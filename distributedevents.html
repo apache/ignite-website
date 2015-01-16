@@ -96,13 +96,13 @@
 
                         <li><a href="distributedmessaging.html#distributedmessaging">Distributed Messaging</a></li>
 
-                        <li><a href="distributedevents.html#distributedevents">Distributed Events</a></li>
+                        <li><a href="#distributedevents">Distributed Events</a></li>
 
                         <li><a href="managedservices.html#managedservices">Managed Services</a></li>
 
                         <li><a href="">Distributed Data Structures</a></li>
 
-                        <li><a href="#hpc">High Performance Computing</a>
+                        <li><a href="computing.html#hpc">High Performance Computing</a>
                             <ul class="nav nav-stacked list-unstyled sidebar-sub-menu">
                                 <li><a href="">Load Balancing</a></li>
                                 <li><a href="">Fault Tolerance</a></li>
@@ -138,108 +138,7 @@
 
                 <!--Main Content -->
                 <div class="col-md-9 col-sm-9 main-content">
-
-                    <section id="hpc" class="hpc" >
-
-                        <h2>High Performance Computing</h2>
-
-                        <p><b>High Performance Computing (HPC) systems provide the means for parallel processing of CPU or otherwise resource intensive tasks.</b></p>
-
-                        <img src="images/in_memory_compute.png"/><br/><br/>
-
-                        <p>Apache Ignite computational features include</p>
-
-                        <ul class="list-unstyled">
-                            <li>Dynamic Clustering</li>
-                            <li>Fork-Join & MapReduce Processing</li>
-                            <li>Distributed Closure Execution</li>
-                            <li>Load Balancing and Fault Tolerance</li>
-                            <li>Distributed Messaging and Events</li>
-                            <li>Linear Scalability</li>
-                        </ul>
-
-                    </section>
-
-                    <section id="distributedmessaging" class="distributedmessaging">
-
-                        <h2>Distributed Messaging</h2>
-
-                        <p>Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data via publish-subscribe and direct point-to-point communication models. Among the key features of Ignite’s messaging support are
-
-                        <ul class="list-unstyled">
-                            <li>Support for topic-based publish-subscribe model</li>
-                            <li>Support for direct point-to-point communication</li>
-                            <li>Pluggable communication transport layer</li>
-                            <li>Support for message ordering</li>
-                            <li>Cluster-aware message listener auto-deployment </li>
-                        </ul>
-
-                        <h3>Example</h3>
-
-                        <div class="tabs">
-
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a href="#unordered" data-toggle="tab">Unordered Messages</a></li>
-                                <li><a href="#ordered" data-toggle="tab">Ordered Messages</a></li>
-                                <li><a href="#example3" data-toggle="tab">Example 3</a></li>
-                            </ul>
-
-                            <div class="tab-content">
-
-                                <div id="unordered" class="tab-pane active">
-                                    <p>Send and receive unordered messages</p>
-
-                                    <pre class="brush:java">
-                                        try (Grid grid = GridGain.start("examples/config/example-compute.xml")) {
-                                            // Add unordered message listener on all grid nodes.
-                                            grid.message().remoteListen("MyUnorderedTopic", new GridBiPredicate&lt;UUID, String&gt;() {
-                                                @Override public boolean apply(UUID nodeId, String msg) {
-                                                    println("Unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
-
-                                                    return true; // Return true to continue listening.
-                                                }
-                                            }).get();
-
-                                            // Send unordered messages to all remote nodes.
-                                            for (int i = 0; i < 10; i++)
-                                                grid.forRemotes().message().send("MyUnorderedTopic", Integer.toString(i));
-                                        }
-                                    </pre>
-                                </div>
-
-                                <div id="ordered" class="tab-pane">
-                                    <p>Send and receive ordered messages</p>
-
-                                    <pre class="brush:java">
-                                        try (Grid grid = GridGain.start()) {
-                                          // Add ordered message listener on all grid nodes.
-                                          grid.message().remoteListen("MyOrderedTopic", new GridBiPredicate&lt;UUID, String&gt;() {
-                                            @Override public boolean apply(UUID nodeId, String msg) {
-                                              println("Ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
-
-                                              return true; // Return true to continue listening.
-                                            }
-                                          }).get();
-
-                                          // Send ordered messages to all remote nodes.
-                                          for (int i = 0; i < 10; i++)
-                                            grid.forRemotes().message().sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
-                                        }
-                                    </pre>
-                                </div>
-
-                                <div id="example3" class="tab-pane">
-                                    <h4>Example 3 Content</h4>
-                                    <p> and so on ...</p>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-                    <section id="distributedevents" class="distributedevents">
+                     <section id="distributedevents" class="distributedevents">
 
                         <h2>Distributed Events</h2>
 
@@ -251,30 +150,56 @@
                             <li>Provide local and remote filters for fine-grained control over notifications</li>
                         </ul>
 
+                         <h3>Example</h3><br>
+
+                         <div class="tabs">
+                             <ul class="nav nav-tabs">
+                                 <li class="active"><a href="#example1" data-toggle="tab">Example 1</a></li>
+                                 <li><a href="#example2" data-toggle="tab">Example 2</a></li>
+                                 <li><a href="#example3" data-toggle="tab">Example 3</a></li>
+                             </ul>
+
+                             <div class="tab-content">
+                                 <div id="example1" class="tab-pane active">
+                                     <p>Subscribe remote and local notifications for cache data updates</p>
+                                     <pre class="brush:java">
+                                         try (Grid grid = GridGain.start("examples/config/example-cache.xml")) {
+                                             final GridCache&lt;Integer, String&gt; cache = g.cache(CACHE_NAME);
+
+                                             // Sample remote filter to accept only keys that are greater than 10.
+                                             GridPredicate&lt;GridCacheEvent&gt; rmtLsnr = new GridPredicate&lt;GridCacheEvent&gt;() {
+                                                @Override public boolean apply(GridCacheEvent evt) {
+                                                   println("Cache event: " + evt);
+
+                                                   int key = evt.key();
+
+                                                   // Accept only keys greater than 10.
+                                                   return key >= 10;
+                                                }
+                                             };
+
+                                             // Subscribe to specified cache events on all nodes that have cache running.
+                                             grid.forCache(CACHE_NAME).events().remoteListen(null, rmtLsnr,
+                                                 EVT_CACHE_OBJECT_PUT,
+                                                 EVT_CACHE_OBJECT_READ,
+                                                 EVT_CACHE_OBJECT_REMOVED).get();
+                                         }
+                                     </pre>
+                                 </div>
+
+                                 <div id="example2" class="tab-pane">
+                                     <p>Example 1 Content</p>
+                                 </div>
+
+                                 <div id="example3" class="tab-pane">
+                                     <p>Example 3 Content</p>
+                                 </div>
+                             </div>
+                         </div>
+
                     </section>
-
-                    <section id="managedservices" class="managedservices">
-
-                        <h2>Distributed Services</h2>
-
-                        <p>GridGain allows you to control how many instances of your service should be deployed on each grid node and will automatically ensure proper deployment and fault tolerance of all managed services .
-                            With managed services you can
-
-                        <ul class="list-unstyled">
-                            <li>Deploy any number of distributed service instances in the grid</li>
-                            <li>Deploy singletons, including cluster-singleton, node-singleton, or key-affinity-singleton</li>
-                            <li>Deploy distributed services on node start-up</li>
-                            <li>Undeploy any of the deployed services</li>
-                            <li>Get information about service deployment topology within the grid</li>
-                            <li>Create service proxy for accessing remotely deployed distributed services</li>
-                        </ul>
-
-                    </section>
-
                 </div>
-
             </div>
-
         </main>
 
         <footer id="footer">
@@ -336,7 +261,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')
-    </script>
+                </script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
@@ -344,26 +269,26 @@
 
     <script type="text/javascript">
 
-            if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                        if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 
-                var msViewportStyle = document.createElement('style')
+                            var msViewportStyle = document.createElement('style')
 
-                msViewportStyle.appendChild(
+                            msViewportStyle.appendChild(
 
-                    document.createTextNode(
+                                document.createTextNode(
 
-                        '@-ms-viewport{width:auto!important}'
+                                    '@-ms-viewport{width:auto!important}'
 
-                    )
+                                )
 
-                )
+                            )
 
-                document.querySelector('head').appendChild(msViewportStyle)
+                            document.querySelector('head').appendChild(msViewportStyle)
 
-            }
+                        }
 
 
-    </script>
+                </script>
 
     <!--Syntax highlighter -->
     <script src="http://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlightLoader.js"></script>
@@ -371,4 +296,3 @@
 </body>
 
 </html>
-
