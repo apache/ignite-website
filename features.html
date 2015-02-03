@@ -37,6 +37,7 @@ under the License.
     <title>Apache Ignite - Features</title>
     <link media="all" rel="stylesheet" href="css/all.css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="css/syntaxhighlighter.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -75,7 +76,7 @@ under the License.
     </header>
     <main id="main" role="main" class="container key-features">
         <section id="features">
-            <h2>Key Features</h2>
+            <h2>Key In-Memory Features</h2>
             <p align="center">
                 Apache Ignite In-Memory Data Fabric is a high-performance,
                 integrated and distributed in-memory platform for computing
@@ -113,8 +114,8 @@ under the License.
                 or otherwise resource intensive tasks including traditional High Performance Computing (HPC) and
                 Massively Parallel Processing (MPP).
             </p>
-            <div class="main-caps">Features:</div>
-            <ul>
+            <div class="features-heading">Features:</div>
+            <ul class="features-list">
                 <li>Dynamic Clustering</li>
                 <li>Fork-Join & MapReduce Processing</li>
                 <li>Distributed Closure Execution</li>
@@ -122,6 +123,60 @@ under the License.
                 <li>Distributed Messaging and Events</li>
                 <li>Linear Scalability</li>
             </ul>
+
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="compute-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#compute-example-1" aria-controls="home" data-toggle="tab">Example 1</a></li>
+                    <li><a href="#compute-example-2" aria-controls="profile" data-toggle="tab">Example 2</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="compute-example-1">
+                        <pre class="brush:java">
+                            try (Grid grid = GridGain.start("examples/config/example-compute.xml")) {
+                                // Add unordered message listener on all grid nodes.
+                                grid.message().remoteListen("MyUnorderedTopic", new GridBiPredicate&lt;UUID, String&gt;() {
+                                    @Override public boolean apply(UUID nodeId, String msg) {
+                                        println("Unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+
+                                        return true; // Return true to continue listening.
+                                    }
+                                }).get();
+
+                                // Send unordered messages to all remote nodes.
+                                for (int i = 0; i < 10; i++)
+                                    grid.forRemotes().message().send("MyUnorderedTopic", Integer.toString(i));
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="compute-example-2">
+                        <pre class="brush:java">
+                            try (Grid grid = GridGain.start()) {
+                                // Add ordered message listener on all grid nodes.
+                                grid.message().remoteListen("MyOrderedTopic", new GridBiPredicate&lt;UUID, String&gt;() {
+                                    @Override public boolean apply(UUID nodeId, String msg) {
+                                    println("Ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+                                        return true; // Return true to continue listening.
+                                    }
+                                }).get();
+
+                                // Send ordered messages to all remote nodes.
+                                for (int i = 0; i < 10; i++)
+                                    grid.forRemotes().message().sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
+                            }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screencasts">
+                <div class="screencasts-heading">Screencasts:</div>
+                <iframe src="http://player.vimeo.com/video/107643054?title=0&byline=0&portrait=0" width="650" height="365" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Computations">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -134,8 +189,8 @@ under the License.
                 Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data
                 via publish-subscribe and direct point-to-point communication models.
             </p>
-            <div class="main-caps">Features:</div>
-            <ul>
+            <div class="features-heading">Features:</div>
+            <ul class="features-list">
                 <li>Support for topic-based publish-subscribe model</li>
                 <li>Support for direct point-to-point communication</li>
                 <li>Pluggable communication transport layer</li>
@@ -175,6 +230,7 @@ under the License.
         </div>
     </footer>
 </div>
+<script src="http://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlightLoader.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -189,6 +245,19 @@ under the License.
         );
         document.querySelector('head').appendChild(msViewportStyle)
     }
+</script>
+<script type="text/javascript">
+    $('ul#compute-examples a[href="compute-example-1"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    });
+
+    $('ul#compute-examples a[href="compute-example-2"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
 </script>
 </body>
 </html>
