@@ -112,6 +112,7 @@ under the License.
                 By utilizing system memory rather than disk, Ignite In-Memory Data Fabric is orders
                 of magnitude faster than traditional DBMS systems.
             </p>
+            <img src="images/in_memory_data.png"/>
             <div class="features-heading">Features:</div>
             <ul class="features-list">
                 <li>Distributed In-Memory Caching</li>
@@ -129,10 +130,11 @@ under the License.
                 <div class="examples-heading">Examples:</div>
                 <!-- Nav tabs -->
                 <ul id="datagrid-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#datagrid-example-basic" aria-controls="home" data-toggle="tab">Basic Cache Operations</a></li>
-                    <li><a href="#datagrid-example-transactions" aria-controls="profile" data-toggle="tab">Distributed Transactions</a></li>
-                    <li><a href="#datagrid-example-locks" aria-controls="profile" data-toggle="tab">Distributed Locking</a></li>
-                    <li><a href="#datagrid-example-queries" aria-controls="profile" data-toggle="tab">Cache Queries</a></li>
+                    <li class="active"><a href="#datagrid-example-basic" aria-controls="home" data-toggle="tab">Basic put-get</a></li>
+                    <li><a href="#datagrid-example-transactions" aria-controls="profile" data-toggle="tab">Transactions</a></li>
+                    <li><a href="#datagrid-example-locks" aria-controls="profile" data-toggle="tab">Locks</a></li>
+                    <li><a href="#datagrid-example-sqlquery" aria-controls="profile" data-toggle="tab">SQL Query</a></li>
+                    <li><a href="#datagrid-example-sqljoin" aria-controls="profile" data-toggle="tab">SQL Join</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -140,36 +142,40 @@ under the License.
                     <div class="tab-pane active" id="datagrid-example-basic">
                         <br/>
                         <p>
-                            Basic cache operations example
+                            Basic cache operations example.
                         </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-
-                                final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("partitioned");
-
-                                final int keyCnt = 20;
+                                final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
 
                                 // Store keys in cache.
-                                for (int i = 0; i < keyCnt; i++)
+                                for (int i = 0; i < 10; i++)
                                     cache.put(i, Integer.toString(i));
 
-                                for (int i = 0; i < keyCnt; i++)
+                                // Retrieve values from cache.
+                                for (int i = 0; i < 10; i++)
                                     System.out.println("Got [key=" + i + ", val=" + cache.get(i) + ']');
 
                                 // Remove objects from cache.
-                                for (int i = 0; i < keyCnt; i++)
+                                for (int i = 0; i < 10; i++)
                                     cache.remove(i);
+
+                                // Atomic put-if-absent.
+                                cache.putIfAbsent(1, "1");
+
+                               // Atomic replace.
+                               cache.replace(1, "1", "2");
                             }
                         </pre>
                     </div>
                     <div class="tab-pane" id="datagrid-example-transactions">
                         <br/>
                         <p>
-                            Transaction example demonstrating multiple reads and puts done atomically
+                            Transaction example demonstrating multiple reads and puts done atomically.
                         </p>
                         <pre class="brush:java">
                             // Clone every object we get from cache, so we can freely update it.
-                            IgniteCache&lt;Integer, Account&gt; cache = Ignition.ignite().jcache("partitioned");
+                            IgniteCache&lt;Integer, Account&gt; cache = Ignition.ignite().jcache("cacheName");
 
                             try (IgniteTx tx = Ignition.ignite().transactions().txStart(PESSIMISTIC, REPEATABLE_READ)) {
                                 Account acct = cache.get(acctId);
@@ -189,10 +195,10 @@ under the License.
                     <div class="tab-pane" id="datagrid-example-locks">
                         <br/>
                         <p>
-                            Synchronously acquire and release lock by key
+                            Synchronously acquire and release lock by key.
                         </p>
                         <pre class="brush:java">
-                            final GridCache&lt;String, Integer&gt; cache = Ignition.ignite.jcache("partitioned");
+                            final GridCache&lt;String, Integer&gt; cache = Ignition.ignite.jcache("cacheName");
 
                             cache.lock("Hello");
 
@@ -205,10 +211,10 @@ under the License.
                             }
                         </pre>
                     </div>
-                    <div class="tab-pane" id="datagrid-example-queries">
+                    <div class="tab-pane" id="datagrid-example-sqlquery">
                         <br/>
                         <p>
-                            Index definition example
+                            Person class definition.
                         </p>
                         <pre class="brush:java">
                             private static class Person implements Serializable {
@@ -229,11 +235,11 @@ under the License.
                         </pre>
                         <br/>
                         <p>
-                            Simple distributed SQL query
+                            Simple distributed SQL query.
                         </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("partitioned");
+                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
 
                                 // Create query which selects salaries based on range.
                                 CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
@@ -246,13 +252,36 @@ under the License.
 
                             }
                         </pre>
+                    </div>
+                    <div class="tab-pane" id="datagrid-example-sqljoin">
                         <br/>
                         <p>
-                            Distributed query with SQL join between Person and Organization
+                            Person class definition.
+                        </p>
+                        <pre class="brush:java">
+                            private static class Person implements Serializable {
+                                /** Person ID (indexed). */
+                                @CacheQuerySqlField(index = true)
+                                private long id;
+
+                                /** Organization ID (indexed). */
+                                @CacheQuerySqlField(index = true)
+                                private long orgId;
+
+                                /** First name (not-indexed). */
+                                @CacheQuerySqlField
+                                private String firstName;
+
+                                ...
+                            }
+                        </pre>
+                        <br/>
+                        <p>
+                            Distributed query with SQL join between Person and Organization.
                         </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("partitioned");
+                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
 
                                 // Create query which joins on 2 types to select people for a specific organization.
                                 CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
@@ -284,6 +313,7 @@ under the License.
                 or otherwise resource intensive tasks including traditional High Performance Computing (HPC) and
                 Massively Parallel Processing (MPP).
             </p>
+            <img src="images/in_memory_compute.png"/>
             <div class="features-heading">Features:</div>
             <ul class="features-list">
                 <li>Dynamic Clustering</li>
@@ -306,6 +336,10 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="compute-example-broadcast">
+                        <br/>
+                        <p>
+                            Print out hello message on all nodes.
+                        </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
                                 // Print out hello message on all nodes.
@@ -320,6 +354,10 @@ under the License.
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-runnable">
+                        <br/>
+                        <p>
+                            Iterate through all words in a sentence and print each word on different nodes in the cluster.
+                        </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
                                 Collection&lt;IgniteFuture&gt; futs = new ArrayList<>();
@@ -327,12 +365,12 @@ under the License.
                                 // Enable asynchronous mode.
                                 IgniteCompute compute = ignite.compute().withAsync();
 
-                                // Iterate through all words in the sentence and create callable jobs.
+                                // Iterate through all words in the sentence and create runnable jobs.
                                 for (final String word : "Print words using runnable".split(" ")) {
                                     // Execute runnable on some node.
                                     compute.run(new IgniteRunnable() {
                                         @Override public void run() {
-                                            System.out.println(">>> Printing '" + word + "' on this node from ignite job.");
+                                            System.out.println("Printing '" + word + "' on this node from ignite job.");
                                         }
                                     });
 
@@ -346,13 +384,18 @@ under the License.
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-closure">
+                        </br>
+                        <p>
+                            This example splits a phrase into collection of words, computes their length on different
+                            nodes and then computes total amount of non-whitespaces characters in the phrase.
+                        </p>
                         <pre class="brush:java">
                             try (Ignite ignite = Ignition.start() {
                                 // Execute closure on all cluster nodes.
                                 Collection&lt;Integer&gt; res = ignite.compute().apply(
                                     new IgniteClosure&lt;String, Integer&gt;() {
                                         @Override public Integer apply(String word) {
-                                            System.out.println(">>> Printing '" + word + "' on this node from Ignite job.");
+                                            System.out.println("Printing '" + word + "' on this node from Ignite job.");
 
                                             // Return number of letters in the word.
                                             return word.length();
@@ -365,7 +408,7 @@ under the License.
 
                                 int sum = 0;
 
-                                // Add up individual word lengths received from remote nodes
+                                // Add up individual word lengths received from remote nodes.
                                 for (int len : res)
                                 sum += len;
                             }
@@ -383,11 +426,10 @@ under the License.
         <section id="servicegrid" class="feature-section">
             <h2>Service Grid</h2>
             <p>
-                Service Grid allow developers to have complete control over services being deployed on the cluster. It
-                allows you to control how many instances of your service should be deployed on each grid node.</br><br/>
-                Ignite Service Grid is resilient to topology changes. It guarantees continuous availability of all
-                deployed services in case of node failures. </br><br/>
-                Service Grid also allows for deployments of arbitrary user-defined data structures on the grid.
+                Ignite Service Grid allows you to have complete control over services being deployed on the
+                cluster. It allows you to control how many instances of your service should be deployed on each cluster
+                node, ensuring proper deployment and fault tolerance. Service Grid guarantees continuous availability
+                of all deployed services in case of node failures. </br><br/>
             </p>
             <div class="features-heading">Features:</div>
             <ul class="features-list">
@@ -397,9 +439,63 @@ under the License.
                 <li>Fault tolerant deployment of all services </li>
                 <li>Un-deploy any of the deployed services</li>
                 <li>Get information about service deployment topology within the grid</li>
-                <li>Create service proxy for accessing remotely deployed managed services</li>
+                <li>Create service proxy for accessing remotely deployed services</li>
 
             </ul>
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="service-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#service-example" aria-controls="home" data-toggle="tab">Service Deployment</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="service-example">
+                        <br/>
+                        <p>
+                            An example of how a distributed service may be implemented
+
+                        </p>
+                        <pre class="brush:java">
+                            // Simple service implementation.
+                            public class MyIgniteService implements Service {
+                                // Example of ignite resource injection. All resources are optional.
+                                // You should inject resources only as needed.
+                                @IgniteInstanceResource
+                                private Ignite ignite;
+                                ...
+
+                                @Override public void cancel(ServiceContext ctx) {
+                                    // No-op.
+                                }
+
+                                @Override public void execute(ServiceContext ctx) {
+                                    // Loop until service is cancelled.
+                                    while (!ctx.isCancelled()) {
+                                        // Do something.
+                                        ...
+                                    }
+                                }
+                            }
+                        </pre>
+                        <br/>
+                        <p>
+                            and deployed.
+                        </p>
+                        <pre class="brush:java">
+                            ...
+
+                            IgniteServices svcs = ignite.services();
+
+                            IgniteFuture&lt;?&gt; fut = svcs.deployClusterSingleton("myClusterSingleton", new MyIgniteService());
+
+                            // Wait for deployment to complete.
+                            fut.get();
+                        </pre>
+                    </div>
+                </div>
+            </div>
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Services">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -411,7 +507,10 @@ under the License.
             <p>
                 Streaming processing addresses a large family of applications for which traditional processing methods
                 and disk-based storages, like databases or file systems, fall short. Such applications are pushing
-                the limits of traditional data processing infrastructures.<br/><br/>
+                the limits of traditional data processing infrastructures.
+            </p>
+            <img src="images/in_memory_streaming.png"/>
+            <p>
                 Streaming support allows to query into rolling windows of coming data, and enable users to answer
                 such questions as “What are the 10 most popular products over last 2 hours?”, or “What is the average
                 product price in a certain category for the past day?”.<br/><br/>
@@ -420,6 +519,7 @@ under the License.
                 events is split into multiple stages and each stage has to be properly routed within a
                 cluster for processing.
             </p>
+
             <div class="features-heading">Features:</div>
             <ul class="features-list">
                 <li>Programmatic Querying</li>
@@ -433,6 +533,34 @@ under the License.
             </ul>
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Data+Streaming">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
+            </div>
+        </section>
+
+        <section id="hadoop" class="feature-section">
+            <h2>Hadoop Acceleration</h2>
+            <p>
+                Hadoop Accelerator enhances existing Hadoop technology to enable fast data processing using the tools
+                and technology your organization is already using today.<br/><br/>
+                Ignite’s in-memory accelerator for Hadoop is based on the industry’s first dual-mode,
+                high-performance in-memory file system that is 100% compatible with Hadoop HDFS, and an in-memory
+                optimized MapReduce implementation. In-memory HDFS and in-memory MapReduce provide easy to use
+                extensions to disk-based HDFS and traditional MapReduce, delivering up to 100x faster performance.<br/><br/>
+                In-memory accelerator for Hadoop requires minimal to no integration and works with any commercial or
+                open source version of Hadoop, including Cloudera, HortonWorks, MapR, Apache, Intel, AWS, as well
+                as any other Hadoop 1.x and Hadoop 2.x distributions.
+            </p>
+            <div class="features-heading">Features:</div>
+            <ul class="features-list">
+                <li>100x faster performance</li>
+                <li>In-Memory MapReduce</li>
+                <li>Highly optimized in-memory processing</li>
+                <li>Dual mode - standalone file system or primay caching layer for HDFS </li>
+                <li>Highly tunable read-through and write-through behavior</li>
+
+            </ul>
+            <div class="feature-links">
+                <a target=wiki href="http://hadoop.gridgain.org/latest/Hadoop+Accelerator">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
@@ -466,14 +594,11 @@ under the License.
             <h2>Advanced Clustering</h2>
             <p>
                 Ignite In-Memory Data Fabric provides one of the most sophisticated clustering technologies on
-                Java Virtual Machine (JVM).<br/><br/>
-                Ignite allows automatic discovery of nodes whenever they join or leave the cluster.
-                New nodes become part of the cluster without having to re-start the whole grid. Similarly, nodes
-                leaving the cluster automatically get disconnected from other nodes. Auto Discovery helps to scale the
-                cluster when needed, without having to restart the whole cluster.<br/><br/>
-                Developers can leverage from Ignite’s hybrid cloud support that allows establishing connection
-                between private cloud and public clouds such as Amazon Web Services, providing them with best of
-                both worlds.
+                Java Virtual Machine (JVM). In Ignite nodes can automatically discover each other.
+                This helps to scale the cluster when needed, without having to restart the whole cluster. Developers
+                can also leverage from Ignite’s hybrid cloud support that allows establishing connection
+                between private cloud and public clouds such as Amazon Web Services, providing them
+                with best of both worlds. <br/><br/>
             </p>
             <div class="features-heading">Features:</div>
             <ul class="features-list">
@@ -484,6 +609,70 @@ under the License.
                 <li>On-demand and direct deployment</li>
                 <li>Support for virtual clusters and node groupings</li>
             </ul>
+
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="clustering-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#clustering-example-broadcast" aria-controls="home" data-toggle="tab">Broadcast</a></li>
+                    <li><a href="#clustering-example-unicast" aria-controls="profile" data-toggle="tab">Unicast</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="clustering-example-broadcast">
+                        <br/>
+                        <p>
+                            Broadcast message to multiple nodes in the cluster.
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
+                                IgniteRunnable r = new IgniteRunnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Hello World");
+                                    }
+                                };
+
+                                // Broadcast to all cluster nodes.
+                                ignite.compute().broadcast(r);
+
+                                // Broadcast to all remote nodes.
+                                ignite.compute(ignite.cluster().forRemotes()).broadcast(r);
+                            }
+                        </pre>
+                    </div>
+
+                    <div class="tab-pane" id="clustering-example-unicast">
+                        <br/>
+                        <p>
+                            Unicast message to a node in the cluster.
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
+                                IgniteRunnable r = new IgniteRunnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Hello World");
+                                    }
+                                };
+
+                                // Unicast to some random node picked by load balancer.
+                                ignite.compute(ignite.cluster().forRandom()).run(r);
+
+                                // Unicast to some node with CPU load less than 50%.
+                                ignite.compute(ignite.cluster().forPredicate(new IgnitePredicate&lt;ClusterNode&gt;() {
+                                    @Override
+                                    public boolean apply(ClusterNode n) {
+                                        return n.metrics().getCurrentCpuLoad() <0.5;
+                                    }
+                                })).run(r);
+                            }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Basic+Concepts">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -504,6 +693,64 @@ under the License.
                 <li>Support for message ordering</li>
                 <li>Cluster-aware message listener auto-deployment </li>
             </ul>
+
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="messaging-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#messaging-example-ordered" aria-controls="home" data-toggle="tab">Ordered Messaging</a></li>
+                    <li><a href="#messaging-example-unordered" aria-controls="profile" data-toggle="tab">Unordered Messaging</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="messaging-example-ordered">
+                        <br/>
+                        <p>
+                            Send and receive ordered messages
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
+                                // Add listener for ordered messages on all nodes.
+                                ignite.message().remoteListen("MyOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
+                                    @Override public boolean apply(UUID nodeId, String msg) {
+                                        System.out.println("Received ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+
+                                        return true; // Return true to continue listening.
+                                    }
+                                });
+
+                                // Send ordered messages to remote nodes nodes.
+                                for (int i = 0; i < 10; i++)
+                                    ignite.message(ignite.cluster().forRemotes()).sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="messaging-example-unordered">
+                        <br/>
+                        <p>
+                            Send and receive unordered messages
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
+                                // Add listener for unordered messages on all nodes.
+                                ignite.message().remoteListen("MyUnOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
+                                    @Override public boolean apply(UUID nodeId, String msg) {
+                                        System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+
+                                        return true; // Return true to continue listening.
+                                    }
+                                });
+
+                                // Send unordered messages to remote nodes.
+                                for (int i = 0; i < 10; i++)
+                                    ignite.message(ignite.cluster().forRemotes()).send("MyUnOrderedTopic", Integer.toString(i));
+                            }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Messaging">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -517,7 +764,7 @@ under the License.
                 occurring in distributed grid environment. Developers can use this functionality to get notified
                 about remote tasks executions or any cache data changes within the cluster.<br/><br/>
                 In Ignite, event notifications can be grouped together and sent in batches and/or timely intervals.
-                Batching notifications helps attain high cache performance and low latency.
+                Batching notifications help attain high cache performance and low latency.
 
             </p>
             <div class="features-heading">Features:</div>
@@ -527,6 +774,50 @@ under the License.
                 <li>Provide local and remote filters for fine-grained control over notifications</li>
                 <li>Automatic batching of notifications</li>
             </ul>
+
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="events-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#events-example-cache" aria-controls="home" data-toggle="tab">Cache Events</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="events-example-cache">
+                        <br/>
+                        <p>
+                            Subscribe to remote notifications for cache data updates.
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
+                                final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+
+                                // sample remote filter which only accepts events for keys
+                                // that are greater than or equal to 10.
+                                IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = new IgnitePredicate&lt;CacheEvent&gt;() {
+                                    @Override public boolean apply(CacheEvent evt) {
+                                        System.out.println("Cache event: " + evt);
+
+                                        int key = evt.key();
+
+                                        return key >= 10;
+                                    }
+                                };
+
+                                // Subscribe to specified cache events on all nodes that have cache running.
+                                ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
+                                    EVT_CACHE_OBJECT_PUT, EVT_CACHE_OBJECT_READ, EVT_CACHE_OBJECT_REMOVED);
+
+                                // Generate cache events.
+                                for (int i = 0; i < 20; i++)
+                                    cache.put(i, Integer.toString(i));
+                            }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Events">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -551,6 +842,77 @@ under the License.
                 <li>ExecutorService</li>
                 <li>CountDownLatch</li>
             </ul>
+
+            <div class="code-examples">
+                <div class="examples-heading">Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="datastructures-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#datastructures-example-queues" aria-controls="home" data-toggle="tab">Queues</a></li>
+                    <li><a href="#datastructures-example-sets" aria-controls="profile" data-toggle="tab">Sets</a></li>
+                    <li><a href="#datastructures-example-sequence" aria-controls="profile" data-toggle="tab">Atomic Sequence</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="datastructures-example-queues">
+                        <br/>
+                        <p>
+                            Distributed Queue example.
+                        </p>
+                        <pre class="brush:java">
+                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
+                                CollectionConfiguration colCfg = new CollectionConfiguration();
+
+                                colCfg.setCacheName("cacheName");
+
+                                // Non-colocated queue which will be distributed
+                                // across all data nodes.
+                                IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, colCfg);
+
+                                // Add queue elements.
+                                for (int i = 0; i < 20; i++)
+                                    queue.add("Value " + Integer.toString(i));
+
+                                // Poll queue elements.
+                                for (int i = 0; i < 20; i++)
+                                    System.out.println("Polled value: " + queue.poll());
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="datastructures-example-sets">
+                        <br/>
+                        <p>
+                            Distributed Set example.
+                        </p>
+                        <pre class="brush:java">
+                            // Initialize new set.
+                            IgniteSet&lt;String&gt; set = Ignition.ignite().set("setName", null);
+
+                            // Add set elements.
+                            for (int i = 0; i < 10; i++)
+                                set.add(Integer.toString(i));
+
+                            // Iterate over set.
+                            for (String item : set)
+                                System.out.println("Set item: " + item);
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="datastructures-example-sequence">
+                        <br/>
+                        <p>
+                            Distributed AtomicSequence example.
+                        </p>
+                        <pre class="brush:java">
+                            // Initialize atomic sequence.
+                            IgniteAtomicSequence seq = Ignition.ignite().atomicSequence("seqName", 0, true);
+
+                            for (int i = 0; i < 100; i++)
+                                System.out.println("Next sequence value: " + seq.incrementAndGet());
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Data+Structures">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
@@ -619,7 +981,13 @@ under the License.
         $(this).tab('show')
     });
 
-    $('ul#compute-examples a[href="compute-example-queries"]').click(function (e) {
+    $('ul#compute-examples a[href="compute-example-sqlquery"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    });
+
+    $('ul#compute-examples a[href="compute-example-sqljoin"]').click(function (e) {
         e.preventDefault();
 
         $(this).tab('show')
@@ -638,6 +1006,60 @@ under the License.
     })
 
     $('ul#compute-examples a[href="compute-example-closure"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="service-example"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="messaging-example-ordered"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="messaging-example-unordered"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="events-example-cache"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="clustering-example-broadcast"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="clustering-example-unicast"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="datastructures-example-queues"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="datastructures-example-sets"]').click(function (e) {
+        e.preventDefault();
+
+        $(this).tab('show')
+    })
+
+    $('ul#compute-examples a[href="datastructures-example-sequence"]').click(function (e) {
         e.preventDefault();
 
         $(this).tab('show')
