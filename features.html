@@ -145,27 +145,29 @@ under the License.
                             Basic cache operations example.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+                           // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Store keys in cache.
-                                for (int i = 0; i < 10; i++)
-                                    cache.put(i, Integer.toString(i));
+                             // Get an instance of named cache.
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
 
-                                // Retrieve values from cache.
-                                for (int i = 0; i < 10; i++)
-                                    System.out.println("Got [key=" + i + ", val=" + cache.get(i) + ']');
+                            // Store keys in cache.
+                            for (int i = 0; i < 10; i++)
+                                cache.put(i, Integer.toString(i));
 
-                                // Remove objects from cache.
-                                for (int i = 0; i < 10; i++)
-                                    cache.remove(i);
+                            // Retrieve values from cache.
+                            for (int i = 0; i < 10; i++)
+                                System.out.println("Got [key=" + i + ", val=" + cache.get(i) + ']');
 
-                                // Atomic put-if-absent.
-                                cache.putIfAbsent(1, "1");
+                            // Remove objects from cache.
+                            for (int i = 0; i < 10; i++)
+                                cache.remove(i);
 
-                               // Atomic replace.
-                               cache.replace(1, "1", "2");
-                            }
+                            // Atomic put-if-absent.
+                            cache.putIfAbsent(1, "1");
+
+                           // Atomic replace.
+                           cache.replace(1, "1", "2");
                         </pre>
                     </div>
                     <div class="tab-pane" id="datagrid-example-transactions">
@@ -174,10 +176,13 @@ under the License.
                             Transaction example demonstrating multiple reads and puts done atomically.
                         </p>
                         <pre class="brush:java">
-                            // Clone every object we get from cache, so we can freely update it.
-                            IgniteCache&lt;Integer, Account&gt; cache = Ignition.ignite().jcache("cacheName");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                            try (IgniteTx tx = Ignition.ignite().transactions().txStart(PESSIMISTIC, REPEATABLE_READ)) {
+                            // Clone every object we get from cache, so we can freely update it.
+                            IgniteCache&lt;Integer, Account&gt; cache = ignite.jcache("cacheName");
+
+                            try (IgniteTx tx = Ignition.ignite().transactions().txStart()) {
                                 Account acct = cache.get(acctId);
 
                                 assert acct != null;
@@ -198,16 +203,23 @@ under the License.
                             Synchronously acquire and release lock by key.
                         </p>
                         <pre class="brush:java">
-                            final GridCache&lt;String, Integer&gt; cache = Ignition.ignite.jcache("cacheName");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                            cache.lock("Hello");
+                             // Get an instance of named cache.
+                            final GridCache&lt;String, Integer&gt; cache = ignite.jcache("cacheName");
+
+                            // Lock cache key "Hello".
+                            Lock lock = cache.lock("Hello");
+
+                            lock.lock();
 
                             try {
                                 cache.put("Hello", 11);
                                 cache.put("World", 22);
                             }
                             finally {
-                                cache.unlock("Hello");
+                                lock.unlock();
                             }
                         </pre>
                     </div>
@@ -238,19 +250,20 @@ under the License.
                             Simple distributed SQL query.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Create query which selects salaries based on range.
-                                CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
-                                    cache.queries().createSqlQuery(Person.class, "salary > ? and salary <= ?");
+                            // Get an instance of named cache.
+                            GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
 
-                                // Execute queries for salary ranges.
-                                print("People with salaries between 0 and 1000: ", qry.execute(0, 1000).get());
+                            // Create query which selects salaries based on range.
+                            CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
+                                cache.queries().createSqlQuery(Person.class, "salary > ? and salary <= ?");
 
-                                print("People with salaries between 1000 and 2000: ", qry.execute(1000, 2000).get());
+                            // Execute queries for salary ranges.
+                            print("People with salaries between 0 and 1000: ", qry.execute(0, 1000).get());
 
-                            }
+                            print("People with salaries between 1000 and 2000: ", qry.execute(1000, 2000).get());
                         </pre>
                     </div>
                     <div class="tab-pane" id="datagrid-example-sqljoin">
@@ -280,21 +293,22 @@ under the License.
                             Distributed query with SQL join between Person and Organization.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Create query which joins on 2 types to select people for a specific organization.
-                                CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
-                                    cache.queries().createSqlQuery(Person.class, "from Person, Organization " +
-                                        "where Person.orgId = Organization.id " +
-                                        "and Organization.name = ?");
+                             // Get an instance of named cache.
+                            GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
 
-                                // Execute queries for find employees for different organizations.
-                                print("Following people are 'Ignite' employees: ", qry.execute("Ignite").get());
+                            // Create query which joins on 2 types to select people for a specific organization.
+                            CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
+                                cache.queries().createSqlQuery(Person.class, "from Person, Organization " +
+                                    "where Person.orgId = Organization.id " +
+                                    "and Organization.name = ?");
 
-                                print("Following people are 'Other' employees: ", qry.execute("Other").get());
+                            // Execute queries for find employees for different organizations.
+                            print("Following people are 'Ignite' employees: ", qry.execute("Ignite").get());
 
-                            }
+                            print("Following people are 'Other' employees: ", qry.execute("Other").get());
                         </pre>
                     </div>
                 </div>
@@ -342,16 +356,17 @@ under the License.
                             Print out hello message on all nodes.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                // Print out hello message on all nodes.
-                                ignite.compute().broadcast(
-                                    new IgniteRunnable() {
-                                        @Override public void run() {
-                                            System.out.println(">>> Hello Node! :)");
-                                        }
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
+
+                            // Print out hello message on all nodes.
+                            ignite.compute().broadcast(
+                                new IgniteRunnable() {
+                                    @Override public void run() {
+                                        System.out.println(">>> Hello Node! :)");
                                     }
-                                );
-                            }
+                                }
+                            );
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-runnable">
@@ -360,28 +375,29 @@ under the License.
                             Iterate through all words in a sentence and print each word on different nodes in the cluster.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                Collection&lt;IgniteFuture&gt; futs = new ArrayList<>();
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Enable asynchronous mode.
-                                IgniteCompute compute = ignite.compute().withAsync();
+                            Collection&lt;IgniteFuture&gt; futs = new ArrayList<>();
 
-                                // Iterate through all words in the sentence and create runnable jobs.
-                                for (final String word : "Print words using runnable".split(" ")) {
-                                    // Execute runnable on some node.
-                                    compute.run(new IgniteRunnable() {
-                                        @Override public void run() {
-                                            System.out.println("Printing '" + word + "' on this node from ignite job.");
-                                        }
-                                    });
+                            // Enable asynchronous mode.
+                            IgniteCompute compute = ignite.compute().withAsync();
 
-                                    futs.add(compute.future());
-                                }
+                            // Iterate through all words in the sentence and create runnable jobs.
+                            for (final String word : "Print words using runnable".split(" ")) {
+                                // Execute runnable on some node.
+                                compute.run(new IgniteRunnable() {
+                                    @Override public void run() {
+                                        System.out.println("Printing '" + word + "' on this node from ignite job.");
+                                    }
+                                });
 
-                                // Wait for all futures to complete.
-                                for (IgniteFuture&lt;?&gt; f : futs)
-                                f.get();
+                                futs.add(compute.future());
                             }
+
+                            // Wait for all futures to complete.
+                            for (IgniteFuture&lt;?&gt; f : futs)
+                            f.get();
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-closure">
@@ -391,28 +407,29 @@ under the License.
                             nodes and then computes total amount of non-whitespaces characters in the phrase.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start() {
-                                // Execute closure on all cluster nodes.
-                                Collection&lt;Integer&gt; res = ignite.compute().apply(
-                                    new IgniteClosure&lt;String, Integer&gt;() {
-                                        @Override public Integer apply(String word) {
-                                            System.out.println("Printing '" + word + "' on this node from Ignite job.");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                            // Return number of letters in the word.
-                                            return word.length();
-                                        }
-                                    },
+                            // Execute closure on all cluster nodes.
+                            Collection&lt;Integer&gt; res = ignite.compute().apply(
+                                new IgniteClosure&lt;String, Integer&gt;() {
+                                    @Override public Integer apply(String word) {
+                                        System.out.println("Printing '" + word + "' on this node from Ignite job.");
 
-                                    // Job parameters. Ignite will create as many jobs as there are parameters.
-                                    Arrays.asList("Count characters using closure".split(" "))
-                                );
+                                        // Return number of letters in the word.
+                                        return word.length();
+                                    }
+                                },
 
-                                int sum = 0;
+                                // Job parameters. Ignite will create as many jobs as there are parameters.
+                                Arrays.asList("Count characters using closure".split(" "))
+                            );
 
-                                // Add up individual word lengths received from remote nodes.
-                                for (int len : res)
-                                sum += len;
-                            }
+                            int sum = 0;
+
+                            // Add up individual word lengths received from remote nodes.
+                            for (int len : res)
+                            sum += len;
                         </pre>
                     </div>
                 </div>
@@ -485,6 +502,9 @@ under the License.
                             and deployed.
                         </p>
                         <pre class="brush:java">
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
+
                             ...
 
                             IgniteServices svcs = ignite.services();
@@ -594,7 +614,7 @@ under the License.
             <h2>Advanced Clustering</h2>
             <p>
                 Ignite In-Memory Data Fabric provides one of the most sophisticated clustering technologies on
-                Java Virtual Machine (JVM). In Ignite nodes can automatically discover each other.
+                Java Virtual Machine (JVM). Ignite nodes can automatically discover each other.
                 This helps to scale the cluster when needed, without having to restart the whole cluster. Developers
                 can also leverage from Ignite’s hybrid cloud support that allows establishing connection
                 between private cloud and public clouds such as Amazon Web Services, providing them
@@ -626,20 +646,22 @@ under the License.
                             Broadcast message to multiple nodes in the cluster.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                IgniteRunnable r = new IgniteRunnable() {
-                                    @Override
-                                    public void run() {
-                                        System.out.println("Hello World");
-                                    }
-                                };
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Broadcast to all cluster nodes.
-                                ignite.compute().broadcast(r);
+                            // Create runnable job.
+                            IgniteRunnable r = new IgniteRunnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("Hello World");
+                                }
+                            };
 
-                                // Broadcast to all remote nodes.
-                                ignite.compute(ignite.cluster().forRemotes()).broadcast(r);
-                            }
+                            // Broadcast to all cluster nodes.
+                            ignite.compute().broadcast(r);
+
+                            // Broadcast to all remote nodes.
+                            ignite.compute(ignite.cluster().forRemotes()).broadcast(r);
                         </pre>
                     </div>
 
@@ -649,25 +671,27 @@ under the License.
                             Unicast message to a node in the cluster.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                IgniteRunnable r = new IgniteRunnable() {
-                                    @Override
-                                    public void run() {
-                                        System.out.println("Hello World");
-                                    }
-                                };
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // Unicast to some random node picked by load balancer.
-                                ignite.compute(ignite.cluster().forRandom()).run(r);
+                            // Create runnable job.
+                            IgniteRunnable r = new IgniteRunnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println("Hello World");
+                                }
+                            };
 
-                                // Unicast to some node with CPU load less than 50%.
-                                ignite.compute(ignite.cluster().forPredicate(new IgnitePredicate&lt;ClusterNode&gt;() {
-                                    @Override
-                                    public boolean apply(ClusterNode n) {
-                                        return n.metrics().getCurrentCpuLoad() <0.5;
-                                    }
-                                })).run(r);
-                            }
+                            // Unicast to some random node picked by load balancer.
+                            ignite.compute(ignite.cluster().forRandom()).run(r);
+
+                            // Unicast to some node with CPU load less than 50%.
+                            ignite.compute(ignite.cluster().forPredicate(new IgnitePredicate&lt;ClusterNode&gt;() {
+                                @Override
+                                public boolean apply(ClusterNode n) {
+                                    return n.metrics().getCurrentCpuLoad() <0.5;
+                                }
+                            })).run(r);
                         </pre>
                     </div>
                 </div>
@@ -710,20 +734,21 @@ under the License.
                             Send and receive ordered messages
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                // Add listener for ordered messages on all nodes.
-                                ignite.message().remoteListen("MyOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
-                                    @Override public boolean apply(UUID nodeId, String msg) {
-                                        System.out.println("Received ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                        return true; // Return true to continue listening.
-                                    }
-                                });
+                            // Add listener for ordered messages on all nodes.
+                            ignite.message().remoteListen("MyOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
+                                @Override public boolean apply(UUID nodeId, String msg) {
+                                    System.out.println("Received ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
 
-                                // Send ordered messages to remote nodes nodes.
-                                for (int i = 0; i < 10; i++)
-                                    ignite.message(ignite.cluster().forRemotes()).sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
-                            }
+                                    return true; // Return true to continue listening.
+                                }
+                            });
+
+                            // Send ordered messages to remote nodes nodes.
+                            for (int i = 0; i < 10; i++)
+                                ignite.message(ignite.cluster().forRemotes()).sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
                         </pre>
                     </div>
                     <div class="tab-pane" id="messaging-example-unordered">
@@ -732,20 +757,21 @@ under the License.
                             Send and receive unordered messages
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-compute.xml")) {
-                                // Add listener for unordered messages on all nodes.
-                                ignite.message().remoteListen("MyUnOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
-                                    @Override public boolean apply(UUID nodeId, String msg) {
-                                        System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                        return true; // Return true to continue listening.
-                                    }
-                                });
+                            // Add listener for unordered messages on all nodes.
+                            ignite.message().remoteListen("MyUnOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
+                                @Override public boolean apply(UUID nodeId, String msg) {
+                                    System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
 
-                                // Send unordered messages to remote nodes.
-                                for (int i = 0; i < 10; i++)
-                                    ignite.message(ignite.cluster().forRemotes()).send("MyUnOrderedTopic", Integer.toString(i));
-                            }
+                                    return true; // Return true to continue listening.
+                                }
+                            });
+
+                            // Send unordered messages to remote nodes.
+                            for (int i = 0; i < 10; i++)
+                                ignite.message(ignite.cluster().forRemotes()).send("MyUnOrderedTopic", Integer.toString(i));
                         </pre>
                     </div>
                 </div>
@@ -790,29 +816,31 @@ under the License.
                             Subscribe to remote notifications for cache data updates.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                // sample remote filter which only accepts events for keys
-                                // that are greater than or equal to 10.
-                                IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = new IgnitePredicate&lt;CacheEvent&gt;() {
-                                    @Override public boolean apply(CacheEvent evt) {
-                                        System.out.println("Cache event: " + evt);
+                            // Get an instance of named cache.
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
 
-                                        int key = evt.key();
+                            // sample remote filter which only accepts events for keys
+                            // that are greater than or equal to 10.
+                            IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = new IgnitePredicate&lt;CacheEvent&gt;() {
+                                @Override public boolean apply(CacheEvent evt) {
+                                    System.out.println("Cache event: " + evt);
 
-                                        return key >= 10;
-                                    }
-                                };
+                                    int key = evt.key();
 
-                                // Subscribe to specified cache events on all nodes that have cache running.
-                                ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
-                                    EVT_CACHE_OBJECT_PUT, EVT_CACHE_OBJECT_READ, EVT_CACHE_OBJECT_REMOVED);
+                                    return key >= 10;
+                                }
+                            };
 
-                                // Generate cache events.
-                                for (int i = 0; i < 20; i++)
-                                    cache.put(i, Integer.toString(i));
-                            }
+                            // Subscribe to specified cache events on all nodes that have cache running.
+                            ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
+                                EVT_CACHE_OBJECT_PUT, EVT_CACHE_OBJECT_READ, EVT_CACHE_OBJECT_REMOVED);
+
+                            // Generate cache events.
+                            for (int i = 0; i < 20; i++)
+                                cache.put(i, Integer.toString(i));
                         </pre>
                     </div>
                 </div>
@@ -846,46 +874,51 @@ under the License.
                 <div class="examples-heading">Examples:</div>
                 <!-- Nav tabs -->
                 <ul id="datastructures-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#datastructures-example-queues" aria-controls="home" data-toggle="tab">Queues</a></li>
-                    <li><a href="#datastructures-example-sets" aria-controls="profile" data-toggle="tab">Sets</a></li>
+                    <li class="active"><a href="#datastructures-example-queue" aria-controls="home" data-toggle="tab">Queue</a></li>
+                    <li><a href="#datastructures-example-set" aria-controls="profile" data-toggle="tab">Set</a></li>
                     <li><a href="#datastructures-example-sequence" aria-controls="profile" data-toggle="tab">Atomic Sequence</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="datastructures-example-queues">
+                    <div class="tab-pane active" id="datastructures-example-queue">
                         <br/>
                         <p>
                             Distributed Queue example.
                         </p>
                         <pre class="brush:java">
-                            try (Ignite ignite = Ignition.start("examples/config/example-cache.xml")) {
-                                CollectionConfiguration colCfg = new CollectionConfiguration();
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
 
-                                colCfg.setCacheName("cacheName");
+                            CollectionConfiguration colCfg = new CollectionConfiguration();
 
-                                // Non-colocated queue which will be distributed
-                                // across all data nodes.
-                                IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, colCfg);
+                            colCfg.setCacheName("cacheName");
 
-                                // Add queue elements.
-                                for (int i = 0; i < 20; i++)
-                                    queue.add("Value " + Integer.toString(i));
+                            // Non-colocated queue which will be distributed
+                            // across all data nodes.
+                            IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, colCfg);
 
-                                // Poll queue elements.
-                                for (int i = 0; i < 20; i++)
-                                    System.out.println("Polled value: " + queue.poll());
-                            }
+                            // Add queue elements.
+                            for (int i = 0; i < 20; i++)
+                                queue.add("Value " + Integer.toString(i));
+
+                            // Poll queue elements.
+                            for (int i = 0; i < 20; i++)
+                                System.out.println("Polled value: " + queue.poll());
+
                         </pre>
                     </div>
-                    <div class="tab-pane" id="datastructures-example-sets">
+                    <div class="tab-pane" id="datastructures-example-set">
                         <br/>
                         <p>
                             Distributed Set example.
                         </p>
                         <pre class="brush:java">
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
+
                             // Initialize new set.
-                            IgniteSet&lt;String&gt; set = Ignition.ignite().set("setName", null);
+                            IgniteSet&lt;String&gt; set = ignite.set("setName", null);
 
                             // Add set elements.
                             for (int i = 0; i < 10; i++)
@@ -902,8 +935,11 @@ under the License.
                             Distributed AtomicSequence example.
                         </p>
                         <pre class="brush:java">
+                            // Get an instance of Ignite cluster.
+                            Ignite ignite = Ignition.ignite();
+
                             // Initialize atomic sequence.
-                            IgniteAtomicSequence seq = Ignition.ignite().atomicSequence("seqName", 0, true);
+                            IgniteAtomicSequence seq = ignite.atomicSequence("seqName", 0, true);
 
                             for (int i = 0; i < 100; i++)
                                 System.out.println("Next sequence value: " + seq.incrementAndGet());
@@ -933,12 +969,16 @@ under the License.
                     </ul>
                 </nav>
                 <div class="col-md-4 col-sm-4">
-                    <p align="right">&copy; 2014 Copyright <a href="#"><b>Apache Ignite</b></a></p>
+                    <p align="right">
+                        Copyright &copy; 2014 <a href="http://www.apache.org/">The Apache Software Foundation</a>. Apache, Apache Ignite,
+                        the Apache feather, Ignite logo are trademarks of The Apache Software
+                        Foundation.
+                    </p>
                     <ul class="social-networks list-unstyled">
-                        <li><a href="https://www.linkedin.com/company/249196" class="icon-linkedin"></a></li>
-                        <li><a href="https://www.twitter.com/gridgain" class="icon-twitter"></a></li>
-                        <li><a href="https://plus.google.com/101084158514011491168/posts" class="icon-google-plus"></a></li>
-                        <li><a href="https://www.vimeo.com/gridgain" class="icon-youtube"></a></li>
+                        <li><a href="https://www.linkedin.com/company/apache-ignite" class="icon-linkedin"></a></li>
+                        <li><a href="https://twitter.com/ApacheIgnite" class="icon-twitter"></a></li>
+                        <li><a href="https://plus.google.com/109419715166167783665/about" class="icon-google-plus"></a></li>
+                        <li><a href="https://www.facebook.com/pages/Apache-Ignite-Incubating/813431118713318" class="icon-facebook"></a></li>
                     </ul>
                 </div>
             </div>
@@ -1046,13 +1086,13 @@ under the License.
         $(this).tab('show')
     })
 
-    $('ul#compute-examples a[href="datastructures-example-queues"]').click(function (e) {
+    $('ul#compute-examples a[href="datastructures-example-queue"]').click(function (e) {
         e.preventDefault();
 
         $(this).tab('show')
     })
 
-    $('ul#compute-examples a[href="datastructures-example-sets"]').click(function (e) {
+    $('ul#compute-examples a[href="datastructures-example-set"]').click(function (e) {
         e.preventDefault();
 
         $(this).tab('show')
