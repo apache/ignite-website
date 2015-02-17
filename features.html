@@ -386,7 +386,7 @@ under the License.
 
                             // Wait for all futures to complete.
                             for (IgniteFuture&lt;?&gt; f : futs)
-                            f.get();
+                                f.get();
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-closure">
@@ -417,7 +417,7 @@ under the License.
 
                             // Add up individual word lengths received from remote nodes.
                             for (int len : res)
-                            sum += len;
+                                sum += len;
                         </pre>
                     </div>
                 </div>
@@ -725,7 +725,7 @@ under the License.
                             // Add listener for ordered messages on all nodes.
                             ignite.message().remoteListen("MyOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
                                 @Override public boolean apply(UUID nodeId, String msg) {
-                                    System.out.println("Received ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+                                    System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
 
                                     return true; // Return true to continue listening.
                                 }
@@ -733,7 +733,8 @@ under the License.
 
                             // Send ordered messages to remote nodes nodes.
                             for (int i = 0; i < 10; i++)
-                                ignite.message(ignite.cluster().forRemotes()).sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
+                                ignite.message(ignite.cluster().forRemotes()).
+                                    sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
                         </pre>
                     </div>
                     <div class="tab-pane" id="messaging-example-unordered">
@@ -747,7 +748,7 @@ under the License.
                             // Add listener for unordered messages on all nodes.
                             ignite.message().remoteListen("MyUnOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
                                 @Override public boolean apply(UUID nodeId, String msg) {
-                                    System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+                                    System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
 
                                     return true; // Return true to continue listening.
                                 }
@@ -755,7 +756,8 @@ under the License.
 
                             // Send unordered messages to remote nodes.
                             for (int i = 0; i < 10; i++)
-                                ignite.message(ignite.cluster().forRemotes()).send("MyUnOrderedTopic", Integer.toString(i));
+                                ignite.message(ignite.cluster().forRemotes()).
+                                    send("MyUnOrderedTopic", Integer.toString(i));
                         </pre>
                     </div>
                 </div>
