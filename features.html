@@ -538,12 +538,30 @@ under the License.
                 <div class="tab-content">
                     <div class="tab-pane active" id="messaging-example-ordered">
                         <pre class="brush:java">
-                            
+                            Ignite ignite = Ignition.ignite();
+
+                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
+
+                            // Add listener for unordered messages on all remote nodes.
+                            rmtMsg.remoteListen("MyOrderedTopic", (nodeId, msg) -> {
+                                System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
+
+                                return true; // Return true to continue listening.
+                            });
+
+                            // Send ordered messages to remote nodes.
+                            for (int i = 0; i < 10; i++)
+                                rmtMsg.sendOrdered("MyOrderedTopic", Integer.toString(i));
+                        </pre>                            
                     </div>
                     <div class="tab-pane" id="messaging-example-unordered">
                         <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
+
                             // Add listener for unordered messages on all remote nodes.
-                            ignite.message().remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
+                            rmtMsg.remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
                                 System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
 
                                 return true; // Return true to continue listening.
@@ -551,8 +569,7 @@ under the License.
 
                             // Send unordered messages to remote nodes.
                             for (int i = 0; i < 10; i++)
-                                ignite.message(ignite.cluster().forRemotes()).
-                                    send("MyUnOrderedTopic", Integer.toString(i));
+                                rmtMsg.send("MyUnOrderedTopic", Integer.toString(i));
                         </pre>
                     </div>
                 </div>
