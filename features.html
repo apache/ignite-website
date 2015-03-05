@@ -413,72 +413,10 @@ under the License.
             </div>
         </section>
 
-        <section id="hadoop" class="feature-section">
-            <h2>Hadoop Acceleration</h2>
-            <p>
-                Hadoop Accelerator enhances existing Hadoop technology to enable fast data processing using the tools and technology your organization is already using today.<br/><br/>
-                Ignite’s in-memory accelerator for Hadoop is based on the dual-mode,
-                high-performance in-memory file system that is 100% compatible with Hadoop HDFS, and an in-memory optimized MapReduce implementation. In-memory HDFS and in-memory MapReduce provide easy to use extensions to disk-based HDFS and traditional MapReduce, delivering up to 100x faster performance.
-            </p>
-            <div class="feature-box">
-                <div class="feature-left">
-                    <div class="features-heading">Features:</div>
-                    <ul class="features-list">
-                        <li>100x Faster Performance</li>
-                        <li>In-Memory MapReduce</li>
-                        <li>Highly Optimized In-Memory Processing</li>
-                        <li>Standalone File System</li>
-                        <li>Optional Caching Layer for HDFS</li>
-                        <li>Read-Through and Write-Through with HDFS</li>
-                    </ul>
-                </div>
-                <div class="feature-right">
-                    <img src="images/hadoop_sequence.png" width="400px"/>
-                </div>
-            </div>
-
-            <div class="code-examples">&nbsp;</div>
-            
-            <div class="feature-links">
-                <!--<a target=wiki href="#">Learn More <i class="fa fa-angle-double-right"></i></a>-->
-                <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
-            </div>
-        </section>
-
-        <section id="filesystem" class="feature-section">
-            <h2>Distributed File System</h2>
-            <p>
-                One of the unique capabilities of Ignite is a file system interface to its in-memory data called
-                Ignite File System (IGFS). IGFS delivers similar functionality to Hadoop HDFS, including the ability to
-                create a fully functional file system in memory. In fact, IFS is at the core of
-                Ignite’s In-Memory Hadoop Accelerator. <br/><br/>
-                The data from each file is split on separate data blocks and stored in cache.
-                Developers can access each file’s data with a standard Java streaming API. Moreover, for each part
-                of the file a developer can calculate an affinity and process the file’s content on corresponding
-                nodes to avoid unnecessary networking.
-            </p>
-            <div class="features-heading">Features:</div>
-            <ul class="features-list">
-                <li>Provides Typical File System “View” on In-Memory Caches</li>
-                <li>List Directories or Get Information for a Single Path</li>
-                <li>Create/Move/Delete Files or Directories</li>
-                <li>Write/Read Data Streams into/from Files</li>
-            </ul>
-            <div class="feature-links">
-                <a target=wiki href="http://doc.gridgain.org/latest/GGFS">Learn More <i class="fa fa-angle-double-right"></i></a>
-                <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
-            </div>
-        </section>
-
         <section id="clustering" class="feature-section">
             <h2>Advanced Clustering</h2>
             <p>
-                Ignite In-Memory Data Fabric provides one of the most sophisticated clustering technologies on
-                Java Virtual Machine (JVM). Ignite nodes can automatically discover each other.
-                This helps to scale the cluster when needed, without having to restart the whole cluster. Developers
-                can also leverage from Ignite’s hybrid cloud support that allows establishing connection
-                between private cloud and public clouds such as Amazon Web Services, providing them
-                with best of both worlds. <br/><br/>
+                Ignite In-Memory Data Fabric provides one of the most sophisticated clustering technologies on Java Virtual Machine (JVM). Ignite nodes can automatically discover each other. This helps to scale the cluster when needed, without having to restart the whole cluster.Developers can also leverage from Ignite’s hybrid cloud support that allows establishing connection between private cloud and public clouds such as Amazon Web Services, providing them with best of both worlds. <br/><br/>
             </p>
             <div class="feature-box">
                 <div class="feature-left">
@@ -565,7 +503,7 @@ under the License.
             </div>
 
             <div class="feature-links">
-                <a target=wiki href="http://doc.gridgain.org/latest/Basic+Concepts">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a target=wiki href="http://apacheignite.readme.io/v1.0/docs/cluster">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
@@ -573,17 +511,20 @@ under the License.
         <section id="messaging" class="feature-section">
             <h2>Distributed Messaging</h2>
             <p>
-                Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data
-                via publish-subscribe and direct point-to-point communication models.
+                Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data via publish-subscribe and direct point-to-point communication models.
             </p>
-            <div class="features-heading">Features:</div>
-            <ul class="features-list">
-                <li>Support for Topic-Based Publish-Subscribe Model</li>
-                <li>Support for Direct Point-to-Point Communication</li>
-                <li>Pluggable Communication Transport Layer</li>
-                <li>Support for Message Ordering</li>
-                <li>Cluster-Aware Message Listener Auto-Deployment </li>
-            </ul>
+            <div class="feature-box">
+                <div class="feature-left">
+                    <div class="features-heading">Features:</div>
+                    <ul class="features-list">
+                        <li>Support for Topic-Based Publish-Subscribe Model</li>
+                        <li>Support for Direct Point-to-Point Communication</li>
+                        <li>Pluggable Communication Transport Layer</li>
+                        <li>Support for Message Ordering</li>
+                        <li>Cluster-Aware Message Listener Auto-Deployment </li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="code-examples">
                 <div class="examples-heading">Examples:</div>
@@ -596,43 +537,16 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="messaging-example-ordered">
-                        <br/>
-                        <p>
-                            Send and receive ordered messages
-                        </p>
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            // Add listener for ordered messages on all nodes.
-                            ignite.message().remoteListen("MyOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
-                                @Override public boolean apply(UUID nodeId, String msg) {
-                                    System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
-
-                                    return true; // Return true to continue listening.
-                                }
-                            });
-
-                            // Send ordered messages to remote nodes nodes.
-                            for (int i = 0; i < 10; i++)
-                                ignite.message(ignite.cluster().forRemotes()).
-                                    sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
-                        </pre>
+                            
                     </div>
                     <div class="tab-pane" id="messaging-example-unordered">
-                        <br/>
-                        <p>
-                            Send and receive unordered messages
-                        </p>
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            // Add listener for unordered messages on all remote nodes.
+                            ignite.message().remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
+                                System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
 
-                            // Add listener for unordered messages on all nodes.
-                            ignite.message().remoteListen("MyUnOrderedTopic", new IgniteBiPredicate&lt;UUID, String&gt;() {
-                                @Override public boolean apply(UUID nodeId, String msg) {
-                                    System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
-
-                                    return true; // Return true to continue listening.
-                                }
+                                return true; // Return true to continue listening.
                             });
 
                             // Send unordered messages to remote nodes.
@@ -645,7 +559,7 @@ under the License.
             </div>
 
             <div class="feature-links">
-                <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Messaging">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a target=wiki href="http://apacheignite.readme.io/v1.0/docs/messaging">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
@@ -813,6 +727,64 @@ under the License.
 
             <div class="feature-links">
                 <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Data+Structures">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
+            </div>
+        </section>
+
+        <section id="filesystem" class="feature-section">
+            <h2>Distributed File System</h2>
+            <p>
+                One of the unique capabilities of Ignite is a file system interface to its in-memory data called Ignite File System (IGFS). IGFS delivers similar functionality to Hadoop HDFS, but only in memory. In fact, IGFS is at the core of Ignite’s In-Memory Hadoop Accelerator. <br/><br/>
+                The data from each file is split on separate data blocks and stored in cache.
+                Developers can access each file’s data with a standard Java streaming API. Moreover, for each part of the file a developer can calculate an affinity and process the file’s content on corresponding nodes to avoid unnecessary networking.
+            </p>
+            <div class="feature-box">
+                <div class="feature-left">
+                    <div class="features-heading">Features:</div>
+                    <ul class="features-list">
+                        <li>In-Memory File System</li>
+                        <li>List Directories</li>
+                        <li>Get Information for a Single Path</li>
+                        <li>Create/Move/Delete Files or Directories</li>
+                        <li>Write/Read Data Streams into/from Files</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-links">
+                <!--<a target=wiki href="http://doc.gridgain.org/latest/GGFS">Learn More <i class="fa fa-angle-double-right"></i></a>-->
+                <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
+            </div>
+        </section>
+
+        <section id="hadoop" class="feature-section">
+            <h2>Hadoop Acceleration</h2>
+            <p>
+                Hadoop Accelerator enhances existing Hadoop technology to enable fast data processing using the tools and technology your organization is already using today.<br/><br/>
+                Ignite’s in-memory accelerator for Hadoop is based on the dual-mode,
+                high-performance in-memory file system that is 100% compatible with Hadoop HDFS, and an in-memory optimized MapReduce implementation. In-memory HDFS and in-memory MapReduce provide easy to use extensions to disk-based HDFS and traditional MapReduce, delivering up to 100x faster performance.
+            </p>
+            <div class="feature-box">
+                <div class="feature-left">
+                    <div class="features-heading">Features:</div>
+                    <ul class="features-list">
+                        <li>100x Faster Performance</li>
+                        <li>In-Memory MapReduce</li>
+                        <li>Highly Optimized In-Memory Processing</li>
+                        <li>Standalone File System</li>
+                        <li>Optional Caching Layer for HDFS</li>
+                        <li>Read-Through and Write-Through with HDFS</li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <img src="images/hadoop_sequence.png" width="400px"/>
+                </div>
+            </div>
+
+            <div class="code-examples">&nbsp;</div>
+            
+            <div class="feature-links">
+                <!--<a target=wiki href="#">Learn More <i class="fa fa-angle-double-right"></i></a>-->
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
