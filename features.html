@@ -100,10 +100,6 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="datagrid-example-basic">
-                        <br/>
-                        <p>
-                            Basic cache operations example.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
@@ -130,10 +126,6 @@ under the License.
                         </pre>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-transactions">
-                        <br/>
-                        <p>
-                            Transaction example demonstrating multiple reads and puts done atomically.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
@@ -156,10 +148,6 @@ under the License.
                         </pre>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-locks">
-                        <br/>
-                        <p>
-                            Synchronously acquire and release lock by key.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
@@ -181,31 +169,6 @@ under the License.
                         </pre>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-sqlquery">
-                        <br/>
-                        <p>
-                            Person class definition.
-                        </p>
-                        <pre class="brush:java">
-                            private static class Person implements Serializable {
-                                /** Person ID (indexed). */
-                                @CacheQuerySqlField(index = true)
-                                private long id;
-
-                                /** Organization ID (indexed). */
-                                @CacheQuerySqlField(index = true)
-                                private long orgId;
-
-                                /** First name (not-indexed). */
-                                @CacheQuerySqlField
-                                private String firstName;
-
-                                ...
-                            }
-                        </pre>
-                        <br/>
-                        <p>
-                            Simple distributed SQL query.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
@@ -223,31 +186,6 @@ under the License.
                         </pre>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-sqljoin">
-                        <br/>
-                        <p>
-                            Person class definition.
-                        </p>
-                        <pre class="brush:java">
-                            private static class Person implements Serializable {
-                                /** Person ID (indexed). */
-                                @CacheQuerySqlField(index = true)
-                                private long id;
-
-                                /** Organization ID (indexed). */
-                                @CacheQuerySqlField(index = true)
-                                private long orgId;
-
-                                /** First name (not-indexed). */
-                                @CacheQuerySqlField
-                                private String firstName;
-
-                                ...
-                            }
-                        </pre>
-                        <br/>
-                        <p>
-                            Distributed query with SQL join between Person and Organization.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
@@ -311,21 +249,11 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="compute-example-broadcast">
-                        <br/>
-                        <p>
-                            Print out hello message on all nodes.
-                        </p>
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
                             // Print out hello message on all nodes.
-                            ignite.compute().broadcast(
-                                new IgniteRunnable() {
-                                    @Override public void run() {
-                                        System.out.println(">>> Hello Node! :)");
-                                    }
-                                }
-                            );
+                            ignite.compute().broadcast(() -> "Hello Node!");
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-runnable">
@@ -576,6 +504,7 @@ under the License.
                 between private cloud and public clouds such as Amazon Web Services, providing them
                 with best of both worlds. <br/><br/>
             </p>
+            <img src="images/ignite_cluster.png"/>
             <div class="features-heading">Features:</div>
             <ul class="features-list">
                 <li>Dynamic Topology Management</li>
