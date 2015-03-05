@@ -260,14 +260,14 @@ under the License.
                     </div>
                     <div class="tab-pane" id="compute-example-runnable">
                         <pre class="brush:java">
-                            Collection<IgniteCallable<Integer>> calls = new ArrayList<>();
+                            Collection&lt;IgniteCallable&lt;Integer&gt;&gt; calls = new ArrayList&lt;&gt;();
                              
                             // Iterate through all words in the sentence and create callable jobs.
                             for (String word : "How Many Characters".split(" "))
                                 calls.add(word::length);
 
                             // Execute collection of callables on the Ignite cluster.
-                            Collection<Integer> res = ignite.compute().call(calls);
+                            Collection&lt;Integer&gt; res = ignite.compute().call(calls);
 
                             // Add all the word lengths received from cluster nodes.
                             int total = res.stream().mapToInt(Integer::intValue).sum(); 
@@ -278,7 +278,7 @@ under the License.
                             IgniteCompute compute  = ignite.compute();
 
                             // Execute closure on all cluster nodes.
-                            Collection<Integer> res = ignite.compute().apply(
+                            Collection&lt;Integer&gt; res = ignite.compute().apply(
                                 String::length,
                                 Arrays.asList("How Many Characters".split(" "))
                             );
