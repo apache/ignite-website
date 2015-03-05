@@ -227,9 +227,11 @@ under the License.
                         <li>Dynamic Clustering</li>
                         <li>Fork-Join & MapReduce Processing</li>
                         <li>Distributed Closure Execution</li>
-                        <li>Load Balancing and Fault Tolerance</li>
-                        <li>Distributed Messaging and Events</li>
+                        <li>Adaptive Load Balancing</li>
+                        <li>Automatic Fault Tolerance</li>
                         <li>Linear Scalability</li>
+                        <li>Custom Scheduling</li>
+                        <li>Checkpointing of Long Running Jobs</li>
                         <li>ExecutorService</li>
                     </ul>
                 </div>
@@ -252,69 +254,40 @@ under the License.
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
-                            // Print out hello message on all nodes.
+                            // Print out hello message on all cluster nodes.
                             ignite.compute().broadcast(() -> "Hello Node!");
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-runnable">
-                        <br/>
-                        <p>
-                            Iterate through all words in a sentence and print each word on different nodes in the cluster.
-                        </p>
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            Collection<IgniteCallable<Integer>> calls = new ArrayList<>();
+                             
+                            // Iterate through all words in the sentence and create callable jobs.
+                            for (String word : "How Many Characters".split(" "))
+                                calls.add(word::length);
 
-                            Collection&lt;IgniteFuture&gt; futs = new ArrayList<>();
+                            // Execute collection of callables on the Ignite cluster.
+                            Collection<Integer> res = ignite.compute().call(calls);
 
-                            // Enable asynchronous mode.
-                            IgniteCompute compute = ignite.compute().withAsync();
-
-                            // Iterate through all words in the sentence and create runnable jobs.
-                            for (final String word : "Print words using runnable".split(" ")) {
-                                // Execute runnable on some node.
-                                compute.run(new IgniteRunnable() {
-                                    @Override public void run() {
-                                        System.out.println("Printing '" + word + "' on this node from ignite job.");
-                                    }
-                                });
-
-                                futs.add(compute.future());
-                            }
-
-                            // Wait for all futures to complete.
-                            for (IgniteFuture&lt;?&gt; f : futs)
-                                f.get();
+                            // Add all the word lengths received from cluster nodes.
+                            int total = res.stream().mapToInt(Integer::intValue).sum(); 
                         </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-closure">
-                        <br/>
-                        <p>
-                            This example splits a phrase into collection of words, computes their length on different
-                            nodes and then computes total amount of non-whitespaces characters in the phrase.
-                        </p>
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            IgniteCompute compute  = ignite.compute();
 
                             // Execute closure on all cluster nodes.
-                            Collection&lt;Integer&gt; res = ignite.compute().apply(
-                                new IgniteClosure&lt;String, Integer&gt;() {
-                                    @Override public Integer apply(String word) {
-                                        System.out.println("Printing '" + word + "' on this node from Ignite job.");
-
-                                        // Return number of letters in the word.
-                                        return word.length();
-                                    }
-                                },
-
-                                // Job parameters. Ignite will create as many jobs as there are parameters.
-                                Arrays.asList("Count characters using closure".split(" "))
+                            // If the number of closures is less than the number of 
+                            // parameters, then Ignite will create as many closures 
+                            // as there are parameters.
+                            Collection<Integer> res = ignite.compute().apply(
+                                String::length,
+                                Arrays.asList("How Many Characters".split(" "))
                             );
-
-                            int sum = 0;
-
-                            // Add up individual word lengths received from remote nodes.
-                            for (int len : res)
-                                sum += len;
+                                 
+                            // Add all the word lengths received from cluster nodes.
+                            int total = res.stream().mapToInt(Integer::intValue).sum(); 
                         </pre>
                     </div>
                 </div>
