@@ -1,0 +1,538 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Ignite vs. Hazelcast Benchmarks</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-1382082-8', 'auto');
+      ga('send', 'pageview');
+    </script>    
+</head>
+<body>
+<div id="wrapper">
+    <div id="header"></div>
+
+    <main id="main" role="main" class="container key-features">
+        <div id="benchmarks">
+            <section id="benchmarksconfiguration" class="first-section">
+                <p>
+                    Benchmarks were performed on Ignite 1.0.0 and Hazelcast 3.2.3 to evaluate and compare
+                    their performance for various cache operations and SQL based cache queries. The results
+                    obtained provide throughput, latency, and dStat probes measuring various metrics during
+                    benchmark execution.
+                </p>
+
+                <h4>Hardware Specification</h4>
+
+                <table class="benchmarks" style="width: 70%;">
+                    <tbody>
+                    <tr>
+                        <th width="55%">Specification</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Hardware</td>
+                        <td>TODO</td>
+                    </tr>
+                    <tr>
+                        <td>CPU</td>
+                        <td>TODO</td>
+                    </tr>
+                    <tr>
+                        <td>RAM</td>
+                        <td>TODO</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h4>Test Parameters</h4>
+
+                <table style="width: 70%;">
+                    <tr>
+                        <th width="55%">Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Number of Nodes</td>
+                        <td>TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Threads</td>
+                        <td>TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Test Duration (ms)</td>
+                        <td>TODO</td>
+                    </tr>
+                </table>
+
+                <h4>Results Summary</h4>
+
+                <p>
+                    For all benchmarks, one local node and three remote nodes were configured
+                    with TODO client threads and a test duration of TODO sec.
+                </p>
+
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput, Ops/sec <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency, μs <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th>Benchmark Name</th>
+                        <th width="17%">Ignite</th>
+                        <th width="17%">Hazelcast</th>
+                        <th width="17%">Ignite</th>
+                        <th width="17%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td><a href="#atomicputbenchmark">Atomic Put</a></td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#atomicputandgetbenchmark">Atomic Put And Get</a></td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#transactionalputbenchmark">Transactional Put</a></td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#transactionalputandgetbenchmark">Transactional Put And Get</a></td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#sqlquerybenchmark">SQL Query</a></td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="atomicputbenchmark">
+                <h3>Atomic Put Benchmark</h3>
+
+                <p>
+                    Benchmarks atomic distributed cache put operation in Ignite. Randomly generated
+                    key-value pairs are stored in cache on multiple nodes.
+                </p>
+
+                <h4>Results Summary</h4>
+
+                <p>
+                    Results show that atomic cache put operations in Ignite performed exceptionally
+                    well with approximately TODO operations per second, as compared to Hazelcast
+                    with approximately TODO atomic put operations per second.
+                </p>
+
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td>Avg</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="http://www.gridgain.com/wp-content/benchmarks/GG-vs-HZ/001-atomic-put-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.com/wp-content/benchmarks/GG-vs-HZ/001-atomic-put-0-backup-async-backup/Results.html', '']);">
+                        <img src="/images/benchmarks/ignite-vs-hazelcast/001-atomic-put-0-backup-async-backup-e1404198496783.png" alt="">
+                    </a>
+                </p>
+
+                <p>
+                    To see complete graph and other probes,
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/001-atomic-put-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/001-atomic-put-0-backup-async-backup/Results.html', 'click here']);">
+                        click here</a>.
+                </p>
+            </section>
+
+            <section id="atomicputandgetbenchmark">
+                <h3>Atomic Put And Get Benchmark</h3>
+
+                <p>Benchmarks atomic distributed cache put and get operations in Ignite. Randomly generated key-value pairs are
+                    stored and retrieved from cache on multiple nodes.</p>
+                <h4>Results Summary</h4>
+
+                <p>Results show that more than TODO cache put and get operations per second can be performed in Ignite as
+                    compared to TODO cache put and get operations per second in Hazelcast.</p>
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td>Avg</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/005-atomic-put-get-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/005-atomic-put-get-0-backup-async-backup/Results.html', '']);">
+                        <img src="/images/benchmarks/ignite-vs-hazelcast/005-atomic-put-get-0-backup-async-backup-e1404252048561.png" alt="">
+                    </a>
+                </p>
+
+                <p>
+                    To see complete graph and other probes,
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/005-atomic-put-get-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/005-atomic-put-get-0-backup-async-backup/Results.html', 'click here']);">
+                        click here</a>.
+                </p>
+            </section>
+
+            <section id="transactionalputbenchmark">
+                <h3>Transactional Put Benchmark</h3>
+
+                <p>
+                    Benchmarks transactional distributed cache put operation. Randomly generated key-value
+                    pairs are stored in PARTITIONED cache with TRANSACTIONAL atomicity mode.
+                </p>
+
+                <h4>Results Summary</h4>
+
+                <p>
+                    Following results show that more than TODO transactional put operations can be
+                    performed in Ignite, which is much higher than Hazelcast resulting in approximately
+                    TODO transactional put operations per second.
+                </p>
+
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td>Avg</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/009-tx-put-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/009-tx-put-0-backup-async-backup/Results.html', '']);">
+                        <img src="/images/benchmarks/ignite-vs-hazelcast/009-tx-put-0-backup-async-backup-e1404252786205.png" alt="">
+                    </a>
+                </p>
+
+                <p>To see complete graph and other probes,
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/009-tx-put-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/009-tx-put-0-backup-async-backup/Results.html', 'click here']);">
+                        click here</a>.
+                </p>
+            </section>
+
+            <section id="transactionalputandgetbenchmark">
+                <h3>Transactional Put And Get Benchmark</h3>
+
+                <p>
+                    Benchmarks transactional distributed cache put and get operations together. Randomly
+                    generated key-value pairs are stored and retrieved in a single transaction from PARTITIONED
+                    cache with TRANSACTIONAL atomicity mode.
+                </p>
+
+                <h4>Results Summary</h4>
+
+                <p>
+                    Following results show that approximately TODO transactional cache put and get
+                    operations per second can be performed together in Ignite, as compared to only
+                    TODO transactional put and get operations per second in Hazelcast.
+                </p>
+
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td>Avg</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/013-tx-put-get-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/013-tx-put-get-0-backup-async-backup/Results.html', '']);">
+                        <img src="/images/benchmarks/ignite-vs-hazelcast/013-tx-put-get-0-backup-async-backup-e1404252927809.png" alt="">
+                    </a>
+                </p>
+
+                <p>
+                    To see complete graph and other probes,
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/013-tx-put-get-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/013-tx-put-get-0-backup-async-backup/Results.html', 'click here']);">
+                        click here</a>.
+                </p>
+            </section>
+
+            <section id="sqlquerybenchmark">
+                <h3>SQL Query Benchmark</h3>
+
+                <p>
+                    Benchmarks distributed SQL query operation on cached data. Simple SQL query was executed on
+                    data stored on multiple nodes in PARTITIONED cache.
+                </p>
+
+                <h4>Results Summary</h4>
+
+                <p>
+                    Results show a throughput of approximately TODO SQL based cache query operations per
+                    second in Ignite, which proves how quickly data can be retrieved from Ignite’s In-Memory
+                    Data Grid through cache queries, as compared to only TODO SQL based cache query operations
+                    per second in Hazelcast.
+                </p>
+
+                <table style="width: 700px;">
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
+                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                        <th width="23%">Ignite</th>
+                        <th width="23%">Hazelcast</th>
+                    </tr>
+                    <tr>
+                        <td>Avg</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                        <td bgcolor="#def2e7">TODO</td>
+                        <td bgcolor="#e0ecf5">TODO</td>
+                    </tr>
+                </table>
+
+                <p>
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/017-sql-query-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/017-sql-query-0-backup-async-backup/Results.html', '']);">
+                        <img src="/images/benchmarks/ignite-vs-hazelcast/017-sql-query-0-backup-async-backup-e1404253076873.png" alt="">
+                    </a>
+                </p>
+
+                <p>
+                    To see complete graph and other probes,
+                    <a href="http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/017-sql-query-0-backup-async-backup/Results.html"
+                        onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.gridgain.org/wp-content/benchmarks/GG-vs-HZ/017-sql-query-0-backup-async-backup/Results.html', 'click here']);">
+                        click here</a>.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+</div>
+<script type="text/javascript">
+    eval(function()
+    {
+        try
+        {
+            doHighlight();
+        }
+        catch(e)
+        {
+            var elem = document.createElement('SCRIPT');
+            elem.src="https://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlight.js";
+            var theBody = document.getElementsByTagName('body')[0];
+            theBody.appendChild(elem);
+        }
+    })();
+</script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script src="/js/jquery-1.11.1.min.js"><\/script>')</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement('style');
+        msViewportStyle.appendChild(
+            document.createTextNode(
+                '@-ms-viewport{width:auto!important}'
+            )
+        );
+        document.querySelector('head').appendChild(msViewportStyle)
+    }
+    $(document).ready(function(e) {
+        $('#header').load('/includes/header.html');
+        $('#igniteimage').load('/includes/igniteimage.html');
+        $('#footer').load('/includes/footer.html');
+    });
+</script>
+</body>
+</html>
