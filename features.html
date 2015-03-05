@@ -534,26 +534,18 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="clustering-example-broadcast">
-                        <br/>
-                        <p>
-                            Broadcast message to multiple nodes in the cluster.
-                        </p>
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            final Ignite ignite = Ignition.ignite();
 
-                            // Create runnable job.
-                            IgniteRunnable r = new IgniteRunnable() {
-                                @Override
-                                public void run() {
-                                    System.out.println("Hello World");
-                                }
-                            };
+                            IgniteCluster cluster = ignite.cluster();
 
-                            // Broadcast to all cluster nodes.
-                            ignite.compute().broadcast(r);
+                            // Get compute instance which will only execute
+                            // over remote nodes, i.e. not this node.
+                            IgniteCompute compute = ignite.compute(cluster.forRemotes());
 
-                            // Broadcast to all remote nodes.
-                            ignite.compute(ignite.cluster().forRemotes()).broadcast(r);
+                            // Broadcast to all remote nodes and print the ID of the node 
+                            // on which this closure is executing.
+                            compute.broadcast(() -> System.out.println("Hello Node: " + ignite.cluster().localNode().id());
                         </pre>
                     </div>
 
