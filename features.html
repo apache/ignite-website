@@ -584,20 +584,19 @@ under the License.
         <section id="events" class="feature-section">
             <h2>Distributed Events</h2>
             <p>
-                Distributed events functionality allows applications to receive notifications about cache events
-                occurring in distributed grid environment. Developers can use this functionality to get notified
-                about remote tasks executions or any cache data changes within the cluster.<br/><br/>
-                In Ignite, event notifications can be grouped together and sent in batches and/or timely intervals.
-                Batching notifications help attain high cache performance and low latency.
-
+                Distributed events functionality allows applications to receive notifications about cache events occurring in distributed grid environment. Developers can use this functionality to get notified about remote tasks executions or any cache data changes within the cluster. Event notifications can be grouped together and sent in batches and/or timely intervals to reduce network traffic.
             </p>
-            <div class="features-heading">Features:</div>
-            <ul class="features-list">
-                <li>Subscribe Local and Remote Listeners</li>
-                <li>Enable and Disable any Event</li>
-                <li>Provide Local and Remote Filters for Fine-Grained Control Over Notifications</li>
-                <li>Automatic Batching of Notifications for Enhanced Performance</li>
-            </ul>
+            <div class="feature-box">
+                <div class="feature-left">
+                    <div class="features-heading">Features:</div>
+                    <ul class="features-list">
+                        <li>Subscribe Local and Remote Listeners</li>
+                        <li>Enable and Disable any Event</li>
+                        <li>Provide Local and Remote Event Filters</li>
+                        <li>Group Event Notifications into Batches</li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="code-examples">
                 <div class="examples-heading">Examples:</div>
@@ -616,27 +615,21 @@ under the License.
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
-                            // Get an instance of named cache.
-                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
-
                             // sample remote filter which only accepts events for keys
                             // that are greater than or equal to 10.
-                            IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = new IgnitePredicate&lt;CacheEvent&gt;() {
-                                @Override public boolean apply(CacheEvent evt) {
-                                    System.out.println("Cache event: " + evt);
-
-                                    int key = evt.key();
-
-                                    return key >= 10;
-                                }
-                            };
+                            IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = evt -&gt; evt.key() >= 10;
 
                             // Subscribe to specified cache events on all nodes that have cache running.
                             ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
-                                EVT_CACHE_OBJECT_PUT, EVT_CACHE_OBJECT_READ, EVT_CACHE_OBJECT_REMOVED);
+                                EventType.EVT_CACHE_OBJECT_PUT, 
+                                EventType.EVT_CACHE_OBJECT_READ, 
+                                EventType.EVT_CACHE_OBJECT_REMOVED);
+
+                            // Get an instance of named cache.
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
 
                             // Generate cache events.
-                            for (int i = 0; i < 20; i++)
+                            for (int i = 0; i &lt; 20; i++)
                                 cache.put(i, Integer.toString(i));
                         </pre>
                     </div>
@@ -644,7 +637,7 @@ under the License.
             </div>
 
             <div class="feature-links">
-                <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Events">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a target=wiki href="http://apacheignite.readme.io/v1.0/docs/events">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
@@ -657,15 +650,20 @@ under the License.
                 to it on one node and poll it from another node. Or have a distributed Primary Key generator,
                 which would guarantee uniqueness on all nodes.
             </p>
-            <div class="features-heading">Features:</div>
-            <ul class="features-list">
-                <li>Concurrent Map</li>
-                <li>Distributed Queues and Sets</li>
-                <li>AtomicLong</li>
-                <li>AtomicSequence</li>
-                <li>AtomicReference</li>
-                <li>CountDownLatch</li>
-            </ul>
+            <div class="feature-box">
+                <div class="feature-left">
+                    <div class="features-heading">Features:</div>
+                    <ul class="features-list">
+                        <li>Concurrent Map</li>
+                        <li>Distributed Queues and Sets</li>
+                        <li>AtomicLong</li>
+                        <li>AtomicSequence</li>
+                        <li>AtomicReference</li>
+                        <li>CountDownLatch</li>
+                        <li>ExecutorService</li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="code-examples">
                 <div class="examples-heading">Examples:</div>
@@ -743,7 +741,7 @@ under the License.
             </div>
 
             <div class="feature-links">
-                <a target=wiki href="http://doc.gridgain.org/latest/Distributed+Data+Structures">Learn More <i class="fa fa-angle-double-right"></i></a>
+                <a target=wiki href="http://apacheignite.readme.io/v1.0/docs/queue-and-set">Learn More <i class="fa fa-angle-double-right"></i></a>
                 <a href="#features">Top <i class="fa fa-angle-double-up"></i></a>
             </div>
         </section>
