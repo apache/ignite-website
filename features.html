@@ -527,8 +527,9 @@ under the License.
                 <div class="examples-heading">Examples:</div>
                 <!-- Nav tabs -->
                 <ul id="clustering-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#clustering-example-broadcast" aria-controls="home" data-toggle="tab">Broadcast</a></li>
-                    <li><a href="#clustering-example-unicast" aria-controls="profile" data-toggle="tab">Unicast</a></li>
+                    <li class="active"><a href="#clustering-example-remotes" aria-controls="home" data-toggle="tab">Remote Cluster Group</a></li>
+                    <li><a href="#clustering-example-random" aria-controls="profile" data-toggle="tab">Random Cluster Group</a></li>
+                    <li><a href="#clustering-example-custom" aria-controls="profile" data-toggle="tab">Custom Cluster Group</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -539,43 +540,49 @@ under the License.
 
                             IgniteCluster cluster = ignite.cluster();
 
-                            // Get compute instance which will only execute
-                            // over remote nodes, i.e. not this node.
-                            IgniteCompute compute = ignite.compute(cluster.forRemotes());
+                            // Cluster group containing all remote nodes, i.e. not this node.
+                            ClusterGroup remotes = cluster.forRemotes();
+
+                            // Get compute instance which will only execute over remote nodes.
+                            IgniteCompute compute = ignite.compute(remotes);
 
                             // Broadcast to all remote nodes and print the ID of the node 
                             // on which this closure is executing.
-                            compute.broadcast(() -> System.out.println("Hello Node: " + ignite.cluster().localNode().id());
+                            compute.broadcast(() -> System.out.println("Hello Node: " + cluster.localNode().id());
                         </pre>
                     </div>
 
-                    <div class="tab-pane" id="clustering-example-unicast">
-                        <br/>
-                        <p>
-                            Unicast message to a node in the cluster.
-                        </p>
+                    <div class="tab-pane" id="clustering-example-random">
                         <pre class="brush:java">
-
                             Ignite ignite = Ignition.ignite();
 
-                            // Create runnable job.
-                            IgniteRunnable r = new IgniteRunnable() {
-                                @Override
-                                public void run() {
-                                    System.out.println("Hello World");
-                                }
-                            };
+                            IgniteCluster cluster = ignite.cluster();
 
-                            // Unicast to some random node picked by load balancer.
-                            ignite.compute(ignite.cluster().forRandom()).run(r);
+                            // Cluster group containing random remote node.
+                            ClusterGroup random = cluster.forRemotes().forRandom();
 
-                            // Unicast to some node with CPU load less than 50%.
-                            ignite.compute(ignite.cluster().forPredicate(new IgnitePredicate&lt;ClusterNode&gt;() {
-                                @Override
-                                public boolean apply(ClusterNode n) {
-                                    return n.metrics().getCurrentCpuLoad() <0.5;
-                                }
-                            })).run(r);
+                            // Get compute instance over a random remote node.
+                            IgniteCompute compute = ignite.compute(random);
+
+                            // Send closure to the random node and print its ID.
+                            compute.run(() -> System.out.println("Hello Node: " + cluster.localNode().id());
+                        </pre>
+                    </div>
+
+                    <div class="tab-pane" id="clustering-example-custom">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            IgniteCluster cluster = ignite.cluster();
+
+                            // Dynamic cluster group over nodes loaded less than 50%.
+                            ClusterGroup cpuNodes = cluster.forPredicate(node -> node.metrics().getCurrentCpuLoad() < 0.5);
+
+                            // Get compute instance over nodes loaded less than 50%.
+                            IgniteCompute compute = ignite.compute(cpuNodes);
+
+                            // Send closure to one of the CPU nodes.
+                            compute.run(() -> System.out.println("Hello Node: " + cluster.localNode().id());
                         </pre>
                     </div>
                 </div>
