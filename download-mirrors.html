@@ -1,6 +1,10 @@
 <main id="main" role="main" class="container key-features">
 
-  [define version]1.0.0-rc3[end]
+  <!-- Update the following template variables for every release -->
+  [define displayversion]1.0.0-RC3[end]
+  [define releasedate]2015-03-24[end]
+  [define srcpackageversion]1.0.0-rc3[end]
+  [define binpackageversion]1.0.0-rc3-bin[end]
   [define distdir]incubator/ignite/1.0.0-RC3[end]
   [define disturl]https://www.apache.org/dist[end]
      
@@ -25,28 +29,28 @@
        <li>libraries (required and optional)</li>
     </ul>
     <p>&nbsp;</p>
-    <p><b>1.0.0-RC3</b> (2015-03-24)</b></p>
+    <p><b>[displayversion]</b> ([releasedate])</b></p>
     <ul style="line-height: 112%" class="features-list">
        <li>
         source: 
         <a id="apache_ignite_source_download"
-          href="[preferred]/[distdir]/incubator-ignite-[version].zip"
-          onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-1.0.0-RC3');">incubator-ignite-[version].zip</a> 
+          href="[preferred]/[distdir]/incubator-ignite-[srcpackageversion].zip"
+          onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-[displayversion]');">incubator-ignite-[srcpackageversion].zip</a> 
 
-        (<a href="[disturl]/[distdir]/incubator-ignite-[version].zip.asc">pgp</a>,
-         <a href="[disturl]/[distdir]/incubator-ignite-[version].zip.md5">md5</a>,
-         <a href="[disturl]/[distdir]/incubator-ignite-[version].zip.sha1">sha1</a>)
+        (<a href="[disturl]/[distdir]/incubator-ignite-[srcpackageversion].zip.asc">pgp</a>,
+         <a href="[disturl]/[distdir]/incubator-ignite-[srcpackageversion].zip.md5">md5</a>,
+         <a href="[disturl]/[distdir]/incubator-ignite-[srcpackageversion].zip.sha1">sha1</a>)
        </li>
        <li>
         binary: 
         <a 
           id="apache_ignite_binary_download"
-          href="[preferred]/[distdir]/incubator-ignite-[version]-bin.zip"
-          onclick="ga('send', 'event', 'apache_ignite_binary_download', 'download', 'apache-ignite-1.0.0-RC3');">incubator-ignite-[version]-bin.zip</a> 
+          href="[preferred]/[distdir]/incubator-ignite-[binpackageversion].zip"
+          onclick="ga('send', 'event', 'apache_ignite_binary_download', 'download', 'apache-ignite-[displayversion]');">incubator-ignite-[binpackageversion]-bin.zip</a> 
 
-       (<a href="[disturl]/[distdir]/incubator-ignite-[version]-bin.zip.asc">pgp</a>, 
-        <a href="[disturl]/[distdir]/incubator-ignite-[version]-bin.zip.md5">md5</a>,
-        <a href="[disturl]/[distdir]/incubator-ignite-[version]-bin.zip.sha1">sha1</a>)
+       (<a href="[disturl]/[distdir]/incubator-ignite-[binpackageversion].zip.asc">pgp</a>, 
+        <a href="[disturl]/[distdir]/incubator-ignite-[binpackageversion].zip.md5">md5</a>,
+        <a href="[disturl]/[distdir]/incubator-ignite-[binpackageversion].zip.sha1">sha1</a>)
        </li>
     </ul>
     <p>&nbsp;</p>
@@ -71,12 +75,17 @@
       </select>
       <input type="submit" value="Change" />
     </form>
+    <!-- <p>(The <a href="http://www.apache.org/mirrors/">complete list of mirrors</a>)</p> -->
     <p>&nbsp;</p>
     <p><b>Legal</b></p>
-    For more information about Apache release policy see 
-    <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a>
-    <!--You may also consult the
-    <a href="http://www.apache.org/mirrors/">complete list of mirrors</a>.-->
+    <p>Binary downloads are provided as a convenience for users who
+      cannot or do not wish to compile the source themselves.  These
+      binaries are not official Apache Ignite (incubating)
+      releases. We recommended that you download the officially
+      released source distributions and verify the signatures of the
+      downloaded files before opening them.</p>
+    <p>For more information about Apache release policy see 
+    <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a></p>
   </section> <!-- downloads -->
 
   <section id="build-source" class="feature-block">
@@ -86,18 +95,18 @@
        # Check Out Sprint 2 branch.
        $ git clone https://git-wip-us.apache.org/repos/asf/incubator-ignite -b sprint-2
 
-       # Build the binary release
+       # Build maven project
        $ cd incubator-ignite
-       $ mvn clean package -DskipTests
+       $ mvn clean package -DskipTests -P-release
     </pre>
     <div class="features-heading">From a source package:</div>
     <pre class="brush:bash">
        # Unpack the source package
-       $ unzip -q incubator-ignite-[version].zip
+       $ unzip -q incubator-ignite-[srcpackageversion].zip
 
-       # Build maven project
-       $ cd incubator-ignite-[version]
-       $ mvn clean package -DskipTests -P-release
+       # Build the binary release
+       $ cd incubator-ignite-[srcpackageversion]
+       $ mvn clean package -DskipTests
     </pre>
   </section><!-- build-source -->
 
