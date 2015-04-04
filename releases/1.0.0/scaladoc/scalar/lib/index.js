@@ -1,4 +1,4 @@
-// ?? 2009???2010 EPFL/LAMP
+// © 2009–2010 EPFL/LAMP
 // code by Gilles Dubochet with contributions by Johannes Rudolph, "spiros" and Marcin Kubala
 
 var topLevelTemplates = undefined;
