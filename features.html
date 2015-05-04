@@ -82,6 +82,7 @@ under the License.
                         <li>Hibernate L2 Cache Integration</li>
                         <li>Tiered Off-Heap Storage</li>
                         <li>Distributed SQL Queries with Distributed Joins</li>
+                        <li>Memcached-compliant & REST APIs for access from different languages</li>
                     </ul>
                 </div>
                 <div class="feature-right">
@@ -106,7 +107,7 @@ under the License.
                             Ignite ignite = Ignition.ignite();
 
                              // Get an instance of named cache.
-                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.cache("cacheName");
 
                             // Store keys in cache.
                             for (int i = 0; i < 10; i++)
@@ -132,7 +133,7 @@ under the License.
                             Ignite ignite = Ignition.ignite();
 
                             // Clone every object we get from cache, so we can freely update it.
-                            IgniteCache&lt;Integer, Account&gt; cache = ignite.jcache("cacheName");
+                            IgniteCache&lt;Integer, Account&gt; cache = ignite.cache("cacheName");
 
                             try (IgniteTx tx = Ignition.ignite().transactions().txStart()) {
                                 Account acct = cache.get(acctId);
@@ -154,7 +155,7 @@ under the License.
                             Ignite ignite = Ignition.ignite();
 
                              // Get an instance of named cache.
-                            final GridCache&lt;String, Integer&gt; cache = ignite.jcache("cacheName");
+                            final GridCache&lt;String, Integer&gt; cache = ignite.cache("cacheName");
 
                             // Lock cache key "Hello".
                             Lock lock = cache.lock("Hello");
@@ -175,7 +176,7 @@ under the License.
                             Ignite ignite = Ignition.ignite();
 
                             // Get an instance of named cache.
-                            GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
+                            GridCache&lt;Long, Person&gt; cache = ignite.cache("cacheName");
 
                             // Create query which selects salaries based on range.
                             CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
@@ -192,7 +193,7 @@ under the License.
                             Ignite ignite = Ignition.ignite();
 
                              // Get an instance of named cache.
-                            GridCache&lt;Long, Person&gt; cache = ignite.jcache("cacheName");
+                            GridCache&lt;Long, Person&gt; cache = ignite.cache("cacheName");
 
                             // Create query which joins on 2 types to select people for a specific organization.
                             CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
