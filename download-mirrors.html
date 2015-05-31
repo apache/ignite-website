@@ -26,7 +26,7 @@
 
   <section id="downloads" class="feature-section">
     <h2 style="text-align: left;">Apache Ignite Releases</h2>
-    <p><b>Source:</b></p>
+    <p><b>Sources</b></p>
     <table>
       <thead>
           <tr><th>Version</th><th>Docs</th><th>Date</th><th>Source</th></tr>
@@ -87,7 +87,38 @@
       </tbody>
     </table>
     <p>&nbsp;</p>
-    <p><b>In-Memory Data Fabric:</b></p>
+    <p>
+      If you encounter a problem with the selected mirror, please select another mirror.
+      If all mirrors are failing, there are <i>backup</i> mirrors
+      (at the end of the mirrors list) that should be available.
+    </p>
+    <form action="/download.html" method="get" id="SelectMirror">
+      Selected mirror:
+      <select name="Preferred" onchange="submit()">
+        [if-any http]
+            [for http]<option value="[http]"[is http preferred] selected="selected"[end]>[http]</option>[end]
+        [end]  
+        [if-any ftp]
+            [for ftp]<option value="[ftp]"[is ftp preferred] selected="selected"[end]>[ftp]</option>[end]
+        [end]
+        [if-any backup]
+            [for backup]<option value="[backup]"[is backup preferred] selected="selected"[end]>[backup] (backup)</option>[end]
+        [end]
+      </select>
+      <input type="submit" value="Change" />
+    </form>
+    <!-- <p>(The <a href="http://www.apache.org/mirrors/">complete list of mirrors</a>)</p> -->
+    <p>&nbsp;</p>
+    <p><b>Binaries</b></p>
+    <p>Binary downloads are provided for the convenience of our users
+      and are not official Apache Ignite (incubating) releases. In
+      order to verify the release, we recommend that you download the
+      officially one od the source distributions and verify the
+      signatures of the downloaded files before opening them.</p>
+    <p>For more information about Apache release policy see 
+    <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a></p>
+    <p>&nbsp;</p>
+    <p>In-Memory Data Fabric:</p>
     <table>
         <thead>
             <tr><th>Version</th><th>Docs</th><th>Date</th><th>Binary</th></tr>
@@ -150,7 +181,7 @@
         </tbody>
     </table>
     <p>&nbsp;</p>
-    <p><b>In-Memory Hadoop Accelerator:</b></p>
+    <p>In-Memory Hadoop Accelerator:</p>
     <table>
         <thead>
             <tr><th>Version</th><th>Docs</th><th>Date</th><th>Binary</th></tr>
@@ -190,28 +221,6 @@
             </tr>
         </tbody>
     </table>
-    <p>&nbsp;</p>
-    <p>
-      If you encounter a problem with the selected mirror, please select another mirror.
-      If all mirrors are failing, there are <i>backup</i> mirrors
-      (at the end of the mirrors list) that should be available.
-    </p>
-    <form action="/download.html" method="get" id="SelectMirror">
-      Selected mirror:
-      <select name="Preferred" onchange="submit()">
-        [if-any http]
-            [for http]<option value="[http]"[is http preferred] selected="selected"[end]>[http]</option>[end]
-        [end]  
-        [if-any ftp]
-            [for ftp]<option value="[ftp]"[is ftp preferred] selected="selected"[end]>[ftp]</option>[end]
-        [end]
-        [if-any backup]
-            [for backup]<option value="[backup]"[is backup preferred] selected="selected"[end]>[backup] (backup)</option>[end]
-        [end]
-      </select>
-      <input type="submit" value="Change" />
-    </form>
-    <!-- <p>(The <a href="http://www.apache.org/mirrors/">complete list of mirrors</a>)</p> -->
   </section> <!-- downloads -->
 
   <section id="maven" class="feature-section">
@@ -274,23 +283,14 @@
           href="https://builds.apache.org/view/H-L/view/Ignite/job/Ignite-nightly/lastSuccessfulBuild/">last successful build</a> 
       </li>
     </ul>
-    <p>&nbsp;</p>
-    <p><b>Legal</b></p>
-    <p>Binary downloads are provided for convenience and are 
-      not official Apache Ignite (incubating) releases. 
-      In order to verify the release, we recommend that you download 
-      the officially released source distributions and verify the 
-      signatures of the downloaded files before opening them.</p>
-    <p>For more information about Apache release policy see 
-    <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a></p>
   </section><!-- build-source -->
 
   <section id="3rdparty" class="feature-section">
     <h2 style="text-align: left;">3<sup>rd</sup> Party Binaries</h2>
 
     <p>This is a list of 3<sup>rd</sup> party binary packages based on
-    Apache Ignite. The Apache Ignite project does not officially
-    endorse or maintain any party binary packages.</p>
+    Apache Ignite. The Apache Ignite project does not endorse or
+    maintain any 3<sup>rd</sup> party binary packages.</p>
 
     <p><b><a href="http://www.gridgain.com/download/editions/"
              target="_blank">GridGain Community Edition</a></b><br/><br/>
