@@ -63,7 +63,6 @@ under the License.
                             Ignite data grid is lightning fast and is one of the fastest implementations of transactional or
                             atomic data in a cluster today. We know it because we constantly benchmark it ourselves.
                         </p>
-                        </ul>
                     </td>
                     <td>
                         <img class="first" src="/images/in_memory_data.png" width="400px"/>
@@ -215,7 +214,7 @@ under the License.
             <table class="formatted">
                 <thead>
                     <tr>
-                        <th width="30%" class="left">Feature</th>
+                        <th width="35%" class="left">Feature</th>
                         <th>Description</th>
                     </tr>
                 </thead>
@@ -237,58 +236,133 @@ under the License.
                                     <li>Pluggable Persistence</li>
                                 </ul>
                             </p>
-
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/jcache" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">JCache (JSR 107)</td>
+                        <td class="left">Queries & Distributed Joins</td>
                         <td>
                             <p>
-                                Apache Ignite data grid is an implementation of JCache (JSR 107) specification.
-                                JCache provides a very simple to use, but yet very powerful API for data caching.
+                                Ignite supports a very elegant query API with support for:
+                                <ul class="page-list">
+                                    <li>Predicate-based Scan Queries</li>
+                                    <li>SQL Queries (ANSI 99)</li>
+                                    <li>Text Queries</li>
+                                </ul>
                             </p>
                             <p>
-                                The data grid is composed of distributed in-memory caches which support <i>local</i>,
-                                <i>replicated</i>, and <i>partitioned</i> data distribution models. The caching API implements
-                                <b>JCache (JSR 107)</b> standard, as well as ability to transact on the cached data and query
-                                across caches using standard SQL.
+                                For SQL and TEXT queries ignites supports in-memory indexing, so all the data lookups are extremely fast.
+                                If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory as well.
                             </p>
                             <p>
-                            <ul class="page-list">
-                                <li>Basic Cache Operations</li>
-                                <li>ConcurrentMap APIs</li>
-                                <li>Collocated Processing (EntryProcessor)</li>
-                                <li>Events and Metrics</li>
-                                <li>Pluggable Persistence</li>
-                            </ul>
+                                Ignite also allows users to implement their own custom indexing using pluggable
+                                <i>IndexingSpi</i>.
                             </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/cache-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">JCache (JSR 107)</td>
+                        <td class="left">ACID Transactions</td>
                         <td>
                             <p>
-                                Apache Ignite data grid is an implementation of JCache (JSR 107) specification.
-                                JCache provides a very simple to use, but yet very powerful API for data caching.
+                                Ignite supports 2 modes for cache operation, <i>transactional</i> and <i>atomic</i>.
+                                In <i>transactional</i> mode you are able to group multiple cache operations in a
+                                transaction, while <i>atomic</i> mode supports multiple atomic operations, one at a time.
+                                <i>Atomic</i> mode is more light-weight and generally has better performance over transactional
+                                caches.
                             </p>
                             <p>
-                                The data grid is composed of distributed in-memory caches which support <i>local</i>,
-                                <i>replicated</i>, and <i>partitioned</i> data distribution models. The caching API implements
-                                <b>JCache (JSR 107)</b> standard, as well as ability to transact on the cached data and query
-                                across caches using standard SQL.
+                                In <i>transactional</i> mode Ignite supports OPTIMISTIC and PESSIMISTIC transactions and
+                                utilizes 2PC protocol with many <i>one-phase-commit</i> optimizations whenever applicable.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/transactions" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Off-Heap and On-Heap Memory</td>
+                        <td>
+                            <p>
+                                Ignite supports 2 modes for caching data in-memory:
+                                <span style="white-space: nowrap"><i>off-heap</i></span> and
+                                <span style="white-space: nowrap"><i>on-heap</i></span>.
+                                Off-Heap memory allows your cache to overcome lengthy JVM Garbage Collection (GC) pauses
+                                when working with large heap sizes by caching data outside of main Java Heap space,
+                                but still in RAM.
                             </p>
                             <p>
-                            <ul class="page-list">
-                                <li>Basic Cache Operations</li>
-                                <li>ConcurrentMap APIs</li>
-                                <li>Collocated Processing (EntryProcessor)</li>
-                                <li>Events and Metrics</li>
-                                <li>Pluggable Persistence</li>
-                            </ul>
+                                Whenever off-heap memory is configured, Ignite will also store query indexes off-heap
+                                as well. This means that indexes will not take any portion of on-heap memory.
                             </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Tiered Memory</td>
+                        <td>
+                            <p>
+                                As data gets colder (not accessed) Ignite will optaionally migrate it
+                                from On-Heap to Off-Heap and from Off-Heap to Swap (disk) storage.
+                            </p>
+                            <p>
+                                Whenever some data is accessed, it will immediately be propagated to the top tier
+                                pushing some other colder data down the next memory tier.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">JDBC Driver</td>
+                        <td>
+                            <p>
+                                Ignite is shipped with JDBC driver that allows you to retrieve distributed data from
+                                cache using standard SQL queries and JDBC API.
+                            </p>
+                            <p>
+                                JDBC driver allows users to connect to Ignite using any standard SQL tool and start
+                                executing SQL queries against the in-memory data stored in Ignite caches.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/jdbc-driver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Web Session Clustering</td>
+                        <td>
+                            <p>
+                                Ignite In-Memory Data Fabric is capable of caching web sessions of all Java Servlet
+                                containers that follow Java Servlet 3.0 Specification, including Apache Tomcat,
+                                Eclipse Jetty, Oracle WebLogic, and others.
+                            </p>
+                            <p>
+                                Web sessions caching becomes useful when running a cluster of app servers to improve
+                                performance and scalability of the servlet container.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/web-session-clustering" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Hibernate L2 Caching</td>
+                        <td>
+                            <p>
+                                Ignite In-Memory Data Fabric can be used as Hibernate Second-Level cache (or L2 cache),
+                                which can significantly speed-up the persistence layer of your application.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/hibernate-l2-cache" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
