@@ -97,6 +97,7 @@ under the License.
                     <li><a href="#datagrid-example-locks" role="tab" data-toggle="tab">Locks</a></li>
                     <li><a href="#datagrid-example-sqlquery" role="tab" data-toggle="tab">SQL Query</a></li>
                     <li><a href="#datagrid-example-sqljoin" role="tab" data-toggle="tab">SQL Join</a></li>
+                    <li><a href="#datagrid-example-sqlaggregation" role="tab" data-toggle="tab">SQL Aggregation</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -172,38 +173,54 @@ under the License.
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-sqlquery">
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("mycache");
 
-                            // Get an instance of named cache.
-                            GridCache&lt;Long, Person&gt; cache = ignite.cache("cacheName");
+                            SqlFieldsQuery sql = new SqlFieldsQuery(
+                              "select concat(firstName, ' ', lastName) from Person");
 
-                            // Create query which selects salaries based on range.
-                            CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
-                                cache.queries().createSqlQuery(Person.class, "salary > ? and salary <= ?");
-
-                            // Execute queries for salary ranges.
-                            print("People with salaries between 0 and 1000: ", qry.execute(0, 1000).get());
-
-                            print("People with salaries between 1000 and 2000: ", qry.execute(1000, 2000).get());
+                            // Select concatinated first and last name for all persons.
+                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor = cache.query(sql)) {
+                              for (List&lt;?&gt; row : cursor)
+                                System.out.println("Full name: " + row.get(0));
+                            }
                         </pre>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="datagrid-example-sqljoin">
                         <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("personCache");
 
-                             // Get an instance of named cache.
-                            GridCache&lt;Long, Person&gt; cache = ignite.cache("cacheName");
+                            // Select with join between Person and Organization to
+                            // get the names of all the employees of a specific organization.
+                            SqlFieldsQuery sql = new SqlFieldsQuery(
+                                "select p.name  "
+                                    + "from Person p, \"orgCache\".Organization where "
+                                    + "Person.orgId = Organization.id "
+                                    + "and Organization.name = ?");
 
-                            // Create query which joins on 2 types to select people for a specific organization.
-                            CacheQuery&lt;Map.Entry&lt;Long, Person&gt;&gt; qry =
-                                cache.queries().createSqlQuery(Person.class, "from Person, Organization " +
-                                    "where Person.orgId = Organization.id " +
-                                    "and Organization.name = ?");
+                            // Execute the query and obtain the query result cursor.
+                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql.setArgs("Ignite"))) {
+                                for (List&lt;?&gt; row : cursor)
+                                    System.out.println("Person name=" + row);
+                            }
+                        </pre>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="datagrid-example-sqlaggregation">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("personCache");
 
-                            // Execute queries for find employees for different organizations.
-                            print("Following people are 'Ignite' employees: ", qry.execute("Ignite").get());
+                            // Select average age of people working within different departments.
+                            SqlFieldsQuery sql = new SqlFieldsQuery(
+                                "select avg(p.age) as avg_age, d.name as dpmt_name, o.name as org_name "
+                                    + "from Person p, \"depCache\".Department d, \"orgCache\".Organization o "
+                                    + "where p.depid = d.id and d.orgid = o.id "
+                                    + "group by d.name, o.name "
+                                    + "order by avg_age";
 
-                            print("Following people are 'Other' employees: ", qry.execute("Other").get());
+                            // Execute the query and obtain the query result cursor.
+                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql.setArgs("Ignite"))) {
+                                for (List&lt;?&gt; row : cursor)
+                                    System.out.println("Person name=" + row);
+                            }
                         </pre>
                     </div>
                 </div>
