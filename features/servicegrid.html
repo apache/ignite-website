@@ -49,111 +49,81 @@ under the License.
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
-        <section id="streaming" class="page-section">
+        <section id="servicegrid" class="page-section">
             <table class="twosides">
                 <tr>
                     <td>
-                        <h2 class="first">Streaming & CEP</h2>
+                        <h2 class="first">Service Grid</h2>
                         <p>
-                            Ignite streaming allows to process continuous never-ending streams of data in scalable
-                            and fault-tolerant fashion. The rates at which data can be injected into Ignite can be very
-                            high and easily exceed millions of events per second on a moderately sized cluster.
+                            Service Grid allows for deployments of arbitrary user-defined services on the cluster.
+                            You can implement and deploy any service, such as custom counters, ID generators,
+                            hierarchical maps, etc.
                         </p>
                         <p>
-                            <div class="page-heading">How it Works:</div>
-                            <ol class="page-list">
-                                <li>Clients inject streams of data into Ignite.</li>
-                                <li>Data is automatically partitioned between Ignite data nodes.</li>
-                                <li>Data is concurrently processed in sliding windows on Ignite nodes.</li>
-                                <li>Clients perform concurrent SQL queries on the streamed data.</li>
-                            </ol>
+                            The main use case of the service grid is ability to deploy various types of
+                            <b>singleton services in the cluster</b>. However, in case if you need multiple instances
+                            of a service, Ignite will also ensure proper deployment and fault tolerance of all
+                            service instances.
                         </p>
                     </td>
-                    <td align="center">
-                        <img class="first" src="/images/ignite-stream-query.png" width="382px"/>
-                        <br/>
-                        <img src="/images/in_memory_streaming.png" width="280px">
+                    <td style="padding-top: 60px !important;">
+                        <img src="/images/ignite_service.png" width="440px">
                     </td>
                 </tr>
             </table>
             <div class="code-examples">
                 <div class="page-heading">Code Examples:</div>
                 <!-- Nav tabs -->
-                <ul id="datagrid-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#streaming-data" role="tab" data-toggle="tab">Stream Data</a></li>
-                    <li><a href="#streaming-transformer" role="tab" data-toggle="tab">Transform Data</a></li>
-                    <li><a href="#streaming-query" role="tab" data-toggle="tab">Query Sliding Windows</a></li>
+                <ul id="service-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#service-define" aria-controls="home" data-toggle="tab">Service Definition</a></li>
+                    <li><a href="#service-deploy" aria-controls="home" data-toggle="tab">Service Deployment</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="streaming-data">
+                    <div class="tab-pane active" id="service-define">
                         <pre class="brush:java">
-                            // Get the data streamer reference and stream data.
-                            try (IgniteDatastreamder&lt;Integer, String&gt; stmr = ignite.dataStreamer("myStreamCache")) {
-                                // Stream entries.
-                                for (int i = 0; i &lt; 100000; i++)
-                                    stmr.addData(i, Integer.toString(i));
+                            // Simple service implementation.
+                            public class MyIgniteService implements Service {
+                                // Example of ignite resource injection. All resources are optional.
+                                // You should inject resources only as needed.
+                                @IgniteInstanceResource
+                                private Ignite ignite;
+                                ...
+
+                                @Override public void cancel(ServiceContext ctx) {
+                                    // No-op.
+                                }
+
+                                @Override public void execute(ServiceContext ctx) {
+                                    // Loop until service is cancelled.
+                                    while (!ctx.isCancelled()) {
+                                        // Do something.
+                                        ...
+                                    }
+                                }
                             }
                         </pre>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="streaming-transformer">
+                    <div class="tab-pane" id="service-deploy">
                         <pre class="brush:java">
-                            CacheConfiguration cfg = new CacheConfiguration("wordCountCache");
+                            Ignite ignite = Ignition.ignite();
 
-                            IgniteCache&lt;Integer, Long&gt; stmCache = ignite.getOrCreateCache(cfg);
+                            IgniteServices svcs = ignite.services();
 
-                            try (IgniteDataStreamer&lt;String, Long&gt; stmr = ignite.dataStreamer(stmCache.getName())) {
-                              // Allow data updates.
-                              stmr.allowOverwrite(true);
+                            // Deploy cluster-singleton service.
+                            IgniteFuture&lt;?&gt; fut = svcs.deployClusterSingleton("myClusterSingleton", new MyIgniteService());
 
-                              // Configure data transformation to count instances of the same word.
-                              stmr.receiver(StreamTransformer.from((e, arg) -> {
-                                // Get current count.
-                                Long val = e.getValue();
-
-                                // Increment count by 1.
-                                e.setValue(val == null ? 1L : val + 1);
-
-                                return null;
-                              }));
-
-                              // Stream words into the streamer cache.
-                              for (String word : text)
-                                stmr.addData(word, 1L);
-                            }
+                            // Wait for deployment to complete.
+                            fut.get();
                         </pre>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="streaming-query">
-                        <pre class="brush:java">
-                            CacheConfiguration&lt;String, Instrument&gt; cfg = new CacheConfiguration<>("instCache");
-
-                            // LRU window holding 1,000,000 entries.
-                            cfg.setEvictionPolicyFactory(new LruEvictionPolicy(1_000_000));
-
-                            // Index some fields for querying portfolio positions.
-                            cfg.setIndexedTypes(String.class, Instrument.class);
-
-                            // Get a handle on the cache (create it if necessary).
-                            IgniteCache&lt;String, Instrument&lt; instCache = ignite.getOrCreateCache(cfg);
-
-                            // Select top 3 best performing instruments from the sliding window.
-                            SqlFieldsQuery top3qry = new SqlFieldsQuery(
-                              "select symbol, (latestPrice - openPrice) as change "
-                                + "from Instrument "
-                                + "order by change "
-                                + "desc limit 3"
-                            );
-
-                            // List of rows. Every row is represented as a List as well.
-                            List&lt;List&lt;?&gt;&gt; top3 = instCache.query(top3qry).getAll();                        </pre>
                     </div>
                 </div>
             </div>
             <div class="page-heading">GitHub Examples:</div>
             <p>
-                Also see <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming/wordcount" target="github">word count</a>
-                and <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming" target="github">other examples</a> available on GitHub.
+                Also see <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/servicegrid" target="github">service grid examples</a>
+                available on GitHub.
             </p>
         </section>
         <section id="key-features" class="page-section">
