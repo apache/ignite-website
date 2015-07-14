@@ -149,60 +149,132 @@ under the License.
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Data Streamers</td>
+                        <td class="left">Distributed Closure Execution</td>
                         <td>
                             <p>
-                                Data streamers are defined by <code>IgniteDataStreamer</code> API and are built to inject large
-                                amounts of continuous streams of data into Ignite stream caches. Data streamers are
-                                built in a scalable and fault-tolerant fashion and provide <b>at-least-once-guarantee</b>
-                                semantics for all the data streamed into Ignite.
+                                Ignite compute grid allows to broadcast and load-balance any closure within the cluster
+                                or a cluster group, including Java 8 lambdas, as well as plain Java runnables and callables.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/v1.2/docs/data-streamers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href=http://apacheignite.readme.io/docs/distributed-closures" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Collocated Processing</td>
+                        <td class="left">ForkJoin Processing</td>
                         <td>
                             <p>
-                                For cases when you need to execute some custom logic instead of just adding new data,
-                                you can take advantage of <code>StreamReceiver</code> API.
+                                <code>ComputeTask</code> is Ignite abstraction for the in-memory <code>ForkJoin</code>,
+                                paradigm, which is a light-weight form of MapReduce. Pure
+                                MapReduce was never built for performance and only works well when dealing with
+                                off-line batch oriented processing (e.g. Hadoop MapReduce).
                             </p>
                             <p>
-                                Stream receivers allow you to react to the streamed data in collocated fashion,
-                                directly on the nodes where it will be cached. You can change the data or add any
-                                custom pre-processing logic to it, before putting the data into cache.
+                                However, when computing on data that resides in-memory, real-time low latencies
+                                and high throughput usually take the highest priority. Also, simplicity of the API
+                                becomes very important as well. With that in mind, Ignite introduced the
+                                <code>ComputeTask</code> API, which is Ignite <code>ForkJoin</code> (or a
+                                light-weight MapReduce) implementation.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/v1.2/docs/data-streamers#streamreceiver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/compute-tasks" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Sliding Windows</td>
+                        <td class="left">Clustered ExecutorService</td>
                         <td>
                             <p>
-                                Ignite streaming functionality also allows to query into sliding windows of data.
-                                Sliding windows are configured as Ignite cache eviction policies, and can be
-                                <code>time-based</code>, <code>size-based</code>, or <code>batch-based</code>. You can configure one sliding-window per cache. However,
-                                you can easily define more than one cache if you need different sliding windows for the
-                                same data.
+                                Ignite provides a cluster-enabled implementation of standard JDK
+                                <code>ExecutorService</code> and automatically executes all the computations in
+                                load-balanced fashion within the cluster. Your computations also become fault-tolerant
+                                and are guaranteed to execute as long as there is at least one node left. You can
+                                think of it as a distributed cluster-enabled thread pool.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/v1.2/docs/sliding-windows" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/executor-service" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Querying Sliding Windows</td>
+                        <td class="left">Collocation of Compute & Data</td>
                         <td>
                             <p>
-                                You can use full set of Ignite data indexing capabilities, together with
-                                Ignite SQL, TEXT, and Predicate based cache queries, to query into the streaming data.
+                                Collocation of computations with data allow for minimizing data serialization within
+                                network and can significantly improve performance and scalability of your application.
+                                Whenever possible, you should always make best effort to collocate your computations
+                                with the cluster nodes caching the data that needs to be processed.
+                            </p>
+                            <p>
+                                Ignite provides various ways to collocate compute with data either automatically
+                                or manually as needed.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/v1.2/docs/cache-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/collocate-compute-and-data" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Load Balancing</td>
+                        <td>
+                            <p>
+                                Load balancing component balances job distribution among cluster nodes. In Ignite
+                                load balancing is achieved via a pluggable <code>LoadBalancingSpi</code> which controls
+                                load on all nodes and makes sure that every node in the cluster is equally loaded.
+                            </p>
+                            <p>
+                                In homogeneous environments with homogeneous tasks load balancing is achieved by random or
+                                round-robin policies. However, in many other use cases, especially under uneven load,
+                                more complex adaptive load-balancing policies are provided.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Fault Tolerance</td>
+                        <td>
+                            <p>
+                                Ignite supports automatic job failover. In case of a node crash or any other error,
+                                jobs are automatically transferred to other available nodes for re-execution.
+                                The pluggable <code>FailoverSpi</code> is responsible for handling the selection of a
+                                new node for the execution of a failed job.
+                            </p>
+                            <p>
+                                <b>At Least Once Guarantee</b> - Ignite guarantees that as long as there is at
+                                least one node standing, no job will ever be lost.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Job Checkpointing</td>
+                        <td>
+                            <p>
+                                Checkpointing is supported via a pluggable <code>CheckpointSpi</code>. It
+                                provides ability to save an intermediate job state. Checkpointing can be useful
+                                when long running jobs need to store some intermediate state to protect from node
+                                failures. Then on restart of a failed node, a job would load the saved checkpoint
+                                and continue from where it left off.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/checkpointing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Job Scheduling</td>
+                        <td>
+                            <p>
+                                Pluggable <code>CollisionSpi</code> provides a fine-grained control over how the jobs
+                                are scheduled once they arrive to a specific cluster node for execution. Various
+                                policies are supported, including FIFO, Priority, or even job stealing.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/job-scheduling" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
