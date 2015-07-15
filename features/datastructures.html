@@ -1,0 +1,237 @@
+ <!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Apache Ignite - In-Memory Data Grid</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="servicegrid" class="page-section">
+            <h2 class="first">Distributed Data Structures</h2>
+            <p>
+                Ignite allows for most of the data structures from <code>java.util.concurrent</code>
+                framework to be used in a distributed fashion. For example, you can take
+                <code>java.util.concurrent.BlockingDeque</code> and add something to it on one node and
+                poll it from another node. Or have a distributed Primary Key generator, which would
+                guarantee uniqueness on all nodes.
+            </p>
+            <p>
+                <div class="page-heading">Supported Data Structures:</div>
+                <ul class="page-list">
+                    <li>Concurrent Map</li>
+                    <li>Distributed Queues and Sets</li>
+                    <li>AtomicLong</li>
+                    <li>AtomicSequence</li>
+                    <li>AtomicReference</li>
+                    <li>CountDownLatch</li>
+                    <li>ExecutorService</li>
+                </ul>
+            </p>
+            <div class="code-examples">
+                <div class="page-heading">Code Examples:</div>
+                <!-- Nav tabs -->
+                <ul id="datastructure-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#example-queue" aria-controls="home" data-toggle="tab">BlockingQueue</a></li>
+                    <li><a href="#example-set" aria-controls="profile" data-toggle="tab">Set</a></li>
+                    <li><a href="#example-sequence" aria-controls="profile" data-toggle="tab">AtomicSequence</a></li>
+                    <li><a href="#example-long" aria-controls="profile" data-toggle="tab">AtomicLong</a></li>
+                    <li><a href="#example-countdownlatch" aria-controls="profile" data-toggle="tab">CountDownLatch</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="example-queue">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            CollectionConfiguration colCfg = new CollectionConfiguration();
+
+                            colCfg.setCacheName("cacheName");
+
+                            // Non-colocated queue which will be distributed
+                            // across all data nodes.
+                            IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, colCfg);
+
+                            // Add queue elements.
+                            for (int i = 0; i < 20; i++)
+                                queue.add("Value " + Integer.toString(i));
+
+                            // Poll queue elements.
+                            for (int i = 0; i < 20; i++)
+                                System.out.println("Polled value: " + queue.poll());
+
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="example-set">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Initialize new set.
+                            IgniteSet&lt;String&gt; set = ignite.set("setName", null);
+
+                            // Add set elements.
+                            for (int i = 0; i < 10; i++)
+                                set.add(Integer.toString(i));
+
+                            // Iterate over set.
+                            for (String item : set)
+                                System.out.println("Set item: " + item);
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="example-sequence">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Initialize atomic sequence.
+                            IgniteAtomicSequence seq = ignite.atomicSequence("seqName", 0, true);
+
+                            for (int i = 0; i < 100; i++)
+                                System.out.println("Next sequence value: " + seq.incrementAndGet());
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="example-long">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Initialize atomic long.
+                            IgniteAtomicLong atomicLong = ignite.atomicLong("myAtomicLong", 0, true);
+
+                            for (int i = 0; i < 100; i++)
+                                System.out.println("Incremented value: " + atomicLong.incrementAndGet());
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="example-countdownlatch">
+                        <br/>
+                        <p>
+                            Distributed AtomicSequence example.
+                        </p>
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Initialize distributed count down latch.
+                            final IgniteCountDownLatch latch = ignite.countDownLatch(latchName, 10, false, true);
+
+                            IgniteCompute asyncCompute = ignite.compute().withAsync();
+
+                            // Asynchronously execute closures on the cluster
+                            // which will simply count down the latch on remote nodes.
+                            for (int i = 0; i < 10; i++)
+                                asyncCompute.run(() -> latch.countDown());
+
+                            // Waite for all closures to complete.
+                            latch.await();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="page-heading">GitHub Examples:</div>
+            <p>
+                Also see <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/datastructures" target="github">data structure examples</a>
+                available on GitHub.
+            </p>
+        </section>
+        <section id="key-features" class="page-section">
+            <h2>Service Grid Features</h2>
+            <table class="formatted">
+                <thead>
+                    <tr>
+                        <th width="35%" class="left">Feature</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="left">Cluster Singletons</td>
+                        <td>
+                            <p>
+                                Ignite allows to deploy any number of services on any of the grid nodes. However,
+                                the most commonly used feature is to deploy singleton services on the cluster.
+                                Ignite will manage the singleton contract regardless of topology changes and
+                                node crashes.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/cluster-singletons" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Fault Tolerance</td>
+                        <td>
+                            <p>
+                                Ignite always guarantees that services are continuously available, and are deployed
+                                according to the specified configuration, regardless of any topology changes or
+                                node crashes.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/service-grid#load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Load Balancing</td>
+                        <td>
+                            <p>
+                                In all cases, other than singleton service deployment, Ignite will automatically make
+                                sure that about an equal number of services are deployed on each node within the
+                                cluster. Whenever cluster topology changes, Ignite will re-evaluate service
+                                deployments and may re-deploy an already deployed service on another node for better
+                                load balancing.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/service-grid#load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
