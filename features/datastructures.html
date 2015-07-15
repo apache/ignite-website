@@ -61,13 +61,13 @@ under the License.
             <p>
                 <div class="page-heading">Supported Data Structures:</div>
                 <ul class="page-list">
-                    <li>Concurrent Map</li>
-                    <li>Distributed Queues and Sets</li>
-                    <li>AtomicLong</li>
-                    <li>AtomicSequence</li>
-                    <li>AtomicReference</li>
-                    <li>CountDownLatch</li>
-                    <li>ExecutorService</li>
+                    <li><a href="datagrid.html">Concurrent Map (Cache)</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/queue-and-set" target="docs">Distributed Queues and Sets</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/atomic-types" target="docs">AtomicLong</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/atomic-types" target="docs">AtomicReference</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/id-generator" target="docs">AtomicSequence (ID Generator)</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/countdownlatch" target="docs">CountDownLatch</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/executor-service" target="docs">ExecutorService</a></li>
                 </ul>
             </p>
             <div class="code-examples">
@@ -78,6 +78,7 @@ under the License.
                     <li><a href="#example-set" aria-controls="profile" data-toggle="tab">Set</a></li>
                     <li><a href="#example-sequence" aria-controls="profile" data-toggle="tab">AtomicSequence</a></li>
                     <li><a href="#example-long" aria-controls="profile" data-toggle="tab">AtomicLong</a></li>
+                    <li><a href="#example-ref" aria-controls="profile" data-toggle="tab">AtomicReference</a></li>
                     <li><a href="#example-countdownlatch" aria-controls="profile" data-toggle="tab">CountDownLatch</a></li>
                 </ul>
 
@@ -87,13 +88,9 @@ under the License.
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
 
-                            CollectionConfiguration colCfg = new CollectionConfiguration();
-
-                            colCfg.setCacheName("cacheName");
-
                             // Non-colocated queue which will be distributed
                             // across all data nodes.
-                            IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, colCfg);
+                            IgniteQueue&lt;String&gt; queue = ignite.queue("queueName", 20, new CollectionConfiguration());
 
                             // Add queue elements.
                             for (int i = 0; i < 20; i++)
@@ -143,6 +140,18 @@ under the License.
                                 System.out.println("Incremented value: " + atomicLong.incrementAndGet());
                         </pre>
                     </div>
+                    <div class="tab-pane" id="example-ref">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            String val = "123";
+
+                            // Initialize distributed atomic reference.
+                            IgniteAtomicReference&lt;String&gt; ref = ignite.atomicReference(refName, val, true);
+
+                            ref.compareAndSet(val, "456");
+                        </pre>
+                    </div>
                     <div class="tab-pane" id="example-countdownlatch">
                         <pre class="brush:java">
                             Ignite ignite = Ignition.ignite();
@@ -157,7 +166,7 @@ under the License.
                             for (int i = 0; i < 10; i++)
                                 asyncCompute.run(() -> latch.countDown());
 
-                            // Waite for all closures to complete.
+                            // Wait for all closures to complete.
                             latch.await();
                         </pre>
                     </div>
@@ -170,7 +179,7 @@ under the License.
             </p>
         </section>
         <section id="key-features" class="page-section">
-            <h2>Service Grid Features</h2>
+            <h2>Data Structure Features</h2>
             <table class="formatted">
                 <thead>
                     <tr>
@@ -180,44 +189,48 @@ under the License.
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Cluster Singletons</td>
+                        <td class="left">Collocated vs. Non-Collocated</td>
                         <td>
                             <p>
-                                Ignite allows to deploy any number of services on any of the grid nodes. However,
-                                the most commonly used feature is to deploy singleton services on the cluster.
-                                Ignite will manage the singleton contract regardless of topology changes and
-                                node crashes.
+                                Queues and Sets can be deployed in <code>collocated</code> or
+                                <span style="white-space: nowrap"><code>non-collocated</code></span> mode. In <i>collocated</i>
+                                mode all the elements of a collection will reside on the same cluster node. This
+                                mode should be used for relatively small collections. In <i>non-collocated</i> mode, the
+                                elements of the collection will be equally distributed within the cluster allowing
+                                to keep very large collections in memory.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/cluster-singletons" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/queue-and-set" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Fault Tolerance</td>
+                        <td class="left">Bounded Queues</td>
                         <td>
                             <p>
-                                Ignite always guarantees that services are continuously available, and are deployed
-                                according to the specified configuration, regardless of any topology changes or
-                                node crashes.
+                                Bounded queues allow users to have queues with predefined maximum size which gives a better
+                                control over the overall cache capacity.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/service-grid#load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/queue-and-set#bounded-queues" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Load Balancing</td>
+                        <td class="left">Reservation-based ID Generator</td>
                         <td>
                             <p>
-                                In all cases, other than singleton service deployment, Ignite will automatically make
-                                sure that about an equal number of services are deployed on each node within the
-                                cluster. Whenever cluster topology changes, Ignite will re-evaluate service
-                                deployments and may re-deploy an already deployed service on another node for better
-                                load balancing.
+                                ID Generator is implemented with <code>AtomicSequence</code>. Whenever you perform
+                                <code>incrementAndGet()</code> (or any other atomic operation) on an atomic sequence,
+                                the data structure reserves ahead a range of values, which are guaranteed to be unique
+                                across the cluster for this sequence instance.
+                            </p>
+                            <p>
+                                Until all the values in the reservation are used, all sequence increment operations
+                                will happen locally on the client.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/service-grid#load-balancing" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.readme.io/docs/id-generator" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
