@@ -49,70 +49,21 @@ under the License.
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
-        <section id="messaging" class="page-section">
-            <h2 class="first">Distributed Messaging</h2>
+        <section id="clients" class="page-section">
+            <h2 class="first">Client Protocols</h2>
             <p>
-                Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data via
-                publish-subscribe and direct point-to-point communication models. Messages can be exchanged in
-                ordered or unordered fashion. Ordered messages are slightly slower, but when used, Ignite
-                guarantees that messages will be received in the same order they were sent.
+                Ignite supports several protocols for client connectivity to Ignite clusters, including Ignite Native
+                Clients, REST/HTTP, Memcached, Node.js (under development), etc.
             </p>
-            <div class="code-examples">
-                <div class="page-heading">Code Examples:</div>
-                <!-- Nav tabs -->
-                <ul id="messaging-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#messaging-example-ordered" aria-controls="home" data-toggle="tab">Ordered Messaging</a></li>
-                    <li><a href="#messaging-example-unordered" aria-controls="profile" data-toggle="tab">Unordered Messaging</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active" id="messaging-example-ordered">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
-
-                            // Add listener for unordered messages on all remote nodes.
-                            rmtMsg.remoteListen("MyOrderedTopic", (nodeId, msg) -> {
-                                System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
-
-                                return true; // Return true to continue listening.
-                            });
-
-                            // Send ordered messages to remote nodes.
-                            for (int i = 0; i < 10; i++)
-                                rmtMsg.sendOrdered("MyOrderedTopic", Integer.toString(i));
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="messaging-example-unordered">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
-
-                            // Add listener for unordered messages on all remote nodes.
-                            rmtMsg.remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
-                                System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
-
-                                return true; // Return true to continue listening.
-                            });
-
-                            // Send unordered messages to remote nodes.
-                            for (int i = 0; i < 10; i++)
-                                rmtMsg.send("MyUnOrderedTopic", Integer.toString(i));
-                        </pre>
-                    </div>
-                </div>
-            </div>
             <div class="page-heading">GitHub Examples:</div>
             <p>
-                Also see <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/messaging" target="github">messaging examples</a>
+                See <a href="https://github.com/apache/incubator-ignite/tree/master/examples/memcached" target="github">memcached examples</a>
+                and <a href="https://github.com/apache/incubator-ignite/blob/master/examples/rest" target="github">REST examples</a>
                 available on GitHub.
             </p>
         </section>
         <section id="key-features" class="page-section">
-            <h2>Messaging Features</h2>
+            <h2>Supported Clients</h2>
             <table class="formatted">
                 <thead>
                     <tr>
@@ -122,12 +73,27 @@ under the License.
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="left">Ordered vs. Unordered</td>
+                        <td class="left">Ignite Native Client</td>
                         <td>
                             <p>
-                                Ignite supports ordered and unordered messages. Ordered messages are slightly slower,
-                                but when used, Ignite guarantees that messages will be received in the same order they
-                                were sent.
+                                Ignite Native Clients provide full functionality of Ignite In-Memory Data Fabric to
+                                the remote clients connecting to the data fabric. It allows to use the whole set of
+                                <code>Ignite APIs</code>, including Near Caching, transactions, compute,
+                                streaming, services, etc.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.gridgain.org/v1.3/docs/clients-vs-servers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Memcached</td>
+                        <td>
+                            <p>
+                                Ignite is <a href="http://memcached.org/" target="_blank">Memcached</a> compliant,
+                                which enables users to store and retrieve distributed data from Ignite cache using any
+                                Memcached compatible client, including Java, PHP, Python, Ruby, and other Memcached
+                                clients.
                             </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/messaging" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
@@ -135,15 +101,26 @@ under the License.
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Topic and Point-to-Point</td>
+                        <td class="left">REST/HTTP</td>
                         <td>
                             <p>
-                                Ignite messaging works via topic based subscriptions. Topic messages can be sent
-                                to either a group of nodes or to an individual node.
+                                Ignite provides an HTTP REST client that gives you the ability to communicate with the
+                                grid over HTTP and HTTPS protocols using REST approach. REST APIs can be used to
+                                perform different operations, like read/write from/to cache, execute tasks, get
+                                various metrics and more.
                             </p>
                             <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/messaging" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite.gridgain.org/docs/rest-api" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Node.JS (under development)</td>
+                        <td>
+                            <p>
+                                Ignite will provide Node.JS client connectivity which enables all cache operations, and
+                                SQL queries over JSON data stored in Ignite.
+                            </p>
                         </td>
                     </tr>
                 </tbody>
