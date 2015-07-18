@@ -1,0 +1,97 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Ignite - Use Cases</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="hibernate-l2-cache" class="page-section">
+            <h2 class="first">Ignite as Hibernate L2 Cache</h2>
+            <p>Hibernate stores data in first-level (L1) cache to minimize expensive database requests. However,
+                this data is cached per Hibernate session and is not shared among threads. A common solution here is to configure a second-level (L2) cache.</p>
+            <p>Apache Ignite In-Memory Data Grid can be easily plugged in as Hibernate second-level (L2) cache. Accessible by all sessions, Ignite Data Grid
+               can significantly accelerate the performance of your application by reducing data access time.</p>
+
+            <h3>How Hibernate Caching Works</h3>
+            <p>
+                Hibernate first-level (L1) cache is associated with the session object, the scope of which is limited to a single session.
+                Objects cached in one session are not shared with another. For example, when an application tries to access an entity/object for the first time,
+                it is loaded from the database and is stored in L1 cache memory maintained by the session object. Subsequent requests for the same entity,
+                within the same session, will fetch the data from the session's cache. Since L1 cache is maintained per session,
+                a request for the same entity by another session will hit the persistence layer.
+            </p>
+
+            <h3>How Ignite Comes Into the Picture</h3>
+            <p>
+                To overcome the issue of per-session cache, a global second-level (L2) cache can be configured,
+                in which cached objects are visible to all sessions. This usually gives a significantly greater performance gain since each newly
+                created session has access to the data already present in L2 cache memeory.
+            </p>
+
+            <img class="centeredImage" src="/images/hibernate-L2-cache.png"/><br/>
+
+            <p>
+                Apache Ignite can be easily plugged-in as Hibernate L2 cache implementation,
+                and can be used in all access modes - <code>READ_ONLY</code>, <code>READ_WRITE</code>, <code>NONSTRICT_READ_WRITE</code>, and <code>TRANSACTIONAL</code>, supporting a wide range of related features:
+                <ul class="page-list">
+                    <li>Caching to memory and disk, as well as off-heap memory.</li>
+                    <li>Cache transactions, that make <code>TRANSACTIONAL</code> mode possible.</li>
+                    <li>Clustering, with 2 different replication modes: <code>REPLICATED</code> and <code>PARTITIONED</code></li>
+                </ul>
+            </p>
+            <p>
+                <a href="http://apacheignite.readme.io/docs/hibernate-l2-cache">
+                    <b>Configure Ignite as Hibernate L2 Cache <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Ignite - Use Cases</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="web-session-caching" class="page-section">
+            <h2 class="first">Ignite for Web Session Clustering</h2>
+            <p>
+                Failing-over web session caching is problematic when you run multiple application servers.
+                Most web applications run in a cluster to distribute the load of high volume of web requests.
+                When one of the application servers crashes, the load balancer will just route the web request
+                to another available application server, but all of user’s session data is lost. A feasible solution
+                here would be to cache all your web sessions in Ignite cache.
+            </p>
+            <p>
+                Apache Ignite is capable of caching web sessions of all Java Servlet containers that
+                follow Java Servlet 3.0 Specification, including Apache Tomcat, Eclipse Jetty, Oracle WebLogic, and others.
+            </p>
+            <p>
+                Ignite Web Sessions Cache is a distributed cache that maintains a copy of all web sessions’ data in memory.
+                In case of an application server failure, web requests get routed to some other application server that
+                simply fetches the web session data from Ignite cache.
+            </p>
+
+            <img class="centeredImage" src="/images/web_sessions_3.png"/><br/>
+            <p>
+                Ignite In-Memory Data Fabric ensures fault tolerance by either replicating or partitioning the sessions' data
+                across all grid nodes in the cluster. Hence, no session is ever lost, providing better user experience.
+                Furtermore, with web session caching, sticky connections become less important as the session is available
+                on any application server the web request may be routed to.
+            </p>
+            <p>
+                Apache Ignite Web Session clustering helps your web application to:
+
+                <ul class="page-list">
+                    <li>Scale out your application servers horizontally as the load increases.</li>
+                    <li>Achieve fault tolerance by configuring number of backups across the data grid.</li>
+                    <li>Easily configure all types of application servers in plug-n-play fashion.</li>
+                </ul>
+            </p>
+            <p>
+                <a href="http://apacheignite.readme.io/docs/web-session-clustering">
+                    <b>Configure Ignite for Caching Web Sessions <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
