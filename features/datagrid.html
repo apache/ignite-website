@@ -197,9 +197,9 @@ under the License.
                             // get the names of all the employees of a specific organization.
                             SqlFieldsQuery sql = new SqlFieldsQuery(
                                 "select p.name  "
-                                    + "from Person p, \"orgCache\".Organization where "
-                                    + "Person.orgId = Organization.id "
-                                    + "and Organization.name = ?");
+                                    + "from Person p, \"orgCache\".Organization o where "
+                                    + "p.orgId = o.id "
+                                    + "and o.name = ?");
 
                             // Execute the query and obtain the query result cursor.
                             try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql.setArgs("Ignite"))) {
