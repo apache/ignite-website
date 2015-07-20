@@ -35,7 +35,7 @@ under the License.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Ignite - Use Cases</title>
+    <title>Apache Ignite - Database Caching</title>
     <link media="all" rel="stylesheet" href="/css/all.css">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
@@ -49,50 +49,149 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="database-caching" class="page-section">
-            <h2 class="first">Ignite for Database Caching</h2>
-            <p>
-                In a traditional multi-tier application, where data is kept independent of application tier or business logic,
-                frequent application calls to persistence layer can cause substancial latency problems.
-                This can be mittigated by storing data close to the application tier via database caching.
-            </p>
-            <p>
-                Apache Ignite database caching enables users to keep the most frequently used data in memory- partitioned or
-                replicated across a cluster of computers and closer to the processing application. This provides greatly improved
-                performance than fetching data from external data sources on each request, as frequent operations can be
-                performed in memory and in a parallel fashion.
-            </p>
-
-            <img class="centeredImage" src="/images/ignite-db-cache-2.png" width="650px"/><br/>
-
-            <p>
-                Ignite cluster can be scaled horizontally, to hundreds of nodes, on demand.
-                Each new node joining the Ignite cluster can auto-discover other cluster nodes and, at this point,
-                data is rebalanced to maintain even distribution of keys across all nodes.
-                In the event of a node crash, Ignite cluster can self-heal, wherein data from the failed node
-                is propagated to other nodes in the grid. Ignite guarantees that as long as there is at least one node standing,
-                no data will ever be lost.
-            </p>
-            <p>
-                In addition to being highly elastic and resilient, Ignite In-memory Data Fabric is lightening fast and a fully
-                compliant implementation of JCache (JSR 107) specification. Ignite is also fully compliant with other caching technologies, likes of which include - Memcached, Spring and Hibernate.
-            </p>
-            <p>
-                Apache Ignite offers a wide range of functionalities that can be used to process cached data. These include:
-                <ul class="page-list">
-                    <li>Distributed In-Memory ACID Transactions</li>
-                    <li>Tiered Off-Heap Storage</li>
-                    <li>Distributed ANSI-99 SQL Queries with support for Joins</li>
-                    <li>JDBC Driver</li>
-                    <li>Distributed Computations</li>
-                    <li>Continuous Queries</li>
-                    <li>Distributed Data Structures</li>
-                    <li>Support for various underlying data store types - RDBMS, NoSQL and Hadoop</li>
-                </ul>
-
-                <a href="http://apacheignite.readme.io/docs/getting-started">
-                    <b>Get started with Apache Ignite <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
+            <table class="twosides">
+                <tr>
+                    <td valign="top">
+                        <h2 class="first">Ignite for Database Caching</h2>
+                        <p>
+                            Ignite in-memory data grid is a <code class="text-nowrap">key-value in-memory store</code>
+                            which enables caching data in-memory within distributed clusters.
+                        </p>
+                        <p>
+                            Ignite database caching enables users to keep the most frequently accessed data in memory,
+                            by either partitioning or replicating it across a cluster of computers.
+                        </p>
+                        <p>
+                            In addition to being highly elastic and resilient, Ignite is lightning fast and a fully
+                            compliant implementation of JCache (JSR 107) specification. Ignite is also fully
+                            compliant with other caching technologies, including Memcached, Spring and Hibernate.
+                        </p>
+                        <div class="page-heading">Ignite Data Grid:</div>
+                        Database caching is supported by the <a href="/features/datagrid.html" class="text-nowrap">Data Grid</a>
+                        component.
+                    </td>
+                    <td valign="top">
+                        <img class="first" src="/images/ignite-db-cache.png" width="400px"/>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section id="key-features" class="page-section">
+            <h2>Ignite Features for Database Caching</h2>
+            <table class="formatted">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Feature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="left">Key-Value Store</td>
+                        <td>
+                            <p>
+                                Ignite data grid is an <code>in-memory key-value store</code> which can be viewed as a
+                                distributed partitioned hash map, with every cluster node owning a portion of the overall
+                                data. This way the more cluster nodes we add, the more data we can cache.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.gridgain.org/docs/data-grid" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Write-Through & Read-Through</td>
+                        <td>
+                            <p>
+                                Whenever an update happens in the in-memory cache, Ignite can optionally propagate it
+                                to the underlying database. Also, whenever the data is requested from cache and is not
+                                there, Ignite can automatically load it from the underlying database. Such behavior
+                                is called <code class="text-nowrap">write-through</code> and
+                                <code class="text-nowrap">read-through</code> correspondingly.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/persistent-store#read-through-and-write-through" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Write-Behind</td>
+                        <td>
+                            <p>
+                                In a simple write-through mode each cache put and remove operation will involve a
+                                corresponding request to the persistent storage and therefore the overall duration of
+                                the cache update might be relatively long. To mitigate such cases, Ignite offers an
+                                option to perform an asynchronous persistent store update also known as
+                                <code class="text-nowrap">write-behind</code>.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.gridgain.org/docs/data-grid" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Automatic Persistence</td>
+                        <td>
+                            <p>
+                                Ignite ships with its own database schema mapping wizard which provides automatic
+                                support for integrating with persistence stores.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/automatic-persistence" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Pluggable Persistence</td>
+                        <td>
+                            <p>
+                                Ignite supports pluggable persistence semantics specified by JCache specification.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/persistent-store" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">ACID Transactions</td>
+                        <td>
+                            <p>
+                                Ignite in-memory cache is fully consistent and fully transactional. Whenever pluggable
+                                persistence is turned on, database and in-memory cache operations are
+                                automatically merged into one overall transaction.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/transactions" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Queries & Distributed Joins</td>
+                        <td>
+                            <p>
+                                Ignite supports a very elegant query API with support for:
+                                <ul class="page-list">
+                                    <li>Scan Queries (Predicate-based)</li>
+                                    <li>SQL Queries (ANSI 99)</li>
+                                    <li>Text Queries</li>
+                                </ul>
+                            </p>
+                            <p>
+                                For <code>SQL</code> and <code>TEXT</code> queries ignites supports in-memory indexing,
+                                so all the data lookups are extremely fast. If you are caching your data in off-heap
+                                memory, then query indexes will also be cached in off-heap memory as well.
+                            </p>
+                            <p>
+                                Ignite also allows users to implement their own custom indexing using pluggable
+                                <code>IndexingSpi</code>.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/cache-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </main>
 
