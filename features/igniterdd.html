@@ -51,61 +51,88 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="igniterdd" class="page-section">
-            <table class="twosides">
-                <tr>
-                    <td valign="top">
-                        <h2 class="first">Spark Shared RDDs</h2>
-                        <p>
-                            Apache Ignite provides an implementation of Spark RDD abstraction which allows to easily
-                            share state in memory across multiple Spark jobs, either within the same application
-                            or between different Spark applications.
-                        </p>
-                        <p>
-                            <code>IgniteRDD</code> is implemented is as a view over a distributed Ignite cache,
-                            which may be deployed either within the Spark job executing process, or on a Spark worker,
-                            or in its own cluster.
-                        </p>
-                        <p>
-                            Depending pre-configured deployment mode, the shared state may either exist only
-                            during the lifespan of a Spark application (<code>embedded mode</code>), or it may out-survive
-                            the Spark application (<code>standalone mode</code>), in which case the state can be shared across
-                            multiple Spark applications.
-                        </p>
-                    </td>
-                    <td valign="top">
-                        <img class="first" src="/images/spark-ignite-rdd.png" width="440px">
-                    </td>
-                </tr>
-            </table>
-            <div class="code-examples">
-                <div class="page-heading">Code Examples:</div>
-                <!-- Nav tabs -->
-                <ul id="ignite-rdd-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#rdd-transform" aria-controls="home" data-toggle="tab">Transformations</a></li>
-                    <li><a href="#rdd-sql" aria-controls="profile" data-toggle="tab">SQL Queries</a></li>
-                </ul>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <h2 class="first">Spark Shared RDDs</h2>
+                    <p>
+                        Apache Ignite provides an implementation of Spark RDD abstraction which allows to easily
+                        share state in memory across multiple Spark jobs, either within the same application
+                        or between different Spark applications.
+                    </p>
+                    <p>
+                        <code>IgniteRDD</code> is implemented is as a view over a distributed Ignite cache,
+                        which may be deployed either within the Spark job executing process, or on a Spark worker,
+                        or in its own cluster.
+                    </p>
+                    <p>
+                        Depending pre-configured deployment mode, the shared state may either exist only
+                        during the lifespan of a Spark application (<code>embedded mode</code>), or it may out-survive
+                        the Spark application (<code>standalone mode</code>), in which case the state can be shared across
+                        multiple Spark applications.
+                    </p>
+                </div>
 
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active" id="rdd-transform">
-                        <pre class="brush:java">
-                            val cacheRdd = igniteContext.fromCache("partitioned")
-
-                            // Store pairs of integers from 1 to 10000 into in-memory cache
-                            // named "partitioned" using 10 parallel store operations.
-                            cacheRdd.savePairs(sparkContext.parallelize(1 to 10000, 10).map(i => (i, i)))
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="rdd-sql">
-                        <pre class="brush:java">
-                            val cache = igniteContext.fromCache("partitioned")
-
-                            val result = cache.sql(
-                                "select _val from Integer where val > ? and val < ?", 10, 100)
-                        </pre>
-                    </div>
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive" src="/images/spark-ignite-rdd.png" width="440px" style="float:right;"/>
                 </div>
             </div>
+
+            <!--<table class="twosides">-->
+                <!--<tr>-->
+                    <!--<td valign="top">-->
+                        <!--<h2 class="first">Spark Shared RDDs</h2>-->
+                        <!--<p>-->
+                            <!--Apache Ignite provides an implementation of Spark RDD abstraction which allows to easily-->
+                            <!--share state in memory across multiple Spark jobs, either within the same application-->
+                            <!--or between different Spark applications.-->
+                        <!--</p>-->
+                        <!--<p>-->
+                            <!--<code>IgniteRDD</code> is implemented is as a view over a distributed Ignite cache,-->
+                            <!--which may be deployed either within the Spark job executing process, or on a Spark worker,-->
+                            <!--or in its own cluster.-->
+                        <!--</p>-->
+                        <!--<p>-->
+                            <!--Depending pre-configured deployment mode, the shared state may either exist only-->
+                            <!--during the lifespan of a Spark application (<code>embedded mode</code>), or it may out-survive-->
+                            <!--the Spark application (<code>standalone mode</code>), in which case the state can be shared across-->
+                            <!--multiple Spark applications.-->
+                        <!--</p>-->
+                    <!--</td>-->
+                    <!--<td valign="top">-->
+                        <!--<img class="first" src="/images/spark-ignite-rdd.png" width="440px">-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+
+                <div class="code-examples"><br/>
+                    <div class="page-heading">Code Examples:</div>
+                    <!-- Nav tabs -->
+                    <ul id="ignite-rdd-examples" class="nav nav-tabs">
+                        <li class="active"><a href="#rdd-transform" aria-controls="home" data-toggle="tab">Transformations</a></li>
+                        <li><a href="#rdd-sql" aria-controls="profile" data-toggle="tab">SQL Queries</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="rdd-transform">
+                            <pre class="brush:java">
+                                val cacheRdd = igniteContext.fromCache("partitioned")
+
+                                // Store pairs of integers from 1 to 10000 into in-memory cache
+                                // named "partitioned" using 10 parallel store operations.
+                                cacheRdd.savePairs(sparkContext.parallelize(1 to 10000, 10).map(i => (i, i)))
+                            </pre>
+                        </div>
+                        <div class="tab-pane" id="rdd-sql">
+                            <pre class="brush:java">
+                                val cache = igniteContext.fromCache("partitioned")
+
+                                val result = cache.sql(
+                                    "select _val from Integer where val > ? and val < ?", 10, 100)
+                            </pre>
+                        </div>
+                    </div>
+                </div>
         </section>
         <section id="key-features" class="page-section">
             <h2>IgniteRDD Features</h2>

@@ -51,38 +51,72 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="computegrid" class="page-section">
-            <table class="twosides">
-                <tr>
-                    <td>
-                        <h2 class="first">In-Memory Compute Grid</h2>
-                        <p>
-                            Distributed computations are performed in parallel fashion to gain high performance,
-                            low latency, and linear scalability. Ignite compute grid provides a set of simple APIs
-                            that allow users distribute computations and data processing across multiple computers
-                            in the cluster.
-                        </p>
-                        <p>
-                            Distributed parallel processing is based on the ability to take any computation and
-                            execute it on any set of cluster nodes and return the results back.
-                        </p>
-                        <div class="videos">
-                            <div class="page-heading">Videos:</div>
-                            <ul>
-                                <li>
-                                    <i class="fa fa-lg fa-play-circle-o"></i>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0; padding-right:0">
+                    <h2 class="first">In-Memory Compute Grid</h2>
+                    <p>
+                        Distributed computations are performed in parallel fashion to gain high performance,
+                        low latency, and linear scalability. Ignite compute grid provides a set of simple APIs
+                        that allow users distribute computations and data processing across multiple computers
+                        in the cluster.
+                    </p>
+                    <p>
+                        Distributed parallel processing is based on the ability to take any computation and
+                        execute it on any set of cluster nodes and return the results back.
+                    </p>
+                    <div class="videos">
+                        <div class="page-heading">Videos:</div>
+                        <ul>
+                            <li>
+                                <i class="fa fa-lg fa-play-circle-o"></i>
                                     <span class="video-title">
                                         <a target="youtube" href="https://www.youtube.com/watch?v=J775J77_-B8">Getting Started with Compute Grid</a>
                                     </span>
-                                    <span class="video-duration">03:50</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td>
-                        <img class="first" src="/images/in_memory_compute.png" width="380px"/>
-                    </td>
-                </tr>
-            </table>
+                                <span class="video-duration">03:50</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <br/>
+                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive" src="/images/in_memory_compute.png" width="400px" style="float:right;"/>
+                </div>
+            </div>
+
+            <!--<table class="twosides">-->
+                <!--<tr>-->
+                    <!--<td>-->
+                        <!--<h2 class="first">In-Memory Compute Grid</h2>-->
+                        <!--<p>-->
+                            <!--Distributed computations are performed in parallel fashion to gain high performance,-->
+                            <!--low latency, and linear scalability. Ignite compute grid provides a set of simple APIs-->
+                            <!--that allow users distribute computations and data processing across multiple computers-->
+                            <!--in the cluster.-->
+                        <!--</p>-->
+                        <!--<p>-->
+                            <!--Distributed parallel processing is based on the ability to take any computation and-->
+                            <!--execute it on any set of cluster nodes and return the results back.-->
+                        <!--</p>-->
+                        <!--<div class="videos">-->
+                            <!--<div class="page-heading">Videos:</div>-->
+                            <!--<ul>-->
+                                <!--<li>-->
+                                    <!--<i class="fa fa-lg fa-play-circle-o"></i>-->
+                                    <!--<span class="video-title">-->
+                                        <!--<a target="youtube" href="https://www.youtube.com/watch?v=J775J77_-B8">Getting Started with Compute Grid</a>-->
+                                    <!--</span>-->
+                                    <!--<span class="video-duration">03:50</span>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                    <!--<td>-->
+                        <!--<img class="first" src="/images/in_memory_compute.png" width="380px"/>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+
+
             <div class="code-examples">
                 <div class="page-heading">Code Examples:</div>
                 <!-- Nav tabs -->
@@ -95,44 +129,45 @@ under the License.
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="compute-example-broadcast">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+                            <pre class="brush:java">
+                                Ignite ignite = Ignition.ignite();
 
-                            // Print out hello message on all cluster nodes.
-                            ignite.compute().broadcast(() -> "Hello Node!");
-                        </pre>
+                                // Print out hello message on all cluster nodes.
+                                ignite.compute().broadcast(() -> "Hello Node!");
+                            </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-countchars">
-                        <pre class="brush:java">
-                            Collection&lt;IgniteCallable&lt;Integer&gt;&gt; calls = new ArrayList&lt;&gt;();
+                            <pre class="brush:java">
+                                Collection&lt;IgniteCallable&lt;Integer&gt;&gt; calls = new ArrayList&lt;&gt;();
 
-                            // Iterate through all words in the sentence and create callable jobs.
-                            for (String word : "How Many Characters".split(" "))
-                                calls.add(word::length);
+                                // Iterate through all words in the sentence and create callable jobs.
+                                for (String word : "How Many Characters".split(" "))
+                                    calls.add(word::length);
 
-                            // Execute collection of callables on the Ignite cluster.
-                            Collection&lt;Integer&gt; res = ignite.compute().call(calls);
+                                // Execute collection of callables on the Ignite cluster.
+                                Collection&lt;Integer&gt; res = ignite.compute().call(calls);
 
-                            // Add all the word lengths received from cluster nodes.
-                            int total = res.stream().mapToInt(Integer::intValue).sum();
-                        </pre>
+                                // Add all the word lengths received from cluster nodes.
+                                int total = res.stream().mapToInt(Integer::intValue).sum();
+                            </pre>
                     </div>
                     <div class="tab-pane" id="compute-example-closure">
-                        <pre class="brush:java">
-                            IgniteCompute compute  = ignite.compute();
+                            <pre class="brush:java">
+                                IgniteCompute compute  = ignite.compute();
 
-                            // Execute closure on all cluster nodes.
-                            Collection&lt;Integer&gt; res = ignite.compute().apply(
-                                String::length,
-                                Arrays.asList("How Many Characters".split(" "))
-                            );
+                                // Execute closure on all cluster nodes.
+                                Collection&lt;Integer&gt; res = ignite.compute().apply(
+                                    String::length,
+                                    Arrays.asList("How Many Characters".split(" "))
+                                );
 
-                            // Add all the word lengths received from cluster nodes.
-                            int total = res.stream().mapToInt(Integer::intValue).sum();
-                        </pre>
+                                // Add all the word lengths received from cluster nodes.
+                                int total = res.stream().mapToInt(Integer::intValue).sum();
+                            </pre>
                     </div>
                 </div>
             </div>
+
             <div class="page-heading">GitHub Examples:</div>
             <p>
                 Also see <a href="https://github.com/apache/incubator-ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/computegrid" target="github">Java 7 examples</a>
