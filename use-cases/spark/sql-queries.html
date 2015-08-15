@@ -31,17 +31,14 @@ under the License.
 -->
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>Apache Ignite - Features</title>
-    <link media="all" rel="stylesheet" href="css/all.css">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
+    <title>Apache Ignite - Faster SQL Queries</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 
     <!--#include virtual="/includes/sh.html" -->
@@ -51,45 +48,41 @@ under the License.
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
-        <section id="overview" class="page-section">
-            <h2 style="padding: 60px 0 40px 0; float: left">Ignite Features</h2>
-            <div class="col-sm-12 col-md-12 col-xs-12 page-menu">
-                <div class="col-sm-4 col-md-4 col-xs-12">
-                    <h3>Transactions & Analytics</h3>
-                    <ul>
-                        <li><a href="/features/datagrid.html">Data Grid</a></li>
-                        <li><a href="/features/computegrid.html">Compute Grid</a></li>
-                        <li><a href="/features/streaming.html">Streaming & CEP</a></li>
-                        <li><a href="/features/datastructures.html">Data Structures</a></li>
-                        <li><a href="/features/messaging.html">Messaging</a></li>
-                        <li><a href="/features/servicegrid.html">Service Grid</a></li>
-                    </ul>
+        <section id="spark-sqlqueries" class="page-section">
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <h2 class="first">Faster SQL Queries with Indexes</h2>
+                    <p>
+                        Running SQL queries using <code>IgniteRDD</code> is orders of magnitude faster than running SQL
+                        queries using Spark native RDDs or Data Frame APIs.
+                    </p>
+                    <div class="page-heading">In-Memory Indexes</div>
+                    <p>
+                        Spark does not support SQL indexes, resulting in slow SQL queries due to full scans across
+                        the whole data set. Such full-scan queries in spark can take minutes and introduce significant
+                        wait times, especially when running many queries within the same Spark application.
+                    <p>
+                        Apache Ignite, on the other hand, supports SQL with <span style="white-space: nowrap;"><code>in-memory indexing</code>.</span>
+                        Because of advanced in-memory indexing capabilities, IgniteRDD allows to execute SQL
+                        queries 100s of times faster than Spark native RDDs or Data Frames.
+                    </p>
                 </div>
-                <div class="col-sm-4 col-md-4 col-xs-12" style="width: 275px;">
-                    <h3>Hadoop & Spark</h3>
-                    <ul>
-                        <li><a href="/features/igniterdd.html">Spark Shared RDD</a></li>
-                        <li><a href="/features/igfs.html">In-Memory File System</a></li>
-                        <li><a href="/features/mapreduce.html">In-Memory MapReduce</a></li>
-                        <li class="empty"></li>
-                        <li class="empty"></li>
-                        <li class="empty"></li>
-                    </ul>
-                </div>
-                <div class="col-sm-4 col-md-4 col-xs-12" style="width: 275px;">
-                    <h3 class="last">Runs Everywhere</h3>
-                    <ul class="last">
-                        <li><a href="/features/clientprotos.html">Client Protocols</a></li>
-                        <li><a href="/features/deploy.html">Deployment Options</a></li>
-                        <li class="empty"></li>
-                        <li class="empty"></li>
-                        <li class="empty"></li>
-                        <li class="empty"></li>
-                    </ul>
+
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive" src="/images/spark-ignite-rdd.png" width="440px" style="float:right;"/>
                 </div>
             </div>
-
-            <!--#include virtual="/includes/igniteimage.html" -->
+            <div class="page-heading">On-Heap and Off-Heap Memory</div>
+            <p>
+                Ignite allows storing data in <i>on-heap</i> as well as <i>off-heap</i> memory.
+                If data is cached in off-heap memory, query indexes will be stored off-heap as well and
+                will not introduce any additional JVM Garbage Collection (GC) overhead.
+            </p>
+            <p>
+                <a href="https://apacheignite.readme.io/docs/ignitecontext--igniterdd#section-running-sql-queries-against-ignite-cache">
+                    <b>Run SQL Queries against Ignite Cache <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
         </section>
     </main>
 

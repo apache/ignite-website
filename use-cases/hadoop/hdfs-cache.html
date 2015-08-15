@@ -1,0 +1,95 @@
+<!--
+▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+ ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+ ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+     ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Apache Ignite - HDFS Cache</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="hdfs-cache" class="page-section">
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0;">
+                    <h2 class="first">In-Memory File System as HDFS Cache</h2>
+                    <p>
+                        Ignite File System (IGFS) is a plug-and-play in-memory file system,
+                        compatible with Hadoop Distributed File System (HDFS) and In-Memory Map Reduce.
+                    </p>
+                    <div class="page-heading">Dual Mode</div>
+                    <p>
+                        IGFS supports dual-mode that allows it to work as either a standalone file system in Hadoop cluster,
+                        or work in tandem with HDFS, providing a primary caching layer for the secondary HDFS.
+                        As a caching layer it provides highly configurable <em>read-through</em> and <em>write-through</em> behaviour.
+                    </p>
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0;">
+                    <img class="first img-responsive" src="/images/ignite_filesystem.png" width="440px" style="float:right;"/>
+                </div>
+            </div>
+            <div class="page-heading">Write-Through & Read-Through</div>
+            <p>
+                Ignite In-Memory File System can be configured with a Hadoop native <code>Secondary File System</code>.
+                Such implementation allows for <em>read-through</em> and <em>write-through</em> behavior over any
+                other Hadoop FileSystem implementation (e.g. HDFS).
+            </p>
+            <p>
+                This allows IGFS serve as an in-memory caching layer over disk-based HDFS or any other
+                Hadoop-compliant file system.
+            </p>
+            <p>
+                <a href="https://apacheignite.readme.io/docs/secondary-file-system">
+                    <b>Configure HDFS Cache <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
