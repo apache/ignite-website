@@ -84,7 +84,7 @@ under the License.
                         however indexes still remain <em>on-heap</em>. Given that indexes usually require about 30% of additional space,
                         this can still lead to large GC pauses, which defeats the very reason to store the data <em>off-heap</em>
                         to begin with. Apache Ignite, on the other hand, is able to store both, the cached data and the indexes
-                        in the <a href="http://apacheignite.readme.io/docs/off-heap-memory"><em>off-heap</em></a> memory,
+                        in the <em>off-heap</em> memory,
                         allowing to completely eliminate any GC overhead within user applications.
                     </p></td>
                 </tr>
@@ -92,9 +92,9 @@ under the License.
                     <td class="left">Standard SQL and JOIN Queries</td>
                     <td><p>
                         Hazelcast has limited support for SQL queries and absolutely no support for JOINs, even when using their predicate-based API. Apache Ignite, on the other hand,
-                        supports free-form <a href="http://apacheignite.readme.io/docs/cache-queries">SQL queries</a> virtually without any limitations (ANSI 99 compliant). You can use any
+                        supports free-form SQL queries virtually without any limitations (ANSI 99 compliant). You can use any
                         SQL function, any aggregation, any grouping and Ignite will figure out where to fetch the results from.
-                        Ignite also supports distributed <a href="http://apacheignite.readme.io/docs/cache-queries#section-sql-joins">SQL JOINs</a>. Moreover, if the data resides in different caches,
+                        Ignite also supports distributed SQL JOINs. Moreover, if the data resides in different caches,
                         Ignite allows for cross-cache JOIN queries as well.
                     </p></td>
                 </tr>
@@ -105,12 +105,12 @@ under the License.
                         However, Hazelcast does not recommend using replicated caches due to its inability to keep data consistent on all nodes.
                         Moreover, Hazelcast recommends storing only immutable objects when using a replicated cache, to avoid reading any stale data.
                         In contrast, Apache Ignite guarantees full data consistency across all the nodes in the cluster,
-                        regardless of any data type, and any <a href="http://apacheignite.readme.io/docs/cache-modes">cache distribution mode</a> configured.
+                        regardless of any data type, and any cache distribution mode configured.
                     </p></td>
                 <tr>
                     <td class="left">Tiered Storage</td>
                     <td><p>
-                        Apache Ignite provides <a href="http://apacheignite.readme.io/docs/off-heap-memory#tiered-off-heap-storage">tiered storage</a> model, a feature not supported in Hazelcast,
+                        Apache Ignite provides tiered storage model, a feature not supported in Hazelcast,
                         where data can be stored and moved between <em>on-heap</em>, <em>off-heap</em>, and <em>swap</em> space. Going up the tier
                         provides more data storage capacity, with gradual increase in latency.
                     </p></td>
@@ -119,8 +119,15 @@ under the License.
                     <td class="left">Data Streaming</td>
                     <td><p>
                         Hazelcast does not possess real-time data processing capabilities.
-                        Apache Ignite <a href="http://apacheignite.readme.io/docs/streaming--cep">streaming</a> allows to process continuous never-ending streams of data in scalable and fault-tolerant fashion.
+                        Apache Ignite streaming allows to process continuous never-ending streams of data in scalable and fault-tolerant fashion.
                         Ignite streaming functionality also allows you to perform concurrent SQL queries on the streamed data.
+                    </p></td>
+                </tr>
+                <tr>
+                    <td class="left">.Net and C++ Client</td>
+                    <td><p>
+                        Apache Ignite provides .Net and C++ client to connect to Ignite nodes and perform most of the
+                        operations supported by Ignite In-Memory Data Grid. In Hazelcast, this feature is available only in enterprise edition.
                     </p></td>
                 </tr>
                 </tbody>
@@ -137,118 +144,84 @@ under the License.
                 benchmark execution.
             </p>
 
-            <p><b>Hardware Specification</b></p>
-
             <table style="width: 70% !important;" class="formatted">
                 <thead>
-                    <tr>
-                        <th width="55%" class="left">Specification</th>
-                        <th>Description</th>
-                    </tr>
+                <tr>
+                    <th colspan="2" style="text-align:center;">
+                        Technical Details
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="left">Hardware</td>
-                        <td>c4.2xlarge</td>
-                    </tr>
-                    <tr>
-                        <td class="left">CPU</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td class="left">RAM (GB)</td>
-                        <td>15</td>
-                    </tr>
+                <tr>
+                    <td><b>Hardware</b></td>
+                    <td>c4.2xlarge</td>
+                </tr>
+                <tr>
+                    <td><b>CPU</b></td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td><b>RAM (GB)</b></td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td><b>Number of Nodes</b></td>
+                    <td>4</td>
+                </tr>
                 </tbody>
             </table>
-            <br/>
-            <p><b>Test Parameters</b></p>
-
-            <table style="width: 70% !important;" class="formatted">
-                <thead>
-                    <tr>
-                        <th width="55%" class="left">Parameter</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="left">Number of Nodes</td>
-                        <td>4</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Number of Threads</td>
-                        <td>64</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Test Duration (ms)</td>
-                        <td>300,000</td>
-                    </tr>
-                </tbody>
-            </table>
-            <br/>
-            <p><b>Hosted on Github</b></p>
-
-            <p>
-                Ignite and all other benchmarks are written on top of
-                <a href="https://github.com/apacheignite/yardstick-ignite" target="_blank">Yardstick Benchmarking Framework</a> hosted on
-                <a href="https://github.com/gridgain/yardstick" target="_blank">GitHub</a>
-                where you can find full documentation.
-            </p>
-
         </section>
 
         <section id="atomic-putandgetbenchmark" class="page-section">
-            <h3>Atomic Put and Get Benchmark</h3><br/>
-
-            <p>Benchmarks atomic distributed cache put and get operations in Ignite. Randomly generated key-value pairs are
-                stored and retrieved from cache on multiple nodes.</p>
-
-            <p><b>Results Summary</b></p>
-
-            <p>Results show that over 76,000 cache put and get operations per second can be performed in Ignite as
-                compared to 74,000 cache put and get operations per second in Hazelcast.</p>
-
-            <table style="width: 90%;" class="formatted">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
-                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td><b>Ignite</b></td>
-                        <td><b>Hazelcast</b></td>
-                        <td><b>Ignite</b></td>
-                        <td><b>Hazelcast</b></td>
-                    </tr>
-                    <tr>
-                        <td class="left">Avg</td>
-                        <td>76,768</td>
-                        <td>74,066</td>
-                        <td>832</td>
-                        <td>863</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Min</td>
-                        <td>72,405</td>
-                        <td>69,456</td>
-                        <td>803</td>
-                        <td>822</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Max</td>
-                        <td>79,510</td>
-                        <td>77,649</td>
-                        <td>882</td>
-                        <td>920</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h3>Atomic Put and Get Benchmark</h3>
             <br/>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>76,768</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>74,066</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>0.83</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>0.86</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <p>
                 <a href="/benchmarks/ignite-vs-hazelcast/002-ignite-atomic-put-get-1-backup/Results.html">
                     See graph <i class="fa fa-angle-double-right"></i></a>
@@ -256,110 +229,123 @@ under the License.
         </section>
 
         <section id="opt-tx-putandgetbenchmark" class="page-section">
-            <h3>Transactional Put and Get Benchmark</h3><br/>
-
-            <p>
-                Benchmarks transactional distributed cache put and get operations together. Randomly
-                generated key-value pairs are stored and retrieved in a single transaction from <code>PARTITIONED</code>
-                cache with <code>TRANSACTIONAL</code> atomicity mode.
-            </p>
-
-            <table style="width: 90%;" class="formatted">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
-                        <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td><b>Ignite</b></td>
-                        <td><b>Hazelcast</b></td>
-                        <td><b>Ignite</b></td>
-                        <td><b>Hazelcast</b></td>
-                    </tr>
-                    <tr>
-                        <td class="left">Avg</td>
-                        <td>34,430</td>
-                        <td>22,185</td>
-                        <td>1,859</td>
-                        <td>2,885</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Min</td>
-                        <td>29,399</td>
-                        <td>21,071</td>
-                        <td>1,773</td>
-                        <td>2,746</td>
-                    </tr>
-                    <tr>
-                        <td class="left">Max</td>
-                        <td>36,062</td>
-                        <td>23,305</td>
-                        <td>2,176</td>
-                        <td>3,033</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h3>Transactional Put and Get Benchmark</h3>
             <br/>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>34,430</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>22,185</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>1.8</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>2.8</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <p>
                 <a href="/benchmarks/ignite-vs-hazelcast/002-ignite-tx-put-get-1-backup/Results.html">
                     See graph <i class="fa fa-angle-double-right"></i></a>
             </p>
         </section>
         <section id="sqlquerybenchmark" class="page-section">
-            <h3>SQL Query Benchmark</h3><br/>
-
-            <p>
-            Benchmarks distributed SQL query operation on cached data. Simple SQL query was executed on data stored on multiple nodes in a <code>PARTITIONED</code> cache.
-            </p>
-
-            <table style="width: 90%;" class="formatted">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th colspan="2">Throughput (Operations/sec) <br/><span class="small">More is better</span></th>
-                    <th colspan="2">Latency (microseconds) <br/><span class="small">Less is better</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td></td>
-                    <td><b>Ignite</b></td>
-                    <td><b>Hazelcast</b></td>
-                    <td><b>Ignite</b></td>
-                    <td><b>Hazelcast</b></td>
-                </tr>
-                <tr>
-                    <td class="left">Avg</td>
-                    <td>32,467</td>
-                    <td>24</td>
-                    <td>1,971</td>
-                    <td>2,576,647</td>
-                </tr>
-                <tr>
-                    <td class="left">Min</td>
-                    <td>24,113</td>
-                    <td>0</td>
-                    <td>1,893</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td class="left">Max</td>
-                    <td>33,763</td>
-                    <td>51</td>
-                    <td>2,651</td>
-                    <td>2,891,354</td>
-                </tr>
-                </tbody>
-            </table>
+            <h3>SQL Query Benchmark</h3>
             <br/>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>32,467</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>24</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Apache Ignite</b></td>
+                            <td>1.9</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hazelcast</b></td>
+                            <td>2576</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <p>
                 <a href="/benchmarks/ignite-vs-hazelcast/001-ignite-sql-query-1-backup/Results.html">
                     See graph <i class="fa fa-angle-double-right"></i></a>
             </p>
+        </section>
+
+        <br/>
+        <section class="page-section">
+            <h3>More Benchmarks</h3>
+            <p>
+                Ignite and all other benchmarks are written on top of Yardstick Benchmarking Framework, hosted on
+                <a href="https://github.com/apacheignite/yardstick-ignite" target="_blank">GitHub</a>
+                where you can find full documentation.
+            </p>
+
         </section>
     </main>
 
