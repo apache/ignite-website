@@ -40,16 +40,694 @@ under the License.
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 
+<!-- ***NOTICE***
+     As of 2015-08-31, SSI does not work with the "virtual"
+     downloads.cgi hack. Therefore, we're including the banners,
+     navbars and notices explicitly. -->
     <!--#include virtual="/includes/sh.html" -->
+<!-- Syntax highlighter. -->
+<script type="text/javascript" src="/js/shCore.js"></script>
+<script type="text/javascript" src="/js/shBrushBash.js"></script>
+<script type="text/javascript" src="/js/shBrushJava.js"></script>
+<script type="text/javascript" src="/js/shBrushXml.js"></script>
+<script type="text/javascript" src="/js/shBrushScala.js"></script>
+
+<link href="/css/shCore.css" rel="stylesheet" type="text/css"/>
+<!--<link href="/css/shThemeDefault.css" rel="stylesheet" type="text/css"/>-->
+<link href="/css/shThemeEclipse.css" rel="stylesheet" type="text/css"/>
+<!--<link href="/css/shThemeFadeToGrey.css" rel="stylesheet" type="text/css"/>-->
+
+<!--<link href="/css/shThemeMDUltra.css" rel="stylesheet" type="text/css"/>-->
+<!--<link href="/css/shThemeEmacs.css" rel="stylesheet" type="text/css"/>-->
+<!--<link href="/css/shThemeDjango.css" rel="stylesheet" type="text/css"/>-->
+<!--<link href="/css/shThemeRDark.css" rel="stylesheet" type="text/css"/>-->
+<!--<link href="/css/shThemeMidnight.css" rel="stylesheet" type="text/css"/>-->
+    <!-- end of include "/includes/sh.html" -->
+
 </head>
 <body>
 <div id="wrapper">
     <!--#include virtual="/includes/header.html" -->
+<header id="header" class="affix" data-spy="affix" data-offset-top="0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-xs-6">
+                <div class="logo"><a href="/index.html"><img src="/images/logo.png" alt="ApacheIgnite"></a></div>
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-6">
+                <nav id="nav" class="navbar navbar-default" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="navbar">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="/features.html">Features <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li role="presentation" class="submenu-header">Transactions & Analytics</li>
+                                        <li><a href="/features/datagrid.html">Data Grid</a></li>
+                                        <li><a href="/features/computegrid.html">Compute Grid</a></li>
+                                        <li><a href="/features/streaming.html">Streaming & CEP</a></li>
+                                        <li><a href="/features/datastructures.html">Data Structures</a></li>
+                                        <li><a href="/features/messaging.html">Messaging</a></li>
+                                        <li><a href="/features/servicegrid.html">Service Grid</a></li>
+                                        <li class="divider"></li>
+                                        <li role="presentation" class="submenu-header">Hadoop & Spark</li>
+                                        <li><a href="/features/igniterdd.html">Spark Shared RDDs</a></li>
+                                        <li><a href="/features/igfs.html">In-Memory File System</a></li>
+                                        <li><a href="/features/mapreduce.html">In-Memory MapReduce</a></li>
+                                        <li class="divider"></li>
+                                        <li role="presentation" class="submenu-header">Runs Everywhere</li>
+                                        <li><a href="/features/clientprotos.html">Client Protocols</a></li>
+                                        <li><a href="/features/deploy.html">Deployment Options</a></li>
+                                    </ul>
+                                </li>
 
-    <!--#exec cgi="/download-mirrors.cgi" -->
+                                <li class="dropdown">
+                                    <a href="/usecases.html">Use Cases <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li role="presentation" class="submenu-header">In-Memory Caching</li>
+                                        <li><a href="/use-cases/caching/database-caching.html">Database Caching</a></li>
+                                        <li><a href="/use-cases/caching/jcache-provider.html">JCache Provider</a></li>
+                                        <li><a href="/use-cases/caching/key-value-store">Key-Value Store</a></li>
+                                        <li><a href="/use-cases/caching/hibernate-l2-cache.html">Hibernate L2 Cache</a></li>
+                                        <li><a href="/use-cases/caching/web-session-clustering.html">Web Session Clustering</a></li>
+                                        <li class="divider"></li>
+                                        <!--<li role="presentation" class="submenu-header">Data Grid Replacements</li>-->
+                                        <!--<li><a href="/use-cases/datagridreplace/hazelcast.html">Hazelcast</a></li>-->
+                                        <!--<li><a href="/use-cases/datagridreplace/coherence.html">Oracle Coherence</a></li>-->
+                                        <!--<li><a href="/use-cases/datagridreplace/gemfire.html">Pivotal GemFire</a></li>-->
+                                        <!--<li class="divider"></li>-->
+                                        <li role="presentation" class="submenu-header">Ignite and Spark</li>
+                                        <li><a href="/use-cases/spark/shared-memory-layer.html">Shared Memory Layer</a></li>
+                                        <li><a href="/use-cases/spark/sql-queries">Faster Sql Queries</a></li>
+                                        <li class="divider"></li>
+                                        <li role="presentation" class="submenu-header">Ignite and Hadoop</li>
+                                        <li><a href="/use-cases/hadoop/hdfs-cache">IGFS as HDFS Cache</a></li>
+                                        <li><a href="/use-cases/hadoop/mapreduce">Faster In-Memory MapReduce</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="http://apacheignite.readme.io/docs">Documentation</a></li>
+                                <li><a href="http://apache-ignite-users.70518.x6.nabble.com/">Ask Question</a></li>
+                                <li class="dropdown">
+                                    <a href="/community/resources.html">Community <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li role="presentation" class="submenu-header">Resources</li>
+                                        <li><a href="/community/resources.html#ask">Ask a Question</a></li>
+                                        <li><a href="/community/resources.html#stackoverflow">Stack Overflow</a></li>
+                                        <li><a href="/community/resources.html#mail-lists">Mailing Lists</a></li>
+                                        <li><a href="/community/resources.html#git">Git Repositories</a></li>
+                                        <li><a href="https://issues.apache.org/jira/browse/IGNITE" target="_blank">Ignite Jira</a></li>
+                                        <li><a href="https://cwiki.apache.org/confluence/display/IGNITE/" target="_blank">Ignite Wiki</a></li>
+                                        <li class="last"><a href="/community/resources.html#people">People</a></li>
+                                        <li class="divider"></li>
+                                        <li role="presentation" class="submenu-header">Contribute</li>
+                                        <li><a href="/community/contribute.html#contribute">Start Contributing</a></li>
+                                        <li><a href="/community/contribute.html#pick-ticket">Pick a Ticket</a></li>
+                                        <li><a href="/community/contribute.html#ignite-dev">Start Developing</a></li>
+                                        <li><a href="/community/contribute.html#become-committer">Become a Committer</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="/download.cgi">Download <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="/download.cgi#sources">Source Releases</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/download.cgi#binaries">Binary Releases</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/download.cgi#docker">Docker And Cloud Images</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/download.cgi#maven">Download From Maven</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/download.cgi#build-source">Build From Source</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/download.cgi#3rdparty">3<sup>rd</sup> Party Binaries</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+    <!-- end of include "/includes/header.html" -->
+
+    <!-- START OF MAIN SITE BODY -->
+<main id="main" role="main" class="container key-features">
+
+  <!-- Update the following template variables for every release -->
+  [define distdir]ignite[end]
+  [define disturl]https://www.apache.org/dist[end]
+     
+  <section id="toc" class="page-section">
+    <h2 class="first" style="text-align: left;">Downloads</h2>
+    <ul style="line-height: 112%" class="features-list">
+        <li><a href="#sources">Source Releases</a></li>
+        <li><a href="#binaries">Binary Releases</a></li>
+        <li><a href="#docker">Docker And Cloud Images</a></li>
+        <li><a href="#maven">Download From Maven</a></li>
+        <li><a href="#build-source">Build From Source</a></li>
+        <li><a href="#3rdparty">3<sup>rd</sup> Party Binaries</a></li>
+    </ul>
+    <p>&nbsp;</p>
+    <p>Downloads contain</p>
+    <ul style="line-height: 112%" class="features-list">
+       <li>startup scripts</li>
+       <li>default configuration</li>
+       <li>examples for all major components</li>
+       <li>libraries (required and optional, without LGPL)</li>
+       <li>to get LGPL dependencies (e.g. Hibernate L2 Cache), see <a href="#build-source">Building The Binaries</a>.</li>
+    </ul>
+  </section>
+
+  <section id="sources" class="page-section">
+    <h2>Source Releases</h2>
+    <table class="formatted">
+      <thead>
+          <tr><th>Version</th><th>Docs</th><th>Date</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+	    <tr>
+          <td style="white-space: nowrap;">1.3.0 (latest)</td>
+          <td style="white-space: nowrap;">
+            <a href="https://apacheignite.readme.io/v1.3/docs">guide</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.3.0/javadoc/">javadoc</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.3.0/scaladoc/scalar/">scaladoc</a>
+          </td>
+          <td style="white-space: nowrap;">2015-07-21</td>
+          <td style="white-space: nowrap;">
+            <a id="apache_ignite_source_download"
+              href="[disturl]/[distdir]/1.3.0/apache-ignite-1.3.0-incubating-src.zip"
+              onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-1.3.0');">apache-ignite-1.3.0-incubating-src.zip</a> 
+
+            (<a href="[disturl]/[distdir]/1.3.0/apache-ignite-1.3.0-incubating-src.zip.asc">pgp</a>,
+             <a href="[disturl]/[distdir]/1.3.0/apache-ignite-1.3.0-incubating-src.zip.sha1">sha1</a>)
+          </td>
+        </tr>
+	    <tr>
+          <td style="white-space: nowrap;">1.2.0</td>
+          <td style="white-space: nowrap;">
+            <a href="https://apacheignite.readme.io/v1.2/docs">guide</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.2.0/javadoc/">javadoc</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.2.0/scaladoc/scalar/">scaladoc</a>
+          </td>
+          <td style="white-space: nowrap;">2015-06-29</td>
+          <td style="white-space: nowrap;">
+            <a id="apache_ignite_source_download"
+              href="[disturl]/[distdir]/1.2.0/apache-ignite-1.2.0-incubating-src.zip"
+              onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-1.2.0');">apache-ignite-1.2.0-incubating-src.zip</a> 
+
+            (<a href="[disturl]/[distdir]/1.2.0/apache-ignite-1.2.0-incubating-src.zip.asc">pgp</a>,
+             <a href="[disturl]/[distdir]/1.2.0/apache-ignite-1.2.0-incubating-src.zip.sha1">sha1</a>)
+          </td>
+        </tr>
+	    <tr>
+          <td style="white-space: nowrap;">1.1.0</td>
+          <td style="white-space: nowrap;">
+            <a href="https://apacheignite.readme.io/v1.1/docs">guide</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.1.0/javadoc/">javadoc</a>,
+            <a href="https://ignite.incubator.apache.org/releases/1.1.0/scaladoc/scalar/">scaladoc</a>
+          </td>
+          <td style="white-space: nowrap;">2015-05-28</td>
+          <td style="white-space: nowrap;">
+            <a id="apache_ignite_source_download"
+              href="[disturl]/[distdir]/1.1.0/apache-ignite-1.1.0-incubating-src.zip"
+              onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-1.1.0');">apache-ignite-1.1.0-incubating-src.zip</a> 
+
+            (<a href="[disturl]/[distdir]/1.1.0/apache-ignite-1.1.0-incubating-src.zip.asc">pgp</a>,
+             <a href="[disturl]/[distdir]/1.1.0/apache-ignite-1.1.0-incubating-src.zip.sha1">sha1</a>)
+          </td>
+        </tr>
+        <tr>
+          <td style="white-space: nowrap;">1.0.0</td>
+          <td style="white-space: nowrap;">
+            <a href="https://apacheignite.readme.io/v1.0/docs">guide</a>,
+            <a href="https://ignite.apache.org/releases/1.0.0/javadoc/">javadoc</a>,
+            <a href="https://ignite.apache.org/releases/1.0.0/scaladoc/scalar/">scaladoc</a>
+          </td>
+          <td style="white-space: nowrap;">2015-04-02</td>
+          <td style="white-space: nowrap;">
+            <a id="apache_ignite_source_download"
+              href="[disturl]/[distdir]/1.0.0/incubator-ignite-1.0.0-src.zip"
+              onclick="ga('send', 'event', 'apache_ignite_source_download', 'download', 'apache-ignite-1.0.0');">incubator-ignite-1.0.0-src.zip</a> 
+
+            (<a href="[disturl]/[distdir]/1.0.0/incubator-ignite-1.0.0-src.zip.asc">pgp</a>,
+             <a href="[disturl]/[distdir]/1.0.0/incubator-ignite-1.0.0-src.zip.sha1">sha1</a>)
+          </td>
+        </tr>
+        <tr>
+          <td>1.0.0-RC3</td>
+          <td style="white-space: nowrap;">
+            <a href="https://apacheignite.readme.io/v1.0-rc3/docs">guide</a>, 
+            <a href="https://ignite.apache.org/releases/1.0.0-rc3/javadoc/">javadoc</a>,
+            <a href="https://ignite.apache.org/releases/1.0.0-rc3/scaladoc/scalar/">scaladoc</a>
+          </td>
+          <td>2015-03-24</td>
+          <td>
+            <a 
+              id="apache_ignite_binary_fabric_download"
+              href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3.zip"
+              onclick="ga('send', 'event', 'apache_ignite_fabric_download', 'download', 'apache-ignite-1.0.0');">incubator-ignite-1.0.0-rc3.zip</a> 
+
+           (<a href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3.zip.asc">pgp</a>, 
+            <a href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3.zip.sha1">sha1</a>)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!--
+    <p>
+      If you encounter a problem with the selected mirror, please select another mirror.
+      If all mirrors are failing, there are <i>backup</i> mirrors
+      (at the end of the mirrors list) that should be available.
+    </p>
+    <form action="/download.cgi" method="get" id="SelectMirror">
+      Selected mirror:
+      <select name="Preferred" onchange="submit()">
+        [if-any http]
+            [for http]<option value="[http]"[is http preferred] selected="selected"[end]>[http]</option>[end]
+        [end]  
+        [if-any ftp]
+            [for ftp]<option value="[ftp]"[is ftp preferred] selected="selected"[end]>[ftp]</option>[end]
+        [end]
+        [if-any backup]
+            [for backup]<option value="[backup]"[is backup preferred] selected="selected"[end]>[backup] (backup)</option>[end]
+        [end]
+      </select>
+      <input type="submit" value="Change" />
+    </form>
+    <p>&nbsp;</p>
+    -->
+  </section>
+  <section id="binaries" class="page-section">
+    <h2>Binary Releases</h2>
+    <p>Binary downloads are provided for the convenience of our users
+      and are not official Apache Ignite (incubating) releases. In
+      order to verify the release, we recommend that you download the
+      official source distribution and verify the
+      signatures of the downloaded files before opening them.</p>
+    <p>For more information about Apache release policy see 
+    <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a></p>
+    <div class="page-heading">In-Memory Data Fabric:</div>
+    <table class="formatted">
+        <thead>
+            <tr><th>Version</th><th>Docs</th><th>Date</th><th>Binary</th></tr>
+        </thead>
+        <tbody>
+		   <tr>
+              <td style="white-space: nowrap;">1.3.0 (latest)</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.3/docs">guide</a>,
+                <a href="https://ignite.apache.org/releases/1.3.0/javadoc/">javadoc</a>,
+                <a href="https://ignite.apache.org/releases/1.3.0/scaladoc/scalar/">scaladoc</a>
+              </td>
+              <td style="white-space: nowrap;">2015-07-21</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_fabric_download"
+                  href="[disturl]/[distdir]/1.3.0/apache-ignite-fabric-1.3.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_fabric_download', 'download', 'apache-ignite-1.3.0');">apache-ignite-fabric-1.3.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.3.0/apache-ignite-fabric-1.3.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.3.0/apache-ignite-fabric-1.3.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+		   <tr>
+              <td style="white-space: nowrap;">1.2.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.2/docs">guide</a>,
+                <a href="https://ignite.apache.org/releases/1.2.0/javadoc/">javadoc</a>,
+                <a href="https://ignite.apache.org/releases/1.2.0/scaladoc/scalar/">scaladoc</a>
+              </td>
+              <td style="white-space: nowrap;">2015-06-29</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_fabric_download"
+                  href="[disturl]/[distdir]/1.2.0/apache-ignite-fabric-1.2.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_fabric_download', 'download', 'apache-ignite-1.2.0');">apache-ignite-fabric-1.2.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.2.0/apache-ignite-fabric-1.2.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.2.0/apache-ignite-fabric-1.2.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+			<tr>
+              <td style="white-space: nowrap;">1.1.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.1/docs">guide</a>,
+                <a href="https://ignite.apache.org/releases/1.1.0/javadoc/">javadoc</a>,
+                <a href="https://ignite.apache.org/releases/1.1.0/scaladoc/scalar/">scaladoc</a>
+              </td>
+              <td style="white-space: nowrap;">2015-05-28</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_fabric_download"
+                  href="[disturl]/[distdir]/1.1.0/apache-ignite-fabric-1.1.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_fabric_download', 'download', 'apache-ignite-1.1.0');">apache-ignite-fabric-1.1.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.1.0/apache-ignite-fabric-1.1.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.1.0/apache-ignite-fabric-1.1.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+            <tr>
+              <td style="white-space: nowrap;">1.0.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.0/docs">guide</a>,
+                <a href="https://ignite.apache.org/releases/1.0.0/javadoc/">javadoc</a>,
+                <a href="https://ignite.apache.org/releases/1.0.0/scaladoc/scalar/">scaladoc</a>
+              </td>
+              <td style="white-space: nowrap;">2015-04-02</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_fabric_download"
+                  href="[disturl]/[distdir]/1.0.0/ignite-fabric-1.0.0-incubating.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_fabric_download', 'download', 'apache-ignite-1.0.0');">ignite-fabric-1.0.0-incubating.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.0.0/ignite-fabric-1.0.0-incubating.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.0.0/ignite-fabric-1.0.0-incubating.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+            <tr>
+              <td style="white-space: nowrap;">1.0.0-RC3</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.0-rc3/docs">guide</a>, 
+                <a href="https://ignite.apache.org/releases/1.0.0-rc3/javadoc/">javadoc</a>,
+                <a href="https://ignite.apache.org/releases/1.0.0-rc3/scaladoc/scalar/">scaladoc</a>
+              </td>
+              <td style="white-space: nowrap;">2015-03-24</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_download"
+                  href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_binary_download', 'download', 'apache-ignite-1.0.0-RC3');">incubator-ignite-1.0.0-rc3-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.0.0-RC3/incubator-ignite-1.0.0-rc3-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-heading">In-Memory Hadoop Accelerator:</div>
+    <table class="formatted">
+        <thead>
+            <tr><th>Version</th><th>Docs</th><th>Date</th><th>Binary</th></tr>
+        </thead>
+        <tbody>
+		   <tr>
+              <td style="white-space: nowrap;">1.3.0 (latest)</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.3/docs/hadoop-accelerator">guide</a> 
+              </td>
+              <td style="white-space: nowrap;">2015-07-21</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_hadoop_download"
+                  href="[disturl]/[distdir]/1.3.0/apache-ignite-hadoop-1.3.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_hadoop_download', 'download', 'apache-ignite-1.3.0');">apache-ignite-hadoop-1.3.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.3.0/apache-ignite-hadoop-1.3.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.3.0/apache-ignite-hadoop-1.3.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+		   <tr>
+              <td style="white-space: nowrap;">1.2.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.2/docs/hadoop-accelerator">guide</a> 
+              </td>
+              <td style="white-space: nowrap;">2015-06-29</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_hadoop_download"
+                  href="[disturl]/[distdir]/1.2.0/apache-ignite-hadoop-1.2.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_hadoop_download', 'download', 'apache-ignite-1.2.0');">apache-ignite-hadoop-1.2.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.2.0/apache-ignite-hadoop-1.2.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.2.0/apache-ignite-hadoop-1.2.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+			<tr>
+              <td style="white-space: nowrap;">1.1.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.1/docs/hadoop-accelerator">guide</a> 
+              </td>
+              <td style="white-space: nowrap;">2015-05-28</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_hadoop_download"
+                  href="[disturl]/[distdir]/1.1.0/apache-ignite-hadoop-1.1.0-incubating-bin.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_hadoop_download', 'download', 'apache-ignite-1.1.0');">apache-ignite-hadoop-1.1.0-incubating-bin.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.1.0/apache-ignite-hadoop-1.1.0-incubating-bin.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.1.0/apache-ignite-hadoop-1.1.0-incubating-bin.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+            <tr>
+              <td style="white-space: nowrap;">1.0.0</td>
+              <td style="white-space: nowrap;">
+                <a href="https://apacheignite.readme.io/v1.0/docs/hadoop-accelerator">guide</a> 
+              </td>
+              <td style="white-space: nowrap;">2015-04-02</td>
+              <td style="white-space: nowrap;">
+                <a 
+                  id="apache_ignite_binary_hadoop_download"
+                  href="[disturl]/[distdir]/1.0.0/ignite-hadoop-1.0.0-incubating.zip"
+                  onclick="ga('send', 'event', 'apache_ignite_hadoop_download', 'download', 'apache-ignite-1.0.0');">ignite-hadoop-1.0.0-incubating.zip</a> 
+
+               (<a href="[disturl]/[distdir]/1.0.0/ignite-hadoop-1.0.0-incubating.zip.asc">pgp</a>, 
+                <a href="[disturl]/[distdir]/1.0.0/ignite-hadoop-1.0.0-incubating.zip.sha1">sha1</a>)
+              </td>
+            </tr>
+        </tbody>
+    </table>
+  </section> <!-- downloads -->
+
+  <section id="docker" class="page-section">
+    <h2>Docker And Cloud Images</h2>
+    <table class="formatted">
+      <thead>
+      <tr><th>Name</th><th>Docs</th><th>Date</th><th>URL</th></tr>
+      </thead>
+        <tbody>
+          <tr>
+            <td style="white-space: nowrap;">Docker Image</td>
+            <td style="white-space: nowrap;">
+              <a href="https://apacheignite.readme.io/v1.2/docs/docker-deployment">guide</a>
+            </td>
+            <td style="white-space: nowrap;">2015-06-25</td>
+            <td style="white-space: nowrap;">
+              <a id="docker_repo_download"
+                href="https://registry.hub.docker.com/u/apacheignite/ignite-docker/" onclick="ga('send', 'event', 'docker_repo_download', 'download', 'docker_repo_download');">docker repository</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="white-space: nowrap;">Amazon Image</td>
+            <td style="white-space: nowrap;">
+              <a href="https://apacheignite.readme.io/v1.2/docs/docker-deployment#amazon-ec2-deployment">guide</a>
+            </td>
+            <td style="white-space: nowrap;">2015-06-25</td>
+            <td style="white-space: nowrap;">
+              <a id="aws_image_west_download" href="https://console.aws.amazon.com/ec2/home?region=us-west-1#launchAmi=ami-51fb0d15" onclick="ga('send', 'event', 'aws_image_west_download', 'download', 'aws_image_west_download');">us-west:ami-51fb0d15</a>,
+              <a id="aws_image_east_download" href="https://console.aws.amazon.com/ec2/home?region=us-east-1#launchAmi=ami-0f824764" onclick="ga('send', 'event', 'aws_image_east_download', 'download', 'aws_image_east_download');">us-east:ami-0f824764</a>,
+              <a id="aws_image_central_download" href="https://console.aws.amazon.com/ec2/home?region=eu-central-1#launchAmi=ami-0a4d7617"  onclick="ga('send', 'event', 'aws_image_central_download', 'download', 'aws_image_central_download');">eu-central:ami-0a4d7617</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="white-space: nowrap;">Google Compute Image</td>
+            <td style="white-space: nowrap;">
+              <a href="https://apacheignite.readme.io/v1.2/docs/docker-deployment#google-compute-deployment">guide</a>
+            </td>
+            <td style="white-space: nowrap;">2015-06-25</td>
+            <td style="white-space: nowrap;">
+              <a id="gce_image_download" href="https://storage.googleapis.com/ignite-media/ignite-google-image.tar.gz" onclick="ga('send', 'event', 'gce_image_download', 'download', 'gce_image_download');">ignite-google-image.tar.gz</a>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+  </section><!-- cloud images -->
+
+  <section id="maven" class="page-section">
+    <h2>Download from Maven</h2>
+    <p>
+      Ignite requires only one <b>ignite-core</b> mandatory dependency. Usually you will 
+      also need to add <b>ignite-spring</b> for spring-based XML configuration, and <b>ignite-indexing</b> for SQL querying.
+    </p>
+    <p>
+      Most often your Ignite pom file will look like this (replace ${ignite-version} with actual Ignite version). The latest version is <b>1.1.0-incubating</b>.
+    </p>
+    <pre class="brush:xml">    
+    &lt;dependency>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId>org.apache.ignite&lt;/groupId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId>ignite-core&lt;/artifactId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;version>${ignite.version}&lt;/version>
+    &lt;/dependency>
+    &lt;dependency>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId>org.apache.ignite&lt;/groupId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId>ignite-spring&lt;/artifactId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;version>${ignite.version}&lt;/version>
+    &lt;/dependency>
+    &lt;dependency>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId>org.apache.ignite&lt;/groupId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId>ignite-indexing&lt;/artifactId>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;version>${ignite.version}&lt;/version>
+    &lt;/dependency>
+    </pre>
+    <p>See <a href="http://apacheignite.readme.io/v1.0/docs/maven-setup">Maven Setup</a> for a full list of Maven dependencies.</p>
+  </section><!-- maven downloads -->
+
+  <section id="build-source" class="page-section">
+    <h2>Building the Binaries </h2>
+    NOTE: JDK version should be 1.7.0-* or >= 1.8.0-u40.
+    <pre class="brush:bash">
+       # Unpack the source package
+       $ unzip -q apache-ignite-1.1.0-incubating-src.zip
+       $ cd apache-ignite-1.1.0-incubating-src
+       
+       # Build In-Memory Data Fabric release (without LGPL dependencies)
+       $ mvn clean package -DskipTests
+       
+       # Build In-Memory Data Fabric release (with LGPL dependencies)
+       $ mvn clean package -DskipTests -Prelease,lgpl
+       
+       # Build In-Memory Hadoop Accelerator release
+       # (optionally specify version of hadoop to use)
+       $ mvn clean package -DskipTests -Dignite.edition=hadoop [-Dhadoop.version=X.X.X]
+    </pre>
+    <div class="page-heading">GIT repository:</div>
+    <pre class="brush:bash">
+       $ git clone https://git-wip-us.apache.org/repos/asf/incubator-ignite
+    </pre>
+    <div class="page-heading">Jenkins Nightly Builds:</div>
+    <ul class="features-list">
+      <li>
+        <a id="apache_ignite_nighly_download"
+          href="https://builds.apache.org/view/H-L/view/Ignite/job/Ignite-nightly/lastSuccessfulBuild/" onclick="ga('send', 'event', 'apache_ignite_nighly_download', 'download', 'apache_ignite_nighly_download');">last successful build</a> 
+      </li>
+    </ul>
+    <p>&nbsp;</p>
+  </section><!-- build-source -->
+
+  <section id="3rdparty" class="page-section">
+    <h2>3<sup>rd</sup> Party Binaries</h2>
+
+    <p>
+        This is a list of 3<sup>rd</sup> party binary packages based on Apache Ignite. The Apache Ignite project
+        does not endorse or maintain any 3<sup>rd</sup> party binary packages.
+    </p>
+
+    <p>
+        <a href="http://www.gridgain.com/download/editions/" target="_blank"><b>GridGain Community Edition</b></a>
+        is a binary build of Apache Ignite created by GridGain, which includes optional LGPL
+        dependencies, such as Hibernate L2 cache integration and Geospatial Indexing, as well as bug
+        fixes and features which may be included into the future official Apache Ignite releases.
+    </p>
+
+    <p>
+        If you would like to provide your own edition of Apache Ignite here, please send email to
+        <a href="mailto:dev@ignite.apache.org?subject=Subscribe&body=Please%20subscribe%20me.">Ignite dev list</a>.
+    </p>
+  </section> <!-- 3rdparty -->
+</main>
+    <!-- END OF MAIN SITE BODY -->
 
     <!--#include virtual="/includes/footer.html" -->
+<footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-5">
+                    <div class="logo"><a href="#wrapper"><img src="/images/logo3.png"></a></div>
+                </div>
+                <nav class="col-md-4 col-sm-3 footer-nav">
+                    <ul class="list-unstyled">
+                        <li><a href="/index.html#overview">Overview</a></li>
+                        <li><a href="/features.html">Features</a></li>
+                        <li><a href="http://apacheignite.readme.io/docs">Documentation</a></li>
+                        <li><a href="/community/resources.html">Community</a></li>
+                        <li><a href="http://apache-ignite-users.70518.x6.nabble.com/">Support</a></li>
+                        <li><a href="/download.cgi">Download</a></li>
+                    </ul>
+                </nav>
+                <div class="col-md-4 col-sm-4">
+                    <p style="text-align: right">
+                        &copy; 2015 <a href="http://www.apache.org/">The Apache Software Foundation</a>.<br/>
+                        Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are trademarks of
+                        The Apache Software Foundation.
+                    </p>
+                    <ul class="social-networks list-unstyled">
+                        <li><a href="https://www.linkedin.com/company/apache-ignite" class="icon-linkedin"></a></li>
+                        <li><a href="https://twitter.com/ApacheIgnite" class="icon-twitter"></a></li>
+                        <li><a href="https://plus.google.com/109419715166167783665/about" class="icon-google-plus"></a></li>
+                        <li><a href="https://www.facebook.com/pages/Apache-Ignite-Incubating/813431118713318" class="icon-facebook"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- end of include "/includes/footer.html" -->
+
 </div>
 <!--#include virtual="/includes/scripts.html" -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-61232409-1', 'auto');
+    ga('send', 'pageview');
+</script>
+<script type="text/javascript">
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement('style');
+        msViewportStyle.appendChild(
+            document.createTextNode(
+                '@-ms-viewport{width:auto!important}'
+            )
+        );
+        document.querySelector('head').appendChild(msViewportStyle)
+    }
+</script>
+<script type="text/javascript">
+    eval(function()
+    {
+        try
+        {
+            doHighlight();
+        }
+        catch(e)
+        {
+            var elem = document.createElement('SCRIPT');
+            elem.src="https://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlight.js";
+            var theBody = document.getElementsByTagName('body')[0];
+            theBody.appendChild(elem);
+        }
+    })();
+</script>
+
+<!-- Syntax highlight. -->
+<script type="text/javascript">
+    SyntaxHighlighter.all()
+</script>
+
+<!-- Disable carousel slide on mobile devices. -->
+<script type="text/javascript">
+    if( /Android|webOS|iPhone|iPod|Galaxy Note|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ $('.carousel').carousel ({
+   interval:false
+ });
+}
+</script>
+<!-- end of include "/includes/scripts.html" -->
 </body>
 </html>
