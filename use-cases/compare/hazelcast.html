@@ -1,0 +1,346 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Ignite Data Grid vs Hazelcast Data Grid</title>
+    <link media="all" rel="stylesheet" href="/css/all.css">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="hazelcast-replacement" class="page-section">
+            <h2 class="first">Ignite vs Hazelcast Data Grid</h2>
+            <p>
+                Both, Apache Ignite and Hazelcast provide a feature rich data grid functionality responsible for
+                partitioning and caching data in memory with the capability to scale out across distributed clusters.
+            </p>
+            <div class="page-links">
+                <a href="/benchmarks/ignite-vs-hazelcast.html">Click Here for Benchmark Results <i class="fa fa-angle-double-right"></i></a>
+            </div>
+        </section>
+
+        <section id="opensource" class="page-section">
+            <h3>Feature Comparison</h3>
+            <p>
+                Apache Ignite and Hazelcast have many differences in the way caching, transactions, and data querying
+                are supported. Below we outline only major differences, which in our opinion are most important whenever
+                choosing an in-memory data grid product.
+            </p>
+            <br/><br/>
+            <table class="formatted">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;font-size: larger">Apache Ignite</th>
+                        <th style="text-align: center;font-size: larger">Hazelcast</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="2" style="text-align: center"><b>Open Source Focus</b></td></tr>
+                    <tr>
+                        <td width="50%" valign="top">
+                            <p>
+                                Ignite has been growing and enhancing its open source feature set. The latest
+                                major additions include <i>Ignite Fabric for C++</i> and <i>.NET/C#</i>, with
+                                <i>Node.JS</i> integration coming soon as well.
+                            </p>
+                        </td>
+                        <td width="50%" valign="top">
+                            <p>
+                                Hazelcast has continuously been removing features from its open source offering and
+                                moving them to enterprise (paid) edition. This is true for features like
+                                <i>off-heap memory</i>, <i>continuous queries</i>, <i>web-session clustering</i>,
+                                <i>SSL encryption support</i>, and more.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>JCache (JSR 107)</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite is fully compliant with <i><nobr>JCache (JSR 107)</nobr></i> specification for caching.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast is fully compliant with <i><nobr>JCache (JSR 107)</nobr></i> specification for caching.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Off-Heap Memory</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports storing data in <em><nobr>on-heap</nobr></em> or <em><nobr>off-heap</nobr></em> memory,
+                                depending on user configuration.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast supports <em><nobr>off-heap</nobr></em> memory only in its commercial (paid) offering.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Off-Heap Indexes</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Whenever configured with <em>off-heap memory</em>, Ignite will store query indexes
+                                off-heap as well (in order not to affect on-heap memory used by user applications).
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast does not have support for <em>off-heap</em> indexes.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Continuous Queries</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides support for <em>continuous queries</em>, i.e. allows clients and servers
+                                to subscribe for continuous notifications to the data updates.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast offers support for <em>continuous queries</em> only in its commercial (paid) edition.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>SQL Queries</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports complete SQL (ANSI-99) syntax for querying in-memory data.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast has very limited support for SQL (only a few keywords).
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Queries with JOINs</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite SQL includes full support for <em><nobr>SQL JOINs</nobr></em>, including
+                                <em>JOINs</em> across multiple caches, for example:
+                            </p>
+                            <p>&nbsp;&nbsp;&nbsp;<i><nobr>select * from A a, B b where a.b_id = b.id</nobr></i></p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast does not have any support for <em>JOIN</em> queries (with or without SQL).
+                                Whenever needed, users perform <em>JOINs</em> by manually combining multiple query results.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center""><b>Query Consistency</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides full query consistency, i.e. queries are executed on a certain snapshot
+                                of data, and updates that happened after the query execution started do not affect
+                                the query result.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast queries are inconsistent and it is possible that part of the query result will
+                                see a certain update and another part will not.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Query Fault Tolerance</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite queries are fault-tolerant, i.e. query result is always consistent and is not
+                                affected by cluster topology changes, like nodes joining, leaving, or crashing.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast queries are not fault-tolerant, i.e. query results become inconsistent
+                                during cluster topology changes, while the data is being <nobr>re-balanced</nobr>
+                                in the background.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Data Consistency</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports <em>atomic</em> and <em>transactional</em> consistency on all in-memory
+                                data, regardless of whether data is stored in <em>PARTITIONED</em> or <em>REPLICATED</em>
+                                caches.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast supports <em>atomic</em> and <em>transactional</em> consistency only on
+                                <em>PARTITIONED</em> caches. Data stored in <em>REPLICATED</em> caches does not have
+                                any transactional guarantees at all.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>SSL Encryption</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports SSL encryption for all network traffic, including client-server and
+                                server-server communication.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast offers SSL encryption support only in its commercial (paid) edition.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Web Session Clustering</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports caching and clustering <nobr>web-sessions</nobr> for all known application servers.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast offers <nobr>web-session</nobr> clustering only in its commercial (paid) edition.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Compute Grid</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite has very rich computational support, including support for map-reduce, fork-join,
+                                and basic distributed lambda processing on the cluster, including job load-balancing,
+                                fault-tolerance, checkpointing, scheduling, etc.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast only provides support random job distribution wihtin cluster.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Streaming Grid</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides support for in-memory streaming, including support for maintaining and
+                                querying sliding windows of streaming data.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast does not offer any support for streaming.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Service Grid</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite allows users to easily cluster-enable their services, including support for various
+                                cluster-singletons.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast managed services do not provide support for cluster-singletons.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Fabric for .NET/C#</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides full in-memory fabric APIs for .NET/C# users <nobr>(coming in 1.5)</nobr>.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast provides .NET/C# limited client APIs only in its commercial (paid) edition.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Fabric for C++</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides full in-memory fabric APIs for C++ users <nobr>(coming in 1.5)</nobr>.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast provides C++ limited client APIs only in its commercial (paid) edition.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Fabric for Node.JS</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite provides client API support for Node.JS users <nobr>(coming in 1.5)</nobr>.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Hazelcast does not have any support for Node.JS.
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
