@@ -35,7 +35,7 @@ under the License.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Ignite - Coherence Replacement</title>
+    <title>Apache Ignite vs Coherence</title>
     <link media="all" rel="stylesheet" href="/css/all.css">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
@@ -49,97 +49,169 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="coherence-replacement" class="usecase-page-section">
-            <h2 class="first">Ignite as Oracle Coherence Replacement</h2>
+            <h2 class="first">Ignite vs Coherence</h2>
             <p>
-                Both, Apache Ignite and Coherence provide a feature rich data grid functionality responsible for
+                Both, Apache Ignite and Oracle Coherence provide a feature rich data grid functionality responsible for
                 partitioning and caching data in memory with the capability to scale out across distributed clusters.
-                However, by switching from Coherence to Apache Ignite, developers can leverage all the additional features
-                that Ignite provides as compared to Coherence.
+            </p>
+            <p>
+                Ignite and Coherence have many differences in the way caching, transactions, and data querying
+                are supported. Below we outline only major differences, which in our opinion are most important whenever
+                choosing an in-memory data grid product.
             </p>
         </section>
 
         <section id="comparison">
             <table class="formatted">
                 <thead>
-                <tr>
-                    <th width="35%" class="left">Feature</th>
-                    <th>Comparison</th>
-                </tr>
+                    <tr>
+                        <th style="text-align: center;font-size: larger">Apache Ignite</th>
+                        <th style="text-align: center;font-size: larger">Coherence</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="left">Open Source vs. Closed Source</td>
-                    <td><p>
-                        One of the disadvantages of proprietary software like Coherence, apart from the licensing fee,
-                        is that there is little or no option to customize the software according to your needs.
-                        Whereas Apache Ignite, being open source, gives developers the flexibility to tailor the software according
-                        to their project’s requirements, using the source code and its pluggable APIs.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">JCache (JSR107)</td>
-                    <td><p>
-                        Both, Apache Ignite and Coherence implement JCache specification (JSR 107), so it should be
-                        a relatively easy process to switch from Coherence to Apache Ignite and take benefit of
-                        the additional functionality available in Ignite.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">On-Heap vs. Off-Heap</td>
-                    <td><p>
-                        While <em>on-heap</em> memory is certainly the most natural way to cache data,
-                        JVM does not work well with large heap sizes (more than 16GB), causing lengthy GC pauses.
-                        Oracle Coherence does provide developers with a limited option to store the data <em>off-heap</em>,
-                        however indexes still remain <em>on-heap</em>. Given that indexes usually require about 30% of additional space,
-                        this can still lead to large GC pauses, which defeats the very reason to store the data <em>off-heap</em>
-                        to begin with. Apache Ignite, on the other hand, is able to store both, the cached data and the indexes
-                        in the <em>off-heap</em> memory,
-                        allowing to completely eliminate any GC overhead within user applications.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">Standard SQL and JOIN Queries</td>
-                    <td><p>
-                        Oracle Coherence supports querying data from caches,
-                        but does not support JOIN queries or standard SQL syntax. Apache Ignite, on the other hand,
-                        supports free-form SQL queries virtually without any limitations (ANSI 99 compliant). You can use any
-                        SQL function, any aggregation, any grouping and Ignite will figure out where to fetch the results from.
-                        Ignite also supports distributed SQL JOINs. Moreover, if the data resides in different caches,
-                        Ignite allows for cross-cache JOIN queries as well.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">ACID Transactions</td>
-                    <td><p>
-                        Coherence does not recommend using transactions due to its poor performance.
-                        Apache Ignite transactions, on the other hand, provide excellent performance with 10s of thousands transactions/sec per server.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">Tiered Storage</td>
-                    <td><p>
-                        Apache Ignite provides tiered storage model, a feature not supported in Coherence,
-                        where data can be stored and moved between <em>on-heap</em>, <em>off-heap</em>, and <em>swap</em> space. Going up the tier
-                        provides more data storage capacity, with gradual increase in latency.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">Data Streaming</td>
-                    <td><p>
-                        Coherence does not possess real-time data processing capabilities.
-                        Apache Ignite streaming allows to process continuous never-ending streams of data in scalable and fault-tolerant fashion.
-                        Ignite streaming functionality also allows you to perform concurrent SQL queries on the streamed data.
-                    </p></td>
-                </tr>
-                <tr>
-                    <td class="left">Configuration and Deployment</td>
-                    <td><p>
-                        Coherence uses a proprietary XML format for configuration and does not
-                        really have any support for configuring a system directly from code. Apache Ignite supports standard
-                        Java beans for configuration and natively integrates with Spring XML, as well as provides ability to
-                        easily configure the system directly from code.
-                    </p></td>
-                </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Open Source vs. Closed Source</b></td></tr>
+                    <tr>
+                        <td width="50%" valign="top">
+                            <p>
+                                Ignite is an Apache project and has been growing and enhancing its open source feature set. The latest
+                                major additions include <i>Ignite Fabric for C++</i> and <i>.NET/C#</i>, with
+                                <i>Node.JS</i> integration coming soon as well.
+                            </p>
+                        </td>
+                        <td width="50%" valign="top">
+                            <p>
+                                Coherence is a proprietary Oracle software and does not have a free open source offering.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>JCache (JSR 107)</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite is fully compliant with <i><nobr>JCache (JSR 107)</nobr></i> specification for caching.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Coherence is fully compliant with <i><nobr>JCache (JSR 107)</nobr></i> specification for caching.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Off-Heap Memory</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports storing data in <em><nobr>on-heap</nobr></em> or <em><nobr>off-heap</nobr></em> memory,
+                                depending on user configuration.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Oracle Coherence does provide developers with a limited option to store the data in <em><nobr>off-heap</nobr></em> memory.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Off-Heap Indexes</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Whenever configured with <em>off-heap memory</em>, Ignite will store query indexes
+                                off-heap as well (in order not to affect on-heap memory used by user applications).
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Coherence does not have support for <em>off-heap</em> indexes.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>SQL Queries</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite supports complete SQL (ANSI-99) syntax for querying in-memory data.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Coherence does not support SQL.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Queries with JOINs</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite SQL includes full support for <em><nobr>SQL JOINs</nobr></em>, including
+                                <em>JOINs</em> across multiple caches, for example:
+                            </p>
+                            <p>&nbsp;&nbsp;&nbsp;<i><nobr>select * from A a, B b where a.b_id = b.id</nobr></i></p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Coherence does not have any support for <em>JOIN</em> queries (with or without SQL).
+                                Whenever needed, users perform <em>JOINs</em> by manually combining multiple query results.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>ACID Transactions</b></td></tr>
+                    <tr>
+                        <td valign="top">
+                            <p>
+                                Ignite transactions provide excellent performance with 100s of thousands transactions/sec per server.
+                            </p>
+                        </td>
+                        <td valign="top">
+                            <p>
+                                Coherence does not recommend using transactions due to its poor performance.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Tiered Storage</b></td></tr>
+                    <tr>
+                        <td width="50%" valign="top">
+                            <p>
+                                Ignite provides tiered storage model where data can be stored and moved between
+                                <em>on-heap</em>, <em>off-heap</em>, and <em>swap</em> space. Going up the tier
+                                provides more data storage capacity, with gradual increase in latency.
+                            </p>
+                        </td>
+                        <td width="50%" valign="top">
+                            <p>
+                                Coherence does not have any support for tiered storage.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Data Streaming</b></td></tr>
+                    <tr>
+                        <td width="50%" valign="top">
+                            <p>
+                                Ignite provides support for in-memory streaming, including support for maintaining and
+                                querying sliding windows of streaming data.
+                            </p>
+                        </td>
+                        <td width="50%" valign="top">
+                            <p>
+                                Coherence does not offer any support for streaming.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align: center"><b>Configuration</b></td></tr>
+                    <tr>
+                        <td width="50%" valign="top">
+                            <p>
+                                Ignite supports standard Java beans for configuration and natively integrates with
+                                Spring XML, as well as provides ability to easily configure the system directly from code.
+                            </p>
+                        </td>
+                        <td width="50%" valign="top">
+                            <p>
+                                Coherence uses a proprietary XML format for configuration and does not
+                                have any support for configuring a system directly from code.
+                            </p>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </section>
