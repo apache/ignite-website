@@ -1,7 +1,7 @@
 <!-- REMEMBER TO COPY ALL CHANGES TO download.html -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -51,4 +51,47 @@
    interval:false
  });
 }
+</script>
+
+<!-- Table export -->
+<script type="text/javascript" src="//cdn.rawgit.com/hhurz/tableExport.jquery.plugin/master/libs/FileSaver/FileSaver.min.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/hhurz/tableExport.jquery.plugin/master/libs/jsPDF/jspdf.min.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/hhurz/tableExport.jquery.plugin/master/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var expBtnDesc = [
+        {type:'json', text: 'JSON', icon:'ico-json.png'},
+        {type:'xml', text: 'XML', icon:'ico-xml.png'},
+        {type:'csv', text: 'CSV', icon:'ico-csv.png'},
+        {type:'excel', text: 'XLS', icon:'ico-xls.png'},
+        {type:'pdf', text: 'PDF', icon:'ico-pdf.png'}
+    ];
+
+    $("table").each(function (ix) {
+        var insert = '' +
+            '<div class="btn-group btn-group-export" title="Export table content to selected format">\n' +
+            '    <button class="btn btn-default btn-export btn-sm dropdown-toggle fa fa-download" data-toggle="dropdown"> <i class="fa fa-caret-down"/></button>\n' +
+            '    <ul class="dropdown-menu dropdown-menu-right" role="menu">\n';
+
+        var id = this.id || 'table' + ix;
+
+        this.id = id;
+
+        $.each(expBtnDesc, function (ix, btn) {
+            insert += "        <li><a href='#' onclick='$(\"#" + id + "\").tableExport({type:\"" + btn.type + "\"});'>" +
+                    "<img src='/images/" + btn.icon + "' width='24px'/> " + btn.text +
+                "</a></li>\n";
+
+            if (ix < expBtnDesc.length - 1)
+                insert += '        <li class="divider"></li>\n';
+        });
+
+        insert += '    </ul>\n'+
+            '</div>\n';
+
+        $(this).find('thead').before(insert);
+    });
+});
 </script>
