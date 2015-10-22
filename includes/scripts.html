@@ -62,14 +62,59 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var expBtnDesc = [
-        {type:'json', text: 'JSON', icon:'ico-json.png'},
-        {type:'xml', text: 'XML', icon:'ico-xml.png'},
-        {type:'csv', text: 'CSV', icon:'ico-csv.png'},
-        {type:'excel', text: 'XLS', icon:'ico-xls.png'},
-        {type:'pdf', text: 'PDF', icon:'ico-pdf.png'}
+        {cfg: {type:'json'}, text: 'JSON', icon:'ico-json.png'},
+        {cfg: {type:'xml'}, text: 'XML', icon:'ico-xml.png'},
+        {cfg: {type:'csv'}, text: 'CSV', icon:'ico-csv.png'},
+        {cfg: {type:'excel'}, text: 'XLS', icon:'ico-xls.png'},
+        {cfg: {type:'pdf',
+                jspdf: {
+                    autotable: {
+                        styles: {
+                            overflow: 'linebreak',
+                            fontSize: 14,
+                            rowHeight: 22
+                        },
+                        headerStyles: {
+                            rowHeight: 28,
+                            fontSize: 16,
+                            fillColor: 207,
+                            textColor: 0
+                        },
+                        bodyStyles: {
+                            rowHeight: 20,
+                            fillColor: 245
+                        },
+                        alternateRowStyles: {fillColor: 255}
+                    }
+                }
+            },
+            text: 'PDF',
+            icon:'ico-pdf.png'}
     ];
 
-    $("table").each(function (ix) {
+    function findTitle(elem) {
+        var header = $(elem).find('thead tr th:first-child').text().trim();
+
+        var parent = [];
+
+        $(elem).parents().each(function (ix, e) {
+            if (e.tagName.toLowerCase() == 'section')
+                parent = [e];
+        });
+
+        if (parent.length > 0) {
+            var title = $(parent).find('h2, h3');
+
+            if (title.length > 0)
+                return title.text().trim() + ' ' + header;
+        }
+
+        parent = $(parent).parent('main');
+
+        return parent.length > 0 ? parent.find('h2').text().trim() + ' ' + header : 'Export ' + header;
+    }
+
+    $("table").each(function (ix, tbl) {
         var insert = '' +
             '<div class="btn-group btn-group-export" title="Export table content to selected format">\n' +
             '    <button class="btn btn-default btn-export btn-sm dropdown-toggle fa fa-download" data-toggle="dropdown"> <i class="fa fa-caret-down"/></button>\n' +
@@ -80,7 +125,9 @@ $(document).ready(function() {
         this.id = id;
 
         $.each(expBtnDesc, function (ix, btn) {
-            insert += "        <li><a href='#' onclick='$(\"#" + id + "\").tableExport({type:\"" + btn.type + "\"});'>" +
+            btn.cfg.fileName = findTitle(tbl);
+
+            insert += "        <li><a href='#' onclick='$(\"#" + id + "\").tableExport(" + JSON.stringify(btn.cfg) + ");'>" +
                     "<img src='/images/" + btn.icon + "' width='24px'/> " + btn.text +
                 "</a></li>\n";
 
