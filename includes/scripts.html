@@ -92,28 +92,6 @@ $(document).ready(function() {
             icon:'ico-pdf.png'}
     ];
 
-    function findTitle(elem) {
-        var header = $(elem).find('thead tr th:first-child').text().trim();
-
-        var parent = [];
-
-        $(elem).parents().each(function (ix, e) {
-            if (e.tagName.toLowerCase() == 'section')
-                parent = [e];
-        });
-
-        if (parent.length > 0) {
-            var title = $(parent).find('h2, h3');
-
-            if (title.length > 0)
-                return title.text().trim() + ' ' + header;
-        }
-
-        parent = $(parent).parent('main');
-
-        return parent.length > 0 ? parent.find('h2').text().trim() + ' ' + header : 'Export ' + header;
-    }
-
     $("table").each(function (ix, tbl) {
         var insert = '' +
             '<div class="btn-group btn-group-export" title="Export table content to selected format">\n' +
@@ -125,7 +103,7 @@ $(document).ready(function() {
         this.id = id;
 
         $.each(expBtnDesc, function (ix, btn) {
-            btn.cfg.fileName = findTitle(tbl);
+            btn.cfg.fileName = $(tbl).attr('name');
 
             insert += "        <li><a href='#' onclick='$(\"#" + id + "\").tableExport(" + JSON.stringify(btn.cfg) + ");'>" +
                     "<img src='/images/" + btn.icon + "' width='24px'/> " + btn.text +
