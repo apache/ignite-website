@@ -44,27 +44,27 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-    <div id="wrapper">
+<div id="wrapper">
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
 
-        <section id="benchmarksconfiguration" class="usecase-page-section">
+        <section id="benchmarksconfiguration" class="page-section">
             <h2 class="first">Ignite vs Hazelcast Benchmarks</h2>
             <p>
-                Benchmarks were performed on Ignite 1.0.0 and Hazelcast 3.5 to evaluate and compare
-                their performance for various cache operations and SQL based cache queries. The results
+                Benchmarks were performed on Ignite 1.5.0-b1 and Hazelcast 3.6-EA2 to evaluate and compare
+                their performance for various atomic and transactional cache operations, and SQL based cache queries. The results
                 obtained provide throughput, latency, and percentile probes measuring various metrics during
                 benchmark execution.
-            </p>
+            </p> <br />
 
             <div class="row">
-                <div class="col-sm-8 col-md-7 col-xs-12">
-                    <table class="formatted" name="Technical Details Apache Ignite vs Hazelcast Benchmarks">
+                <div class="col-sm-6 col-md-6 col-xs-12">
+                    <table class="formatted" name="AWS EC2 Configuration Apache Ignite vs Hazelcast Benchmarks">
                         <thead>
                         <tr>
                             <th colspan="2" style="text-align:center;">
-                                Technical Details
+                                AWS EC2 Configuration
                             </th>
                         </tr>
                         </thead>
@@ -78,28 +78,66 @@ under the License.
                             <td>8</td>
                         </tr>
                         <tr>
-                            <td><b>RAM (GB)</b></td>
-                            <td>15</td>
+                            <td><b>RAM </b></td>
+                            <td>15 Gib</td>
                         </tr>
                         <tr>
-                            <td><b>Number of Nodes</b></td>
-                            <td>4</td>
+                            <td><b>OS</b></td>
+                            <td>Ubuntu 14.04</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6 col-md-6 col-xs-12">
+                    <table class="formatted" name="YardStick Apache Ignite vs Hazelcast Benchmarks">
+                        <thead>
+                        <tr>
+                            <th colspan="2" style="text-align:center;">
+                                Yardstick Configuration
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>Nodes</b></td>
+                            <td>1 Client, 4 Servers</td>
+                        </tr>
+                        <tr>
+                            <td><b>Threads</b></td>
+                            <td>64</td>
+                        </tr>
+                        <tr>
+                            <td><b>Backup</b></td>
+                            <td>1, Synchronous</td>
+                        </tr>
+                        <tr>
+                            <td><b>JDK</b></td>
+                            <td>Java 1.7.0_80</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <p>
+            <ul class="page-list">
+                <li><a href="#serilizable-put-benchmark">Deadlock Free Transactions</a></li>
+                <li><a href="#tx-put-benchmark">Transactional Operations</a></li>
+                <li><a href="#atomic-put-benchmark">Atomic Operations</a></li>
+                <li><a href="#sql-query-benchmark">SQL Query</a></li>
+            </ul>
+            </p>
         </section>
 
-        <section id="atomic-putandgetbenchmark" class="page-section">
-            <h3>Atomic Put and Get Benchmark</h3>
-            <br/>
+        <section id="serilizable-put-benchmark" class="page-section">
+            <h2>Deadlock Free Transactions (Optimistic, Serializable)</h2><br/>
+
+            <h3>Put Benchmarks</h3>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                    <table class="formatted benchmarks" name="Atomic Put and Get Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Deadlock Free Put Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
                         <thead>
                         <tr>
-                            <th colspan="2">
+                            <th colspan="4">
                                 Throughput, operations/sec<br/>
                                 <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
                             </th>
@@ -107,18 +145,41 @@ under the License.
                         </thead>
                         <tbody>
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>76,768</td>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>74,066</td>
+                            <td>1</td>
+                            <td>66,534</td>
+                            <td>37,069</td>
+                            <td class="delta">79%</td>
                         </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>30,523</td>
+                            <td>16,620</td>
+                            <td class="delta">83%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>15,778</td>
+                            <td>8,611</td>
+                            <td class="delta">83%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>12,651</td>
+                            <td>5,871</td>
+                            <td class="delta">115%</td>
+                        </tr>
+
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
-                    <table class="formatted benchmarks" name="Atomic Put and Get Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Deadlock Free Put Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
                         <thead>
                         <tr>
                             <th colspan="2">
@@ -128,33 +189,50 @@ under the License.
                         </tr>
                         </thead>
                         <tbody>
+
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>0.83</td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>0.86</td>
+                            <td>0.96</td>
+                            <td>1.73</td>
+                        </tr>
+                        <tr>
+                            <td>2.09</td>
+                            <td>3.85</td>
+                        </tr>
+                        <tr>
+                            <td>4.05</td>
+                            <td>7.43</td>
+
+                        </tr>
+                        <tr>
+                            <td>5.06</td>
+                            <td>10.90</td>
+
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <p>
-                <a href="/benchmarks/ignite-vs-hazelcast/002-ignite-atomic-put-get-1-backup/Results.html">
-                    See graph <i class="fa fa-angle-double-right"></i></a>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put/001-1.5.0-b1-SNAPSHOT-3ac1504d-tx-opt-serial-put-1-backup/Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put/001-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAllSerializable-bs-2-1-backup/Results.html" target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put/002-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAllSerializable-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put/003-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAllSerializable-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
             </p>
         </section>
 
-        <section id="opt-tx-putandgetbenchmark" class="page-section">
-            <h3>Transactional Put and Get Benchmark</h3>
-            <br/>
+        <section id="serilizable-put-get-benchmark" class="page-section">
+            <h3>Put and Get Benchmarks</h3>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                    <table class="formatted benchmarks" name="Transactional Put and Get Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Deadlock Free Put Get Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
                         <thead>
                         <tr>
-                            <th colspan="2">
+                            <th colspan="4">
                                 Throughput, operations/sec<br/>
                                 <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
                             </th>
@@ -162,18 +240,41 @@ under the License.
                         </thead>
                         <tbody>
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>34,430</td>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>22,185</td>
+                            <td>1</td>
+                            <td>27,185</td>
+                            <td>16,425</td>
+                            <td class="delta">65%</td>
                         </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>23,440</td>
+                            <td>14,022</td>
+                            <td class="delta">67%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>12,900</td>
+                            <td>6,707</td>
+                            <td class="delta">92%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>10,061</td>
+                            <td>4,396</td>
+                            <td class="delta">128%</td>
+                        </tr>
+
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
-                    <table class="formatted benchmarks" name="Transactional Put and Get Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Deadlock Free Put Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
                         <thead>
                         <tr>
                             <th colspan="2">
@@ -183,32 +284,435 @@ under the License.
                         </tr>
                         </thead>
                         <tbody>
+
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>1.8</td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>2.8</td>
+                            <td>2.35</td>
+                            <td>3.89</td>
+                        </tr>
+                        <tr>
+                            <td>2.81</td>
+                            <td>4.57</td>
+                        </tr>
+                        <tr>
+                            <td>4.96</td>
+                            <td>9.57</td>
+
+                        </tr>
+                        <tr>
+                            <td>6.36</td>
+                            <td>14.61</td>
+
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <p>
-                <a href="/benchmarks/ignite-vs-hazelcast/002-ignite-tx-put-get-1-backup/Results.html">
-                    See graph <i class="fa fa-angle-double-right"></i></a>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put-get/002-1.5.0-b1-SNAPSHOT-3ac1504d-tx-opt-serial-put-get-1-backup/Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put-get/004-1.5.0-b1-SNAPSHOT-3ac1504d-tx-opt-serializable-getAllPutAll-bs-2-1-backup/Results.html" target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put-get/005-1.5.0-b1-SNAPSHOT-3ac1504d-tx-opt-serializable-getAllPutAll-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/serializable-opt-put-get/006-1.5.0-b1-SNAPSHOT-3ac1504d-tx-opt-serializable-getAllPutAll-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
             </p>
         </section>
-        <section id="sqlquerybenchmark" class="page-section">
-            <h3>SQL Query Benchmark</h3>
-            <br/>
+
+        <section id="tx-put-benchmark" class="page-section">
+            <h2>Transactional Operations</h2><br/>
+
+            <h3>Put Benchmarks</h3>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Transactional Put Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                        <thead>
+                        <tr>
+                            <th colspan="4">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>46,310</td>
+                            <td>37,069</td>
+                            <td class="delta">24%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>26,562</td>
+                            <td>16,620</td>
+                            <td class="delta">59%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>11,465</td>
+                            <td>8,611</td>
+                            <td class="delta">33%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>7,866</td>
+                            <td>5,871</td>
+                            <td class="delta">34%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Transactional Put Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                        </tr>
+                        <tr>
+                            <td>1.38</td>
+                            <td>1.73</td>
+                        </tr>
+                        <tr>
+                            <td>2.41</td>
+                            <td>3.85</td>
+                        </tr>
+                        <tr>
+                            <td>5.58</td>
+                            <td>7.43</td>
+
+                        </tr>
+                        <tr>
+                            <td>8.14</td>
+                            <td>10.90</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-put/001-1.5.0-b1-SNAPSHOT-3ac1504d-tx-put-1-backup/Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-put/003-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAll-bs-2-1-backup/Results.html" target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-put/002-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAll-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-put/003-1.5.0-b1-SNAPSHOT-3ac1504d-tx-putAll-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
+            </p>
+        </section>
+
+        <section id="tx-pess-put-get-benchmark" class="page-section">
+
+            <h3>Pessimistic Put and Get Benchmarks</h3>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Pessimistic Put and Get Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                        <thead>
+                        <tr>
+                            <th colspan="4">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>21,054</td>
+                            <td>16,425</td>
+                            <td class="delta">28%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>21,768</td>
+                            <td>14,022</td>
+                            <td class="delta">55%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>10,714</td>
+                            <td>6,707</td>
+                            <td class="delta">59%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>7,534</td>
+                            <td>4,396</td>
+                            <td class="delta">71%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Pessimistic Put and Get Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                        </tr>
+                        <tr>
+                            <td>3.04</td>
+                            <td>3.89</td>
+                        </tr>
+                        <tr>
+                            <td>2.94</td>
+                            <td>4.57</td>
+
+                        </tr>
+                        <tr>
+                            <td>5.97</td>
+                            <td>9.57</td>
+
+                        </tr>
+                        <tr>
+                            <td>8.50</td>
+                            <td>14.61</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-pess-put-get/003-1.5.0-b1-SNAPSHOT-3ac1504d-tx-put-get-pes-1-backup /Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-pess-put-get/004-1.5.0-b1-SNAPSHOT-3ac1504d-tx-pessimistic-getAllPutAll-bs-2-1-backup/Results.html" target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-pess-put-get/005-1.5.0-b1-SNAPSHOT-3ac1504d-tx-pessimistic-getAllPutAll-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-pess-put-get/006-1.5.0-b1-SNAPSHOT-3ac1504d-tx-pessimistic-getAllPutAll-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
+            </p>
+        </section>
+
+        <section id="tx-opt-put-get-benchmark" class="page-section">
+
+            <h3>Optimistic Put and Get Benchmarks</h3>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Optimistic Put and Get Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                        <thead>
+                        <tr>
+                            <th colspan="4">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>44,922</td>
+                            <td>27,404</td>
+                            <td class="delta">63%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>21,380</td>
+                            <td>12,854</td>
+                            <td class="delta">66%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>9,763</td>
+                            <td>5,843</td>
+                            <td class="delta">67%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>6,964</td>
+                            <td>3,784</td>
+                            <td class="delta">84%</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Optimistic Put and Get Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                        </tr>
+                        <tr>
+                            <td>1.42</td>
+                            <td>2.34</td>
+                        </tr>
+                        <tr>
+                            <td>2.99</td>
+                            <td>4.98</td>
+
+                        </tr>
+                        <tr>
+                            <td>6.60</td>
+                            <td>10.96</td>
+
+                        </tr>
+                        <tr>
+                            <td>9.19</td>
+                            <td>16.94</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-opt-put-get/002-1.5.0-b1-SNAPSHOT-3ac1504d-tx-put-get-opt-1-backup/Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-opt-put-get/001-1.5.0-b1-SNAPSHOT-3ac1504d-tx-optimistic-getAllPutAll-bs-2-1-backup/Results.html"target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-opt-put-get/001-1.5.0-b1-SNAPSHOT-3ac1504d-tx-optimistic-getAllPutAll-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/tx-opt-put-get/003-1.5.0-b1-SNAPSHOT-3ac1504d-tx-optimistic-getAllPutAll-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
+            </p>
+        </section>
+
+        <section id="atomic-put-benchmark" class="page-section">
+            <h2>Atomic Operations</h2><br/>
+
+            <h3>Put Benchmarks</h3>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
+                    <table class="formatted benchmarks" name="Atomic Put Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
+                        <thead>
+                        <tr>
+                            <th colspan="4">
+                                Throughput, operations/sec<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b># of keys</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>114,063</td>
+                            <td>98,597</td>
+                            <td class="delta">15%</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>87,642</td>
+                            <td>77,752</td>
+                            <td class="delta">12%</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>60,380</td>
+                            <td>49,322</td>
+                            <td class="delta">22%</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>50,583</td>
+                            <td>36,437</td>
+                            <td class="delta">38%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Atomic Put Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+                                Latency, milliseconds<br/>
+                                <span style="font-weight:normal;font-size:smaller;">Smaller number represents better latency</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                        </tr>
+                        <tr>
+                            <td>0.56</td>
+                            <td>0.64</td>
+                        </tr>
+                        <tr>
+                            <td>0.72</td>
+                            <td>0.82</td>
+                        </tr>
+                        <tr>
+                            <td>1.0</td>
+                            <td>1.2</td>
+
+                        </tr>
+                        <tr>
+                            <td>1.2</td>
+                            <td>1.7</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/atomic-put/001-1.5.0-b1-SNAPSHOT-3ac1504d-atomic-put-1-backup/Results.html" target="_blank">1 key</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/atomic-put/001-1.5.0-b1-SNAPSHOT-3ac1504d-atomic-putAll-bs-2-1-backup/Results.html" target="_blank">2 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/atomic-put/002-1.5.0-b1-SNAPSHOT-3ac1504d-atomic-putAll-bs-6-1-backup/Results.html" target="_blank">6 keys</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/atomic-put/003-1.5.0-b1-SNAPSHOT-3ac1504d-atomic-putAll-bs-10-1-backup/Results.html" target="_blank">10 keys</a>
+            </p>
+        </section>
+
+        <section id="sql-query-benchmark" class="page-section">
+            <h2>SQL Query Benchmarks</h2><br/>
+
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0;">
+                <div class="col-sm-7 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
                     <table class="formatted benchmarks" name="SQL Query Benchmark Apache Ignite vs Hazelcast Throughput operations per sec">
                         <thead>
                         <tr>
-                            <th colspan="2">
+                            <th colspan="4">
                                 Throughput, operations/sec<br/>
                                 <span style="font-weight:normal;font-size:smaller;">Bigger number represents better throughput</span>
                             </th>
@@ -216,18 +720,29 @@ under the License.
                         </thead>
                         <tbody>
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>32,467</td>
+                            <td><b>Benchmark</b></td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
+                            <td><b>Delta</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>24</td>
+                            <td>SQl Query</td>
+                            <td>76,596</td>
+                            <td>53,765</td>
+                            <td class="delta">42%</td>
                         </tr>
+                        <tr>
+                            <td>SQL Query Put</td>
+                            <td>64,156</td>
+                            <td>58,323</td>
+                            <td class="delta">10%</td>
+                        </tr>
+
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
-                    <table class="formatted benchmarks" name="SQL Query Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
+                <div class="col-sm-5 col-md-5 col-xs-12" style="padding-left:0; padding-right:0">
+                    <table class="formatted benchmarks" name="Deadlock Free Put Benchmark Apache Ignite vs Hazelcast Latency milliseconds">
                         <thead>
                         <tr>
                             <th colspan="2">
@@ -237,21 +752,27 @@ under the License.
                         </tr>
                         </thead>
                         <tbody>
+
                         <tr>
-                            <td><b>Apache Ignite</b></td>
-                            <td>1.9</td>
+                            <td><b>Ignite</b></td>
+                            <td><b>Hazelcast</b></td>
                         </tr>
                         <tr>
-                            <td><b>Hazelcast</b></td>
-                            <td>2576</td>
+                            <td>0.83</td>
+                            <td>1.18</td>
+                        </tr>
+                        <tr>
+                            <td>0.99</td>
+                            <td>1.09</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <p>
-                <a href="/benchmarks/ignite-vs-hazelcast/001-ignite-sql-query-1-backup/Results.html">
-                    See graph <i class="fa fa-angle-double-right"></i></a>
+                <i class="fa fa-line-chart"></i> Graphs:
+                <a href="/benchmarks/ignite-vs-hazelcast/sql-query/001-1.5.0-b1-SNAPSHOT-3ac1504d-sql-query-1-backup/Results.html" target="_blank">SQL query</a>,
+                <a href="/benchmarks/ignite-vs-hazelcast/sql-query/002-1.5.0-b1-SNAPSHOT-3ac1504d-sql-query-put-1-backup/Results.html" target="_blank">SQL query put</a>
             </p>
         </section>
 
@@ -268,7 +789,7 @@ under the License.
     </main>
 
     <!--#include virtual="/includes/footer.html" -->
-    </div>
-    <!--#include virtual="/includes/scripts.html" -->
-    </body>
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
 </html>
