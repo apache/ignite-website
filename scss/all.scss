@@ -394,63 +394,65 @@ p {
                 color: $red;
             }
         }
-        @media (max-width: $mobile) {
-            border: none;
-            display: block;
-            overflow:hidden;
-            border-top:1px solid $black;
-            
-            tbody {
-                border-left:120px solid $gray;
-                float:left;
-                width:100%;
-                padding:0 1px 0 1px;
-            }
-            tr {
-                float:left;
-                width:100%;
-                clear:both;
-                
-                &:nth-child(odd) td {
-                    background-color: rgba(0,0,0,0.1);
-                }
-            }
-            td {
-                width: 100% !important;
-                height: auto;
-                padding:0 0 0 120px !important;
-                margin:0 -1px 0 -121px;
+        @media screen {
+            @media (max-width: $mobile) {
+                border: none;
                 display: block;
-                float:left;
-                clear:both;
-                width:100%;
-                white-space:nowrap;
-                border-width: 0 1px 1px 1px !important;
-                border-color: $black;
-                @include box-sizing(content-box);
+                overflow:hidden;
+                border-top:1px solid $black;
                 
-                &:before {
-                    content:attr(title);
-                    padding: 10px;
-                    display:inline-block;
-                    color:$white !important;
-                    font-weight:bold;
-                    width:120px;
-                    vertical-align:middle;
-                    margin:0 0 0 -120px;
-                    position:relative;
-                    white-space:normal;
+                tbody {
+                    border-left:120px solid $gray;
+                    float:left;
+                    width:100%;
+                    padding:0 1px 0 1px;
                 }
-                ul,
-                span {
-                    white-space:normal;
-                    display:inline-block;
-                    vertical-align:middle;
-                    padding:5px;
+                tr {
+                    float:left;
+                    width:100%;
+                    clear:both;
+                    
+                    &:nth-child(odd) td {
+                        background-color: rgba(0,0,0,0.1);
+                    }
                 }
+                td {
+                    width: 100% !important;
+                    height: auto;
+                    padding:0 0 0 120px !important;
+                    margin:0 -1px 0 -121px;
+                    display: block;
+                    float:left;
+                    clear:both;
+                    width:100%;
+                    white-space:nowrap;
+                    border-width: 0 1px 1px 1px !important;
+                    border-color: $black;
+                    @include box-sizing(content-box);
+                    
+                    &:before {
+                        content:attr(title);
+                        padding: 10px;
+                        display:inline-block;
+                        color:$white !important;
+                        font-weight:bold;
+                        width:120px;
+                        vertical-align:middle;
+                        margin:0 0 0 -120px;
+                        position:relative;
+                        white-space:normal;
+                    }
+                    ul,
+                    span {
+                        white-space:normal;
+                        display:inline-block;
+                        vertical-align:middle;
+                        padding:5px;
+                    }
+                }
+                thead,
+                th {display:none;}
             }
-            thead,
-            th {display:none;}
         }
     }
 }
@@ -758,5 +760,98 @@ p {
 @media screen and (max-width: $screen-xs-max) {
     .btn-group-export {
         display: none;
+    }
+}
+
+/*
+ * Reset media print style.
+ */
+@media print {
+    a[href]:after {
+        content: "";
+    }
+
+    /*
+     * Hide social icons.
+     */
+    .social-networks {
+        display: none;
+    }
+
+    /*
+     * Hide navigation menu.
+     */
+    footer nav {
+        display: none;
+    }
+
+    /*
+     * Hide button to download export for table.
+     */
+    .btn-group-export {
+        display: none;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+
+    footer {
+        page-break-inside: avoid;
+    }
+
+    section.page-section {
+        page-break-inside: avoid;
+    }
+
+    section.page-section table {
+        page-break-inside: avoid;
+    }
+
+    section.page-section:first-child {
+        margin-top: 50px;
+    }
+
+    section.page-section {
+        padding-top: 0;
+        margin-top: 0;
+        margin-bottom: 50px;
+
+        border-bottom: none;
+    }
+
+    section.page-section p.line-chart {
+        display: none;
+    }
+
+    /*
+     * Small grid
+     *
+     * Columns, offsets, pushes, and pulls for the small device range, from phones
+     * to tablets.
+     */
+
+    /* @media (min-width: $mobile) {
+        @include make-grid(print);
+    }*/
+
+    @media (min-width: $landscape) {
+        @include make-grid(print);
+
+        #main table td {
+            padding-left: 0;
+        }
+
+        #main table th {
+            padding-left: 0;
+        }
+
+        #main table td:first-child {
+            padding-left: 20px;
+        }
+
+        #main table th:first-child {
+            padding-left: 20px;
+        }
     }
 }
