@@ -7,6 +7,7 @@ css_dir = "css"
 sass_dir = "scss"
 images_dir = "images"
 javascripts_dir = "js"
+cache_path = "C:\\temp\\sass\\"
 
 # You can select your preferred output style here (can be overridden via the command line):
 output_style = :expanded
