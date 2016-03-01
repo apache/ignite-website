@@ -299,12 +299,19 @@ under the License.
                                 Ignite also allows to configure multiple <b>backup copies</b> to guarantee data resiliency
                                 in case of failures.
                             </p>
-                            <p>
-                                Regardless of which caching mode is used, Ignite guarantees data consistency
-                                across all cluster members, regardless of various failure conditions.
-                            </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/cache-modes" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Collocated Processing</td>
+                        <td>
+                            <p>
+                                Ignite allows executing any native Java, C++, and .NET/C# code directly on the server-side, close to the data, in collocated fashion.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/affinity-collocation" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -325,73 +332,10 @@ under the License.
                         <td class="left">Client-side Near Caches</td>
                         <td>
                             <p>
-                                Whenever the data is accessed from remote clients, Ignite also supports client-side
-                                <code>NEAR Caching</code>. In <i>transactional</i> mode, the data stored in NEAR caches is also
-                                transactional and is either automatically updated or invalidated in consistent fashion
-                                update transaction commit.
-                            </p>
-                            <p>
-                                Regardless of which caching mode is used, Ignite guarantees data consistency
-                                across all cluster members, regardless of various failure conditions.
+                                Near cache is local client-side cache that stores the most recently and most frequently accessed data.
                             </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/near-caches" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">ACID Transactions</td>
-                        <td>
-                            <p>
-                                Ignite supports 2 modes for cache operation, <i>transactional</i> and <i>atomic</i>.
-                                In <i>transactional</i> mode you are able to group multiple cache operations in a
-                                transaction, while <i>atomic</i> mode supports multiple atomic operations, one at a time.
-                                <i>Atomic</i> mode is more light-weight and generally has better performance over
-                                transactional caches.
-                            </p>
-                            <p>
-                                In <i>transactional</i> mode Ignite supports <code>OPTIMISTIC</code> and
-                                <code>PESSIMISTIC</code> transactions and utilizes 2PC protocol with many
-                                <i>one-phase-commit</i> optimizations whenever applicable.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/transactions" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Queries & Distributed Joins</td>
-                        <td>
-                            <p>
-                                Ignite supports a very elegant query API with support for:
-                                <ul class="page-list">
-                                    <li>Scan Queries (Predicate-based)</li>
-                                    <li>SQL Queries (ANSI 99)</li>
-                                    <li>Text Queries</li>
-                                </ul>
-                            </p>
-                            <p>
-                                For <code>SQL</code> and <code>TEXT</code> queries ignites supports in-memory indexing, so all the data lookups are extremely fast.
-                                If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory as well.
-                            </p>
-                            <p>
-                                Ignite also allows users to implement their own custom indexing using pluggable
-                                <code>IndexingSpi</code>.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/cache-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Continuous Queries</td>
-                        <td>
-                            <p>
-                                Continuous queries are useful for cases when you want to execute a query and then
-                                continue to get notified about the data changes that fall into your query filter.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/continuous-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -406,17 +350,25 @@ under the License.
                                 when working with large heap sizes by caching data outside of main Java Heap space,
                                 but still in RAM.
                             </p>
-                            <p>
-                                Whenever off-heap memory is configured, Ignite will also store query indexes off-heap
-                                as well. This means that indexes will not take any portion of on-heap memory.
-                            </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="left">Tiered Memory</td>
+                        <td class="left">Off-Heap Indexes</td>
+                        <td>
+                            <p>
+                                Whenever off-heap memory is configured, Ignite will also store query indexes off-heap
+                                as well. This means that indexes will not take any portion of on-heap memory.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Tiered Storage</td>
                         <td>
                             <p>
                                 As data gets colder (not accessed) Ignite will optionally migrate it
@@ -432,18 +384,215 @@ under the License.
                         </td>
                     </tr>
                     <tr>
+                        <td class="left">Binary Protocol</td>
+                        <td>
+                            <p>
+                                Starting from v1.5 Ignite introduced a new concept of storing data in caches, called BinaryObjects. It allows you to:
+                            </p>
+                            <ul class="page-list">
+                                <li>Read a serialized object's field without full object deserialization.</li>
+                                <li>Dynamically change  an object's structure.</li>
+                                <li>Dynamically create an object.</li>
+                            </ul>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/jcache" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">ACID Transactions</td>
+                        <td>
+                            <p>
+                                Ignite provides fully ACID compliant distributed transactions that ensure guaranteed consistency.</p>
+                            <p>
+                                Ignite supports <code>OPTIMISTIC</code> and <code>PESSIMISTIC</code> concurrency modes
+                                as well as <code>READ_COMMITTED</code>, <code>REPEATABLE_READ</code>, and <code>SERIALIZABLE</code> isolation levels.</p>
+                            <p>
+                                Ignite transactions  utilize 2PC protocol with many one-phase-commit optimizations whenever applicable.
+                            </p>
+                            <div class="page-links">
+                                <a href="http://apacheignite.readme.io/docs/transactions" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Deadlock-Free Transactions</td>
+                        <td>
+                            <p>
+                                Ignite supports deadlock-free, optimistic transactions, which do not acquire any locks, and free users from worrying about the lock order. Such transactions also provide much better performance.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/transactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Transactional Entry Processor</td>
+                        <td>
+                            <p>
+                                Ignite transactional entry processor allows executing collocated user logic on the server side within a transaction.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/affinity-collocation#ignitecompute-vs-entryprocessor" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Cross-Partition Transactions</td>
+                        <td>
+                            <p>
+                                In Ignite, transactions can be performed on all partitions of a cache across the whole cluster.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/transactions#ignitetransactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Locks</td>
+                        <td>
+                            <p>
+                                Ignite allows developers to define explicit locks enforcing mutual exclusion on cached objects.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/locks" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">SQL Queries</td>
+                        <td>
+                            <p>
+                                Ignite supports the standard SQL syntax (ANSI 99) to query the cache. You can use any SQL function, aggregation, or grouping.
+                            </p>
+                            <div class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/sql-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Distributed Joins</td>
+                        <td>
+                            <p>
+                                Ignite supports <b>distributed SQL joins</b> as well as <b>cross-cache joins</b>.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/sql-queries#sql-joins" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Continuous Queries</td>
+                        <td>
+                            <p>
+                                Continuous queries are useful for cases when you want to execute a query and then continue to get notified about the data changes that fall into your query filter.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/continuous-queries" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Query Indexing</td>
+                        <td>
+                            <p>
+                                For SQL queries, ignites supports in-memory indexing, so all the data lookups are extremely fast.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/sql-queries#configuring-sql-indexes-using-annotations" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Query Consistency</td>
+                        <td>
+                            <p>
+                                In Ignite, provides full query consistency. Updates that happened after the query execution started do not affect the query result.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Query Fault-Tolerance</td>
+                        <td>
+                            <p>
+                                Ignite queries are fault-tolerant, i.e. query result is always consistent and is not affected by cluster topology changes.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="left">JDBC Driver</td>
                         <td>
                             <p>
                                 Ignite is shipped with <code>JDBC Driver</code> that allows you to retrieve distributed data from
                                 cache using standard SQL queries and JDBC API.
                             </p>
-                            <p>
-                                JDBC driver allows users to connect to Ignite using any standard SQL tool and start
-                                executing SQL queries against the in-memory data stored in Ignite caches.
-                            </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/jdbc-driver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">ODBC Driver</td>
+                        <td>
+                            <p>
+                                Ignite ODBC driver allows users to retrieve data from cache using standard SQL queries and ODBC API.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left" width="35%">Write-Through</td>
+                        <td>
+                            <p>
+                                Write-Through mode allows updating the data in the database.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/persistent-store" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Read-Through</td>
+                        <td>
+                            <p>
+                                Read-Through mode allows reading the data from the database.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/persistent-store" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Write-Behind Caching</td>
+                        <td>
+                            <p>
+                                Ignite provides an option to asynchronously perform updates to the database via Write-Behind Caching.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/persistent-store#write-behind-caching" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Automatic Persistence</td>
+                        <td>
+                            <p>
+                                Automatically connect to the underlying database and generate XML OR-mapping configuration and Java domain model POJOs.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/automatic-persistence" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">
+                            <b>Database Integration</b>
+                        </td>
+                        <td>
+                            <p>
+                                Ignite can automatically integrate with external databases - RDBMS, NoSQL, and HDFS.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/persistent-store" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -487,6 +636,26 @@ under the License.
                             </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/spring-caching" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">XA/JTA</td>
+                        <td>
+                            <p>
+                                Ignite can be configured with a Java Transaction API (JTA) transaction manager lookup class.
+                            </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/transactions#integration-with-jta" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">OSGI Support</td>
+                        <td>
+                            <p></p> &nbsp;
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/osgi-starting-inside-a-container" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>

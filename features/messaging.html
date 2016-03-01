@@ -51,12 +51,19 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="messaging" class="page-section">
-            <h2 class="first">Distributed Messaging</h2>
+            <h2 class="first">Distributed Messaging & Events</h2>
             <p>
-                Apache Ignite provides high-performance cluster-wide messaging functionality to exchange data via
-                publish-subscribe and direct point-to-point communication models. Messages can be exchanged in
+                Ignite provides <b>high-performance cluster-wide messaging</b> functionality to exchange data via
+                publish-subscribe and direct point-to-point communication models. Messages can be exchanged in an
                 ordered or unordered fashion. Ordered messages are slightly slower, but when used, Ignite
                 guarantees that messages will be received in the same order they were sent.
+            </p>
+
+            <p>
+                Ignite <b>distributed events</b> functionality allows applications to receive notifications when a variety
+                of events occur in the distributed grid environment. You can automatically get notified for task executions,
+                read, write or query operations occurring on local or remote nodes within the cluster.
+                Event notifications can also be grouped together and sent in batches or timely intervals.
             </p>
             <div class="code-examples">
                 <div class="page-heading">Code Examples:</div>
@@ -64,6 +71,8 @@ under the License.
                 <ul id="messaging-examples" class="nav nav-tabs">
                     <li class="active"><a href="#messaging-example-ordered" aria-controls="home" data-toggle="tab">Ordered Messaging</a></li>
                     <li><a href="#messaging-example-unordered" aria-controls="profile" data-toggle="tab">Unordered Messaging</a></li>
+                    <li><a href="#events-example-local" aria-controls="profile" data-toggle="tab">Local Events</a></li>
+                    <li><a href="#events-example-remote" aria-controls="profile" data-toggle="tab">Remote Events</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -104,6 +113,55 @@ under the License.
                                 rmtMsg.send("MyUnOrderedTopic", Integer.toString(i));
                         </pre>
                     </div>
+                    <div class="tab-pane" id="events-example-local">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Local listener that listenes to local events.
+                            IgnitePredicate&lt;CacheEvent&gt; locLsnr = evt -> {
+                                System.out.println("Received local event [evt=" + evt.name() + "]");
+
+                                return true; // Continue listening.
+                            };
+
+                            // Subscribe to specified cache events occuring on local node.
+                            ignite.events().localListen(locLsnr,
+                                EventType.EVT_CACHE_OBJECT_PUT,
+                                EventType.EVT_CACHE_OBJECT_REMOVED);
+
+                            // Get an instance of named cache.
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.cache("cacheName");
+
+                            // Generate cache events.
+                            for (int i = 0; i < 20; i++)
+                                cache.put(i, Integer.toString(i));
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="events-example-remote">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            // Get an instance of named cache.
+                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+
+                            // Sample remote filter which only accepts events for keys
+                            // that are greater than or equal to 10.
+                            IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = evt -> {
+                                System.out.println("Received remote event [evt=" + evt.&lt;Integer&gt;key() >= 10 + "]");
+
+                                return true; // Continue listening.
+                            };
+
+                            // Subscribe to specified cache events on all nodes that have cache running.
+                            ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
+                                EventType.EVT_CACHE_OBJECT_PUT,
+                                EventType.EVT_CACHE_OBJECT_REMOVED);
+
+                            // Generate cache events.
+                            for (int i = 0; i < 20; i++)
+                                cache.put(i, Integer.toString(i));
+                        </pre>
+                    </div>
                 </div>
             </div>
             <div class="page-heading">GitHub Examples:</div>
@@ -113,7 +171,7 @@ under the License.
             </p>
         </section>
         <section id="key-features" class="page-section">
-            <h2>Messaging Features</h2>
+            <h2>Messaging & Events Features</h2>
             <table class="formatted" name="Messaging Features">
                 <thead>
                     <tr>
@@ -122,6 +180,28 @@ under the License.
                     </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td class="left">Topic Based Messaging</td>
+                    <td>
+                        <p>
+                            Ignite distributed messaging allows for topic based cluster-wide communication between all nodes.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/messaging" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Point-to-Point Messaging</td>
+                    <td>
+                        <p>
+                            Ignite messages can be sent to either a group of nodes or to an individual node.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.readme.io/docs/messaging" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
                     <tr>
                         <td class="left">Ordered vs. Unordered</td>
                         <td>
@@ -135,18 +215,39 @@ under the License.
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="left">Topic and Point-to-Point</td>
-                        <td>
-                            <p>
-                                Ignite messaging works via topic based subscriptions. Topic messages can be sent
-                                to either a group of nodes or to an individual node.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/messaging" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="left">Event Notifications</td>
+                    <td>
+                        <p>
+                            Ignite distributed events functionality allows applications to receive notifications when a variety of events occur within the cluster.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/events" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Local vs. Remote Events</td>
+                    <td>
+                        <p>
+                            Applications can get notified for task executions, read, write or query operations occurring on local or remote nodes within the cluster.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/events" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Automatic Batching</td>
+                    <td>
+                        <p>
+                            Event notifications can be grouped together and sent in batches or timely intervals.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/automatic-batching" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </section>
