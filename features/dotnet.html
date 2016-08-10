@@ -140,9 +140,9 @@ under the License.
                             var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("personCache");
 
                             // SQL join on Person and Organization.
-                            var sql = new SqlQuery("Person", "from Person, \"orgCache\".Organization "
-                              + "where Person.OrgId = Organization.Id "
-                              + "and Organization.name = Ignite");
+                            var sql = new SqlQuery("Person", "from Person as p, \"orgCache\".Organization as org"
+                              + "where p.OrgId = org.Id "
+                              + "and org.name = Ignite");
 
                             // Find all persons working for Ignite organization.
                             foreach (var cacheEntry in cache.Query(sql))

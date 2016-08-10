@@ -120,7 +120,7 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-query">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("mycache");
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
 
                             SqlQuery sql = new SqlQuery(Person.class, "salary > ?");
 
@@ -133,13 +133,13 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-join">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("mycache");
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
 
                             // SQL join on Person and Organization.
                             SqlQuery sql = new SqlQuery(Person.class,
-                              "from Person, Organization "
-                              + "where Person.orgId = Organization.id "
-                              + "and lower(Organization.name) = lower(?)");
+                              "from Person as p, \"orgCache\".Organization as org "
+                              + "where p.orgId = org.id "
+                              + "and lower(org.name) = lower(?)");
 
                             // Find all persons working for Ignite organization.
                             try (QueryCursor&lt;Entry&lt;Long, Person&gt;&gt; cursor = cache.query(sql.setArgs("Ignite"))) {
