@@ -65,8 +65,11 @@ under the License.
                         on replicated or partitioned caches distributed across the cluster.
                     </p>
                     <p>
-                        Ignite also supports <span style="white-space: nowrap"><a href="https://apacheignite-cpp.readme.io/docs/cross-platform-interoperability" target="_blank">Cross-platform Interoperability</a></span>
-                        by writing objects to cache in a common binary format allowing application to seamlessly interoperate between <b>Java</b>, <b>.NET</b> and <b>C++</b>.
+                        Ignite also supports <span style="white-space: nowrap"><a href="https://apacheignite-cpp.readme.io/docs/cross-platform-interoperability" target="_blank">Cross-Platform Interoperability</a></span>
+                        allowing applications to seamlessly interoperate between <b>Java</b>, <b>.NET</b> and <b>C++</b> by writing/reading objects to/from cache in a common binary format.
+                        Additionally, both Ignite .NET and Ignite C++ provide native APIs and their implementations that delegate most of the calls to Java using JNI.
+                        Here, it is worth mentioning that the JNI overhead is minimal and does not cause any performance degradation, especially in distributed environments where network is the main obstacle.
+                        Furthermore, Ignite provides a pure C++ implementation of the Binary Marshaller to contribute to the perfomance.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
@@ -120,9 +123,9 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-query">
                         <pre class="brush:cpp">
-                            Cache&lt;int, Person&gt; cache = grid.GetOrCreateCache&lt;int, Person&gt;("myCache");
+                            Cache&lt;int, Person&gt; cache = grid.GetOrCreateCache&lt;int, Person&gt;("personCache");
 
-                            SqlQuery qry("Person", "Salary < 1000");
+                            SqlQuery qry("Person", "Salary &lt; 1000");
 
                             QueryCursor&lt;int, Person&gt; cursor = cache.Query(qry);
 
@@ -133,11 +136,13 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-join">
                         <pre class="brush:cpp">
-                            Cache&lt;int, Person&gt; cache = grid.GetOrCreateCache&lt;int, Person&gt;("myCache");
+                            Cache&lt;int, Person&gt; cache = grid.GetOrCreateCache&lt;int, Person&gt;("personCache");
 
-                            SqlQuery qry("from Person, Organization "
-                                "where Person.OrgId = Organization.Id "
-                                "and lower(Organization.Name) = Ignite");
+                            // SQL join on Person and Organization
+                            // to find all persons working for Ignite organization.
+                            SqlQuery qry("Person", "from Person, \"orgCache\".Organization "
+                              + "where Person.OrgId = Organization.Id "
+                              + "and Organization.name = Ignite");
 
                             QueryCursor&lt;int, Person&gt; cursor = cache.Query(qry);
 

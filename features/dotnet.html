@@ -69,8 +69,11 @@ under the License.
                         <a href="https://apacheignite-net.readme.io/docs/streaming" target="_blank">Data Streaming</a>, and more, on replicated or partitioned caches distributed across the cluster.
                     </p>
                     <p>
-                        Ignite also supports <a href="https://apacheignite-net.readme.io/docs/platform-interoperability" target="_blank">Cross-platform Interoperability</a>
-                        by writing objects to cache in a common binary format allowing application to seamlessly interoperate between <b>Java</b>, <b>.NET</b> and <b>C++</b>.
+                        Ignite also supports <span style="white-space: nowrap"><a href="https://apacheignite-net.readme.io/docs/platform-interoperability" target="_blank">Cross-Platform Interoperability</a></span>
+                        allowing applications to seamlessly interoperate between <b>Java</b>, <b>.NET</b> and <b>C++</b> by writing/reading objects to/from cache in a common binary format.
+                        Additionally, both Ignite .NET and Ignite C++ provide native APIs and their implementations that delegate most of the calls to Java using JNI.
+                        Here, it is worth mentioning that the JNI overhead is minimal and does not cause any performance degradation, especially in distributed environments where network is the main obstacle.
+                        Furthermore, Ignite provides a pure .NET implementation of the Binary Marshaller to contribute to the perfomance.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
@@ -122,9 +125,9 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-query">
                         <pre class="brush:csharp">
-                            var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("myCache");
+                            var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("personCache");
 
-                            var sql = new SqlQuery(typeof(Person), "Salary &gt; ?");
+                            var sql = new SqlQuery("Person", "Salary &lt; 1000");
 
                             var cursor = cache.Query(sql);
 
@@ -134,12 +137,12 @@ under the License.
                     </div>
                     <div class="tab-pane" id="sql-join">
                         <pre class="brush:csharp">
-                            var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("myCache");
+                            var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("personCache");
 
                             // SQL join on Person and Organization.
-                            var sql = new SqlQuery(typeof(Person), "from Person, Organization "
+                            var sql = new SqlQuery("Person", "from Person, \"orgCache\".Organization "
                               + "where Person.OrgId = Organization.Id "
-                              + "and lower(Organization.Name) = lower(?)", "Ignite");
+                              + "and Organization.name = Ignite");
 
                             // Find all persons working for Ignite organization.
                             foreach (var cacheEntry in cache.Query(sql))
