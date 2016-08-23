@@ -89,6 +89,7 @@ under the License.
                     <li><a href="#transactions" aria-controls="profile" data-toggle="tab">Transactions</a></li>
                     <li><a href="#sql-query" aria-controls="profile" data-toggle="tab">SQL Query</a></li>
                     <li><a href="#sql-join" aria-controls="profile" data-toggle="tab">SQL Join</a></li>
+                    <li><a href="#linq" aria-controls="profile" data-toggle="tab">LINQ</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -149,11 +150,21 @@ under the License.
                                 Console.WriteLine(cacheEntry.Value);
                         </pre>
                     </div>
+                    <div class="tab-pane" id="linq">
+                        <pre class="brush:csharp">
+                            var cache = ignite.GetOrCreateCache&lt;int, Person&gt;("personCache");
+
+                            var qry = cache.AsCacheQueryable().Where(x => x.Value.Salary < 1000);
+
+                            foreach (var cacheEntry in qry)
+                                Console.WriteLine(cacheEntry.Value);
+                        </pre>
+                    </div>
                 </div>
             </div>
             <div class="page-heading">GitHub Examples:</div>
             <p>
-                Also see <a href="https://github.com/apache/ignite/tree/master/modules/platforms/dotnet/examples" target="github">Ignite .Net examples</a>
+                Also see <a href="https://github.com/apache/ignite/tree/master/modules/platforms/dotnet/examples" target="github">Ignite .NET examples</a>
                 available on GitHub.
             </p>
 
