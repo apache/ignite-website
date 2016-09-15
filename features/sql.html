@@ -1,0 +1,209 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apache Ignite - SQL Queries</title>
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1.1">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+
+    <main id="main" role="main" class="container">
+        <section id="sql-queries" class="page-section" style="border-bottom: none;">
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
+                    <h2 class="first">SQL Queries</h2>
+                    <p>
+                        Ignite supports free-form SQL queries virtually without any limitations. The SQL syntax is ANSI-99 compliant.
+                        You can use any SQL function, aggregation, or grouping. Ignite also supports distributed SQL joins. Moreover, if the data resides in different caches, Ignite allows for cross-cache joins as well.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive" src="/images/ansi-99.png" width="150px" style="margin-left: 60px;"/>
+                </div>
+            </div>
+            <p>&nbsp;</p>
+        </section>
+
+        <section id="collocated-joins" class="page-section page-subsection">
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
+                    <div class="page-heading">Collocated SQL Joins</div>
+                    <p>
+                        SQL joins can be performed on collocated data stored across multiple caches.
+                        Since all the cache entries with the same affinity key are stored on the same processing node, these queries do not require expensive network trips to fetch the data from remote nodes, and hence, are extermely fast.
+                        Joins can also be performed between <code>PARTITIONED</code> and <code>REPLICATED</code> caches.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive t-image" src="/images/collocated_sql_queries.png" width="350px" style="float:right; padding-top:0;"/>
+                </div>
+            </div>
+            <p>&nbsp;</p>
+        </section>
+
+        <section id="non-collocated-joins" class="page-section page-subsection">
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
+                    <div class="page-heading">Non-Collocated SQL Joins</div>
+                    <p>
+                        In Ignite, the default implementation of SQL join requires all the participating caches to be collocated. However,
+                        for cases where it is extremely difficult to collocate all the data, Ignite offers non-collocated SQL joins.
+                        Data can be distributed in any way across the cluster, and Ignite will figure out where to fetch the results from.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
+                    <img class="first img-responsive t-image" src="/images/non_collocated_sql_queries.png" width="350px" style="float:right; padding-top:0;"/>
+                </div>
+            </div>
+            <p>&nbsp;</p>
+        </section>
+        <section id="sql-indexes" class="page-section page-subsection">
+            <div class="col-sm-12 col-md-7 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="page-heading">SQL Indexes</div>
+                <p>
+                    For SQL queries, Ignite supports in-memory indexing to facilitate fast data lookups.
+                    If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory.
+                    Ignite allows configuring single column indexes as well as group indexes. It also provides support for custom indexing.
+                </p>
+            </div>
+            <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0"/>
+            <p>&nbsp;</p>
+        </section>
+
+        <section id="examples" class="page-section page-subsection">
+            <div class="code-examples"  style="padding-top:50px;">
+                <div class="page-heading">Code Examples</div>
+                <!-- Nav tabs -->
+                <ul id="datastructure-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#sql-query" aria-controls="home" data-toggle="tab">SQL Query</a></li>
+                    <li><a href="#collocated-join" aria-controls="profile" data-toggle="tab">Collocated Join</a></li>
+                    <li><a href="#non-collocated-join" aria-controls="profile" data-toggle="tab">Non-Collocated Join</a></li>
+                    <li><a href="#sql-fields-query" aria-controls="profile" data-toggle="tab">SQL Fields Query</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="sql-query">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            SqlQuery sql = new SqlQuery(Person.class, "salary &gt; ?");
+
+                            // Find all persons earning more than 1,000.
+                            try (QueryCursor&lt;Entry&lt;Long, Person&gt;&gt; cursor = cache.query(sql.setArgs(1000))) {
+                                for (Entry&lt;Long, Person&gt; e : cursor)
+                                    System.out.println(e.getValue().toString());
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="collocated-join">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            // SQL join on Person and Organization.
+                            SqlQuery sql = new SqlQuery(Person.class,
+                                "from Person as p, \"orgCache\".Organization as org"
+                                + "where p.orgId = org.id "
+                                + "and lower(org.name) = lower(?)");
+
+                            // Find all persons working for Ignite organization.
+                            try (QueryCursor&lt;Entry&lt;Long, Person&gt;&gt; cursor = cache.query(sql.setArgs("Ignite"))) {
+                                for (Entry&lt;Long, Person&gt; e : cursor)
+                                    System.out.println(e.getValue().toString());
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="non-collocated-join">
+                        <pre class="brush:java">
+                            IgniteCache&lt;AffinityKey&lt;Long&gt;, Person&gt; cache = ignite.cache("personCache");
+
+                            // SQL clause query with join over non-collocated data.
+                            String joinSql =
+                                "from Person, \"orgCache\".Organization as org " +
+                                "where Person.orgId = org.id " +
+                                "and lower(org.name) = lower(?)";
+
+                            SqlQuery qry = new SqlQuery&lt;AffinityKey&lt;Long&gt;, Person&gt;(Person.class, joinSql)
+                                .setArgs("ApacheIgnite");
+
+                            // Enable non-collocated joins for the query.
+                            qry.setDistributedJoins(true);
+
+                            // Execute the query to find out employees for specified organization.
+                            System.out.println("Following people are 'ApacheIgnite' employees (distributed    join): " +
+                                cache.query(qry).getAll());
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="sql-fields-query">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            // Execute query to get names of all employees.
+                            SqlFieldsQuery sql = new SqlFieldsQuery(
+                                "select concat(firstName, ' ', lastName) from Person");
+
+                            // Iterate over the result set.
+                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor = cache.query(sql) {
+                                for (List&lt;?&gt; row : cursor)
+                                    System.out.println("personName=" + row.get(0));
+                            }
+                        </pre>
+                    </div>
+                </div>
+
+
+                <div class="page-heading">GitHub Examples</div>
+                <p>
+                    Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
+                    available on GitHub.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
