@@ -35,7 +35,7 @@ under the License.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Ignite - SQL Queries</title>
+    <title>Apache Ignite - SQL Grid</title>
     <link media="all" rel="stylesheet" href="/css/all.css?v=1.2">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
@@ -49,74 +49,36 @@ under the License.
 
 
     <main id="main" role="main" class="container">
-        <section id="sql-queries" class="page-section" style="border-bottom: none;">
+        <section id="sql-queries" class="page-section">
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
-                    <h2 class="first">SQL Queries</h2>
+                    <h2 class="first">SQL Grid</h2>
                     <p>
-                        Ignite supports free-form SQL queries virtually without any limitations. The SQL syntax is ANSI-99 compliant.
-                        You can use any SQL function, aggregation, or grouping. Ignite also supports distributed SQL joins. Moreover, if the data resides in different caches, Ignite allows for cross-cache joins as well.
+                        Apache Ignite In-Memory SQL Grid provides in-memory distributed database capabilities
+                        to the Ignite platform. The In-Memory SQL Grid is horizontally scalable, fault tolerant and ANSI SQL-99
+                        compliant.
+                    </p>
+                    <p>
+                        Ignite SQL Grid fully supports all SQL and DML commands. It also supports distributed SQL joins.
+                        Moreover, if the data resides in different caches, Ignite allows for cross-cache joins as well.
+                    </p>
+                    <p>
+                        The In-Memory SQL Grid allows you to interact with
+                        the Ignite platform using standard SQL language through Ignite JDBC or ODBC APIs.
+                        This provides true cross-platform connectivity even from languages such as PHP, Ruby and more.
                     </p>
                 </div>
-                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="first img-responsive" src="/images/ansi-99.png" width="150px" style="margin-left: 60px;"/>
-                </div>
-            </div>
-            <p>&nbsp;</p>
-        </section>
 
-        <section id="collocated-joins" class="page-section page-subsection">
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
-                    <div class="page-heading">Collocated SQL Joins</div>
-                    <p>
-                        SQL joins can be performed on collocated data stored across multiple caches.
-                        Since all the cache entries with the same affinity key are stored on the same processing node, these queries do not require expensive network trips to fetch the data from remote nodes, and hence, are extermely fast.
-                        Joins can also be performed between <code>PARTITIONED</code> and <code>REPLICATED</code> caches.
-                    </p>
-                </div>
                 <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="first img-responsive t-image" src="/images/collocated_sql_queries.png" width="350px" style="float:right; padding-top:0;"/>
+                    <img class="first img-responsive" src="/images/sql-grid-2.png" width="400px" style="float:right;"/>
                 </div>
             </div>
-            <p>&nbsp;</p>
-        </section>
 
-        <section id="non-collocated-joins" class="page-section page-subsection">
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
-                    <div class="page-heading">Non-Collocated SQL Joins</div>
-                    <p>
-                        In Ignite, the default implementation of SQL join requires all the participating caches to be collocated. However,
-                        for cases where it is extremely difficult to collocate all the data, Ignite offers non-collocated SQL joins.
-                        Data can be distributed in any way across the cluster, and Ignite will figure out where to fetch the results from.
-                    </p>
-                </div>
-                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="first img-responsive t-image" src="/images/non_collocated_sql_queries.png" width="350px" style="float:right; padding-top:0;"/>
-                </div>
-            </div>
-            <p>&nbsp;</p>
-        </section>
-        <section id="sql-indexes" class="page-section page-subsection">
-            <div class="col-sm-12 col-md-7 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="page-heading">SQL Indexes</div>
-                <p>
-                    For SQL queries, Ignite supports in-memory indexing to facilitate fast data lookups.
-                    If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory.
-                    Ignite allows configuring single column indexes as well as group indexes. It also provides support for custom indexing.
-                </p>
-            </div>
-            <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0"/>
-            <p>&nbsp;</p>
-        </section>
-
-        <section id="examples" class="page-section page-subsection">
-            <div class="code-examples"  style="padding-top:50px;">
-                <div class="page-heading">Code Examples</div>
+            <div class="code-examples">
+                <div class="page-heading">SQL Query Examples</div>
                 <!-- Nav tabs -->
-                <ul id="datastructure-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#sql-query" aria-controls="home" data-toggle="tab">SQL Query</a></li>
+                <ul id="sql-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#select" aria-controls="home" data-toggle="tab">SQL Query</a></li>
                     <li><a href="#collocated-join" aria-controls="profile" data-toggle="tab">Collocated Join</a></li>
                     <li><a href="#non-collocated-join" aria-controls="profile" data-toggle="tab">Non-Collocated Join</a></li>
                     <li><a href="#sql-fields-query" aria-controls="profile" data-toggle="tab">SQL Fields Query</a></li>
@@ -124,7 +86,7 @@ under the License.
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="sql-query">
+                    <div class="tab-pane active" id="select">
                         <pre class="brush:java">
                             IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
 
@@ -191,14 +153,177 @@ under the License.
                         </pre>
                     </div>
                 </div>
-
-
-                <div class="page-heading">GitHub Examples</div>
-                <p>
-                    Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
-                    available on GitHub.
-                </p>
             </div>
+            <div class="code-examples">
+                <div class="page-heading">DML Examples</div>
+                <!-- Nav tabs -->
+                <ul id="dml-examples" class="nav nav-tabs">
+                    <li  class="active"><a href="#insert" aria-controls="profile" data-toggle="tab">INSERT</a></li>
+                    <li><a href="#update" aria-controls="profile" data-toggle="tab">UPDATE</a></li>
+                    <li><a href="#delete" aria-controls="profile" data-toggle="tab">DELETE</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="insert">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            cache.query(new SqlFieldsQuery("INSERT INTO Person(_key, firstName, " +
+                                "lastName) values (1, 'John', 'Smith'), (5, 'Mary', 'Jones')"));
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="update">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            cache.query(new SqlFieldsQuery("UPDATE Person set lastName = ? " +
+                                "WHERE _key >= ?").setArgs("Jones", 2L));
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="delete">
+                        <pre class="brush:java">
+                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+
+                            cache.query(new SqlFieldsQuery("DELETE FROM Person " +
+                                "WHERE _key >= ?").setArgs(2L));
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="page-heading">GitHub Examples</div>
+            <p>
+                Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
+                and <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryDmlExample.java" target="github"> DML example</a> available on GitHub.
+            </p>
+        </section>
+
+        <section id="key-features" class="page-section">
+            <h2>SQL Grid Features</h2>
+            <table class="formatted" name="SQL Grid Features">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Feature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="left">SQL Queries</td>
+                    <td>
+                        <p>
+                            Ignite supports free-form SQL queries without any limitations. The SQL syntax is ANSI-99 compliant which means
+                            that you can use any kind of SQL functions, aggregations, groupings or joins.
+                        </p>
+                        <p>
+                            SQL queries in Ignite are fully distributed and perform in a fault-tolerant manner that guarantees
+                            consistent query results regardless of cluster topology changes.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/sql-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Distributed DML</td>
+                    <td>
+                        <p>
+                            Apache Ignite SQL Grid not only allows selecting data from the Data Grid, using <code>SQL ANSI-99</code> syntax,
+                            but it also makes it possible to modify that data with well-known DML statements like <code>INSERT</code>, <code>MERGE</code>, <code>UPDATE</code>, and <code>DELETE</code>.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/dml" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Collocated SQL Joins</td>
+                    <td>
+                        <p>
+                            SQL joins can be performed on collocated data stored across multiple caches.
+                            Since all the cache entries with the same affinity key are stored on the same processing node, these queries do not require expensive network trips to fetch the data from remote nodes, and hence, are extermely fast.
+                            Joins can also be performed between <code>PARTITIONED</code> and <code>REPLICATED</code> caches.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/sql-queries#section-distributed-collocated-joins" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Non-Collocated SQL Joins</td>
+                    <td>
+                        <p>
+                            In Ignite, the default implementation of SQL join requires all the participating caches to be collocated. However,
+                            for cases where it is extremely difficult to collocate all the data, Ignite offers non-collocated SQL joins.
+                            Data can be distributed in any way across the cluster, and Ignite will figure out where to fetch the results from.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/sql-queries#section-distributed-non-collocated-joins" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="left">SQL Indexes</td>
+                    <td>
+                        <p>
+                            For SQL queries, Ignite supports in-memory indexing to facilitate fast data lookups.
+                            If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory.
+                            Ignite allows configuring single column indexes as well as group indexes. It also provides support for custom indexing.
+                        </p>
+                        <div  class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/indexes" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">JDBC/ODBC Driver</td>
+                    <td>
+                        <p>
+                            Ignite is shipped with <code>JDBC/ODBC Driver</code> that allows you to retrieve distributed data from
+                            cache using standard SQL queries and JDBC/ODBC API.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/jdbc-driver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Geospacial Support</td>
+                    <td>
+                        <p>
+                            Ignite supports querying and indexing geometry data types such as points, lines, and polygons considering the spatial relationship between these geometries.
+                        </p>
+                        <div class="page-links">
+                            <a href="http://apacheignite.gridgain.org/docs/geospatial-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">.NET & C++ Support</td>
+                    <td>
+                        <p>
+                            Ignite.NET and Ignite C++ are buit on top of Ignite. This allows you to perform almost all SQL Grid operations including SQL and DML commands as well as distributed joins.
+                        </p>
+                        <div class="page-links">
+                            <a href="https://apacheignite-net.readme.io/docs/sql-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Integrations</td>
+                    <td>
+                        <p>
+                            Using the Ignite JDBC/ODBC driver, SQL Grid can integrate with a variety of tools, languages and technologies - <b>Apache Zeppelin</b>, <b>Tableau</b> and <b>PHP Data Objects</b>.
+                        </p>
+                        <div class="page-links">
+                            <a href="https://apacheignite-mix.readme.io/docs/overview-1" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </section>
     </main>
 
