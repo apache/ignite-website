@@ -37,7 +37,7 @@ under the License.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Downloads - Apache Ignite</title>
-    <link media="all" rel="stylesheet" href="css/all.css?v=1.4">
+    <link media="all" rel="stylesheet" href="css/all.css?v=1.5">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 
@@ -1153,7 +1153,7 @@ under the License.
 <!--#include virtual="/includes/scripts.html" -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -1203,6 +1203,45 @@ under the License.
    interval:false
  });
 }
+</script>
+
+<!--Launch YouTube video in Bootstrap modal-->
+<script type="text/javascript">
+$(document).ready(function(){
+    /* Get iframe src attribute value i.e. YouTube video url
+    and store it in a variable */
+    var sqlUrl = $("#sql").attr('src');
+    var dataGridUrl = $("#data-grid").attr('src');
+    var clusteringUrl = $("#clustering").attr('src');
+
+    /* Assign empty url value to the iframe src attribute when
+    modal hide, which stop the video playing */
+    $("#sql-modal").on('hide.bs.modal', function(){
+        $("#sql").attr('src', '');
+    });
+
+    $("#data-grid-modal").on('hide.bs.modal', function(){
+        $("#data-grid").attr('src', '');
+    });
+
+    $("#clustering-modal").on('hide.bs.modal', function(){
+        $("#clustering").attr('src', '');
+    });
+
+    /* Assign the initially stored url back to the iframe src
+    attribute when modal is displayed again */
+    $("#sql-modal").on('show.bs.modal', function(){
+        $("#sql").attr('src', sqlUrl);
+    });
+
+    $("#data-grid-modal").on('show.bs.modal', function(){
+        $("#data-grid").attr('src', dataGridUrl);
+    });
+
+    $("#clustering-modal").on('show.bs.modal', function(){
+        $("#clustering").attr('src', clusteringUrl);
+    });
+});
 </script>
 <!-- end of include "/includes/scripts.html" -->
 </body>
