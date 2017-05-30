@@ -176,24 +176,24 @@ under the License.
                         <th colspan="2" class="left">MEMORY FORMATS</th>
                     </tr>
                     <tr>
-                        <td class="features-left">On-Heap Memory</td>
+                        <td class="left">Page Memory</td>
                         <td>
                             <p>
-                                Ignite stores all cache entries on-heap to provide fast data access.
+                                Apache Ignite <code>Page Memory</code> is a manageable off-heap based memory architecture that is split into pages of fixed size. By default, Ignite stores data in off-heap memory.
                             </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/off-heap-memory#onheap_tiered" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            <div class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/page-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="features-left">Off-Heap Memory</td>
+                        <td class="features-left">On-Heap Memory</td>
                         <td>
                             <p>
-                                Storing data in off-heap memory allows your cache to overcome lengthy JVM Garbage Collection (GC) pauses.
+                                Ignite stores data in off-heap memory with an option to store data on-heap.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite.readme.io/docs/page-memory#on-heap-caching" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -201,21 +201,10 @@ under the License.
                         <td class="features-left">Off-Heap Indexes</td>
                         <td>
                             <p>
-                                Whenever configured with off-heap memory, Ignite will store query indexes off-heap as well.
+                                Ignite stores query indexes off-heap memory. For every unique index that is declared in an SQL schema, Apache Ignite instantiates and manages a dedicated B+ tree instance.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/off-heap-memory" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="features-left">Tiered Storage</td>
-                        <td>
-                            <p>
-                                Ignite provides tiered storage model, where data can be stored and moved between <b>on-heap</b>, <b>off-heap</b>, and <b>swap space</b>.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/off-heap-memory#tiered-off-heap-storage" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite.readme.io/docs/page-memory#section-b-tree-and-index-page" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -236,7 +225,7 @@ under the License.
                                 <li>Dynamically create an object.</li>
                             </ul>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/jcache" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite.readme.io/docs/binary-marshaller" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -437,7 +426,7 @@ under the License.
                                 Ignite In-Memory Data Grid can be easily plugged in as a second level(L2) cache which is visible to all sessions.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/hibernate-l2-cache" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/hibernate-l2-cache" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -448,7 +437,7 @@ under the License.
                                 Ignite is capable of caching web sessions of all Java Servlet containers that follow Java Servlet 3.0 Specification.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/web-session-clustering" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/web-session-clustering" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -459,7 +448,18 @@ under the License.
                                 Ignite provides an implementation of SpringCacheAbstraction - an annotation-based way to enable caching for Java methods.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/osgi-starting-inside-a-container" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="http://apacheignite-mix.readme.io/docs/spring-caching" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Spring Data</td>
+                        <td>
+                            <p>
+                                Ignite implements Spring Data <code>CrudRepository</code> that supports basic CRUD operations as well as provides access to Ignite SQL Grid.
+                            </p>
+                            <div class="page-links">
+                                <a href="https://apacheignite-mix.readme.io/docs/spring-data" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -845,7 +845,7 @@ under the License.
                                 Ignite JMS Data Streamer consumes messages from JMS brokers and inserts them into Ignite caches.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/jms-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/jms-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -856,7 +856,7 @@ under the License.
                                 IgniteSink is a Flume sink that extracts events from an associated Flume channel and injects into an Ignite cache.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/flume-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/flume-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -867,7 +867,7 @@ under the License.
                                 Ignite MQTT Streamer consumes messages from a MQTT topic and feeds transformed key-value pairs into an Ignite cache.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/mqtt-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/mqtt-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -877,6 +877,9 @@ under the License.
                             <p>
                                 Ignite Twitter Streamer consumes messages from a Twitter Streaming API and inserts them into an Ignite cache.
                             </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite-mix.readme.io/docs/twitter-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -886,7 +889,7 @@ under the License.
                                 Ignite Kafka Data Streamer consumes messages for a given Kafka Topic from Kafka Broker and inserts them into an Ignite cache.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/kafka-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/kafka-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -897,7 +900,7 @@ under the License.
                                 Ignite Camel streamer consumes messages from an Apache Camel consumer endpoint and feeds them into an Ignite cache.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/camel-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-mix.readme.io/docs/camel-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -907,6 +910,9 @@ under the License.
                             <p>
                                 Ignite Storm Streamer consumes messages from an Apache Storm consumer endpoint and feeds them into an Ignite cache.
                             </p>
+                            <div  class="page-links">
+                                <a href="https://apacheignite-mix.readme.io/docs/storm-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -1205,7 +1211,7 @@ under the License.
                                 IGFS can also be deployed as a caching layer over another Hadoop File System.
                             </p>
                             <div  class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/ignitecontext-igniterdd#section-running-sql-queries-against-ignite-cache" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite-fs.readme.io/docs/secondary-file-system" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -1311,7 +1317,7 @@ under the License.
                             Ignite In-Memory Data Fabric is developed predominantly in Java, and provides native support for other languages - .NET and C++.
                         </p>
                         <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/binary-marshaller" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            <a href="https://apacheignite.readme.io/docs/getting-started" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -1445,10 +1451,10 @@ under the License.
                         <td class="features-left">Public Clouds Support</td>
                         <td>
                             <p>
-                                Ignite integrates with <b>Amazon Web Services</b>, <b>Google Compute Engine</b>, and <b>Apache JClouds</b>.
+                                Ignite integrates with <b>Amazon Web Services</b>, <b>Google Compute Engine</b>, <b>Apache Mesos</b>, and <b>Kubernetes</b>.
                             </p>
                             <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/aws-config" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                                <a href="https://apacheignite.readme.io/docs/deployment" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
