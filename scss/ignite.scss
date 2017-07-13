@@ -246,7 +246,7 @@ section.page-section {
     h1, h2 {
         font-size: 26px;
         color: #333;
-        padding: 0 0 20px 0;
+        padding: 0 0 15px 0;
         text-align: left;
     }
     h1 {
@@ -960,10 +960,6 @@ section.page-subsection {
     padding-left: 20px;
 }
 
-a.github-icon {
-    color: white;
-}
-
 .screencast-center {
     padding-right: 10px;
     padding-left: 10px;
@@ -1046,10 +1042,6 @@ a.github-icon {
     .banner {
         padding: 50px 0 0;
         margin-left: 15px;
-
-        @media (max-width: $tablet) {
-            padding: 20px 0 0;
-        }
     }
 
     h2 {
@@ -1058,18 +1050,22 @@ a.github-icon {
         margin: 0 0 15px;
         text-align: left;
         @media (max-width: $tablet) {
-            font-size: 70px;
-            line-height: 70px;
+            font-size: 25px;
+            line-height: 25px;
+            text-align: center
         }
         @media (max-width: $mobile) {
-            font-size: 42px;
-            line-height: 42px;
             margin: 0 0 5px;
+            text-align: center
         }
 
         & > span {
-                font: 27px/27px $alt-font-harabara;
+            font: 27px/27px $alt-font-harabara;
+            @media (max-width: $tablet) {
+                font-size: 25px;
+                line-height: 25px;
             }
+        }
     }
 
     ul.banner-list {
@@ -1087,19 +1083,20 @@ a.github-icon {
                 margin-bottom: 10px;
                 font-size: 22px;
                 padding-left: 10px;
+
+                & > span {
+                    font-size: 22px;
+                }
             }
         }
-
-
     }
-    span {
-        font-size: 22px;
-    }
+
     p {
         padding-top: 10px;
         font-size: 24px;
         color: $white;
     }
+
     .buttons {
         margin: 0 0 12px;
         letter-spacing: -4px;
@@ -1112,6 +1109,15 @@ a.github-icon {
             letter-spacing: normal;
             margin: 0 10px 10px;
         }
+    }
+}
+
+.main-image {
+    padding-top: 10px;
+    padding-left: 35px;
+
+    @media (max-width: $tablet) {
+        text-align: center
     }
 }
 
@@ -1129,12 +1135,13 @@ a.github-icon {
 }
 
 .feature-box {
-    padding-right: 20px;
-    padding-left: 0px;
-
     h2 {
         text-align: center !important;
         font-weight: 300;
+
+        &:hover {
+            color: #e50000;
+        }
     }
 
     p {
@@ -1143,10 +1150,27 @@ a.github-icon {
         font-weight: 300 !important;
     }
 
-    &:last-child {
-        padding-right:20px;
-        margin-right:0px;
+    hr {
+        border-top: none !important;
+        border-bottom: 1px solid #d7d7d7 !important;
+        padding-top: 5px;
+        width: 90px;
     }
+}
+
+.feature-box-left {
+    padding-right: 20px;
+    padding-left: 0px;
+}
+
+.feature-box-center {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.feature-box-right {
+    padding-right: 0px;
+    padding-left: 20px;
 }
 
 .cross-mark {
@@ -1209,29 +1233,23 @@ a.github-icon {
     margin: auto;
     width: 70px;
     height: 70px;
+    border: none !important;
 
     &:hover {
-        background: #E50000;
+        background: #e50000;
     }
 }
 
 .circular-feature-icon {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 
 hr {
-
     border: 0;
     border-top: 1px solid #d7d7d7;
     border-bottom: 1px solid #d7d7d7;
     max-width: 250px;
     height: 5px;
-    text-align: center;
-}
-
-.main-image {
-    padding-top: 10px;
-    padding-left: 35px;
 }
 
 .learn-more {
@@ -1242,6 +1260,13 @@ hr {
     font-size: 18px !important;
     padding-bottom: 10px;
     margin-top:20px;
+
+    a {
+        color: white;
+        &:hover {
+         color: #f00;
+        }
+     }
 }
 
 table.comparison-matrix {
@@ -1257,7 +1282,7 @@ table.comparison-matrix {
         & > th {
             color: white;
             font-size: 20px !important;
-            font-weight: bold;
+            font-weight: 400;
             border: none !important;
         }
         & .left {
@@ -1271,6 +1296,7 @@ table.comparison-matrix {
             border-bottom: 1px solid #d7d7d7;
             & > td {
                 border: none !important;
+                font-weight: 300;
 
                 & > p {
                     margin-top :8px;
@@ -1389,30 +1415,99 @@ p.timeline-Tweet-text {
     font-size: 15px!important;
 }
 
-a.timeline-Tweet {
-  /* Buttonish */
-  display: inline-block;
-  padding: 6px 12px 6px 30px;
-  margin: 10px 0;
-  border: #ccc solid 1px;
-  border-radius: 3px;
-  background: #f8f8f8 url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNzIgNzIiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDcyIDcyIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxyZWN0IHg9IjAiIGZpbGw9Im5vbmUiIHdpZHRoPSI3MiIgaGVpZ2h0PSI3MiIvPg0KPHBhdGggZmlsbD0iIzU1YWNlZSIgZD0iTTY4LjgxMiwxNS4xNDFjLTIuMzQ4LDEuMDM5LTQuODY5LDEuNzQzLTcuNTE5LDIuMDZjMi43MDMtMS42Miw0Ljc3OC00LjE4Nyw1Ljc1Ni03LjI0NGMtMi41MjksMS41LTUuMzMsMi41OTItOC4zMTMsMy4xNzYNCglDNTYuMzQ5LDEwLjU5MSw1Mi45NDgsOSw0OS4xODIsOWMtNy4yMjksMC0xMy4wOTIsNS44NjEtMTMuMDkyLDEzLjA5M2MwLDEuMDI2LDAuMTE4LDIuMDIxLDAuMzM4LDIuOTgxDQoJYy0xMC44ODUtMC41NDgtMjAuNTI4LTUuNzU3LTI2Ljk4Ny0xMy42NzljLTEuMTI2LDEuOTM2LTEuNzcxLDQuMTg0LTEuNzcxLDYuNTgxYzAsNC41NDIsMi4zMTIsOC41NTEsNS44MjQsMTAuODk4DQoJYy0yLjE0Ni0wLjA2OS00LjE2NS0wLjY1Ny01LjkzLTEuNjM4Yy0wLjAwMiwwLjA1NS0wLjAwMiwwLjExLTAuMDAyLDAuMTYyYzAsNi4zNDUsNC41MTMsMTEuNjM4LDEwLjUwNCwxMi44NA0KCWMtMS4xMDEsMC4yOTgtMi4yNTYsMC40NTctMy40NDksMC40NTdjLTAuODQ2LDAtMS42NjctMC4wNzgtMi40NjUtMC4yMzFjMS42NjcsNS4yLDYuNDk5LDguOTg2LDEyLjIzLDkuMDkNCgljLTQuNDgyLDMuNTEyLTEwLjEyOSw1LjYwNi0xNi4yNiw1LjYwNmMtMS4wNTUsMC0yLjA5Ni0wLjA2MS0zLjEyMi0wLjE4NGM1Ljc5NCwzLjcxNywxMi42NzYsNS44ODIsMjAuMDY3LDUuODgyDQoJYzI0LjA4MywwLDM3LjI1MS0xOS45NDksMzcuMjUxLTM3LjI0OWMwLTAuNTY2LTAuMDE0LTEuMTM0LTAuMDM5LTEuNjk0QzY0LjgzOCwyMC4wNjgsNjcuMDU4LDE3Ljc2NSw2OC44MTIsMTUuMTQxeiIvPg0KPC9zdmc+DQo=") 8px 8px no-repeat;
-  background-size: 1em 1em;
-
-  /* Text */
-  font: normal 12px/18px Helvetica, Arial, sans-serif;
-  color: #333;
-  white-space: nowrap;
+.highlight-ignite-comparison {
+    background: #fce0e0;
+    border-bottom: 1px solid #ebebeb !important;
 }
 
-a.timeline-Tweet:hover,
-a.timeline-Tweet:focus {
-  background-color: #dedede;
+.durable-memory-icon {
+    background-image: url("/images/durable_memory_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
+
+    &:hover {
+        background-image: url("/images/durable_memory_red_icon.svg");
+    }
 }
 
-/* Color Highlight for keyboard navigation */
+.distributed-sql-icon {
+    background-image: url("/images/distributed_sql_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
 
-a.timeline-Tweet:focus {
-  outline: none;
-  border-color: #0089cb;
+    &:hover {
+        background-image: url("/images/distributed_sql_red_icon.svg");
+    }
 }
+
+.acid-transactions-icon {
+    background-image: url("/images/acid_transactions_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
+
+    &:hover {
+        background-image: url("/images/acid_transactions_red_icon.svg");
+    }
+}
+
+.collocated-prcessing-icon {
+    background-image: url("/images/collocated_processing_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
+
+    &:hover {
+        background-image: url("/images/collocated_processing_red_icon.svg");
+    }
+}
+
+.key-value-icon {
+    background-image: url("/images/key_value_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
+
+    &:hover {
+        background-image: url("/images/key_value_red_icon.svg");
+    }
+}
+
+.machine-learning-icon {
+    background-image: url("/images/machine_learning_icon.svg");
+    height: 50px;
+    width: 50px;
+    display: block;
+    margin-left: 120px;
+
+    &:hover {
+        background-image: url("/images/machine_learning_red_icon.svg");
+    }
+}
+
+.relative {
+    position:relative;
+}
+.video-image-text{
+    position: absolute;
+    bottom: 45px;
+    color: #ffab40 !important;
+    width: 100%;
+    text-align: center;
+    font-size: 20px !important;
+    font-weight: 300;
+    letter-spacing: 2px;
+    padding-left: 10px;
+
+    &:hover {
+    text-decoration: underline;
+    }
+}
+
