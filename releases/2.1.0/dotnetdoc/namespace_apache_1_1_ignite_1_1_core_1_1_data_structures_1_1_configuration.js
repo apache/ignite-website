@@ -1,0 +1,4 @@
+var namespace_apache_1_1_ignite_1_1_core_1_1_data_structures_1_1_configuration =
+[
+    [ "AtomicConfiguration", "class_apache_1_1_ignite_1_1_core_1_1_data_structures_1_1_configuration_1_1_atomic_configuration.html", "class_apache_1_1_ignite_1_1_core_1_1_data_structures_1_1_configuration_1_1_atomic_configuration" ]
+];
