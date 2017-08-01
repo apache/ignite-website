@@ -94,26 +94,46 @@ under the License.
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="create-table">
-                        <pre class="brush:sql">
-                            CREATE TABLE IF NOT EXISTS Person (
-                                age int, id int, name varchar, company varchar,
-                                PRIMARY KEY (name, id))
-                                WITH "template=replicated,backups=5,affinitykey=id"
+                        <pre class="brush:java">
+                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+
+                            SqlFieldsQuery query = new SqlFieldsQuery(
+                                "CREATE TABLE IF NOT EXISTS Person (" +
+                                " age int, id int, name varchar, company varchar," +
+                                " PRIMARY KEY (name, id))" +
+                                " WITH \"template=replicated,backups=5,affinitykey=id\"");
+
+                            cache.query(query).getAll();
                         </pre>
                     </div>
                     <div class="tab-pane" id="drop-table">
-                        <pre class="brush:sql">
-                            DROP TABLE IF EXISTS "Person"
+                        <pre class="brush:java">
+                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+
+                            SqlFieldsQuery query = new SqlFieldsQuery(
+                                "DROP TABLE IF EXISTS \"Person\"");
+
+                            cache.query(query).getAll();
                         </pre>
                     </div>
                     <div class="tab-pane" id="create-index">
-                        <pre class="brush:sql">
-                            CREATE INDEX idx_person_name ON Person (name)
+                        <pre class="brush:java">
+                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+
+                            SqlFieldsQuery query = new SqlFieldsQuery(
+                                "CREATE INDEX idx_person_name ON Person (name)");
+
+                            cache.query(query).getAll();
                         </pre>
                     </div>
                     <div class="tab-pane" id="drop-index">
-                        <pre class="brush:sql">
-                            DROP INDEX idx_person_name
+                        <pre class="brush:java">
+                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+
+                            SqlFieldsQuery query = new SqlFieldsQuery(
+                                "DROP INDEX idx_person_name");
+
+                            cache.query(query).getAll();
                         </pre>
                     </div>
                 </div>
