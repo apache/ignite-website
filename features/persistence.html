@@ -55,12 +55,14 @@ under the License.
             <h1 class="first">Ignite Native Persistence</h1>
                 <div class="col-sm-12 col-md-12 col-xs-12" style="padding-left:0; padding-right:0; margin-bottom: 20px;">
                     <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0; padding-right:0;">
-                        <p>Ignite Native Persistence is a distributed ACID and SQL-compliant disk store that transparently integrates with Ignite's
-                            durable memory as an optional disk layer storing data and indexes on SSD, Flash, 3D XPoint, and other types of non-volatile storages.</p>
+                        <p>Ignite Native Persistence is a distributed ACID and SQL-compliant disk store that transparently
+                            integrates with Ignite's Durable Memory as an optional disk layer storing data and indexes on SSD,
+                            Flash, 3D XPoint, and other types of non-volatile storages.</p>
                         <p>
-                            With the Ignite Persistence enabled, you no longer need to keep all the data and indexes in memory or warm it up after a node or cluster restart because
-                            Apache Durable Memory is tightly coupled with the persistence and treats it as a secondary storage. This implies that if a subset of data or an
-                            index is missing in RAM, the durable memory will take it from disk.
+                            With the Ignite Persistence enabled, you no longer need to keep all the data and indexes in
+                            memory or warm it up after a node or cluster restart because the Durable Memory is tightly
+                            coupled with the persistence and treats it as a secondary memory tier.
+                            This implies that if a subset of data or an index is missing in RAM, the Durable Memory will take it from disk.
                         </p>
 
                     </div>
@@ -73,15 +75,90 @@ under the License.
                     that can be used as an alternative persistence layer for an Apache Ignite cluster:
                 </p>
                 <ul class="page-list" style="margin-bottom: 20px;">
-                    <li>Ability to execute SQL queries over the data that is both in memory and on disk which means that Apache Ignite can be used as a memory-centric distributed SQL database.</li>
-                    <li>No need to have all the data and indexes in memory. The Ignite Persistence allows storing a superset of data on disk and only most frequently used subsets in memory.</li>
-                    <li>Instantaneous cluster restarts. If the whole cluster goes down there is no need to warm up the memory by preloading data from the Ignite Persistence.
+                    <li>Ability to execute SQL queries over the data that is both in memory and on disk which means that
+                        Apache Ignite can be used as a memory-centric distributed SQL database.</li>
+                    <li>No need to have all the data and indexes in memory. The Ignite Persistence allows storing a
+                        superset of data on disk and only most frequently used subsets in memory.</li>
+                    <li>Instantaneous cluster restarts. If the whole cluster goes down there is no need to warm up the
+                        memory by preloading data from the Ignite Persistence.
                         The cluster becomes fully operational once all the cluster nodes are interconnected with each other.</li>
-                    <li>Data and indexes are stored in a similar format both in memory and on disk that helps to avoid expensive transformations while the data sets are being moved between memory and disk.</li>
+                    <li>Data and indexes are stored in a similar format both in memory and on disk that helps to avoid
+                        expensive transformations while the data sets are being moved between memory and disk.</li>
                     <li>An ability to create full and incremental cluster snapshots by plugging-in 3rd party solutions.</li>
                 </ul>
 
+                <div class="page-heading">Write-Ahead Log</div>
+                <p>
+                    Every time the data is updated in memory, the update will be appended to the tail of an Apache Ignite
+                    node's write-ahead log (WAL). The purpose of the WAL is to propagate updates to disk in
+                    the fastest way possible and provide a recovery mechanism for scenarios where a single node or the
+                    whole cluster goes down.
+                </p>
+                <p>
+                    The whole WAL is split into several files, called segments, that are filled out sequentially.
+                    Once a segment is full, its content will be copied to the WAL archive and kept there for the
+                    time defined by several configuration parameters. While the segment is being copied, another segment
+                    will be treated as an active WAL file and will accept all the updates coming from the application side.
+                </p>
+                <p>
+                    It is worth mentioning, that a cluster can always be recovered to the latest successfully committed
+                    transaction in case of a crash or restart relying on the content of the WAL.
+                </p>
 
+                <div class="page-heading">Checkpointing</div>
+                <p>
+                    Due to the nature of the WAL, it constantly grows and it would take significant time to
+                    recover the cluster by going over the WAL from its head to tail. To mitigate this, the Durable Memory
+                    and Ignite Native Persistence support a checkpointing process.
+                </p>
+                <p>
+                    The checkpointing is the process of copying dirty pages from memory to partition files on disk.
+                    A dirty page is a page that was updated in memory but was not written to the respective partition
+                    file on disk (an update was just appended to the WAL).
+                </p>
+                <p>
+                    This process helps to utilize disk space frugally by keeping pages in the most up-to-date state on
+                    disk and allowing to remove outdated WAL segments from the WAL archive.
+                </p>
+                <div class="page-heading">Durability</div>
+                <p>
+                    Ignite's Durable Memory together with the Native Persistence fully complies with the ACID's durability
+                    property guaranteeing that:
+
+                    <ul class="page-list" style="margin-bottom: 20px;">
+                        <li>Transactions that have committed will survive permanently.</li>
+                        <li>
+                            The cluster can always be recovered to the latest successfully committed transaction
+                            in the event of a crash or restart.
+                        </li>
+                        <li>
+                            The cluster becomes fully operational once all the cluster nodes are interconnected with each other.
+                            There is no need to warm up the memory by preloading data from the disk (<i>instantaneous restarts</i>).
+                        </li>
+                    </ul>
+                </p>
+                <div class="page-heading">Configuration</div>
+                <p>
+                    To enable the Ignite Native Persistence, add the following configuration parameter to the cluster's
+                    node configuration:
+                </p>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="configuration">
+                        <pre class="brush:xml">
+                            <!-- Cluster node configuration. -->
+                            <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+
+                                <!-- Enabling Apache Ignite Native Persistence. -->
+                                <property name="persistentStoreConfiguration">
+                                    <bean class="org.apache.ignite.configuration.PersistentStoreConfiguration">
+                                    </bean>
+                                </property>
+
+                                <!-- Additional settings. -->
+                            </bean>
+                        </pre>
+                    </div>
+                </div>
             <p><a href="https://apacheignite.readme.io/v2.1/docs/distributed-persistent-store" target="_blank">Read more</a></p>
         </section>
     </main>
