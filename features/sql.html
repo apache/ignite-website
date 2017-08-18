@@ -148,17 +148,30 @@ under the License.
                             CREATE TABLE City (
                                 id LONG PRIMARY KEY, name VARCHAR)
                                 WITH "template=replicated"
+
+                            CREATE TABLE Person (
+                                id LONG, name VARCHAR, city_id LONG, PRIMARY KEY (id, city_id))
+                                WITH "backups=1, affinityKey=city_id"
                         </pre>
                     </div>
                     <div class="tab-pane" id="ddl-java">
                         <pre class="brush:java">
                             IgniteCache&lt;CityKey, City&gt; cache = ignite.cache("cityCache");
 
-                            // Create table
+                            // Create table based on REPLICATED template
                             SqlFieldsQuery query = new SqlFieldsQuery(
                                 "CREATE TABLE City (" +
                                 " id LONG PRIMARY KEY, name VARCHAR)" +
                                 " WITH \"template=replicated\"");
+
+                            cache.query(query).getAll();
+
+                            // Create table based on PARTITIONED template with one backup
+                            SqlFieldsQuery query = new SqlFieldsQuery(
+                                "CREATE TABLE Person (" +
+                                " id LONG, name VARCHAR, city_id LONG," +
+                                " PRIMARY KEY (id, city_id))" +
+                                " WITH \"backups=1, affinityKey=city_id\"");
 
                             cache.query(query).getAll();
 
@@ -173,8 +186,13 @@ under the License.
                                 stmt.executeUpdate("CREATE TABLE City (" +
                                     " id LONG PRIMARY KEY, name VARCHAR) " +
                                     " WITH \"template=replicated\"");
-                            }
 
+                                // Create table based on PARTITIONED template with one backup
+                                stmt.executeUpdate("CREATE TABLE Person (" +
+                                " id LONG, name VARCHAR, city_id LONG, " +
+                                " PRIMARY KEY (id, city_id)) " +
+                                " WITH \"backups=1, affinityKey=city_id\"");
+                            }
                         </pre>
                     </div>
                     <div class="tab-pane" id="ddl-odbc">
@@ -188,8 +206,16 @@ under the License.
                             SQLCHAR query[] = "CREATE TABLE City ( "
                                 "id LONG PRIMARY KEY, name VARCHAR) "
                                 "WITH \"template=replicated\"";
-
                             SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
+
+                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
+
+                            // Create table based on PARTITIONED template with one backup
+                            SQLCHAR query[] = "CREATE TABLE Person ( "
+                                "id LONG, name VARCHAR, city_id LONG "
+                                "PRIMARY KEY (id, city_id)) "
+                                "WITH \"backups=1, affinityKey=city_id\"";
+                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(query));
 
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
@@ -532,6 +558,18 @@ under the License.
                         </p>
                         <div class="page-links">
                             <a href="https://apacheignite-tools.readme.io/docs" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">SQL Tooling</td>
+                    <td>
+                        <p>
+                            You can process data stored in the Ignite cluster using a SQL tool of your choice -
+                            <b>DBeaver</b>, <b>Pentaho</b>, <b>Tableau</b>, <b>Web Console</b>, <b>Apache Zeppelin</b>.
+                        </p>
+                        <div class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/sql-tooling" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>
