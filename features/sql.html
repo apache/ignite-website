@@ -61,15 +61,19 @@ under the License.
                         support for a subset of DDL commands relevant for distributed databases.
                     </p>
                     <p>
-                        Data sets as well as indexes can be stored both in RAM and on disk thanks to the durable memory
+                        Data sets as well as indexes can be stored both in RAM and on disk thanks to the Durable Memory
                         architecture. This allows executing distributed SQL operations across different memory layers
-                        achieving in-memory performance with durability of disk.
+                        achieving in-memory performance with the durability of disk.
                     </p>
                     <p>
-                        You can interact with Apache Ignite using SQL language via natively developed APIs for Java,
+                        You can interact with Apache Ignite using the SQL language via natively developed APIs for Java,
                         .NET and C++, or via the Ignite JDBC or ODBC drivers. This provides a true cross-platform
                         connectivity from languages such as PHP, Ruby and more.
                     </p>
+
+                    <p><a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Read more</a></p>
+                    <p><a href="https://apacheignite.readme.io/docs/getting-started-sql" target="_blank">Getting Started Guide</a></p>
+
                 </div>
 
                 <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
@@ -77,185 +81,314 @@ under the License.
                 </div>
             </div>
             <div class="code-examples">
-                <div class="page-heading">Distributed DDL Examples</div>
-                <p>Ignite supports <b>Data Definition Language (DDL)</b> statements for creating and removing SQL tables and indexes at runtime.
-                    Currently Ignite supports CREATE and DROP statements for tables and indexes, as shown below.
+                <div class="page-heading">Connectivity</div>
+                <p>The following code examples show how to use the JDBC and ODBC drivers and open a connection:</p>
+                <!-- Nav tabs -->
+                <ul id="connectivity-examples" class="nav nav-tabs">
+                    <li  class="active"><a href="#jdbc-connectivity" aria-controls="profile" data-toggle="tab">JDBC</a></li>
+                    <li><a href="#odbc-connectivity" aria-controls="profile" data-toggle="tab">ODBC</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="jdbc-connectivity">
+                        <pre class="brush:java">
+
+                            Class.forName("org.apache.ignite.IgniteJdbcThinDriver");
+
+                            Connection conn = DriverManager.getConnection(
+                                "jdbc:ignite:thin://127.0.0.1/");
+
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="odbc-connectivity">
+                        <pre class="brush:cpp">
+                            // Combining connect string
+                            std::string connectStr = "DRIVER={Apache Ignite};SERVER=localhost;PORT=10800;SCHEMA=Person;";
+
+                            SQLCHAR outstr[ODBC_BUFFER_SIZE];
+                            SQLSMALLINT outstrlen;
+
+                            // Connecting to ODBC server
+                            SQLRETURN ret = SQLDriverConnect(dbc, NULL, reinterpret_cast&lt;SQLCHAR*&gt;(&connectStr[0]), static_cast&lt;SQLSMALLINT&gt;(connectStr.size()),
+                                outstr, sizeof(outstr), &outstrlen, SQL_DRIVER_COMPLETE)
+                        </pre>
+                    </div>
+                </div>
+
+                Ignite <a href="https://apacheignite.readme.io/docs/getting-started" target="_blank">Java</a>,
+                 <a href="https://apacheignite-net.readme.io/docs/getting-started-2" target="_blank">.NET</a> or
+                 <a href="https://apacheignite-cpp.readme.io/docs/getting-started-1" target="_blank">C++</a> APIs can be
+                used as alternatives to the JDBC and ODBC drivers.
+            </div>
+
+
+            <div class="code-examples">
+                <div class="page-heading">SQL Tables Creation</div>
+                <p>Ignite supports <b>Data Definition Language (DDL)</b> statements for creating and removing SQL tables
+                    and indexes at runtime.
                 </p>
-                <p>In the future Apache Ignite releases, you can expect to see support for additional, widely used DDL statements. See <a href="https://apacheignite.readme.io/docs/distributed-ddl">Ignite DDL documentation</a> for more details.</p>
+                <p> Let's create a couple of tables.
+                    Here are examples of how to achieve this:​
+                </p>
                 <!-- Nav tabs -->
                 <ul id="ddl-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#create-table" aria-controls="profile" data-toggle="tab">CREATE TABLE</a></li>
-                    <li><a href="#drop-table" aria-controls="profile" data-toggle="tab">DROP TABLE</a></li>
-                    <li><a href="#create-index" aria-controls="profile" data-toggle="tab">CREATE INDEX</a></li>
-                    <li><a href="#drop-index" aria-controls="profile" data-toggle="tab">DROP INDEX</a></li>
+                    <li  class="active"><a href="#ddl-sql" aria-controls="profile" data-toggle="tab">SQL</a></li>
+                    <li><a href="#ddl-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
+                    <li><a href="#ddl-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
+                    <li><a href="#ddl-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
 
-                    <div class="tab-pane active" id="create-table">
-                        <pre class="brush:java">
-                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
-
-                            SqlFieldsQuery query = new SqlFieldsQuery(
-                                "CREATE TABLE IF NOT EXISTS Person (" +
-                                " age int, id int, name varchar, company varchar," +
-                                " PRIMARY KEY (name, id))" +
-                                " WITH \"template=replicated,backups=5,affinitykey=id\"");
-
-                            cache.query(query).getAll();
+                    <div class="tab-pane active" id="ddl-sql">
+                        <pre class="brush:sql">
+                            CREATE TABLE City (
+                                id LONG PRIMARY KEY, name VARCHAR)
+                                WITH "template=replicated"
                         </pre>
                     </div>
-                    <div class="tab-pane" id="drop-table">
+                    <div class="tab-pane" id="ddl-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+                            IgniteCache&lt;CityKey, City&gt; cache = ignite.cache("cityCache");
 
+                            // Create table
                             SqlFieldsQuery query = new SqlFieldsQuery(
-                                "DROP TABLE IF EXISTS \"Person\"");
+                                "CREATE TABLE City (" +
+                                " id LONG PRIMARY KEY, name VARCHAR)" +
+                                " WITH \"template=replicated\"");
 
                             cache.query(query).getAll();
+
                         </pre>
                     </div>
-                    <div class="tab-pane" id="create-index">
+                    <div class="tab-pane" id="ddl-jdbc">
                         <pre class="brush:java">
-                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+                            // Create table
+                            try (Statement stmt = conn.createStatement()) {
 
-                            SqlFieldsQuery query = new SqlFieldsQuery(
-                                "CREATE INDEX idx_person_name ON Person (name)");
+                                // Create table based on REPLICATED template
+                                stmt.executeUpdate("CREATE TABLE City (" +
+                                    " id LONG PRIMARY KEY, name VARCHAR) " +
+                                    " WITH \"template=replicated\"");
+                            }
 
-                            cache.query(query).getAll();
                         </pre>
                     </div>
-                    <div class="tab-pane" id="drop-index">
-                        <pre class="brush:java">
-                            IgniteCache&lt;PersonKey, Person&gt; cache = ignite.cache("Person");
+                    <div class="tab-pane" id="ddl-odbc">
+                        <pre class="brush:cpp">
+                            SQLHSTMT stmt;
 
-                            SqlFieldsQuery query = new SqlFieldsQuery(
-                                "DROP INDEX idx_person_name");
+                            // Allocate a statement handle
+                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
 
-                            cache.query(query).getAll();
+                            // Create table based on REPLICATED template
+                            SQLCHAR query[] = "CREATE TABLE City ( "
+                                "id LONG PRIMARY KEY, name VARCHAR) "
+                                "WITH \"template=replicated\"";
+
+                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
+
+                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
                 </div>
 
+                <p>See <a href="https://apacheignite.readme.io/docs/distributed-ddl">Ignite DDL documentation</a> for
+                    more details.
+                </p>
             </div>
             <div class="code-examples">
-                <div class="page-heading">Distributed DML Examples</div>
-                <p>Ignite supports modifying data stored in-memory with well-known <b>DML</b> statements like INSERT, UPDATE, or DELETE. This allows you to use Apache Ignite as a distributed SQL database fully relying on its SQL abilities.</p>
+                <div class="page-heading">Data Modification</div>
+                <p>
+                    To modify data stored in Ignite use standard <b>DML</b> statements like INSERT, UPDATE, or DELETE.
+                </p>
                 <!-- Nav tabs -->
                 <ul id="dml-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#insert" aria-controls="profile" data-toggle="tab">INSERT</a></li>
-                    <li><a href="#update" aria-controls="profile" data-toggle="tab">UPDATE</a></li>
-                    <li><a href="#delete" aria-controls="profile" data-toggle="tab">DELETE</a></li>
+                    <li  class="active"><a href="#dml-sql" aria-controls="profile" data-toggle="tab">SQL</a></li>
+                    <li><a href="#dml-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
+                    <li><a href="#dml-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
+                    <li><a href="#dml-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
 
-                    <div class="tab-pane active" id="insert">
-                        <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+                    <div class="tab-pane active" id="dml-sql">
+                        <pre class="brush:sql">
+                            INSERT INTO City (id, name) VALUES (1, 'Forest Hill');
+                            INSERT INTO City (id, name) VALUES (2, 'Denver');
 
-                            cache.query(new SqlFieldsQuery("INSERT INTO Person(_key, firstName, " +
-                                "lastName) values (1, 'John', 'Smith'), (5, 'Mary', 'Jones')"));
+
+                            UPDATE City
+                            SET name = 'Foster City'
+                            WHERE id = 2
+
+
+                            DELETE FROM City
+                            WHERE name = 'Foster City'
                         </pre>
                     </div>
-                    <div class="tab-pane" id="update">
+                    <div class="tab-pane" id="dml-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+                            IgniteCache&lt;Long, City&gt; cache = ignite.cache("cityCache");
 
-                            cache.query(new SqlFieldsQuery("UPDATE Person set lastName = ? " +
-                                "WHERE _key >= ?").setArgs("Jones", 2L));
+                            // Insert data
+                            cache.query(new SqlFieldsQuery("INSERT INTO City(id, name) " +
+                                " values (1, 'Forest Hill'), (2, 'Denver')"));
+
+                            // Update data
+                            cache.query(new SqlFieldsQuery("UPDATE City set name = ? " +
+                                "WHERE id = ?").setArgs("Foster City", 2L));
+
+                            // Delete data
+                            cache.query(new SqlFieldsQuery("DELETE FROM City " +
+                                "WHERE id = ?").setArgs(2L));
                         </pre>
                     </div>
-                    <div class="tab-pane" id="delete">
+                    <div class="tab-pane" id="dml-jdbc">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+                            // Populate City table
+                            try (PreparedStatement stmt =
+                            conn.prepareStatement("INSERT INTO City (id, name) VALUES (?, ?)")) {
 
-                            cache.query(new SqlFieldsQuery("DELETE FROM Person " +
-                                "WHERE _key >= ?").setArgs(2L));
+                                stmt.setLong(1, 1L);
+                                stmt.setString(2, "Forest Hill");
+                                stmt.executeUpdate();
+
+                                stmt.setLong(1, 2L);
+                                stmt.setString(2, "Denver");
+                                stmt.executeUpdate();
+                            }
+
+                            // Update City
+                            try (Statement stmt = conn.createStatement()) {
+
+                                stmt.executeUpdate("UPDATE City SET name = 'Foster City' WHERE id = 2");
+                            }
+
+                            // Delete from City
+                            try (Statement stmt = conn.createStatement()) {
+
+                                stmt.executeUpdate("DELETE FROM City WHERE name = 'Foster City'");
+                            }
+
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="dml-odbc">
+                        <pre class="brush:cpp">
+                            SQLHSTMT stmt;
+
+                            // Allocate a statement handle
+                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+
+                            // Populate City table
+                            SQLCHAR query1[] = "INSERT INTO City (id, name) VALUES (?, ?)";
+
+                            ret = SQLPrepare(stmt, query1, static_cast&lt;SQLSMALLINT&gt;(sizeof(query1)));
+
+                            key = 1;
+                            strncpy(name, "Forest Hill", sizeof(name));
+                            ret = SQLExecute(stmt);
+
+                            key = 2;
+                            strncpy(name, "Denver", sizeof(name));
+                            ret = SQLExecute(stmt);
+
+                            // Update City
+                            SQLCHAR query[] = "UPDATE City SET name = 'Foster City' WHERE id = 2"
+
+                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
+
+                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
+
+                            // Delete from City
+                            SQLCHAR query[] = "DELETE FROM City WHERE name = 'Foster City'"
+
+                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
+
+                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
                 </div>
             </div>
             <div class="code-examples">
-                <div class="page-heading">SQL Query Examples</div>
-                <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.The SQL syntax is ANSI-99 compliant which means that you can use
-                    any kind of SQL functions, aggregations, groupings or joins, defined by the specification, as a part of an SQL query.</p>
+                <div class="page-heading">Querying Data</div>
+                <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.
+                    The SQL syntax is ANSI-99 compliant which means that you can use
+                    any kind of SQL functions, aggregations, groupings or joins, defined by the specification,
+                    as a part of an SQL query.
+                </p>
                 <!-- Nav tabs -->
                 <ul id="sql-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#select" aria-controls="home" data-toggle="tab">SQL Query</a></li>
-                    <li><a href="#collocated-join" aria-controls="profile" data-toggle="tab">Collocated Join</a></li>
-                    <li><a href="#non-collocated-join" aria-controls="profile" data-toggle="tab">Non-Collocated Join</a></li>
-                    <li><a href="#sql-fields-query" aria-controls="profile" data-toggle="tab">SQL Fields Query</a></li>
+                    <li class="active"><a href="#query-sql" aria-controls="home" data-toggle="tab">SQL</a></li>
+                    <li><a href="#query-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
+                    <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
+                    <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="select">
-                        <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
-
-                            SqlQuery sql = new SqlQuery(Person.class, "salary &gt; ?");
-
-                            // Find all persons earning more than 1,000.
-                            try (QueryCursor&lt;Entry&lt;Long, Person&gt;&gt; cursor = cache.query(sql.setArgs(1000))) {
-                                for (Entry&lt;Long, Person&gt; e : cursor)
-                                    System.out.println(e.getValue().toString());
-                            }
+                    <div class="tab-pane active" id="query-sql">
+                        <pre class="brush:sql">
+                            SELECT p.name, c.name
+                            FROM Person p, City c
+                            WHERE p.city_id = c.id
                         </pre>
                     </div>
-                    <div class="tab-pane" id="collocated-join">
+                    <div class="tab-pane" id="query-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
+                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("personCache");
 
-                            // SQL join on Person and Organization.
-                            SqlQuery sql = new SqlQuery(Person.class,
-                                "from Person as p, \"orgCache\".Organization as org"
-                                + "where p.orgId = org.id "
-                                + "and lower(org.name) = lower(?)");
-
-                            // Find all persons working for Ignite organization.
-                            try (QueryCursor&lt;Entry&lt;Long, Person&gt;&gt; cursor = cache.query(sql.setArgs("Ignite"))) {
-                                for (Entry&lt;Long, Person&gt; e : cursor)
-                                    System.out.println(e.getValue().toString());
-                            }
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="non-collocated-join">
-                        <pre class="brush:java">
-                            IgniteCache&lt;AffinityKey&lt;Long&gt;, Person&gt; cache = ignite.cache("personCache");
-
-                            // SQL clause query with join over non-collocated data.
-                            String joinSql =
-                                "from Person, \"orgCache\".Organization as org " +
-                                "where Person.orgId = org.id " +
-                                "and lower(org.name) = lower(?)";
-
-                            SqlQuery qry = new SqlQuery&lt;AffinityKey&lt;Long&gt;, Person&gt;(Person.class, joinSql)
-                                .setArgs("ApacheIgnite");
-
-                            // Enable non-collocated joins for the query.
-                            qry.setDistributedJoins(true);
-
-                            // Execute the query to find out employees for specified organization.
-                            System.out.println("Following people are 'ApacheIgnite' employees (distributed    join): " +
-                                cache.query(qry).getAll());
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="sql-fields-query">
-                        <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; cache = ignite.cache("personCache");
-
-                            // Execute query to get names of all employees.
+                            // SQL join on Person and City.
                             SqlFieldsQuery sql = new SqlFieldsQuery(
-                                "select concat(firstName, ' ', lastName) from Person");
+                                "select Person.name, City.name  "
+                                    + "from Person as p, \"cityCache\".City as c where "
+                                    + "p.orgId = c.id ");
 
-                            // Iterate over the result set.
-                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor = cache.query(sql) {
+                            // Execute the query and obtain the query result cursor.
+                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql)) {
                                 for (List&lt;?&gt; row : cursor)
-                                    System.out.println("personName=" + row.get(0));
+                                    System.out.println("Person name & city=" + row.get(0));
                             }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="query-jdbc">
+                        <pre class="brush:java">
+                            try (Statement stmt = conn.createStatement()) {
+                                try (ResultSet rs =
+                                stmt.executeQuery("SELECT p.name, c.name " +
+                                " FROM Person p, City c " +
+                                " WHERE p.city_id = c.id")) {
+
+                                System.out.println("Query results:");
+
+                                while (rs.next())
+                                     System.out.println(">>>    " +
+                                        rs.getString(1) +
+                                        ", " +
+                                        rs.getString(2));
+                                }
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="query-odbc">
+                        <pre class="brush:java">
+                            SQLHSTMT stmt;
+
+                            // Allocate a statement handle
+                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
+
+                            // Get data
+                            SQLCHAR query[] = "SELECT p.name, c.name "
+                              "FROM Person p, City c "
+                              "WHERE p.city_id = c.id";
+
+                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
+
+                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
                 </div>
