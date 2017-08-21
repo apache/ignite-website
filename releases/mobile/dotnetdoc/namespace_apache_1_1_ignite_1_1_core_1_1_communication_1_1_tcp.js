@@ -1,4 +1,0 @@
-var namespace_apache_1_1_ignite_1_1_core_1_1_communication_1_1_tcp =
-[
-    [ "TcpCommunicationSpi", "class_apache_1_1_ignite_1_1_core_1_1_communication_1_1_tcp_1_1_tcp_communication_spi.html", "class_apache_1_1_ignite_1_1_core_1_1_communication_1_1_tcp_1_1_tcp_communication_spi" ]
-];
