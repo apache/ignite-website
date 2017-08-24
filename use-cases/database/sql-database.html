@@ -33,10 +33,10 @@ under the License.
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="canonical" href="https://ignite.apache.org/use-cases/caching/database-caching.html" />
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/database/sql-database.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Caching Use Case - Apache Ignite</title>
+    <title>SQL Database - Apache Ignite</title>
     <link media="all" rel="stylesheet" href="/css/all.css?v=1.8">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
@@ -48,49 +48,58 @@ under the License.
 <div id="wrapper">
     <!--#include virtual="/includes/header.html" -->
 
+
     <main id="main" role="main" class="container">
-        <section id="database-caching" class="page-section">
-            <h1 class="first">Database Caching</h1>
+        <section id="sql-queries" class="page-section">
+            <h1 class="first">SQL Database</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0;">
+                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
                     <p>
-                        Ignite Database Caching enables users to keep the most frequently accessed data in memory,
-                        by either partitioning or replicating it across a cluster of computers.
+                        SQL is still considered to be a mainstream language for non trivial data processing. Nowadays,
+                        the language is no longer a prerogative of relational databases and being supported by
+                        databases and platforms of architectures different from the relational one.
                     </p>
-                    <div class="page-heading">Write-Through & Read-Through</div>
                     <p>
-                        Whenever an update happens in the in-memory cache, Ignite can optionally propagate it
-                        to the underlying database. Also, whenever the data is requested from cache and is not
-                        there, Ignite can automatically load it from the underlying database. Such behavior
-                        is called <code class="text-nowrap">write-through</code> and
-                        <code class="text-nowrap">read-through</code> correspondingly.
+                        Apache Ignite's SQL level of support is so extensive that the platform is widely used as a
+                        full-fledged <b>SQL database</b>. Combining Ignite's SQL capabilities together with its
+                        distributed core you get a horizontally scalable, fault tolerant and always available SQL database.
+                    </p>
+
+                    <div class="page-heading">Performance and Durability</div>
+                    <p>
+                        Data sets as well as indexes can be stored both in memory and on disk thanks to the
+                        <a href="/features/durablememory.html">Durable Memory</a>
+                        architecture. This allows executing distributed SQL operations across different memory layers
+                        achieving in-memory performance with the durability of disk.
+                        If the <a href="/features/persistence.html">disk layer</a>
+                        is disabled Apache Ignite can be used as a pure distributed
+                        <a href="/use-cases/database/in-memory-database.html"><b>in-memory</b> database</a>.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/in_memory_data.png" width="400px" style="float:right;"/>
+                    <img class="img-responsive" src="/images/ignite-distributed-database.png" width="400px" style="float:right;"/>
                 </div>
             </div>
-            <div class="page-heading">Write-Behind</div>
+
+            <div class="page-heading">SQL ANSI-99 Compliance</div>
             <p>
-                In a simple write-through mode each cache put and remove operation will involve a
-                corresponding request to the persistent storage and therefore the overall duration of
-                the cache update might be relatively long. To mitigate such cases, Ignite offers an
-                option to perform an asynchronous persistent store update also known as
-                <code class="text-nowrap">write-behind</code>.
-            </p>
-            <div class="page-heading">Automatic Persistence</div>
-            <p>
-                Ignite ships with its own database schema mapping wizard which provides automatic support for
-                integrating with persistence stores. This utility automatically connects to the underlying database
-                and generates all the required XML OR-mapping configuration and Java domain model POJOs.
-            </p>
-            <div class="page-heading">Data Grid</div>
-            <p>
-                See <a href="/features/datagrid.html" class="text-nowrap" target="_blank"><b>Data Grid</b></a> for more information.
+                Ignite complies with SQL ANSI-99 standard supporting all <b>SQL</b> and <b>DML</b> commands,
+                including SELECT, UPDATE, INSERT, MERGE, DELETE statements and distributed joins. It also provides
+                support for a subset of <b>DDL</b> commands relevant for distributed SQL databases.
             </p>
 
+            <div class="page-heading">Languages and Tools</div>
             <p>
+                You can interact with Apache Ignite using the SQL language via natively developed APIs for Java,
+                .NET and C++, or via the Ignite <b>JDBC</b> or <b>ODBC</b> drivers. This provides a true
+                cross-platform connectivity from an endless number of SQL tools and programming languages.
+            </p>
 
+
+            <p>
+                Check <a href="/features/sql.html">SQL</a> section for more details or start using
+                Ignite as a SQL database referring to
+                <a href="https://apacheignite.readme.io/docs/getting-started-sql" target="_blank">SQL Getting Started Guide</a>
             </p>
         </section>
     </main>

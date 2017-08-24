@@ -1,0 +1,204 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/comparison/ignite-for-rdbms.html" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ignite for RDBMS Users</title>
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1.8">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+
+    <main id="main" role="main" class="container">
+        <section id="sql-queries" class="page-section">
+            <h1 class="first">Ignite for RDBMS Users</h1>
+            <div style="padding:0 0 20px 0;">
+                <p>
+                    Apache Ignite does not require you as a skilled RDBMS user to learn new APIs if you want to
+                    start working with an Ignite cluster. All the data processing and SQL schema definition can
+                    be accomplished with a familiar SQL syntax. Ignite complies with SQL ANSI-99 standard supporting all
+                    <b>SQL</b> and <b>DML</b> commands, including SELECT, UPDATE, INSERT, MERGE, DELETE statements and
+                    distributed joins. It also provides support for a subset of <b>DDL</b> commands relevant for
+                    distributed SQL databases.
+                </p>
+                <p>
+                    Ignite can store data and indexes both in memory and on disk which allows executing distributed SQL
+                    queries across different memory layers achieving the performance and scale of in-memory computing
+                    together with the disk durability and strong consistency in one system. If the persistence is disabled
+                    Ignite can act as a pure <a href="/use-cases/database/in-memory-database.html" target="_blank">
+                    in-memory database</a>.
+                </p>
+            </div>
+
+            <section id="comparison-matrix-section" class="page-section" style="border: none">
+                <table class="comparison-matrix" name="comparison-matrix">
+                    <thead>
+                    <tr><th>Feature</th><th>RDBMS</th><th>Ignite</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Scalability</td>
+                        <td><span class="cross-mark">&#x2717;</span> vertical</td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span> horizontal</b></td>
+                    </tr>
+                    <tr>
+                        <td>Availability</td>
+                        <td><span class="cross-mark">&#x2717;</span> failover only</td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span> high</b></td>
+                    </tr>
+                    <tr>
+                        <td>Consistency</td>
+                        <td><span class="check-mark">&#x2713;</span> strong</td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span> strong</b></td>
+                    </tr>
+                    <tr>
+                        <td>In-Memory</td>
+                        <td><span class="check-mark">&#x2713;</span> caching only</td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span> in-memory store</b></td>
+                    </tr>
+                    <tr>
+                        <td>Persistence</td>
+                        <td><span class="check-mark">&#x2713;</span></td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>SQL</td>
+                        <td><span class="check-mark">&#x2713;</span></td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>Key-Value</td>
+                        <td><span class="cross-mark">&#x2717;</span></td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>Collocated Processing</td>
+                        <td><span class="cross-mark">&#x2717;</span></td>
+                        <td class="highlight-ignite-comparison"><span class="check-mark">&#x2713;</span></b></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="comparison-matrix-mobile" name="comparison-matrix-sm">
+                    <thead>
+                    <tr><th>Scalability</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="cross-mark">&#x2717;</span> vertical</span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span> <b>horizontal</b></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>Availability</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="cross-mark">&#x2717;</span> failover only</span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span> <b>high</b></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>Consistency</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="check-mark">&#x2713;</span> strong</span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span> <b>strong</b></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>In-Memory</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="check-mark">&#x2713;</span> caching only</span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span> <b>in-memory store</b></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>Persistence</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>SQL</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>Key-Value</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="cross-mark">&#x2717;</span></span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    </tbody>
+                    <thead>
+                    <tr><th>Collocated-Processing</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr><td><span class="left">RDBMS</span><span class="right"><span class="cross-mark">&#x2717;</span></span></td></tr>
+                    <tr class="ignite"><td><span class="left"><b>Ignite</b></span><span class="right"><span class="check-mark">&#x2713;</span></span></td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <p>
+                The main difference between Ignite and traditional relational databases is that, first, the memory is
+                treated as a fully functional storage, not just as a caching layer, like most databases do. Second,
+                Ignite is horizontally scalable, highly available and supports both
+                <a href="/features/datagrid.html">key-value</a> APIs and
+                <a href="/collocatedprocessing.html">collocated processing</a> approach.
+            </p>
+
+            <p>
+                Check <a href="/features/sql.html">SQL</a> section for more details or start using
+                Ignite as a SQL database referring to
+                <a href="https://apacheignite.readme.io/docs/getting-started-sql" target="_blank">SQL Getting Started Guide</a>.
+                In addition, learn how Ignite is used for <a href="/use-cases/caching/database-caching.html">
+                relational databases acceleration</a>.
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>

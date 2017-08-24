@@ -33,10 +33,10 @@ under the License.
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="canonical" href="https://ignite.apache.org/use-cases/caching/database-caching.html" />
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/database/in-memory-database.html"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Caching Use Case - Apache Ignite</title>
+    <title>In-Memory Database - Apache Ignite</title>
     <link media="all" rel="stylesheet" href="/css/all.css?v=1.8">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
@@ -49,48 +49,36 @@ under the License.
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
-        <section id="database-caching" class="page-section">
-            <h1 class="first">Database Caching</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0;">
+        <section id="key-value-store" class="page-section">
+            <h1 class="first">In-Memory Database</h1>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Ignite Database Caching enables users to keep the most frequently accessed data in memory,
-                        by either partitioning or replicating it across a cluster of computers.
+                        Apache Ignite can be used as all-in-one <a href="/use-cases/database/distributed-database.html">
+                        distributed database</a> that supports SQL, key-value, compute, machine learning and other
+                        data processing APIs.
                     </p>
-                    <div class="page-heading">Write-Through & Read-Through</div>
                     <p>
-                        Whenever an update happens in the in-memory cache, Ignite can optionally propagate it
-                        to the underlying database. Also, whenever the data is requested from cache and is not
-                        there, Ignite can automatically load it from the underlying database. Such behavior
-                        is called <code class="text-nowrap">write-through</code> and
-                        <code class="text-nowrap">read-through</code> correspondingly.
+                        The database is capable of storing data as well as indexes both in memory and on disk thanks to the
+                        <a href="/features/durablememory.html">Durable Memory</a> architecture.
+                        This allows executing distributed SQL, key-value and other operations across different memory
+                        layers achieving the performance and scale of in-memory computing together with the disk
+                        durability and strong consistency in one system.
+                    </p>
+                    <p>
+                        In the scenarios, when the whole data set and indexes fit in memory and the persistence is disabled
+                        on purpose, Apache Ignite will function as a full-fledged <i>in-memory database</i> supporting
+                        all the existing APIs for a pure in-memory use case.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/in_memory_data.png" width="400px" style="float:right;"/>
+                    <img class="img-responsive" src="/images/ignite-distributed-database.png" width="400px" style="float:right;"/>
                 </div>
             </div>
-            <div class="page-heading">Write-Behind</div>
             <p>
-                In a simple write-through mode each cache put and remove operation will involve a
-                corresponding request to the persistent storage and therefore the overall duration of
-                the cache update might be relatively long. To mitigate such cases, Ignite offers an
-                option to perform an asynchronous persistent store update also known as
-                <code class="text-nowrap">write-behind</code>.
-            </p>
-            <div class="page-heading">Automatic Persistence</div>
-            <p>
-                Ignite ships with its own database schema mapping wizard which provides automatic support for
-                integrating with persistence stores. This utility automatically connects to the underlying database
-                and generates all the required XML OR-mapping configuration and Java domain model POJOs.
-            </p>
-            <div class="page-heading">Data Grid</div>
-            <p>
-                See <a href="/features/datagrid.html" class="text-nowrap" target="_blank"><b>Data Grid</b></a> for more information.
-            </p>
-
-            <p>
-
+                Check <a href="/features/sql.html">SQL</a> and
+                <a href="/features/datagrid.html" class="text-nowrap">Data Grid</a> features sections
+                for more technical details.
             </p>
         </section>
     </main>

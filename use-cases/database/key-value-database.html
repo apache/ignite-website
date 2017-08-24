@@ -1,0 +1,120 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/database/key-value-database.html" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key-Value Database - Apache Ignite</title>
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1.8">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="key-value-store" class="page-section">
+            <h1 class="first">Key-Value Database</h1>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <p>
+                        Regardless of API used in Apache Ignite, when it is time to store data within a distributed
+                        cluster the data will be kept in a form of key-value pairs. The pairs end up in
+                        a key-value store that can be viewed as a distributed partitioned hash map with
+                        every cluster node owning a portion of the overall data set.
+                    </p>
+                    <p>
+                        Apache Ignite fully complies with <a href="/use-cases/caching/jcache-provider.html" target="_blank">
+                        JCache (JSR 107)</a> specification providing extended features on top such as
+                        distributed ACID transactions, scan and continuous queries, collocated processing.
+                    </p>
+                    <p>
+                        This exceptional features coverage made Apache Ignite one of the most widely used <b>key-value
+                        databases</b>. Let's look over its main characteristics.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
+                    <img class="img-responsive" src="/images/ignite-db-cache.png" width="400px" style="float:right;"/>
+                </div>
+                </div>
+
+                <div class="page-heading">Partitioning & Replication</div>
+                <p>
+                    Depending on configuration, Ignite can either partition or replicate data.
+                    Unlike <code>REPLICATED</code> mode, where data is fully replicated across all nodes
+                    in the cluster, in <code>PARTITIONED</code> mode Ignite will equally split the data across
+                    multiple cluster nodes, allowing for storing TBs of data both in memory and on disk.
+                </p>
+                <div class="page-heading">Redundancy</div>
+                <p>
+                    Ignite also allows to configure multiple <b>backup copies</b> to guarantee data resiliency
+                    in case of failures.
+                </p>
+                <div class="page-heading">Consistency</div>
+                <p>
+                    Regardless of which replication scheme is used, Ignite guarantees data consistency across
+                    all cluster members.
+                </p>
+                <div class="page-heading">Performance and Durability</div>
+                <p>
+                    Data can be stored both in RAM and on disk thanks to the
+                    <a href="/features/durablememory.html">Durable Memory</a>
+                    architecture. The data can be persisted in <a href="/features/persistence.html">
+                    Ignite Native Persistence</a> or in a 3rd party database such as RDBMS, NoSQL or Hadoop.
+                    <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Learn</a>
+                    when to use one type of persistence over another.
+                </p>
+                <div class="page-heading">Data Locality</div>
+                <p>
+                    Unlike other key-value databases, Ignite determines data locality using a pluggable hashing algorithm.
+                    Every client can determine which node a key belongs to by plugging it into a hashing function,
+                    without a need for any special mapping servers or name nodes.
+                </p>
+                <p>
+                    Check <a href="/features/datagrid.html" class="text-nowrap"><b>Data Grid</b></a>
+                    for more information.
+                </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
