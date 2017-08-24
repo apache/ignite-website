@@ -61,8 +61,8 @@ under the License.
                         <p>
                             With the Ignite Persistence enabled, you no longer need to keep all the data and indexes in
                             memory or warm it up after a node or cluster restart because the Durable Memory is tightly
-                            coupled with the persistence and treats it as a secondary memory tier.
-                            This implies that if a subset of data or an index is missing in RAM, the Durable Memory will take it from disk.
+                            coupled with persistence and treats it as a secondary memory tier.
+                            This implies that if a subset of data or an index is missing in RAM, the Durable Memory will take it from the disk.
                         </p>
 
                     </div>
@@ -79,12 +79,12 @@ under the License.
                         Apache Ignite can be used as a memory-centric distributed SQL database.</li>
                     <li>No need to have all the data and indexes in memory. The Ignite Persistence allows storing a
                         superset of data on disk and only most frequently used subsets in memory.</li>
-                    <li>Instantaneous cluster restarts. If the whole cluster goes down there is no need to warm up the
+                    <li>Instantaneous cluster restarts. If the whole cluster goes down, there is no need to warm up the
                         memory by preloading data from the Ignite Persistence.
                         The cluster becomes fully operational once all the cluster nodes are interconnected with each other.</li>
                     <li>Data and indexes are stored in a similar format both in memory and on disk that helps to avoid
                         expensive transformations while the data sets are being moved between memory and disk.</li>
-                    <li>An ability to create full and incremental cluster snapshots by plugging-in 3rd party solutions.</li>
+                    <li>Ability to create full and incremental cluster snapshots by plugging-in 3rd party solutions.</li>
                 </ul>
 
                 <div class="page-heading">Write-Ahead Log</div>
@@ -101,19 +101,19 @@ under the License.
                     will be treated as an active WAL file and will accept all the updates coming from the application side.
                 </p>
                 <p>
-                    It is worth mentioning, that a cluster can always be recovered to the latest successfully committed
+                    It is worth mentioning that a cluster can always be recovered to the latest successfully committed
                     transaction in case of a crash or restart relying on the content of the WAL.
                 </p>
 
                 <div class="page-heading">Checkpointing</div>
                 <p>
-                    Due to the nature of the WAL, it constantly grows and it would take significant time to
+                    Due to the nature of the WAL, it constantly grows, and it would take a significant amount of time to
                     recover the cluster by going over the WAL from its head to tail. To mitigate this, the Durable Memory
-                    and Ignite Native Persistence support a checkpointing process.
+                    and the Ignite Native Persistence support a checkpointing process.
                 </p>
                 <p>
-                    The checkpointing is the process of copying dirty pages from memory to partition files on disk.
-                    A dirty page is a page that was updated in memory but was not written to the respective partition
+                    Checkpointing is the process of copying dirty pages from the memory to the partition files on disk.
+                    A dirty page is a page that was updated in the memory but was not written to the respective partition
                     file on disk (an update was just appended to the WAL).
                 </p>
                 <p>
