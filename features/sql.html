@@ -137,6 +137,7 @@ under the License.
                     <li><a href="#ddl-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
                     <li><a href="#ddl-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
                     <li><a href="#ddl-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
+                    <li><a href="#ddl-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -219,6 +220,26 @@ under the License.
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
+                    <div class="tab-pane" id="ddl-cpp">
+                        <pre class="brush:cpp">
+                            Cache&lt;CityKey, City&gt; cache = ignite.GetCache&lt;CityKey, City&gt;("cityCache");
+
+                            // Create table based on REPLICATED template
+                            SqlFieldsQuery query("CREATE TABLE City ("
+                                " id LONG PRIMARY KEY, name VARCHAR)"
+                                " WITH \"template=replicated\"");
+
+                            cache.Query(query);
+
+                            // Create table based on PARTITIONED template with one backup
+                            query.SetSql("CREATE TABLE Person ("
+                                " id LONG, name VARCHAR, city_id LONG,"
+                                " PRIMARY KEY (id, city_id))"
+                                " WITH \"backups=1, affinityKey=city_id\"");
+
+                            cache.Query(query);
+                        </pre>
+                    </div>
                 </div>
 
                 <p> In the above example, for the Person table, Ignite creates a distributed cache with 1 backup of data and city_id as the affinity key.
@@ -241,6 +262,7 @@ under the License.
                     <li><a href="#dml-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
                     <li><a href="#dml-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
                     <li><a href="#dml-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
+                    <li><a href="#dml-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -342,6 +364,26 @@ under the License.
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
+                    <div class="tab-pane" id="dml-cpp">
+                        <pre class="brush:cpp">
+                            Cache&lt;int64_t, City&gt; cache = ignite.GetCache&lt;int64_t, City&gt;("cityCache");
+
+                            // Insert data
+                            cache.Query(SqlFieldsQuery("INSERT INTO City(id, name) "
+                                " values (1, 'Forest Hill'), (2, 'Denver')"));
+
+                            // Update data
+                            query = SqlFieldsQuery("UPDATE City set name = ? WHERE id = ?");
+                            query.AddArgument("Foster City");
+                            query.AddArgument(2LL);
+                            cache.Query(query);
+
+                            // Delete data
+                            query = SqlFieldsQuery("DELETE FROM City WHERE id = ?");
+                            query.AddArgument(2LL);
+                            cache.Query(query);
+                        </pre>
+                    </div>
                 </div>
                 <p>
                     See <a href="https://apacheignite.readme.io/docs/dml" target="_blank">Ignite DML documentation</a> for more details.
@@ -360,6 +402,7 @@ under the License.
                     <li><a href="#query-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
                     <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
                     <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
+                    <li><a href="#query-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -408,7 +451,7 @@ under the License.
                         </pre>
                     </div>
                     <div class="tab-pane" id="query-odbc">
-                        <pre class="brush:java">
+                        <pre class="brush:cpp">
                             SQLHSTMT stmt;
 
                             // Allocate a statement handle
@@ -422,6 +465,27 @@ under the License.
                             SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
 
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="query-cpp">
+                        <pre class="brush:cpp">
+                            Cache&lt;int64_t, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("personCache");
+
+                            // SQL join on Person and City.
+                            SqlFieldsQuery sql("select Person.name, City.name "
+                                    "from Person as p, \"cityCache\".City as c where "
+                                    "p.orgId = c.id");
+
+                            // Execute the query and obtain the query result cursor.
+                            FieldsQueryCursor cursor = personCache.Query(sql));
+
+                            while (cursor.HasNext())
+                            {
+                                QueryFieldsRow row = cursor.GetNext();
+                            
+                                std::cout &lt;&lt; "Person: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; ", "
+                                          &lt;&lt; "City: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; std::endl;
+                            }
                         </pre>
                     </div>
                 </div>
