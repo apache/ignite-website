@@ -136,8 +136,8 @@ under the License.
                     <li  class="active"><a href="#ddl-sql" aria-controls="profile" data-toggle="tab">SQL</a></li>
                     <li><a href="#ddl-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
                     <li><a href="#ddl-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                    <li><a href="#ddl-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
-                    <li><a href="#ddl-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
+                    <!--<li><a href="#ddl-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
+                    <li><a href="#ddl-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>-->
                 </ul>
 
                 <!-- Tab panes -->
@@ -154,7 +154,7 @@ under the License.
                                 WITH "backups=1, affinityKey=city_id"
                         </pre>
                     </div>
-                    <div class="tab-pane" id="ddl-java">
+                    <!--<div class="tab-pane" id="ddl-java">
                         <pre class="brush:java">
                             IgniteCache&lt;CityKey, City&gt; cache = ignite.cache("cityCache");
 
@@ -176,7 +176,7 @@ under the License.
                             cache.query(query).getAll();
 
                         </pre>
-                    </div>
+                    </div>-->
                     <div class="tab-pane" id="ddl-jdbc">
                         <pre class="brush:java">
                             // Create table
@@ -220,7 +220,7 @@ under the License.
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
-                    <div class="tab-pane" id="ddl-cpp">
+                    <!--<div class="tab-pane" id="ddl-cpp">
                         <pre class="brush:cpp">
                             Cache&lt;CityKey, City&gt; cache = ignite.GetCache&lt;CityKey, City&gt;("cityCache");
 
@@ -239,7 +239,7 @@ under the License.
 
                             cache.Query(query);
                         </pre>
-                    </div>
+                    </div>-->
                 </div>
 
                 <p> In the above example, for the Person table, Ignite creates a distributed cache with 1 backup of data and city_id as the affinity key.
@@ -285,7 +285,7 @@ under the License.
                     </div>
                     <div class="tab-pane" id="dml-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, City&gt; cache = ignite.cache("cityCache");
+                            IgniteCache&lt;Long, City&gt; cache = ignite.cache("SQL_PUBLIC_CITY");
 
                             // Insert data
                             cache.query(new SqlFieldsQuery("INSERT INTO City(id, name) " +
@@ -366,7 +366,7 @@ under the License.
                     </div>
                     <div class="tab-pane" id="dml-cpp">
                         <pre class="brush:cpp">
-                            Cache&lt;int64_t, City&gt; cache = ignite.GetCache&lt;int64_t, City&gt;("cityCache");
+                            Cache&lt;int64_t, City&gt; cache = ignite.GetCache&lt;int64_t, City&gt;("SQL_PUBLIC_CITY");
 
                             // Insert data
                             cache.Query(SqlFieldsQuery("INSERT INTO City(id, name) "
@@ -416,7 +416,7 @@ under the License.
                     </div>
                     <div class="tab-pane" id="query-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("personCache");
+                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("SQL_PUBLIC_PERSON");
 
                             // SQL join on Person and City.
                             SqlFieldsQuery sql = new SqlFieldsQuery(
@@ -469,7 +469,7 @@ under the License.
                     </div>
                     <div class="tab-pane" id="query-cpp">
                         <pre class="brush:cpp">
-                            Cache&lt;int64_t, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("personCache");
+                            Cache&lt;int64_t, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
 
                             // SQL join on Person and City.
                             SqlFieldsQuery sql("select Person.name, City.name "
