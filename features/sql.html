@@ -416,13 +416,13 @@ under the License.
                     </div>
                     <div class="tab-pane" id="query-java">
                         <pre class="brush:java">
-                            IgniteCache&lt;Long, Person&gt; personCache = ignite.cache("SQL_PUBLIC_PERSON");
+                            IgniteCache&lt;PersonKey, Person&gt; personCache = ignite.cache("SQL_PUBLIC_PERSON");
 
                             // SQL join on Person and City.
                             SqlFieldsQuery sql = new SqlFieldsQuery(
-                                "select Person.name, City.name  "
-                                    + "from Person as p, \"cityCache\".City as c where "
-                                    + "p.orgId = c.id ");
+                            "SELECT p.name, c.name  "
+                                + "FROM Person as p, City as c "
+                                + "WHERE p.city_id = c.id");
 
                             // Execute the query and obtain the query result cursor.
                             try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql)) {
@@ -469,12 +469,12 @@ under the License.
                     </div>
                     <div class="tab-pane" id="query-cpp">
                         <pre class="brush:cpp">
-                            Cache&lt;int64_t, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
+                            Cache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
 
                             // SQL join on Person and City.
-                            SqlFieldsQuery sql("select Person.name, City.name "
-                                    "from Person as p, \"cityCache\".City as c where "
-                                    "p.orgId = c.id");
+                            SqlFieldsQuery sql("SELECT p.name, c.name "
+                                    "FROM Person as p, City as c "
+                                    "WHERE p.city_id = c.id");
 
                             // Execute the query and obtain the query result cursor.
                             FieldsQueryCursor cursor = personCache.Query(sql));
