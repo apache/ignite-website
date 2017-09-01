@@ -421,6 +421,7 @@ under the License.
                     <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
                     <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
                     <li><a href="#query-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
+                    <li><a href="#query-dotnet" aria-controls="profile" data-toggle="tab">.NET API</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -504,6 +505,23 @@ under the License.
                                 std::cout &lt;&lt; "Person: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; ", "
                                           &lt;&lt; "City: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; std::endl;
                             }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="query-dotnet">
+                        <pre class="brush:csharp">
+							ICache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;PersonKey, Person&gt;("SQL_PUBLIC_PERSON");
+
+							// SQL join on Person and City.
+							SqlFieldsQuery sql = new SqlFieldsQuery(
+							"SELECT p.name, c.name  "
+								+ "FROM Person as p, City as c "
+								+ "WHERE p.city_id = c.id");
+
+							// Execute the query and obtain the query result cursor.
+							foreach (IList row in personCache.QueryFields(sql))
+							{
+								Console.WriteLine($"Person '{row[0]}' from city '{row[1]}'");
+							}
                         </pre>
                     </div>
                 </div>
