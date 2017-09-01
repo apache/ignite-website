@@ -365,6 +365,23 @@ under the License.
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
+                    <div class="tab-pane" id="dml-dotnet">
+                        <pre class="brush:csharp">
+                            ICache&lt;long, City&gt; cache = ignite.GetCache&lt;long, City&gt;("SQL_PUBLIC_CITY");
+
+                            // Insert data
+                            cache.QueryFields(new SqlFieldsQuery("INSERT INTO City(id, name) " +
+                                " values (1, 'Forest Hill'), (2, 'Denver')"));
+
+                            // Update data
+                            cache.QueryFields(new SqlFieldsQuery("UPDATE City set name = ? " +
+                                "WHERE id = ?", "Foster City", 2));
+
+                            // Delete data
+                            cache.QueryFields(new SqlFieldsQuery("DELETE FROM City " +
+                                "WHERE id = ?", 2));
+                        </pre>
+                    </div>
                     <div class="tab-pane" id="dml-cpp">
                         <pre class="brush:cpp">
                             Cache&lt;int64_t, City&gt; cache = ignite.GetCache&lt;int64_t, City&gt;("SQL_PUBLIC_CITY");
@@ -383,23 +400,6 @@ under the License.
                             query = SqlFieldsQuery("DELETE FROM City WHERE id = ?");
                             query.AddArgument(2LL);
                             cache.Query(query);
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-dotnet">
-                        <pre class="brush:csharp">
-                            ICache&lt;long, City&gt; cache = ignite.GetCache&lt;long, City&gt;("SQL_PUBLIC_CITY");
-
-                            // Insert data
-                            cache.QueryFields(new SqlFieldsQuery("INSERT INTO City(id, name) " +
-                                " values (1, 'Forest Hill'), (2, 'Denver')"));
-
-                            // Update data
-                            cache.QueryFields(new SqlFieldsQuery("UPDATE City set name = ? " +
-                                "WHERE id = ?", "Foster City", 2));
-
-                            // Delete data
-                            cache.QueryFields(new SqlFieldsQuery("DELETE FROM City " +
-                                "WHERE id = ?", 2));
                         </pre>
                     </div>
                 </div>
@@ -486,6 +486,23 @@ under the License.
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
                     </div>
+                    <div class="tab-pane" id="query-dotnet">
+                        <pre class="brush:csharp">
+							ICache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;PersonKey, Person&gt;("SQL_PUBLIC_PERSON");
+
+							// SQL join on Person and City.
+							SqlFieldsQuery sql = new SqlFieldsQuery(
+							"SELECT p.name, c.name  "
+								+ "FROM Person as p, City as c "
+								+ "WHERE p.city_id = c.id");
+
+							// Execute the query and obtain the query result cursor.
+							foreach (IList row in personCache.QueryFields(sql))
+							{
+								Console.WriteLine($"Person '{row[0]}' from city '{row[1]}'");
+							}
+                        </pre>
+                    </div>
                     <div class="tab-pane" id="query-cpp">
                         <pre class="brush:cpp">
                             Cache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
@@ -505,23 +522,6 @@ under the License.
                                 std::cout &lt;&lt; "Person: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; ", "
                                           &lt;&lt; "City: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; std::endl;
                             }
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="query-dotnet">
-                        <pre class="brush:csharp">
-							ICache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;PersonKey, Person&gt;("SQL_PUBLIC_PERSON");
-
-							// SQL join on Person and City.
-							SqlFieldsQuery sql = new SqlFieldsQuery(
-							"SELECT p.name, c.name  "
-								+ "FROM Person as p, City as c "
-								+ "WHERE p.city_id = c.id");
-
-							// Execute the query and obtain the query result cursor.
-							foreach (IList row in personCache.QueryFields(sql))
-							{
-								Console.WriteLine($"Person '{row[0]}' from city '{row[1]}'");
-							}
                         </pre>
                     </div>
                 </div>
