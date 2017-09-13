@@ -40,7 +40,7 @@ under the License.
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>What is Apache Ignite</title>
-    <meta name="description" content="Apache Ignite is an elastic, horizontally scalable distributed system that supports adding and removing cluster nodes on demand.">
+    <meta name="description" content="Apache Ignite components and facts: in-memory and persistent modes, distributed SQL database, in-memory data grid, ACID transactions, collocated processing, and more...">
     <link media="all" rel="stylesheet" href="/css/all.css?v=1.11">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
@@ -71,38 +71,39 @@ under the License.
                 <h3>Durable Memory</h3>
                 <p>
                     Ignite's durable memory component treats RAM not just as a caching layer but as a complete fully functional storage layer.
-                    This means that users can turn the persistence on and off as needed. If the persistence is off, then Ignite, like always,
-                    can act as a distributed <strong>in-memory database</strong> or as an <strong>in-memory data grid</strong>, depending on whether you prefer to use SQL or key-value APIs.
-                    If the persistence is turned on, then Ignite becomes a distributed, horizontally <strong>scalable database</strong> that guarantees full data consistency and is
+                    This means that users can turn the persistence on and off as needed. If the persistence is off, then Ignite
+                    can act as a distributed <nobr><i><strong>in-memory database</strong></i></nobr> or <nobr><i><strong>in-memory data grid</strong></i></nobr>,
+                    depending on whether you prefer to use SQL or key-value APIs. If the persistence is turned on, then Ignite becomes a distributed,
+                    <nobr><i><strong>horizontally scalable database</strong></i></nobr> that guarantees full data consistency and is
                     resilient to full cluster failures.
 
                 </p>
 
                 <h3>Complete SQL Support</h3>
                 <p>
-                    In addition to SQL querying, Ignite provides support for DDL and DML, allowing users to interact with Ignite using pure SQL without writing any code.
-                    This means that users can create tables and indexes as well as insert, update, and query data using only SQL. Having such complete SQL support makes Ignite a one-of-a-kind <strong>distributed SQL database</strong>.
+                    Ignite provides full support for SQL, DDL and DML, allowing users to interact with Ignite using pure SQL without writing any code.
+                    This means that users can create tables and indexes as well as insert, update, and query data using only SQL. Having such complete SQL support makes Ignite a one-of-a-kind
+                    <i><strong>distributed SQL database</strong></i>.
                 </p>
 
 
                 <h3>ACID Compliance</h3>
                 <p>
-                    Data stored in Ignite is ACID-compliant both in memory and on disk, making Ignite a <strong>strongly consistent</strong> system.
-                    Ignite transactions work across the network and can span multiple servers. This makes Ignite stand out from the eventually c
-                    onsistent NoSQL systems that hardly support any type of transactions.
+                    Data stored in Ignite is ACID-compliant both in memory and on disk, making Ignite a <i><strong>strongly consistent</strong></i> system.
+                    Ignite transactions work across the network and can span multiple servers.
                 </p>
 
                 <h3>Key-Value</h3>
                 <p>
-                    Ignite's data grid component is an in-memory <strong>distributed key-value store</strong> that that can be viewed as a
+                    Ignite's data grid component is an in-memory <i><strong>distributed key-value store</strong></i> that that can be viewed as a
                     distributed partitioned hash map with every cluster node owning a portion of the overall data. Ignite data grid can linearly scale to hundreds of node.
                 </p>
 
                 <h3>Collocated Processing</h3>
                 <p>
-                    Most traditional databases work in a client-server fashion, meaning that data must be brought to the client side for processing.
-                    This approach requires lots of data movement from servers to clients and generally does not scale. Ignite, on the other hand, allows for sending computations to the data, moving only the lightweight compute functions across the network.
-                    As a result, Ignite scales better and minimizes data movement. When <i><strong>collocated</strong></i>, all the data processing happens locally on the node that stores the data, and only the result is brought back to the user.
+                    Most traditional databases work in a client-server fashion, meaning that data must be brought to the client side for processing. This approach requires
+                    lots of data movement from servers to clients and generally does not scale. Ignite, on the other hand, allows for sending light-weight computations to the data,
+                    i.e. <i><strong>collocating</strong></i> computations with data. As a result, Ignite scales better and minimizes data movement.
                 </p>
 
                 <h3>Scalability and Durability</h3>
@@ -128,7 +129,7 @@ under the License.
                 persistence can be disabled and Ignite can act as a pure distributed in-memory database, with strong
                 support for SQL and distributed joins.
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/distributed-sql"></a></p><br/><br/>
+            <br/><br/>
 
             <h2>Is Ignite an in-memory data grid (IMDG)?</h2>
             <p>
@@ -136,7 +137,15 @@ under the License.
                 in-memory mode or with Ignite native persistence. It can also integrate with any 3rd party databases,
                 including any RDBMS or NoSQL stores.
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/data-grid"></a></p><br/><br/>
+            <br/><br/>
+
+            <h2>Is Ignite a persistent or pure in-memory storage?</h2>
+            <p>
+                <strong>Both</strong>. Native persistence in Ignite can be turned on and off. This allows Ignite users
+                to store smaller operational data sets in-memory only, and larger data sets on disk, using memory as
+                a caching layer for better performance.
+            </p>
+            <br/><br/>
 
             <h2>Is Ignite a distributed database?</h2>
             <p>
@@ -145,14 +154,7 @@ under the License.
                 controls how data is partitioned, however, users can plugin their own distribution (affinity) functions
                 and collocate various pieces of data together for efficiency.
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/distributed-sql"></a></p><br/><br/>
-
-            <h2>Does Ignite have persistance?</h2>
-            <p>
-                <strong>Yes</strong>. Ignite can work in pure in-memory mode or as a distributed, horizontally scalable database that guarantees full data consistency and is
-                resilient to full cluster failures.
-            </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/distributed-sql"></a></p><br/><br/>
+            <br/><br/>
 
             <h2>Is Ignite an SQL database?</h2>
             <p>
@@ -165,7 +167,7 @@ under the License.
                 Essentially, Ignite purposely does not support any constraints that would entail a cluster broadcast
                 message for each update and significantly hurt performance and scalability of the system.
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/indexes"></a></p><br/><br/>
+            <br/><br/>
 
             <h2>Is Ignite a transactional database?</h2>
             <p>
@@ -173,19 +175,20 @@ under the License.
                 Ignite also supports cross-partition transactions, which means that transactions can span keys
                 residing in different partitions on different servers.
             </p>
+            <br/><br/>
 
             <p>
                 At SQL level Ignite supports atomic, but not yet transactional consistency. Ignite community plans
                 to implement SQL transactions in version 2.3.
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/sql-queries#known-limitations"></a></p><br/><br/>
+            <br/><br/>
 
             <h2>Is Ignite a key-value store?</h2>
             <p>
                 <strong>Yes</strong>. Ignite provides a feature rich key-value API, that is JCache (JSR-107) compliant
                 and supports Java, C++, <nobr>and .NET.</nobr>
             </p>
-            <p><a href="https://apacheignite.readme.io/v2.1/docs/data-grid"></a></p><br/><br/>
+            <p><a href="https://apacheignite.readme.io/docs/data-grid"></a></p><br/><br/>
 
             <h2>Book</h2>
             <p>Learn even more from <a href="http://a.co/h4MBi1v" target="_blank">High-Performance in-memory computing with Apache Ignite</a> book.</p>
