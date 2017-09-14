@@ -39,10 +39,11 @@ under the License.
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <meta name="description" content="Ignite In-Memory Data Grid is a distributed transactional store that enables storing data in-memory and on-disk and supports key-value and SQL APIs"/>
     <title>In-Memory Data Grid - Apache Ignite</title>
-    <link media="all" rel="stylesheet" href="/css/all.css?v=1.11">
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1.11"/>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'/>
 
     <!--#include virtual="/includes/sh.html" -->
 </head>
@@ -56,9 +57,9 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Ignite Data Grid is a distributed key-value store that
-                        enables storing data both in memory and on disk within distributed clusters and provides extensive
-                        key-value APIs. Ignite Data Grid can be viewed as a distributed partitioned hash map with every
+                        Ignite Data Grid is a distributed, transactional key-value store. Unlike other
+                        in-memory data grids (IMDG), Ignite enables storing data both, in memory and on disk.
+                        Ignite Data Grid can be viewed as a distributed partitioned hash map with every
                         cluster node owning a portion of the overall data. This way the more cluster nodes we add, the
                         more data we can cache.
                     </p>
@@ -71,12 +72,21 @@ under the License.
                         atomic data in distributed clusters today. We know it because we constantly benchmark it ourselves.
                     </p>
                     <p>
-                        Data along with indexes can be persisted in <a href="/features/persistence.html" target="_blank">
-                        Ignite Native Persistence</a> or in a 3rd party database such as RDBMS, NoSQL or Hadoop. If a
-                        3rd party database is used then Ignite can significantly accelerate performance by storing
-                        a full copy of data in memory.
-                        <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Learn more</a>
-                        when to use one type of persistence over another.
+                        The data in the data grid can be stored only in memory, or can also be persisted to disk.
+                        If <a href="/features/persistence.html" target="_blank">Ignite native persistence</a> is enabled,
+                        then data and indexes will be persisted natively by Ignite on every cluster node. In this case,
+                        memory only serves as a smaller caching layer of the overall persisted data set. All queries and transactions
+                        span the whole data set stored on disk.
+                    </p>
+                    <p>
+                        The in-memory data grid can also improve performance and scalability by integrating with existing 3rd party
+                        databases, like RDBMS, NoSQL, or Hadoop-based storages. This approach does not require
+                        rip-and-replace of the existing data, but has its limitations. For example, SQL or scan queries will only include the
+                        results stored in memory, and not in the external database, since Ignite does not have any knowledge of the external data.
+                    </p>
+                    <p>
+                        <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Read more</a>
+                        about different types of persistence in Ignite.
                     </p>
 
                     <div class="videos">
@@ -255,9 +265,10 @@ under the License.
                         <td class="left">Key-Value Store</td>
                         <td>
                             <p>
-                                Ignite data grid is an <code>in-memory key-value store</code> which can be viewed as a
-                                distributed partitioned hash map, with every cluster node owning a portion of the overall
-                                data. This way the more cluster nodes we add, the more data we can cache.
+                                Ignite data grid is a <code>key-value store</code> which can store data both, in-memory
+                                and on-disk. It can be viewed as a distributed partitioned hash map, with every cluster
+                                node owning a portion of the overall data. This way the more cluster nodes we add,
+                                the more data we can store.
                             </p>
                             <p>
                                 Unlike other key-value stores, Ignite determines data locality using a pluggable hashing
@@ -266,6 +277,34 @@ under the License.
                             </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/data-grid" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Durable Memory</td>
+                        <td>
+                            <p>
+                                Ignite <code>Durable Memory</code> allows storing and processing data and indexes
+                                both, in memory and on disk. The in-memory data, including indexes, is always
+                                stored and managed <code>off-heap</code>, completely removing any type of Garbage
+                                Collection overhead.
+                            </p>
+                            <div class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/durable-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Native Persistence</td>
+                        <td>
+                            <p>
+                                Ignite <code>Native Persistence</code> is a distributed ACID and SQL-compliant disk
+                                store that transparently integrates with Ignite's Durable Memory as an optional
+                                persistence layer, storing data and indexes on SSD, Flash, 3D XPoint, or any other
+                                types of storages.
+                            </p>
+                            <div class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -296,9 +335,9 @@ under the License.
                         <td>
                             <p>
                                 Depending on the configuration, Ignite can either <i>partition</i> or <i>replicate</i>
-                                data in memory. Unlike <code>REPLICATED</code> mode, where data is fully replicated across
+                                data. Unlike <code>REPLICATED</code> mode, where data is fully replicated across
                                 all nodes in the cluster, in <code>PARTITIONED</code> mode Ignite will equally split the data
-                                across multiple cluster nodes, allowing for caching TBs of data in memory.
+                                across multiple cluster nodes.
                             </p>
                             <p>
                                 Ignite also allows to configure multiple <b>backup copies</b> to guarantee data resiliency
@@ -341,59 +380,6 @@ under the License.
                             </p>
                             <div class="page-links">
                                 <a href="http://apacheignite.readme.io/docs/near-caches" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Durable Memory</td>
-                        <td>
-                            <p>
-                                Apache Ignite <code>Durable Memory</code> allows storing and processing data and indexes
-                                both in memory and on disk when the Ignite Native Persistence feature is enabled.
-                            </p>
-                            <div class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/durable-memory" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Ignite Native Persistence</td>
-                        <td>
-                            <p>
-                                <code>Ignite Native Persistence</code> is a distributed ACID and SQL-compliant disk
-                                store that transparently integrates with Ignite's Durable Memory as an optional
-                                disk layer storing data and indexes on SSD, Flash, 3D XPoint, and other types of
-                                non-volatile storages.
-                            </p>
-                            <div class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="features-left">Off-Heap Indexes</td>
-                        <td>
-                            <p>
-                                Ignite stores query indexes off-heap memory. For every unique index that is declared in an SQL schema, Apache Ignite instantiates and manages a dedicated B+ tree instance.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/page-memory#section-b-tree-and-index-page" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Binary Protocol</td>
-                        <td>
-                            <p>
-                                Apache Ignite stores data in caches as <code>BinaryObjects</code> that allows you to:
-                            </p>
-                            <ul class="page-list">
-                                <li>Read a serialized object's field without full object deserialization.</li>
-                                <li>Dynamically change  an object's structure.</li>
-                                <li>Dynamically create an object.</li>
-                            </ul>
-                            <div  class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/binary-marshaller" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -474,7 +460,7 @@ under the License.
                         </td>
                         <td>
                             <p>
-                                Ignite can automatically integrate with external databases - RDBMS, NoSQL, and HDFS.
+                                Ignite can automatically integrate with external databases, like RDBMS, NoSQL, HDFS and others.
                             </p>
                             <div  class="page-links">
                                 <a href="https://apacheignite.readme.io/docs/3rd-party-store" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
@@ -511,17 +497,6 @@ under the License.
                             </p>
                             <div  class="page-links">
                                 <a href="https://apacheignite.readme.io/docs/3rd-party-store#section-write-behind-caching" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Automatic Persistence</td>
-                        <td>
-                            <p>
-                                Automatically connect to the underlying database and generate XML OR-mapping configuration and Java domain model POJOs.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-tools.readme.io/docs/automatic-rdbms-integration" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -596,6 +571,22 @@ under the License.
                             <p></p> &nbsp;
                             <div  class="page-links">
                                 <a href="https://apacheignite-mix.readme.io/docs/starting-inside-an-osgi-container" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="left">Binary Protocol</td>
+                        <td>
+                            <p>
+                                Apache Ignite stores data in caches as <code>BinaryObjects</code> that allows you to:
+                            </p>
+                            <ul class="page-list">
+                                <li>Read a serialized object's field without full object deserialization.</li>
+                                <li>Dynamically change  an object's structure.</li>
+                                <li>Dynamically create an object.</li>
+                            </ul>
+                            <div  class="page-links">
+                                <a href="https://apacheignite.readme.io/docs/binary-marshaller" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </td>
                     </tr>
