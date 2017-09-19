@@ -1,0 +1,25 @@
+var interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services =
+[
+    [ "Cancel", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a14d09175ecd93860244405e54bb35ef3", null ],
+    [ "CancelAll", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#aff27eac07f81706f94d1745568c770b7", null ],
+    [ "CancelAllAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a42f0507b85131e44ba2de4a1b569e041", null ],
+    [ "CancelAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a4490fb1db35e6d994ddf8edb305718e4", null ],
+    [ "Deploy", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#aa3971032ff01d7253b4ab57451004cde", null ],
+    [ "DeployAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a83b219ed8ba97ce2261dc47960b23e26", null ],
+    [ "DeployClusterSingleton", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#ae10b3f706877f59d9a64d702f5e9f54f", null ],
+    [ "DeployClusterSingletonAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a68c33f037459d168c5ef7fd8356ba421", null ],
+    [ "DeployKeyAffinitySingleton< TK >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a13ef580d9bc75346f7a8f1a1f2e2d35f", null ],
+    [ "DeployKeyAffinitySingletonAsync< TK >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#abcbb740f9ff4261bca3d996927ad1ee3", null ],
+    [ "DeployMultiple", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#ad733ca0889ed691ba11b0a5d98ca47e5", null ],
+    [ "DeployMultipleAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#ad71471f1e367d890c49cbc4fb3c827be", null ],
+    [ "DeployNodeSingleton", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a67e78b68c17f196c57a9401c255c98ec", null ],
+    [ "DeployNodeSingletonAsync", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#ac1e98d94522525b267826652d3ded701", null ],
+    [ "GetService< T >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#aa8e6038f969bfc1f3332d8866dbf93b5", null ],
+    [ "GetServiceDescriptors", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a3e5828f0acb10758c94f491613e01163", null ],
+    [ "GetServiceProxy< T >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#add5e3bbf61327b7299f3d4bc2cc59d67", null ],
+    [ "GetServiceProxy< T >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#af8259b480d8c4890ce4ea05998a135db", null ],
+    [ "GetServices< T >", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#abc9c8428cc2f6c8cbf61530caceefc10", null ],
+    [ "WithKeepBinary", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a0291d659c43e7e18514f1a7ee282a803", null ],
+    [ "WithServerKeepBinary", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a92ba7709d6d2374b54d0433fdae89b35", null ],
+    [ "ClusterGroup", "interface_apache_1_1_ignite_1_1_core_1_1_services_1_1_i_services.html#a3eeea0978b7ff71ca04cd5604fda42c4", null ]
+];
