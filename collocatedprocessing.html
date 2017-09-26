@@ -62,7 +62,7 @@ under the License.
                         network is the most expensive operation in a distributed system.
                     </p>
                     <p>
-                        A much more scalable approach is <b>collocated processing</b> that reverses the flow by bringing
+                        A much more scalable approach is <code>collocated</code> processing that reverses the flow by bringing
                         the computations to the servers where the data actually resides. This approach allows you to
                         execute advanced logic or distributed SQL with JOINs exactly where the data is stored avoiding
                         expensive serialization and network trips.
@@ -75,25 +75,19 @@ under the License.
 
             <div class="page-heading">Usage Example</div>
             <p>
-                Let's assume that a blizzard is approaching New York City. You, as a telecommunication company has to warn
-                all the people sending a message to everyone with precise instructions on how to behave during such
-                weather conditions. There are around 8 million New Yorkers in your database that have to receive
-                the text message.
+                Let's assume that a blizzard is approaching New York. As a telecommunication company, you have to
+                send a warning text message to 8 million New Yorkers.
+                With the client-server approach the company has to move all <nobr>8 million (!)</nobr> records
+                from the database to the client text messaging application, which does not scale.
             </p>
             <p>
-                With the client-server approach the company has to connect to the database, move all 8 million (!) records
-                from there to a client application that will text to everyone. This is highly inefficient that wastes
-                network and computational resources of company's IT infrastructure.
-            </p>
-            <p>
-                However, if the company initially collocates all the cities it covers with the people who live there then
-                it can send a single computation (!) to the cluster node that stores information about all New Yorkers
-                and send the text message from there. This approach avoids 8 million records movement over the network
-                and helps utilizing cluster resources for computation needs. That's the collocated processing in action!
+                A much more efficient approach would be to send the text-messaging logic to the cluster node responsible
+                for storing the New York residents. This approach moves only 1 computation instead of 8 million records
+                across the network, and performs a lot better.
             </p>
 
             <p>
-                Code snippet below shows a way how this computation might look like:
+                Here is an example of how this logic might look like:
             </p>
             <!--<ul id="compute-example" class="nav nav-tabs">-->
                 <!--<li  class="active"><a href="#compute-task" aria-controls="profile" data-toggle="tab">Message Broadcasting Logic</a></li>-->
