@@ -55,16 +55,22 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
                     <p>
-                        Ignite comes with ANSI-99 compliant, horizontally scalable and fault tolerant
-                        <nobr><code>distributed SQL database</code></nobr>. The distribution is provided either by
+                        Apache Ignite comes with ANSI-99 compliant, horizontally scalable and fault-tolerant
+                        distributed SQL database. The distribution is provided either by
                         <i>partitioning</i> the data across cluster nodes or by full <i>replication</i>, depending on the
                         use case.
                     </p>
                     <p>
-                        You can interact with Ignite as you would
-                        with any other SQL database, connecting directly using JDBC or ODBC drivers either from
-                        external tools or from application logic. For better performance, Ignite also provides
-                        direct SQL APIs for Java, .NET, and C++ languages.
+                        As an SQL database, Ignite supports all DML commands including SELECT, UPDATE, INSERT, and DELETE queries.
+                        It also implements a subset of DDL commands relevant for distributed systems.
+                    </p>
+                    <p>
+                        One of Ignite's distinguishing characteristics is the full support for
+                        <nobr><a href="https://apacheignite.readme.io/docs/sql-queries#distributed-joins" target="_blank">distributed SQL JOINs</a></nobr>.
+                        Ignite can join data in both collocated and non-collocated fashions. When <i>collocated</i>,
+                        the JOINs are executed on the local data available on each node without having to move large
+                        data sets across the network. Such approach provides the best scalability and performance
+                        in distributed databases.
                     </p>
                 </div>
 
@@ -73,25 +79,45 @@ under the License.
                 </div>
             </div>
             <p>
-                Ignite <a href="/features/durablememory.html">durable memory</a>
-                allows turning persistence on and off. By default the persistence is disabled,
-                in which case Ignite acts as a pure
-                <nobr><i>in-memory database</i> (IMDB)</nobr>.
-                If the persistence is turned on, then Ignite becomes a
-                <i><nobr>durable, distributed, horizontally scalable SQL database</nobr></i> that
-                guarantees full data consistency and is resilient to full cluster failures.
+                Unlike many distributed SQL databases, Ignite treats both memory and disk as full-fledged active
+                <a href="/features/durablememory.html"> storage tiers</a> for its data and indexes. Even more, the disk
+                tier is optional and, if disabled, turns Ignite into a pure
+                <nobr><a href="/use-cases/database/in-memory-database.html">in-memory database</a></nobr>.
             </p>
             <p>
-                One of the distinguishing characteristics of Ignite SQL is the support for
-                <nobr><a href="https://apacheignite.readme.io/docs/sql-queries#distributed-joins" target="_blank">distributed SQL JOINs</a></nobr>,
-                which works in both, collocated and non-collocated fashions. When collocated, the JOINs are
-                executed on the local data available on each node without having to move large data sets
-                across the network. Such collocated approach provides the best scalability and performance
-                in distributed clusters.
+                You can interact with Ignite as you would with any other SQL enabled storage by connecting with JDBC or ODBC
+                drivers from both external tools and applications. On top of that, Java, .NET and C++ developers can
+                leverage from Apache Ignite native libraries that incorporate SQL APIs.
+            </p>
+            <p>
+                Once Ignite is chosen for its SQL capabilities, you can tap into features missing in conventional SQL
+                databases:
+                <ul class="page-list">
+                    <li>
+                        <a href="/features/datagrid.html">Key-Value APIs</a> - Apache Ignite key-value APIs are
+                        compliant with <nobr><a href="/use-cases/caching/jcache-provider.html">
+                        JCache (JSR 107)</a></nobr> specification and provide extended features built on top such as
+                        distributed ACID transactions, scan and continuous queries, collocated processing.
+                    </li>
+                    <li>
+                        <a href="/collocatedprocessing.html">Collocated Processing</a> - this approach allows you to
+                        execute advanced logic or distributed SQL with JOINs exactly where the data is stored avoiding
+                        expensive serialization and network trips.
+                    </li>
+                </ul>
             </p>
 
-            <p><a href="https://apacheignite.readme.io/docs/getting-started-sql" target="_blank">Get Started with Ignite SQL</a></br>
-            <a href="https://apacheignite.readme.io/docs/distributed-sql" target="_blank">More on Distributed SQL</a></p>
+            <p>
+                See also:
+                <ul class="page-list">
+                    <li>
+                        <a href="https://apacheignite.readme.io/docs/getting-started-sql" target="_blank">Get Started with Ignite SQL</a>
+                    </li>
+                    <li>
+                        <a href="https://apacheignite.readme.io/docs/distributed-sql" target="_blank">More on SQL Capabilities</a>
+                    </li>
+                </ul>
+            </p>
 
             <div class="code-examples">
                 <div class="page-heading">Connectivity</div>
