@@ -61,16 +61,15 @@ under the License.
                         use case.
                     </p>
                     <p>
-                        As an SQL database, Ignite supports all DML commands including SELECT, UPDATE, INSERT, and DELETE queries.
-                        It also implements a subset of DDL commands relevant for distributed systems.
+                        Unlike many distributed SQL databases, Ignite <a href="/features/durablememory.html">durable memory</a>
+                        treats both memory and disk as active storage tiers. The disk tier, a.k.a.
+                        <nobr><a href="/features/persistence.html">native persistence</a></nobr>, is disabled by default,
+                        in which case Ignite becomes a pure
+                        <nobr><a href="/use-cases/database/in-memory-database.html">in-memory database</a> (IMDB)</nobr>.
                     </p>
                     <p>
-                        One of Ignite's distinguishing characteristics is the full support for
-                        <nobr><a href="https://apacheignite.readme.io/docs/sql-queries#distributed-joins" target="_blank">distributed SQL JOINs</a></nobr>.
-                        Ignite can join data in both collocated and non-collocated fashions. When <i>collocated</i>,
-                        the JOINs are executed on the local data available on each node without having to move large
-                        data sets across the network. Such approach provides the best scalability and performance
-                        in distributed databases.
+                        You can interact with Ignite as you would with any other SQL storage, using standard JDBC or ODBC
+                        connectivity. Ignite also provides native SQL APIs for Java, .NET and C++ developers for better performance.
                     </p>
                 </div>
 
@@ -79,29 +78,26 @@ under the License.
                 </div>
             </div>
             <p>
-                Unlike many distributed SQL databases, Ignite treats both memory and disk as full-fledged active
-                <a href="/features/durablememory.html"> storage tiers</a> for its data and indexes. Even more, the disk
-                tier is optional and, if disabled, turns Ignite into a pure
-                <nobr><a href="/use-cases/database/in-memory-database.html">in-memory database</a></nobr>.
+                One of Ignite's distinguishing characteristics is the full support for
+                <nobr><a href="https://apacheignite.readme.io/docs/sql-queries#distributed-joins" target="_blank">distributed SQL JOINs</a></nobr>.
+                Ignite can join data in both collocated and non-collocated fashions. When <i>collocated</i>,
+                the JOINs are executed on the local data available on each node without having to move large
+                data sets across the network. Such approach provides the best scalability and performance
+                in distributed databases.
             </p>
             <p>
-                You can interact with Ignite as you would with any other SQL enabled storage by connecting with JDBC or ODBC
-                drivers from both external tools and applications. On top of that, Java, .NET and C++ developers can
-                leverage from Apache Ignite native libraries that incorporate SQL APIs.
-            </p>
-            <p>
-                Once Ignite is chosen for its SQL capabilities, you can tap into features missing in conventional SQL
-                databases:
+                In addition to standard SQL features, Ignite also provides powerful processing APIs:
                 <ul class="page-list">
                     <li>
-                        <a href="/features/datagrid.html">Key-Value APIs</a> - Apache Ignite key-value APIs are
-                        compliant with <nobr><a href="/use-cases/caching/jcache-provider.html">
-                        JCache (JSR 107)</a></nobr> specification and provide extended features built on top such as
-                        distributed ACID transactions, scan and continuous queries, collocated processing.
+                        <a href="/features/datagrid.html">Key-Value APIs</a> - Ignite key-value APIs allow to
+                        interact with Ignite as with a <nobr><a href="/use-cases/database/key-value-store.html">key-value store</a></nobr>.
+                        In addition to standard key-value operations supported by
+                        <nobr><a href="/use-cases/caching/jcache-provider.html">JCache (JSR 107)</a></nobr> standard,
+                        Ignite also provides extended support for distributed ACID transactions, continuous queries, partition scans, and more.
                     </li>
                     <li>
                         <a href="/collocatedprocessing.html">Collocated Processing</a> - this approach allows you to
-                        execute advanced logic or distributed SQL with JOINs exactly where the data is stored avoiding
+                        execute distributed SQL JOINs or custom user logic exactly on the nodes where the data is stored, avoiding
                         expensive serialization and network trips.
                     </li>
                 </ul>
