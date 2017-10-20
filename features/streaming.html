@@ -39,7 +39,7 @@ under the License.
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Data Ingestion and Streaming - Apache Ignite</title>
+    <title>Data Loading and Streaming - Apache Ignite</title>
     <link media="all" rel="stylesheet" href="/css/all.css?v=1.14">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
@@ -52,23 +52,27 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="streaming" class="page-section">
-            <h1 class="first">Data Ingestion and Streaming</h1>
+            <h1 class="first">Data Loading and Streaming</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Ignite streaming capabilities allows ingesting never-ending streams of data in a scalable
-                        and fault-tolerant fashion. The rates at which data can be injected into Ignite can be very
-                        high and easily exceed millions of events per second on a moderately sized cluster.
+                        Ignite data loading and streaming capabilities allow ingesting large finite as well as
+                        never-ending volumes of data in a scalable and fault-tolerant way into the cluster.
+                        The rate at which data can be injected into Ignite is very high and easily exceeds millions
+                        of events per second on a moderately sized cluster.
                     </p>
                     <p>
-                    <div class="page-heading">How it Works:</div>
-                    <ol class="page-list">
-                        <li>Clients inject streams of data into Ignite.</li>
-                        <li>Data is automatically partitioned between Ignite data nodes.</li>
-                        <li>Data is concurrently processed across all cluster nodes.</li>
-                        <li>Clients perform concurrent <code>SQL queries</code> on the streamed data.</li>
-                        <li>Clients subscribe to <code>continuous queries</code> as data changes.</li>
-                    </ol>
+                        Apache Ignite <a href="https://apacheignite-mix.readme.io/docs/overview" target="_blank">
+                        integrates</a> with major streaming technologies and frameworks such as Kafka, Camel,
+                        Storm or JMS to bring even more advanced streaming capabilities to Ignite-based architectures.
+                    </p>
+
+                    <div class="page-heading">Data Loading</div>
+                    <p>
+                        Ignite provides several <a href="https://apacheignite.readme.io/docs/data-loading" target="_blank">
+                        techniques</a> for initial data loading. For instance, Ignite streaming APIs are a good
+                        choice for clusters with Ignite native persistence enabled, while the clusters that persist
+                        data in a 3rd party store can connect to it directly with <code>CacheStore</code> API.
                     </p>
                 </div>
 
@@ -78,6 +82,16 @@ under the License.
                     <img class="img-responsive" src="/images/in_memory_streaming.png" width="280px" style="margin: auto;">
                 </div>
             </div>
+
+            <div class="page-heading">How Ignite Streaming Works:</div>
+            <ol class="page-list">
+                <li>Clients inject streams of data into Ignite.</li>
+                <li>Data is automatically partitioned between Ignite data nodes.</li>
+                <li>Data is concurrently processed across all cluster nodes.</li>
+                <li>Clients perform concurrent <code>SQL queries</code> on the streamed data.</li>
+                <li>Clients subscribe to <code>continuous queries</code> as data changes.</li>
+            </ol>
+
             <div class="code-examples">
                 <div class="page-heading">Code Examples:</div>
                 <!-- Nav tabs -->
