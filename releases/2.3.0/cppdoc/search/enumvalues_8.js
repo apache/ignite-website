@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['pessimistic',['PESSIMISTIC',['../structignite_1_1transactions_1_1TransactionConcurrency.html#ae4a4021eb1bbb6d2acdaad1defeb469aa2dab87bb6563f92fc20d5b0ba28a47b7',1,'ignite::transactions::TransactionConcurrency']]],
+  ['prepared',['PREPARED',['../structignite_1_1transactions_1_1TransactionState.html#a173faba612c6a4e91c0726140d8d43f3a325ee455e3af924905bf4e6d20715df3',1,'ignite::transactions::TransactionState']]],
+  ['preparing',['PREPARING',['../structignite_1_1transactions_1_1TransactionState.html#a173faba612c6a4e91c0726140d8d43f3a66b5a8b42a03ad76c55c259f4b767795',1,'ignite::transactions::TransactionState']]],
+  ['primary',['PRIMARY',['../structignite_1_1cache_1_1CachePeekMode.html#acd2d0e89b2c2c9d391060a89585bc2b2a53c00318ef070e94f5127c7ae2c82660',1,'ignite::cache::CachePeekMode']]]
+];
