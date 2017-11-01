@@ -132,6 +132,7 @@ $(document).ready(function() {
 $(document).ready(function(){
     /* Get iframe src attribute value i.e. YouTube video url
     and store it in a variable */
+    var sqldbUrl = $("#sql-db").attr('src');
     var sqlUrl = $("#sql").attr('src');
     var dataGridUrl = $("#data-grid").attr('src');
     var clusteringUrl = $("#clustering").attr('src');
@@ -140,7 +141,11 @@ $(document).ready(function(){
     var webconsoleSqlUrl = $("#webconsole-sql").attr('src');
 
     /* Assign empty url value to the iframe src attribute when
-    modal hide, which stop the video playing */
+    modal hide, which will stop the video playing */
+    $("#sql-db-modal").on('hide.bs.modal', function(){
+        $("#sql-db").attr('src', '');
+    });
+
     $("#sql-modal").on('hide.bs.modal', function(){
         $("#sql").attr('src', '');
     });
@@ -156,15 +161,21 @@ $(document).ready(function(){
     $("#database-import-modal").on('hide.bs.modal', function(){
         $("#database-import").attr('src', '');
     });
+
     $("#data-loading-modal").on('hide.bs.modal', function(){
         $("#data-loading").attr('src', '');
     });
+
     $("#webconsole-sql-modal").on('hide.bs.modal', function(){
         $("#webconsole-sql").attr('src', '');
     });
 
     /* Assign the initially stored url back to the iframe src
     attribute when modal is displayed again */
+    $("#sql-db-modal").on('show.bs.modal', function(){
+        $("#sql-db").attr('src', sqldbUrl);
+    });
+
     $("#sql-modal").on('show.bs.modal', function(){
         $("#sql").attr('src', sqlUrl);
     });
@@ -180,9 +191,11 @@ $(document).ready(function(){
     $("#database-import-modal").on('show.bs.modal', function(){
         $("#database-import").attr('src', databaseImportUrl);
     });
+
     $("#data-loading-modal").on('show.bs.modal', function(){
         $("#data-loading").attr('src', dataLoadingUrl);
     });
+
     $("#webconsole-sql-modal").on('show.bs.modal', function(){
         $("#webconsole-sql").attr('src', webconsoleSqlUrl);
     });
