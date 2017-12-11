@@ -81,8 +81,9 @@ under the License.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/java.png" width="300" style="float:right;"/>
+                    <img class="img-responsive" src="/images/multilanguage.png" width="300" style="float:right;"/>
                 </div>
+
             </div>
             <div class="page-heading">Supported Drivers and Protocols</div>
             <table class="formatted" name="Supported Clients Features">
@@ -174,6 +175,112 @@ under the License.
                 </tr>
                 </tbody>
             </table>
+
+            <div class="code-examples">
+                <div class="page-heading"> Getting Started Guides</div>
+
+                <p>
+                The getting started guides that show how to start and make use of Apache Ignite in a matter of minutes:
+                </p>
+
+                <ul class="page-list">
+                <li><a href="https://apacheignite.readme.io/docs/getting-started" target="_blank">Java Getting Started</a></li>
+                <li><a href="https://apacheignite-net.readme.io/docs/getting-started-2" target="_blank">.NET Getting Started</a></li>
+                <li><a href="https://apacheignite-cpp.readme.io/docs/getting-started-1" target="_blank">C++ Getting Started</a></li>
+                </ul>
+            </div>
+
+            <div class="code-examples">
+                <div class="page-heading">Code Examples</div>
+                <!-- Nav tabs -->
+                <ul id="messaging-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#java-ex" aria-controls="home" data-toggle="tab">Java</a></li>
+                    <li><a href="#dotnet-ex" aria-controls="profile" data-toggle="tab">.NET</a></li>
+                    <li><a href="#cpp-ex" aria-controls="profile" data-toggle="tab">C++</a></li>
+                    <li><a href="#php-ex" aria-controls="profile" data-toggle="tab">PHP</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="java-ex">
+                        <pre class="brush:java">
+                            Ignite ignite = Ignition.ignite();
+
+                            IgniteCache&lt;Integer, String&gt; cache = ignite.cache("myCache");
+
+                            // Store keys in cache (values will end up on different nodes).
+                            for (int i = 0; i &lt; 10; i++)
+                                cache.put(i, Integer.toString(i));
+
+                            for (int i = 0; i &lt; 10; i++)
+                                System.out.println("Got [key=" + i + ", val=" + cache.get(i) + ']');
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="dotnet-ex">
+                        <pre class="brush:csharp">
+                            using (var ignite = Ignition.Start())
+                            {
+                                var cache = ignite.GetOrCreateCache&lt;int, string&gt;("myCache");
+
+                                // Store keys in cache (values will end up on different nodes).
+                                for (int i = 0; i &lt; 10; i++)
+                                    cache.Put(i, i.ToString());
+
+                                for (int i = 0; i &lt; 10; i++)
+                                    Console.WriteLine("Got [key={0}, val={1}]", i, cache.Get(i));
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="cpp-ex">
+                        <pre class="brush:cpp">
+                            // Get cache instance.
+                            Cache&lt;int, std::string&gt; cache = grid.GetCache&lt;int, std::string&gt;("myCache");
+
+                            // Store keys in cache (values will end up on different  nodes).
+                            for (int i = 0; i &lt; 10; ++i)
+                            {
+                                std::stringstream value;
+                                value &lt;&lt; i;
+
+                                cache.Put(i, value.str());
+                            }
+
+                            for (int i = 0; i &lt; 10; ++i)
+                                std::cout &lt;&lt; "Got [key=" &lt;&lt; i &lt;&lt; ", val=" &lt;&lt; cache.Get(i) &lt;&lt; "]";
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="php-ex">
+                        <pre class="brush:cpp">
+                           &lt;?php
+                                try {
+                                    // Connecting to Ignite using pre-configured DSN.
+                                    $dbh = new PDO('odbc:LocalApacheIgniteDSN');
+
+                                    // Changing PDO error mode.
+                                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                                    // Executing the query. The salary field is an indexed field.
+                                    $dbh->query('UPDATE Person SET salary = 42000 WHERE salary > 50000');
+
+                                } catch (PDOException $e) {
+                                    print "Error!: " . $e->getMessage() . "\n";
+                                    die();
+                                }
+                            ?&gt;
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+            More examples are available on
+            <a href="https://github.com/apache/ignite/tree/master" target="_blank">GitHub</a>:
+                <ul class="page-list">
+                    <li><a href="https://github.com/apache/ignite/tree/master/examples" target="_blank">Java Examples</a></li>
+                    <li><a href="https://github.com/apache/ignite/tree/master/modules/platforms/dotnet/examples" target="_blank">.NET Examples</a></li>
+                    <li><a href="https://github.com/apache/ignite/tree/master/modules/platforms/cpp/examples" target="_blank">C++ Examples</a></li>
+                </ul>
+            </p>
         </section>
     </main>
 
