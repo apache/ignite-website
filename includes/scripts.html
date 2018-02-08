@@ -22,22 +22,22 @@
         document.querySelector('head').appendChild(msViewportStyle)
     }
 </script>
-<script type="text/javascript">
-    eval(function()
-    {
-        try
-        {
-            doHighlight();
-        }
-        catch(e)
-        {
-            var elem = document.createElement('SCRIPT');
-            elem.src="https://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlight.js";
-            var theBody = document.getElementsByTagName('body')[0];
-            theBody.appendChild(elem);
-        }
-    })();
-</script>
+<!--<script type="text/javascript">-->
+    <!--eval(function()-->
+    <!--{-->
+        <!--try-->
+        <!--{-->
+            <!--doHighlight();-->
+        <!--}-->
+        <!--catch(e)-->
+        <!--{-->
+            <!--var elem = document.createElement('SCRIPT');-->
+            <!--elem.src="https://crux-framework-tools.googlecode.com/svn/trunk/misc/highlight/highlight.js";-->
+            <!--var theBody = document.getElementsByTagName('body')[0];-->
+            <!--theBody.appendChild(elem);-->
+        <!--}-->
+    <!--})();-->
+<!--</script>-->
 
 <!-- Syntax highlight. -->
 <script type="text/javascript">
@@ -127,15 +127,16 @@ $(document).ready(function() {
 });
 </script>
 
+
 <!--Launch YouTube video in Bootstrap modal-->
 <script type="text/javascript">
 $(document).ready(function(){
     /* Get iframe src attribute value i.e. YouTube video url
     and store it in a variable */
-    var sqldbUrl = $("#sql-db").attr('src');
+    var sqldbUrl = $("#sql-db").attr('data-src-lazy');
     var sqlUrl = $("#sql").attr('src');
-    var dataGridUrl = $("#data-grid").attr('src');
-    var clusteringUrl = $("#clustering").attr('src');
+    var dataGridUrl = $("#data-grid").attr('data-src-lazy');
+    var clusteringUrl = $("#clustering").attr('data-src-lazy');
     var databaseImportUrl = $("#database-import").attr('src');
     var dataLoadingUrl = $("#data-loading").attr('src');
     var webconsoleSqlUrl = $("#webconsole-sql").attr('src');
@@ -173,7 +174,9 @@ $(document).ready(function(){
     /* Assign the initially stored url back to the iframe src
     attribute when modal is displayed again */
     $("#sql-db-modal").on('show.bs.modal', function(){
-        $("#sql-db").attr('src', sqldbUrl);
+        $('.lazy_load').each(function(){
+            $("#sql-db").attr('src', sqldbUrl);
+          });
     });
 
     $("#sql-modal").on('show.bs.modal', function(){
@@ -181,11 +184,15 @@ $(document).ready(function(){
     });
 
     $("#data-grid-modal").on('show.bs.modal', function(){
-        $("#data-grid").attr('src', dataGridUrl);
+        $('.lazy_load').each(function(){
+            $("#data-grid").attr('src', dataGridUrl);
+        });
     });
 
     $("#clustering-modal").on('show.bs.modal', function(){
-        $("#clustering").attr('src', clusteringUrl);
+        $('.lazy_load').each(function(){
+            $("#clustering").attr('src', clusteringUrl);
+        });
     });
 
     $("#database-import-modal").on('show.bs.modal', function(){

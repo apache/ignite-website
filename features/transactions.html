@@ -59,32 +59,55 @@ under the License.
                         The consistency guarantees are met for both memory and disk tiers.
                     </p>
                     <p>
-                        Transactions in Apache Ignite can span multiple cluster nodes, caches and partitions.
+                        Transactions in Apache Ignite can span multiple cluster nodes, caches (aka. tables) and partitions.
                         Both pessimistic and optimistic locking are available for applications. The optimistic mode is
                         a foundation of deadlock-free transactions in Ignite that help to avoid distributed deadlocks
-                        caused by applications in runtime.
-                    </p>
-                    <p>
-                        Ignite leverages from Two-Phase-Commit (2PC) protocol for its transactions and optimizes to
-                        one-phase-commit if possible. Whenever data is updated within a transaction,
-                        Ignite will keep a transactional state in a local transaction map until commit() is called,
-                        at which point, if needed, the data is transferred to participating remote nodes.
-                    </p>
-                    <p>
-                        If Ignite persistence is used then all the updates are written to the write-ahead log file
-                        that guarantees data consistency even if the cluster or individual nodes go down in the middle
-                        of transactions execution.
-                    </p>
-                    <p>
-                        In the occasions when Ignite is used as a caching layer on top of a 3rd party database such as
-                        RDBMS or NoSQL store, the transactions will span both Ignite and the database if the latter
-                        is a strongly consistent store.
+                        that might be caused by applications in runtime.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
                     <img class="img-responsive" src="/images/in_memory_data.png" width="500" style="float:right;"/>
                 </div>
             </div>
+
+            <div class="page-heading">Two-Phase-Commit Protocol</div>
+            <p>
+                In a distributed system, a transaction may span multiple cluster nodes. Obviously, this poses some
+                challenges when we want to ensure that data are consistent across all the participating nodes.
+                For example, in the event of the loss of a cluster node, the transaction may not have fully committed on
+                the lost node. A widely-used approach to ensuring data consistency in this type of scenario is the
+                two-phase commit protocol (2PC).
+            </p>
+            <p>
+                Ignite leverages from 2PC protocol for its transactional subsystem and optimizes to
+                one-phase-commit if possible. Whenever data is updated within a transaction,
+                Ignite will keep a transactional state in a local transaction map until the changes are committed,
+                at which point, if needed, the data is transferred to participating remote nodes.
+            </p>
+            <div class="page-heading">Consistency and Ignite Persistence</div>
+            <p>
+                If Ignite persistence is used then all the updates are written to the write-ahead log file
+                that guarantees data consistency even if the cluster or individual nodes go down in the middle
+                of transaction execution.
+            </p>
+            <p>
+                The purpose of the WAL is to propagate updates to disk in the fastest way possible and provide a
+                recovery mechanism for scenarios where a single node or the whole cluster goes down.
+                It is worth mentioning, that a cluster can always be recovered to the latest successfully committed
+                transaction in case of a crash or restart relying on the content of the WAL.
+            </p>
+            <div class="page-heading">Consistency and 3rd Party Persistence</div>
+            <p>
+                In the scenarios, when Ignite is used as a caching layer on top of a 3rd party database such as
+                RDBMS, the transactions will span both Ignite and the database if the latter
+                is a strongly consistent storage.
+            </p>
+            <p>
+                For instance, when the RDBMS is used as a persistence layer, then a transaction coordinator will write the
+                transactional changes to the database before it sends the commit message to participating Ignite cluster nodes.
+                This way, if a transaction fails at the database level, the coordinator can still send the Rollback message
+                to everyone involved, so that the data stored in Ignite will remain consistent with the database.
+            </p>
 
             <div class="code-examples">
                 <div class="page-heading">Code Examples</div>
@@ -171,6 +194,18 @@ under the License.
                         </p>
                         <div  class="page-links">
                             <a href="https://apacheignite.readme.io/docs/transactions#two-phase-commit-2pc" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Write-Ahead Log</td>
+                    <td>
+                        <p>
+                            Ignite persistence maintains the WAL that propagates updates to disk in the fastest way possible and
+                            provides a recovery mechanism for scenarios where a single node or the whole cluster goes down:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/write-ahead-log" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>
