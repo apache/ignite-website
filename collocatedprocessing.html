@@ -52,7 +52,7 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="memory-centric" class="page-section">
-            <h1 class="first">What is Collocated Processing?</h1>
+            <h1 class="first">Collocated Processing</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
@@ -122,7 +122,7 @@ under the License.
                 collocated data. Especially it is crucial for distributed JOINs supported by Ignite.
             </p>
             <p>
-                Taking the two tables created above as an example, let's get the most inhabited cities across China,
+                Taking the example of the two tables created above, let's get the most inhabited cities across China,
                 Russia and the USA joining the data stored in the <code>Country</code> and <code>City</code> tables, as follows:
             </p>
             <div class="tab-content">
@@ -139,20 +139,28 @@ under the License.
                 </div>
             </div>
             <p>
-                Since all the data was collocated beforehand, Ignite will execute the query with the JOIN in the collocated
-                mode
+                Since all the cities were collocated with their countries beforehand, Ignite will execute the query and
+                join the data on concrete nodes that store China, Russia and the USA entries. This approach, again, <i>avoids</i>
+                expensive data movement across the network, needed to complete the query, because all the data will be available
+                on the nodes locally.
             </p>
-            <div class="page-heading">Usage Example</div>
+            <div class="page-heading">Distributed Collocated Computations</div>
             <p>
-                Let's assume that a blizzard is approaching New York. As a telecommunication company, you have to
-                send a warning text message to 8 million New Yorkers.
+                Apache Ignite compute grid and machine learning component allows to perform computations and execute
+                machine learning algorithms in parallel fashion to gain high performance, low latency, and linear scalability.
+                Furthermore, both components highly rely on data collocation (and collocated processing in general) giving
+                the ways to optimize specific tasks or calculations.
+            </p>
+            <p>
+                For instance, let's assume that a blizzard is approaching New York. As a telecommunication company,
+                you have to send a warning text message to 8 million New Yorkers.
                 With the client-server approach the company has to move all <nobr>8 million (!)</nobr> records
                 from the database to the client text messaging application, which does not scale.
             </p>
             <p>
-                A much more efficient approach would be to send the text-messaging logic to the cluster node responsible
-                for storing the New York residents. This approach moves only 1 computation instead of 8 million records
-                across the network, and performs a lot better.
+                A much more efficient approach would be to send the text-messaging logic, implemented with compute grid,
+                to the cluster node responsible for storing the New York residents.
+                This approach moves only 1 computation instead of 8 million records across the network, and performs a lot better.
             </p>
 
             <p>
@@ -205,9 +213,75 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
                         </pre>
                 </div>
             </div>
-            <p>
-                Check more <a href="https://apacheignite.readme.io/docs/affinity-collocation" target="_blank">here</a>.
-            </p>
+
+            <div class="page-heading">More on Collocated Processing</div>
+            <table class="formatted" name="More on Ignite Transactions">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Feature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="features-left">Affinity Collocation</td>
+                    <td>
+                        <p>
+                            If business logic requires to access more than one entry it can be reasonable to
+                            collocate dependent entries by storing them on a single cluster node:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/affinity-collocation" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Collocated Computations</td>
+                    <td>
+                        <p>
+                            It is also possible to route computations to the nodes where the data is stored:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/collocate-compute-and-data" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Compute Grid</td>
+                    <td>
+                        <p>
+                            Distributed computations are performed in parallel fashion to gain high performance, low latency, and linear scalability:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Distributed JOINs</td>
+                    <td>
+                        <p>
+                            Ignite supports collocated and non-collocated distributed SQL joins:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Machine Learning</td>
+                    <td>
+                        <p>
+                            Ignite machine learning component allows users to run ML/DL training and inference directly
+                            on the data stored in an Ignite cluster and provides ML and DL algorithms:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/machine-learning" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </section>
     </main>
 
