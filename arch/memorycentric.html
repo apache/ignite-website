@@ -52,12 +52,13 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="memory-centric" class="page-section">
-            <h1 class="first">What is Memory-Centric?</h1>
+            <h1 class="first">Memory-Centric Storage</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite is based on <i>memory-centric architecture</i> that combines the performance and scale of
-                        in-memory computing together with the disk durability and strong consistency in one system.
+                        Apache Ignite is based on distributed <i>memory-centric architecture</i> that combines the
+                        performance and scale of in-memory computing together with the disk durability and strong
+                        consistency in one system.
                     </p>
                     <p>
                         The main difference between the memory-centric approach and the traditional disk-centric approach is that
@@ -70,16 +71,14 @@ under the License.
                     <img class="img-responsive" src="/images/memory-centric.png" width="440px" style="float: right; margin-top: -25px;"/>
                 </div>
             </div>
-
             <p>
                 On the other hand, when persistence is turned on, Ignite begins to function as a memory-centric system
                 where most of the processing happens in memory, but the data and indexes get persisted to disk. The main
                 difference here from the traditional disk-centric RDBMS or NoSQL system is that Ignite is strongly consistent,
                 horizontally scalable, and supports both SQL and key-value processing APIs.
             </p>
-            <br/>
-            <br/>
-            <h2>Collocated vs Client-Server Processing</h2>
+
+            <div class="page-heading">Collocated vs Client-Server Processing</div>
             <p>
                 The disk-centric systems, like RDBMS or NoSQL, generally utilize the classic client-server approach, where
                 the data is brought from the server to the client side where it gets processed and then is usually discarded.
@@ -91,7 +90,141 @@ under the License.
                 exactly where the data is stored avoiding expensive serialization and network trips.
             </p>
 
-            <p><a href="/whatisignite.html">Learn more</a></p>
+            <div class="page-heading">Partitioning & Replication</div>
+            <p>
+                Depending on the configuration, Ignite can either partition or replicate data across its memory-centric
+                storage. Unlike <code>REPLICATED</code> mode, where data is fully replicated across all nodes
+                in the cluster, in <code>PARTITIONED</code> mode Ignite will equally split the data across
+                multiple cluster nodes, allowing for staring TBs of data both in memory and on disk.
+            </p>
+
+            <div class="page-heading">Redundancy</div>
+            <p>
+                Ignite also allows to configure multiple <b>backup copies</b> to guarantee data resiliency
+                in case of failures.
+            </p>
+
+            <div class="page-heading">Consistency</div>
+            <p>
+                Regardless of which replication scheme is used, Ignite guarantees data consistency across
+                all cluster members.
+            </p>
+
+            <div class="page-heading">Ignite as In-Memory Store</div>
+            <p>
+                The persistence is totally optional in Ignite that allows using the cluster in the memory-only mode
+                where all the data and indexes are stored solely in RAM. In this scenario, you can achieve the maximum
+                performance possible because the data is never written to disk. To prevent possible data loss when a
+                single cluster node fails, it is recommended to configure a number of backup copies (aka. replication
+                factor) appropriately.
+            </p>
+
+            <div class="page-heading">Ignite Persistence</div>
+            <p>
+                There are two ways to enable persistence in Ignite. The first approach is to use its own distributed,
+                ACID, and <nobr>SQL-compliant</nobr> persistence that transparently and efficiently integrates with
+                overall memory architecture.
+            </p>
+            <p>
+                With the the native persistence enabled, Ignite always stores a superset of data on disk,
+                and as much as possible in RAM. For example, if there are
+                100 entries and RAM has the capacity to store only 20, then all 100 will be stored on disk
+                and only 20 will be cached in RAM for better performance.
+            </p>
+
+            <div class="page-heading">Ignite and 3rd Party Database</div>
+            <p>
+                The second approach to have the persistence enabled, is to deploy Ignite above an existing 3rd party database
+                such as RDBMS, Apache Cassandra or MongoDB. This mode is usually used to accelerate the underlying
+                database by storing a copy of the data in memory in Ignite. Ignite supports both read-through and
+                write-through modes that ensure data consistency and keeps Ignite and the database in sync. Refer to
+                <a href="/arch/persistence.html" target="doc">Ignite persistence</a> page to compare Ignite persistence
+                vs 3rd Party Persistence modes.
+            </p>
+
+            <div class="page-heading">More on Memory-Centric Storage</div>
+            <table class="formatted" name="Deployment Options Features">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Feature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="left">Durable Memory</td>
+                    <td>
+                        <p>
+                            Apache Ignite is based on the <nobr>Durable Memory</nobr>
+                            architecture that allows storing and processing data and indexes both in memory and on disk:
+                        </p>
+                        <div  class="page-links">
+                            <a href="/arch/durablememory.html" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Persistence</td>
+                    <td>
+                        <p>
+                            Ignite native persistence is a distributed, ACID, and <nobr>SQL-compliant</nobr> disk store
+                            that transparently integrates with Ignite's durable memory:
+                        </p>
+                        <div  class="page-links">
+                            <a href="/arch/persistence.html" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Distributed Database</td>
+                    <td>
+                        <p>
+                            Apache Ignite can be used as all-in-one distributed database that supports SQL, key-value,
+                            compute, machine learning and other data processing APIs:
+                        </p>
+                        <div  class="page-links">
+                            <a href="/use-cases/database/distributed-database.html" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">In-Memory Database</td>
+                    <td>
+                        <p>
+                            Apache Ignite can be used as a distributed and horizontally scalable in-memory database (IMDB):
+                        </p>
+                        <div  class="page-links">
+                            <a href="/use-cases/database/in-memory-database.html" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Data Grid</td>
+                    <td>
+                        <p>
+                            Ignite can act as a data grid that is a distributed, transactional key-value store. Unlike
+                            other in-memory data grids (IMDG), Ignite enables storing data both, in memory and on disk,
+                            and therefore is able to store more data than can fit in physical memory:
+                        </p>
+                        <div class="page-links">
+                            <a href="/features/datagrid.html" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Database Caching</td>
+                    <td>
+                        <p>
+                            Ignite is used as a caching layer (aka. data grid) above 3rd party databases such as RDBMS,
+                            Apache Cassandra, MongoDB:
+                        </p>
+                        <div class="page-links">
+                            <a href="/use-cases/caching/database-caching.html" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </section>
     </main>
 
