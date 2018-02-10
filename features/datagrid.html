@@ -33,7 +33,7 @@ under the License.
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="canonical" href="https://ignite.apache.org/use-cases/database/datagrid.html" />
+<link rel="canonical" href="https://ignite.apache.org/features/datagrid.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -54,41 +54,26 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="datagrid" class="page-section">
-            <h1 class="first">In-Memory Data Grid</h1>
+            <h1 class="first">Key-Value In-Memory Data Grid</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Ignite data grid is a distributed, transactional key-value store. Unlike other
-                        in-memory data grids (IMDG), Ignite enables storing data both, in memory and on disk, and
+                        Ignite can be accessed with simple key-value APIs and, thus, act as a in-memory data grid.
+                        In this scenario, you can think of Ignite as of a distributed partitioned hash map with every
+                        cluster node owning a portion of the overall data set. Unlike other in-memory data grids (IMDG),
+                        Ignite enables storing data both, in memory and on disk, and
                         therefore is able to store more data than can fit in physical memory.
-                        On top of the standard key-value data operations, including ACID transactions and all the
-                        JCache (JSR 107) functionality, Ignite also supports <nobr>SQL queries</nobr>
-                        over its data with the support for <nobr>distributed joins</nobr>.
+                    </p>
+                    <p>
+                        Ignite data grid is one of the fastest implementations of ACID transactions or
+                        atomic data updates in distributed clusters today. We know it because we constantly benchmark it ourselves.
                     </p>
                 </div>
-
                 <div class="col-sm-4 col-md-6 col-xs-12" style="padding-right:0">
                     <img class="img-responsive" src="/images/data_grid.png" width="500px" style="float:right;"/>
                 </div>
             </div>
 
-            <p>
-                The data grid has been built from the ground up to linearly scale to hundreds of nodes with strong
-                semantics for data locality and affinity data routing to reduce redundant data noise. It can be
-                viewed as a distributed partitioned hash map with every cluster node owning a portion of the
-                overall data. This way the more cluster nodes we add, the more data we can cache.
-            </p>
-            <p>
-                Ignite data grid is one of the fastest implementations of ACID transactions or
-                atomic data updates in distributed clusters today. We know it because we constantly benchmark it ourselves.
-            </p>
-            <p>
-                The data in the data grid can be stored either purely in memory, or can also be persisted to disk.
-                If <a href="/arch/persistence.html" target="_blank">Ignite native persistence</a> is enabled,
-                then data and indexes will be persisted natively by Ignite on every cluster node. In this case,
-                memory only serves as a smaller caching layer of the overall persisted data set. All queries and transactions
-                span the whole data set stored on disk.
-            </p>
             <p>
                 The in-memory data grid can also improve performance and scalability by integrating with existing 3rd party
                 databases, like RDBMS, NoSQL, or Hadoop-based storages. This approach does not require
@@ -96,6 +81,32 @@ under the License.
                 results stored in memory, and not in the external database, since Ignite does not have any knowledge of the external data.
             </p>
 
+            <div class="page-heading">JCache APIs</div>
+            <p>
+                Ignite key-value APIs comply with <a href="/use-cases/caching/jcache-provider.html">JCache (JSR 107)</a>
+                specification that supports the following:
+            </p>
+            <ul class="page-list">
+                <li>In-Memory Key Value Store</li>
+                <li>Basic Cache Operations</li>
+                <li>ConcurrentMap APIs</li>
+                <li>Collocated Processing (EntryProcessor)</li>
+                <li>Events and Metrics</li>
+                <li>Pluggable Persistence</li>
+            </ul>
+
+            <div class="page-heading">Extended Key-Value APIs</div>
+            <p>
+                In addition to the standard JCache API, Ignites supports distributed ACID transactions,
+                scan and continuous queries, collocated processing and more.
+            </p>
+
+            <p>
+                The data grid has been built from the ground up to linearly scale to hundreds of nodes with strong
+                semantics for data locality and affinity data routing to reduce redundant data noise. It can be
+                viewed as a distributed partitioned hash map with every cluster node owning a portion of the
+                overall data. This way the more cluster nodes we add, the more data we can cache.
+            </p>
             <div class="videos">
                 <div class="page-heading">Videos</div>
                 <ul class="page-list">
@@ -269,7 +280,7 @@ under the License.
                         </p>
 
                         <div class="page-links">
-                            <a href="/features/key-value-store.html">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                            <a href="/use-cases/database/key-value-store.html">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>
