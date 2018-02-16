@@ -76,13 +76,13 @@ under the License.
             <div class="page-heading">Data Collocation</div>
             <p>
                 To start benefiting from the collocated processing, we need to ensure that the data is properly collocated
-                at the first place. If business logic requires to access more than one entry it can be reasonable to
-                collocate dependent entries by storing them on a single cluster node. This technique is also known as
-                affinity collocation of the data.
+                in the first place. If the business logic requires to access more than one entry, it is usually best to
+                collocate dependent entries on a single cluster node. This technique is also known as
+                <code>affinity collocation</code> of the data.
             </p>
             <p>
                 In the example below, we have <code>Country</code> and <code>City</code> tables and want to collocate
-                <code>City</code> entries with <code>Country</code> entries for where a city is located. To achieve this,
+                <code>City</code> entries with their corresponding <code>Country</code> entries. To achieve this,
                 we use the <code>WITH</code> clause and specify <code>affinityKey=CountryCode</code> as shown below:
             </p>
             <div class="tab-content">
@@ -119,10 +119,10 @@ under the License.
             <div class="page-heading">SQL and Distributed JOINs</div>
             <p>
                 Apache Ignite SQL engine will always perform much more efficiently if a query is run against the
-                collocated data. Especially it is crucial for distributed JOINs supported by Ignite.
+                collocated data. It is especially crucial for execution of distributed JOINs within the cluster.
             </p>
             <p>
-                Taking the example of the two tables created above, let's get the most inhabited cities across China,
+                Taking the example of the two tables created above, let's get the most populated cities across China,
                 Russia and the USA joining the data stored in the <code>Country</code> and <code>City</code> tables, as follows:
             </p>
             <div class="tab-content">
@@ -139,17 +139,15 @@ under the License.
                 </div>
             </div>
             <p>
-                Since all the cities were collocated with their countries beforehand, Ignite will execute the query and
-                join the data on concrete nodes that store China, Russia and the USA entries. This approach, again, <i>avoids</i>
-                expensive data movement across the network, needed to complete the query, because all the data will be available
-                on the nodes locally.
+                Since all the cities were collocated with their countries, the JOIN will execute only on the nodes
+                that store China, Russia and the USA entries. This approach <i>avoids</i> expensive data movement
+                across the network, and therefore scales better and provides the fastest performance.
             </p>
             <div class="page-heading">Distributed Collocated Computations</div>
             <p>
-                Apache Ignite compute grid and machine learning component allows to perform computations and execute
-                machine learning algorithms in parallel fashion to gain high performance, low latency, and linear scalability.
-                Furthermore, both components highly rely on data collocation (and collocated processing in general) giving
-                the ways to optimize specific tasks or calculations.
+                Apache Ignite compute grid and machine learning components allow to perform computations and execute
+                machine learning algorithms in parallel to achieve high performance, low latency, and linear scalability.
+                Furthermore, both components work best with collocated data and collocated processing in general.
             </p>
             <p>
                 For instance, let's assume that a blizzard is approaching New York. As a telecommunication company,
@@ -158,9 +156,9 @@ under the License.
                 from the database to the client text messaging application, which does not scale.
             </p>
             <p>
-                A much more efficient approach would be to send the text-messaging logic, implemented with compute grid,
-                to the cluster node responsible for storing the New York residents.
-                This approach moves only 1 computation instead of 8 million records across the network, and performs a lot better.
+                A much more efficient approach would be to send the text-messaging logic to the cluster node responsible
+                for storing the New York residents. This approach moves only 1 computation instead of 8 million records
+                across the network, and performs a lot better.
             </p>
 
             <p>

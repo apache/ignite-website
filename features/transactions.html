@@ -60,9 +60,8 @@ under the License.
                     </p>
                     <p>
                         Transactions in Apache Ignite can span multiple cluster nodes, caches (aka. tables) and partitions.
-                        Both pessimistic and optimistic locking are available for applications. The optimistic mode is
-                        a foundation of deadlock-free transactions in Ignite that help to avoid distributed deadlocks
-                        that might be caused by applications in runtime.
+                        Both pessimistic and optimistic locking are available for applications. The optimistic mode
+                        also supports deadlock-free transactions that help avoid distributed deadlocks in user code.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
@@ -73,40 +72,39 @@ under the License.
             <div class="page-heading">Two-Phase-Commit Protocol</div>
             <p>
                 In a distributed system, a transaction may span multiple cluster nodes. Obviously, this poses some
-                challenges when we want to ensure that data are consistent across all the participating nodes.
-                For example, in the event of the loss of a cluster node, the transaction may not have fully committed on
+                challenges when we want to ensure that the data is consistent across all the participating nodes.
+                For example, in the event of a cluster node failure, the transaction may not have fully committed on
                 the lost node. A widely-used approach to ensuring data consistency in this type of scenario is the
                 two-phase commit protocol (2PC).
             </p>
             <p>
-                Ignite leverages from 2PC protocol for its transactional subsystem and optimizes to
-                one-phase-commit if possible. Whenever data is updated within a transaction,
-                Ignite will keep a transactional state in a local transaction map until the changes are committed,
-                at which point, if needed, the data is transferred to participating remote nodes.
+                Ignite comes with one the fastest implementations of 2PC protocol. Moreover,
+                often when transactions span only one node or one partition, Ignite will utilize a much faster
+                one-phase-commit (1PC) protocol. Whenever the data is updated within a transaction,
+                Ignite will keep the transactional state in a local transaction map until the changes are committed,
+                at which point the data is transferred to the participating remote nodes. Only the nodes that hold the
+                primary or backup copies of the data will participate in the transaction.
             </p>
             <div class="page-heading">Consistency and Ignite Persistence</div>
             <p>
-                If Ignite persistence is used then all the updates are written to the write-ahead log file
-                that guarantees data consistency even if the cluster or individual nodes go down in the middle
-                of transaction execution.
+                If Ignite native persistence is used then all the updates are written to the write-ahead log (WAL) file
+                that guarantees data consistency, even if the cluster or individual nodes go down in the middle
+                of a transaction.
             </p>
             <p>
-                The purpose of the WAL is to propagate updates to disk in the fastest way possible and provide a
-                recovery mechanism for scenarios where a single node or the whole cluster goes down.
-                It is worth mentioning, that a cluster can always be recovered to the latest successfully committed
-                transaction in case of a crash or restart relying on the content of the WAL.
+                The purpose of the WAL is to propagate updates to the disk in the append-only mode, which is the fastest
+                way to persist data to disk. WAL provides a recovery mechanism for failure scenarios when a single node
+                or the whole cluster go down. A cluster can always be recovered to the
+                latest successfully committed transaction.
             </p>
             <div class="page-heading">Consistency and 3rd Party Persistence</div>
             <p>
-                In the scenarios, when Ignite is used as a caching layer on top of a 3rd party database such as
-                RDBMS, the transactions will span both Ignite and the database if the latter
-                is a strongly consistent storage.
-            </p>
-            <p>
-                For instance, when the RDBMS is used as a persistence layer, then a transaction coordinator will write the
-                transactional changes to the database before it sends the commit message to participating Ignite cluster nodes.
-                This way, if a transaction fails at the database level, the coordinator can still send the Rollback message
-                to everyone involved, so that the data stored in Ignite will remain consistent with the database.
+                In scenarios when Ignite is used as a caching layer on top of 3rd party databases, such as
+                RDBMS, Ignite transactions will span both, the cached data and the external database.
+                For instance, when an RDBMS is used as a persistence layer, Ignite will write the
+                transactional changes to the database before it sends the commit message to participating cluster nodes.
+                This way, if a transaction fails at the database level, Ignite can still send the rollback message
+                to every node involved, keeping the data consistent between the in-memory cache and the external database.
             </p>
 
             <div class="code-examples">
