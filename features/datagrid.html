@@ -58,11 +58,11 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Ignite can be accessed with simple key-value APIs and, thus, act as a in-memory data grid.
-                        In this scenario, you can think of Ignite as of a distributed partitioned hash map with every
+                        Ignite provides extensive and rich key-value APIs and can act as an in-memory data grid.
+                        You can think of Ignite as of a distributed partitioned hash map with every
                         cluster node owning a portion of the overall data set. Unlike other in-memory data grids (IMDG),
                         Ignite enables storing data both, in memory and on disk, and
-                        therefore is able to store more data than can fit in physical memory.
+                        therefore is able to store more data than can fit in the physical memory.
                     </p>
                     <p>
                         Ignite data grid is one of the fastest implementations of ACID transactions or
@@ -74,11 +74,19 @@ under the License.
                 </div>
             </div>
 
+            <div class="page-heading">3rd Party Databases</div>
             <p>
-                The in-memory data grid can also improve performance and scalability by integrating with existing 3rd party
-                databases, like RDBMS, NoSQL, or Hadoop-based storages. This approach does not require
-                rip-and-replace of the existing data, but has its limitations. For example, SQL or scan queries will only include the
-                results stored in memory, and not in the external database, since Ignite does not have any knowledge of the external data.
+                Inite in-memory data grid can improve performance and scalability of existing 3rd party databases, like RDBMS,
+                NoSQL, or Hadoop-based storages, by sliding in as a distribute cache between the application and database layers. This approach does not require
+                rip-and-replace of the existing data, and will automatically write-through or read-through all the updates
+                or reads to or from the underlying database. Ignite will automatically merge with the underlying database
+                transactions, providing transparent transactional behavior to the users.
+            </p>
+            <p>
+                However, this approach also has its limitations. For example, SQL or scan queries will only include the
+                results stored in memory, and not in the external database, since Ignite cannot index the external data.
+                If you require that data on disk should be indexed and accessible via SQL queries, we recommend that you look at
+                <a href="/arch/persistence.html">Ignite native persistence</a>.
             </p>
 
             <div class="page-heading">JCache APIs</div>
