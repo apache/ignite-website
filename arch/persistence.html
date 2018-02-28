@@ -33,7 +33,7 @@ under the License.
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="canonical" href="https://ignite.apache.org/features/persistence.html" />
+    <link rel="canonical" href="https://ignite.apache.org/arch/persistence.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -41,7 +41,7 @@ under the License.
     <meta http-equiv="Expires" content="0" />
     <title>Peristence - Apache Ignite</title>
     <meta name="description" content="Apache Ignite can be used as a memory-centric distributed SQL database that allows executing SQL queries over the data that is both in memory and on disk"/>
-    <link media="all" rel="stylesheet" href="/css/all.css?v=1514336027">
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1514336028">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
 
@@ -56,21 +56,31 @@ under the License.
             <h1 class="first">Ignite Native Persistence</h1>
                 <div class="col-sm-12 col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
                     <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                        <p>Ignite native persistence is a distributed, ACID, and <nobr>SQL-compliant</nobr> disk store
-                            that transparently integrates with Ignite's durable memory. Ignite persistence is optional
-                            and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
+                        <p>
+                            As it is covered in <a href="/arch/memorycentric.html">memory-centric storage</a>,
+                            Ignite is widely used as a caching layer (aka. data grid) above an existing 3rd
+                            party database such as RDBMS, Apache Cassandra or MongoDB. This mode is used to
+                            accelerate the underlying database that persists the data.
+                            At the same time Ignite comes with its own persistence, that is considered as an alternate
+                            and preferable persistence layer for the Ignite cluster.
                         </p>
                         <p>
-                            With the the native persistence enabled, Ignite always stores a superset of data on disk,
-                            and as much as possible in RAM. For example, if there are
-                            100 entries and RAM has the capacity to store only 20, then all 100 will be stored on disk
-                            and only 20 will be cached in RAM for better performance.
+                            Ignite native persistence is a distributed, ACID, and <nobr>SQL-compliant</nobr> disk store
+                            that transparently integrates with Ignite's durable memory. Ignite persistence is optional
+                            and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
                         </p>
                     </div>
                     <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0; top: -10px;">
                         <a href="/images/native_persistence.png"><img class="img-responsive" src="/images/native_persistence.png" width="450px" style="float:right;" alt="Apache Ignite Native Persistence - Distributed SQL Database"/></a>
                     </div>
                 </div>
+                <p>
+                    With the the native persistence enabled, Ignite always stores a superset of data on disk,
+                    and as much as possible in RAM. For example, if there are
+                    100 entries and RAM has the capacity to store only 20, then all 100 will be stored on disk
+                    and only 20 will be cached in RAM for better performance.
+                </p>
+
                 <p>
                     The native persistence has the following important characteristics:
                 </p>

@@ -1,0 +1,288 @@
+<!--
+▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+ ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+ ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+     ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="canonical" href="https://ignite.apache.org/features/transactions.html" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>ACID Transactions</title>
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1509574040">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+    <main id="main" role="main" class="container">
+        <section id="java" class="page-section">
+            <h1 class="first">ACID Transactions</h1>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+                <div class="col-sm-6 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
+                    <p>
+                        Apache Ignite is a strongly consistent platform that fully supports distributed ACID transactions.
+                        The consistency guarantees are met for both memory and disk tiers.
+                    </p>
+                    <p>
+                        Transactions in Apache Ignite can span multiple cluster nodes, caches (aka. tables) and partitions.
+                        Both pessimistic and optimistic locking are available for applications. The optimistic mode
+                        also supports deadlock-free transactions that help avoid distributed deadlocks in user code.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
+                    <img class="img-responsive" src="/images/in_memory_data.png" width="500" style="float:right;"/>
+                </div>
+            </div>
+
+            <div class="page-heading">Two-Phase-Commit Protocol</div>
+            <p>
+                In a distributed system, a transaction may span multiple cluster nodes. Obviously, this poses some
+                challenges when we want to ensure that the data is consistent across all the participating nodes.
+                For example, in the event of a cluster node failure, the transaction may not have fully committed on
+                the lost node. A widely-used approach to ensuring data consistency in this type of scenario is the
+                two-phase commit protocol (2PC).
+            </p>
+            <p>
+                Ignite comes with one the fastest implementations of 2PC protocol. Moreover,
+                often when transactions span only one node or one partition, Ignite will utilize a much faster
+                one-phase-commit (1PC) protocol. Whenever the data is updated within a transaction,
+                Ignite will keep the transactional state in a local transaction map until the changes are committed,
+                at which point the data is transferred to the participating remote nodes. Only the nodes that hold the
+                primary or backup copies of the data will participate in the transaction.
+            </p>
+            <div class="page-heading">Consistency and Ignite Persistence</div>
+            <p>
+                If Ignite native persistence is used then all the updates are written to the write-ahead log (WAL) file
+                that guarantees data consistency, even if the cluster or individual nodes go down in the middle
+                of a transaction.
+            </p>
+            <p>
+                The purpose of the WAL is to propagate updates to the disk in the append-only mode, which is the fastest
+                way to persist data to disk. WAL provides a recovery mechanism for failure scenarios when a single node
+                or the whole cluster go down. A cluster can always be recovered to the
+                latest successfully committed transaction.
+            </p>
+            <div class="page-heading">Consistency and 3rd Party Persistence</div>
+            <p>
+                In scenarios when Ignite is used as a caching layer on top of 3rd party databases, such as
+                RDBMS, Ignite transactions will span both, the cached data and the external database.
+                For instance, when an RDBMS is used as a persistence layer, Ignite will write the
+                transactional changes to the database before it sends the commit message to participating cluster nodes.
+                This way, if a transaction fails at the database level, Ignite can still send the rollback message
+                to every node involved, keeping the data consistent between the in-memory cache and the external database.
+            </p>
+
+            <div class="code-examples">
+                <div class="page-heading">Code Examples</div>
+                <!-- Nav tabs -->
+                <ul id="messaging-examples" class="nav nav-tabs">
+                    <li class="active"><a href="#java-ex" aria-controls="home" data-toggle="tab">Java</a></li>
+                    <li><a href="#dotnet-ex" aria-controls="profile" data-toggle="tab">.NET</a></li>
+                    <li><a href="#cpp-ex" aria-controls="profile" data-toggle="tab">C++</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="java-ex">
+                        <pre class="brush:java">
+                            try (Transaction tx = transactions.txStart()) {
+                                Integer hello = cache.get("Hello");
+
+                                if (hello == 1)
+                                    cache.put("Hello", 11);
+
+                                    cache.put("World", 22);
+
+                                tx.commit();
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="dotnet-ex">
+                        <pre class="brush:csharp">
+                            using (ITransaction tx = transactions.TxStart())
+                            {
+                                var hello = cache.Get(1);
+
+                                if (hello != "Hello")
+                                    cache.Put(1, "Hello");
+
+                                    cache.Put(2, "World");
+
+                                tx.Commit();
+                            }
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="cpp-ex">
+                        <pre class="brush:cpp">
+                        Transaction tx = transactions.TxStart();
+
+                        int hello = cache.Get("Hello");
+
+                        if (hello == 1)
+                            cache.Put("Hello", 11);
+
+                        cache.Put("World", 22);
+
+                        tx.Commit();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-heading">More on Ignite Transactions</div>
+            <table class="formatted" name="More on Ignite Transactions">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Feature</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="features-left">ACID Transactions</td>
+                    <td>
+                        <p>
+                            Ignite provides fully ACID compliant distributed transactions that ensure guaranteed consistency.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">2-Phase-Commit</td>
+                    <td>
+                        <p>
+                            Ignite utilizes a Two-Phase-Commit (2PC) protocol for its transactions and optimizes
+                            to one-phase-commit whenever possible:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions#two-phase-commit-2pc" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Write-Ahead Log</td>
+                    <td>
+                        <p>
+                            Ignite persistence maintains the WAL that propagates updates to disk in the fastest way possible and
+                            provides a recovery mechanism for scenarios where a single node or the whole cluster goes down:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/write-ahead-log" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Deadlock-Free Transactions</td>
+                    <td>
+                        <p>
+                            Ignite supports deadlock-free, optimistic transactions, which do not acquire any locks.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions#deadlock-free-transactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">Deadlocks Detection</td>
+                    <td>
+                        <p>
+                            Debugging and troubleshooting distributed deadlocks in Ignite:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions#deadlock-detection" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left" width="35%">Transactional Entry Processor</td>
+                    <td>
+                        <p>
+                            Ignite transactional entry processor allows executing collocated user logic on the server
+                            side within a transaction:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/affinity-collocation#ignitecompute-vs-entryprocessor" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left" width="35%">Cross-Partition Transactions</td>
+                    <td>
+                        <p>
+                            In Ignite, transactions can be performed on all partitions of a cache across the whole
+                            cluster:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions#ignitetransactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left" width="35%">Locks</td>
+                    <td>
+                        <p>
+                            Ignite allows developers to define explicit locks enforcing mutual exclusion on cached objects:
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/distributed-locks" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">XA/JTA</td>
+                    <td>
+                        <p>
+                            Ignite can be configured with a Java Transaction API (JTA) transaction manager lookup class.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/transactions#integration-with-jta" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>

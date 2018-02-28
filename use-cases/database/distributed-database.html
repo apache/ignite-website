@@ -37,7 +37,7 @@ under the License.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distributed Database - Apache Ignite</title>
-    <link media="all" rel="stylesheet" href="/css/all.css?v=1514336027">
+    <link media="all" rel="stylesheet" href="/css/all.css?v=1514336028">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link media="all" rel="stylesheet" href="/css/syntaxhighlighter.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
@@ -58,18 +58,20 @@ under the License.
                         compute, machine learning and other data processing APIs.
                     </p>
                     <p>
-                        Regardless of the API you decide to use, the data is always stored in a form of key-value pairs
-                        across the cluster. The underlying key-value store distributes the data evenly guaranteeing that
+                        Regardless of the API you decide to use, the data is always stored off-heap in the cluster-aware
+                        page-based storage which tries to evenly distribute the data, guaranteeing that
                         every cluster node will own a portion of the overall data set.
                     </p>
                     <p>
                         The data and indexes can be stored both in RAM and, optionally, on disk if
-                        <a href="/features/persistence.html">Ignite Native Persistence</a> is enabled.
+                        <a href="/arch/persistence.html">Ignite Native Persistence</a> is enabled.
                     </p>
                     <p>
-                        Ignite Persistent Store is a distributed ACID and SQL-compliant disk store that transparently
-                        integrates with Ignite's durable memory as an optional disk layer storing data and indexes on
-                        SSD, Flash, 3D XPoint, and other types of non-volatile storages.
+                        Ignite native persistent store utilizes disk to allow Ignite users store and process
+                        more data than can fit in memory. It also adds extra resiliency and crash recovery capabilities
+                        and supports full cluster restarts without loosing data. Moreover, when persistence is turned on,
+                        the cluster restarts are almost instantaneous, as Ignite becomes immediately operational from
+                        disk without having to preload all the data in memory.
                     </p>
                 </div>
 
@@ -80,41 +82,42 @@ under the License.
 
             <div class="page-heading">SQL</div>
             <p>
-                Ignite complies with SQL ANSI-99 standard supporting all <b>SQL</b> and <b>DML</b> commands,
+                Ignite is ANSI-99 compliant, supporting most <b>SQL</b> and <b>DML</b> commands,
                 including SELECT, UPDATE, INSERT, MERGE, DELETE statements and distributed joins. It also provides
-                support for a subset of <b>DDL</b> commands relevant for distributed SQL databases.
+                support for a subset of <b>DDL</b> commands, including CREATE and ALTER commands for tables and indexes.
             </p>
 
             <div class="page-heading">Key-value</div>
             <p>
-                Apache Ignite key-value APIs are compliant with <a href="/use-cases/caching/jcache-provider.html">
-                JCache (JSR 107)</a> specification and provide extended features built on top such as
-                distributed ACID transactions, scan and continuous queries, collocated processing.
+                Ignite can be used ad a distributed key-value store, supporting all map-like key-value operations, including
+                concurrent CAS operations. It also provides rich support for distributed ACID transactions, continuous
+                queries, collocated processing and more. Ignite key-value store is fully compliant with
+                <a href="/use-cases/caching/jcache-provider.html">JCache (JSR 107)</a> specification.
             </p>
             <div class="page-heading">Collocated Processing</div>
             <p>
-                The disk-centric systems, like RDBMS or NoSQL, generally utilize the classic client-server
-                approach, where the data is brought from the server to the client side where it gets processed
-                and then is usually discarded. This approach does not scale well as moving the data over the
+                Most disk-centric databases, like RDBMS or NoSQL, generally utilize the classic client-server
+                approach, where the data is brought from the server to the client where it gets processed
+                and then discarded. This approach does not scale well as moving the data over the
                 network is the most expensive operation in a distributed system.
             </p>
             <p>
-                A much more scalable approach is <a href="/collocatedprocessing.html">
+                A much more scalable approach is <a href="/features/collocatedprocessing.html">
                 collocated processing</a> that reverses the flow by bringing the computations to the servers where
                 the data actually resides. This approach allows you to execute advanced logic or distributed SQL
-                with JOINs exactly where the data is stored avoiding expensive serialization and network trips.
+                with JOINs exactly where the data is stored, avoiding expensive serialization and network trips.
             </p>
             <div class="page-heading">Partitioning & Replication</div>
             <p>
                 Depending on the configuration, Ignite can either partition or replicate data.
                 Unlike <code>REPLICATED</code> mode, where data is fully replicated across all nodes
                 in the cluster, in <code>PARTITIONED</code> mode Ignite will equally split the data across
-                multiple cluster nodes, allowing for staring TBs of data both in memory and on disk.
+                multiple cluster nodes, allowing for storing Terabytes of data in memory and on disk.
             </p>
             <div class="page-heading">Redundancy</div>
             <p>
-                Ignite also allows to configure multiple <b>backup copies</b> to guarantee data resiliency
-                in case of failures.
+                Ignite also allows to configure multiple <b>backup copies</b> guaranteeing data resiliency
+                in case of individual node or server failures.
             </p>
             <div class="page-heading">Consistency</div>
             <p>
