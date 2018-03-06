@@ -53,22 +53,22 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="native-persistence" class="page-section">
-            <h1 class="first">Ignite Native Persistence</h1>
+            <h1 class="first">Ignite Persistence</h1>
                 <div class="col-sm-12 col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
                     <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
                         <p>
-                            As it is covered in <a href="/arch/memorycentric.html">memory-centric storage</a>,
-                            Ignite is widely used as a caching layer (aka. data grid) above an existing 3rd
-                            party database such as RDBMS, Apache Cassandra or MongoDB. This mode is used to
-                            accelerate the underlying database that persists the data.
-                            At the same time Ignite comes with its own persistence, that is considered as an alternate
-                            and preferable persistence layer for the Ignite cluster.
+                            Ignite is widely used as a caching layer above an existing 3rd
+                            party database, such as RDBMS, Apache Cassandra or MongoDB, to
+                            accelerate them. At the same time, Ignite comes with its own persistence that is considered as an alternate
+                            and preferable persistence layer for an Ignite cluster.
                         </p>
+                        <h2 style="padding-top: 10px;">Native Persistence</h2>
                         <p>
                             Ignite native persistence is a distributed, ACID, and <nobr>SQL-compliant</nobr> disk store
                             that transparently integrates with Ignite's durable memory. Ignite persistence is optional
                             and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
                         </p>
+
                     </div>
                     <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0; top: -10px;">
                         <a href="/images/native_persistence.png"><img class="img-responsive" src="/images/native_persistence.png" width="450px" style="float:right;" alt="Apache Ignite Native Persistence - Distributed SQL Database"/></a>
@@ -80,7 +80,6 @@ under the License.
                     100 entries and RAM has the capacity to store only 20, then all 100 will be stored on disk
                     and only 20 will be cached in RAM for better performance.
                 </p>
-
                 <p>
                     The native persistence has the following important characteristics:
                 </p>
@@ -170,7 +169,32 @@ under the License.
                         </pre>
                     </div>
                 </div>
-            <p><a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Read more</a></p>
+
+            <h2 style="padding-top: 10px;">3rd Party Persistence</h2>
+            <p>
+                Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party
+                database - RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database that persists
+                the data. Ignite stores data in memory, distributed across multiple nodes providing fast data access.
+                It reduces the network overhead caused due to frequent data movement between an application and the database.
+                However, there are some limitations in comparison to the native persistence. For instance, SQL queries
+                will be executed only on the data that is in RAM, thus, requiring to preload all the data set from disk
+                to memory beforehand.
+            </p>
+
+            <h2 style="padding-top: 10px;">Swap Space</h2>
+            <p>
+                If you do not want to use Ignite native persistence or 3rd party persistence, you can enable swapping,
+                in which case, Ignite in-memory data will be moved to the swap space located on disk if you run out of RAM.
+                When swap space is enabled, Ignites stores data in memory mapped files (MMF) whose content will be
+                swapped to disk by the OS depending on the current RAM consumption. The swap space is mostly used to
+                avoid out of memory errors (OOME) that might happen if RAM consumption goes beyond its capacity and
+                you need more time to scale the cluster out to​ redistribute the data sets evenly.
+            </p>
+
+            <div class="page-heading">More Information</div>
+            <p><a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">Native Persistence</a></p>
+            <p><a href="https://apacheignite.readme.io/docs/3rd-party-store" target="_blank">3rd Party Persistence</a></p>
+            <p><a href="https://apacheignite.readme.io/docs/swap-space" target="_blank">Swap Space</a></p>
         </section>
     </main>
 
