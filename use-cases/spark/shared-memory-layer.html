@@ -54,21 +54,28 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite provides an implementation of Spark RDD and DataFrames abstractions which allows
-                        using Ignite as an in-memory distributed store in Spark. That gives an ability to share a state
-                        and data across multiple Spark jobs and workers easily, either within the same application or
-                        between different Spark applications.
+                        Apache Ignite is a distributed memory-centric database and caching platform that is used by
+                        Apache Spark users to:
+                        <ul>
+                            <li>
+                                Achieve true in-memory performance and avoid data movement from a data source to
+                                Spark workers and applications.
+                            </li>
+                            <li>
+                                Share the state among several running Spark applications.
+                            </li>
+                            <li>
+                                Boost Spark SQL with the usage of Ignite DataFrames or by switching to Ignite SQL.
+                            </li>
+                        </ul>
                     </p>
-                    <div class="page-heading">Shared RDDs and DataFrames</div>
+                    <div class="page-heading">Ignite Shared RDDs</div>
                     <p>
-                        In addition to all the standard RDDs and DataFrames functionality, Ignite's shared Spark RDDs and DataFrames
-                        also shares the state of the RDD across other Spark jobs, applications and workers.
-                    </p>
-                    <p>
-                        Depending on the pre-configured deployment mode, the shared state may either exist only
-                        during the lifespan of a Spark application (<code>embedded mode</code>), or it may out-survive
-                        the Spark application (<code>standalone mode</code>), in which case the state can be shared across
-                        multiple Spark applications.
+                        Apache Ignite provides an implementation of Spark RDD abstraction which allows to
+                        easily share state in memory across Spark jobs. The main difference between native
+                        Spark RDD and IgniteRDD is that Ignite RDD provides a shared in-memory view on data across
+                        different Spark jobs, workers, or applications, while other Spark jobs or applications
+                        cannot see native Spark RDD.
                     </p>
                 </div>
 
@@ -77,17 +84,45 @@ under the License.
                 </div>
             </div>
 
-            <div class="page-heading">In-Memory File System</div>
             <p>
-                One of unique capabilities of Ignite is a distributed in-memory file system called
-                Ignite File System (IGFS). IGFS delivers similar functionality to Hadoop HDFS, but
-                only in memory. In fact, in addition to its own APIs, IGFS implements Hadoop FileSystem API
-                and can be transparently plugged into Hadoop or Spark deployments.
+                Also, even Apache Spark supports a fairly rich SQL syntax, it doesn’t support indexing natively.
+                Spark queries may take minutes, even on moderately small data sets by doing full scans of data.
+                With Ignite, Spark users can configure primary and secondary indexes that can bring 1000x
+                performance improvement depending on a use case.
             </p>
             <p>
-                IGFS splits the data from each file into separate data blocks and stores them in
-                a distributed in-memory cache. However, unlike Hadoop HDFS, IGFS does not need a name node
-                and automatically determines file data locality using a hashing function.
+                The way IgniteRDD is implemented is as a view over a distributed Ignite table (aka. cache),
+                which may be deployed either within the Spark job executing process, or on a Spark worker,
+                or in its cluster. It means that depending on the chosen deployment mode the shared state may
+                either exist only during the lifespan of a Spark applicati​on (embedded mode), or it may
+                out-survive the Spark application (standalone mode) in which case the state can be shared
+                across multiple Spark applications.
+            </p>
+
+            <div class="page-heading">Ignite DataFrames</div>
+            <p>
+                Apache Spark DataFrame API introduced the concept of a schema to describe the data,
+                allowing Spark to manage the schema and organize the data into a tabular format.
+                To put it simply, a DataFrame is a distributed collection of data organized into named columns.
+                It is conceptually equivalent to a table in a relational database which allows Spark leveraging
+                from Catalyst query optimizer. The optimizer produces much more efficient query execution plans
+                in compare to RDDs which are just collections of elements partitioned across the nodes of the cluster.
+            </p>
+            <p>
+                Ignite DataFrame implementation expands and makes standard DataFrames much more performant whenever
+                Ignite is used as memory-centric storage for Spark. That gives following benefits:
+                <ul>
+                <li>
+                    Ability to share DataFrames across Spark workers by writing and reading DataFrames to/from Ignite.
+                </li>
+                <li>
+                    Faster Spark SQL queries with an in-place execution of Spark's query execution plans in Ignite
+                    which avoids data movement from Ignite to Spark.
+                </li>
+                <li>
+                    Boost Spark SQL even further by defining secondary indexes on Ignite side.
+                </li>
+                </ul>
             </p>
             <p>
                 <a href="https://apacheignite-fs.readme.io/docs/ignitecontext-igniterdd" target="docs">
