@@ -77,6 +77,11 @@ under the License.
                 difference here from the traditional disk-centric RDBMS or NoSQL system is that Ignite is strongly consistent,
                 horizontally scalable, and supports both SQL and key-value processing APIs.
             </p>
+            <p>
+                Read more about Ignite's <i>durable memory</i> and its operational modes
+                <a href="/arch/durablememory.html">here</a>.
+            </p>
+
 
             <div class="page-heading">Collocated vs Client-Server Processing</div>
             <p>
@@ -110,37 +115,6 @@ under the License.
                 all cluster members.
             </p>
 
-            <div class="page-heading">Ignite as In-Memory Store</div>
-            <p>
-                The persistence is totally optional in Ignite that allows using the cluster in the memory-only mode
-                where all the data and indexes are stored solely in RAM. In this scenario, you can achieve the maximum
-                performance possible because the data is never written to disk. To prevent possible data loss when a
-                single cluster node fails, it is recommended to configure a number of backup copies (aka. replication
-                factor) appropriately.
-            </p>
-
-            <div class="page-heading">Ignite Persistence</div>
-            <p>
-                There are two ways to enable persistence in Ignite. The first approach is to use its own distributed,
-                ACID, and <nobr>SQL-compliant</nobr> persistence that transparently and efficiently integrates with
-                overall memory architecture.
-            </p>
-            <p>
-                With the the native persistence enabled, Ignite always stores a superset of data on disk,
-                and as much as possible in RAM. For example, if there are
-                100 entries and RAM has the capacity to store only 20, then all 100 will be stored on disk
-                and only 20 will be cached in RAM for better performance.
-            </p>
-
-            <div class="page-heading">Ignite and 3rd Party Database</div>
-            <p>
-                The second approach to have the persistence enabled, is to deploy Ignite above an existing 3rd party database
-                such as RDBMS, Apache Cassandra or MongoDB. This mode is usually used to accelerate the underlying
-                database by storing a copy of the data in memory in Ignite. Ignite supports both read-through and
-                write-through modes that ensure data consistency and keeps Ignite and the database in sync. Refer to
-                <a href="/arch/persistence.html" target="doc">Ignite persistence</a> page to compare Ignite persistence
-                vs 3rd Party Persistence modes.
-            </p>
 
             <div class="page-heading">More on Memory-Centric Storage</div>
             <table class="formatted" name="Deployment Options Features">

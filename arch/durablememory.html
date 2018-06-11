@@ -77,7 +77,75 @@ under the License.
                 indexes on disk (assuming that Ignite Native Persistence is enabled), while Virtual Memory uses the
                 disk when it runs out of RAM, for swapping purposes only.
             </p>
-            <h2 style="padding-top: 10px;">Ignite Native Persistence</h2>
+
+            <div class="page-heading">Durable Memory Modes</div>
+            <table class="formatted" name="Deployment Options Features">
+                <thead>
+                <tr>
+                    <th width="35%" class="left">Mode</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="left">In-Memory</td>
+                    <td>
+                        <p>
+                            The whole data set is stored in memory. In this scenario, you can achieve the maximum
+                            performance possible because the data is never written to disk. To prevent possible data
+                            loss when a single cluster node fails, it is recommended to configure a number of backup
+                            copies (aka. replication factor) appropriately.
+                            <a href="/arch/durablememory.html#swap-space">Swap space</a> can be used to prevent memory
+                            overflow.
+                        </p>
+
+                        <p>
+                            <strong>Use cases</strong>: in-memory computations,
+                            <a href="/use-cases/caching/web-session-clustering.html">Web-session clustering</a>,
+                            state caching, real-time processing of never-ending streams of data.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">In-Memory + Full Copy on Disk</td>
+                    <td>
+                        <p>
+                            The whole data set is stored both in memory and on disk. The disk is used for recovery
+                            purpose. <a href="/arch/durablememory.html#native-persistence">Ignite persistence</a>
+                            or a <a href="/arch/durablememory.html#3rd-party-persistence">3rd party database</a>
+                            can be used as a persistence layer.
+                        </p>
+
+                        <p>
+                            <strong>Use cases</strong>: Ignite as an
+                            <a href="/features/datagrid.html"><nobr>In-Memory Data Grid</nobr></a> or
+                            <a href="/use-cases/caching/database-caching.html">distributed cache</a>
+                            which scales out and accelerates existing RDBMS and NoSQL deployments.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">100% on Disk + X% in Memory</td>
+                    <td>
+                        <p>
+                            100% of data is stored in <a href="/arch/durablememory.html#native-persistence">Ignite persistence</a>
+                            and X% of data is cached in memory. X is solely defined by your hardware resources. The
+                            more data is cached the faster is the performance. The disk becomes your primary storage.
+                        </p>
+
+                        <p>
+                            <strong>Use cases</strong>: Ignite as a memory-centric
+                            <a href="/use-cases/database/distributed-database.html"><nobr>distributed database</nobr></a>.
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2 style="padding-top: 10px;" id="native-persistence">
+                Ignite Native Persistence
+                <a href="/arch/durablememory.html#native-persistence"><i class="fa fa-anchor"></i></a>
+            </h2>
             <p>
                 Ignite Persistence is the most flexible, scalable, and convenient way of persisting data in Ignite.
                 It is widely used in scenarios where applications need a distributed memory-centric database
@@ -115,7 +183,10 @@ under the License.
                 </ul>
             </div>
 
-            <h2 style="padding-top: 10px;">3rd Party Persistence</h2>
+            <h2 style="padding-top: 10px;" id="3rd-party-persistence">
+                3rd Party Persistence
+                <a href="/arch/durablememory.html#3rd-party-persistence"><i class="fa fa-anchor"></i></a>
+            </h2>
             <p>
                 Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party
                 database - RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database that persists
@@ -126,7 +197,10 @@ under the License.
                 to memory beforehand.
             </p>
 
-            <h2 style="padding-top: 10px;">Swap Space</h2>
+            <h2 style="padding-top: 10px;" id="swap-space">
+                Swap Space
+                <a href="/arch/durablememory.html#swap-space"><i class="fa fa-anchor"></i></a>
+            </h2>
             <p>
                 If you do not want to use Ignite native persistence or 3rd party persistence, you can enable swapping,
                 in which case, Ignite in-memory data will be moved to the swap space located on disk if you run out of RAM.
