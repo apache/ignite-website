@@ -78,7 +78,10 @@ under the License.
                 disk when it runs out of RAM, for swapping purposes only.
             </p>
 
-            <div class="page-heading">Durable Memory Modes</div>
+            <div class="page-heading" id="durable-memory-modes">
+                Durable Memory Modes
+                <a href="/arch/durablememory.html#durable-memory-modes"><i class="fa fa-anchor"></i></a>
+            </div>
             <table class="formatted" name="Deployment Options Features">
                 <thead>
                 <tr>
@@ -100,9 +103,24 @@ under the License.
                         </p>
 
                         <p>
-                            <strong>Use cases</strong>: in-memory computations,
-                            <a href="/use-cases/caching/web-session-clustering.html">Web-session clustering</a>,
-                            state caching, real-time processing of never-ending streams of data.
+                            <strong>Use cases</strong>: in-memory caches, in-memory data grids, in-memory computations,
+                            web-session caching, real-time processing of continuous data streams.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">In-Memory + 3rd party database</td>
+                    <td>
+                        <p>
+                            Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party
+                            database - RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database.
+                            Automatic integration is provided with most of the known databases, like Oracle, MySQL,
+                            PostgreSQL, Apache Cassandra, etc.
+                        </p>
+
+                        <p>
+                            <strong>Use cases</strong>: Ignite as <a href="/features/datagrid.html">In-Memory Data Grid</a>
+                            - adds acceleration and scale to existing database deployments (RDBMS, NoSQL, etc).
                         </p>
                     </td>
                 </tr>
@@ -110,32 +128,33 @@ under the License.
                     <td class="left">In-Memory + Full Copy on Disk</td>
                     <td>
                         <p>
-                            The whole data set is stored both in memory and on disk. The disk is used for recovery
-                            purpose. <a href="/arch/durablememory.html#native-persistence">Ignite persistence</a>
-                            or a <a href="/arch/durablememory.html#3rd-party-persistence">3rd party database</a>
-                            can be used as a persistence layer.
+                            The whole data set is stored in memory and on disk. The disk is used for data recovery
+                            purposes in case of full cluster crashes and restarts.
+                            <a href="/arch/durablememory.html#native-persistence">Ignite native persistence</a> is used to
+                            store the data on disk.
                         </p>
 
                         <p>
                             <strong>Use cases</strong>: Ignite as an
-                            <a href="/features/datagrid.html"><nobr>In-Memory Data Grid</nobr></a> or
-                            <a href="/use-cases/caching/database-caching.html">distributed cache</a>
-                            which scales out and accelerates existing RDBMS and NoSQL deployments.
+                            <a href="/use-cases/database/in-memory-database.html"><nobr>In-Memory Database</nobr></a> -
+                            provides SQL, key-value and collocated processing APIs to in-memory data.
                         </p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="left">100% on Disk + X% in Memory</td>
+                    <td class="left">100% on Disk + In-Memory Cache</td>
                     <td>
                         <p>
-                            100% of data is stored in <a href="/arch/durablememory.html#native-persistence">Ignite persistence</a>
-                            and X% of data is cached in memory. X is solely defined by your hardware resources. The
-                            more data is cached the faster is the performance. The disk becomes your primary storage.
+                            100% of data is stored in <a href="/arch/durablememory.html#native-persistence">Ignite native
+                            persistence</a> and smaller subset of data is cached in memory. The more data is cached in
+                            memory, the faster is the performance. The disk serves as the primary storage that survives
+                            any type of cluster failures and restarts.
                         </p>
 
                         <p>
-                            <strong>Use cases</strong>: Ignite as a memory-centric
-                            <a href="/use-cases/database/distributed-database.html"><nobr>distributed database</nobr></a>.
+                            <strong>Use cases</strong>: Ignite as a
+                            <a href="/use-cases/database/distributed-database.html">Memory-Centric Distributed Database</a>
+                            - provides cloud-native distributed database with SQL, key-value and collocated processing APIs.
                         </p>
                     </td>
                 </tr>
