@@ -60,12 +60,9 @@ under the License.
                         connectivity. Ignite also provides native SQL APIs for Java, .NET and C++ developers for better performance.
                     </p>
                     <p>
-                        Unlike other distributed SQL databases, Ignite treats both memory and disk as active storage tiers.
+                        Unlike other distributed SQL databases, Ignite memory-centric storage treats both memory and disk as active storage tiers.
                         The disk tier, a.k.a. <nobr><a href="/arch/persistence.html">native persistence</a></nobr>, is disabled by default,
                         in which case Ignite becomes a pure <nobr><a href="/use-cases/database/in-memory-database.html">in-memory database</a> (IMDB)</nobr>.
-                    </p>
-                    <p>
-
                     </p>
                 </div>
 
@@ -82,28 +79,27 @@ under the License.
                 in distributed databases.
             </p>
 
-            <div class="page-heading">Memory Mode</div>
+            <div class="page-heading">SQL and Memory Centric Mode</div>
             <p>
-                In scenarios when the whole data set and indexes fit in memory, and the persistence is disabled,
+                Apache Ignite can function in a pure in-memory mode, or as a memory-centric system where most of the processing happens in memory, but the data and indexes get persisted to disk.
+            </p>
+
+            <p>
+                In scenarios when the whole data set and indexes are stored memory, and persistence is disabled,
                 Ignite will function as an in-memory database supporting SQL, together with all the existing APIs for memory-only use cases.
             </p>
-
-            <div class="page-heading">3rd Party Databases</div>
             <p>
-                Owing to the support for read-through and write-through capabilities, Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party database -
-                RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database. Automatic integration is
-                provided with most of the known databases, like Oracle, MySQL, PostgreSQL, Apache Cassandra, etc.
+                When <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">native persistence</a> is enabled, only
+                a subset of data and most frequently used indexes are stored in memory. Since Ignite persists indexes on disk, they do not have to be rebuilt on cluster restart making the system faster than other in-memory databases.
             </p>
 
-            <div class="page-heading">Native Persistence</div>
+            <div class="page-heading">SQL and 3rd Party Databases</div>
             <p>
-                Ignite <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="_blank">native persistence</a> is a distributed ACID and SQL-compliant disk store that transparently integrates with Ignite's durable memory.
-                Ignite persistence is optional and can be turned on and off.
-                When turned off, Ignite becomes a pure in-memory store. When native persistence is enabled, Ignite stores both data and indexes on disk.
-                A subset of data and the most frequently used indexes are stored in memory. Additionally, since Ignite persists indexes on disk,
-                they do not have to be rebuilt on cluster restart making the system faster than other in-memory databases.
+                Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party database -
+                RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database. Ignite provides read-through and
+                write-through functionalities to read and write database records. While Ignite requires data to be preloaded into caches for SELECT queries,
+                it propogates all updates - INSERT, UPDATE, DELETE - to the database.
             </p>
-
 
             <p>
                 Want to learn more? See <a href="https://apacheignite-sql.readme.io/docs/overview" target="_blank">Ignite SQL Capabilities</a>
