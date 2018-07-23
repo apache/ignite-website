@@ -33,7 +33,7 @@ under the License.
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="canonical" href="https://ignite.apache.org/features/datagrid.html" />
+    <link rel="canonical" href="https://ignite.apache.org/features/datagrid.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -56,57 +56,60 @@ under the License.
         <section id="datagrid" class="page-section">
             <h1 class="first">Key-Value In-Memory Data Grid</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
+
+                <p>
+                    Ignite provides extensive and rich key-value APIs and can act as an in-memory data grid.
+                    You can think of Ignite as of a distributed partitioned hash map with every
+                    cluster node owning a portion of the overall data set. Unlike other in-memory data grids (IMDG),
+                    Ignite enables storing data both, in memory and on disk, and
+                    therefore is able to store more data than can fit in the physical memory.
+                </p>
+                <p>
+                    Ignite data grid is one of the fastest implementations of ACID transactions or
+                    atomic data updates in distributed clusters today. We know it because we constantly benchmark it ourselves.
+                </p>
                 <div class="col-sm-8 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
-                    <p>
-                        Ignite provides extensive and rich key-value APIs and can act as an in-memory data grid.
-                        You can think of Ignite as of a distributed partitioned hash map with every
-                        cluster node owning a portion of the overall data set. Unlike other in-memory data grids (IMDG),
-                        Ignite enables storing data both, in memory and on disk, and
-                        therefore is able to store more data than can fit in the physical memory.
-                    </p>
-                    <p>
-                        Ignite data grid is one of the fastest implementations of ACID transactions or
-                        atomic data updates in distributed clusters today. We know it because we constantly benchmark it ourselves.
-                    </p>
                     <div class="page-heading">3rd Party Databases</div>
                     <p>
-                        Ignite in-memory data grid can improve performance and scalability of existing 3rd party databases, like RDBMS,
-                        NoSQL, or Hadoop-based storages, by sliding in as a distribute cache between the application and database layers. This approach does not require
-                        rip-and-replace of the existing data, and will automatically write-through or read-through all the updates
-                        or reads to or from the underlying database. Ignite will automatically merge with the underlying database
+                        Ignite in-memory data grid can improve performance and scalability of existing 3rd party databases - RDBMS,
+                        NoSQL, or Hadoop-based storages, by sliding in as a distributed cache between the application and database layers.
+                        Ignite will automatically write-through or read-through all the updates
+                        or reads to or from the underlying database. Ignite will also merge with the underlying database
                         transactions, providing transparent transactional behavior to the users.
+                    </p>
+                    <p>
+                        However, this approach also has its limitations. For example, SQL or scan queries will only include the
+                        results stored in memory, and not in the external database, since Ignite cannot index the external data.
+                        If you require that data on disk should be indexed and accessible via SQL queries, we recommend that you look at
+                        <a href="/arch/persistence.html">Ignite native persistence</a>.
                     </p>
                 </div>
 
                 <div class="col-sm-4 col-md-4 col-xs-12" style="padding-right:0">
                     <img class="img-responsive" src="/images/IMDG.png" width="300px" style="float:right;"/>
                 </div>
+
+
+                <div class="col-sm-8 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
+                    <div class="page-heading">Native Persistence</div>
+                    <p>
+                        Ignite <a href="/arch/persistence.html">native persistence</a> is a distributed ACID and SQL-compliant disk store that transparently
+                        integrates with Ignite's durable memory. Ignite persistence is optional and can be turned on and off.
+                        When turned off, Ignite becomes a pure in-memory store. When native persistence is enabled, Ignite stores
+                        both data and indexes on disk. A subset of data and the most frequently used indexes are stored in memory.
+                        Additionally, since Ignite persists indexes on disk, they do not have to be rebuilt on cluster
+                        restart making the system faster than other in-memory databases.
+                    </p>
+                </div>
+
+                <div class="col-sm-4 col-md-4 col-xs-12" style="padding-right:0">
+                    <img class="img-responsive" src="/images/native_persistence_key_value.png" width="300px" style="float:right;"/>
+                </div>
             </div>
 
+            <div class="page-heading">Key-Value APIs</div>
             <p>
-                However, this approach also has its limitations. For example, SQL or scan queries will only include the
-                results stored in memory, and not in the external database, since Ignite cannot index the external data.
-                If you require that data on disk should be indexed and accessible via SQL queries, we recommend that you look at
-                <a href="/arch/persistence.html">Ignite native persistence</a>.
-            </p>
-
-            <div class="page-heading">JCache APIs</div>
-            <p>
-                Ignite key-value APIs comply with <a href="/use-cases/caching/jcache-provider.html">JCache (JSR 107)</a>
-                specification that supports the following:
-            </p>
-            <ul class="page-list">
-                <li>In-Memory Key Value Store</li>
-                <li>Basic Cache Operations</li>
-                <li>ConcurrentMap APIs</li>
-                <li>Collocated Processing (EntryProcessor)</li>
-                <li>Events and Metrics</li>
-                <li>Pluggable Persistence</li>
-            </ul>
-
-            <div class="page-heading">Extended Key-Value APIs</div>
-            <p>
-                In addition to the standard JCache API, Ignites supports distributed ACID transactions,
+                In addition to the standard <a href="/use-cases/caching/jcache-provider.html">JCache (JSR 107)</a>, API Ignites supports distributed ACID transactions,
                 scan and continuous queries, collocated processing and more.
             </p>
 
@@ -116,6 +119,15 @@ under the License.
                 viewed as a distributed partitioned hash map with every cluster node owning a portion of the
                 overall data. This way the more cluster nodes we add, the more data we can cache.
             </p>
+
+            <div class="page-heading">Affinity Collocation</div>
+            <p>
+                To improve performance and scalability of an application, Ignite allows collocating data with data or compute with data.
+                By collocating related cache keys together, you can make sure that all keys will be cached on the same processing node,
+                hence avoiding costly network trips to fetch data from remote nodes.
+                It is also possible to route computations to the nodes where the data is cached.
+            </p>
+
             <div class="videos">
                 <div class="page-heading">Videos</div>
                 <ul class="page-list">
