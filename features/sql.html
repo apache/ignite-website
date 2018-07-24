@@ -74,7 +74,7 @@ under the License.
             <p>
                 Ignite can <nobr><a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="_blank">join data</a></nobr>
                 in both collocated and non-collocated fashions. When <a href="/features/collocatedprocessing.html">collocated</a>,
-                the JOINs are executed on the nodes where the data is stored, avoiding
+                JOINs are executed on the nodes where the data is stored, avoiding
                 expensive serialization and network trips. Such approach provides the best scalability and performance
                 in distributed databases.
             </p>
@@ -82,36 +82,33 @@ under the License.
             <div class="page-heading">SQL and In-Memory Mode</div>
             <p>
                 Apache Ignite can function in a pure in-memory mode in which all data and indexes are stored entirely
-                in RAM. In this scenario, you can achieve the maximum performance possible because the data is never
-                written to disk. As with any other in-memory database, configure backup copies of the data to
-                prevent possible data loss in case of cluster nodes failures.
+                in RAM. In this mode, you can achieve the maximum performance possible because the data is never
+                written to disk. As with any other in-memory database, you can configure backup copies of the data to
+                prevent possible data loss if cluster nodes fail.
             </p>
 
             <div class="page-heading">SQL and Native Persistence</div>
             <p>
                 In this mode, <a href="/arch/persistence.html">Ignite native persistence</a> serves as the primary
-                storage that survives any type of cluster failures and restarts. 100% of data and indexes are
+                storage that can survive cluster failures and restarts. 100% of data and indexes are
                 persisted to disk and the same or smaller amount is cached in memory.
+                When memory resources are scarce, indexes will take priority over data in
+                which case indexes will be cached first. This policy helps to run high-performant
+                SQL queries even if RAM is limited. If a value or index is missing in memory, Ignite will query on-disk data.
             </p>
             <p>
-                Ignite always queries on-disk data if a value or index is missing in memory. If RAM resources are
-                scarce, you'll find Ignite caching the most frequently used indexes there over the data. This policy helps
-                to run high-performant SQL queries even if memory resources are limited.
-            </p>
-            <p>
-                On a restart, Ignite will be reading data and indexes from disk not requiring you to warm the memory up.
-                This significantly decreases a potential downtime.
+                On cluster restart, Ignite reads data and indexes from disk eliminating the need for memory warm-up.
+                This process significantly decreases any potential downtime.
             </p>
 
             <div class="page-heading">SQL and 3rd Party Databases</div>
             <p>
-                Finally, Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party database -
+                Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party database -
                 RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database. Ignite provides read-through and
                 write-through capabilities to read and write database records.
             </p>
             <p>
-                In this mode Ignite requires the whole data to be preloaded into caches for SELECT queries,
-                it propogates all updates - INSERT, UPDATE, DELETE - to the database.
+                In this mode, Ignite requires preloading data into caches for SELECT queries; however, it propagates all updates - INSERT, UPDATE, DELETE - to the database.
             </p>
 
             <p>
