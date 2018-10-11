@@ -61,24 +61,43 @@ under the License.
                         consistency in one system.
                     </p>
                     <p>
-                        The main difference between the memory-centric approach and the traditional disk-centric approach is that
-                        the memory is treated as a fully functional storage, not just as a caching layer, like most databases do.
-                        For example, Apache Ignite can function in a pure in-memory mode, in which case it can be treated as an
-                        In-Memory Database (IMDB) and In-Memory Data Grid (IMDG) in one.
+                        When native persistence is turned on, Ignite functions as a <nobr><i>memory-centric system-of-record</i></nobr>,
+                        where most of the processing happens in memory on cached data, but the superset of data and indexes gets persisted to disk.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/memory-centric-storage.png" width="440px" style="float: right;"/>
+                    <img class="img-responsive" src="/images/durable_memory.png" width="440px" style="float: right;"/>
                 </div>
             </div>
             <p>
-                On the other hand, when persistence is turned on, Ignite functions as a <nobr><i>memory-centric system-of-record</i></nobr>,
-                where most of the processing happens in memory on cached data, but the superset of data and indexes get persisted to disk.
+                When persistence is turned off, Ignite functions as a memory-only store, in which case it can be treated as a Distributed Cache,
+                In-Memory Database (IMDB) or In-Memory Data Grid (IMDG).
             </p>
-            <div class="page-heading" id="durable-memory-modes">
-                Memory and Disk Usage Modes
-                <a href="/arch/memorycentric.html#memory-usage-modes"><i class="fa fa-anchor"></i></a>
+
+            <div class="page-heading" id="db-and-caching-in-one">
+                Database and Caching in One
+                <a href="/arch/memorycentric.html#db-and-caching-in-one"><i class="fa fa-anchor"></i></a>
             </div>
+            <p>
+                One of the main advantages of Ignite is that it comes with a distributed in-memory cache and a
+                distributed on-disk storage in one platform. In other words, Ignite users get both, a
+                distributed cache and a distributed database together.
+            </p>
+            <p>
+                Ignite distributed cache can be used either stand-alone, or can also integrate with any existing database, including
+                Oracle, MySQL, Cassandra, Mongo, and others. However, in this case, the memory-layer may not be able to
+                fit the whole data set, causing Ignite indexing and SQL queries to only function
+                over the in-memory subset. This approach is recommended whenever there is already
+                an existing database present and replacing it is not an option.
+            </p>
+            <p>
+                However, in order to ensure that the whole data set is durable and available for querying and collocated processing,
+                it is preferable to enable native persistence and use Ignite as a distributed system-of-record.
+                In this case Ignite will always store a superset of data on disk,  with a subset of data cached in memory.
+            </p>
+            <p>
+                The following <i>memory and disk usage modes</i> are supported:
+            </p>
             <table class="formatted" name="Deployment Options Features">
                 <thead>
                 <tr>
@@ -91,12 +110,9 @@ under the License.
                     <td class="left">In-Memory</td>
                     <td>
                         <p>
-                            The whole data set is stored in memory. In this scenario, you can achieve the maximum
-                            performance possible because the data is never written to disk. To prevent possible data
-                            loss when a single cluster node fails, it is recommended to configure a number of backup
-                            copies (aka. replication factor) appropriately.
-                            <a href="/arch/memorycentric.html#swap-space">Swap space</a> can be used to prevent memory
-                            overflow.
+                            The whole data set is stored in memory. In order to survive
+                            node failures, it is recommended to configure a number of redundant backup
+                            copies (aka. replication factor) across the cluster.
                         </p>
 
                         <p>
@@ -109,9 +125,9 @@ under the License.
                     <td class="left">In-Memory + 3rd party database</td>
                     <td>
                         <p>
-                            Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party
-                            database - RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database.
-                            Automatic integration is provided with most of the known databases, like Oracle, MySQL,
+                            Ignite can be used as a caching layer (aka. data grid) over any existing 3rd party
+                            database. This mode is used to accelerate and scale the underlying database.
+                            Automatic integration is provided with most known databases, like Oracle, MySQL,
                             PostgreSQL, Apache Cassandra, etc.
                         </p>
 
@@ -125,16 +141,14 @@ under the License.
                     <td class="left">In-Memory + Full Copy on Disk</td>
                     <td>
                         <p>
-                            The whole data set is stored in memory and on disk. The disk is used for data recovery
-                            purposes in case of full cluster crashes and restarts.
-                            <a href="/arch/memorycentric.html#native-persistence">Ignite native persistence</a> is used to
-                            store the data on disk.
+                            The whole data set is stored in memory and on disk. The disk is used as a memory-offload for data recovery
+                            purposes, in case of full cluster crashes and restarts.
                         </p>
 
                         <p>
                             <strong>Use cases</strong>: Ignite as an
                             <a href="/use-cases/database/in-memory-database.html"><nobr>In-Memory Database</nobr></a> -
-                            provides SQL, key-value and collocated processing APIs to in-memory data.
+                            provides SQL, key-value and collocated processing APIs over in-memory data.
                         </p>
                     </td>
                 </tr>
@@ -142,9 +156,8 @@ under the License.
                     <td class="left">100% on Disk + In-Memory Cache</td>
                     <td>
                         <p>
-                            100% of data is stored in <a href="/arch/memorycentric.html#native-persistence">Ignite native
-                            persistence</a> and the same or smaller amount is cached in memory. The more data is in
-                            memory, the faster is the performance. The disk serves as the primary storage that survives
+                            100% of data is persisted to disk and the same or smaller amount is cached in memory.
+                            The more data is cached, the faster is the performance. The disk serves as the primary storage that survives
                             any type of cluster failures and restarts.
                         </p>
 
@@ -158,75 +171,6 @@ under the License.
                 </tbody>
             </table>
 
-            <h2 style="padding-top: 10px;" id="native-persistence">
-                Ignite Native Persistence
-                <a href="/arch/memorycentric.html#native-persistence"><i class="fa fa-anchor"></i></a>
-            </h2>
-            <p>
-                Ignite Persistence is the most flexible, scalable, and convenient way of persisting data in Ignite.
-                It is widely used in scenarios where applications need a distributed memory-centric database.
-            </p>
-            <p>
-                Ignite native persistence is a distributed, ACID, and <nobr>SQL-compliant</nobr> disk store
-                that transparently integrates with Ignite's memory-centric storage. Ignite persistence is optional
-                and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
-            </p>
-            <p>
-                Following are the advantages and characteristics of Apache Ignite when Ignite native persistence is used
-                together with Ignite in-memory store:
-            </p>
-            <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                <div class="page-heading">In-Memory</div>
-                <ul class="page-list">
-                    <li>Off-Heap memory</li>
-                    <li>Removes noticeable GC pauses</li>
-                    <li>Automatic Defragmentation</li>
-                    <li>Predictable memory consumption</li>
-                    <li>Boosts SQL performance</li>
-                </ul>
-            </div>
-            <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                <div class="page-heading">On Disk</div>
-                <ul class="page-list">
-                    <li>Optional Persistence</li>
-                    <li>Support of flash, SSD, Intel 3D Xpoint</li>
-                    <li>Stores superset of data</li>
-                    <li>Fully Transactional</li>
-                    <ul>
-                        <li>Write-Ahead-Log (WAL)</li>
-                    </ul>
-                    <li>Instantaneous Cluster Restarts</li>
-                </ul>
-            </div>
-
-            <h2 style="padding-top: 10px;" id="3rd-party-persistence">
-                3rd Party Persistence
-                <a href="/arch/memorycentric.html#3rd-party-persistence"><i class="fa fa-anchor"></i></a>
-            </h2>
-            <p>
-                Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party
-                database - RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database that persists
-                the data. Ignite stores data in memory, distributed across multiple nodes providing fast data access.
-                It reduces the network overhead caused due to frequent data movement between an application and the database.
-                However, there are some limitations in comparison to the native persistence. For instance, SQL queries
-                will be executed only on the data that is in RAM, thus, requiring to preload all the data set from disk
-                to memory beforehand.
-            </p>
-
-            <h2 style="padding-top: 10px;" id="swap-space">
-                Swap Space
-                <a href="/arch/memorycentric.html#swap-space"><i class="fa fa-anchor"></i></a>
-            </h2>
-            <p>
-                If you do not want to use Ignite native persistence or 3rd party persistence, you can enable swapping,
-                in which case, Ignite in-memory data will be moved to the swap space located on disk if you run out of RAM.
-                When swap space is enabled, Ignites stores data in memory mapped files (MMF) whose content will be
-                swapped to disk by the OS depending on the current RAM consumption. The swap space is mostly used to
-                avoid out of memory errors (OOME) that might happen if RAM consumption goes beyond its capacity and
-                you need more time to scale the cluster out to​ redistribute the data sets evenly.
-            </p>
-
-
             <h2 style="padding-top: 10px;" id="collocated-processing">
                 Collocated vs Client-Server Processing
                 <a href="/arch/memorycentric.html#collocated-processing"><i class="fa fa-anchor"></i></a>
@@ -237,7 +181,7 @@ under the License.
                 This approach does not scale well as moving the data over the network is the most expensive operation in a distributed system.
             </p>
             <p>
-                A much more scalable approach is <b>collocated processing</b> that reverses the flow by bringing the computations to the
+                A much more scalable approach is <code>collocated processing</code> that reverses the flow by bringing the computations to the
                 servers where the data actually resides. This approach allows you to execute advanced logic or distributed SQL with JOINs
                 exactly where the data is stored avoiding expensive serialization and network trips.
             </p>
@@ -250,7 +194,25 @@ under the License.
                 Depending on the configuration, Ignite can either partition or replicate data across its memory-centric
                 storage. Unlike <code>REPLICATED</code> mode, where data is fully replicated across all nodes
                 in the cluster, in <code>PARTITIONED</code> mode Ignite will equally split the data across
-                multiple cluster nodes, allowing for staring TBs of data both in memory and on disk.
+                multiple cluster nodes, allowing for storing TBs of data both in memory and on disk.
+            </p>
+
+            <h2 style="padding-top: 10px;" id="durability">
+                Durability
+                <a href="/arch/memorycentric.html#durability"><i class="fa fa-anchor"></i></a>
+            </h2>
+            <p>
+                Ignite provides strong ACID durability guarantees to the data:
+
+            <ul class="page-list" style="margin-bottom: 20px;">
+                <li>Committed transactions will always survive any failures.</li>
+                <li>
+                    The cluster can always be recovered to the latest successfully committed transaction.
+                </li>
+                <li>
+                    The cluster restarts are very fast.
+                </li>
+            </ul>
             </p>
 
             <h2 style="padding-top: 10px;" id="redundancy">
@@ -270,6 +232,67 @@ under the License.
                 Regardless of which replication scheme is used, Ignite guarantees data consistency across
                 all cluster members.
             </p>
+
+            <h2 style="padding-top: 10px;" id="native-persistence">
+                Ignite Native Persistence
+                <a href="/arch/memorycentric.html#native-persistence"><i class="fa fa-anchor"></i></a>
+            </h2>
+            <p>
+                Ignite native persistence is a distributed, ACID and <nobr>SQL-compliant</nobr> disk store
+                that transparently integrates with Ignite's in-memory cache. Ignite persistence is optional
+                and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
+            </p>
+
+            <h2 style="padding-top: 10px;" id="write-ahead-log">
+                Write-Ahead Log
+                <a href="/arch/memorycentric.html#write-ahead-log"><i class="fa fa-anchor"></i></a>
+            </h2>
+            <p>
+                Every time the data is updated in memory, the update will be appended to the tail of
+                the write-ahead log (WAL). The purpose of the WAL is to propagate updates to disk in
+                the fastest way possible and provide a consistent recovery mechanism that supports full cluster failures.
+            </p>
+
+            <h2 style="padding-top: 10px;" id="checkpointing">
+                Checkpointing
+                <a href="/arch/memorycentric.html#checkpointing"><i class="fa fa-anchor"></i></a>
+            </h2>
+            <p>
+                As WAL grows, it periodically gets <i>checkpointed</i> to the main storage.
+                Checkpointing is the process of copying <i>dirty pages</i> from memory to the partition files on disk.
+                A dirty page is a page that was updated in memory, was appended to WAL, but was not written to a respective partition
+                file on disk yet.
+            </p>
+
+            <h2 style="padding-top: 10px;" id="peristence-config">
+                Persistence Configuration
+                <a href="/arch/memorycentric.html#peristence-config"><i class="fa fa-anchor"></i></a>
+            </h2>
+            <p>
+                To enable Ignite persistence, add the following configuration parameter to the cluster's
+                node configuration:
+            </p>
+            <div class="tab-content">
+                <div class="tab-pane active" id="configuration">
+                    <pre class="brush:xml">
+                        <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+                            <!-- Enabling Apache Ignite native persistence. -->
+                            <property name="dataStorageConfiguration">
+                                <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                                    <property name="defaultDataRegionConfiguration">
+                                        <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                                            <property name="persistenceEnabled" value="true"/>
+                                        </bean>
+                                    </property>
+                                </bean>
+                            </property>
+
+                            <!-- Additional setting. -->
+
+                        </bean>
+                    </pre>
+                </div>
+            </div><br/>
 
             <h2 style="padding-top: 10px;" id="more">
                 More on Memory-Centric Storage
