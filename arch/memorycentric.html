@@ -84,16 +84,11 @@ under the License.
                 distributed cache and a distributed database together.
             </p>
             <p>
-                Ignite distributed cache can be used either stand-alone, or can also integrate with any existing database, including
-                Oracle, MySQL, Cassandra, Mongo, and others. However, in this case, the memory-layer may not be able to
-                fit the whole data set, causing Ignite indexing and SQL queries to only function
-                over the in-memory subset. This approach is recommended whenever there is already
-                an existing database present and replacing it is not an option.
-            </p>
-            <p>
-                However, in order to ensure that the whole data set is durable and available for querying and collocated processing,
-                it is preferable to enable native persistence and use Ignite as a distributed system-of-record.
-                In this case Ignite will always store a superset of data on disk,  with a subset of data cached in memory.
+                In partitioned (not replicated) mode, the data is partitioned across multiple servers, with each server responsible
+                for a subset of the data. Collectively, the full data set is stored across all servers. Each server
+                has its subset persisted on disk. Depending on how much memory is available,
+                each server also has either the whole subset or a portion of it cached in memory. Such combination
+                of memory and disk creates a distributed memory-centric storage.
             </p>
             <p>
                 The following <i>memory and disk usage modes</i> are supported:
@@ -231,16 +226,6 @@ under the License.
             <p>
                 Regardless of which replication scheme is used, Ignite guarantees data consistency across
                 all cluster members.
-            </p>
-
-            <h2 style="padding-top: 10px;" id="native-persistence">
-                Ignite Native Persistence
-                <a href="/arch/memorycentric.html#native-persistence"><i class="fa fa-anchor"></i></a>
-            </h2>
-            <p>
-                Ignite native persistence is a distributed, ACID and <nobr>SQL-compliant</nobr> disk store
-                that transparently integrates with Ignite's in-memory cache. Ignite persistence is optional
-                and can be turned on and off. When turned off Ignite becomes a pure in-memory store.
             </p>
 
             <h2 style="padding-top: 10px;" id="write-ahead-log">
