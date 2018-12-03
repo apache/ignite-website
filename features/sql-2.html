@@ -447,6 +447,46 @@ under the License.
                 </p>
             </div>
             <div class="code-examples">
+                <div class="page-heading">Transactional Updates</div>
+                <p>
+                    The BEGIN, COMMIT and ROLLBACK commands allow you to handle SQL Transactions.
+                </p>
+                <!-- Nav tabs -->
+                <ul id="sql-transactions-examples" class="nav nav-tabs">
+                    <li  class="active"><a href="#sql-commit" aria-controls="profile" data-toggle="tab">COMMIT</a></li>
+                    <li><a href="#sql-rollback" aria-controls="profile" data-toggle="tab">ROLLBACK</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="sql-commit">
+                        <pre class="brush:sql">
+                            BEGIN;
+
+                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
+
+                            Update City SET population = population + 1 where id = 3;
+
+                            COMMIT;
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="sql-rollback">
+                        <pre class="brush:sql">
+                            BEGIN;
+
+                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
+
+                            Update City SET population = population + 1 where id = 3;
+
+                            ROLLBACK;
+                        </pre>
+                    </div>
+                <p>
+                    See <a href="https://apacheignite-sql.readme.io/docs/transactions" target="_blank">SQL Transactions documentation</a> for more details.
+                </p>
+            </div>
+            <div class="code-examples">
                 <div class="page-heading">Querying Data</div>
                 <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.
                     The SQL syntax is ANSI-99 compliant which means that you can use
