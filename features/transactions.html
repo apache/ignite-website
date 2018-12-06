@@ -55,8 +55,8 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite is a strongly consistent platform that fully supports distributed ACID transactions.
-                        The consistency guarantees are met for both memory and disk tiers.
+                        Apache Ignite is a strongly consistent platform that fully supports distributed ACID transactions
+                        for key-value as well as SQL operations. The consistency guarantees are met for both memory and disk tiers.
                     </p>
                     <p>
                         Transactions in Apache Ignite can span multiple cluster nodes, caches (aka. tables) and partitions.
@@ -85,6 +85,15 @@ under the License.
                 at which point the data is transferred to the participating remote nodes. Only the nodes that hold the
                 primary or backup copies of the data will participate in the transaction.
             </p>
+            <div class="page-heading">Transactional SQL and MVCC</div>
+            <p>
+                In addition to key-value transactions, Ignite supports <a href="https://apacheignite-sql.readme.io/v2.6/docs/multiversion-concurrency-control">SQL transactions</a>
+                by enabling <a href="https://apacheignite.readme.io/v2.6/docs/multiversion-concurrency-control">multiversion concurrency control</a>
+                (MVCC) - a method of controlling consistency of data accessed by multiple users concurrently.
+                It implements the <a href="https://en.wikipedia.org/wiki/Snapshot_isolation" target="_blank">snapshot</a>
+                isolation guarantee which ensures that each transaction always sees a consistent snapshot of data.
+            </p>
+
             <div class="page-heading">Consistency and Ignite Persistence</div>
             <p>
                 If Ignite native persistence is used then all the updates are written to the write-ahead log (WAL) file
@@ -114,6 +123,7 @@ under the License.
                     <li class="active"><a href="#java-ex" aria-controls="home" data-toggle="tab">Java</a></li>
                     <li><a href="#dotnet-ex" aria-controls="profile" data-toggle="tab">.NET</a></li>
                     <li><a href="#cpp-ex" aria-controls="profile" data-toggle="tab">C++</a></li>
+                    <li><a href="#sql-ex" aria-controls="profile" data-toggle="tab">SQL</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -149,16 +159,46 @@ under the License.
                     </div>
                     <div class="tab-pane" id="cpp-ex">
                         <pre class="brush:cpp">
-                        Transaction tx = transactions.TxStart();
+                            Transaction tx = transactions.TxStart();
 
-                        int hello = cache.Get("Hello");
+                            int hello = cache.Get("Hello");
 
-                        if (hello == 1)
-                            cache.Put("Hello", 11);
+                            if (hello == 1)
+                                cache.Put("Hello", 11);
 
-                        cache.Put("World", 22);
+                            cache.Put("World", 22);
 
-                        tx.Commit();
+                            tx.Commit();
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="sql-ex">
+                        <pre class="brush:sql">
+                            Class.forName("org.apache.ignite.IgniteJdbcThinDriver");
+
+                            // Open JDBC connection.
+                            Connection conn = DriverManager.getConnection("jdbc:ignite:thin://127.0.0.1");
+
+                            PreparedStatement updateStmt = null;
+                            PreparedStatement selectStmt = null;
+
+                            // Start transaction
+                            conn.setAutoCommit(false);
+
+                            selectStmt = conn.prepareStatement("select name from Person where id = 1");
+                            selectStmt.setInt(1, 1);
+                            ResultSet rs = selectStmt.executeQuery();
+
+                            if (rs.next())
+                                System.out.println("name = " + rs.getString("name"));
+
+                            updateStmt = conn.prepareStatement("update Person set name = ? where id = ? ");
+
+                            updateStmt.setString(1, "New Name");
+                            updateStmt.setInt(2, 1);
+                            updateStmt.executeUpdate();
+
+                            // Commit transaction
+                            conn.commit();
                         </pre>
                     </div>
                 </div>
@@ -177,10 +217,21 @@ under the License.
                     <td class="features-left">ACID Transactions</td>
                     <td>
                         <p>
-                            Ignite provides fully ACID compliant distributed transactions that ensure guaranteed consistency.
+                            Ignite provides fully ACID compliant distributed transactions that ensure guaranteed consistency for SQL and key-value operations.
                         </p>
                         <div  class="page-links">
                             <a href="https://apacheignite.readme.io/docs/transactions" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="features-left">MVCC</td>
+                    <td>
+                        <p>
+                            Ignite supports multiversion concurrency control (MVCC) that allows controlling consistency of data accessed by multiple users concurrently.
+                        </p>
+                        <div  class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/multiversion-concurrency-control" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>

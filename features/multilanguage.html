@@ -80,8 +80,8 @@ under the License.
                         for better performance.
                     </p>
                     <p>
-                        To access Ignite from other programming languages such as <b>Python</b>, <b>Ruby</b>, <b>PHP</b>
-                        or <b>Node.JS</b> consider using Ignite binary client protocol, JDBC and ODBC drivers, or other
+                        Ignite offers thin clients to access Ignite from <b>Python</b>, <b>PHP</b>, and <b>Node.JS</b>.
+                        To access Ignite from other programming consider using Ignite binary client protocol, JDBC and ODBC drivers, or other
                         client protocols listed below.
                     </p>
                 </div>
@@ -95,14 +95,17 @@ under the License.
                 <div class="page-heading"> Getting Started Guides</div>
 
                 <p>
-                    The getting started guides that show how to start and make use of Apache Ignite in a matter of minutes:
+                    The following getting started guides show how to start and use Apache Ignite in minutes:
                 </p>
 
                 <ul class="page-list">
-                    <li><a href="https://apacheignite.readme.io/docs/getting-started" target="_blank">Java Getting Started</a></li>
-                    <li><a href="https://apacheignite-net.readme.io/docs/getting-started-2" target="_blank">.NET Getting Started</a></li>
-                    <li><a href="https://apacheignite-cpp.readme.io/docs/getting-started-1" target="_blank">C++ Getting Started</a></li>
-                    <li><a href="https://apacheignite-sql.readme.io/docs/getting-started" target="_blank">SQL Getting Started</a></li>
+                    <li><a href="https://apacheignite.readme.io/docs/getting-started" target="_blank">Java</a></li>
+                    <li><a href="https://apacheignite-net.readme.io/docs/getting-started-2" target="_blank">.NET</a></li>
+                    <li><a href="https://apacheignite-cpp.readme.io/docs/getting-started-1" target="_blank">C++</a></li>
+                    <li><a href="https://apacheignite-sql.readme.io/docs/getting-started" target="_blank">SQL</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/python-thin-client" target="_blank">Python</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/php-thin-client" target="_blank">PHP</a></li>
+                    <li><a href="http://apacheignite.readme.io/docs/nodejs-thin-client" target="_blank">Node.JS</a></li>
                 </ul>
             </div>
 
@@ -113,7 +116,9 @@ under the License.
                     <li class="active"><a href="#java-ex" aria-controls="home" data-toggle="tab">Java</a></li>
                     <li><a href="#dotnet-ex" aria-controls="profile" data-toggle="tab">.NET</a></li>
                     <li><a href="#cpp-ex" aria-controls="profile" data-toggle="tab">C++</a></li>
+                    <li><a href="#python-ex" aria-controls="profile" data-toggle="tab">Python</a></li>
                     <li><a href="#php-ex" aria-controls="profile" data-toggle="tab">PHP</a></li>
+                    <li><a href="#nodeJS-ex" aria-controls="profile" data-toggle="tab">Node.JS</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -165,24 +170,48 @@ under the License.
                                 std::cout &lt;&lt; "Got [key=" &lt;&lt; i &lt;&lt; ", val=" &lt;&lt; cache.Get(i) &lt;&lt; "]";
                         </pre>
                     </div>
+                    <div class="tab-pane" id="python-ex">
+                        <pre class="brush:python">
+                            from pyignite import Client
+
+                            client = Client()
+                            client.connect('127.0.0.1', 10800)
+
+                            #Create cache
+                            my_cache = client.create_cache('my cache')
+
+                            #Put value in cache
+                            my_cache.put('my key', 42)
+
+                            #Get value from cache
+                            result = my_cache.get('my key')
+                            print(result)
+                        </pre>
+                    </div>
                     <div class="tab-pane" id="php-ex">
-                        <pre class="brush:cpp">
-                           &lt;?php
-                                try {
-                                    // Connecting to Ignite using pre-configured DSN.
-                                    $dbh = new PDO('odbc:LocalApacheIgniteDSN');
+                        <pre class="brush:php">
+                            $client = new Client();
 
-                                    // Changing PDO error mode.
-                                    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                            $client->connect(new ClientConfiguration('127.0.0.1:10800'));
+                            $cache = $client-&gt;getOrCreateCache('myCache')-&gt;
+                                setKeyType(ObjectType::INTEGER);
 
-                                    // Executing the query. The salary field is an indexed field.
-                                    $dbh->query('UPDATE Person SET salary = 42000 WHERE salary > 50000');
+                            // put and get value
+                            $cache-&gt;put(1, 'abc');
+                            $value = $cache-&gt;get(1);
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="nodeJS-ex">
+                        <pre class="brush:jscript">
+                            const igniteClient = new IgniteClient();
 
-                                } catch (PDOException $e) {
-                                    print "Error!: " . $e->getMessage() . "\n";
-                                    die();
-                                }
-                            ?&gt;
+                            await igniteClient.connect(new IgniteClientConfiguration('127.0.0.1:10800'));
+                            const cache = (await igniteClient.getOrCreateCache('myCache')).
+                                setKeyType(ObjectType.PRIMITIVE_TYPE.INTEGER);
+
+                            // put and get value
+                            await cache.put(1, 'abc');
+                            const value = await cache.get(1);
                         </pre>
                     </div>
                 </div>
@@ -218,6 +247,23 @@ under the License.
                         </p>
                         <div class="page-links">
                             <a href="http://apacheignite.readme.io/docs/clients-vs-servers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left">Thin Clients</td>
+                    <td>
+                        <p>
+                            A thin client is a lightweight Ignite client that connects to the cluster via a standard socket connection.
+                            Ignite provides thin clients for
+                            <a href="https://apacheignite.readme.io/docs/java-thin-client" target="docs">Java</a>,
+                            <a href="https://apacheignite-net.readme.io/docs/thin-client" target="docs">.NET</a>,
+                            <a href="http://apacheignite.readme.io/docs/php-thin-client" target="docs">PHP</a>,
+                            <a href="http://apacheignite.readme.io/docs/python-thin-client" target="docs">Python</a>, and
+                            <a href="http://apacheignite.readme.io/docs/nodejs-thin-client" target="docs">Node.JS</a>.
+                        </p>
+                        <div class="page-links">
+                            <a href="https://apacheignite.readme.io/docs/thin-clients" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </td>
                 </tr>

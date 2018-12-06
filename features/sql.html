@@ -79,6 +79,14 @@ under the License.
                 in distributed databases.
             </p>
 
+            <div class="page-heading">SQL Transactions</div>
+            <p>
+                Ignite supports <a href="https://apacheignite-sql.readme.io/v2.6/docs/multiversion-concurrency-control">SQL transactions</a>
+                by enabling <a href="https://apacheignite.readme.io/v2.6/docs/multiversion-concurrency-control">multiversion concurrency control</a>
+                (MVCC) - a method of controlling consistency of data accessed by multiple users concurrently. MVCC implements the snapshot
+                isolation guarantee which ensures that each transaction always sees a consistent snapshot of data.
+            </p>
+
             <div class="page-heading">SQL and In-Memory Mode</div>
             <p>
                 Apache Ignite can function in a pure in-memory mode in which all data and indexes are stored entirely
@@ -439,32 +447,72 @@ under the License.
                 </p>
             </div>
             <div class="code-examples">
-                <div class="page-heading">Querying Data</div>
-                <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.
-                    The SQL syntax is ANSI-99 compliant which means that you can use
-                    any kind of SQL functions, aggregations, groupings or joins, defined by the specification,
-                    as a part of an SQL query.
+                <div class="page-heading">Transactional Updates</div>
+                <p>
+                    The BEGIN, COMMIT and ROLLBACK commands allow you to handle SQL Transactions.
                 </p>
                 <!-- Nav tabs -->
-                <ul id="sql-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#query-sql" aria-controls="home" data-toggle="tab">SQL</a></li>
-                    <li><a href="#query-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
-                    <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                    <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
-                    <li><a href="#query-dotnet" aria-controls="profile" data-toggle="tab">.NET API</a></li>
-                    <li><a href="#query-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
+                <ul id="sql-transactions-examples" class="nav nav-tabs">
+                    <li  class="active"><a href="#sql-commit" aria-controls="profile" data-toggle="tab">COMMIT</a></li>
+                    <li><a href="#sql-rollback" aria-controls="profile" data-toggle="tab">ROLLBACK</a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div class="tab-pane active" id="query-sql">
+
+                    <div class="tab-pane active" id="sql-commit">
+                        <pre class="brush:sql">
+                            BEGIN;
+
+                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
+
+                            Update City SET population = population + 1 where id = 3;
+
+                            COMMIT;
+                        </pre>
+                    </div>
+                    <div class="tab-pane" id="sql-rollback">
+                        <pre class="brush:sql">
+                            BEGIN;
+
+                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
+
+                            Update City SET population = population + 1 where id = 3;
+
+                            ROLLBACK;
+                        </pre>
+                    </div>
+                    <p>
+                        See <a href="https://apacheignite-sql.readme.io/docs/transactions" target="_blank">SQL Transactions documentation</a> for more details.
+                    </p>
+                </div>
+                <div class="code-examples">
+                    <div class="page-heading">Querying Data</div>
+                    <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.
+                        The SQL syntax is ANSI-99 compliant which means that you can use
+                        any kind of SQL functions, aggregations, groupings or joins, defined by the specification,
+                        as a part of an SQL query.
+                    </p>
+                    <!-- Nav tabs -->
+                    <ul id="sql-examples" class="nav nav-tabs">
+                        <li class="active"><a href="#query-sql" aria-controls="home" data-toggle="tab">SQL</a></li>
+                        <li><a href="#query-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
+                        <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
+                        <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
+                        <li><a href="#query-dotnet" aria-controls="profile" data-toggle="tab">.NET API</a></li>
+                        <li><a href="#query-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="query-sql">
                         <pre class="brush:sql">
                             SELECT p.name, c.name
                             FROM Person p, City c
                             WHERE p.city_id = c.id
                         </pre>
-                    </div>
-                    <div class="tab-pane" id="query-java">
+                        </div>
+                        <div class="tab-pane" id="query-java">
                         <pre class="brush:java">
                             IgniteCache&lt;PersonKey, Person&gt; personCache = ignite.cache("SQL_PUBLIC_PERSON");
 
@@ -480,8 +528,8 @@ under the License.
                                     System.out.println("Person name & city=" + row.get(0));
                             }
                         </pre>
-                    </div>
-                    <div class="tab-pane" id="query-jdbc">
+                        </div>
+                        <div class="tab-pane" id="query-jdbc">
                         <pre class="brush:java">
                             try (Statement stmt = conn.createStatement()) {
                                 try (ResultSet rs =
@@ -499,8 +547,8 @@ under the License.
                                 }
                             }
                         </pre>
-                    </div>
-                    <div class="tab-pane" id="query-odbc">
+                        </div>
+                        <div class="tab-pane" id="query-odbc">
                         <pre class="brush:cpp">
                             SQLHSTMT stmt;
 
@@ -516,8 +564,8 @@ under the License.
 
                             SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
                         </pre>
-                    </div>
-                    <div class="tab-pane" id="query-dotnet">
+                        </div>
+                        <div class="tab-pane" id="query-dotnet">
                         <pre class="brush:csharp">
 							ICache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;PersonKey, Person&gt;("SQL_PUBLIC_PERSON");
 
@@ -533,8 +581,8 @@ under the License.
 								Console.WriteLine($"Person '{row[0]}' from city '{row[1]}'");
 							}
                         </pre>
-                    </div>
-                    <div class="tab-pane" id="query-cpp">
+                        </div>
+                        <div class="tab-pane" id="query-cpp">
                         <pre class="brush:cpp">
                             Cache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
 
@@ -554,18 +602,18 @@ under the License.
                                           &lt;&lt; "City: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; std::endl;
                             }
                         </pre>
+                        </div>
                     </div>
+                    <p>
+                        See <a href="https://apacheignite-sql.readme.io/docs/select" target="_blank">SELECT queries documentation</a> for more details.
+                    </p>
                 </div>
-                <p>
-                    See <a href="https://apacheignite-sql.readme.io/docs/select" target="_blank">SELECT queries documentation</a> for more details.
-                </p>
-            </div>
 
-            <div class="page-heading github-examples">GitHub Examples</div>
-            <p>
-                Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
-                and <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryDmlExample.java" target="github"> DML example</a> available on GitHub.
-            </p>
+                <div class="page-heading github-examples">GitHub Examples</div>
+                <p>
+                    Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
+                    and <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryDmlExample.java" target="github"> DML example</a> available on GitHub.
+                </p>
         </section>
 
         <section id="key-features" class="page-section">
