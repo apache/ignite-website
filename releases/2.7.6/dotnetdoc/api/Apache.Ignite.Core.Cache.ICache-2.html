@@ -1,0 +1,4033 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ICache&lt;TK, TV&gt;
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ICache&lt;TK, TV&gt;
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Cache.ICache`2">
+  
+  
+  <h1 id="Apache_Ignite_Core_Cache_ICache_2" data-uid="Apache.Ignite.Core.Cache.ICache`2" class="text-break">Interface ICache&lt;TK, TV&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Main entry point for Ignite cache APIs. You can get a named cache by calling
+<a class="xref" href="Apache.Ignite.Core.IIgnite.html#Apache_Ignite_Core_IIgnite_GetCache__2_System_String_">GetCache&lt;TK, TV&gt;(String)</a> method.
+<p>
+Cache API supports distributed transactions. All <code>Get(...)</code>, <code>Put(...)</code>, <code>Replace(...)</code>,
+and <code>Remove(...)</code> operations are transactional and will participate in an ongoing transaction,
+if any. Other methods like <code>Peek(...)</code> or various <code>Contains(...)</code> methods may
+be transaction-aware, i.e. check in-transaction entries first, but will not affect the current
+state of transaction. See <a class="xref" href="Apache.Ignite.Core.Transactions.ITransaction.html">ITransaction</a> documentation for more information
+about transactions.
+<p>
+Neither <code>null</code> keys or values are allowed to be stored in cache. If a <code>null</code> value
+happens to be in cache (e.g. after invalidation or remove), then cache will treat this case
+as there is no value at all.
+<p>
+Note that cache is generic and you can only work with provided key and value types. If cache also
+contains keys or values of other types, any attempt to retrieve them will result in
+<span class="xref">System.InvalidCastException</span>. Use <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache&lt;TK, TV&gt;</a> in order to work with entries
+of arbitrary types.
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;Apache.Ignite.Core.Cache.ICacheEntry&lt;TK, TV&gt;&gt;.GetEnumerator()</span>
+    </div>
+    <div>
+      <span class="xref">System.Collections.IEnumerable.GetEnumerator()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Cache.html">Apache.Ignite.Core.Cache</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Cache_ICache_2_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ICache&lt;TK, TV&gt; : IEnumerable&lt;ICacheEntry&lt;TK, TV&gt;&gt;, IEnumerable</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td><p>Key type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TV</span></td>
+        <td><p>Value type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Ignite_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Ignite*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Ignite" data-uid="Apache.Ignite.Core.Cache.ICache`2.Ignite">Ignite</h4>
+  <div class="markdown level1 summary"><p>Ignite hosting this cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IIgnite Ignite { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.IIgnite.html">IIgnite</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_IsAllowAtomicOpsInTx_" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsAllowAtomicOpsInTx*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_IsAllowAtomicOpsInTx" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsAllowAtomicOpsInTx">IsAllowAtomicOpsInTx</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether to allow use atomic operations in transactions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsAllowAtomicOpsInTx { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_IsKeepBinary_" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsKeepBinary*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_IsKeepBinary" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsKeepBinary">IsKeepBinary</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether to keep values in binary form.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsKeepBinary { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Item_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Item*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Item__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Item(`0)">Item[TK]</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a cache value with the specified key.
+Shortcut to <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_Get__0_">Get(TK)</a> and <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_Put__0__1_">Put(TK, TV)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TV this[TK key] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><p>Cache value with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyNotFoundException</span></td>
+        <td><p>If the key is not present in the cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Name_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Name*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Name" data-uid="Apache.Ignite.Core.Cache.ICache`2.Name">Name</h4>
+  <div class="markdown level1 summary"><p>Name of this cache (<code>null</code> for default cache).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Clear_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Clear*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Clear" data-uid="Apache.Ignite.Core.Cache.ICache`2.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears the contents of the cache, without notifying listeners or CacheWriters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Clear()</code></pre>
+  </div>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Clear_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Clear*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Clear__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Clear(`0)">Clear(TK)</h4>
+  <div class="markdown level1 summary"><p>Clear entry from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Clear(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ClearAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ClearAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAll(System.Collections.Generic.IEnumerable{`0})">ClearAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Clear entries from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ClearAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ClearAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ClearAllAsync_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAllAsync(System.Collections.Generic.IEnumerable{`0})">ClearAllAsync(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Clear entries from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task ClearAllAsync(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ClearAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ClearAsync" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAsync">ClearAsync()</h4>
+  <div class="markdown level1 summary"><p>Clears the contents of the cache, without notifying listeners or CacheWriters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task ClearAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ClearAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ClearAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ClearAsync(`0)">ClearAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Clear entry from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task ClearAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ContainsKey_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKey*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ContainsKey__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKey(`0)">ContainsKey(TK)</h4>
+  <div class="markdown level1 summary"><p>Check if cache contains mapping for this key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool ContainsKey(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if cache contains mapping for this key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeyAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeyAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeyAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeyAsync(`0)">ContainsKeyAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Check if cache contains mapping for this key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; ContainsKeyAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if cache contains mapping for this key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeys_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeys*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeys_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeys(System.Collections.Generic.IEnumerable{`0})">ContainsKeys(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Check if cache contains mapping for these keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool ContainsKeys(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if cache contains mapping for all these keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeysAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeysAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ContainsKeysAsync_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.ContainsKeysAsync(System.Collections.Generic.IEnumerable{`0})">ContainsKeysAsync(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Check if cache contains mapping for these keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; ContainsKeysAsync(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if cache contains mapping for all these keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Get_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Get*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Get__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Get(`0)">Get(TK)</h4>
+  <div class="markdown level1 summary"><p>Retrieves value mapped to the specified key from cache.</p>
+<p>If the value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disable, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TV Get(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><p>Value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyNotFoundException</span></td>
+        <td><p>If the key is not present in the cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAll(System.Collections.Generic.IEnumerable{`0})">GetAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retrieves values mapped to the specified keys from cache.
+If some value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disabled, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICollection&lt;ICacheEntry&lt;TK, TV&gt;&gt; GetAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntry-2.html">ICacheEntry</a>&lt;TK, TV&gt;&gt;</td>
+        <td><p>Map of key-value pairs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAllAsync_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAllAsync(System.Collections.Generic.IEnumerable{`0})">GetAllAsync(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retrieves values mapped to the specified keys from cache.
+If some value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disabled, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;ICollection&lt;ICacheEntry&lt;TK, TV&gt;&gt;&gt; GetAllAsync(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntry-2.html">ICacheEntry</a>&lt;TK, TV&gt;&gt;&gt;</td>
+        <td><p>Map of key-value pairs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndPut_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPut*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndPut__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPut(`0,`1)">GetAndPut(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Associates the specified value with the specified key in this cache,
+returning an existing value if one existed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">CacheResult&lt;TV&gt; GetAndPut(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;</td>
+        <td><p>The value associated with the key at the start of the operation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutAsync(`0,`1)">GetAndPutAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Associates the specified value with the specified key in this cache,
+returning an existing value if one existed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;CacheResult&lt;TV&gt;&gt; GetAndPutAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;&gt;</td>
+        <td><p>The value associated with the key at the start of the operation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutIfAbsent_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutIfAbsent*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutIfAbsent__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutIfAbsent(`0,`1)">GetAndPutIfAbsent(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if cache had no previous mapping for it.
+If cache previously contained value for the given key, then this value is returned.
+In case of PARTITIONED or REPLICATED caches, the value will be loaded from the primary node,
+which in its turn may load the value from the swap storage, and consecutively, if it&apos;s not
+in swap, from the underlying persistent storage.
+If the returned value is not needed, method putxIfAbsent() should be used instead of this one to
+avoid the overhead associated with returning of the previous value.
+If write-through is enabled, the stored value will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">CacheResult&lt;TV&gt; GetAndPutIfAbsent(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;</td>
+        <td><p>Previously contained value regardless of whether put happened or not.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutIfAbsentAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutIfAbsentAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndPutIfAbsentAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndPutIfAbsentAsync(`0,`1)">GetAndPutIfAbsentAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if cache had no previous mapping for it.
+If cache previously contained value for the given key, then this value is returned.
+In case of PARTITIONED or REPLICATED caches, the value will be loaded from the primary node,
+which in its turn may load the value from the swap storage, and consecutively, if it&apos;s not
+in swap, from the underlying persistent storage.
+If the returned value is not needed, method putxIfAbsent() should be used instead of this one to
+avoid the overhead associated with returning of the previous value.
+If write-through is enabled, the stored value will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;CacheResult&lt;TV&gt;&gt; GetAndPutIfAbsentAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;&gt;</td>
+        <td><p>Previously contained value regardless of whether put happened or not.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndRemove_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndRemove*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndRemove__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndRemove(`0)">GetAndRemove(TK)</h4>
+  <div class="markdown level1 summary"><p>Atomically removes the entry for a key only if currently mapped to some value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">CacheResult&lt;TV&gt; GetAndRemove(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is associated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;</td>
+        <td><p>The value if one existed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndRemoveAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndRemoveAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndRemoveAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndRemoveAsync(`0)">GetAndRemoveAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Atomically removes the entry for a key only if currently mapped to some value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;CacheResult&lt;TV&gt;&gt; GetAndRemoveAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is associated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;&gt;</td>
+        <td><p>The value if one existed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndReplace_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndReplace*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndReplace__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndReplace(`0,`1)">GetAndReplace(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Atomically replaces the value for a given key if and only if there is a value currently mapped by the key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">CacheResult&lt;TV&gt; GetAndReplace(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;</td>
+        <td><p>The previous value associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAndReplaceAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndReplaceAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAndReplaceAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAndReplaceAsync(`0,`1)">GetAndReplaceAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Atomically replaces the value for a given key if and only if there is a value currently mapped by the key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;CacheResult&lt;TV&gt;&gt; GetAndReplaceAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;&gt;</td>
+        <td><p>The previous value associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetAsync(`0)">GetAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Retrieves value mapped to the specified key from cache.</p>
+<p>If the value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disable, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TV&gt; GetAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;TV&gt;</td>
+        <td><p>Value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyNotFoundException</span></td>
+        <td><p>If the key is not present in the cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetConfiguration_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetConfiguration*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetConfiguration" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetConfiguration">GetConfiguration()</h4>
+  <div class="markdown level1 summary"><p>Gets the cache configuration.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">CacheConfiguration GetConfiguration()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Configuration.CacheConfiguration.html">CacheConfiguration</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetLocalEntries_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalEntries*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetLocalEntries_Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalEntries(Apache.Ignite.Core.Cache.CachePeekMode[])">GetLocalEntries(CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Get local cache entries.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerable&lt;ICacheEntry&lt;TK, TV&gt;&gt; GetLocalEntries(params CachePeekMode[] peekModes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">peekModes</span></td>
+        <td><p>Peek modes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntry-2.html">ICacheEntry</a>&lt;TK, TV&gt;&gt;</td>
+        <td><p>Enumerable instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetLocalMetrics_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetLocalMetrics" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalMetrics">GetLocalMetrics()</h4>
+  <div class="markdown level1 summary"><p>Gets local snapshot metrics (statistics) for this cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICacheMetrics GetLocalMetrics()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheMetrics.html">ICacheMetrics</a></td>
+        <td><p>Cache metrics.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetLocalSize_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalSize*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetLocalSize_Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLocalSize(Apache.Ignite.Core.Cache.CachePeekMode[])">GetLocalSize(CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Gets the number of all entries cached on this node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int GetLocalSize(params CachePeekMode[] modes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">modes</span></td>
+        <td><p>Optional peek modes. If not provided, then total cache size is returned.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>Cache size on this node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetLostPartitions_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLostPartitions*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetLostPartitions" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetLostPartitions">GetLostPartitions()</h4>
+  <div class="markdown level1 summary"><p>Gets lost partitions IDs.
+<p>
+See also <a class="xref" href="Apache.Ignite.Core.Cache.Configuration.CacheConfiguration.html#Apache_Ignite_Core_Cache_Configuration_CacheConfiguration_PartitionLossPolicy">PartitionLossPolicy</a>
+and <a class="xref" href="Apache.Ignite.Core.IIgnite.html#Apache_Ignite_Core_IIgnite_ResetLostPartitions_System_Collections_Generic_IEnumerable_System_String__">ResetLostPartitions(IEnumerable&lt;String&gt;)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICollection&lt;int&gt; GetLostPartitions()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetMetrics_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetMetrics" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetMetrics">GetMetrics()</h4>
+  <div class="markdown level1 summary"><p>Gets global (whole cluster) snapshot metrics (statistics) for this cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICacheMetrics GetMetrics()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheMetrics.html">ICacheMetrics</a></td>
+        <td><p>Cache metrics.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetMetrics_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetMetrics_Apache_Ignite_Core_Cluster_IClusterGroup_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetMetrics(Apache.Ignite.Core.Cluster.IClusterGroup)">GetMetrics(IClusterGroup)</h4>
+  <div class="markdown level1 summary"><p>Gets global (whole cluster group) snapshot metrics (statistics) for this cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICacheMetrics GetMetrics(IClusterGroup clusterGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><span class="parametername">clusterGroup</span></td>
+        <td><p>The cluster group to get metrics for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheMetrics.html">ICacheMetrics</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetQueryMetrics_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetQueryMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetQueryMetrics" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetQueryMetrics">GetQueryMetrics()</h4>
+  <div class="markdown level1 summary"><p>Gets query metrics.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IQueryMetrics GetQueryMetrics()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.IQueryMetrics.html">IQueryMetrics</a></td>
+        <td><p>Query metrics.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetSize_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetSize*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetSize_Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetSize(Apache.Ignite.Core.Cache.CachePeekMode[])">GetSize(CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Gets the number of all entries cached across all nodes.
+<p>
+NOTE: this operation is distributed and will query all participating nodes for their cache sizes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int GetSize(params CachePeekMode[] modes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">modes</span></td>
+        <td><p>Optional peek modes. If not provided, then total cache size is returned.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>Cache size across all nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_GetSizeAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetSizeAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_GetSizeAsync_Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.GetSizeAsync(Apache.Ignite.Core.Cache.CachePeekMode[])">GetSizeAsync(CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Gets the number of all entries cached across all nodes.
+<p>
+NOTE: this operation is distributed and will query all participating nodes for their cache sizes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;int&gt; GetSizeAsync(params CachePeekMode[] modes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">modes</span></td>
+        <td><p>Optional peek modes. If not provided, then total cache size is returned.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><p>Cache size across all nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Invoke_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Invoke*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Invoke__2__0_Apache_Ignite_Core_Cache_ICacheEntryProcessor__0__1___0___1____0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Invoke``2(`0,Apache.Ignite.Core.Cache.ICacheEntryProcessor{`0,`1,``0,``1},``0)">Invoke&lt;TArg, TRes&gt;(TK, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;, TArg)</h4>
+  <div class="markdown level1 summary"><p>Invokes an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> against the
+<a class="xref" href="Apache.Ignite.Core.Cache.IMutableCacheEntry-2.html">IMutableCacheEntry&lt;TK, TV&gt;</a> specified by the provided key.
+If an entry does not exist for the specified key, an attempt is made to load it (if a loader is configured)
+or a surrogate entry, consisting of the key with a null value is used instead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TRes Invoke&lt;TArg, TRes&gt;(TK key, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt; processor, TArg arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor</a>&lt;TK, TV, TArg, TRes&gt;</td>
+        <td><span class="parametername">processor</span></td>
+        <td><p>The processor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TArg</span></td>
+        <td><span class="parametername">arg</span></td>
+        <td><p>The argument.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TRes</span></td>
+        <td><p>Result of the processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TArg</span></td>
+        <td><p>The type of the argument.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TRes</span></td>
+        <td><p>The type of the result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheEntryProcessorException.html">CacheEntryProcessorException</a></td>
+        <td><p>If an exception has occured during processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_InvokeAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_InvokeAll__2_System_Collections_Generic_IEnumerable__0__Apache_Ignite_Core_Cache_ICacheEntryProcessor__0__1___0___1____0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAll``2(System.Collections.Generic.IEnumerable{`0},Apache.Ignite.Core.Cache.ICacheEntryProcessor{`0,`1,``0,``1},``0)">InvokeAll&lt;TArg, TRes&gt;(IEnumerable&lt;TK&gt;, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;, TArg)</h4>
+  <div class="markdown level1 summary"><p>Invokes an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> against a set of keys.
+If an entry does not exist for the specified key, an attempt is made to load it (if a loader is configured)
+or a surrogate entry, consisting of the key with a null value is used instead.</p>
+<p>The order that the entries for the keys are processed is undefined.
+Implementations may choose to process the entries in any order, including concurrently.
+Furthermore there is no guarantee implementations will use the same processor instance
+to process each entry, as the case may be in a non-local cache topology.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICollection&lt;ICacheEntryProcessorResult&lt;TK, TRes&gt;&gt; InvokeAll&lt;TArg, TRes&gt;(IEnumerable&lt;TK&gt; keys, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt; processor, TArg arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>The keys.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor</a>&lt;TK, TV, TArg, TRes&gt;</td>
+        <td><span class="parametername">processor</span></td>
+        <td><p>The processor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TArg</span></td>
+        <td><span class="parametername">arg</span></td>
+        <td><p>The argument.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessorResult-2.html">ICacheEntryProcessorResult</a>&lt;TK, TRes&gt;&gt;</td>
+        <td><p>Map of <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessorResult-2.html">ICacheEntryProcessorResult&lt;TK, T&gt;</a> of the processing per key, if any,
+defined by the <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> implementation.
+No mappings will be returned for processors that return a null value for a key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TArg</span></td>
+        <td><p>The type of the argument.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TRes</span></td>
+        <td><p>The type of the result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheEntryProcessorException.html">CacheEntryProcessorException</a></td>
+        <td><p>If an exception has occured during processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_InvokeAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_InvokeAllAsync__2_System_Collections_Generic_IEnumerable__0__Apache_Ignite_Core_Cache_ICacheEntryProcessor__0__1___0___1____0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAllAsync``2(System.Collections.Generic.IEnumerable{`0},Apache.Ignite.Core.Cache.ICacheEntryProcessor{`0,`1,``0,``1},``0)">InvokeAllAsync&lt;TArg, TRes&gt;(IEnumerable&lt;TK&gt;, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;, TArg)</h4>
+  <div class="markdown level1 summary"><p>Invokes an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> against a set of keys.
+If an entry does not exist for the specified key, an attempt is made to load it (if a loader is configured)
+or a surrogate entry, consisting of the key with a null value is used instead.</p>
+<p>The order that the entries for the keys are processed is undefined.
+Implementations may choose to process the entries in any order, including concurrently.
+Furthermore there is no guarantee implementations will use the same processor instance
+to process each entry, as the case may be in a non-local cache topology.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;ICollection&lt;ICacheEntryProcessorResult&lt;TK, TRes&gt;&gt;&gt; InvokeAllAsync&lt;TArg, TRes&gt;(IEnumerable&lt;TK&gt; keys, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt; processor, TArg arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>The keys.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor</a>&lt;TK, TV, TArg, TRes&gt;</td>
+        <td><span class="parametername">processor</span></td>
+        <td><p>The processor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TArg</span></td>
+        <td><span class="parametername">arg</span></td>
+        <td><p>The argument.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessorResult-2.html">ICacheEntryProcessorResult</a>&lt;TK, TRes&gt;&gt;&gt;</td>
+        <td><p>Map of <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessorResult-2.html">ICacheEntryProcessorResult&lt;TK, T&gt;</a> of the processing per key, if any,
+defined by the <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> implementation.
+No mappings will be returned for processors that return a null value for a key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TArg</span></td>
+        <td><p>The type of the argument.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TRes</span></td>
+        <td><p>The type of the result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheEntryProcessorException.html">CacheEntryProcessorException</a></td>
+        <td><p>If an exception has occured during processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_InvokeAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_InvokeAsync__2__0_Apache_Ignite_Core_Cache_ICacheEntryProcessor__0__1___0___1____0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.InvokeAsync``2(`0,Apache.Ignite.Core.Cache.ICacheEntryProcessor{`0,`1,``0,``1},``0)">InvokeAsync&lt;TArg, TRes&gt;(TK, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;, TArg)</h4>
+  <div class="markdown level1 summary"><p>Invokes an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt;</a> against the
+<a class="xref" href="Apache.Ignite.Core.Cache.IMutableCacheEntry-2.html">IMutableCacheEntry&lt;TK, TV&gt;</a> specified by the provided key.
+If an entry does not exist for the specified key, an attempt is made to load it (if a loader is configured)
+or a surrogate entry, consisting of the key with a null value is used instead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TRes&gt; InvokeAsync&lt;TArg, TRes&gt;(TK key, ICacheEntryProcessor&lt;TK, TV, TArg, TRes&gt; processor, TArg arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryProcessor-4.html">ICacheEntryProcessor</a>&lt;TK, TV, TArg, TRes&gt;</td>
+        <td><span class="parametername">processor</span></td>
+        <td><p>The processor.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TArg</span></td>
+        <td><span class="parametername">arg</span></td>
+        <td><p>The argument.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;TRes&gt;</td>
+        <td><p>Result of the processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TArg</span></td>
+        <td><p>The type of the argument.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TRes</span></td>
+        <td><p>The type of the result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CacheEntryProcessorException.html">CacheEntryProcessorException</a></td>
+        <td><p>If an exception has occured during processing.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_IsEmpty_" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsEmpty*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_IsEmpty" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsEmpty">IsEmpty()</h4>
+  <div class="markdown level1 summary"><p>Checks whether this cache contains no key-value mappings.
+<p>
+Semantically equals to <code>ICache.Size(CachePeekMode.PRIMARY) == 0</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsEmpty()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_IsLocalLocked_" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsLocalLocked*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_IsLocalLocked__0_System_Boolean_" data-uid="Apache.Ignite.Core.Cache.ICache`2.IsLocalLocked(`0,System.Boolean)">IsLocalLocked(TK, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Checks if specified key is locked.
+<p>
+This is a local operation and does not involve any network trips
+or access to persistent storage in any way.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsLocalLocked(TK key, bool byCurrentThread)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to check.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">byCurrentThread</span></td>
+        <td><p>If true, checks that current thread owns a lock on this key;
+otherwise, checks that any thread on any node owns a lock on this key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if specified key is locked; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LoadAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LoadAll_System_Collections_Generic_IEnumerable__0__System_Boolean_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadAll(System.Collections.Generic.IEnumerable{`0},System.Boolean)">LoadAll(IEnumerable&lt;TK&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Loads the specified entries into the cache using the configured 
+<a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore.html">ICacheStore</a>&gt; for the given keys.
+<p>
+If an entry for a key already exists in the cache, a value will be loaded if and only if 
+<code data-dev-comment-type="paramref" class="paramref">replaceExistingValues</code> is true.<br>If no loader is configured for the cache, no objects will be loaded.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LoadAll(IEnumerable&lt;TK&gt; keys, bool replaceExistingValues)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>The keys to load.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">replaceExistingValues</span></td>
+        <td><p>if set to <code>true</code>, existing cache values will
+be replaced by those loaded from a cache store.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LoadAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LoadAllAsync_System_Collections_Generic_IEnumerable__0__System_Boolean_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadAllAsync(System.Collections.Generic.IEnumerable{`0},System.Boolean)">LoadAllAsync(IEnumerable&lt;TK&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Asynchronously loads the specified entries into the cache using the configured 
+<a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore.html">ICacheStore</a>&gt; for the given keys.
+<p>
+If an entry for a key already exists in the cache, a value will be loaded if and only if 
+<code data-dev-comment-type="paramref" class="paramref">replaceExistingValues</code> is true.<br>If no loader is configured for the cache, no objects will be loaded.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task LoadAllAsync(IEnumerable&lt;TK&gt; keys, bool replaceExistingValues)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>The keys to load.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">replaceExistingValues</span></td>
+        <td><p>if set to <code>true</code>, existing cache values will
+be replaced by those loaded from a cache store.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LoadCache_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadCache*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadCache(Apache.Ignite.Core.Cache.ICacheEntryFilter{`0,`1},System.Object[])">LoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</h4>
+  <div class="markdown level1 summary"><p>Executes <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___">LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</a> on all cache nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LoadCache(ICacheEntryFilter&lt;TK, TV&gt; p, params object[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryFilter-2.html">ICacheEntryFilter</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">p</span></td>
+        <td><p>Optional predicate. If provided, will be used to filter values to be put into cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td><p>Optional user arguments to be passed into <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LoadCacheAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadCacheAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LoadCacheAsync_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___" data-uid="Apache.Ignite.Core.Cache.ICache`2.LoadCacheAsync(Apache.Ignite.Core.Cache.ICacheEntryFilter{`0,`1},System.Object[])">LoadCacheAsync(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</h4>
+  <div class="markdown level1 summary"><p>Executes <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___">LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</a> on all cache nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task LoadCacheAsync(ICacheEntryFilter&lt;TK, TV&gt; p, params object[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryFilter-2.html">ICacheEntryFilter</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">p</span></td>
+        <td><p>Optional predicate. If provided, will be used to filter values to be put into cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td><p>Optional user arguments to be passed into <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalClear_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalClear*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalClear__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalClear(`0)">LocalClear(TK)</h4>
+  <div class="markdown level1 summary"><p>Clear entry from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.
+<p>
+Note that this operation is local as it merely clears
+an entry from local cache, it does not remove entries from remote caches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LocalClear(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalClearAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalClearAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalClearAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalClearAll(System.Collections.Generic.IEnumerable{`0})">LocalClearAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Clear entries from the cache and swap storage, without notifying listeners or CacheWriters.
+Entry is cleared only if it is not currently locked, and is not participating in a transaction.
+<p>
+Note that this operation is local as it merely clears
+entries from local cache, it does not remove entries from remote caches.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LocalClearAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys to clear.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalEvict_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalEvict*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalEvict_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalEvict(System.Collections.Generic.IEnumerable{`0})">LocalEvict(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Attempts to evict all entries associated with keys. Note, that entry will be evicted only
+if it&apos;s not used (not participating in any locks or transactions).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LocalEvict(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys to evict from cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalLoadCache*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalLoadCache(Apache.Ignite.Core.Cache.ICacheEntryFilter{`0,`1},System.Object[])">LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</h4>
+  <div class="markdown level1 summary"><p>Delegates to <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a> method to load state
+from the underlying persistent storage. The loaded values will then be given
+to the optionally passed in predicate, and, if the predicate returns true,
+will be stored in cache. If predicate is null, then all loaded values will be stored in cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt; p, params object[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryFilter-2.html">ICacheEntryFilter</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">p</span></td>
+        <td><p>Optional predicate. If provided, will be used to filter values to be put into cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td><p>Optional user arguments to be passed into <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalLoadCacheAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalLoadCacheAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalLoadCacheAsync_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalLoadCacheAsync(Apache.Ignite.Core.Cache.ICacheEntryFilter{`0,`1},System.Object[])">LocalLoadCacheAsync(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</h4>
+  <div class="markdown level1 summary"><p>Delegates to <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a> method to load state
+from the underlying persistent storage. The loaded values will then be given
+to the optionally passed in predicate, and, if the predicate returns true,
+will be stored in cache. If predicate is null, then all loaded values will be stored in cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task LocalLoadCacheAsync(ICacheEntryFilter&lt;TK, TV&gt; p, params object[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntryFilter-2.html">ICacheEntryFilter</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">p</span></td>
+        <td><p>Optional predicate. If provided, will be used to filter values to be put into cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td><p>Optional user arguments to be passed into <a class="xref" href="Apache.Ignite.Core.Cache.Store.ICacheStore-2.html#Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___">LoadCache(Action&lt;TK, TV&gt;, Object[])</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LocalPeek_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalPeek*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LocalPeek__0_Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.LocalPeek(`0,Apache.Ignite.Core.Cache.CachePeekMode[])">LocalPeek(TK, CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Peeks at cached value using optional set of peek modes. This method will sequentially
+iterate over given peek modes, and try to peek at value using each peek mode. Once a
+non-null value is found, it will be immediately returned.
+This method does not participate in any transactions, however, it may peek at transactional
+value depending on the peek modes used.
+If key is not present in cache, KeyNotFoundException will be thrown.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TV LocalPeek(TK key, params CachePeekMode[] modes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">modes</span></td>
+        <td><p>Peek modes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><p>Peeked value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Lock_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Lock*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Lock__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Lock(`0)">Lock(TK)</h4>
+  <div class="markdown level1 summary"><p>Creates an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a> instance associated with passed key.
+This method does not acquire lock immediately, you have to call appropriate method on returned instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICacheLock Lock(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key for lock.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a></td>
+        <td><p>New <a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a> instance associated with passed key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_LockAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.LockAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_LockAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.LockAll(System.Collections.Generic.IEnumerable{`0})">LockAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates an <a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a> instance associated with passed keys.
+This method does not acquire lock immediately, you have to call appropriate method on returned instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICacheLock LockAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys for lock.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a></td>
+        <td><p>New <a class="xref" href="Apache.Ignite.Core.Cache.ICacheLock.html">ICacheLock</a> instance associated with passed keys.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Put_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Put*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Put__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Put(`0,`1)">Put(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Associates the specified value with the specified key in the cache.
+<p>
+If the cache previously contained a mapping for the key,
+the old value is replaced by the specified value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Put(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_PutAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_PutAll_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair__0__1___" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAll(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">PutAll(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pairs in cache.
+If write-through is enabled, the stored values will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void PutAll(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt; vals)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;TK, TV&gt;&gt;</td>
+        <td><span class="parametername">vals</span></td>
+        <td><p>Key-value pairs to store in cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_PutAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_PutAllAsync_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair__0__1___" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAllAsync(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">PutAllAsync(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pairs in cache.
+If write-through is enabled, the stored values will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task PutAllAsync(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt; vals)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;TK, TV&gt;&gt;</td>
+        <td><span class="parametername">vals</span></td>
+        <td><p>Key-value pairs to store in cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_PutAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_PutAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutAsync(`0,`1)">PutAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Associates the specified value with the specified key in the cache.
+<p>
+If the cache previously contained a mapping for the key,
+the old value is replaced by the specified value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task PutAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_PutIfAbsent_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutIfAbsent*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_PutIfAbsent__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutIfAbsent(`0,`1)">PutIfAbsent(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Atomically associates the specified key with the given value if it is not already associated with a value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool PutIfAbsent(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if a value was set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_PutIfAbsentAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutIfAbsentAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_PutIfAbsentAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.PutIfAbsentAsync(`0,`1)">PutIfAbsentAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Atomically associates the specified key with the given value if it is not already associated with a value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; PutIfAbsentAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key with which the specified value is to be associated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the specified key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if a value was set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Query_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Query*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Query_Apache_Ignite_Core_Cache_Query_QueryBase_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Query(Apache.Ignite.Core.Cache.Query.QueryBase)">Query(QueryBase)</h4>
+  <div class="markdown level1 summary"><p>Queries cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IQueryCursor&lt;ICacheEntry&lt;TK, TV&gt;&gt; Query(QueryBase qry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.QueryBase.html">QueryBase</a></td>
+        <td><span class="parametername">qry</span></td>
+        <td><p>Query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.IQueryCursor-1.html">IQueryCursor</a>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntry-2.html">ICacheEntry</a>&lt;TK, TV&gt;&gt;</td>
+        <td><p>Cursor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Query_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Query*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Query_Apache_Ignite_Core_Cache_Query_SqlFieldsQuery_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Query(Apache.Ignite.Core.Cache.Query.SqlFieldsQuery)">Query(SqlFieldsQuery)</h4>
+  <div class="markdown level1 summary"><p>Queries separate entry fields.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IFieldsQueryCursor Query(SqlFieldsQuery qry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.SqlFieldsQuery.html">SqlFieldsQuery</a></td>
+        <td><span class="parametername">qry</span></td>
+        <td><p>SQL fields query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.IFieldsQueryCursor.html">IFieldsQueryCursor</a></td>
+        <td><p>Cursor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_QueryContinuous_" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryContinuous*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_QueryContinuous_Apache_Ignite_Core_Cache_Query_Continuous_ContinuousQuery__0__1__" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryContinuous(Apache.Ignite.Core.Cache.Query.Continuous.ContinuousQuery{`0,`1})">QueryContinuous(ContinuousQuery&lt;TK, TV&gt;)</h4>
+  <div class="markdown level1 summary"><p>Start continuous query execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IContinuousQueryHandle QueryContinuous(ContinuousQuery&lt;TK, TV&gt; qry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.Continuous.ContinuousQuery-2.html">ContinuousQuery</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">qry</span></td>
+        <td><p>Continuous query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.Continuous.IContinuousQueryHandle.html">IContinuousQueryHandle</a></td>
+        <td><p>Handle to stop query execution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_QueryContinuous_" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryContinuous*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_QueryContinuous_Apache_Ignite_Core_Cache_Query_Continuous_ContinuousQuery__0__1__Apache_Ignite_Core_Cache_Query_QueryBase_" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryContinuous(Apache.Ignite.Core.Cache.Query.Continuous.ContinuousQuery{`0,`1},Apache.Ignite.Core.Cache.Query.QueryBase)">QueryContinuous(ContinuousQuery&lt;TK, TV&gt;, QueryBase)</h4>
+  <div class="markdown level1 summary"><p>Start continuous query execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IContinuousQueryHandle&lt;ICacheEntry&lt;TK, TV&gt;&gt; QueryContinuous(ContinuousQuery&lt;TK, TV&gt; qry, QueryBase initialQry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.Continuous.ContinuousQuery-2.html">ContinuousQuery</a>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">qry</span></td>
+        <td><p>Continuous query.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.QueryBase.html">QueryBase</a></td>
+        <td><span class="parametername">initialQry</span></td>
+        <td><p>The initial query. This query will be executed before continuous listener is registered which allows
+to iterate through entries which have already existed at the time continuous query is executed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.Continuous.IContinuousQueryHandle-1.html">IContinuousQueryHandle</a>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.ICacheEntry-2.html">ICacheEntry</a>&lt;TK, TV&gt;&gt;</td>
+        <td><p>Handle to get initial query cursor or stop query execution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_QueryFields_" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryFields*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_QueryFields_Apache_Ignite_Core_Cache_Query_SqlFieldsQuery_" data-uid="Apache.Ignite.Core.Cache.ICache`2.QueryFields(Apache.Ignite.Core.Cache.Query.SqlFieldsQuery)">QueryFields(SqlFieldsQuery)</h4>
+  <div class="markdown level1 summary"><p>Queries separate entry fields.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use Query(SqlFieldsQuery qry) instead.&quot;)]
+IQueryCursor&lt;IList&gt; QueryFields(SqlFieldsQuery qry)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.SqlFieldsQuery.html">SqlFieldsQuery</a></td>
+        <td><span class="parametername">qry</span></td>
+        <td><p>SQL fields query.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Query.IQueryCursor-1.html">IQueryCursor</a>&lt;<span class="xref">System.Collections.IList</span>&gt;</td>
+        <td><p>Cursor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Rebalance_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Rebalance*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Rebalance" data-uid="Apache.Ignite.Core.Cache.ICache`2.Rebalance">Rebalance()</h4>
+  <div class="markdown level1 summary"><p>Rebalances cache partitions. This method is usually used when rebalanceDelay configuration parameter
+has non-zero value. When many nodes are started or stopped almost concurrently,
+it is more efficient to delay rebalancing until the node topology is stable to make sure that no redundant
+re-partitioning happens.
+<p>
+In case of partitioned caches, for better efficiency user should usually make sure that new nodes get
+placed on the same place of consistent hash ring as the left nodes, and that nodes are restarted before
+rebalanceDelay expires.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task Rebalance()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><p>Task that will be completed when rebalancing is finished.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Remove_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Remove*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Remove__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Remove(`0)">Remove(TK)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mapping from cache. If cache previously contained value for the given key,
+then this value is returned. In case of PARTITIONED or REPLICATED caches, the value will be
+loaded from the primary node, which in its turn may load the value from the disk-based swap
+storage, and consecutively, if it&apos;s not in swap, from the underlying persistent storage.
+If the returned value is not needed, method removex() should always be used instead of this
+one to avoid the overhead associated with returning of the previous value.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool Remove(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key whose mapping is to be removed from cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>False if there was no matching key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Remove_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Remove*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Remove__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Remove(`0,`1)">Remove(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mapping from cache if one exists and value is equal to the passed in value.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool Remove(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key whose mapping is to be removed from cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to match against currently cached value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if entry was removed, false otherwise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAll" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAll">RemoveAll()</h4>
+  <div class="markdown level1 summary"><p>Removes all mappings from cache.
+If write-through is enabled, the value will be removed from store.
+This method is not transactional.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void RemoveAll()</code></pre>
+  </div>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAll_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAll(System.Collections.Generic.IEnumerable{`0})">RemoveAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mappings from cache.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void RemoveAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys whose mappings are to be removed from cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAllAsync" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAllAsync">RemoveAllAsync()</h4>
+  <div class="markdown level1 summary"><p>Removes all mappings from cache.
+If write-through is enabled, the value will be removed from store.
+This method is not transactional.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task RemoveAllAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAllAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAllAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAllAsync_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAllAsync(System.Collections.Generic.IEnumerable{`0})">RemoveAllAsync(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mappings from cache.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task RemoveAllAsync(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys whose mappings are to be removed from cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAsync(`0)">RemoveAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mapping from cache. If cache previously contained value for the given key,
+then this value is returned. In case of PARTITIONED or REPLICATED caches, the value will be
+loaded from the primary node, which in its turn may load the value from the disk-based swap
+storage, and consecutively, if it&apos;s not in swap, from the underlying persistent storage.
+If the returned value is not needed, method removex() should always be used instead of this
+one to avoid the overhead associated with returning of the previous value.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; RemoveAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key whose mapping is to be removed from cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>False if there was no matching key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_RemoveAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_RemoveAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.RemoveAsync(`0,`1)">RemoveAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Removes given key mapping from cache if one exists and value is equal to the passed in value.
+If write-through is enabled, the value will be removed from store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; RemoveAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key whose mapping is to be removed from cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to match against currently cached value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if entry was removed, false otherwise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Replace_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Replace*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Replace__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Replace(`0,`1)">Replace(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if there is a previous mapping for it.
+If cache previously contained value for the given key, then this value is returned.
+In case of PARTITIONED or REPLICATED caches, the value will be loaded from the primary node,
+which in its turn may load the value from the swap storage, and consecutively, if it&apos;s not
+in swap, rom the underlying persistent storage.
+If write-through is enabled, the stored value will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool Replace(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if the value was replaced.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_Replace_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Replace*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_Replace__0__1__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.Replace(`0,`1,`1)">Replace(TK, TV, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if only if the previous value is equal to the
+old value passed as argument.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool Replace(TK key, TV oldVal, TV newVal)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">oldVal</span></td>
+        <td><p>Old value to match.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">newVal</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>True if replace happened, false otherwise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ReplaceAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ReplaceAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ReplaceAsync__0__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ReplaceAsync(`0,`1)">ReplaceAsync(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if there is a previous mapping for it.
+If cache previously contained value for the given key, then this value is returned.
+In case of PARTITIONED or REPLICATED caches, the value will be loaded from the primary node,
+which in its turn may load the value from the swap storage, and consecutively, if it&apos;s not
+in swap, rom the underlying persistent storage.
+If write-through is enabled, the stored value will be persisted to store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; ReplaceAsync(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if the value was replaced.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ReplaceAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ReplaceAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ReplaceAsync__0__1__1_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ReplaceAsync(`0,`1,`1)">ReplaceAsync(TK, TV, TV)</h4>
+  <div class="markdown level1 summary"><p>Stores given key-value pair in cache only if only if the previous value is equal to the
+old value passed as argument.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;bool&gt; ReplaceAsync(TK key, TV oldVal, TV newVal)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to store in cache.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">oldVal</span></td>
+        <td><p>Old value to match.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">newVal</span></td>
+        <td><p>Value to be associated with the given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><p>True if replace happened, false otherwise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_ResetQueryMetrics_" data-uid="Apache.Ignite.Core.Cache.ICache`2.ResetQueryMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_ResetQueryMetrics" data-uid="Apache.Ignite.Core.Cache.ICache`2.ResetQueryMetrics">ResetQueryMetrics()</h4>
+  <div class="markdown level1 summary"><p>Reset query metrics.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ResetQueryMetrics()</code></pre>
+  </div>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_TryGet_" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryGet*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_TryGet__0__1__" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryGet(`0,`1@)">TryGet(TK, out TV)</h4>
+  <div class="markdown level1 summary"><p>Retrieves value mapped to the specified key from cache.
+If the value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disable, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryGet(TK key, out TV value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>When this method returns, the value associated with the specified key,
+if the key is found; otherwise, the default value for the type of the value parameter.
+This parameter is passed uninitialized.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the cache contains an element with the specified key; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_TryGetAsync_" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryGetAsync*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_TryGetAsync__0_" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryGetAsync(`0)">TryGetAsync(TK)</h4>
+  <div class="markdown level1 summary"><p>Retrieves value mapped to the specified key from cache.
+If the value is not present in cache, then it will be looked up from swap storage. If
+it&apos;s not present in swap, or if swap is disable, and if read-through is allowed, value
+will be loaded from persistent store.
+This method is transactional and will enlist the entry into ongoing transaction if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;CacheResult&lt;TV&gt;&gt; TryGetAsync(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult</a>&lt;TV&gt;&gt;</td>
+        <td><p><a class="xref" href="Apache.Ignite.Core.Cache.CacheResult-1.html">CacheResult&lt;T&gt;</a> containing a bool success flag and a value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_TryLocalPeek_" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryLocalPeek*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_TryLocalPeek__0__1__Apache_Ignite_Core_Cache_CachePeekMode___" data-uid="Apache.Ignite.Core.Cache.ICache`2.TryLocalPeek(`0,`1@,Apache.Ignite.Core.Cache.CachePeekMode[])">TryLocalPeek(TK, out TV, CachePeekMode[])</h4>
+  <div class="markdown level1 summary"><p>Peeks at cached value using optional set of peek modes. This method will sequentially
+iterate over given peek modes, and try to peek at value using each peek mode. Once a
+non-null value is found, it will be immediately returned.
+This method does not participate in any transactions, however, it may peek at transactional
+value depending on the peek modes used.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool TryLocalPeek(TK key, out TV value, params CachePeekMode[] modes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>When this method returns, the value associated with the specified key,
+if the key is found; otherwise, the default value for the type of the value parameter.
+This parameter is passed uninitialized.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.CachePeekMode.html">CachePeekMode</a>[]</td>
+        <td><span class="parametername">modes</span></td>
+        <td><p>Peek modes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if the cache contains an element with the specified key; otherwise, false.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithAllowAtomicOpsInTx_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithAllowAtomicOpsInTx*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithAllowAtomicOpsInTx" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithAllowAtomicOpsInTx">WithAllowAtomicOpsInTx()</h4>
+  <div class="markdown level1 summary"><p>Get another cache instance with operations allowed in transactions.
+Only atomic caches need this. Transactional caches already available for transactions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK, TV&gt; WithAllowAtomicOpsInTx()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK, TV&gt;</td>
+        <td><p>Cache allowed to use in transactions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithExpiryPolicy_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithExpiryPolicy*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithExpiryPolicy_Apache_Ignite_Core_Cache_Expiry_IExpiryPolicy_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithExpiryPolicy(Apache.Ignite.Core.Cache.Expiry.IExpiryPolicy)">WithExpiryPolicy(IExpiryPolicy)</h4>
+  <div class="markdown level1 summary"><p>Returns cache with the specified expired policy set. This policy will be used for each operation
+invoked on the returned cache.
+<p>
+Expiry durations for each operation are calculated only once and then used as constants. Please
+consider this when implementing customg expiry policy implementations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK, TV&gt; WithExpiryPolicy(IExpiryPolicy plc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Expiry.IExpiryPolicy.html">IExpiryPolicy</a></td>
+        <td><span class="parametername">plc</span></td>
+        <td><p>Expiry policy to use.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK, TV&gt;</td>
+        <td><p>Cache instance with the specified expiry policy set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithKeepBinary_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithKeepBinary*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithKeepBinary__2" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithKeepBinary``2">WithKeepBinary&lt;TK1, TV1&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets cache with KeepBinary mode enabled, changing key and/or value types if necessary.
+You can only change key/value types when transitioning from non-binary to binary cache;
+Changing type of binary cache is not allowed and will throw an <span class="xref">System.InvalidOperationException</span></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK1, TV1&gt; WithKeepBinary&lt;TK1, TV1&gt;()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK1, TV1&gt;</td>
+        <td><p>Cache instance with binary mode enabled.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK1</span></td>
+        <td><p>Key type in binary mode.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TV1</span></td>
+        <td><p>Value type in binary mode.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithNoRetries_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithNoRetries*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithNoRetries" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithNoRetries">WithNoRetries()</h4>
+  <div class="markdown level1 summary"><p>Get another cache instance with no-retries behavior enabled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK, TV&gt; WithNoRetries()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK, TV&gt;</td>
+        <td><p>Cache with no-retries behavior enabled.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithPartitionRecover_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithPartitionRecover*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithPartitionRecover" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithPartitionRecover">WithPartitionRecover()</h4>
+  <div class="markdown level1 summary"><p>Gets an instance of cache that will be allowed to execute cache operations (read, write)
+regardless of partition loss policy.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK, TV&gt; WithPartitionRecover()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK, TV&gt;</td>
+        <td><p>Cache without partition loss protection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICache_2_WithSkipStore_" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithSkipStore*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICache_2_WithSkipStore" data-uid="Apache.Ignite.Core.Cache.ICache`2.WithSkipStore">WithSkipStore()</h4>
+  <div class="markdown level1 summary"><p>Get another cache instance with read-through and write-through behavior disabled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICache&lt;TK, TV&gt; WithSkipStore()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache</a>&lt;TK, TV&gt;</td>
+        <td><p>Cache with read-through and write-through behavior disabled.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Apache.Ignite.Linq.CacheLinqExtensions.html#Apache_Ignite_Linq_CacheLinqExtensions_AsCacheQueryable__2_Apache_Ignite_Core_Cache_ICache___0___1__">CacheLinqExtensions.AsCacheQueryable&lt;TKey, TValue&gt;(ICache&lt;TKey, TValue&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Apache.Ignite.Linq.CacheLinqExtensions.html#Apache_Ignite_Linq_CacheLinqExtensions_AsCacheQueryable__2_Apache_Ignite_Core_Cache_ICache___0___1__System_Boolean_">CacheLinqExtensions.AsCacheQueryable&lt;TKey, TValue&gt;(ICache&lt;TKey, TValue&gt;, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Apache.Ignite.Linq.CacheLinqExtensions.html#Apache_Ignite_Linq_CacheLinqExtensions_AsCacheQueryable__2_Apache_Ignite_Core_Cache_ICache___0___1__System_Boolean_System_String_">CacheLinqExtensions.AsCacheQueryable&lt;TKey, TValue&gt;(ICache&lt;TKey, TValue&gt;, Boolean, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="Apache.Ignite.Linq.CacheLinqExtensions.html#Apache_Ignite_Linq_CacheLinqExtensions_AsCacheQueryable__2_Apache_Ignite_Core_Cache_ICache___0___1__Apache_Ignite_Linq_QueryOptions_">CacheLinqExtensions.AsCacheQueryable&lt;TKey, TValue&gt;(ICache&lt;TKey, TValue&gt;, QueryOptions)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
