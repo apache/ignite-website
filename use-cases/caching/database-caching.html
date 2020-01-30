@@ -36,7 +36,7 @@ under the License.
 <link rel="canonical" href="https://ignite.apache.org/use-cases/caching/database-caching.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Caching Use Case - Apache Ignite</title>
+    <title>Distributed In-Memory Cache With SQL and ACID Transactions - Apache Ignite</title>
     <!--#include virtual="/includes/styles.html" -->
 
     <!--#include virtual="/includes/sh.html" -->
@@ -47,50 +47,66 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="database-caching" class="page-section">
-            <h1 class="first">Database Caching</h1>
+            <h1 class="first">Distributed In-Memory Cache With SQL and ACID Transactions</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0;">
                     <p>
-                        Ignite <code>database caching</code> is implemented in the
-                        <nobr><a href="/features/datagrid.html">data grid</a></nobr>
-                        component. It enables users to keep the most frequently accessed data in memory, by either
-                        partitioning or replicating it across a cluster of computers.
-                    </p>
-                    <div class="page-heading">Write-Through & Read-Through</div>
-                    <p>
-                        Whenever an update happens in the in-memory cache, Ignite can optionally propagate it
-                        to the underlying database. Also, whenever the data is requested from cache and is not
-                        there, Ignite can automatically load it from the underlying database. Such behavior
-                        is called <code class="text-nowrap">write-through</code> and
-                        <code class="text-nowrap">read-through</code> correspondingly.
+                        Distributed in-memory cache that supports ANSI SQL, ACID transactions and co-located
+                        computations is one of the usage scenarios Apache Ignite is selected for. From web sessions
+                        and financial securities caching to external APIs and existing databases acceleration, Ignite
+                        provides all essential components needed to speed up enterprise applications as well as
+                        microservices-based architectures that require more than standard key-value look-ups for data
+                        processing.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
                     <img class="img-responsive" src="/images/in_memory_data.png" width="400px" style="float:right;"/>
                 </div>
             </div>
-            <div class="page-heading">Write-Behind</div>
+
             <p>
-                In a simple write-through mode each cache put and remove operation will involve a
-                corresponding request to the persistent storage and therefore the overall duration of
-                the cache update might be relatively long. To mitigate such cases, Ignite offers an
-                option to perform an asynchronous persistent store update also known as
-                <code class="text-nowrap">write-behind</code>.
-            </p>
-            <div class="page-heading">Automatic Persistence</div>
-            <p>
-                Ignite ships with its own database schema mapping wizard which provides automatic support for
-                integrating with persistence stores. This utility automatically connects to the underlying database
-                and generates all the required XML OR-mapping configuration and Java domain model POJOs.
-            </p>
-            <div class="page-heading">In-Memory Data Grid</div>
-            <p>
-                See <a href="/features/datagrid.html" class="text-nowrap" target="_blank" rel="noopener"><b>in-memory data grid</b></a>
-                for more information.
+                As a typical distributed cache, you would span Ignite cluster across several interconnected
+                physical or virtual machines letting it utilize all the available memory and CPU resources.
+                However, the difference comes in a way you can utilize the cluster once it's up and running. In
+                addition to classic key-value APIs you can run distributed ANSI SQL queries joining and grouping
+                various data sets. If strong consistency is required, you can execute multi-records and
+                cross-cache ACID transactions supporting both pessimistic and optimistic modes. If an
+                application runs compute or data-intensive logic, you can minimize data shuffling and network
+                utilization by running co-located computations and distributed machine learning APIs.
             </p>
 
             <p>
+                There are two primary deployment patterns for Ignite as an in-memory cache which are a cache-aside
+                and data grid modes. TODO (mention that if the cache-aside architecture is selected then Ignite
+                persistence can be used).
+            </p>
 
+
+            <div class="page-heading">Cache-Aside Deployment</div>
+            <p>
+                TODO
+            </p>
+
+            <div class="page-heading">Cache-X Deployment (aka. Data Grid)</div>
+            <p>
+                TODO
+            </p>
+
+            <div class="page-heading">Learn More</div>
+            <p>
+                <a href="https://apacheignite-fs.readme.io/docs/installation-deployment" target="docs">
+                    <b>Ignite and Spark Installation and Deployment <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="https://apacheignite-fs.readme.io/docs/ignitecontext-igniterdd" target="docs">
+                    <b>Ignite RDDs in Details <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="https://apacheignite-fs.readme.io/docs/ignite-data-frame" target="docs">
+                    <b>Ignite DataFrames in Details <i class="fa fa-angle-double-right"></i></b>
+                </a>
             </p>
         </section>
     </main>
