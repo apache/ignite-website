@@ -53,7 +53,7 @@ under the License.
                     <p>
                         Distributed in-memory cache that supports ANSI SQL, ACID transactions and co-located
                         computations is one of the usage scenarios Apache Ignite is selected for. From web sessions
-                        and financial securities caching to external APIs and existing databases acceleration, Ignite
+                        and financial instruments caching to external APIs and existing databases acceleration, Ignite
                         provides all essential components needed to speed up enterprise applications as well as
                         microservices-based architectures that require more than standard key-value look-ups for data
                         processing.
@@ -68,44 +68,97 @@ under the License.
                 As a typical distributed cache, you would span Ignite cluster across several interconnected
                 physical or virtual machines letting it utilize all the available memory and CPU resources.
                 However, the difference comes in a way you can utilize the cluster once it's up and running. In
-                addition to classic key-value APIs you can run distributed ANSI SQL queries joining and grouping
+                addition to classic key-value APIs you can run distributed SQL queries joining and grouping
                 various data sets. If strong consistency is required, you can execute multi-records and
-                cross-cache ACID transactions supporting both pessimistic and optimistic modes. If an
+                cross-cache ACID transactions in both pessimistic and optimistic modes. Next, if an
                 application runs compute or data-intensive logic, you can minimize data shuffling and network
-                utilization by running co-located computations and distributed machine learning APIs.
+                utilization by running co-located computations and distributed machine learning APIs on the cluster
+                nodes that store actual data.
             </p>
 
             <p>
-                There are two primary deployment patterns for Ignite as an in-memory cache which are a cache-aside
-                and data grid modes. TODO (mention that if the cache-aside architecture is selected then Ignite
-                persistence can be used).
+                There are two primary deployment strategies for Ignite as an in-memory cache -- the cache-aside one and
+                read-through/write-through caching. Let's review both separately.
             </p>
-
 
             <div class="page-heading">Cache-Aside Deployment</div>
             <p>
-                TODO
+                With the cache-aside deployment strategy, the cache is deployed separately from a primary data store
+                and might not even know about existence of the latter. An application layer becomes in charge of
+                synchronization between a cache and a primary data store. If a record gets updated in the data store
+                then either the application or some change-data-capture (CDC) process needs to refresh a similar
+                record in the cache.
             </p>
-
-            <div class="page-heading">Cache-X Deployment (aka. Data Grid)</div>
             <p>
-                TODO
+                This strategy works well when the cached data is rather static and not updated frequently or
+                temporary data lag/inconsistency is allowed between the primary store and the in-memory cache. It's
+                assumed that the cache and the store will become consistent eventually as soon as soon as changes are
+                replicated in full.
+            </p>
+            <p>
+                If Apache Ignite is deployed in this configuration, then its native persistence can be used as a disk
+                store. This lets eliminate time-consuming data reloading phase from the primary store as well as
+                a cache warm-up step. Furthermore, the native persistence allows you to cache a subset of the data
+                by keeping the full copy on disk. If any piece of data is not cached in RAM then Ignite will take
+                it from disk automatically regardless of the API you use let it be SQL, key-value or scan queries.
             </p>
 
+            <div class="page-heading">Read-Through/Write-Through Caching</div>
+            <p>
+                The read-through/write-through caching strategy can also be classified as an in-memory data grid type
+                of deployment. When Apache Ignite is deployed as a data grid, the application layer starts
+                treating an Ignite cluster as the primary store. The applications write to and read from Ignite only
+                and it becomes Ignite's responsobility to keep an underlying external database updated and
+                consistent with the in-memory data.
+            </p>
+
+            <p>
+                This strategy is favorable for architectures that need to accelerate performance or scale external
+                disk-based databases such as RDBMS or NoSQL. Ignite integrates with many databases out-of-the box and
+                can write-through or write-behind all the changes to them. This also includes ACID transactions -
+                Ignite will coordinate and commit a transaction across its own in-memory cluster as well as to a
+                relational database.
+            </p>
+            <p>
+                The read-through capability assumes that a cache can read data from the external database if a record
+                is missing in memory. Ignite fully supports this capability for key-value APIs. However, if Ignite
+                SQL is at use then you have to preload an entire data set from the underlying database first. (Note,
+                that Ignite SQL can query disk if data is persisted in its own native persistence).
+            </p>
             <div class="page-heading">Learn More</div>
             <p>
-                <a href="https://apacheignite-fs.readme.io/docs/installation-deployment" target="docs">
-                    <b>Ignite and Spark Installation and Deployment <i class="fa fa-angle-double-right"></i></b>
+                <a href="/features/sql.html">
+                    <b>Distributed SQL <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
-                <a href="https://apacheignite-fs.readme.io/docs/ignitecontext-igniterdd" target="docs">
-                    <b>Ignite RDDs in Details <i class="fa fa-angle-double-right"></i></b>
+                <a href="/features/collocatedprocessing.html">
+                    <b>Co-located processing <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
-                <a href="https://apacheignite-fs.readme.io/docs/ignite-data-frame" target="docs">
-                    <b>Ignite DataFrames in Details <i class="fa fa-angle-double-right"></i></b>
+                <a href="/features/transactions.html">
+                    <b>ACID Transactions <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="https://apacheignite.readme.io/docs/distributed-persistent-store" target="docs">
+                    <b>Native Persistence <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/datagrid.html">
+                    <b>Ignite as an In-Memory Data Grid <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/use-cases/database/in-memory-database.html">
+                    <b>Ignite as an In-Memory Database <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="TODO">
+                    <b>Ignite as a Digital Integration Hub <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
         </section>
