@@ -36,7 +36,14 @@ under the License.
 <link rel="canonical" href="https://ignite.apache.org/use-cases/hadoop-acceleration.html"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Spark Performance Acceleration With Apache Ignite</title>
+
+    <meta name="description"
+          content="Apache Ignite enables real-time analytics across operational and historical silos for existing
+          Apache Hadoop deployments. Ignite serves as an in-memory computing platform designated for low-latency and
+          real-time operations while Hadoop continues to be used for long-running OLAP workloads."/>
+
+    <title>Apache Hadoop Performance Acceleration With Apache Ignite</title>
+
     <!--#include virtual="/includes/styles.html" -->
 
     <!--#include virtual="/includes/sh.html" -->
@@ -47,82 +54,117 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="shared-memory-layer" class="page-section">
-            <h1 class="first">Apache Spark Performance Acceleration With Apache Ignite</h1>
+            <h1 class="first">Apache Hadoop Performance Acceleration With Apache Ignite</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite integrates with Apache Spark to accelerate the performance of Spark applications
-                        and APIs by keeping data in a shared in-memory cluster. Spark users can use Ignite as a data
-                        source in a way similar to Hadoop or a relational database. Just start an Ignite cluster, set
-                        it as a data source for Spark workers, and keep using Spark RDDs or DataFrames APIs or gain
-                        even more speed by running Ignite SQL or compute APIs directly.
+                        Apache Ignite enables real-time analytics across operational and historical silos for
+                        existing Apache Hadoop deployments. It does this by serving as an in-memory computing
+                        platform designated for low-latency and high-throughput operations while Hadoop continues to
+                        be used for long-running OLAP workloads.
                     </p>
 
                     <p>
-                        In addition to the performance acceleration of Spark applications, Ignite is used as a shared
-                        in-memory layer by those Spark workers that need to share both data and state.
+                        As the architecture diagram to the right suggests, you can achieve the performance acceleration
+                        of Hadoop-based systems by deploying Ignite as a separate distributed storage that keeps data
+                        sets needed for your low-latency operations or real-time reports.
                     </p>
 
                 </div>
 
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/spark_integration.png" width="440px" style="float:right;"/>
+                    <img class="img-responsive" src="/images/hadoop-acceleration.png" width="440px"
+                         style="float:right;"/>
                 </div>
-
             </div>
 
             <p>
-                The performance increase is achievable for several reasons. First, Ignite is designed to store data sets
-                in memory across a cluster of nodes reducing latency of Spark operations that usually need to pull date
-                from disk-based systems. Second, Ignite tries to minimize data shuffling over the network between its
-                store and Spark applications by running certain Spark tasks, produced by RDDs or DataFrames APIs,
-                in-place on Ignite nodes. This optimization helps to reduce the effect of the network latency on
-                performance of Spark calls. Finally, the network impact can be minimized even greatly if native
-                Ignite APIs such as SQL are called from Spark applications directly. By doing that, you will completely
-                eliminate data shuffling between Spark and Ignite as long as Ignite SQL queries are always executed on
-                Ignite nodes returning a much smaller final result set to an application layer.
-            </p>
-
-            <div class="page-heading">Ignite Shared RDDs</div>
-            <p>
-                Apache Ignite provides an implementation of the Spark RDD which allows any data and state to be shared
-                in memory as RDDs across Spark jobs. The Ignite RDD provides a shared, mutable view of the same data
-                in-memory in Ignite across different Spark jobs, workers, or applications.
+                Depending on the data volume and available memory capacity, you can enable Ignite native persistence to
+                store historical data sets on disk while dedicating a memory space for operational records. Continue
+                using Hadoop as storage for less frequently used data or for long-running and ad-hoc analytical queries.
             </p>
 
             <p>
-                The way an IgniteRDD is implemented is as a view over a distributed Ignite table (aka. cache).
-                It can be deployed with an Ignite node either within the Spark job executing process, on a Spark worker,
-                or in a separate Ignite cluster. It means that depending on the chosen deployment mode the shared
-                state may either exist only during the lifespan of a Spark application (embedded mode), or it may
-                out-survive the Spark application (standalone mode).
+                Next, as the architecture suggests, your applications and services should use Ignite native APIs to
+                process the data residing in the in-memory cluster. Ignite provides SQL, compute (aka. map-reduce),
+                and machine learning APIs for various data processing needs.
             </p>
 
-            <div class="page-heading">Ignite DataFrames</div>
             <p>
-                The Apache Spark DataFrame API introduced the concept of a schema to describe the data,
-                allowing Spark to manage the schema and organize the data into a tabular format. To put it simply,
-                a DataFrame is a distributed collection of data organized into named columns. It is conceptually
-                equivalent to a table in a relational database and allows Spark to leverage the Catalyst query
-                optimizer to produce much more efficient query execution plans in comparison to RDDs, which are
-                collections of elements partitioned across the nodes of the cluster.
+                Finally, consider using Apache Spark DataFrames APIs if an application needs to run federated or
+                cross-database across Ignite and Hadoop clusters. Ignite is integrated with Spark, which natively
+                supports Hive/Hadoop. Cross-database queries should be considered only for a limited number of
+                scenarios when neither Ignite nor Hadoop contains the entire data set.
             </p>
+
+            <div class="page-heading">How to split data and operations between Ignite and Hadoop?</div>
             <p>
-                Ignite supports DataFrame APIs letting Spark to write to and read from Ignite through that interface.
-                Even more, Ignite analyses execution plans produced by Spark's Catalyst engine and can execute
-                parts of the plan on Ignite nodes directly, reducing data shuffling. All that will make your SparkSQL
-                more performant.
+                Consider using this approach:
             </p>
+            <ul class="page-list">
+                <li>
+                    Use Apache Ignite for tasks that require low-latency response time (microseconds,
+                    milliseconds, seconds), high throughput operations (thousands and millions of
+                    operations per second), and real-time processing.
+                </li>
+                <li>
+                    Continue using Apache Hadoop for high-latency operations (dozens of seconds, minutes, hours) and
+                    batch processing.
+                </li>
+            </ul>
+
+            <div class="page-heading">Getting Started Checklist</div>
+            <p>
+                Follow the steps below to implement the discussed architecture in practice:
+            </p>
+            <ul class="page-list">
+                <li>
+                    Download and install Apache Ignite in your system.
+                </li>
+                <li>
+                    Select a list of operations/reports to be executed against Ignite. The best candidates are
+                    operations for which low-latency response time, high-throughput, and real-time analytics.
+                </li>
+                <li>
+                    Depending on the data volume and available memory space, consider using Ignite native
+                    persistence. Alternatively, you can use Ignite as a pure in-memory cache or in-memory data grid
+                    that persists changes to Hadoop or another external database.
+                </li>
+                <li>
+                    Update your applications to ensure they use Ignite native APIs to process Ignite data and Spark
+                    for federated queries.
+                </li>
+            </ul>
 
             <div class="page-heading">Learn More</div>
             <p>
-                <a href="https://apacheignite-fs.readme.io/docs/installation-deployment" target="docs">
-                    <b>Ignite and Spark Installation and Deployment <i class="fa fa-angle-double-right"></i></b>
+                <a href="/arch/memorycentric.html">
+                    <b>Memory-Centric Storage <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
-                <a href="https://apacheignite-fs.readme.io/docs/ignitecontext-igniterdd" target="docs">
-                    <b>Ignite RDDs in Details <i class="fa fa-angle-double-right"></i></b>
+                <a href="/arch/persistence.html">
+                    <b>Native Persistence <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/collocatedprocessing.html">
+                    <b>Co-located Processing <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/sql.html">
+                    <b>Distributed SQL <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/machinelearning.html">
+                    <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="https://apacheignite-fs.readme.io/docs/installation-deployment" target="docs">
+                    <b>Ignite and Spark Installation and Deployment <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
@@ -130,7 +172,6 @@ under the License.
                     <b>Ignite DataFrames in Details <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
-
         </section>
     </main>
 
