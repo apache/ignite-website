@@ -1,0 +1,168 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/database/key-value-store.html"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Apache Ignite operates as a distributed key-value store that stores data both in memory and on disk
+          with support of key-value, SQL, ACID transactions, compute and machine learning APIs."/>
+
+    <title>Distributed Key-Value Store - Apache Ignite</title>
+
+    <!--#include virtual="/includes/styles.html" -->
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="key-value-store" class="page-section">
+            <h1 class="first">Distributed Key-Value Store</h1>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <p>
+                        Apache Ignite can operate as a distributed key-value store that stores data both in memory
+                        and on disk. In this deployment mode, you can think of Ignite as of a distributed partitioned
+                        hash map with every cluster node owning a portion of the overall data set. As with
+                        standard key-value stores, you can access the cluster with key-value requests or take
+                        advantage of APIs available exclusively in Ignite - distributed ACID transactions, SQL,
+                        co-located computations, and machine learning.
+                    </p>
+                </div>
+                <div class="col-sm-6 col-md- col-xs-12" style="padding-right:0">
+                    <img class="img-responsive" src="/images/data_grid.png" width="500px" style="float:right;"/>
+                </div>
+            </div>
+
+            <div class="page-heading">JCache and Extended Key-Value APIs</div>
+            <p>
+                Ignite key-value APIs comply with JCache (JSR 107) specification supporting the following:
+            </p>
+
+            <ul class="page-list">
+                <li>Basic Cache Put/Get Operations</li>
+                <li>ConcurrentMap APIs</li>
+                <li>EntryProcessor and CacheInterceptor APIs</li>
+                <li>Events and Metrics</li>
+            </ul>
+
+            <p>
+                In addition to that, Ignite extends JCache specification supporting distributed key-value ACID
+                transactions, scan and continuous queries, co-located computations, and much more. For instance,
+                continuous queries are handy for cases when you want an application to be notified whenever any record
+                gets updated on the server nodes. While ACID transactions let you update a set of records stored in
+                different caches/tables consistently.
+            </p>
+
+            <div class="page-heading">Near Cache</div>
+
+            <p>
+                Near cache is a local client-side cache that stores the most frequently used data on the application end.
+                This caching technique is supported for key-value APIs only and can be considered for applications that
+                require a consistent response time withing a low microseconds range. The near cache is invalidated and
+                updated by Ignite automatically. Whenever a primary copy of a record gets updated on a server node,
+                the change will be propogated to all the nodes that store its backup copy as well as to your applications
+                that keep a record's copy in their near caches.
+            </p>
+
+            <div class="page-heading">Read-through and Write-Through/Behind</div>
+
+            <p>
+                If Ignite is deployed as a key-value store on top of an external database, then it can automatically
+                write-through or write-behind all the changes to that external store for every key-value request
+                issued by your applications. It also includes key-value ACID transactions - Ignite coordinates and
+                commits a transaction across its in-memory cluster as well as a relational database.
+            </p>
+
+            <p>
+                The read-through capability implies that Ignite can read data from an external database if a record is
+                missing in memory. This feature is fully supported for both JCache and extended key-value APIs.
+            </p>
+
+            <div class="page-heading">Ignite Native Persistence</div>
+
+            <p>
+                If you want Ignite to function as a key-value store that caches data in memory and persists it to
+                disk, then, alternatively to an external database, you can enable Ignite native persistence. Ignite
+                persistence lets eliminate time-consuming data reloading phase from external databases as well as a
+                cache warm-up step. Furthermore, since the native persistence always keeps a full copy of data on disk,
+                you are free to cache a subset of records in memory. If Ignite finds that a record is missing in memory,
+                then it will read it from disk automatically
+                regardless of the API you use.
+            </p>
+
+            <div class="page-heading">Learn More</div>
+            <p>
+                <a href="/arch/memorycentric.html">
+                    <b>Memory-Centric Storage <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/arch/persistence.html">
+                    <b>Native Persistence <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/transactions.html">
+                    <b>ACID Transactions <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/collocatedprocessing.html">
+                    <b>Co-located Processing <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/sql.html">
+                    <b>Distributed SQL <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/machinelearning.html">
+                    <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
