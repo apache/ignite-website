@@ -1,0 +1,152 @@
+<!--
+ ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
+▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
+▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
+░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
+ ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
+ ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
+  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
+  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
+      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/dih.html"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Apache Ignite functions as a low-latency and shared store of the digital integration hub architecture
+           that caches and persists data sets scattered across many disjointed back-end databases and systems."/>
+
+    <title>Digital Integration Hub - Apache Ignite</title>
+
+    <!--#include virtual="/includes/styles.html" -->
+
+    <!--#include virtual="/includes/sh.html" -->
+</head>
+<body>
+<div id="wrapper">
+    <!--#include virtual="/includes/header.html" -->
+
+    <main id="main" role="main" class="container">
+        <section id="shared-memory-layer" class="page-section">
+            <h1 class="first">Building Digital Integration Hub With Apache Ignite</h1>
+            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 10px 0;">
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+                    <p>
+                        A digital integration hub (DIH) is an advanced platform architecture that aggregates
+                        multiple back-end systems and databases into a low-latency and shared data store. Apache
+                        Ignite can function as this high-performance shared store by caching and persisting data sets
+                        dispersed across many disjointed external databases and systems.
+                    </p>
+
+                    <p>
+                        Applications typically access Ignite via an API services layer and get substantial
+                        performance growth by requesting data from this only distributed store that, in its turn,
+                        keeps all the records in memory and offloads the back-end systems.
+                    </p>
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
+                    <img class="img-responsive" src="/images/digital-hub.png" width="440px"
+                         style="float:right;"/>
+                </div>
+            </div>
+
+            <p>
+                The primary purpose of Ignite as of a DIH component is to enable implementations of large-scale and
+                high-throughput architectures that prevent the back-end systems from being overwhelmed with excessive
+                workloads and to avoid complex integrations between the back-end databases and front-end API services.
+            </p>
+
+            <div class="page-heading">Synchronization of Apache Ignite and Back-End Systems</div>
+            <p>
+                Ignite, as the high-performance data store, needs to be synchronized with the back-end databases via
+                streaming, event-based, change data capture (CDC), or other techniques.
+            </p>
+
+            <p>
+                Ignite provides a <code>CacheStore</code> interface for one-way synchronization between an Ignite
+                cluster and an external store supporting relational databases and some NoSQL stores out-of-the-box.
+                The interface allows Ignite to write-through or write-behind all the changes to the backend-systems
+                automatically. It also includes transactions - Ignite coordinates and commits a transaction across its
+                in-memory cluster as well as an external transactional database.
+            </p>
+
+            <p>
+                For bi-directional synchronization, you can consider various streaming, CDC, and event-based
+                technologies. For instance, Kafka, Spark, Debezium are widely used to keep Ignite in sync with other
+                databases.
+            </p>
+
+            <div class="page-heading">Real-Time Analytics</div>
+
+            <p>
+                Although real-time analytics is not a defining characteristic of digital integration hub architectures,
+                in some situations, you can end up consolidating operational and analytical data silos in Apache Ignite.
+                If this happens, you can tap into Ignite SQL, compute and machine learning capabilities for real-time
+                analytics needs.
+            </p>
+
+            <div class="page-heading">Learn More</div>
+            <p>
+                <a href="https://apacheignite-mix.readme.io/docs/overview" target="docs">
+                    <b>Ignite and Streaming Technologies <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="https://apacheignite-fs.readme.io/docs/overview" target="docs">
+                    <b>Ignite and Spark Integration <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/sql.html">
+                    <b>Distributed SQL <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="http://localhost/features/collocatedprocessing.html">
+                    <b>Co-located Processing <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/machinelearning.html">
+                    <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/arch/memorycentric.html">
+                    <b>Memory-Centric Storage <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <!--#include virtual="/includes/footer.html" -->
+</div>
+<!--#include virtual="/includes/scripts.html" -->
+</body>
+</html>
