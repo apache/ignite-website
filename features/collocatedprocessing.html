@@ -39,7 +39,15 @@ under the License.
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Collocated Processing - Apache Ignite</title>
+
+    <title>Co-located Processing - Apache Ignite</title>
+
+    <meta name="description"
+          content="Apache Ignite supports co-located processing technique for compute- and data-intensive calculations
+          as well as machine learning algorithms. The technique increases performance by eliminating the impact of
+          network latency."/>
+
+
     <!--#include virtual="/includes/styles.html" -->
 
     <!--#include virtual="/includes/sh.html" -->
@@ -50,20 +58,23 @@ under the License.
 
     <main id="main" role="main" class="container">
         <section id="memory-centric" class="page-section">
-            <h1 class="first">Collocated Processing</h1>
+            <h1 class="first">Minimizing Network Utilization With Co-located Processing</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        The disk-centric systems, like RDBMS or NoSQL, generally utilize the classic client-server
-                        approach, where the data is brought from the server to the client side where it gets processed
-                        and then is usually discarded. This approach does not scale well as moving the data over the
-                        network is the most expensive operation in a distributed system.
+                        By working with disk-based systems such as relational or NoSQL databases, many of us accustomed
+                        to using a classic client-server approach for data processing. Client applications usually bring
+                        data from servers, use the records for local calculations, and discard the data as soon as the
+                        business tasks complete. This approach does not scale well if a significant volume of data gets
+                        transferred over the network.
                     </p>
                     <p>
-                        A much more scalable approach is <code>collocated</code> processing that reverses the flow by bringing
-                        the computations to the servers where the data actually resides. This approach allows you to
-                        execute advanced logic or distributed SQL with JOINs exactly where the data is stored avoiding
-                        expensive serialization and network trips.
+                        In addition to the client-server approach, Apache Ignite supports a co-located processing
+                        technique. The primary aim of the technique is to increase the performance of your complex
+                        calculations or SQL with JOINs by running them straight on Ignite cluster nodes. In such a case,
+                        the calculations work with local data sets of the cluster nodes, thus, avoiding records shuffling
+                        over the network and eliminating an impact of the network latency on the performance of your
+                        applications.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
@@ -71,17 +82,16 @@ under the License.
                 </div>
             </div>
 
-            <div class="page-heading">Data Collocation</div>
+            <div class="page-heading">Data Co-location</div>
             <p>
-                To start benefiting from the collocated processing, we need to ensure that the data is properly collocated
-                in the first place. If the business logic requires to access more than one entry, it is usually best to
-                collocate dependent entries on a single cluster node. This technique is also known as
-                <code>affinity collocation</code> of the data.
+                To exploit the co-located processing in practice, first, you need to co-locate data sets by storing
+                related records on the same cluster node. That is also known as affinity co-location in Ignite.
             </p>
             <p>
-                In the example below, we have <code>Country</code> and <code>City</code> tables and want to collocate
-                <code>City</code> entries with their corresponding <code>Country</code> entries. To achieve this,
-                we use the <code>WITH</code> clause and specify <code>affinityKey=CountryCode</code> as shown below:
+                For example, let's introduce <code>Country</code> and <code>City</code> tables and co-locate
+                all <code>City</code> records that have a similar <code>Country</code> identifier on a single node. To
+                achieve this, you need to set <code>CountryCode</code> as an <code>affinityKey</code> in <code>City</code>
+                table:
             </p>
             <div class="tab-content">
 
@@ -110,21 +120,21 @@ under the License.
                 </div>
             </div>
             <p>
-                By collocating the tables together we can ensure that all the entries with the same <code>affinityKey</code>
-                will be stored on the same cluster node, hence avoiding costly network trips to fetch data from other
-                remote nodes.
+                This way, you instruct Ignite to store all the <code>Cities</code> with the same <code>CountryCode
+                </code> on a single cluster node. As soon as the data is co-located, Ignite can execute compute- and
+                data-intensive logic, SQL with JOINs straight on the cluster nodes minimizing or eliminating network utilization.
             </p>
+
             <div class="page-heading">SQL and Distributed JOINs</div>
             <p>
-                Apache Ignite SQL engine will always perform much more efficiently if a query is run against the
-                collocated data. It is especially crucial for execution of distributed JOINs within the cluster.
+                Ignite SQL engine performs much faster if a query gets executed against co-located records. That's
+                especially crucial for SQL with JOINs that can span many cluster nodes.
             </p>
             <p>
-                Taking the example of the two tables created above, let's get the most populated cities across China,
-                Russia and the USA joining the data stored in the <code>Country</code> and <code>City</code> tables, as follows:
+                Taking the previous example with <code>Country</code> and <code>City</code> tables,
+                let's join those tables returning the most populated cities across several countries:
             </p>
             <div class="tab-content">
-
                 <div class="tab-pane active" id="sql-joins-query">
                         <pre class="brush:sql">
                             SELECT country.name, city.name, MAX(city.population) as max_pop
@@ -137,26 +147,27 @@ under the License.
                 </div>
             </div>
             <p>
-                Since all the cities were collocated with their countries, the JOIN will execute only on the nodes
-                that store China, Russia and the USA entries. This approach <i>avoids</i> expensive data movement
-                across the network, and therefore scales better and provides the fastest performance.
+                This query is executed only on the nodes that store records of China, Russia, and the USA. Plus, during
+                the JOIN, the records are not shuffled between the nodes as long as all the <code>Cities
+                </code> with the same <code>city.countrycode</code> are stored on a single node.
             </p>
+
             <div class="page-heading">Distributed Collocated Computations</div>
             <p>
-                Apache Ignite compute grid and machine learning components allow to perform computations and execute
+                Apache Ignite compute and machine learning APIs allow to perform computations and execute
                 machine learning algorithms in parallel to achieve high performance, low latency, and linear scalability.
-                Furthermore, both components work best with collocated data and collocated processing in general.
+                Furthermore, both components work best with co-located data sets.
             </p>
             <p>
-                For instance, let's assume that a blizzard is approaching New York. As a telecommunication company,
-                you have to send a warning text message to 8 million New Yorkers.
-                With the client-server approach the company has to move all <nobr>8 million (!)</nobr> records
-                from the database to the client text messaging application, which does not scale.
+                Let's take another example by imagining that a winter storm is about to hit a highly-populated city. As
+                a telecommunication company, you have to send a text message to 20 million residents notifying about the
+                blizzard. With the client-server approach, the company would read all 20 million records from a database
+                to an application that needs to execute some logic and send a message to the residents eventually.
             </p>
             <p>
-                A much more efficient approach would be to send the text-messaging logic to the cluster node responsible
-                for storing the New York residents. This approach moves only 1 computation instead of 8 million records
-                across the network, and performs a lot better.
+                A much more efficient approach would be to run the logic on and send text messages from the cluster nodes
+                that store the records of the residents. With this technique, instead of pulling 20 million records via
+                the network, you execute the logic in place and eliminate a network impact on the performance of the calculation.
             </p>
 
             <p>
@@ -210,74 +221,23 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
                 </div>
             </div>
 
-            <div class="page-heading">More on Collocated Processing</div>
-            <table class="formatted" name="More on Ignite Transactions">
-                <thead>
-                <tr>
-                    <th width="35%" class="left">Feature</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="features-left">Affinity Collocation</td>
-                    <td>
-                        <p>
-                            If business logic requires to access more than one entry it can be reasonable to
-                            collocate dependent entries by storing them on a single cluster node:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/affinity-collocation" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="features-left">Collocated Computations</td>
-                    <td>
-                        <p>
-                            It is also possible to route computations to the nodes where the data is stored:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/collocate-compute-and-data" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="features-left">Compute Grid</td>
-                    <td>
-                        <p>
-                            Distributed computations are performed in parallel fashion to gain high performance, low latency, and linear scalability:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="features-left">Distributed JOINs</td>
-                    <td>
-                        <p>
-                            Ignite supports collocated and non-collocated distributed SQL joins:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="features-left">Machine Learning</td>
-                    <td>
-                        <p>
-                            Ignite machine learning component allows users to run ML/DL training and inference directly
-                            on the data stored in an Ignite cluster and provides ML and DL algorithms:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/machine-learning" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="page-heading">Learn More</div>
+            <p>
+                <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
+                    <b>Compute APIs <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="/features/machinelearning.html">
+                    <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+            <p>
+                <a href="http://localhost/use-cases/hpc.html">
+                    <b>High Performance Computing with Apache Ignite <i class="fa fa-angle-double-right"></i></b>
+                </a>
+            </p>
+
         </section>
     </main>
 
