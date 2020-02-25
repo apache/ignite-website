@@ -68,8 +68,8 @@ under the License.
                         nodes.
                     </p>
                     <p>
-                        Ignite enables speed and scale for HPC scenarios by processing records in memory with the
-                        elimination of data shuffling and network utilization.
+                        Ignite enables speed and scale for HPC scenarios by processing records in memory and reducing
+                        data shuffling and network utilization.
                     </p>
                 </div>
 
@@ -83,39 +83,33 @@ under the License.
             <div class="page-heading">Co-located Processing</div>
             <p>
                 Ignite uses the notion of co-located processing to guide HPC workloads implementations in distributed
-                in-memory environments. The primary aim of this type of processing is to increase the performance of
-                your complex calculations by running them straight on the Ignite cluster nodes. In such a case, the
-                calculations process only local data sets of the cluster nodes, thus, avoiding records shuffling over
-                the network. It results in minimal network utilization, and an order of magnitude performance increase
-                depending on the data volume.
+                in-memory environments. Co-located processing increases the performance of your complex calculations by
+                running them straight on the Ignite cluster nodes. These calculations are done only on local data sets
+                available on the nodes, thus avoiding data shuffling over the network and resulting in orders of magnitude
+                increase in performance.
             </p>
 
             <p>
                 To exploit the co-located processing in practice, first, you need to co-locate data by storing related
-                records on the same cluster node. Consider your bank account and transactions posted to it as an example
-                of related or co-located data. Once you set <code>accountID</code> as an affinity
-                key for <code>Transactions</code> table, then you'll instruct Ignite to store all the transactions with
-                the same <code>accountId</code> on a single cluster node that keeps the record of your account in
-                <code>Accounts</code> table.
-            </p>
-
-            <p>
-                As soon as data is co-located, Ignite can execute compute- and data-intensive logic on the cluster nodes
-                that store the records required for the calculation. For instance, a payment processing system can send
-                a compute task for previous transactions verification to a specific Ignite node that stores your account
-                record with all completed transactions and finish fraud-detection verifications locally on that machine.
-                Thus, instead of pulling all the transactions back to the application over the network, the processing
-                system eliminates network utilization by running verifications on the nodes that store actual data.
-                The effect is even more significant when the system needs to process millions of transactions per second,
-                verifying billions of previously completed payments.
+                records on the same cluster node. As an example of related or co-located data, consider your bank account
+                and transactions posted to it. Once you set <code>accountID</code> as an affinity key for the
+                <code>Transactions</code> table, you'll instruct Ignite to store all transactions for your
+                <code>accountId</code> on the same node that keeps the record of your account in the
+                <code>Accounts</code> table. Now let's say a payment processing system sends a compute task that
+                verifies previous transactions of your account. Since the data is co-located, Ignite will execute this
+                task directly on the node that stores your account record with all completed transactions and finish the
+                verification locally on that machine instead of pulling all the transactions back to the application
+                over the network. This method of executing a task on the node where the data resides provides
+                exceptionally high performance.The effect is even more significant when the system needs to process
+                millions of transactions per second, verifying billions of previously completed payments.
             </p>
 
             <div class="page-heading">Compute APIs</div>
 
             <p>
-                Ignite provides compute APIs (also known as compute grid) for creation and scheduling custom
-                tasks of arbitrary complexity. The APIs implement MapReduce paradigm and presently available for Java,
-                C# and C++ programming languages.
+                Ignite provides compute APIs (also known as compute grid) for creating and scheduling custom
+                tasks of arbitrary complexity. The APIs implement MapReduce paradigm and are presently available for Java,
+                C#, and C++.
             </p>
 
             <div class="page-heading">Learn More</div>
