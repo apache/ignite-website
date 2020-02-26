@@ -33,17 +33,17 @@ under the License.
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="canonical" href="https://ignite.apache.org/arch/memorycentric.html"/>
+    <link rel="canonical" href="https://ignite.apache.org/arch/multi-tier-storage.html"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
     <meta http-equiv="Pragma" content="no-cache"/>
     <meta http-equiv="Expires" content="0"/>
 
-    <title>Memory-Centric Storage - Apache Ignite</title>
+    <title>Multi-Tier Storage - Apache Ignite</title>
 
     <meta name="description"
-          content="Apache Ignite memory-centric storage uses both memory and disk as active storage tiers. Speed of
+          content="Apache Ignite multi-tier storage uses memory, disk and Intel® Optane™ as active storage tiers. Speed of
           memory with the consistency of disk-based databases and no need for memory warm-ups on restarts."/>
 
     <!--#include virtual="/includes/styles.html" -->
@@ -55,16 +55,17 @@ under the License.
     <!--#include virtual="/includes/header.html" -->
 
     <main id="main" role="main" class="container">
-        <section id="memory-centric" class="page-section">
-            <h1 class="first">Memory-Centric Storage</h1>
+        <section id="multi-tier" class="page-section">
+            <h1 class="first">Multi-Tier Storage</h1>
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite is designed to work with both memory and disk as active storage tiers.
-                        Ignite storage is classified as a memory-centric one since most of the architectural decisions
-                        favor specificities of the memory tier that is always at use and cannot be disabled.
+                        Apache Ignite is designed to work with memory, disk and Intel® Optane™ as active storage tiers.
+                        The memory tier allows to use DRAM and Intel® Optane™ operating in the Memory Mode for data
+                        storage and processing needs.
                         The disk tier is optional with the support of two options -- you can persist data in an
-                        external database or keep it in the Ignite native persistence.
+                        external database or keep it in the Ignite native persistence. SSD, Flash, HDD or Intel®
+                        Optane™ operating in the AppDirect Mode can be used as a storage device.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
@@ -88,11 +89,11 @@ under the License.
             </p>
 
             <div class="page-heading" id="storage-usage-modes">
-                Memory-Centric Storage Usage Modes
-                <a href="/arch/memorycentric.html#storage-usage-modes"><i class="fa fa-anchor"></i></a>
+                Multi-Tier Storage Usage Modes
+                <a href="/arch/multi-tier-storage.html#storage-usage-modes"><i class="fa fa-anchor"></i></a>
             </div>
             <p>
-                Below you can see primary modes for memory-centric storage usage and configuration:
+                Below you can see primary modes for multi-tier storage usage and configuration:
             </p>
             <table class="formatted" name="Deployment Options Features">
                 <thead>
@@ -107,7 +108,8 @@ under the License.
                     <td>
                         <p>
                             The whole data set is available in memory only. In order to survive node failures, it is
-                            recommended to keep at least one backup copy of the data across the cluster.
+                            recommended to keep at least one backup copy of the data across the cluster. DRAM or Intel®
+                            Optane™ operating in the Memory Mode can be used as a storage device.
                         </p>
 
                         <p>
@@ -138,7 +140,8 @@ under the License.
                             100% of data is persisted to disk, and the same or smaller amount is cached in memory.
                             The more data is cached, the faster is the performance. The disk serves as the primary
                             storage that survives any cluster failures and restarts. No need for memory warm-ups on
-                            restarts as long as Ignite can serve data from disk.
+                            restarts as long as Ignite can serve data from disk. SSD, Flash, HDD or Intel®
+                            Optane™ operating in the AppDirect Mode can be used as a storage device.
                         </p>
 
                         <p>
@@ -152,18 +155,18 @@ under the License.
 
             <h2 style="padding-top: 10px;" id="partitioning">
                 Partitioning & Replication
-                <a href="/arch/memorycentric.html#partitioning"><i class="fa fa-anchor"></i></a>
+                <a href="/arch/multi-tier-storage.html#partitioning"><i class="fa fa-anchor"></i></a>
             </h2>
             <p>
-                Depending on the configuration, Ignite can both partition or replicate data across its memory-centric
-                storage. With the replicated mode, each cluster node keeps a full copy of the data that is advantageous
+                Depending on the configuration, Ignite can both partition or replicate data across the cluster. With
+                the replicated mode, each cluster node keeps a full copy of the data that is advantageous
                 for frequently accessed dictionaries. As for the partitioned mode, Ignite spreads the data across all
                 the cluster nodes evenly, allowing to store much more than a single machine can fit in.
             </p>
 
             <h2 style="padding-top: 10px;" id="durability">
                 Durability and Consistency
-                <a href="/arch/memorycentric.html#durability"><i class="fa fa-anchor"></i></a>
+                <a href="/arch/multi-tier-storage.html#durability"><i class="fa fa-anchor"></i></a>
             </h2>
             <p>
                 Ignite provides strong ACID durability guarantees to the data:
@@ -179,7 +182,7 @@ under the License.
 
             <h2 style="padding-top: 10px;" id="write-ahead-log">
                 Write-Ahead Logging and Checkpointing
-                <a href="/arch/memorycentric.html#write-ahead-log"><i class="fa fa-anchor"></i></a>
+                <a href="/arch/multi-tier-storage.html#write-ahead-log"><i class="fa fa-anchor"></i></a>
             </h2>
             <p>
                 If Ignite native persistence is selected as a disk tier, then every time a record is updated in memory,
@@ -197,7 +200,7 @@ under the License.
             <div class="page-heading">Learn More</div>
             <p>
                 <a href="https://cwiki.apache.org/confluence/display/IGNITE/Ignite+Durable+Memory+-+under+the+hood" target="docs">
-                    <b>Memory-Centric Storage Implementation Details <i class="fa fa-angle-double-right"></i></b>
+                    <b>Multi-Tier Storage Implementation Details <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
