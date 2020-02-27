@@ -82,26 +82,26 @@ under the License.
                 in memory across a cluster of nodes reducing latency of Spark operations that usually need to pull date
                 from disk-based systems. Second, Ignite tries to minimize data shuffling over the network between its
                 store and Spark applications by running certain Spark tasks, produced by RDDs or DataFrames APIs,
-                in-place on Ignite nodes. This optimization helps to reduce the effect of the network latency on
-                performance of Spark calls. Finally, the network impact can be minimized even greatly if native
-                Ignite APIs such as SQL are called from Spark applications directly. By doing that, you will completely
-                eliminate data shuffling between Spark and Ignite as long as Ignite SQL queries are always executed on
-                Ignite nodes returning a much smaller final result set to an application layer.
+                in-place on Ignite nodes. This optimization helps to reduce the effect of network latency on the
+                performance of Spark calls. Finally, the network impact can be further reduced if the native
+                Ignite APIs, such as SQL, are called from Spark applications directly. By doing so, you can eliminate
+                data shuffling between Spark and Ignite as long as Ignite SQL queries are always executed on
+                Ignite nodes returning a much smaller final result set to the application layer.
             </p>
 
             <div class="page-heading">Ignite Shared RDDs</div>
             <p>
-                Apache Ignite provides an implementation of the Spark RDD which allows any data and state to be shared
-                in memory as RDDs across Spark jobs. The Ignite RDD provides a shared, mutable view of the same data
-                in-memory in Ignite across different Spark jobs, workers, or applications.
+                Apache Ignite provides an implementation of the Spark RDD, which allows any data and state to be shared
+                in memory as RDDs across Spark jobs. The Ignite RDD provides a shared, mutable view of the data stored
+                in Ignite caches across different Spark jobs, workers, or applications.
             </p>
 
             <p>
-                The way an IgniteRDD is implemented is as a view over a distributed Ignite table (aka. cache).
-                It can be deployed with an Ignite node either within the Spark job executing process, on a Spark worker,
-                or in a separate Ignite cluster. It means that depending on the chosen deployment mode the shared
-                state may either exist only during the lifespan of a Spark application (embedded mode), or it may
-                out-survive the Spark application (standalone mode).
+                The Ignite RDD is implemented as a view over a distributed Ignite table (aka. cache). It can be deployed
+                with an Ignite node either within the Spark job executing process, on a Spark worker, or in a separate
+                Ignite cluster. This means that depending on the chosen deployment mode, the shared state may either
+                exist only during the lifespan of a Spark application (embedded mode), or it may out-survive the Spark
+                application (standalone mode).
             </p>
 
             <div class="page-heading">Ignite DataFrames</div>
@@ -114,10 +114,10 @@ under the License.
                 collections of elements partitioned across the nodes of the cluster.
             </p>
             <p>
-                Ignite supports DataFrame APIs letting Spark to write to and read from Ignite through that interface.
-                Even more, Ignite analyses execution plans produced by Spark's Catalyst engine and can execute
-                parts of the plan on Ignite nodes directly, reducing data shuffling. All that will make your SparkSQL
-                more performant.
+                Ignite supports DataFrame APIs allowing Spark to write to and read from Ignite through that interface.
+                Furthermore, Ignite analyses execution plans produced by Spark's Catalyst engine and can execute
+                parts of the plan on Ignite nodes directly, which will reduce data shuffling and consequently make your
+                SparkSQL perform better.
             </p>
 
             <div class="page-heading">Learn More</div>
