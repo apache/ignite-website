@@ -61,20 +61,17 @@ under the License.
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
                     <p>
                         Even though Apache Ignite is broadly used as a caching layer on top of external databases, it
-                        comes with its native persistence that is a distributed, ACID, and SQL-compliant disk-based
-                        store.
-                        The native persistence integrates into the Ignite multi-tier storage as a disk tier that can
-                        be turned on to let Ignite store more data on disk than it can cache in memory and to enable
+                        comes with its native persistence - a distributed, ACID, and SQL-compliant disk-based
+                        store. The native persistence integrates into the Ignite multi-tier storage as a disk tier that
+                        can be turned on to let Ignite store more data on disk than it can cache in memory and to enable
                         fast cluster restarts.
                     </p>
                     <p>
                         With native persistence enabled, Ignite always stores a superset of data on disk, and caches as
-                        much as
-                        it can in memory. For example, if your application stores 200 records in an Ignite cluster and
-                        your
-                        memory capacity allows caching only 150 of them, then those 150 records will be served from
-                        memory while
-                        the rest 50 from disk whenever the application requests them.
+                        much as it can in memory. For example, if your application needs to store 200 records in an
+                        Ignite cluster and the memory capacity allows caching only 150 records, then all 200 will be
+                        stored on disk, out of which 150 will be served from memory while the rest 50 from disk whenever
+                        the application requests them.
                     </p>
                 </div>
                 <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0; top: -10px;">
@@ -86,16 +83,15 @@ under the License.
 
             <div class="page-heading">Ignite Persistence vs. External Databases</div>
             <p>
-                The native persistence has the following advantages over external databases that can also be used as
-                the disk tier in Ignite:
+                The native persistence has the following advantages over external databases:
             </p>
             <ul class="page-list" style="margin-bottom: 20px;">
                 <li>
-                    An ability to cache a subset of the data - the native persistence always stores 100% of data on
+                    The ability to cache a subset of the data - the native persistence always stores 100% of data on
                     disk and lets you cache as much as required in memory.
                 </li>
                 <li>
-                    An ability to query data from disk - if any record is missing in memory, then Ignite takes it from
+                    The ability to query data from disk - if any record is missing in memory, then Ignite reads it from
                     disk. This is supported for all the APIs including SQL.
                 </li>
                 <li>
@@ -114,12 +110,12 @@ under the License.
 
                 As WAL grows, it periodically gets checkpointed to the main storage. Checkpointing is the process of
                 copying dirty pages from the memory tier to the partition files on disk. A dirty page is a page that was
-                updated in memory, was appended to WAL, but was not written to a respective partition file on disk yet.
+                updated in memory, was appended to WAL, but was not written to the respective partition file on disk yet.
             </p>
 
             <div class="page-heading">Durability</div>
             <p>
-                Ignite provides strong ACID durability guarantees to the data:
+                Ignite native persistence provides the following ACID guarantees across the cluster:
             </p>
 
             <ul class="page-list" style="margin-bottom: 20px;">
