@@ -43,7 +43,7 @@ under the License.
     <title>ACID Transactions - Apache Ignite</title>
 
     <meta name="description"
-          content="Apache Ignite can be configured to operate in a strongly consistent mode with full support for
+          content="Apache Ignite can operate in a strongly consistent mode with full support for
                         distributed ACID transactions. The consistency guarantees are met for both memory and disk tiers."/>
 
     <!--#include virtual="/includes/styles.html" -->
@@ -59,7 +59,7 @@ under the License.
             <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
                 <div class="col-sm-6 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
                     <p>
-                        Apache Ignite can be configured to operate in a strongly consistent mode with full support for
+                        Apache Ignite can operate in a strongly consistent mode with full support for
                         distributed ACID transactions. The consistency guarantees are met for both memory and disk tiers.
                     </p>
                     <p>
@@ -74,13 +74,13 @@ under the License.
 
             <div class="page-heading">Two-Phase-Commit Protocol</div>
             <p>
-                In distributed systems, a transaction usually spans across multiple cluster nodes. That requires
-                transactional engines to handle possible distributed failures properly to avoid data cluster-wide
-                inconsistencies. One of the widely-used approaches to ensure data consistency in this type of scenario
+                In distributed systems, a transaction usually spans across multiple cluster nodes. This requires
+                transactional engines to handle possible distributed failures properly to avoid data inconsistencies
+                cluster-wide. One of the widely-used approaches to ensure data consistency in such a scenario
                 is the two-phase commit protocol (2PC).
             </p>
             <p>
-                Ignite transactional engine implements the 2PC protocol. Whenever your records get updated within a
+                Ignite transactional engine implements the 2PC protocol. Whenever the records get updated within a
                 transaction, Ignite will keep the transactional state in a local transaction map until the changes are
                 committed, at which point the data is transferred to the participating remote nodes. Only the nodes that
                 hold primary or backup copies of the data participate in the transaction. Moreover, if a transaction is
@@ -90,8 +90,8 @@ under the License.
 
             <div class="page-heading">Consistency and Ignite Persistence</div>
             <p>
-                If Ignite native persistence is used then all the updates are written to the write-ahead log (WAL) file
-                that guarantees data consistency, even if the cluster or individual nodes go down in the middle
+                If Ignite native persistence is used, then all the updates are written to the write-ahead log (WAL) file,
+                which guarantees data consistency even if the cluster or individual nodes go down in the middle
                 of a transaction.
             </p>
             <p>
@@ -107,13 +107,13 @@ under the License.
                 supporting transactional APIs. For instance, if a relational database is configured as the disk tier,
                 Ignite writes the transactional changes to the database before sending a commit message to participating
                 cluster nodes. This way, if a transaction fails at the database level, Ignite can still send the rollback
-                message to the cluster nodes, keeping the data consistent cross memory and disk tiers.
+                message to the cluster nodes, keeping the data consistent across memory and disk tiers.
             </p>
 
             <div class="page-heading">Learn More</div>
             <p>
                 <a href="https://apacheignite.readme.io/docs/transactions" target="docs">
-                    <b>Ignite Transactions Documentation <i class="fa fa-angle-double-right"></i></b>
+                    <b>Ignite Transactions <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
             <p>
