@@ -53,45 +53,43 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
-    <!--#include virtual="/includes/header.html" -->
 
-    <main id="main" role="main" class="container">
-        <section id="compute" class="page-section">
-            <h1 class="first">Minimizing Network Utilization With Co-located Processing</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
-                    <p>
-                        In traditional disk-based systems, such as relational or NoSQL databases, client applications
-                        usually bring data from servers, use the records for local calculations, and discard the data as
-                        soon as the business task is complete. This approach does not scale well if a significant volume
-                        of data gets transferred over the network.
-                    </p>
-                    <p>
-                        To overcome this issue, Apache Ignite supports a co-located processing technique. The primary
-                        aim of the technique is to increase the performance of your complex calculations or SQL with
-                        JOINs by running them straight on Ignite cluster nodes. In co-located processing, calculations
-                        are done on local data sets of the cluster nodes, thus, avoiding records shuffling over the
-                        network and eliminating the impact of network latency on the performance of your applications.
-                    </p>
-                </div>
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/collocated_processing.png" width="440px" style="float: right; margin-top: -25px;"/>
-                </div>
-            </div>
+<!--#include virtual="/includes/header.html" -->
+<article>
+    <div class="container">
+        
+        <h1>Minimizing Network Utilization <strong>With Co-located Processing</strong></h1>
+           
+        <img class="diagram-right img-responsive" src="/images/collocated_processing.png" />
+        <p>
+            In traditional disk-based systems, such as relational or NoSQL databases, client applications
+            usually bring data from servers, use the records for local calculations, and discard the data as
+            soon as the business task is complete. This approach does not scale well if a significant volume
+            of data gets transferred over the network.
+        </p>
+        <p>
+            To overcome this issue, Apache Ignite supports a co-located processing technique. The primary
+            aim of the technique is to increase the performance of your complex calculations or SQL with
+            JOINs by running them straight on Ignite cluster nodes. In co-located processing, calculations
+            are done on local data sets of the cluster nodes, thus, avoiding records shuffling over the
+            network and eliminating the impact of network latency on the performance of your applications.
+        </p>
+        
+                    
 
-            <div class="page-heading">Data Co-location</div>
-            <p>
-                To use co-located processing in practice, first, you need to co-locate data sets by storing
-                related records on the same cluster node. This process is also known as affinity co-location in Ignite.
-            </p>
-            <p>
-                For example, let's introduce <code>Country</code> and <code>City</code> tables and co-locate
-                all <code>City</code> records that have the same <code>Country</code> identifier on a single node. To
-                achieve this, you need to set <code>CountryCode</code> as an <code>affinityKey</code> in <code>City</code>
-                table:
-            </p>
-            <div class="tab-content">
+        <h2>Data Co-location</h2>
+        <p>
+            To use co-located processing in practice, first, you need to co-locate data sets by storing
+            related records on the same cluster node. This process is also known as affinity co-location in Ignite.
+        </p>
+        <p>
+            For example, let's introduce <code>Country</code> and <code>City</code> tables and co-locate
+            all <code>City</code> records that have the same <code>Country</code> identifier on a single node. To
+            achieve this, you need to set <code>CountryCode</code> as an <code>affinityKey</code> in <code>City</code>
+            table:
+        </p>
+            
+        <div class="tab-content">
 
                 <div class="tab-pane active" id="sql-tables">
                         <pre class="brush:sql">
@@ -117,6 +115,7 @@ under the License.
                         </pre>
                 </div>
             </div>
+            
             <p>
                 This way, you instruct Ignite to store all the <code>Cities</code> with the same <code>CountryCode
                 </code> on a single cluster node. As soon as the data is co-located, Ignite can execute compute and
@@ -124,7 +123,7 @@ under the License.
                 utilization.
             </p>
 
-            <div class="page-heading">SQL and Distributed JOINs</div>
+            <h2>SQL and Distributed JOINs</h2>
             <p>
                 Ignite SQL engine performs much faster if a query gets executed against co-located records. This is
                 especially crucial for SQL with JOINs that can span many cluster nodes.
@@ -151,7 +150,7 @@ under the License.
                 </code> with the same <code>city.countrycode</code> are stored on a single node.
             </p>
 
-            <div class="page-heading">Distributed Collocated Computations</div>
+            <h2>Distributed Collocated Computations</h2>
             <p>
                 Apache Ignite compute and machine learning APIs allow you to perform computations and execute
                 machine learning algorithms in parallel to achieve high performance, low latency, and linear scalability.
@@ -221,28 +220,37 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
                 </div>
             </div>
 
-            <div class="page-heading">Learn More</div>
-            <p>
-                <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
-                    <b>Compute APIs <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-            <p>
-                <a href="/features/machinelearning.html">
-                    <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-            <p>
-                <a href="http://localhost/use-cases/hpc.html">
-                    <b>High Performance Computing with Apache Ignite <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-
-        </section>
-    </main>
-
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                  <div class="title display-6">Learn More</div>
+                  <hr class="my-4">
+                  <div class="row">
+                    <div class="col-6 col-xs-12">
+                        <p>
+                            <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
+                                <b>Compute APIs <i class="fa fa-angle-double-right"></i></b>
+                            </a>
+                        </p>
+                        <p>
+                            <a href="/features/machinelearning.html">
+                                <b>Machine and Deep Learning <i class="fa fa-angle-double-right"></i></b>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        <p>
+                            <a href="http://localhost/use-cases/hpc.html">
+                                <b>High Performance Computing with Apache Ignite <i class="fa fa-angle-double-right"></i></b>
+                            </a>
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</article>        
     <!--#include virtual="/includes/footer.html" -->
-</div>
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

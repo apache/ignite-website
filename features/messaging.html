@@ -45,133 +45,127 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
-    <!--#include virtual="/includes/header.html" -->
+ <!--#include virtual="/includes/header.html" -->
+ <article>
+    <div class="container">
+        <h1>Distributed <strong>Messaging and Events</strong></h1>
 
-    <main id="main" role="main" class="container">
-        <section id="messaging" class="page-section">
-            <h1 class="first">Distributed Messaging and Events</h1>
-            <p>
-                Ignite provides <b>high-performance cluster-wide messaging</b> functionality to exchange data via
-                publish-subscribe and direct point-to-point communication models. Messages can be exchanged in an
-                ordered or unordered fashion. Ordered messages are slightly slower, but when used, Ignite
-                guarantees that messages will be received in the same order they were sent.
-            </p>
+        <p>
+            Ignite provides <b>high-performance cluster-wide messaging</b> functionality to exchange data via publish-subscribe and direct point-to-point communication models. Messages can be exchanged in an ordered or unordered fashion. Ordered messages are slightly slower, but when used, Ignite guarantees that messages will be received in the same order they were sent.
+        </p>
 
-            <p>
-                Ignite <b>distributed events</b> functionality allows applications to receive notifications when a variety
-                of events occur in the distributed grid environment. You can automatically get notified for task executions,
-                read, write or query operations occurring on local or remote nodes within the cluster.
-                Event notifications can also be grouped together and sent in batches or timely intervals.
-            </p>
-            <div class="code-examples">
-                <div class="page-heading">Code Examples:</div>
-                <!-- Nav tabs -->
-                <ul id="messaging-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#messaging-example-ordered" aria-controls="home" data-toggle="tab">Ordered Messaging</a></li>
-                    <li><a href="#messaging-example-unordered" aria-controls="profile" data-toggle="tab">Unordered Messaging</a></li>
-                    <li><a href="#events-example-local" aria-controls="profile" data-toggle="tab">Local Events</a></li>
-                    <li><a href="#events-example-remote" aria-controls="profile" data-toggle="tab">Remote Events</a></li>
-                </ul>
+        <p> Ignite <b>distributed events</b> functionality allows applications to receive notifications when a variety of events occur in the distributed grid environment. You can automatically get notified for task executions,
+        read, write or query operations occurring on local or remote nodes within the cluster.
+        Event notifications can also be grouped together and sent in batches or timely intervals.
+        </p>
+                
+        <h2>Code Examples:</h2>
+        <!-- Nav tabs -->
+        <ul id="messaging-examples" class="nav nav-tabs">
+            <li><a class="active" href="#messaging-example-ordered" aria-controls="home" data-toggle="tab">Ordered Messaging</a></li>
+            <li><a href="#messaging-example-unordered" aria-controls="profile" data-toggle="tab">Unordered Messaging</a></li>
+            <li><a href="#events-example-local" aria-controls="profile" data-toggle="tab">Local Events</a></li>
+            <li><a href="#events-example-remote" aria-controls="profile" data-toggle="tab">Remote Events</a></li>
+        </ul>
 
                 <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane active" id="messaging-example-ordered">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
+        <div class="tab-content">
+            <div class="tab-pane active" id="messaging-example-ordered">
+                <pre class="brush:java">
+                    Ignite ignite = Ignition.ignite();
 
-                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
+                    IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
 
-                            // Add listener for ordered messages on all remote nodes.
-                            rmtMsg.remoteListen("MyOrderedTopic", (nodeId, msg) -> {
-                                System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
+                    // Add listener for ordered messages on all remote nodes.
+                    rmtMsg.remoteListen("MyOrderedTopic", (nodeId, msg) -> {
+                        System.out.println("Received ordered message [msg=" + msg + ", from=" + nodeId + ']');
 
-                                return true; // Return true to continue listening.
-                            });
+                        return true; // Return true to continue listening.
+                    });
 
-                            // Send ordered messages to remote nodes.
-                            for (int i = 0; i < 10; i++)
-                                rmtMsg.sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="messaging-example-unordered">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
-
-                            // Add listener for unordered messages on all remote nodes.
-                            rmtMsg.remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
-                                System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
-
-                                return true; // Return true to continue listening.
-                            });
-
-                            // Send unordered messages to remote nodes.
-                            for (int i = 0; i < 10; i++)
-                                rmtMsg.send("MyUnOrderedTopic", Integer.toString(i));
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="events-example-local">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            // Local listener that listenes to local events.
-                            IgnitePredicate&lt;CacheEvent&gt; locLsnr = evt -> {
-                                System.out.println("Received local event [evt=" + evt.name() + "]");
-
-                                return true; // Continue listening.
-                            };
-
-                            // Subscribe to specified cache events occuring on local node.
-                            ignite.events().localListen(locLsnr,
-                                EventType.EVT_CACHE_OBJECT_PUT,
-                                EventType.EVT_CACHE_OBJECT_REMOVED);
-
-                            // Get an instance of named cache.
-                            final IgniteCache&lt;Integer, String&gt; cache = ignite.cache("cacheName");
-
-                            // Generate cache events.
-                            for (int i = 0; i < 20; i++)
-                                cache.put(i, Integer.toString(i));
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="events-example-remote">
-                        <pre class="brush:java">
-                            Ignite ignite = Ignition.ignite();
-
-                            // Get an instance of named cache.
-                            final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
-
-                            // Sample remote filter which only accepts events for keys
-                            // that are greater than or equal to 10.
-                            IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = evt -> {
-                                System.out.println("Received remote event [evt=" + evt.&lt;Integer&gt;key() >= 10 + "]");
-
-                                return true; // Continue listening.
-                            };
-
-                            // Subscribe to specified cache events on all nodes that have cache running.
-                            ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
-                                EventType.EVT_CACHE_OBJECT_PUT,
-                                EventType.EVT_CACHE_OBJECT_REMOVED);
-
-                            // Generate cache events.
-                            for (int i = 0; i < 20; i++)
-                                cache.put(i, Integer.toString(i));
-                        </pre>
-                    </div>
-                </div>
+                    // Send ordered messages to remote nodes.
+                    for (int i = 0; i < 10; i++)
+                        rmtMsg.sendOrdered("MyOrderedTopic", Integer.toString(i), 0);
+                </pre>
             </div>
-            <div class="page-heading">GitHub Examples:</div>
-            <p>
-                Also see <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/messaging" target="github">messaging examples</a>
-                available on GitHub.
-            </p>
-        </section>
-        <section id="key-features" class="page-section">
-            <h2>Messaging & Events Features</h2>
-            <table class="formatted" name="Messaging Features">
+            <div class="tab-pane" id="messaging-example-unordered">
+                <pre class="brush:java">
+                    Ignite ignite = Ignition.ignite();
+
+                    IgniteMessaging rmtMsg = ignite.message(ignite.cluster().forRemotes());
+
+                    // Add listener for unordered messages on all remote nodes.
+                    rmtMsg.remoteListen("MyUnOrderedTopic", (nodeId, msg) -> {
+                        System.out.println("Received unordered message [msg=" + msg + ", from=" + nodeId + ']');
+
+                        return true; // Return true to continue listening.
+                    });
+
+                    // Send unordered messages to remote nodes.
+                    for (int i = 0; i < 10; i++)
+                        rmtMsg.send("MyUnOrderedTopic", Integer.toString(i));
+                </pre>
+            </div>
+            <div class="tab-pane" id="events-example-local">
+                <pre class="brush:java">
+                    Ignite ignite = Ignition.ignite();
+
+                    // Local listener that listenes to local events.
+                    IgnitePredicate&lt;CacheEvent&gt; locLsnr = evt -> {
+                        System.out.println("Received local event [evt=" + evt.name() + "]");
+
+                        return true; // Continue listening.
+                    };
+
+                    // Subscribe to specified cache events occuring on local node.
+                    ignite.events().localListen(locLsnr,
+                        EventType.EVT_CACHE_OBJECT_PUT,
+                        EventType.EVT_CACHE_OBJECT_REMOVED);
+
+                    // Get an instance of named cache.
+                    final IgniteCache&lt;Integer, String&gt; cache = ignite.cache("cacheName");
+
+                    // Generate cache events.
+                    for (int i = 0; i < 20; i++)
+                        cache.put(i, Integer.toString(i));
+                </pre>
+            </div>
+            <div class="tab-pane" id="events-example-remote">
+                <pre class="brush:java">
+                    Ignite ignite = Ignition.ignite();
+
+                    // Get an instance of named cache.
+                    final IgniteCache&lt;Integer, String&gt; cache = ignite.jcache("cacheName");
+
+                    // Sample remote filter which only accepts events for keys
+                    // that are greater than or equal to 10.
+                    IgnitePredicate&lt;CacheEvent&gt; rmtLsnr = evt -> {
+                        System.out.println("Received remote event [evt=" + evt.&lt;Integer&gt;key() >= 10 + "]");
+
+                        return true; // Continue listening.
+                    };
+
+                    // Subscribe to specified cache events on all nodes that have cache running.
+                    ignite.events(ignite.cluster().forCacheNodes("cacheName")).remoteListen(null, rmtLsnr,
+                        EventType.EVT_CACHE_OBJECT_PUT,
+                        EventType.EVT_CACHE_OBJECT_REMOVED);
+
+                    // Generate cache events.
+                    for (int i = 0; i < 20; i++)
+                        cache.put(i, Integer.toString(i));
+                </pre>
+            </div>
+        </div>
+            
+        
+        <h2>GitHub Examples:</h2>
+        <p>
+            Also see <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/messaging" target="github">messaging examples</a>available on GitHub.
+        </p>
+            
+        
+			<h2>Messaging & Events Features</h2>
+            <table class="table table-bordered table-striped" name="Messaging Features">
                 <thead>
                     <tr>
                         <th width="35%" class="left">Feature</th>
@@ -249,11 +243,11 @@ under the License.
                 </tr>
                 </tbody>
             </table>
-        </section>
-    </main>
+        </div>
+        </article>			
 
     <!--#include virtual="/includes/footer.html" -->
-</div>
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

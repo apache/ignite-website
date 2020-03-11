@@ -45,312 +45,281 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
-    <!--#include virtual="/includes/header.html" -->
+<!--#include virtual="/includes/header.html" -->
+<article>
+    <div class="container">
+     
+        <h1 >Data Loading and <strong>Streaming</strong></h1>
+                
+        <img class="img-responsive diagram-right" src="/images/ignite-stream-query.png" />
+        <p>
+            Ignite data loading and streaming capabilities allow ingesting large finite as well as
+            never-ending volumes of data in a scalable and fault-tolerant way into the cluster.
+            The rate at which data can be injected into Ignite is very high and easily exceeds millions
+            of events per second on a moderately sized cluster.
+        </p>
+        <p>
+            Apache Ignite <a href="https://apacheignite-mix.readme.io/docs/overview" target="_blank" rel="noopener">
+            integrates</a> with major streaming technologies and frameworks such as Kafka, Camel,
+            Storm or JMS to bring even more advanced streaming capabilities to Ignite-based architectures.
+        </p>
+            
+                    
+        <h2>Data Loading</h2>
+        <p>
+            Ignite provides several <a href="https://apacheignite.readme.io/docs/data-loading" target="_blank" rel="noopener">
+            techniques</a> for initial data loading. For instance, Ignite streaming APIs are a good
+            choice for clusters with Ignite native persistence enabled, while the clusters that persist
+            data in a 3rd party store can connect to it directly with <code>CacheStore</code> API.
+        </p>
 
-    <main id="main" role="main" class="container">
-        <section id="streaming" class="page-section">
-            <h1 class="first">Data Loading and Streaming</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0">
+        <h2>How Ignite Streaming Works:</h2>
+        <ol class="page-list">
+            <li>Clients inject streams of data into Ignite.</li>
+            <li>Data is automatically partitioned between Ignite data nodes.</li>
+            <li>Data is concurrently processed across all cluster nodes.</li>
+            <li>Clients perform concurrent <code>SQL queries</code> on the streamed data.</li>
+            <li>Clients subscribe to <code>continuous queries</code> as data changes.</li>
+        </ol>
+    
+            
+        <h2>Code Examples:</h2>
+        <!-- Nav tabs -->
+        <ul id="datagrid-examples" class="nav nav-tabs">
+            <li ><a class="active" href="#streaming-data" role="tab" data-toggle="tab">Stream Data</a></li>
+            <li><a href="#streaming-transformer" role="tab" data-toggle="tab">Transform Data</a></li>
+            
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="streaming-data">
+                <pre class="brush:java">
+                    // Get the data streamer reference and stream data.
+                    try (IgniteDataStreamer&lt;Integer, String&gt; stmr = ignite.dataStreamer("myStreamCache")) {
+                        // Stream entries.
+                        for (int i = 0; i &lt; 100000; i++)
+                            stmr.addData(i, Integer.toString(i));
+                    }
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="streaming-transformer">
+                <pre class="brush:java">
+                    CacheConfiguration cfg = new CacheConfiguration("wordCountCache");
+
+                    IgniteCache&lt;Integer, Long&gt; stmCache = ignite.getOrCreateCache(cfg);
+
+                    try (IgniteDataStreamer&lt;String, Long&gt; stmr = ignite.dataStreamer(stmCache.getName())) {
+                        // Allow data updates.
+                        stmr.allowOverwrite(true);
+
+                        // Configure data transformation to count instances of the same word.
+                        stmr.receiver(StreamTransformer.from((e, arg) -> {
+                        // Get current count.
+                        Long val = e.getValue();
+
+                        // Increment count by 1.
+                        e.setValue(val == null ? 1L : val + 1);
+
+                        return null;
+                        }));
+
+                        // Stream words into the streamer cache.
+                        for (String word : text)
+                        stmr.addData(word, 1L);
+                    }
+                </pre>
+            </div>
+        </div>
+            
+        <h2>GitHub Examples:</h2>
+            <p>Also see
+                <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheContinuousQueryExample.java" target="github">continuous queries</a>,
+    <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming/wordcount" target="github">word count</a>,
+    and <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming" target="github">other streaming examples</a> available on GitHub.
+            </p>
+		
+        <h2>Streaming Features</h2>
+
+        <table class="table table-bordered table-striped" name="Streaming Features">
+        <thead>
+            <tr>
+                <th width="35%" class="left">Feature</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left">Data Streamers</td>
+                <td>
                     <p>
-                        Ignite data loading and streaming capabilities allow ingesting large finite as well as
-                        never-ending volumes of data in a scalable and fault-tolerant way into the cluster.
-                        The rate at which data can be injected into Ignite is very high and easily exceeds millions
-                        of events per second on a moderately sized cluster.
+                        Data streamers are defined by <code>IgniteDataStreamer</code> API and are built to inject large
+                        amounts of continuous streams of data into Ignite stream caches. Data streamers are
+                        built in a scalable and fault-tolerant fashion and provide <b>at-least-once-guarantee</b>
+                        semantics for all the data streamed into Ignite.
+                    </p>
+                    <div class="page-links">
+                        <a href="http://apacheignite.readme.io/docs/data-streamers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Data Loading</td>
+                <td>
+                    <p>
+                        Data streamers can be used to load large amounts of data into Ignite cahes.
+                        They can be used for initial data loading from a 3rd party database or another source.
+                    </p>
+                    <div class="page-links">
+                        <a href="https://apacheignite.readme.io/docs/data-loading" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Collocated Processing</td>
+                <td>
+                    <p>
+                        For cases when you need to execute some custom logic instead of just adding new data,
+                        you can take advantage of <code>StreamReceiver</code> API.
                     </p>
                     <p>
-                        Apache Ignite <a href="https://apacheignite-mix.readme.io/docs/overview" target="_blank" rel="noopener">
-                        integrates</a> with major streaming technologies and frameworks such as Kafka, Camel,
-                        Storm or JMS to bring even more advanced streaming capabilities to Ignite-based architectures.
+                        Stream receivers allow you to react to the streamed data in collocated fashion,
+                        directly on the nodes where it will be cached. You can change the data or add any
+                        custom pre-processing logic to it, before putting the data into cache.
                     </p>
-                </div>
-
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/ignite-stream-query.png" style="float:right;"/>
-                </div>
-            </div>
-
-            <div class="page-heading">Data Loading</div>
-            <p>
-                Ignite provides several <a href="https://apacheignite.readme.io/docs/data-loading" target="_blank" rel="noopener">
-                techniques</a> for initial data loading. For instance, Ignite streaming APIs are a good
-                choice for clusters with Ignite native persistence enabled, while the clusters that persist
-                data in a 3rd party store can connect to it directly with <code>CacheStore</code> API.
-            </p>
-
-            <div class="page-heading">How Ignite Streaming Works:</div>
-            <ol class="page-list">
-                <li>Clients inject streams of data into Ignite.</li>
-                <li>Data is automatically partitioned between Ignite data nodes.</li>
-                <li>Data is concurrently processed across all cluster nodes.</li>
-                <li>Clients perform concurrent <code>SQL queries</code> on the streamed data.</li>
-                <li>Clients subscribe to <code>continuous queries</code> as data changes.</li>
-            </ol>
-
-            <div class="code-examples">
-                <div class="page-heading">Code Examples:</div>
-                <!-- Nav tabs -->
-                <ul id="datagrid-examples" class="nav nav-tabs">
-                    <li class="active"><a href="#streaming-data" role="tab" data-toggle="tab">Stream Data</a></li>
-                    <li><a href="#streaming-transformer" role="tab" data-toggle="tab">Transform Data</a></li>
-                    <!--<li><a href="#streaming-query" role="tab" data-toggle="tab">Query Sliding Windows</a></li>-->
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="streaming-data">
-                        <pre class="brush:java">
-                            // Get the data streamer reference and stream data.
-                            try (IgniteDataStreamer&lt;Integer, String&gt; stmr = ignite.dataStreamer("myStreamCache")) {
-                                // Stream entries.
-                                for (int i = 0; i &lt; 100000; i++)
-                                    stmr.addData(i, Integer.toString(i));
-                            }
-                        </pre>
+                    <div class="page-links">
+                        <a href="http://apacheignite.readme.io/docs/data-streamers#streamreceiver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="streaming-transformer">
-                        <pre class="brush:java">
-                            CacheConfiguration cfg = new CacheConfiguration("wordCountCache");
-
-                            IgniteCache&lt;Integer, Long&gt; stmCache = ignite.getOrCreateCache(cfg);
-
-                            try (IgniteDataStreamer&lt;String, Long&gt; stmr = ignite.dataStreamer(stmCache.getName())) {
-                              // Allow data updates.
-                              stmr.allowOverwrite(true);
-
-                              // Configure data transformation to count instances of the same word.
-                              stmr.receiver(StreamTransformer.from((e, arg) -> {
-                                // Get current count.
-                                Long val = e.getValue();
-
-                                // Increment count by 1.
-                                e.setValue(val == null ? 1L : val + 1);
-
-                                return null;
-                              }));
-
-                              // Stream words into the streamer cache.
-                              for (String word : text)
-                                stmr.addData(word, 1L);
-                            }
-                        </pre>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Continuous Queries</td>
+                <td>
+                    <p>
+                        Continuous queries are useful for cases when you want to execute a query and then
+                        continue to get notified about the data changes that fall into your query filter.
+                    </p>
+                    <div class="page-links">
+                        <a href="http://apacheignite.readme.io/docs/continuous-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
                     </div>
-                    <!--<div role="tabpanel" class="tab-pane" id="streaming-query">-->
-                        <!--<pre class="brush:java">-->
-                            <!--CacheConfiguration&lt;String, Instrument&gt; cfg = new CacheConfiguration<>("instCache");-->
-
-                            <!--// LRU window holding 1,000,000 entries.-->
-                            <!--cfg.setEvictionPolicyFactory(new LruEvictionPolicy(1_000_000));-->
-
-                            <!--// Index some fields for querying portfolio positions.-->
-                            <!--cfg.setIndexedTypes(String.class, Instrument.class);-->
-
-                            <!--// Get a handle on the cache (create it if necessary).-->
-                            <!--IgniteCache&lt;String, Instrument&lt; instCache = ignite.getOrCreateCache(cfg);-->
-
-                            <!--// Select top 3 best performing instruments from the sliding window.-->
-                            <!--SqlFieldsQuery top3qry = new SqlFieldsQuery(-->
-                              <!--"select symbol, (latestPrice - openPrice) as change "-->
-                                <!--+ "from Instrument "-->
-                                <!--+ "order by change "-->
-                                <!--+ "desc limit 3"-->
-                            <!--);-->
-
-                            <!--// List of rows. Every row is represented as a List as well.-->
-                            <!--List&lt;List&lt;?&gt;&gt; top3 = instCache.query(top3qry).getAll();                        </pre>-->
-                    <!--</div>-->
-                </div>
-            </div>
-            <div class="page-heading">GitHub Examples:</div>
-            <p>
-                Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheContinuousQueryExample.java" target="github">continuous queries</a>,
-                <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming/wordcount" target="github">word count</a>,
-                and <a href="https://github.com/apache/ignite/tree/master/examples/src/main/java/org/apache/ignite/examples/streaming" target="github">other streaming examples</a> available on GitHub.
-            </p>
-        </section>
-        <section id="key-features" class="page-section">
-            <h2>Streaming Features</h2>
-            <table class="formatted" name="Streaming Features">
-                <thead>
-                    <tr>
-                        <th width="35%" class="left">Feature</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="left">Data Streamers</td>
-                        <td>
-                            <p>
-                                Data streamers are defined by <code>IgniteDataStreamer</code> API and are built to inject large
-                                amounts of continuous streams of data into Ignite stream caches. Data streamers are
-                                built in a scalable and fault-tolerant fashion and provide <b>at-least-once-guarantee</b>
-                                semantics for all the data streamed into Ignite.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/data-streamers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Data Loading</td>
-                        <td>
-                            <p>
-                                Data streamers can be used to load large amounts of data into Ignite cahes.
-                                They can be used for initial data loading from a 3rd party database or another source.
-                            </p>
-                            <div class="page-links">
-                                <a href="https://apacheignite.readme.io/docs/data-loading" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Collocated Processing</td>
-                        <td>
-                            <p>
-                                For cases when you need to execute some custom logic instead of just adding new data,
-                                you can take advantage of <code>StreamReceiver</code> API.
-                            </p>
-                            <p>
-                                Stream receivers allow you to react to the streamed data in collocated fashion,
-                                directly on the nodes where it will be cached. You can change the data or add any
-                                custom pre-processing logic to it, before putting the data into cache.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/data-streamers#streamreceiver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Continuous Queries</td>
-                        <td>
-                            <p>
-                                Continuous queries are useful for cases when you want to execute a query and then
-                                continue to get notified about the data changes that fall into your query filter.
-                            </p>
-                            <div class="page-links">
-                                <a href="http://apacheignite.readme.io/docs/continuous-queries" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">JMS Data Streamer</td>
-                        <td>
-                            <p>
-                                Ignite JMS Data Streamer consumes messages from JMS brokers and inserts them into Ignite caches.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/jms-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache Flume Sink</td>
-                        <td>
-                            <p>
-                                IgniteSink is a Flume sink that extracts events from an associated Flume channel and injects into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/flume-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">MQTT Streamer</td>
-                        <td>
-                            <p>
-                                Ignite MQTT Streamer consumes messages from a MQTT topic and feeds transformed key-value pairs into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/mqtt-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Twitter Streamer</td>
-                        <td>
-                            <p>
-                                Ignite Twitter Streamer consumes messages from a Twitter Streaming API and inserts them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/twitter-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache Kafka Streamer</td>
-                        <td>
-                            <p>
-                                Ignite Kafka Data Streamer consumes messages for a given Kafka Topic from Kafka Broker and inserts them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/kafka-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache Camel streamer</td>
-                        <td>
-                            <p>
-                                Ignite Camel streamer consumes messages from an Apache Camel consumer endpoint and feeds them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/camel-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache Storm Streamer</td>
-                        <td>
-                            <p>
-                                Ignite Storm Streamer consumes messages from an Apache Storm consumer endpoint and feeds them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/storm-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache Flink Streamer</td>
-                        <td>
-                            <p>
-                                Ignite Flink Streamer consumes messages from an Apache Flink consumer endpoint and feeds them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/flink-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">Apache RocketMQ Streamer</td>
-                        <td>
-                            <p>
-                                Ignite RocketMQ Streamer consumes messages from an Apache RocketMQ consumer endpoint and feeds them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/rocketmq-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="left">ZeroMQ Streamer</td>
-                        <td>
-                            <p>
-                                Ignite ZeroMQ Streamer consumes messages from a ZeroMQ consumer endpoint and feeds them into an Ignite cache.
-                            </p>
-                            <div  class="page-links">
-                                <a href="https://apacheignite-mix.readme.io/docs/zeromq-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
-
-    <!--#include virtual="/includes/footer.html" -->
+                </td>
+            </tr>
+            <tr>
+                <td class="left">JMS Data Streamer</td>
+                <td>
+                    <p>
+                        Ignite JMS Data Streamer consumes messages from JMS brokers and inserts them into Ignite caches.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/jms-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache Flume Sink</td>
+                <td>
+                    <p>
+                        IgniteSink is a Flume sink that extracts events from an associated Flume channel and injects into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/flume-data-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">MQTT Streamer</td>
+                <td>
+                    <p>
+                        Ignite MQTT Streamer consumes messages from a MQTT topic and feeds transformed key-value pairs into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/mqtt-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Twitter Streamer</td>
+                <td>
+                    <p>
+                        Ignite Twitter Streamer consumes messages from a Twitter Streaming API and inserts them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/twitter-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache Kafka Streamer</td>
+                <td>
+                    <p>
+                        Ignite Kafka Data Streamer consumes messages for a given Kafka Topic from Kafka Broker and inserts them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/kafka-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache Camel streamer</td>
+                <td>
+                    <p>
+                        Ignite Camel streamer consumes messages from an Apache Camel consumer endpoint and feeds them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/camel-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache Storm Streamer</td>
+                <td>
+                    <p>
+                        Ignite Storm Streamer consumes messages from an Apache Storm consumer endpoint and feeds them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/storm-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache Flink Streamer</td>
+                <td>
+                    <p>
+                        Ignite Flink Streamer consumes messages from an Apache Flink consumer endpoint and feeds them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/flink-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Apache RocketMQ Streamer</td>
+                <td>
+                    <p>
+                        Ignite RocketMQ Streamer consumes messages from an Apache RocketMQ consumer endpoint and feeds them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/rocketmq-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">ZeroMQ Streamer</td>
+                <td>
+                    <p>
+                        Ignite ZeroMQ Streamer consumes messages from a ZeroMQ consumer endpoint and feeds them into an Ignite cache.
+                    </p>
+                    <div  class="page-links">
+                        <a href="https://apacheignite-mix.readme.io/docs/zeromq-streamer" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+</article>
+    <!--#include virtual="/includes/footer.html" -->
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

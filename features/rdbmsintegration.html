@@ -45,169 +45,156 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
-    <!--#include virtual="/includes/header.html" -->
-
-    <main id="main" role="main" class="container">
-        <section id="rdbms" class="page-section">
-            <h1 class="first">Automatically Integrate with RDBMSs</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 2px 0;">
-                <div class="col-sm-6 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
-
-                    <p>
-                        Ignite provides support for integrating with a variety of persistence stores.
-                        It allows you to connect to the database, import schemas, configure indexed types, and automatically generate all the
-                        required XML OR-mapping configuration and Java domain model POJOs that you can easily download and copy into your project.
-                    </p>
-                    <p>Ignite can integrate with any relational database (RDBMS) that supports a JDBC driver - Oracle, PostgreSQL, Microsoft SQL Server, and MySQL.</p>
-                    <div class="page-heading">RDBMS Integration Wizard</div>
-                    <p>Ignite supports automatic RDBMS integration via <a href="https://console.gridgain.com" target="_blank" rel="noopener">Ignite Web Console</a>
-                        which is an interactive configuration wizard, management and monitoring tool that allows you to:</p>
-                        <ul class="page-list">
-                            <li>Create and download various configurations for your Ignite cluster.</li>
-                            <li>Automatically construct Ignite's SQL metadata from any RDBMS schemas.</li>
-                            <li>Execute SQL queries over your in-memory caches.</li>
-                            <li>View query execution plans, in-memory schemas and streaming charts.</li>
-                        </ul>
-                </div>
-                <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
-                    <a href="/images/domain-model.png"><img class="img-responsive" src="/images/domain-model.png" width="350" style="float:right;"/></a> &nbsp;
-                    <p class="img-caption">Click on the image to view full size.</p>
-                </div>
-            </div>
-            <p>Ignite Web Console is an innovative tool that offers plenty of rich functionalities to manage the Ignite cluster and is not limited to features mentioned above.</p>
-            <div class="code-examples">
-                <div class="page-heading">Example</div>
-                <p>Here is an example of automatically generated Person class, as well as Java and XML configurations, imported from a MySQL PERSON table via Ignite Web Console.</p>
-                <!-- Nav tabs -->
-                <ul id="web-console-example" class="nav nav-tabs">
-                    <li class="active"><a href="#example-person" aria-controls="home" data-toggle="tab">Person</a></li>
-                    <li><a href="#example-xml" aria-controls="profile" data-toggle="tab">XML</a></li>
-                    <li><a href="#example-java" aria-controls="profile" data-toggle="tab">Java</a></li>
-                </ul>
+<!--#include virtual="/includes/header.html" -->
+<article>
+    <div class="container">
+        <h1>Automatically Integrate with RDBMSs</h1>
+        
+        <a href="/images/domain-model.png"><img class="img-responsive diagram-right" src="/images/domain-model.png" /></a>
+        <p>
+            Ignite provides support for integrating with a variety of persistence stores.
+            It allows you to connect to the database, import schemas, configure indexed types, and automatically generate all the
+            required XML OR-mapping configuration and Java domain model POJOs that you can easily download and copy into your project.
+        </p>
+        <p>Ignite can integrate with any relational database (RDBMS) that supports a JDBC driver - Oracle, PostgreSQL, Microsoft SQL Server, and MySQL.</p>
+                    
+        <h2>RDBMS Integration Wizard</h2>
+        <p>Ignite supports automatic RDBMS integration via <a href="https://console.gridgain.com" target="_blank" rel="noopener">Ignite Web Console</a>
+            which is an interactive configuration wizard, management and monitoring tool that allows you to:</p>
+            <ul class="page-list">
+                <li>Create and download various configurations for your Ignite cluster.</li>
+                <li>Automatically construct Ignite's SQL metadata from any RDBMS schemas.</li>
+                <li>Execute SQL queries over your in-memory caches.</li>
+                <li>View query execution plans, in-memory schemas and streaming charts.</li>
+            </ul>
+                
+        <p>Ignite Web Console is an innovative tool that offers plenty of rich functionalities to manage the Ignite cluster and is not limited to features mentioned above.</p>
+                    
+        <h3>Example</h3>
+        <p>Here is an example of automatically generated Person class, as well as Java and XML configurations, imported from a MySQL PERSON table via Ignite Web Console.</p>
+        <!-- Nav tabs -->
+        <ul id="web-console-example" class="nav nav-tabs">
+            <li ><a class="active" href="#example-person" aria-controls="home" data-toggle="tab">Person</a></li>
+            <li><a href="#example-xml" aria-controls="profile" data-toggle="tab">XML</a></li>
+            <li><a href="#example-java" aria-controls="profile" data-toggle="tab">Java</a></li>
+        </ul>
 
                 <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane" id="example-xml">
-                        <pre class="brush:xml">
-                            &lt;bean class="org.apache.ignite.configuration.IgniteConfiguration"&gt;
-                                ...
-                                &lt;property name="cacheStoreFactory"&gt;
-                                    &lt;bean class="org.apache.ignite.cache.store.jdbc.CacheJdbcPojoStoreFactory"&gt;
-                                        &lt;property name="dataSourceBean" value="dsMySQL"/&gt;
-                                        &lt;property name="dialect"&gt;
-                                            &lt;bean class="org.apache.ignite.cache.store.jdbc.dialect.MySQLDialect"/&gt;
-                                        &lt;/property&gt;
-                                        &lt;property name="types"&gt;
-                                            &lt;list&gt;
-                                                &lt;bean class="org.apache.ignite.cache.store.jdbc.JdbcType"&gt;
-                                                    &lt;property name="cacheName" value="PersonCache"/&gt;
-                                                    &lt;property name="keyType" value="java.lang.Integer"/&gt;
-                                                    &lt;property name="valueType" value="com.apache.ignite.myexample.model.Person"/&gt;
-                                                    &lt;property name="databaseSchema" value="test"/&gt;
-                                                    &lt;property name="databaseTable" value="person"/&gt;
-
-                                                    &lt;property name="keyFields"&gt;
-                                                        &lt;list&gt;
-                                                            ...
-                                                        &lt;/list&gt;
-                                                    &lt;/property&gt;
-
-                                                    &lt;property name="valueFields"&gt;
-                                                        &lt;list&gt;
-                                                            ...
-                                                        &lt;/list&gt;
-                                                    &lt;/property&gt;
-                                                &lt;/bean&gt;
-                                            &lt;/list&gt;
-                                        &lt;/property&gt;
-                                    &lt;/bean&gt;
+        <div class="tab-content">
+            <div class="tab-pane" id="example-xml">
+                <pre class="brush:xml">
+                    &lt;bean class="org.apache.ignite.configuration.IgniteConfiguration"&gt;
+                        ...
+                        &lt;property name="cacheStoreFactory"&gt;
+                            &lt;bean class="org.apache.ignite.cache.store.jdbc.CacheJdbcPojoStoreFactory"&gt;
+                                &lt;property name="dataSourceBean" value="dsMySQL"/&gt;
+                                &lt;property name="dialect"&gt;
+                                    &lt;bean class="org.apache.ignite.cache.store.jdbc.dialect.MySQLDialect"/&gt;
                                 &lt;/property&gt;
-                                ...
+                                &lt;property name="types"&gt;
+                                    &lt;list&gt;
+                                        &lt;bean class="org.apache.ignite.cache.store.jdbc.JdbcType"&gt;
+                                            &lt;property name="cacheName" value="PersonCache"/&gt;
+                                            &lt;property name="keyType" value="java.lang.Integer"/&gt;
+                                            &lt;property name="valueType" value="com.apache.ignite.myexample.model.Person"/&gt;
+                                            &lt;property name="databaseSchema" value="test"/&gt;
+                                            &lt;property name="databaseTable" value="person"/&gt;
+
+                                            &lt;property name="keyFields"&gt;
+                                                &lt;list&gt;
+                                                    ...
+                                                &lt;/list&gt;
+                                            &lt;/property&gt;
+
+                                            &lt;property name="valueFields"&gt;
+                                                &lt;list&gt;
+                                                    ...
+                                                &lt;/list&gt;
+                                            &lt;/property&gt;
+                                        &lt;/bean&gt;
+                                    &lt;/list&gt;
+                                &lt;/property&gt;
                             &lt;/bean&gt;
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="example-java">
-                        <pre class="brush:java">
-                        /**
-                         * This configuration was generated by GridGain Web Console (10/26/2016 11:12)
-                         */
-                        public class ClientConfigurationFactory {
-                            private static final Properties props = new Properties();
-
-                            static {
-                                try (InputStream in = IgniteConfiguration.class.getClassLoader().getResourceAsStream("secret.properties")) {
-                                    props.load(in);
-                                }
-                                catch (Exception ignored) {
-                                    // No-op.
-                                }
-                            }
-
-                            /** Helper class for datasource creation. */
-                            public static class DataSources {
-                                public static final MysqlDataSource INSTANCE_dsMySQL = createdsMySQL();
-
-                                private static MysqlDataSource createdsMySQL() {
-                                    MysqlDataSource dataSource = new MysqlDataSource();
-
-                                    dataSource.setURL(props.getProperty("dsMySQL.jdbc.url"));
-                                    dataSource.setUser(props.getProperty("dsMySQL.jdbc.username"));
-                                    dataSource.setPassword(props.getProperty("dsMySQL.jdbc.password"));
-
-                                    return dataSource;
-                                }
-                            }
-                            ...
-                        }
-                        </pre>
-                    </div>
-                    <div class="tab-pane  active" id="example-person">
-                        <pre class="brush:java">
-                            /**
-                             * Person definition.
-                             *
-                             * This POJO was generated by GridGain Web Console (10/26/2016 11:12)
-                             */
-                            public class Person implements Serializable {
-                                /** */
-                                private static final long serialVersionUID = 0L;
-
-                                /** Value for id. */
-                                private int id;
-
-                                /** Value for orgid. */
-                                private Integer orgid;
-
-                                /** Value for name. */
-                                private String name;
-
-                                /** Value for salary. */
-                                private Integer salary;
-
-                                ...
-                            }
-                        </pre>
-                    </div>
-                </div>
+                        &lt;/property&gt;
+                        ...
+                    &lt;/bean&gt;
+                </pre>
             </div>
+            <div class="tab-pane" id="example-java">
+                <pre class="brush:java">
+                /**
+                    * This configuration was generated by GridGain Web Console (10/26/2016 11:12)
+                    */
+                public class ClientConfigurationFactory {
+                    private static final Properties props = new Properties();
 
-            <p>
-                <div class="page-heading">Hosted Management</div>
-                Visit our <a href="/addons.html" target="_blank" rel="noopener">Manage</a> page to learn more about the projects that intend to make user experience with Ignite easier.
-            </p>
+                    static {
+                        try (InputStream in = IgniteConfiguration.class.getClassLoader().getResourceAsStream("secret.properties")) {
+                            props.load(in);
+                        }
+                        catch (Exception ignored) {
+                            // No-op.
+                        }
+                    }
 
+                    /** Helper class for datasource creation. */
+                    public static class DataSources {
+                        public static final MysqlDataSource INSTANCE_dsMySQL = createdsMySQL();
+
+                        private static MysqlDataSource createdsMySQL() {
+                            MysqlDataSource dataSource = new MysqlDataSource();
+
+                            dataSource.setURL(props.getProperty("dsMySQL.jdbc.url"));
+                            dataSource.setUser(props.getProperty("dsMySQL.jdbc.username"));
+                            dataSource.setPassword(props.getProperty("dsMySQL.jdbc.password"));
+
+                            return dataSource;
+                        }
+                    }
+                    ...
+                }
+                </pre>
+            </div>
+            <div class="tab-pane  active" id="example-person">
+                <pre class="brush:java">
+                    /**
+                        * Person definition.
+                        *
+                        * This POJO was generated by GridGain Web Console (10/26/2016 11:12)
+                        */
+                    public class Person implements Serializable {
+                        /** */
+                        private static final long serialVersionUID = 0L;
+
+                        /** Value for id. */
+                        private int id;
+
+                        /** Value for orgid. */
+                        private Integer orgid;
+
+                        /** Value for name. */
+                        private String name;
+
+                        /** Value for salary. */
+                        private Integer salary;
+
+                        ...
+                    }
+                </pre>
+            </div>
+        </div>
+            
+        
+        <h2>Hosted Management</h2>
+        <p>Visit our <a href="/addons.html" target="_blank" rel="noopener">Manage</a> page to learn more about the projects that intend to make user experience with Ignite easier.</p>
             <p>
                 <a href="https://apacheignite-tools.readme.io/docs" target="_blank" rel="noopener">
                     <b>Get started with Ignite Web Console <i class="fa fa-angle-double-right"></i></b>
                 </a>
             </p>
-
-        </section>
-    </main>
-
-    <!--#include virtual="/includes/footer.html" -->
-</div>
+    </div>
+</article>
+<!--#include virtual="/includes/footer.html" -->
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

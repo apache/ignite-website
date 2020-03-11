@@ -51,91 +51,96 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
-    <!--#include virtual="/includes/header.html" -->
-    <main id="main" role="main" class="container">
-        <section id="java" class="page-section">
-            <h1 class="first">ACID Transactions</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-8 col-xs-12" style="padding-left:0; padding-right:0">
+<!--#include virtual="/includes/header.html" -->
+<article>
+    <div class="container">
+        <h1 >ACID <strong>Transactions</strong></h1>
+        
+        <img class="img-responsive diagram-right" src="/images/in_memory_data.png" />
+        <p>
+            Apache Ignite can operate in a strongly consistent mode with full support for
+            distributed ACID transactions. The consistency guarantees are met for both memory and disk tiers.
+        </p>
+        <p>
+            Distributed transactions in Apache Ignite can span multiple cluster nodes, caches/tables, and
+            partitions. Both pessimistic and optimistic locking is available for applications.
+        </p>
+        
+                    
+        <h2>Two-Phase-Commit Protocol</h2>
+        <p>
+            In distributed systems, a transaction usually spans across multiple cluster nodes. This requires
+            transactional engines to handle possible distributed failures properly to avoid data inconsistencies
+            cluster-wide. One of the widely-used approaches to ensure data consistency in such a scenario
+            is the two-phase commit protocol (2PC).
+        </p>
+        <p>
+            Ignite transactional engine implements the 2PC protocol. Whenever the records get updated within a
+            transaction, Ignite will keep the transactional state in a local transaction map until the changes are
+            committed, at which point the data is transferred to the participating remote nodes. Only the nodes that
+            hold primary or backup copies of the data participate in the transaction. Moreover, if a transaction is
+            mapped to a single node, then Ignite optimizes the transaction execution by switching to the
+            one-phase-commit (1PC) protocol.
+        </p>
+
+        <h2>Consistency and Ignite Persistence</h2>
+        <p>
+            If Ignite native persistence is used, then all the updates are written to the write-ahead log (WAL) file,
+            which guarantees data consistency even if the cluster or individual nodes go down in the middle
+            of a transaction.
+        </p>
+        <p>
+            The purpose of the WAL is to propagate updates to the disk in the append-only mode, which is the fastest
+            way to persist data to disk. WAL provides a recovery mechanism for failure scenarios when a single node
+            or the whole cluster goes down. A cluster can always be recovered to the
+            latest successfully committed transaction.
+        </p>
+        <h2>Consistency and 3rd Party Persistence</h2>
+        <p>
+            In scenarios when Ignite is used as a caching layer for an external database, such as
+            RDBMS, Ignite transactions span both the cached data in Ignite as well as the data persisted in a database
+            supporting transactional APIs. For instance, if a relational database is configured as the disk tier,
+            Ignite writes the transactional changes to the database before sending a commit message to participating
+            cluster nodes. This way, if a transaction fails at the database level, Ignite can still send the rollback
+            message to the cluster nodes, keeping the data consistent across memory and disk tiers.
+        </p>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <div class="title display-6">Learn More</div>
+              <hr class="my-4">
+              <div class="row">
+                <div class="col-6 col-xs-12">
                     <p>
-                        Apache Ignite can operate in a strongly consistent mode with full support for
-                        distributed ACID transactions. The consistency guarantees are met for both memory and disk tiers.
+                        <a href="https://apacheignite.readme.io/docs/transactions" target="docs">
+                            <b>Ignite Transactions <i class="fa fa-angle-double-right"></i></b>
+                        </a>
                     </p>
                     <p>
-                        Distributed transactions in Apache Ignite can span multiple cluster nodes, caches/tables, and
-                        partitions. Both pessimistic and optimistic locking is available for applications.
+                        <a href="https://apacheignite.readme.io/docs/transactions#section-two-phase-commit-2pc" target="docs">
+                            <b>Two-phase commit protocol <i class="fa fa-angle-double-right"></i></b>
+                        </a>
                     </p>
                 </div>
-                <div class="col-sm-6 col-md-4 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" src="/images/in_memory_data.png" width="500" style="float:right;"/>
+                <div class="col-6 col-xs-12">
+                    <p>
+                        <a href="https://apacheignite.readme.io/docs/transactions#section-deadlock-detection" target="docs">
+                            <b>Deadlock-free transactions and detection <i class="fa fa-angle-double-right"></i></b>
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://apacheignite.readme.io/docs/transactions#section-integration-with-jta" target="docs">
+                            <b>JTA Support <i class="fa fa-angle-double-right"></i></b>
+                        </a>
+                    </p>
                 </div>
             </div>
-
-            <div class="page-heading">Two-Phase-Commit Protocol</div>
-            <p>
-                In distributed systems, a transaction usually spans across multiple cluster nodes. This requires
-                transactional engines to handle possible distributed failures properly to avoid data inconsistencies
-                cluster-wide. One of the widely-used approaches to ensure data consistency in such a scenario
-                is the two-phase commit protocol (2PC).
-            </p>
-            <p>
-                Ignite transactional engine implements the 2PC protocol. Whenever the records get updated within a
-                transaction, Ignite will keep the transactional state in a local transaction map until the changes are
-                committed, at which point the data is transferred to the participating remote nodes. Only the nodes that
-                hold primary or backup copies of the data participate in the transaction. Moreover, if a transaction is
-                mapped to a single node, then Ignite optimizes the transaction execution by switching to the
-                one-phase-commit (1PC) protocol.
-            </p>
-
-            <div class="page-heading">Consistency and Ignite Persistence</div>
-            <p>
-                If Ignite native persistence is used, then all the updates are written to the write-ahead log (WAL) file,
-                which guarantees data consistency even if the cluster or individual nodes go down in the middle
-                of a transaction.
-            </p>
-            <p>
-                The purpose of the WAL is to propagate updates to the disk in the append-only mode, which is the fastest
-                way to persist data to disk. WAL provides a recovery mechanism for failure scenarios when a single node
-                or the whole cluster goes down. A cluster can always be recovered to the
-                latest successfully committed transaction.
-            </p>
-            <div class="page-heading">Consistency and 3rd Party Persistence</div>
-            <p>
-                In scenarios when Ignite is used as a caching layer for an external database, such as
-                RDBMS, Ignite transactions span both the cached data in Ignite as well as the data persisted in a database
-                supporting transactional APIs. For instance, if a relational database is configured as the disk tier,
-                Ignite writes the transactional changes to the database before sending a commit message to participating
-                cluster nodes. This way, if a transaction fails at the database level, Ignite can still send the rollback
-                message to the cluster nodes, keeping the data consistent across memory and disk tiers.
-            </p>
-
-            <div class="page-heading">Learn More</div>
-            <p>
-                <a href="https://apacheignite.readme.io/docs/transactions" target="docs">
-                    <b>Ignite Transactions <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-            <p>
-                <a href="https://apacheignite.readme.io/docs/transactions#section-two-phase-commit-2pc" target="docs">
-                    <b>Two-phase commit protocol <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-            <p>
-                <a href="https://apacheignite.readme.io/docs/transactions#section-deadlock-detection" target="docs">
-                    <b>Deadlock-free transactions and detection <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-            <p>
-                <a href="https://apacheignite.readme.io/docs/transactions#section-integration-with-jta" target="docs">
-                    <b>JTA Support <i class="fa fa-angle-double-right"></i></b>
-                </a>
-            </p>
-        </section>
-    </main>
-
-    <!--#include virtual="/includes/footer.html" -->
+        </div>
+    </div>
 </div>
+</article>
+<!--#include virtual="/includes/footer.html" -->
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>
