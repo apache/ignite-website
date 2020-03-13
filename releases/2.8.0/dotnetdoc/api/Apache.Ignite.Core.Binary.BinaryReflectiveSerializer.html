@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.8.0/dotnetdoc/api/Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BinaryReflectiveSerializer
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BinaryReflectiveSerializer
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer">
+  
+  
+  <h1 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer" class="text-break">Class BinaryReflectiveSerializer
+  </h1>
+  <div class="markdown level0 summary"><p>Binary serializer which reflectively writes all fields except of ones with 
+<span class="xref">System.NonSerializedAttribute</span>.
+<p>
+Note that Java platform stores dates as a difference between current time 
+and predefined absolute UTC date. Therefore, this difference is always the 
+same for all time zones. .NET, in contrast, stores dates as a difference 
+between current time and some predefined date relative to the current time 
+zone. It means that this difference will be different as you change time zones. 
+To overcome this discrepancy Ignite always converts .Net date to UTC form 
+before serializing and allows user to decide whether to deserialize them 
+in UTC or local form using <code>ReadTimestamp(..., true/false)</code> methods in 
+<a class="xref" href="Apache.Ignite.Core.Binary.IBinaryReader.html">IBinaryReader</a> and <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryRawReader.html">IBinaryRawReader</a>.
+This serializer always read dates in UTC form. It means that if you have
+local date in any field/property, it will be implicitly converted to UTC
+form after the first serialization-deserialization cycle. </p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">BinaryReflectiveSerializer</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Apache.Ignite.Core.Binary.IBinarySerializer.html">IBinarySerializer</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Binary.html">Apache.Ignite.Core.Binary</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class BinaryReflectiveSerializer : IBinarySerializer</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_ForceTimestamp_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.ForceTimestamp*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_ForceTimestamp" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.ForceTimestamp">ForceTimestamp</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether all DateTime values should be written as Timestamp.
+<p>
+Timestamp format is required for values used in SQL and for interoperation with other platforms.
+Only UTC values are supported in Timestamp format. Other values will cause an exception on write.
+<p>
+Normally serializer uses <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryWriter.html#Apache_Ignite_Core_Binary_IBinaryWriter_WriteObject__1_System_String___0_">WriteObject&lt;T&gt;(String, T)</a> for DateTime fields.
+This attribute changes the behavior to <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryWriter.html#Apache_Ignite_Core_Binary_IBinaryWriter_WriteTimestamp_System_String_System_Nullable_System_DateTime__">WriteTimestamp(String, Nullable&lt;DateTime&gt;)</a>.
+<p>
+See also <a class="xref" href="Apache.Ignite.Core.Binary.TimestampAttribute.html">TimestampAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ForceTimestamp { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_RawMode_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.RawMode*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_RawMode" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.RawMode">RawMode</h4>
+  <div class="markdown level1 summary"><p>Gets or value indicating whether raw mode serialization should be used.
+<p>
+Raw mode does not include field names, improving performance and memory usage.
+However, queries do not support raw objects.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RawMode { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_ReadBinary_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.ReadBinary*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_ReadBinary_System_Object_Apache_Ignite_Core_Binary_IBinaryReader_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.ReadBinary(System.Object,Apache.Ignite.Core.Binary.IBinaryReader)">ReadBinary(Object, IBinaryReader)</h4>
+  <div class="markdown level1 summary"><p>Read binary object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReadBinary(object obj, IBinaryReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>Instantiated empty object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryReader.html">IBinaryReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>Binary reader.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_WriteBinary_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.WriteBinary*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_BinaryReflectiveSerializer_WriteBinary_System_Object_Apache_Ignite_Core_Binary_IBinaryWriter_" data-uid="Apache.Ignite.Core.Binary.BinaryReflectiveSerializer.WriteBinary(System.Object,Apache.Ignite.Core.Binary.IBinaryWriter)">WriteBinary(Object, IBinaryWriter)</h4>
+  <div class="markdown level1 summary"><p>Write binary object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void WriteBinary(object obj, IBinaryWriter writer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>Object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryWriter.html">IBinaryWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td><p>Binary writer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Apache.Ignite.Core.Binary.IBinarySerializer.html">IBinarySerializer</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
