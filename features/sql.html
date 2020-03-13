@@ -48,100 +48,105 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<!--#include virtual="/includes/header.html" -->
-<article>
-  <div class="container">
-      <h1>Distributed ANSI SQL <strong>With JOINs</strong></h1>
-		
-      <p>
-          Apache Ignite comes with ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine.
-          That allows you to interact with Ignite as with a regular SQL database using JDBC, ODBC drivers,
-          or native SQL APIs available for Java, C#, C++, Python, and other programming languages.
-      </p>
-      <p>
-          Ignite supports all DML commands, including SELECT, UPDATE, INSERT, and DELETE
-          queries as well as a subset of DDL commands relevant for distributed systems.
-      </p>
-          
-      <img class="img-responsive diagram-right" alt="SQL Database diagram" src="/images/sql_database.png" />
-      
-      <h2>SQL Joins</h2>
-            <p>
-                Ignite fully supports distributed joins for advanced querying needs. A distributed join is a SQL statement
-                with a join clause that combines two or more tables. If the tables are joined on the partitioning column
-                (affinity or primary key), the join is called a co-located join. Otherwise, if the tables were not
-                co-located initially, then Ignite does the join in a non-colocated fashion. The co-located joins avoid
-                data shuffling between nodes, minimizes network usage, thus, performing much faster than a non
-                co-located counterpart.
-            </p>
-			
-            <h2>SQL and In-Memory Mode</h2>
-            <p>
-                Apache Ignite can function in a pure in-memory mode when all data and indexes are located solely in memory.
-                In this mode, Ignite SQL shows the highest performance as long as all the data is served from memory,
-                and there is no need to update the disk tier.
-            </p>					
-		
-            <h2>SQL and Native Persistence</h2>
-            <p>
-                In this mode, Ignite persists 100% of data and indexes in the native persistence while caching as much
-                as possible in memory. Ignite SQL engine does not require to cache an entire data set in memory to
-                operate correctly. If the engine finds that any record is not cached, then it will be taken from disk.
-                Your application merely executes SQL queries, and Ignite gets the records from both memory and disk
-                automatically.
-            </p>
-            <p>
-                On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up.
-                That significantly decreases the time of any potential downtimes.
-            </p>					
-			
-	            <h2>SQL and 3rd Party Databases</h2>
-            <p>
-                Ignite can be used as a caching layer for external databases such as RDBMS, NoSQL, or Hadoop.
-                In this mode, the Ignite SQL engine requires to cache all the data needed for SQL queries in memory as
-                long as the engine does not support federated queries at the moment.
-            </p>
 
-            <p>
-                If federate queries between Ignite and an external database are required, then you can consider Ignite
-                integration for Spark -- DataFrames API can join data stored in Ignite and other systems.
-            </p>				
-			
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <div class="display-6 title">Learn More</div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                  <p><a href="https://apacheignite-sql.readme.io/docs/how-ignite-sql-works" target="docs">Ignite SQL implementation details <i class="fa fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="docs">Distributed JOINs <i class="fa fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="https://apacheignite-sql.readme.io/docs/sql-reference-overview" target="docs">SQL Reference <i class="fa fa-angle-double-right"></i></a></p>
-                </li>
-              </ul>
-            </div>
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                  <p><a href="/use-cases/spark-acceleration.html">Apache Ignite and Spark <i class="fa fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fa fa-angle-double-right"></i></a></p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    
+    <!--#include virtual="/includes/header.html" -->
+<article>
+    <div class="container">
+        <h1>Distributed ANSI SQL <strong>With JOINs</strong></h1>
+            
+        <img class="img-responsive diagram-right" alt="SQL Database diagram" src="/images/sql_database.png" />
+        <p>
+            Apache Ignite comes with ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine
+            allowing you to interact with Ignite as with a regular SQL database using JDBC, ODBC drivers, or
+            native SQL APIs available for Java, C#, C++, Python, and other programming languages.
+
+        </p>
+        <p>
+            Ignite supports all DML commands, including SELECT, UPDATE, INSERT, and DELETE queries as well
+            as a subset of DDL commands relevant for distributed systems.
+        </p>
+        
+        <h2>SQL Joins</h2>
+        <p>
+            Ignite fully supports distributed joins for advanced querying needs. A distributed join is a SQL statement
+            with a join clause that combines two or more tables. If the tables are joined on the partitioning column
+            (affinity or primary key), the join is called a co-located join. Otherwise, if the tables were not
+            co-located initially, then Ignite does the join in a non-colocated fashion. Co-located joins avoid data
+            shuffling between nodes and minimize network usage, thus, performing much faster than a non-colocated
+            counterpart.
+        </p>
+
+        <h2>SQL and In-Memory Mode</h2>
+        <p>
+            Apache Ignite can function in a pure in-memory mode when all the data and indexes are located solely in
+            memory. In this mode, Ignite SQL shows the highest performance since all the data is served from memory
+            with no usage of the disk tier at all.
+        </p>
+
+        <h2>SQL and Native Persistence</h2>
+        <p>
+            In this mode, Ignite persists 100% of data and indexes in the native persistence while caching as much
+            as possible in memory. Ignite SQL engine does not require to cache an entire data set in memory to
+            operate correctly. If the engine finds that a record is not cached, then it will read the record from
+            disk. Your application only executes SQL queries, and Ignite gets the records from both memory and disk
+            automatically.
+        </p>
+        <p>
+            On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up,
+            which significantly decreases the time of any potential downtimes.
+
+        </p>
+
+        <h2>SQL and 3rd Party Databases</h2>
+        <p>
+            Ignite can be used as a caching layer for external databases such as RDBMS, NoSQL, or Hadoop. In this mode,
+            the Ignite SQL engine requires caching all the data needed for SQL queries in memory since the engine
+            currently does not support federated queries.
+        </p>
+
+        <p>
+            If federated queries between Ignite and an external database are required, then you can consider Ignite
+            integration for Spark, where the DataFrames API can join the data stored in Ignite and other systems.
+        </p>
+
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                  <div class="display-6 title">Learn More</div>
+                  <hr class="my-4">
+                  <div class="row">
+                    <div class="col-6 col-xs-12">
+                      <ul>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/how-ignite-sql-works" target="docs">Ignite SQL implementation details <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="docs">Distributed JOINs <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/sql-reference-overview" target="docs">SQL Reference <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-6 col-xs-12">
+                      <ul>
+                        <li>
+                          <p><a href="/use-cases/spark-acceleration.html">Apache Ignite and Spark <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
 </div>
 </article>
+
+
 <!--#include virtual="/includes/footer.html" -->
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>
