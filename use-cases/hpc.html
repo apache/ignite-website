@@ -48,101 +48,102 @@ under the License.
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-    <!--#include virtual="/includes/header.html" -->
-    <article>
+<!--#include virtual="/includes/header.html" -->
+<article>
     <div class="container">
-					<h1>High-Performance Computing <strong>With Apache Ignite</strong></h1>
-			
-          <p>
-              High-performance computing (HPC) is the ability to process data and perform complex
-              calculations at high speeds. Apache Ignite enables HPC by providing APIs for compute- and
-              data-intensive calculations. The APIs implement the MapReduce paradigm and let you run
-              arbitrary tasks across the cluster of Ignite nodes.
-          </p>
-          <img class="diagram-right img-fluid" src="/images/collocated_processing.png"/>
-          <p>
-              Having Ignite as a high-performance compute cluster, you can turn a group of commodity
-              machines or a cloud environment into a distributed supercomputer of interconnected Ignite
-              nodes.
-          </p>
-          <p>
-              Ignite enables speed and scale for HPC scenarios by processing records in memory and reducing
-              data shuffling and network utilization.
-          </p>
-          
-                    
-                
-            <h2>Co-located Processing</h2>
-            <p>
-                Ignite uses the notion of co-located processing to guide HPC workloads implementations in distributed
-                in-memory environments. Co-located processing increases the performance of your complex calculations by
-                running them straight on the Ignite cluster nodes. These calculations are done only on local data sets
-                available on the nodes, thus avoiding data shuffling over the network and resulting in orders of magnitude
-                increase in performance.
-            </p>
+        <h1>High-Performance Computing <strong>With Apache Ignite</strong></h1>
 
-            <p>
-                To exploit the co-located processing in practice, first, you need to co-locate data by storing related
-                records on the same cluster node. As an example of related or co-located data, consider your bank account
-                and transactions posted to it. Once you set <code>accountID</code> as an affinity key for the
-                <code>Transactions</code> table, you'll instruct Ignite to store all transactions for your
-                <code>accountId</code> on the same node that keeps the record of your account in the
-                <code>Accounts</code> table. Now let's say a payment processing system sends a compute task that
-                verifies previous transactions of your account. Since the data is co-located, Ignite will execute this
-                task directly on the node that stores your account record with all completed transactions and finish the
-                verification locally on that machine instead of pulling all the transactions back to the application
-                over the network. This method of executing a task on the node where the data resides provides
-                exceptionally high performance.The effect is even more significant when the system needs to process
-                millions of transactions per second, verifying billions of previously completed payments.
-            </p>					
-				
-            <h2>Compute APIs</h2>
+        <p>
+            Apache Ignite enables high-performance computing by providing APIs for data and
+            compute-intensive calculations. The APIs implement the MapReduce paradigm and let you run
+            arbitrary tasks across the cluster of Ignite nodes. High-performance computing (HPC) is the ability to
+            process data and
+            perform complex calculations at high speeds and with Ignite you can turn your commodity hardware or cloud
+            environment into a distributed supercomputer.
+        </p>
+        <img class="diagram-right img-fluid" src="/images/collocated_processing.png"/>
+        <p>
+            Having Ignite as a high-performance compute cluster, you can turn a group of commodity
+            machines or a cloud environment into a distributed supercomputer of interconnected Ignite
+            nodes.
+        </p>
+        <p>
+            Ignite enables speed and scale for HPC scenarios by processing records in memory and reducing
+            data shuffling and network utilization.
+        </p>
 
-            <p>
-                Ignite provides compute APIs (also known as compute grid) for creating and scheduling custom
-                tasks of arbitrary complexity. The APIs implement MapReduce paradigm and are presently available for Java,
-                C#, and C++.
-            </p>
-				
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <div class="title display-6">Learn More</div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                   <a href="http://localhost/features/collocatedprocessing.html">
-                    Co-located processing <i class="fa fa-angle-double-right"></i>
-                </a>
-                </li>
-                <li>
-                  <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
-                    Compute APIs <i class="fa fa-angle-double-right"></i>
-                </a>
-                </li>
-              </ul>
+
+        <h2>Co-located Processing</h2>
+        <p>
+            Ignite uses the notion of co-located processing to guide HPC workloads implementations in distributed
+            in-memory environments. Co-located processing increases the performance of your complex calculations by
+            running them straight on the Ignite cluster nodes. These calculations are done only on local data sets
+            available on the nodes, thus avoiding data shuffling over the network and resulting in orders of magnitude
+            increase in performance.
+        </p>
+
+        <p>
+            To exploit the co-located processing in practice, first, you need to co-locate data by storing related
+            records on the same cluster node. As an example of related or co-located data, consider your bank account
+            and transactions posted to it. Once you set <code>accountID</code> as an affinity key for the
+            <code>Transactions</code> table, you'll instruct Ignite to store all transactions for your
+            <code>accountId</code> on the same node that keeps the record of your account in the
+            <code>Accounts</code> table. Now let's say a payment processing system sends a compute task that
+            verifies previous transactions of your account. Since the data is co-located, Ignite will execute this
+            task directly on the node that stores your account record with all completed transactions and finish the
+            verification locally on that machine instead of pulling all the transactions back to the application
+            over the network. This method of executing a task on the node where the data resides provides
+            exceptionally high performance.The effect is even more significant when the system needs to process
+            millions of transactions per second, verifying billions of previously completed payments.
+        </p>
+
+        <h2>Compute APIs</h2>
+
+        <p>
+            Ignite provides compute APIs (also known as compute grid) for creating and scheduling custom
+            tasks of arbitrary complexity. The APIs implement MapReduce paradigm and are presently available for Java,
+            C#, and C++.
+        </p>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="title display-6">Learn More</div>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col-6 col-xs-12">
+                        <ul>
+                            <li>
+                                <a href="http://localhost/features/collocatedprocessing.html">
+                                    Co-located processing <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
+                                    Compute APIs <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        <ul>
+                            <li>
+                                <a href="/features/machinelearning.html">
+                                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/arch/multi-tier-storage.html">
+                                    Multi-Tier Storage <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                  <a href="/features/machinelearning.html">
-                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
-                </a>
-                </li>
-                <li>
-                   <a href="/arch/multi-tier-storage.html">
-                    Multi-Tier Storage <i class="fa fa-angle-double-right"></i>
-                </a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </div>
-    
-      
-</div>
+
+
+    </div>
 </article>
 <!--#include virtual="/includes/footer.html" -->
 <!--#include virtual="/includes/scripts.html" -->

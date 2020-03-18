@@ -33,7 +33,7 @@ under the License.
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-cache.html" />
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-cache.html"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -51,130 +51,130 @@ under the License.
 <!--#include virtual="/includes/header.html" -->
 <article>
     <div class="container">
-					<h1 >In-Memory Cache <strong>With SQL, <br />ACID Transactions and Compute APIs</strong></h1>
-        
-          <p>
-                  One of the usages of Apache Ignite is as a distributed in-memory cache that supports ANSI SQL,
-                  ACID transactions, and co-located computations. From APIs and sessions caching to databases and
-                  microservices acceleration, Ignite provides all essential components required to speed up
-                  applications.
-              </p>
-        
-                    <img class="img-fluid diagram-right" src="/images/in_memory_data.png"/>
-                
-            <p>
-                As with classic distributed caches, you can span an Ignite cluster across several interconnected
-                physical or virtual machines letting it utilize all the available memory and CPU resources. But the
-                difference lies in the way you can use the cluster. In addition to standard key-value APIs, you can
-                run distributed SQL queries joining and grouping various data sets. If strong consistency is required,
-                you can execute multi-records and cross-cache ACID transactions in both pessimistic and optimistic
-                modes. Additionally, if an application runs compute or data-intensive logic, you can minimize data
-                shuffling and network utilization by running co-located computations and distributed machine learning
-                APIs right on the cluster nodes that store your data.
+        <h1>In-Memory Cache <strong>With SQL, <br/>ACID Transactions and Compute APIs</strong></h1>
 
-            </p>
+        <p>
+            Apache Ignite is used as a distributed in-memory cache that supports ANSI SQL,
+            ACID transactions, co-located computations and machine learning libraries. From APIs and sessions caching
+            to databases and microservices acceleration, Ignite provides all essential components required to speed up
+            applications.
+        </p>
 
-            <p>
-                There are two primary deployment strategies for Ignite as an in-memory cache -- the cache-aside
-                deployment and read-through/write-through caching. Let's review both of them.
-            </p>				
-      
-            
-					 <h2>Cache-Aside Deployment</h2>
-            <p>
-                With the cache-aside deployment strategy, a cache is deployed separately from the primary data store
-                and might not even know that the latter exists. An application or change-data-capture process (CDC)
-                becomes responsible for data synchronization between these two storage locations. For instance, if any
-                record gets updated in the primary data store, then its new value needs to be replicated to the cache.
-            </p>
-            <p>
-                This strategy works well when the cached data is rather static and not updated frequently, or temporary
-                data lag/inconsistency is allowed between the two storage locations. It's usually assumed that the
-                cache and the primary store will become consistent eventually when changes are replicated in full.
-            </p>
-            <p>
-                If Apache Ignite is deployed in a cache-aside configuration, then its native persistence can be used as
-                a disk store for Ignite data sets. The native persistence allows eliminating the time-consuming cache
-                warm-up step. Furthermore, since the native persistence always keeps a full copy of data on disk,
-                you are free to cache a subset of records in memory. If a required data record is missing in memory,
-                then Ignite reads it from the disk automatically regardless of the API you use -- be it SQL, key-value,
-                or scan queries.
-            </p>
-        
-            <h2>Read-Through/Write-Through Caching</h2>
-            <p>
-                The read-through/write-through caching strategy can also be classified as an in-memory data grid type
-                of deployment. When Apache Ignite is deployed as a data grid, the application layer starts treating
-                Ignite as the primary store. While the applications write to and read from Ignite, the latter ensures
-                that any underlying external databases stay updated and consistent with the in-memory data.
-            </p>
+        <img class="img-fluid diagram-right" src="/images/in_memory_data.png"/>
 
-            <p>
-                This strategy is favorable for architectures that need to accelerate existing disk-based databases or
-                create a shared caching layer across many disconnected data sources. Ignite integrates with many
-                databases out-of-the-box and can write-through or write-behind all the changes to them. This also
-                includes ACID transactions - Ignite will coordinate and commit a transaction across its in-memory
-                cluster as well as to a relational database.
-            </p>
-            <p>
-                The read-through capability implies that a cache can read data from an external database if a record is
-                missing in memory. Ignite fully supports this capability for key-value APIs. However, when using Ignite
-                SQL, you have to preload the entire data set in memory first (Ignite SQL can query data on
-                disk only if it is located in its native persistence).
-            </p>
-        
-            
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <div class="display-6 title">Learn More</div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                  <p> <a href="/features/sql.html">
-                    Distributed SQL <i class="fa fa-angle-double-right"></i>
-                </a></p>
-                </li>
-                <li>
-                  <p><a href="/features/collocatedprocessing.html">
-                    Co-located Processing <i class="fa fa-angle-double-right"></i>
-                </a></p>
-                </li>
-				  <li><p><a href="/features/transactions.html">
-                    ACID Transactions <i class="fa fa-angle-double-right"></i>
-                </a></p></li>
-				  <li><p><a href="/arch/persistence.html">
-                    Native Persistence <i class="fa fa-angle-double-right"></i>
-                </a></p></li>
-              </ul>
+        <p>
+            As with classic distributed caches, you can span an Ignite cluster across several interconnected
+            physical or virtual machines letting it utilize all the available memory and CPU resources. But the
+            difference lies in the way you can use the cluster. In addition to standard key-value APIs, you can
+            run distributed SQL queries joining and grouping various data sets. If strong consistency is required,
+            you can execute multi-records and cross-cache ACID transactions in both pessimistic and optimistic
+            modes. Additionally, if an application runs compute or data-intensive logic, you can minimize data
+            shuffling and network utilization by running co-located computations and distributed machine learning
+            APIs right on the cluster nodes that store your data.
+
+        </p>
+
+        <p>
+            There are two primary deployment strategies for Ignite as an in-memory cache -- the cache-aside
+            deployment and read-through/write-through caching. Let's review both of them.
+        </p>
+
+
+        <h2>Cache-Aside Deployment</h2>
+        <p>
+            With the cache-aside deployment strategy, a cache is deployed separately from the primary data store
+            and might not even know that the latter exists. An application or change-data-capture process (CDC)
+            becomes responsible for data synchronization between these two storage locations. For instance, if any
+            record gets updated in the primary data store, then its new value needs to be replicated to the cache.
+        </p>
+        <p>
+            This strategy works well when the cached data is rather static and not updated frequently, or temporary
+            data lag/inconsistency is allowed between the two storage locations. It's usually assumed that the
+            cache and the primary store will become consistent eventually when changes are replicated in full.
+        </p>
+        <p>
+            If Apache Ignite is deployed in a cache-aside configuration, then its native persistence can be used as
+            a disk store for Ignite data sets. The native persistence allows eliminating the time-consuming cache
+            warm-up step. Furthermore, since the native persistence always keeps a full copy of data on disk,
+            you are free to cache a subset of records in memory. If a required data record is missing in memory,
+            then Ignite reads it from the disk automatically regardless of the API you use -- be it SQL, key-value,
+            or scan queries.
+        </p>
+
+        <h2>Read-Through/Write-Through Caching</h2>
+        <p>
+            The read-through/write-through caching strategy can also be classified as an in-memory data grid type
+            of deployment. When Apache Ignite is deployed as a data grid, the application layer starts treating
+            Ignite as the primary store. While the applications write to and read from Ignite, the latter ensures
+            that any underlying external databases stay updated and consistent with the in-memory data.
+        </p>
+
+        <p>
+            This strategy is favorable for architectures that need to accelerate existing disk-based databases or
+            create a shared caching layer across many disconnected data sources. Ignite integrates with many
+            databases out-of-the-box and can write-through or write-behind all the changes to them. This also
+            includes ACID transactions - Ignite will coordinate and commit a transaction across its in-memory
+            cluster as well as to a relational database.
+        </p>
+        <p>
+            The read-through capability implies that a cache can read data from an external database if a record is
+            missing in memory. Ignite fully supports this capability for key-value APIs. However, when using Ignite
+            SQL, you have to preload the entire data set in memory first (Ignite SQL can query data on
+            disk only if it is located in its native persistence).
+        </p>
+
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="display-6 title">Learn More</div>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col-6 col-xs-12">
+                        <ul>
+                            <li>
+                                <p><a href="/features/sql.html">
+                                    Distributed SQL <i class="fa fa-angle-double-right"></i>
+                                </a></p>
+                            </li>
+                            <li>
+                                <p><a href="/features/collocatedprocessing.html">
+                                    Co-located Processing <i class="fa fa-angle-double-right"></i>
+                                </a></p>
+                            </li>
+                            <li><p><a href="/features/transactions.html">
+                                ACID Transactions <i class="fa fa-angle-double-right"></i>
+                            </a></p></li>
+                            <li><p><a href="/arch/persistence.html">
+                                Native Persistence <i class="fa fa-angle-double-right"></i>
+                            </a></p></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        <ul>
+                            <li>
+                                <p><a href="/features/machinelearning.html">
+                                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
+                                </a></p>
+                            </li>
+                            <li>
+                                <p><a href="/features/datagrid.html">
+                                    Ignite as an In-Memory Data Grid <i class="fa fa-angle-double-right"></i>
+                                </a></p>
+                            </li>
+                            <li><p><a href="/use-cases/in-memory-database.html">
+                                Ignite as an In-Memory Database <i class="fa fa-angle-double-right"></i>
+                            </a></p></li>
+                            <li><p><a href="/use-cases/dih.html">
+                                Ignite as a Digital Integration Hub <i class="fa fa-angle-double-right"></i>
+                            </a></p></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-xs-12">
-              <ul>
-                <li>
-                  <p><a href="/features/machinelearning.html">
-                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
-                </a></p>
-                </li>
-                <li>
-                  <p><a href="/features/datagrid.html">
-                    Ignite as an In-Memory Data Grid <i class="fa fa-angle-double-right"></i>
-                </a></p>
-                </li>
-				  <li><p><a href="/use-cases/in-memory-database.html">
-                    Ignite as an In-Memory Database <i class="fa fa-angle-double-right"></i>
-                </a></p></li>
-				  <li><p><a href="/use-cases/dih.html">
-                    Ignite as a Digital Integration Hub <i class="fa fa-angle-double-right"></i>
-                </a></p></li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </div>
-    
-      
-  </div>	
+
+
+    </div>
 </article>
 <!--#include virtual="/includes/footer.html" -->
 
