@@ -89,19 +89,16 @@ under the License.
 
         <h2>Consistency and Ignite Persistence</h2>
         <p>
-            If Ignite native persistence is used, then all the updates are written to the write-ahead log (WAL) file,
+            If Ignite native persistence is used, then all the updates are written to the write-ahead log (WAL),
             which guarantees data consistency even if the cluster or individual nodes go down in the middle
-            of a transaction.
-        </p>
-        <p>
-            The purpose of the WAL is to propagate updates to the disk in the append-only mode, which is the fastest
-            way to persist data to disk. WAL provides a recovery mechanism for failure scenarios when a single node
-            or the whole cluster goes down. A cluster can always be recovered to the
-            latest successfully committed transaction.
+            of a transaction. The purpose of the WAL is to propagate updates to the disk in the append-only mode,
+            which is the fastest way to persist data to disk. The WAL provides a recovery mechanism for failure scenarios
+            when a single node or the whole cluster goes down. A cluster can always be recovered to the latest
+            successfully committed transaction.
         </p>
         <h2>Consistency and 3rd Party Persistence</h2>
         <p>
-            In scenarios when Ignite is used as a caching layer for an external database, such as
+            In scenarios where Ignite is used as a caching layer for an external database, such as
             RDBMS, Ignite transactions span both the cached data in Ignite as well as the data persisted in a database
             supporting transactional APIs. For instance, if a relational database is configured as the disk tier,
             Ignite writes the transactional changes to the database before sending a commit message to participating
