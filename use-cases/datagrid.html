@@ -50,120 +50,121 @@ under the License.
 <body>
 <!--#include virtual="/includes/header.html" -->
 <article>
-  <header><div class="container">
-				<h1>In-Memory Data Grid <strong>With SQL, <br />ACID Transactions and Compute APIs</strong></h1>
-    </div>
-  </header>
-<div class="container">
-			
-				<p>
-                    Apache Ignite as an in-memory data grid that accelerates and scales your databases, services, and
-                    APIs. It supports key-value and ANSI SQL APIs, ACID transactions, co-located compute, and machine
-                    learning libraries required for real-time applications.
-                </p>
-                <p>
-                    An in-memory data grid type of deployment is also known as a read-through/write-through caching
-                    strategy, in which case the application layer starts treating the data grid as the primary store.
-                    While the application layer writes to and reads from Ignite, the latter ensures that any underlying
-                    database stays updated and consistent with in-memory data.
-                </p>
-                <img class="img-fluid diagram-right" src="/images/svg-diagrams/data_grid.svg" />
-                <p>
-                    As an in-memory data grid, Ignite provides all essential APIs needed to simplify its adoption.
-                    The APIs include distributed key-value and ANSI SQL queries, ACID transactions, co-located
-                    computations, and machine learning models. While key-value and SQL calls let you request, join, and
-                    group distributed data sets, the compute and machine learning components help to eliminate data
-                    shuffling over the network, thus, boosting compute and data-intensive calculations.
-                </p>
-                
-                <p>
-                    Ignite is capable of storing data both in memory and on disk with two options for data persistence
-                    -- you can persist changes in an external database or let Ignite keep data in its native persistence.
-                    Let's review both of these options.
-                </p>
-      
-                <h2>Ignite and External Databases</h2>
-                
-                    <p>
-                        Ignite can improve the performance and scalability of any external database such as RDBMS,
-                        NoSQL or Hadoop, by sliding in as an in-memory cache between the application and the database
-                        layer. When an application writes data to the cache, Ignite automatically writes-through or
-                        writes-behind all data modifications to the underlying external store. Ignite also performs
-                        ACID transactions where it coordinates and commits a transaction across the cluster as well as
-                        the database.
-                    </p>
-                    <p>
-                        Additionally, Ignite can be deployed as a shared and unified in-memory layer that stores data
-                        sets originating from disjointed databases. Your applications can consume all the data from
-                        Ignite as a single store while Ignite can keep the original databases in sync whenever in-memory
-                        data gets updated.
-                    </p>
-                    <p>
-                        However, there are some limitations if an external database is used as a persistence layer for
-                        Ignite deployments. For instance, if you run Ignite SQL or scan queries, you need to ensure that
-                        all the data has been preloaded to the in-memory cluster. Note that Ignite SQL or scan queries
-                        can read data from disk only if it is stored in the native persistence.
-                    </p>
-  
-                    
-                
-                  <p>&nbsp;</p>  
-             <h2  >Ignite Native Persistence</h2>
-             <img class="img-fluid diagram-right" src="/images/native_persistence_key_value.png"/>
-            <p>Ignite native persistence is a distributed ACID and SQL-compliant disk store that transparently integrates with Ignite in-memory layer. When the native persistence is enabled, Ignite stores both data and indexes on disk and eliminates the time-consuming cache warm-up step. Since the native persistence always keeps a full copy of data on disk, you are free to cache a subset of records in memory. If a required data record is missing in memory, then Ignite reads it from the disk automatically regardless of the API you use -- be it SQL, key-value, or scan queries.</p>
-      
-            
-                    
-            
-                    
-      <div class="jumbotron jumbotron-fluid">
+    <header>
         <div class="container">
-          <div class="display-6 title">Learn More</div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col-sm-6">
-              <ul>
-                <li>
-                  <a href="/features/sql.html">
-                    	Distributed SQL <i class="fa fa-angle-double-right"></i>
-                	</a>
-                </li>
-                <li>
-                  <a href="/features/collocatedprocessing.html">
-                    	Co-located Processing <i class="fa fa-angle-double-right"></i>
-                	</a>
-                </li>
-				  <li><a href="/features/transactions.html">
-                    ACID Transactions <i class="fa fa-angle-double-right"></i>
-                </a></li>
-				  <li><a href="/features/machinelearning.html">
-                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
-                </a></li>
-              </ul>
-            </div>
-            <div class="col-sm-6">
-              <ul>
-                <li>
-                  <a href="/arch/persistence.html">
-                    Native Persistence <i class="fa fa-angle-double-right"></i>
-                </a>
-                </li>
-				  <li><a href="/use-cases/in-memory-database.html">
-                    Ignite as an In-Memory Database <i class="fa fa-angle-double-right"></i>
-                </a></li>
-				  <li><a href="/use-cases/dih.html">
-                    Ignite as a Digital Integration Hub <i class="fa fa-angle-double-right"></i>
-                </a></li>
-              </ul>
-            </div>
-          </div>
+            <h1>Apache Ignite as an <strong>In-Memory Data Grid</strong></h1>
         </div>
-      </div>
-    
-      
-</div>			
+    </header>
+    <div class="container">
+
+        <p>
+            Apache Ignite® is an in-memory data grid that accelerates and scales your databases, services, and APIs.
+            It supports key-value and ANSI SQL APIs, ACID transactions, co-located compute, and machine learning
+            libraries required for real-time applications.
+        </p>
+        <p>
+            An in-memory data grid deployment is a read-through/write-through caching strategy, in which the application
+            layer treats the data grid as the primary data store. The application layer writes to and reads from Ignite.
+            Ignite ensures that any underlying database stays updated and consistent with the in-memory data.
+        </p>
+        <img class="img-fluid diagram-right" src="/images/svg-diagrams/data_grid.svg"/>
+        <p>
+            As an in-memory data grid, Ignite provides all essential APIs needed to simplify its adoption.
+            The APIs include distributed key-value and ANSI SQL queries, ACID transactions, co-located
+            computations, and machine learning models. While key-value and SQL calls let you request, join, and
+            group distributed data sets, the compute and machine learning components help to eliminate data
+            shuffling over the network, thus, boosting compute and data-intensive calculations.
+        </p>
+
+        <p>
+            Ignite is capable of storing data both in memory and on disk with two options for data persistence
+            -- you can persist changes in an external database or let Ignite keep data in its native persistence.
+            Let's review both of these options.
+        </p>
+
+        <h2>Ignite and External Databases</h2>
+
+        <p>
+            Ignite can improve the performance and scalability of any external database such as RDBMS,
+            NoSQL or Hadoop, by sliding in as an in-memory cache between the application and the database
+            layer. When an application writes data to the cache, Ignite automatically writes-through or
+            writes-behind all data modifications to the underlying external store. Ignite also performs
+            ACID transactions where it coordinates and commits a transaction across the cluster as well as
+            the database.
+        </p>
+        <p>
+            Additionally, Ignite can be deployed as a shared and unified in-memory layer that stores data
+            sets originating from disjointed databases. Your applications can consume all the data from
+            Ignite as a single store while Ignite can keep the original databases in sync whenever in-memory
+            data gets updated.
+        </p>
+        <p>
+            However, there are some limitations if an external database is used as a persistence layer for
+            Ignite deployments. For instance, if you run Ignite SQL or scan queries, you need to ensure that
+            all the data has been preloaded to the in-memory cluster. Note that Ignite SQL or scan queries
+            can read data from disk only if it is stored in the native persistence.
+        </p>
+
+
+        <p>&nbsp;</p>
+        <h2>Ignite Native Persistence</h2>
+        <img class="img-fluid diagram-right" src="/images/native_persistence_key_value.png"/>
+        <p>Ignite native persistence is a distributed ACID and SQL-compliant disk store that transparently integrates
+            with Ignite in-memory layer. When the native persistence is enabled, Ignite stores both data and indexes on
+            disk and eliminates the time-consuming cache warm-up step. Since the native persistence always keeps a full
+            copy of data on disk, you are free to cache a subset of records in memory. If a required data record is
+            missing in memory, then Ignite reads it from the disk automatically regardless of the API you use -- be it
+            SQL, key-value, or scan queries.</p>
+
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <div class="display-6 title">Learn More</div>
+                <hr class="my-4">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul>
+                            <li>
+                                <a href="/features/sql.html">
+                                    Distributed SQL <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/features/collocatedprocessing.html">
+                                    Co-located Processing <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li><a href="/features/transactions.html">
+                                ACID Transactions <i class="fa fa-angle-double-right"></i>
+                            </a></li>
+                            <li><a href="/features/machinelearning.html">
+                                Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul>
+                            <li>
+                                <a href="/arch/persistence.html">
+                                    Native Persistence <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li><a href="/use-cases/in-memory-database.html">
+                                Ignite as an In-Memory Database <i class="fa fa-angle-double-right"></i>
+                            </a></li>
+                            <li><a href="/use-cases/digital-integration-hub.html">
+                                Ignite as a Digital Integration Hub <i class="fa fa-angle-double-right"></i>
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 </article>
-    <!--#include virtual="/includes/footer.html" -->
+<!--#include virtual="/includes/footer.html" -->
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

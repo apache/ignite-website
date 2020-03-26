@@ -33,15 +33,15 @@ under the License.
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="canonical" href="https://ignite.apache.org/use-cases/hpc.html"/>
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/digital-integration-hub.html"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="Apache Ignite enables high-performance computing by providing APIs for data and
-           compute-intensive calculations. Turn your commodity hardware or cloud environment into a distributed supercomputer."/>
+          content="Apache Ignite functions as a low-latency and shared store of the digital integration hub architecture
+           that caches and persists data sets scattered across many disjointed back-end databases and systems."/>
 
-    <title>High-Performance Computing</title>
+    <title>Digital Integration Hub - Apache Ignite</title>
 
     <!--#include virtual="/includes/styles.html" -->
 
@@ -50,56 +50,65 @@ under the License.
 <body>
 <!--#include virtual="/includes/header.html" -->
 <article>
-
     <header>
         <div class="container">
-            <h1><strong>High-Performance Computing</strong></h1>
+            <h1><strong>Digital Integration Hub</strong></h1>
         </div>
     </header>
     <div class="container">
         <p>
-            High-performance computing (HPC) is the ability to process data and perform complex calculations at high
-            speeds.
-            Using Apache Ignite® as a high-performance compute cluster, you can turn a group of commodity machines or a
-            cloud environment into a distributed supercomputer of interconnected Ignite nodes. Ignite enables speed and scale
-            by processing records in memory and reducing network utilization with APIs for data and compute-intensive
-            calculations. Those APIs implement the MapReduce paradigm and allow you to run arbitrary tasks across the
-            cluster of nodes.
+            A digital integration hub (DIH) is an advanced platform architecture that aggregates multiple back-end
+            systems and databases into a low-latency and shared data store. Apache Ignite® functions as such a store
+            that caches and persists data sets scattered across many disjointed back-end databases and makes
+            them available through high-performance APIs to your applications.
         </p>
-        <img class="diagram-right img-fluid" src="/images/svg-diagrams/high_performance_compute.svg"/>
+        <img class="diagram-right img-fluid" src="/images/svg-diagrams/digital_hub.svg"/>
 
-
-        <h2>Co-located Processing</h2>
         <p>
-            Ignite uses the notion of co-located processing to guide HPC workloads implementations in distributed
-            in-memory environments. Co-located processing increases the performance of your complex calculations by
-            running them straight on the Ignite cluster nodes. These calculations are done only on local data sets
-            available on the nodes, thus avoiding data shuffling over the network and resulting in orders of magnitude
-            increase in performance.
+            Applications access Ignite via an API service layer and experience substantial performance improvements by
+            requesting data from only the Ignite distributed store.
         </p>
 
         <p>
-            To exploit the co-located processing in practice, first, you need to co-locate data by storing related
-            records on the same cluster node. As an example of related or co-located data, consider your bank account
-            and transactions posted to it. Once you set <code>accountID</code> as an affinity key for the
-            <code>Transactions</code> table, you'll instruct Ignite to store all transactions for your
-            <code>accountId</code> on the same node that keeps the record of your account in the
-            <code>Accounts</code> table. Now let's say a payment processing system sends a compute task that
-            verifies previous transactions of your account. Since the data is co-located, Ignite will execute this
-            task directly on the node that stores your account record with all completed transactions and finish the
-            verification locally on that machine instead of pulling all the transactions back to the application
-            over the network. This method of executing a task on the node where the data resides provides
-            exceptionally high performance.The effect is even more significant when the system needs to process
-            millions of transactions per second, verifying billions of previously completed payments.
+            As a digital integration hub component, Apache Ignite:
         </p>
+        <ul>
+            <li>
+                Enables large-scale and high-throughput architectures that prevent back-end systems from getting
+                overwhelmed with excessive workloads
+            </li>
+            <li>
+                Avoids complex integrations between back-end databases and front-end API services
+            </li>
+        </ul>
 
-        <h2>Compute APIs</h2>
+        <h2>Synchronization of Apache Ignite and Back-End Systems</h2>
+        <p>
+            Ignite, as the high-performance data store, needs to be synchronized with the back-end databases via
+            streaming, event-based, change data capture (CDC), or other techniques.
+        </p>
 
         <p>
-            Ignite provides compute APIs (also known as compute grid) for creating and scheduling custom
-            tasks of arbitrary complexity. The APIs implement MapReduce paradigm and are presently available for Java,
-            C#, and C++.
+            Ignite provides the <code>CacheStore</code> interface for uni-directional synchronization between an
+            Ignite cluster and an external store supporting relational databases and some NoSQL stores. The interface
+            allows Ignite to write-through or write-behind all the changes to the backend-systems automatically.
+            It also includes transactions - Ignite coordinates and commits a transaction across its in-memory
+            cluster as well as an external transactional database.
         </p>
+
+        <p>
+            For bi-directional synchronization, you can consider various streaming, CDC, and event-based technologies.
+            For instance, Kafka, Spark, and Debezium are widely used to keep Ignite in sync with other databases.
+        </p>
+
+        <h2>Real-Time Analytics</h2>
+        <p>
+            Although real-time analytics is not a defining characteristic of digital integration hub architectures, in
+            some situations, you can end up consolidating operational and analytical data silos in Apache Ignite. If
+            this happens, you can tap into Ignite SQL, compute, and machine learning capabilities for real-time
+            analytics needs.
+        </p>
+
 
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
@@ -109,13 +118,18 @@ under the License.
                     <div class="col-sm-6">
                         <ul>
                             <li>
-                                <a href="/features/collocatedprocessing.html">
-                                    Co-located processing <i class="fa fa-angle-double-right"></i>
+                                <a href="https://apacheignite-mix.readme.io/docs/overview" target="docs">
+                                    Ignite and Streaming Technologies <i class="fa fa-angle-double-right"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="https://apacheignite.readme.io/docs/compute-grid" target="docs">
-                                    Compute APIs <i class="fa fa-angle-double-right"></i>
+                                <a href="https://apacheignite-fs.readme.io/docs/overview" target="docs">
+                                    Ignite and Spark Integration <i class="fa fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/features/sql.html">
+                                    Distributed SQL <i class="fa fa-angle-double-right"></i>
                                 </a>
                             </li>
                         </ul>
@@ -123,14 +137,23 @@ under the License.
                     <div class="col-sm-6">
                         <ul>
                             <li>
-                                <a href="/features/machinelearning.html">
-                                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
+                                <a href="/features/collocatedprocessing.html">
+                                    Co-located Processing <i class="fa fa-angle-double-right"></i>
                                 </a>
                             </li>
                             <li>
+
+                                <a href="/features/machinelearning.html">
+                                    Machine and Deep Learning <i class="fa fa-angle-double-right"></i>
+                                </a>
+
+                            </li>
+                            <li>
+
                                 <a href="/arch/multi-tier-storage.html">
                                     Multi-Tier Storage <i class="fa fa-angle-double-right"></i>
                                 </a>
+
                             </li>
                         </ul>
                     </div>
