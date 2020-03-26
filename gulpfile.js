@@ -66,24 +66,34 @@ function build(cb){
 
     cb();
 
-    return gulp.src('./scss/ignite-redesign.scss')
+    let buildRet = gulp.src('./scss/ignite-redesign.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('css'))
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('./css'))
     .pipe(browserSync.stream());
-    }
+
+    
+    
+    return buildRet;
+}
 
 exports.build = build;
-// gulp.task('compass', function() {
-//   return gulp.src('./scss/*.scss')
-//     .pipe(compass({
-//       config_file: './config.rb',
-//       css: 'css',
-//       sass: 'scss'
-//     }))
-//     .pipe(gulp.dest('css'));
-// });
 
+/**
+ * minifies the css
+ */
+let cleanCSS = require('gulp-clean-css');
+function minifyCss()
+{
+    return gulp.src('./css/*.css')
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('./css'));
+}
+exports.minifyCss = minifyCss;
 
+/**
+ * observes for changes on the .scss file, and compiles 
+ */
 function watch() {
     gulp.watch('scss/ignite-redesign.scss', build)
 }
