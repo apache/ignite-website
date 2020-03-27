@@ -36,726 +36,119 @@ under the License.
     <link rel="canonical" href="https://ignite.apache.org/features/sql.html" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distributed SQL - Apache Ignite</title>
-    
+
+    <title>Distributed ANSI SQL - Apache Ignite</title>
+
+    <meta name="description"
+          content="Apache Ignite comes with a ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that
+           allows you to interact with Ignite as with a regular SQL database."/>
+
     <!--#include virtual="/includes/styles.html" -->
 
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
+
     <!--#include virtual="/includes/header.html" -->
+<article>
+    <header>
+        <div class="container">
+            <h1>Distributed ANSI SQL <strong>With JOINs</strong></h1>
+      </div>
+    </header>
+    <div class="container">
+        <p>
+            Apache Ignite® comes with a ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine
+            that allows you to interact with Ignite as with a regular SQL database using JDBC, ODBC drivers, or
+            native SQL APIs available for Java, C#, C++, Python, and other programming languages.
+        </p>
+        <img class="img-responsive diagram-right" alt="SQL Database diagram" src="/images/svg-diagrams/distributed_sql.svg" alt="Distributed ANSI SQL With JOINs" />
+        <p>
+            Ignite supports all DML commands, including SELECT, UPDATE, INSERT, and DELETE queries as well
+            as a subset of DDL commands relevant for distributed systems.
+        </p>
+        
+        <h2>SQL Joins</h2>
+        <p>
+            Ignite fully supports distributed joins for advanced querying needs. A distributed join is a SQL statement
+            with a join clause that combines two or more tables. If the tables are joined on the partitioning column
+            (affinity or primary key), the join is called a co-located join. Otherwise, if the tables were not
+            co-located initially, then Ignite does the join in a non-colocated fashion. Co-located joins avoid data
+            shuffling between nodes and minimize network usage, thus, performing much faster than a non-colocated
+            counterpart.
+        </p>
 
+        <h2>SQL and In-Memory Mode</h2>
+        <p>
+            Apache Ignite can function in a pure in-memory mode when all the data and indexes are located solely in
+            memory. In this mode, Ignite SQL shows the highest performance since all the data is served from memory
+            with no usage of the disk tier at all.
+        </p>
 
-    <main id="main" role="main" class="container">
-        <section id="sql-queries" class="page-section">
-            <h1 class="first">Distributed Memory-Centric SQL Database</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding:0 0 20px 0;">
-                <div class="col-sm-6 col-md-7 col-xs-12" style="padding-left:0;">
-                    <p>
-                        Apache Ignite comes with ANSI-99 compliant, horizontally scalable and fault-tolerant
-                        distributed SQL database. You can interact with Ignite as you would with any other SQL storage, using standard JDBC or ODBC
-                        connectivity. Ignite also provides native SQL APIs for Java, .NET and C++ developers for better performance.
-                    </p>
-                    <p>
-                        Unlike other distributed SQL databases, Ignite memory-centric storage treats both memory and disk as active storage tiers.
-                        The disk tier, a.k.a. <nobr><a href="/arch/persistence.html">native persistence</a></nobr>, is disabled by default,
-                        in which case Ignite becomes a pure <nobr><a href="/use-cases/database/in-memory-database.html">in-memory database</a> (IMDB)</nobr>.
-                    </p>
+        <h2>SQL and Native Persistence</h2>
+        <p>
+            In this mode, Ignite persists 100% of data and indexes in the native persistence while caching as much
+            as possible in memory. Ignite SQL engine does not require to cache an entire data set in memory to
+            operate correctly. If the engine finds that a record is not cached, then it will read the record from
+            disk. Your application only executes SQL queries, and Ignite gets the records from both memory and disk
+            automatically.
+        </p>
+        <p>
+            On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up,
+            which significantly decreases the time of any potential downtimes.
+
+        </p>
+
+        <h2>SQL and 3rd Party Databases</h2>
+        <p>
+            Ignite can be used as a caching layer for external databases such as RDBMS, NoSQL, or Hadoop. In this mode,
+            the Ignite SQL engine requires caching all the data needed for SQL queries in memory since the engine
+            currently does not support federated queries.
+        </p>
+
+        <p>
+            If federated queries between Ignite and an external database are required, then you can consider Ignite
+            integration for Spark, where the DataFrames API can join the data stored in Ignite and other systems.
+        </p>
+
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                  <div class="display-6 title">Learn More</div>
+                  <hr class="my-4">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/how-ignite-sql-works" target="docs">Ignite SQL implementation details <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/distributed-joins" target="docs">Distributed JOINs <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="https://apacheignite-sql.readme.io/docs/sql-reference-overview" target="docs">SQL Reference <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-sm-6">
+                      <ul>
+                        <li>
+                          <p><a href="/use-cases/spark-acceleration.html">Apache Ignite and Spark <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                        <li>
+                          <p><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fa fa-angle-double-right"></i></a></p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-                <div class="col-sm-6 col-md-5 col-xs-12" style="padding-right:0">
-                    <img class="img-responsive" alt="SQL Database diagram" src="/images/sql_database.png" width="400px" style="float:right;"/>
-                </div>
-            </div>
-            <div class="page-heading">SQL Joins</div>
-            <p>
-                Ignite can <nobr><a href="https://apacheignite-sql.readme.io/docs/distributed-joins"target="_blank" rel="noopener">join data</a></nobr>
-                in both collocated and non-collocated fashions. When <a href="/features/collocatedprocessing.html">collocated</a>,
-                JOINs are executed on the nodes where the data is stored, avoiding
-                expensive serialization and network trips. Such approach provides the best scalability and performance
-                in distributed databases.
-            </p>
-
-            <div class="page-heading">SQL Transactions</div>
-            <p>
-                Ignite supports <a href="https://apacheignite-sql.readme.io/v2.6/docs/multiversion-concurrency-control">SQL transactions</a>
-                by enabling <a href="https://apacheignite.readme.io/v2.6/docs/multiversion-concurrency-control">multiversion concurrency control</a>
-                (MVCC) - a method of controlling consistency of data accessed by multiple users concurrently. MVCC implements the snapshot
-                isolation guarantee which ensures that each transaction always sees a consistent snapshot of data.
-            </p>
-
-            <div class="page-heading">SQL and In-Memory Mode</div>
-            <p>
-                Apache Ignite can function in a pure in-memory mode in which all data and indexes are stored entirely
-                in RAM. In this mode, you can achieve the maximum performance possible because the data is never
-                written to disk. As with any other in-memory database, you can configure backup copies of the data to
-                prevent possible data loss if cluster nodes fail.
-            </p>
-
-            <div class="page-heading">SQL and Native Persistence</div>
-            <p>
-                In this mode, <a href="/arch/persistence.html">Ignite native persistence</a> serves as the primary
-                storage that can survive cluster failures and restarts. 100% of data and indexes are
-                persisted to disk and the same or smaller amount is cached in memory.
-                When memory resources are scarce, indexes will take priority over data in
-                which case indexes will be cached first. This policy helps to run high-performant
-                SQL queries even if RAM is limited. If a value or index is missing in memory, Ignite will query on-disk data.
-            </p>
-            <p>
-                On cluster restart, Ignite reads data and indexes from disk eliminating the need for memory warm-up.
-                This process significantly decreases any potential downtime.
-            </p>
-
-            <div class="page-heading">SQL and 3rd Party Databases</div>
-            <p>Ignite can be used as a caching layer (aka. data grid) above an existing 3rd party database -
-                RDBMS, NoSQL, or HDFS. This mode is used to accelerate the underlying database.</p>
-
-            <p> When a 3rd party database is configured, Ignite retrieves data from the memory, and inserts data into both the memory and the database.
-                Therefore, in this mode Ignite requires preloading data into caches for SELECT queries; however, it propagates all
-                updates - INSERT, UPDATE, DELETE - to the database.</p>
-
-            <p>Want to learn more? See <a href="https://apacheignite-sql.readme.io/docs/overview"target="_blank" rel="noopener">Ignite SQL Capabilities</a></p>
-
-            <div class="code-examples">
-                <div class="page-heading">Connectivity</div>
-                <p>The following code examples show how to use the JDBC and ODBC drivers and open a connection:</p>
-                <!-- Nav tabs -->
-                <ul id="connectivity-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#jdbc-connectivity" aria-controls="profile" data-toggle="tab">JDBC</a></li>
-                    <li><a href="#odbc-connectivity" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-
-                    <div class="tab-pane active" id="jdbc-connectivity">
-                        <pre class="brush:java">
-
-                            Class.forName("org.apache.ignite.IgniteJdbcThinDriver");
-
-                            Connection conn = DriverManager.getConnection(
-                                "jdbc:ignite:thin://127.0.0.1/");
-
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="odbc-connectivity">
-                        <pre class="brush:cpp">
-                            // Combining connect string
-                            std::string connectStr = "DRIVER={Apache Ignite};SERVER=localhost;PORT=10800;SCHEMA=Person;";
-
-                            SQLCHAR outstr[ODBC_BUFFER_SIZE];
-                            SQLSMALLINT outstrlen;
-
-                            // Connecting to ODBC server
-                            SQLRETURN ret = SQLDriverConnect(dbc, NULL, reinterpret_cast&lt;SQLCHAR*&gt;(&connectStr[0]), static_cast&lt;SQLSMALLINT&gt;(connectStr.size()),
-                                outstr, sizeof(outstr), &outstrlen, SQL_DRIVER_COMPLETE)
-                        </pre>
-                    </div>
-                </div>
-                <p>
-                    Ignite <a href="https://apacheignite.readme.io/docs/getting-started"target="_blank" rel="noopener">Java</a>,
-                    <a href="https://apacheignite-net.readme.io/docs/getting-started-2"target="_blank" rel="noopener">.NET</a> or
-                    <a href="https://apacheignite-cpp.readme.io/docs/getting-started-1"target="_blank" rel="noopener">C++</a> APIs can be
-                    used as alternatives to the JDBC and ODBC drivers.
-                </p>
-            </div>
-
-
-            <div class="code-examples">
-                <div class="page-heading">SQL Tables Creation</div>
-                <p>Ignite supports <b>Data Definition Language (DDL)</b> statements for creating and removing SQL tables
-                    and indexes at runtime.
-                </p>
-                <p> The following examples show how to create tables:​ </p>
-                <!-- Nav tabs -->
-                <ul id="ddl-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#ddl-sql" aria-controls="profile" data-toggle="tab">SQL</a></li>
-                    <li><a href="#ddl-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
-                    <li><a href="#ddl-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                    <!--<li><a href="#ddl-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
-                    <li><a href="#ddl-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>-->
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-
-                    <div class="tab-pane active" id="ddl-sql">
-                        <pre class="brush:sql">
-                            CREATE TABLE City (
-                                id LONG PRIMARY KEY, name VARCHAR)
-                                WITH "template=replicated"
-
-                            CREATE TABLE Person (
-                                id LONG, name VARCHAR, city_id LONG, PRIMARY KEY (id, city_id))
-                                WITH "backups=1, affinityKey=city_id"
-                        </pre>
-                    </div>
-                    <!--<div class="tab-pane" id="ddl-java">
-                        <pre class="brush:java">
-                            IgniteCache&lt;CityKey, City&gt; cache = ignite.cache("cityCache");
-
-                            // Create table based on REPLICATED template
-                            SqlFieldsQuery query = new SqlFieldsQuery(
-                                "CREATE TABLE City (" +
-                                " id LONG PRIMARY KEY, name VARCHAR)" +
-                                " WITH \"template=replicated\"");
-
-                            cache.query(query).getAll();
-
-                            // Create table based on PARTITIONED template with one backup
-                            query = new SqlFieldsQuery(
-                                "CREATE TABLE Person (" +
-                                " id LONG, name VARCHAR, city_id LONG," +
-                                " PRIMARY KEY (id, city_id))" +
-                                " WITH \"backups=1, affinityKey=city_id\"");
-
-                            cache.query(query).getAll();
-
-                        </pre>
-                    </div>-->
-                    <div class="tab-pane" id="ddl-jdbc">
-                        <pre class="brush:java">
-                            // Create table
-                            try (Statement stmt = conn.createStatement()) {
-
-                                // Create table based on REPLICATED template
-                                stmt.executeUpdate("CREATE TABLE City (" +
-                                    " id LONG PRIMARY KEY, name VARCHAR) " +
-                                    " WITH \"template=replicated\"");
-
-                                // Create table based on PARTITIONED template with one backup
-                                stmt.executeUpdate("CREATE TABLE Person (" +
-                                " id LONG, name VARCHAR, city_id LONG, " +
-                                " PRIMARY KEY (id, city_id)) " +
-                                " WITH \"backups=1, affinityKey=city_id\"");
-                            }
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="ddl-odbc">
-                        <pre class="brush:cpp">
-                            SQLHSTMT stmt;
-
-                            // Allocate a statement handle
-                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
-
-                            // Create table based on REPLICATED template
-                            SQLCHAR query[] = "CREATE TABLE City ( "
-                                "id LONG PRIMARY KEY, name VARCHAR) "
-                                "WITH \"template=replicated\"";
-                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
-
-                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
-
-                            // Create table based on PARTITIONED template with one backup
-                            SQLCHAR query[] = "CREATE TABLE Person ( "
-                                "id LONG, name VARCHAR, city_id LONG "
-                                "PRIMARY KEY (id, city_id)) "
-                                "WITH \"backups=1, affinityKey=city_id\"";
-                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(query));
-
-                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
-                        </pre>
-                    </div>
-                    <!--<div class="tab-pane" id="ddl-cpp">
-                        <pre class="brush:cpp">
-                            Cache&lt;CityKey, City&gt; cache = ignite.GetCache&lt;CityKey, City&gt;("cityCache");
-
-                            // Create table based on REPLICATED template
-                            SqlFieldsQuery query("CREATE TABLE City ("
-                                " id LONG PRIMARY KEY, name VARCHAR)"
-                                " WITH \"template=replicated\"");
-
-                            cache.Query(query);
-
-                            // Create table based on PARTITIONED template with one backup
-                            query.SetSql("CREATE TABLE Person ("
-                                " id LONG, name VARCHAR, city_id LONG,"
-                                " PRIMARY KEY (id, city_id))"
-                                " WITH \"backups=1, affinityKey=city_id\"");
-
-                            cache.Query(query);
-                        </pre>
-                    </div>-->
-                </div>
-
-                <p> In the above example, for the Person table, Ignite creates a distributed cache with 1 backup of data and city_id as the affinity key.
-                    These <b>extended parameters</b> are Ignite specific that can be passed using the <code>WITH</code> clause. To set other cache configurations for the table,
-                    you should use the <code>template</code> parameter and provide the name of the cache configuration previously registered(via XML or code).
-                    <a href="https://apacheignite-sql.readme.io/docs/create-table#section-parameters"target="_blank" rel="noopener">Read more</a> about extended parameters.
-                </p>
-                <p>
-                    See <a href="https://apacheignite-sql.readme.io/docs/ddl"target="_blank" rel="noopener">Ignite DDL documentation</a> for more details.
-                </p>
-            </div>
-            <div class="code-examples">
-                <div class="page-heading">Data Modification</div>
-                <p>
-                    To modify data stored in Ignite, use standard <b>DML</b> statements like INSERT, UPDATE, or DELETE.
-                </p>
-                <!-- Nav tabs -->
-                <ul id="dml-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#dml-sql" aria-controls="profile" data-toggle="tab">SQL</a></li>
-                    <li><a href="#dml-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
-                    <li><a href="#dml-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                    <li><a href="#dml-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
-                    <li><a href="#dml-dotnet" aria-controls="profile" data-toggle="tab">.NET API</a></li>
-                    <li><a href="#dml-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-
-                    <div class="tab-pane active" id="dml-sql">
-                        <pre class="brush:sql">
-                            INSERT INTO City (id, name) VALUES (1, 'Forest Hill');
-                            INSERT INTO City (id, name) VALUES (2, 'Denver');
-
-
-                            UPDATE City
-                            SET name = 'Foster City'
-                            WHERE id = 2
-
-
-                            DELETE FROM City
-                            WHERE name = 'Foster City'
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-java">
-                        <pre class="brush:java">
-                            IgniteCache&lt;Long, City&gt; cache = ignite.cache("SQL_PUBLIC_CITY");
-
-                            // Insert data
-                            cache.query(new SqlFieldsQuery("INSERT INTO City(id, name) " +
-                                " values (1, 'Forest Hill'), (2, 'Denver')"));
-
-                            // Update data
-                            cache.query(new SqlFieldsQuery("UPDATE City set name = ? " +
-                                "WHERE id = ?").setArgs("Foster City", 2L));
-
-                            // Delete data
-                            cache.query(new SqlFieldsQuery("DELETE FROM City " +
-                                "WHERE id = ?").setArgs(2L));
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-jdbc">
-                        <pre class="brush:java">
-                            // Populate City table
-                            try (PreparedStatement stmt =
-                            conn.prepareStatement("INSERT INTO City (id, name) VALUES (?, ?)")) {
-
-                                stmt.setLong(1, 1L);
-                                stmt.setString(2, "Forest Hill");
-                                stmt.executeUpdate();
-
-                                stmt.setLong(1, 2L);
-                                stmt.setString(2, "Denver");
-                                stmt.executeUpdate();
-                            }
-
-                            // Update City
-                            try (Statement stmt = conn.createStatement()) {
-
-                                stmt.executeUpdate("UPDATE City SET name = 'Foster City' WHERE id = 2");
-                            }
-
-                            // Delete from City
-                            try (Statement stmt = conn.createStatement()) {
-
-                                stmt.executeUpdate("DELETE FROM City WHERE name = 'Foster City'");
-                            }
-
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-odbc">
-                        <pre class="brush:cpp">
-                            SQLHSTMT stmt;
-
-                            // Allocate a statement handle
-                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
-
-                            // Populate City table
-                            SQLCHAR query1[] = "INSERT INTO City (id, name) VALUES (?, ?)";
-
-                            ret = SQLPrepare(stmt, query1, static_cast&lt;SQLSMALLINT&gt;(sizeof(query1)));
-
-                            key = 1;
-                            strncpy(name, "Forest Hill", sizeof(name));
-                            ret = SQLExecute(stmt);
-
-                            key = 2;
-                            strncpy(name, "Denver", sizeof(name));
-                            ret = SQLExecute(stmt);
-
-                            // Update City
-                            SQLCHAR query[] = "UPDATE City SET name = 'Foster City' WHERE id = 2"
-
-                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
-
-                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
-
-                            // Delete from City
-                            SQLCHAR query[] = "DELETE FROM City WHERE name = 'Foster City'"
-
-                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
-
-                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-dotnet">
-                        <pre class="brush:csharp">
-                            ICache&lt;long, City&gt; cache = ignite.GetCache&lt;long, City&gt;("SQL_PUBLIC_CITY");
-
-                            // Insert data
-                            cache.QueryFields(new SqlFieldsQuery("INSERT INTO City(id, name) " +
-                                " values (1, 'Forest Hill'), (2, 'Denver')"));
-
-                            // Update data
-                            cache.QueryFields(new SqlFieldsQuery("UPDATE City set name = ? " +
-                                "WHERE id = ?", "Foster City", 2));
-
-                            // Delete data
-                            cache.QueryFields(new SqlFieldsQuery("DELETE FROM City " +
-                                "WHERE id = ?", 2));
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="dml-cpp">
-                        <pre class="brush:cpp">
-                            Cache&lt;int64_t, City&gt; cache = ignite.GetCache&lt;int64_t, City&gt;("SQL_PUBLIC_CITY");
-
-                            // Insert data
-                            cache.Query(SqlFieldsQuery("INSERT INTO City(id, name) "
-                                " values (1, 'Forest Hill'), (2, 'Denver')"));
-
-                            // Update data
-                            query = SqlFieldsQuery("UPDATE City set name = ? WHERE id = ?");
-                            query.AddArgument("Foster City");
-                            query.AddArgument(2LL);
-                            cache.Query(query);
-
-                            // Delete data
-                            query = SqlFieldsQuery("DELETE FROM City WHERE id = ?");
-                            query.AddArgument(2LL);
-                            cache.Query(query);
-                        </pre>
-                    </div>
-                </div>
-                <p>
-                    See <a href="https://apacheignite-sql.readme.io/docs/dml"target="_blank" rel="noopener">Ignite DML documentation</a> for more details.
-                </p>
-            </div>
-            <div class="code-examples">
-                <div class="page-heading">Transactional Updates</div>
-                <p>
-                    The BEGIN, COMMIT and ROLLBACK commands allow you to handle SQL Transactions.
-                </p>
-                <!-- Nav tabs -->
-                <ul id="sql-transactions-examples" class="nav nav-tabs">
-                    <li  class="active"><a href="#sql-commit" aria-controls="profile" data-toggle="tab">COMMIT</a></li>
-                    <li><a href="#sql-rollback" aria-controls="profile" data-toggle="tab">ROLLBACK</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-
-                    <div class="tab-pane active" id="sql-commit">
-                        <pre class="brush:sql">
-                            BEGIN;
-
-                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
-
-                            Update City SET population = population + 1 where id = 3;
-
-                            COMMIT;
-                        </pre>
-                    </div>
-                    <div class="tab-pane" id="sql-rollback">
-                        <pre class="brush:sql">
-                            BEGIN;
-
-                            INSERT INTO Person (id, name, city_id) VALUES (1, 'John Doe', 3);
-
-                            Update City SET population = population + 1 where id = 3;
-
-                            ROLLBACK;
-                        </pre>
-                    </div>
-                    <p>
-                        See <a href="https://apacheignite-sql.readme.io/docs/transactions"target="_blank" rel="noopener">SQL Transactions documentation</a> for more details.
-                    </p>
-                </div>
-                <div class="code-examples">
-                    <div class="page-heading">Querying Data</div>
-                    <p>Ignite supports free-form SQL queries and joins that are fully distributed and fault-tolerant.
-                        The SQL syntax is ANSI-99 compliant which means that you can use
-                        any kind of SQL functions, aggregations, groupings or joins, defined by the specification,
-                        as a part of an SQL query.
-                    </p>
-                    <!-- Nav tabs -->
-                    <ul id="sql-examples" class="nav nav-tabs">
-                        <li class="active"><a href="#query-sql" aria-controls="home" data-toggle="tab">SQL</a></li>
-                        <li><a href="#query-jdbc" aria-controls="profile" data-toggle="tab">JDBC</a></li>
-                        <li><a href="#query-odbc" aria-controls="profile" data-toggle="tab">ODBC</a></li>
-                        <li><a href="#query-java" aria-controls="profile" data-toggle="tab">Java API</a></li>
-                        <li><a href="#query-dotnet" aria-controls="profile" data-toggle="tab">.NET API</a></li>
-                        <li><a href="#query-cpp" aria-controls="profile" data-toggle="tab">C++ API</a></li>
-                    </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="query-sql">
-                        <pre class="brush:sql">
-                            SELECT p.name, c.name
-                            FROM Person p, City c
-                            WHERE p.city_id = c.id
-                        </pre>
-                        </div>
-                        <div class="tab-pane" id="query-java">
-                        <pre class="brush:java">
-                            IgniteCache&lt;PersonKey, Person&gt; personCache = ignite.cache("SQL_PUBLIC_PERSON");
-
-                            // SQL join on Person and City.
-                            SqlFieldsQuery sql = new SqlFieldsQuery(
-                            "SELECT p.name, c.name  "
-                                + "FROM Person as p, City as c "
-                                + "WHERE p.city_id = c.id");
-
-                            // Execute the query and obtain the query result cursor.
-                            try (QueryCursor&lt;List&lt;?&gt;&gt; cursor =  personCache.query(sql)) {
-                                for (List&lt;?&gt; row : cursor)
-                                    System.out.println("Person name & city=" + row.get(0));
-                            }
-                        </pre>
-                        </div>
-                        <div class="tab-pane" id="query-jdbc">
-                        <pre class="brush:java">
-                            try (Statement stmt = conn.createStatement()) {
-                                try (ResultSet rs =
-                                stmt.executeQuery("SELECT p.name, c.name " +
-                                " FROM Person p, City c " +
-                                " WHERE p.city_id = c.id")) {
-
-                                System.out.println("Query results:");
-
-                                while (rs.next())
-                                     System.out.println(">>>    " +
-                                        rs.getString(1) +
-                                        ", " +
-                                        rs.getString(2));
-                                }
-                            }
-                        </pre>
-                        </div>
-                        <div class="tab-pane" id="query-odbc">
-                        <pre class="brush:cpp">
-                            SQLHSTMT stmt;
-
-                            // Allocate a statement handle
-                            SQLAllocHandle(SQL_HANDLE_STMT, dbc, &stmt);
-
-                            // Get data
-                            SQLCHAR query[] = "SELECT p.name, c.name "
-                              "FROM Person p, City c "
-                              "WHERE p.city_id = c.id";
-
-                            SQLSMALLINT queryLen = static_cast&lt;SQLSMALLINT&gt;(sizeof(queryLen));
-
-                            SQLRETURN ret = SQLExecDirect(stmt, query, queryLen);
-                        </pre>
-                        </div>
-                        <div class="tab-pane" id="query-dotnet">
-                        <pre class="brush:csharp">
-							ICache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;PersonKey, Person&gt;("SQL_PUBLIC_PERSON");
-
-							// SQL join on Person and City.
-							SqlFieldsQuery sql = new SqlFieldsQuery(
-							"SELECT p.name, c.name  "
-								+ "FROM Person as p, City as c "
-								+ "WHERE p.city_id = c.id");
-
-							// Execute the query and obtain the query result cursor.
-							foreach (IList row in personCache.QueryFields(sql))
-							{
-								Console.WriteLine($"Person '{row[0]}' from city '{row[1]}'");
-							}
-                        </pre>
-                        </div>
-                        <div class="tab-pane" id="query-cpp">
-                        <pre class="brush:cpp">
-                            Cache&lt;PersonKey, Person&gt; personCache = ignite.GetCache&lt;int64_t, Person&gt;("SQL_PUBLIC_PERSON");
-
-                            // SQL join on Person and City.
-                            SqlFieldsQuery sql("SELECT p.name, c.name "
-                                    "FROM Person as p, City as c "
-                                    "WHERE p.city_id = c.id");
-
-                            // Execute the query and obtain the query result cursor.
-                            FieldsQueryCursor cursor = personCache.Query(sql));
-
-                            while (cursor.HasNext())
-                            {
-                                QueryFieldsRow row = cursor.GetNext();
-
-                                std::cout &lt;&lt; "Person: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; ", "
-                                          &lt;&lt; "City: " &lt;&lt; row.GetNext&lt;std::string&gt;() &lt;&lt; std::endl;
-                            }
-                        </pre>
-                        </div>
-                    </div>
-                    <p>
-                        See <a href="https://apacheignite-sql.readme.io/docs/select"target="_blank" rel="noopener">SELECT queries documentation</a> for more details.
-                    </p>
-                </div>
-
-                <div class="page-heading github-examples">GitHub Examples</div>
-                <p>
-                    Also see <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryExample.java" target="github">SQL queries examples</a>
-                    and <a href="https://github.com/apache/ignite/blob/master/examples/src/main/java/org/apache/ignite/examples/datagrid/CacheQueryDmlExample.java" target="github"> DML example</a> available on GitHub.
-                </p>
-        </section>
-
-        <section id="key-features" class="page-section">
-            <h2>SQL Database Features</h2>
-            <table class="formatted" name="SQL Database Features">
-                <thead>
-                <tr>
-                    <th width="35%" class="left">Feature</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="left">SQL Queries</td>
-                    <td>
-                        <p>
-                            Ignite supports free-form SQL queries without any limitations. The SQL syntax is ANSI-99 compliant which means
-                            that you can use any kind of SQL functions, aggregations, groupings or joins.
-                        </p>
-                        <p>
-                            SQL queries in Ignite are fully distributed and perform in a fault-tolerant manner that guarantees
-                            consistent query results regardless of cluster topology changes.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/select" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Distributed DDL</td>
-                    <td>
-                        <p>
-                            Apache Ignite supports Data Definition Language (DDL) statements for creating and removing SQL tables and indexes at runtime. Both native Apache Ignite SQL APIs as well as JDBC and ODBC drivers can be used for SQL schema modifications.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/ddl" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Distributed DML</td>
-                    <td>
-                        <p>
-                            Apache Ignite SQL Grid not only allows selecting data from the Data Grid, using <code>SQL ANSI-99</code> syntax,
-                            but it also makes it possible to modify that data with well-known DML statements like <code>INSERT</code>, <code>MERGE</code>, <code>UPDATE</code>, and <code>DELETE</code>.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/dml" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Collocated SQL Joins</td>
-                    <td>
-                        <p>
-                            SQL joins can be performed on collocated data stored across multiple caches.
-                            Since all the cache entries with the same affinity key are stored on the same processing node, these queries do not require expensive network trips to fetch the data from remote nodes, and hence, are extermely fast.
-                            Joins can also be performed between <code>PARTITIONED</code> and <code>REPLICATED</code> caches.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/distributed-joins#collocated-joins" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Non-Collocated SQL Joins</td>
-                    <td>
-                        <p>
-                            In Ignite, the default implementation of SQL join requires all the participating caches to be collocated. However,
-                            for cases where it is extremely difficult to collocate all the data, Ignite offers non-collocated SQL joins.
-                            Data can be distributed in any way across the cluster, and Ignite will figure out where to fetch the results from.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/distributed-joins#non-collocated-joins" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="left">SQL Indexes</td>
-                    <td>
-                        <p>
-                            For SQL queries, Ignite supports in-memory indexing to facilitate fast data lookups.
-                            If you are caching your data in off-heap memory, then query indexes will also be cached in off-heap memory.
-                            Ignite allows configuring single column indexes as well as group indexes. It also provides support for custom indexing.
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/create-index" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">JDBC/ODBC Driver</td>
-                    <td>
-                        <p>
-                            Ignite is shipped with <code>JDBC/ODBC Driver</code> that allows you to retrieve distributed data from
-                            cache using standard SQL queries and JDBC/ODBC API.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/jdbc-driver" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Geospacial Support</td>
-                    <td>
-                        <p>
-                            Ignite supports querying and indexing geometry data types such as points, lines, and polygons considering the spatial relationship between these geometries.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/geospatial-support" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">.NET & C++ Support</td>
-                    <td>
-                        <p>
-                            Ignite.NET and Ignite C++ are buit on top of Ignite. This allows you to perform almost all SQL Grid operations including SQL and DML commands as well as distributed joins.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/net-sql-api" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">SQL Tooling</td>
-                    <td>
-                        <p>
-                            You can process data stored in the Ignite cluster using a SQL tool of your choice -
-                            <b>DBeaver</b>, <b>Pentaho</b>, <b>Tableau</b>, <b>Web Console</b>, <b>Apache Zeppelin</b> and more.
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite-sql.readme.io/docs/sql-tooling" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
-
-    <!--#include virtual="/includes/footer.html" -->
 </div>
+</article>
+
+
+<!--#include virtual="/includes/footer.html" -->
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>

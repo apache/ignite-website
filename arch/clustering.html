@@ -39,246 +39,98 @@ under the License.
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+
     <title>Deploy Anywhere - Apache Ignite</title>
+
+    <meta name="description"
+          content="Apache Ignite implements the shared-nothing architecture when all the cluster nodes are equal
+          and there is no single point of failure or bottleneck. You can run Apache Ignite on bare metal, virtual
+          machines, Docker, Kubernetes, and cloud environments."/>
+
     <!--#include virtual="/includes/styles.html" -->
 
     <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
-<div id="wrapper">
+
     <!--#include virtual="/includes/header.html" -->
+<article>
+    <header>
+        <div class="container">
+            <h1>Apache Ignite <strong>Deployment Options</strong></h1>
+        </div>
+    </header>
+    <div class="container">
+            
+        
+        <p>
+            Apache Ignite® implements the shared-nothing architecture where all cluster nodes are equal
+            and there is no single point of failure or bottleneck.
+            Ignite does NOT have a component such as a master node or name node that is present in most
+            distributed systems.
+        </p>
+        <img class="img-responsive diagram-right" src="/images/svg-diagrams/ignite_cluster.svg" alt="Apache Ignite cluster diagram" />
+        <p>
+            Ignite nodes discover each other automatically in your environment, and the cluster can be
+            scaled out or in easily.
+        </p>
+        <p>
+            Apache Ignite can run on bare metal, virtual machines, Docker, Kubernetes, and cloud
+            environments. Technically there are no limitations in regards to deployment environments --
+            since Ignite nodes can auto-discover each other via the TCP/IP interface, you can launch a
+            cluster anywhere.
+        </p>
+                    
 
-    <main id="main" role="main" class="container">
-        <section id="deployment-options" class="page-section">
-            <h1 class="first">Deploy Anywhere</h1>
-            <div class="col-sm-12 col-md-12 col-xs-12" style="padding-left:0; padding-right:0;">
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-left:0; padding-right:0;">
-                    <p>
-                        Apache Ignite cluster is based on the shared-nothing architecture which implies that all the
-                        cluster nodes are equal, independent and self-sufficient, and there is no single point of failure
-                        across the cluster.
-                    </p>
-                    <p>
-                        Ignite nodes can automatically discover each other relying on flexible Discovery SPI component.
-                        This helps to scale the cluster out or down when needed and easily.
-                    </p>
-                    <p>
-                        Apache Ignite can run stand-alone, in a cluster, within Kubernetes and Docker containers, as well
-                        as on Apache Mesos and Hadoop Yarn. It can also run on physical servers as well as within
-                        virtual environments or clouds. Technically there are no limitations on where the cluster
-                        can be deployed.
-                    </p>
+        <h2>Servers, Clients and Protocols</h2>
+        <p>
+            Ignite defines two types of nodes — servers and clients.
+
+            A server node is the base computational and data storage unit. Typically, you start a single server
+            node per machine or container and it will scale vertically by utilizing all of the CPU, RAM, and other
+            resources available unless specified differently. These resources are pooled and become available to
+            Ignite applications once the server node joins the cluster of other server nodes.
+        </p>
+        <p>
+            A cluster is a group of server nodes interconnected together in order to provide shared resources
+            like RAM and CPU to your applications.
+        </p>
+        <p>
+            Client nodes (aka. thick clients) are your connection endpoints and gateways from the application layer
+            to the cluster of server nodes. You always embed a client into your application code and execute the
+            required APIs. The clients shield all the complexity of Ignite’s distributed nature from application
+            developers who will see the cluster as a single unit. It’s as simple as connecting to an RDBMS via a
+            JDBC driver or Spring Data framework.
+        </p>
+        <p>
+            In addition to the thick clients, you can access the cluster with Ignite thin clients,
+            JDBC and ODBC drivers, or the REST API.
+        </p>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <div class="title display-6">Learn More</div>
+              <hr class="my-4">
+              <div class="row">
+                <div class="col-sm-6">
+                    <ul>
+                        <li><a href="https://apacheignite.readme.io/docs/clustering" target="docs">Ignite Clustering <i class="fa fa-angle-double-right"></i></a></li>
+                        <li><a href="https://apacheignite.readme.io/docs/tcpip-discovery" target="docs">Discovery SPI Configuration <i class="fa fa-angle-double-right"></i></a></li>
+                    </ul>
                 </div>
-                <div class="col-sm-6 col-md-6 col-xs-12" style="padding-right:0;">
-                    <img class="img-responsive" src="/images/ignite-deploy.png" width="540px" style="float:right;"/>
+                <div class="col-sm-6">
+                    <ul>
+                        <li><a href="https://apacheignite.readme.io/docs/network-config" target="docs">Communication SPI Configuration <i class="fa fa-angle-double-right"></i></a></li>
+                        <li><a href="/features/multilanguage.html">Multi-Language Support <i class="fa fa-angle-double-right"></i></a></li>
+                    </ul>
                 </div>
-            </div>&nbsp;
-
-            <div class="page-heading">Servers, Clients and Protocols</div>
-            <p>
-                There are two types of nodes defined in Ignite - client and server nodes. The nodes server a
-                different purpose.
-            </p>
-            <p>
-                The server nodes act as containers for data and computations. Once interconnected, the server nodes will
-                represent a distributed database (or data grid) that stores the data, participates in queries processing,
-                compute execution, stream processing, etc.
-            </p>
-            <p>
-                The client nodes, on their turn, provide an ability to connect to the distributed database (a group of server nodes)
-                remotely. Ignite native clients allow using the whole set of Ignite APIs, including SQL, transactions,
-                compute, streaming, services, etc. from the client side.
-            </p>
-            <p>
-                In addition to the client nodes, you can access the cluster by means of Ignite binary client protocol,
-                JDBC and ODBC drivers, or REST API.
-            </p>
-
-            <div class="page-heading">Cloud Native Database</div>
-            <p>
-                Cloud native technologies allow us to build and run scalable applications in public, private and
-                hybrid environments. Ignite is a <a href="https://landscape.cncf.io/landscape=database-and-data-warehouse" target="_blank" rel="noopener">
-                cloud native database</a> designed specifically for a cloud
-                computing architecture.
-            </p>
-            <p>
-                Ignite has native integration with <code class="text-nowrap">Amazon AWS</code>
-                and <code class="text-nowrap">Google Compute Engine</code>. For all other cloud environments, Ignite
-                integrates with <code class="text-nowrap">Apache JClouds</code> that has support for most of the
-                <a href="https://jclouds.apache.org/reference/providers/" target="_blank" rel="noopener" class="text-nowrap">existing
-                    cloud providers</a>.
-            </p>
-            <div class="page-heading">Containers</div>
-            <p>
-                Ignite can freely run within container environments. Ignite's integration with <code>Docker</code>
-                allows to automatically build and deploy user code into Ignite prior to server startup.
-            </p>
-            <p>
-                Apache Ignite cluster can also be deployed in <code>Kubernetes</code> that allows automatic deployment and management of
-                containerized applications.
-            </p>
-
-            <div class="page-heading">Resource Managers</div>
-            <p>
-                Ignite provides native integration for <code class="text-nowrap">Hadoop Yarn</code>,<code>Kubernetes</code>,
-                and <code class="text-nowrap">Apache Mesos</code> making it very easy to seamlessly deploy Ignite
-                into specific environments and manage it there.
-            </p>
-
-            <div class="page-heading">More on Clustering and Deployment</div>
-            <table class="formatted" name="Deployment Options Features">
-                <thead>
-                <tr>
-                    <th width="35%" class="left">Feature</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td class="left">Clients and Servers</td>
-                    <td>
-                        <p>
-                            There are two types of nodes defined in Ignite - client and server nodes. The nodes server a
-                            different purpose:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/clients-vs-servers" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Self-Healing Cluster</td>
-                    <td>
-                        <p>
-                            Ignite cluster can self-heal, where clients automatically reconnect in case of failures,
-                            slow clients are automatically kicked out, and data from failed nodes
-                            is automatically propagated to other nodes in the grid:
-                        </p>
-                        <div class="page-links">
-                            <a href="http://apacheignite.readme.io/docs/clients-vs-servers" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Cross-platform Support</td>
-                    <td>
-                        <p>
-                            Applications can access the cluster from numerous programming languages as well as JDBC/ODBC
-                            drivers, and additional protocols:
-                        </p>
-                        <div  class="page-links">
-                            <a href="/features/multilanguage.html" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Zero Deployment</td>
-                    <td>
-                        <p>
-                            Ignite nodes automatically become aware of custom classes, eliminating the need to explicitly deploy them:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/zero-deployment" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Dynamic Schema Changes</td>
-                    <td>
-                        <p>
-                            Ignite stores objects in binary format eliminating the need to deploy classes on server nodes:
-                        </p>
-                        <div  class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/binary-marshaller" target="docs">Docs for this feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Stand-Alone Clusters</td>
-                    <td>
-                        <p>
-                            Ignite nodes can automatically discover each other. This helps to scale the cluster
-                            when needed, without having to restart the whole cluster - simply start up new additional
-                            nodes and they will automatically join the existing work loads:
-                        </p>
-                        <div class="page-links">
-                            <a href="http://apacheignite.readme.io/docs/cluster" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Docker Container</td>
-                    <td>
-                        <p>
-                            <code>Docker</code> allows to package Ignite deployment with all the dependencies into a
-                            standard container. Docker automates downloading the Ignite release, deploying users'
-                            code into Ignite, and configuring nodes. It also automatically starts up the fully
-                            configured Ignite node:
-                        </p>
-                        <div class="page-links">
-                            <a href="http://apacheignite.readme.io/docs/docker-deployment" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Kubernetes</td>
-                    <td>
-                        <p>
-                            Apache Ignite cluster can be easily deployed in and maintained by <code>Kubernetes</code> which is an
-                            open-source system for automating deployment, scaling, and management of containerized applications:
-                        </p>
-                        <div class="page-links">
-                            <a href="https://apacheignite.readme.io/docs/kubernetes-deployment" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Public Clouds</td>
-                    <td>
-                        <p>
-                            For public cloud environments, Ignite has native integration with <code class="text-nowrap">Amazon AWS</code>
-                            and <code class="text-nowrap">Google Compute Engine</code>. For all other cloud environments, Ignite
-                            integrates with <code class="text-nowrap">Apache JClouds</code> which has support for most of the
-                            <a href="https://jclouds.apache.org/reference/providers/" target="_blank" rel="noopener" class="text-nowrap">existing cloud providers</a>.
-                        </p>
-                        <div class="page-links" style="line-height: 1.3;">
-                            <a href="https://apacheignite-mix.readme.io/docs/amazon-aws" target="docs">Amazon AWS Integration <i class="fa fa-angle-double-right"></i></a><br/>
-                            <a href="https://apacheignite-mix.readme.io/docs/google-compute-engine" target="docs">Google Cloud Integration <i class="fa fa-angle-double-right"></i></a><br/>
-                            <a href="https://apacheignite-mix.readme.io/docs/jclouds" target="docs">Apache JClouds Integration <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Apache Mesos</td>
-                    <td>
-                        <p>
-                            Ignite provides native integration for <code>Apache Mesos</code> making it very easy
-                            to deploy into Mesos data centers, such as, for example, Hadoop and Spark environments:
-                        </p>
-                        <div class="page-links">
-                            <a href="http://apacheignite.readme.io/docs/mesos-deployment" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="left">Hadoop Yarn</td>
-                    <td>
-                        <p>
-                            Ignite provides native integration for <code>Hadoop Yarn</code> making it very easy
-                            to deploy into Hadoop and Spark environments:
-                        </p>
-                        <div class="page-links">
-                            <a href="http://apacheignite.readme.io/docs/yarn-deployment" target="docs">Docs for this Feature <i class="fa fa-angle-double-right"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
-
-    <!--#include virtual="/includes/footer.html" -->
+            </div>
+        </div>
+    </div>
 </div>
+</article>         
+    <!--#include virtual="/includes/footer.html" -->
+
 <!--#include virtual="/includes/scripts.html" -->
 </body>
 </html>
