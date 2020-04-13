@@ -314,40 +314,14 @@ under the License.
                         see <a href="#build-source">Building The Binaries</a>.</p>
                 </div>
             </div>
-            <p>
-                If you encounter a problem with the selected mirror, please select another mirror.
-                If all mirrors are failing, there are <i>backup</i> mirrors
-                (at the end of the mirrors list) that should be available.</p>
-            <form action="/download.cgi" method="get" id="SelectMirror">
-                Selected mirror:
-                <select name="Preferred" onchange="submit()">
-                    [if-any http]
-                    [for http]
-                    <option value="[http]" [is http preferred] selected="selected" [end]>[http]</option>
-                    [end]
-                    [end]
-                    [if-any ftp]
-                    [for ftp]
-                    <option value="[ftp]" [is ftp preferred] selected="selected" [end]>[ftp]</option>
-                    [end]
-                    [end]
-                    [if-any backup]
-                    [for backup]
-                    <option value="[backup]" [is backup preferred] selected="selected" [end]>[backup] (backup)</option>
-                    [end]
-                    [end]
-                </select>
-                <input type="submit" value="Change"/>
-            </form>
         </section>
 
         <section id="sources" class="page-section">
             <h2>Source Releases</h2>
             <p>
-                Binary downloads are provided only for the convenience of our users
-                and are not official Apache Ignite releases. In order to verify
-                the release, we recommend that you checkout the <a href="#verification">How to Verify</a>
-                prior to opening and using the downloaded files.</p>
+                Binary release packages are provided for your convenience and not considered as primary
+                release artifacts of the ASF. It's recommended to verify a release downloadable, following
+                <a href="#verification">this guidelines</a>.</p>
             <p>For more information about Apache release policy see
                 <a href="http://www.apache.org/dev/release.html#what">What is a Release?</a></p>
 
@@ -487,6 +461,30 @@ under the License.
             <p>If you are looking for previous release versions of Apache Ignite, please have a look in the
                 <a href="https://archive.apache.org/dist/ignite">archive</a>.
             </p>
+            <p>
+                If you encounter a problem with the selected mirror, please choose another one. If primary mirrors
+                are not reachable, switch to backup servers added to the end of the list.</p>
+            <form action="/download.cgi" method="get" id="SelectMirror">
+                Selected mirror:
+                <select name="Preferred" onchange="submit()">
+                    [if-any http]
+                    [for http]
+                    <option value="[http]" [is http preferred] selected="selected" [end]>[http]</option>
+                    [end]
+                    [end]
+                    [if-any ftp]
+                    [for ftp]
+                    <option value="[ftp]" [is ftp preferred] selected="selected" [end]>[ftp]</option>
+                    [end]
+                    [end]
+                    [if-any backup]
+                    [for backup]
+                    <option value="[backup]" [is backup preferred] selected="selected" [end]>[backup] (backup)</option>
+                    [end]
+                    [end]
+                </select>
+                <input type="submit" value="Change"/>
+            </form>
         </section>
 
         <section id="binaries" class="page-section">
