@@ -1,6 +1,7 @@
   
-const  gulp  = require('gulp');
-const {  series } = require('gulp');
+const gulp = require('gulp');
+
+
 
 const svgSprite = require('gulp-svg-sprite');
 
@@ -61,7 +62,7 @@ exports.svg = svg;
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
 
-function compileCss(cb){
+function build(cb){
 
     cb();
 
@@ -72,10 +73,11 @@ function compileCss(cb){
     .pipe(browserSync.stream());
 
     
+    
     return buildRet;
 }
 
-
+exports.build = build;
 
 /**
  * minifies the css
@@ -93,49 +95,7 @@ exports.minifyCss = minifyCss;
  * observes for changes on the .scss file, and compiles 
  */
 function watch() {
-    gulp.watch('scss/ignite-redesign.scss', compileCss)
+    gulp.watch('scss/ignite-redesign.scss', build)
 }
 
 exports.watch = watch;
-
-
-
-const critical = require('critical');
-/**
- * use critical module to generate and embed css critical path
- */
-function extractCritical(cb) {
-    cb();
-    return critical.generate({
-        inline: false,
-        base: './',
-        src: 'http://127.0.0.1:8080/',
-        dimensions: [{
-            width: 1280,
-            height: 960
-        }],
-        dest: 'css/critical.css',
-        minify: true,
-        extract: false,
-        ignore: ['@font-face',/url\(/]
-
-    });
-}
-
-const inject = require('gulp-inject-string');
-const rename = require('gulp-rename');
-
-function inlineCritical(cb)
-{
-    cb();
-    return gulp.src('css/critical.css')
-    .pipe(inject.wrap('<!-- remember to copy this content to downloads.html --><style>', '</style>'))
-    .pipe(rename('styles.html'))
-    .pipe(gulp.dest('includes'));
-}
-
-exports.inlineCritical = inlineCritical;
-
-exports.critical = series(extractCritical, inlineCritical);
-
-exports.build = series(compileCss, extractCritical, inlineCritical);
