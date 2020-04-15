@@ -50,7 +50,7 @@ under the License.
 
     <!--#include virtual="/includes/styles.html" -->
 
-    
+    <!--#include virtual="/includes/sh.html" -->
 </head>
 <body>
 
@@ -100,7 +100,7 @@ under the License.
         <div class="tab-content">
 
                 <div class="tab-pane active" id="sql-tables">
-                        <pre class="line-numbers"><code class="language-sql">
+                        <pre class="brush:sql">
                             CREATE TABLE Country (
                                 Code CHAR(3),
                                 Name CHAR(52),
@@ -120,7 +120,7 @@ under the License.
                                 Population INT(11),
                                 PRIMARY KEY (ID, CountryCode)
                             ) WITH "template=partitioned, backups=1, affinityKey=CountryCode";
-                        </code></pre>
+                        </pre>
                 </div>
             </div>
             
@@ -142,14 +142,14 @@ under the License.
             </p>
             <div class="tab-content">
                 <div class="tab-pane active" id="sql-joins-query">
-                        <pre class="line-numbers"><code class="language-sql">
+                        <pre class="brush:sql">
                             SELECT country.name, city.name, MAX(city.population) as max_pop
                             FROM country
                             JOIN city ON city.countrycode = country.code
                             WHERE country.code IN ('USA','RUS','CHN')
                             GROUP BY country.name, city.name
                             ORDER BY max_pop DESC;
-                        </code></pre>
+                        </pre>
                 </div>
             </div>
             <p>
@@ -187,7 +187,7 @@ under the License.
             <div class="tab-content">
 
                 <div class="tab-pane active" id="compute-task">
-                        <pre class="line-numbers"><code class="language-java">
+                        <pre class="brush:java">
 
 Ignite ignite = ...
 
@@ -224,7 +224,7 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
   }
 }
 
-                        </code></pre>
+                        </pre>
                 </div>
             </div>
 
