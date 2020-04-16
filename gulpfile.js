@@ -112,7 +112,7 @@ function extractCritical(cb) {
         src: 'http://127.0.0.1:8080/',
         dimensions: [{
             width: 1280,
-            height: 960
+            height: 1600
         }],
         dest: 'css/critical.css',
         minify: true,
@@ -129,7 +129,7 @@ function inlineCritical(cb)
 {
     cb();
     return gulp.src('css/critical.css')
-    .pipe(inject.wrap('<!-- remember to copy this content to downloads.html --><style>', '</style>'))
+    .pipe(inject.wrap('<!-- remember to copy this content to downloads.html --><style>', 'body {opacity: 0;}.fa{display: none;}</style>'))
     .pipe(rename('styles.html'))
     .pipe(gulp.dest('includes'));
 }
