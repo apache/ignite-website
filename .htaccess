@@ -128,7 +128,26 @@ Redirect 301 /features/transactions.html /features/acid-transactions.html
 Redirect 301 /features/collocatedprocessing.html /features/collocated-processing.html
 Redirect 301 /use-cases/hpc.html /use-cases/high-performance-computing.html
 
+
+## fixes for 404 reports on GSC
+Redirect 301 /Features /features.html
+Redirect 301 /Sample /
+Redirect 301 /whatisignite-2.html /whatisignite.html
+Redirect 301 /use-cases/hadoop/mapreduce /use-cases/hadoop-acceleration.html
+Redirect 301 /use-cases/hadoop/hdfs-cache /use-cases/hadoop-acceleration.html
+Redirect 301 /use-cases/compare/gemfire.html /
+Redirect 301 /use-cases/compare/coherence.html /
+Redirect 301 /use-cases/caching/key-value-store /use-cases/key-value-store.html
+Redirect 301 /use-cases/caching/key-value-store.html /use-cases/key-value-store.html
+Redirect 301 /use-cases/caching/database-caching /use-cases/in-memory-cache.html
+ 
+Redirect 301 /releases/latest/javadoc/org/apache/ignite/yarn/class-use/IgniteProvider.VersionComparator.html /releases/latest/javadoc/org/apache/ignite/yarn/IgniteProvider.html
+
+
+##
+
 RewriteEngine On
+RewriteBase /
 
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=301,L]
@@ -136,3 +155,8 @@ RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=301,L]
 RewriteRule ^releases/latest/(.*)$ /releases/2.8.1/$1 [L]
 
 RewriteRule ^releases/mobile/(.*)$ /releases/latest/javadoc/$1 [R=301,L]
+
+#redirects all 404 pages under api doc path, to it corresponding index
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^releases/(.*)/(javadoc|scaladoc|cppdoc|dotnetdoc)/(.*)$ /releases/latest/$2/ [R=301,L]
