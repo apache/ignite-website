@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+      {% assign doc_var = page.leftNav | append: "_var" %}
+      
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-61232409-1');
+    </script>
+
+    {% if page.content == nil or page.content == ""  %}
+    <META NAME="ROBOTS" CONTENT="NOINDEX">
+    {% endif %}
+
+    <meta charset="UTF-8">
+    <title>{{page.title}} | Ignite Documentation</title>
+    {% if site.attrs.base_url contains "/latest" %}
+    <link rel="canonical" href="{{page.id | replace_first: site.version, 'latest' }}" />
+    {% else %}
+    <link rel="canonical" href="{{page.id}}" />
+    {% endif %}
+	{% capture timestamp %}{{"now"| date: '%s'}}{% endcapture %}
+	<link rel="stylesheet" href="{{'assets/css/styles.css?'|append: timestamp |relative_url}}">
+    <link rel="stylesheet" href="{{'assets/css/asciidoc-pygments.css'|relative_url}}">
+    <link rel="shortcut icon" href="{{'/favicon.ico'|relative_url}}">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
+
+	<script type="text/javascript" src="{{'assets/js/anchor.min.js?'|append: timestamp|relative_url}}"></script>
+    
+
+</head>
+<body>
+    {% include header.html %}
+    {{content}}
+    <script>
+    // inits deep anchors -- needs to be done here because of https://www.bryanbraun.com/anchorjs/#dont-run-it-too-late 
+    anchors.add('.page-docs h1, .page-docs h2, .page-docs h3:not(.discrete), .page-docs h4, .page-docs h5');
+    anchors.options = {
+        placement: 'right',
+        visible: 'always'
+    };
+    </script>
+    <!-- load google fonts async -->
+    <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:300,400,600,700&display=swap' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+</body>
+<script type='module' src='{{"assets/js/index.js?"|append: timestamp | relative_url}}' async></script>
+</html>
