@@ -50,7 +50,7 @@ cp -r $tmp_dir/docs_$version/docs/_data/ _data
 # if [ "$latest" = "yes" ]; then
 # sed  "s/{version}/$version/g;s/{base_url}/\/docs\/latest/g"  config.template  > _config.yml
 # else
-sed  "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g"  _config.template  > _config.yml
+sed  "s/{version}/$version/g;s/{base_url}/\/docs/g"  _config.template  > _config.yml
 # fi
 
 # cat $tmp_dir/docs_$version/docs.properties  | sed 's/=/: /;s/^ */    /' >> _config.yml
