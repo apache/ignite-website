@@ -82,7 +82,7 @@ Extensions.register do
      
 
 #    print parent.document.attributes
-    base_url = parent.document.attributes['base_url'] + '/' + parent.document.attributes['version']
+    base_url = parent.document.attributes['base_url']
    
      if (text = attrs['text']).empty?
        text = target
