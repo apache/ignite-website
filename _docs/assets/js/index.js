@@ -7,7 +7,7 @@ import './page-nav.js'
 
 
 document.addEventListener('topNavigationShow', hideLeftNav)
-document.addEventListener('leftNavigationShow', hideTopNav)
+// document.addEventListener('leftNavigationShow', hideTopNav)
 
 
 
