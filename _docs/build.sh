@@ -56,7 +56,7 @@ if [ "$action" = "build" ]; then
 
   rm -rf ../docs/$version
   cp -R _site/docs/$version ../docs/$version
-  cp -R _site/assets/ ../assets
+  cp -R _site/assets ../
 
   if [ "$latest" = "yes" ]; then
     rm ../docs/latest
