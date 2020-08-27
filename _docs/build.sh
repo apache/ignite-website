@@ -38,9 +38,10 @@ export tmp_dir=tmp
 rm -rf $tmp_dir
 mkdir $tmp_dir
 git -C $tmp_dir  clone --single-branch --branch $branch  https://github.com/apache/ignite.git docs_$version
-rm -rf _docs _data
+rm -rf _docs _data _plugins
 cp -R $tmp_dir/docs_$version/docs/_docs _docs
 cp -R $tmp_dir/docs_$version/docs/_data/ _data
+cp -R $tmp_dir/docs_$version/docs/_plugins/ _plugins
 
 # update contents for the jekyll config file
 if [ "$latest" = "yes" ]; then
@@ -68,4 +69,5 @@ fi
 rm -r _config.yml
 rm -rf _data
 rm -rf _docs
+rm -rf _plugins
 rm -rf  $tmp_dir
