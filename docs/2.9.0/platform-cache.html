@@ -18,9 +18,9 @@
 
     <meta charset="UTF-8">
     <meta name="ignite-version" content="2.9.0" />
-    <title>Configuring Logging | Ignite Documentation</title>
+    <title>.NET Platform Cache | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/2.9.0/logging" />
+    <link rel="canonical" href="/docs/2.9.0/platform-cache" />
     
 	
 	<link rel="stylesheet" href="/assets/css/styles.css?1598524563">
@@ -348,7 +348,7 @@
         <li>
             
 
-            <a href="/docs/2.9.0/logging" class='active' >Configuring Logging</a>
+            <a href="/docs/2.9.0/logging" class='' >Configuring Logging</a>
             
         </li>
     
@@ -1196,7 +1196,7 @@
         <li>
             
 
-            <a href="/docs/2.9.0/platform-cache" class='' >.NET Platform Cache</a>
+            <a href="/docs/2.9.0/platform-cache" class='active' >.NET Platform Cache</a>
             
         </li>
     
@@ -1774,405 +1774,244 @@
 
     <article data-swiftype-index='true'>
         
-            <h1>Configuring Logging</h1>
+            <h1>.NET Platform Cache</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Experimental API
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ignite.NET provides an additional layer of caching in the <a href="https://docs.microsoft.com/en-us/dotnet/standard/clr">CLR</a> heap. The platform cache keeps a deserialized copy of every cache entry that is present on the current node, thus greatly improving cache read performance at the cost of increased memory usage.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Platform caches are bypassed within transactions: when a transaction is active, <code>cache.Get</code> and the other APIs listed below do not use the platform cache. Transaction support is coming soon.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-platform-cache">Configuring Platform Cache</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="server-nodes">Server Nodes</h3>
+<div class="paragraph">
+<p>Platform cache is configured once for all server nodes by setting <code>CacheConfiguration.PlatformCacheConfiguration</code> to a non-null value. Platform cache on server nodes stores <strong>all primary and backup cache entries assigned to the given node</strong> in .NET memory.
+Entries are updated in real time and they are guaranteed to be up to date at any given moment, even before user code accesses them.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Platform cache effectively doubles memory usage on server nodes, every cache entry is stored twice: serialized in unmanaged (offheap) memory, and deserialized in CLR heap.
+</td>
+</tr>
+</table>
+</div>
+<code-tabs><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cacheCfg</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CacheConfiguration</span><span class="p">(</span><span class="s">"my-cache"</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PlatformCacheConfiguration</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PlatformCacheConfiguration</span><span class="p">()</span>
+<span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">cache</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">CreateCache</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;(</span><span class="n">cacheCfg</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="client-nodes">Client Nodes</h3>
+<div class="paragraph">
+<p>Platform caches on client nodes require a <a href="/docs/2.9.0/near-cache">Near Cache</a> to be configured, since client nodes do not store data otherwise. The platform cache on a client node keeps the same set of entries as the near cache on that node. the near cache eviction policy effectively applies to the platform cache.</p>
+</div>
+<code-tabs><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">nearCacheCfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NearCacheConfiguration</span>
+<span class="p">{</span>
+    <span class="c1">// Keep up to 1000 most recently used entries in Near and Platform caches.</span>
+    <span class="n">EvictionPolicy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LruEvictionPolicy</span>
+    <span class="p">{</span>
+        <span class="n">MaxSize</span> <span class="p">=</span> <span class="m">1000</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">cache</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">CreateNearCache</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;(</span><span class="s">"my-cache"</span><span class="p">,</span>
+    <span class="n">nearCacheCfg</span><span class="p">,</span>
+    <span class="k">new</span> <span class="nf">PlatformCacheConfiguration</span><span class="p">());</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supported-apis">Supported APIs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite supports a number of logging libraries and frameworks:</p>
+<p>The following <code>ICache&lt;K, V&gt;</code> APIs use a platform cache (including the corresponding async versions):</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>JUL (default),</p>
+<p><code>Get</code>, <code>TryGet</code>, indexer (<code>ICache[k]</code>)</p>
 </li>
 <li>
-<p>Log4j,</p>
+<p><code>GetAll</code> (reads from the platform cache first and falls back to the distributed cache when necessary)</p>
 </li>
 <li>
-<p>Log4j2,</p>
+<p><code>ContainsKey</code>, <code>ContainsKeys</code></p>
 </li>
 <li>
-<p>JCL,</p>
+<p><code>LocalPeek</code>, <code>TryLocalPeek</code></p>
 </li>
 <li>
-<p>SLF4J.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This section shows you how to set up the logger.</p>
-</div>
-<div class="paragraph">
-<p>When a node starts, it outputs start-up information to the console, including the information about the configured logging library. Each logging library has its own configuration parameters and should be set up according to its official documentation. Besides library-specific configuration, there is a number of system properties that allow you to tune logging. These properties are presented in the following table.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 60%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">System Property</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IGNITE_LOG_INSTANCE_NAME</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If the property is set, Ignite includes its instance name in log messages.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IGNITE_QUIET</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set to <code>false</code> to disable the quiet mode and enable the verbose mode.
-In the verbose mode, the node logs a lot more information.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IGNITE_LOG_DIR</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where Ignite writes log files.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$IGNITE_HOME/
-work/log</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IGNITE_DUMP_THREADS_ON_FAILURE</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set to <code>true</code> to output thread dumps to the log when a critical error is caught.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="default-logging">Default Logging</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>By default, Ignite uses the java.util.logging (JUL) framework.
-If you start Ignite using the <code>ignite.sh|bat</code> script from the distribution package, Ignite uses <code>$IGNITE_HOME/config/java.util.logging.properties</code> as the default logging configuration file and outputs all messages to log files in the <code>$IGNITE_HOME/work/log</code> directory.
-You can override the default logging directory by specifying the <code>IGNITE_LOG_DIR</code> system property.</p>
-</div>
-<div class="paragraph">
-<p>If you use Ignite as a library in your application, the default logging configuration includes only console handler at INFO level.
-You can provide a custom configuration file via the <code>java.util.logging.config.file</code> system property.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="using-log4j">Using Log4j</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Before using Log4j, enable the <a href="/docs/2.9.0/setup#enabling-modules">ignite-log4j</a> module.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To enable Log4j logger, set the <code>gridLogger</code> property of <code>IgniteConfiguration</code>, as shown in the following example:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"gridLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.logger.log4j.Log4JLogger"</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!-- log4j configuration file --&gt;</span>
-            <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"java.lang.String"</span> <span class="na">value=</span><span class="s">"log4j-config.xml"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-
-    <span class="c">&lt;!-- other properties --&gt;</span>
-
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">IgniteLogger</span> <span class="n">log</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Log4JLogger</span><span class="o">(</span><span class="s">"log4j-config.xml"</span><span class="o">);</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="n">log</span><span class="o">);</span>
-
-<span class="c1">// Start a node.</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
-    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for .NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>In the above example, the path to <code>log4j-config.xml</code> can be either an absolute path, a local path relative to META-INF in classpath or to <code>IGNITE_HOME</code>. An example log4j configuration file can be found in the distribution package (<code>$IGNITE_HOME/config/ignite-log4j.xml</code>).</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="using-log4j2">Using Log4j2</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Before using Log4j2, enable the <a href="/docs/2.9.0/setup#enabling-modules">ignite-log4j2</a> module.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To enable Log4j2 logger, set the <code>gridLogger</code> property of <code>IgniteConfiguration</code>, as shown below:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"gridLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.logger.log4j2.Log4J2Logger"</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!-- log4j2 configuration file --&gt;</span>
-            <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"java.lang.String"</span> <span class="na">value=</span><span class="s">"log4j2-config.xml"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-
-    <span class="c">&lt;!-- other properties --&gt;</span>
-
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">IgniteLogger</span> <span class="n">log</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Log4J2Logger</span><span class="o">(</span><span class="s">"log4j2-config.xml"</span><span class="o">);</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="n">log</span><span class="o">);</span>
-
-<span class="c1">// Start a node.</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
-    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for .NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>In the above example, the path to <code>log4j2-config.xml</code> can be either an absolute path, a local path relative to META-INF in classpath or to <code>IGNITE_HOME</code>. An example log4j2 configuration file can be found in the distribution package (<code>$IGNITE_HOME/config/ignite-log4j2.xml</code>).</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Log4j2 supports runtime reconfiguration, i.e. changes in the configuration file is applied without the need to restart the application.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="using-jcl">Using JCL</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Before using JCL, enable the <a href="/docs/2.9.0/setup#enabling-modules">ignite-jcl</a> module.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Note that JCL simply forwards logging messages to an underlying logging system, which needs to be properly configured. Refer to the <a href="https://commons.apache.org/proper/commons-logging/guide.html#Configuration">JCL official documentation</a> for more information. For example, if you want to use Log4j, make sure you add the required libraries to your classpath.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To enable Log4j2 logger, set the <code>gridLogger</code> property of <code>IgniteConfiguration</code>, as shown below:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"gridLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.logger.jcl.JclLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-
-    <span class="c">&lt;!-- other properties --&gt;</span>
-
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="k">new</span> <span class="nc">JclLogger</span><span class="o">());</span>
-
-<span class="c1">// Start a node.</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
-    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for .NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-<div class="sect1">
-<h2 id="using-slf4j">Using SLF4J</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Before using SLF4J, enable the <a href="/docs/2.9.0/setup#enabling-modules">ignite-slf4j</a> module.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To enable the SLF4J logger, set the <code>gridLogger</code> property of <code>IgniteConfiguration</code>, as shown below:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"gridLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.logger.slf4j.Slf4jLogger"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-
-    <span class="c">&lt;!-- other properties --&gt;</span>
-
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="k">new</span> <span class="nc">Slf4jLogger</span><span class="o">());</span>
-
-<span class="c1">// Start a node.</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
-    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for .NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Refer to the <a href="https://www.slf4j.org/docs.html">SLF4J user manual</a> for more information.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="suppressing-sensitive-information">Suppressing Sensitive Information</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Logs can include the content of cache entries, system properties, startup options, etc.
-In some cases, those can contain sensitive information.
-You can prevent such information from being written to the log by setting the <code>IGNITE_TO_STRING_INCLUDE_SENSITIVE</code> system property to <code>false</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">./ignite.sh <span class="nt">-J-DIGNITE_TO_STRING_INCLUDE_SENSITIVE</span><span class="o">=</span><span class="nb">false</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>See <a href="/docs/2.9.0/starting-nodes#setting-jvm-options">Setting JVM Options</a> to learn about different ways to set system properties.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="logging-configuration-example">Logging Configuration Example</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The following steps guide you through the process of configuring logging. This should be suitable for most cases.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Use either Log4j or Log4j2 as the logging framework. To enable it, follow the instructions provided in the corresponding section above.</p>
+<p><code>GetLocalEntries</code></p>
 </li>
 <li>
-<p>If you use the default configuration file (either <code>ignite-log4j.xml</code> or <code>ignite-log4j2.xml</code>), uncomment the CONSOLE appender.</p>
+<p><code>GetLocalSize</code></p>
 </li>
 <li>
-<p>In the log4j configuration file, set the path to the log file. The default location is <code>${IGNITE_HOME}/work/log/ignite.log</code>.</p>
-</li>
-<li>
-<p>Start the nodes in verbose mode:</p>
+<p><code>Query</code> with <code>ScanQuery</code></p>
 <div class="ulist">
 <ul>
 <li>
-<p>If you use <code>ignite.sh</code> to start nodes, specify the <code>-v</code> option.</p>
+<p>Uses the platform cache to pass values to <code>ScanQuery.Filter</code></p>
 </li>
 <li>
-<p>If you start nodes from Java code, use the <code>IGNITE_QUIET=false</code> system variable.</p>
+<p>Iterates over the platform cache directly when <code>ScanQuery.Local</code> is <code>true</code> and <code>ScanQuery.Partition</code> is not null</p>
 </li>
 </ul>
 </div>
 </li>
-</ol>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="access-platform-cache-data-directly">Access Platform Cache Data Directly</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You don&#8217;t need to change your code to take advantage of a Platform Cache. Existing calls to <code>ICache.Get</code> and other APIs listed above will be served from the platform cache when possible, improving performance. When a given entry is not present in the platform cache, Ignite falls back to a normal path and retrieves the value from the cluster.</p>
+</div>
+<div class="paragraph">
+<p>However, in some cases we may wish to access the platform cache exclusively, avoiding Java and network calls. <code>Local</code> APIs in combination with <code>CachePeekMode.Platform</code> allow us to do just that:</p>
+</div>
+<code-tabs><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cache</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetCache</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;(</span><span class="s">"my-cache"</span><span class="p">);</span>
+
+<span class="c1">// Get value from platform cache.</span>
+<span class="kt">bool</span> <span class="n">hasKey</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">TryLocalPeek</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">val</span><span class="p">,</span> <span class="n">CachePeekMode</span><span class="p">.</span><span class="n">Platform</span><span class="p">);</span>
+
+<span class="c1">// Get platform cache size (current number of entries on local node).</span>
+<span class="kt">int</span> <span class="n">size</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">GetLocalSize</span><span class="p">(</span><span class="n">CachePeekMode</span><span class="p">.</span><span class="n">Platform</span><span class="p">);</span>
+
+<span class="c1">// Get all values from platform cache.</span>
+<span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">ICacheEntry</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;&gt;</span> <span class="n">entries</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">GetLocalEntries</span><span class="p">(</span><span class="n">CachePeekMode</span><span class="p">.</span><span class="n">Platform</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="advanced-configuration">Advanced Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="binary-mode">Binary Mode</h3>
+<div class="paragraph">
+<p>In order to use <a href="/docs/2.9.0/key-value-api/binary-objects">Binary Objects</a> together with platform cache, set <code>PlatformCacheConfiguration.KeepBinary</code> to <code>true</code>:</p>
+</div>
+<code-tabs><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cacheCfg</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CacheConfiguration</span><span class="p">(</span><span class="s">"people"</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PlatformCacheConfiguration</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PlatformCacheConfiguration</span>
+    <span class="p">{</span>
+        <span class="n">KeepBinary</span> <span class="p">=</span> <span class="k">true</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">cache</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">CreateCache</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Person</span><span class="p">&gt;(</span><span class="n">cacheCfg</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">WithKeepBinary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">IBinaryObject</span><span class="p">&gt;();</span>
+
+<span class="n">IBinaryObject</span> <span class="n">binaryPerson</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="m">1</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="key-and-value-types">Key and Value Types</h3>
+<div class="paragraph">
+<p>When using Ignite cache with <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types">Value Types</a>, you should set <code>PlatformCacheConfiguration.KeyTypeName</code> and <code>ValueTypeName</code> accordingly to achieve maximum performance and reduce GC pressure:</p>
+</div>
+<code-tabs><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cacheCfg</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CacheConfiguration</span><span class="p">(</span><span class="s">"people"</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PlatformCacheConfiguration</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PlatformCacheConfiguration</span>
+    <span class="p">{</span>
+        <span class="n">KeyTypeName</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="kt">long</span><span class="p">).</span><span class="n">FullName</span><span class="p">,</span>
+        <span class="n">ValueTypeName</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">Guid</span><span class="p">).</span><span class="n">FullName</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">var</span> <span class="n">cache</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">CreateCache</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">,</span> <span class="n">Guid</span><span class="p">&gt;(</span><span class="n">cacheCfg</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>Ignite uses <code>ConcurrentDictionary&lt;object, object&gt;</code> by default to store platform cache data, because the actual types are  unknown beforehand. This results in <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/boxing-and-unboxing">boxing and unboxing</a> for value types, reducing performance and allocating more memory. When <code>KeyTypeName</code> and <code>ValueTypeName</code> are set in <code>PlatformCacheConfiguration</code>, Ignite uses those types to create an internal <code>ConcurrentDictionary</code> instead of the default <code>object</code>.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+Incorrect <code>KeyTypeName</code> and/or <code>ValueTypeName</code> settings can cause runtime cast exceptions.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#default-logging">Default Logging</a></li>
-<li><a href="#using-log4j">Using Log4j</a></li>
-<li><a href="#using-log4j2">Using Log4j2</a></li>
-<li><a href="#using-jcl">Using JCL</a></li>
-<li><a href="#using-slf4j">Using SLF4J</a></li>
-<li><a href="#suppressing-sensitive-information">Suppressing Sensitive Information</a></li>
-<li><a href="#logging-configuration-example">Logging Configuration Example</a></li>
+<li><a href="#configuring-platform-cache">Configuring Platform Cache</a>
+<ul class="sectlevel2">
+<li><a href="#server-nodes">Server Nodes</a></li>
+<li><a href="#client-nodes">Client Nodes</a></li>
+</ul>
+</li>
+<li><a href="#supported-apis">Supported APIs</a></li>
+<li><a href="#access-platform-cache-data-directly">Access Platform Cache Data Directly</a></li>
+<li><a href="#advanced-configuration">Advanced Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#binary-mode">Binary Mode</a></li>
+<li><a href="#key-and-value-types">Key and Value Types</a></li>
+</ul>
+</li>
 </ul>
           
       
