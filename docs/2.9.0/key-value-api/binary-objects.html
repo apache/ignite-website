@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+
+      
+      
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-61232409-1');
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <meta name="ignite-version" content="2.9.0" />
+    <title>Working with Binary Objects | Ignite Documentation</title>
+    
+    <link rel="canonical" href="/docs/2.9.0/key-value-api/binary-objects" />
+    
+	
+	<link rel="stylesheet" href="/assets/css/styles.css?1598500266">
+    <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
+
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1598500266"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"
+  />
+
+</head>
+<body>
+    <header>
+    <div class="container">
+        <button type='button' class='menu' title='Docs menu'>
+        <img src="/assets/images/menu-icon.svg"/>
+        </button>
+        <div class='home'>
+            <a href="/" class='home' title='Apache Ignite home'>
+                <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" >
+            </a>
+        </div>
+        
+        <nav>
+            
+        </nav>
+        
+        <select id="version-selector">
+            <option value="2.9.0">2.9.0</option>
+        </select>
+        
+        <a href="https://github.com/ignite" title='GitHub' class='github' target="_blank">
+            <img src="/assets/images/github-gray.svg" alt="GitHub logo">
+        </a>
+        
+        <form class='search'>
+            <button class="search-close" type='button'><img src='/assets/images/cancel.svg'></button>
+            <input type="search" placeholder="Search…" id="search-input">
+        </form>
+        <button type='button' class='search-toggle'><img src='/assets/images/search.svg'></button>
+        <button type='button' class='top-nav-toggle'>⋮</button>
+
+        
+        
+    </div>
+</header>
+
+
+    	 <link rel="stylesheet" href="/assets/css/docs.css">
+<section class='page-docs'>
+    
+
+
+
+<nav class='left-nav' data-swiftype-index='false'>
+
+      
+        <li>
+            
+
+            <a href="/docs/2.9.0//preface" class='' >Preface</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Quick Start Guides<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/java"
+
+                                class=''
+                            >Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/dotnet"
+
+                                class=''
+                            >.NET/C#</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/cpp"
+
+                                class=''
+                            >C++</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/python"
+
+                                class=''
+                            >Python</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/nodejs"
+
+                                class=''
+                            >Node.JS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/sql"
+
+                                class=''
+                            >SQL</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/php"
+
+                                class=''
+                            >PHP</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//quick-start/restapi"
+
+                                class=''
+                            >REST API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/installation" class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//installation/installing-using-zip"
+
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//installation/installing-using-docker"
+
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//installation/deb-rpm"
+
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Kubernetes<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//installation/kubernetes/amazon-eks-deployment" class=''>Amazon EKS</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//installation/kubernetes/azure-deployment" class=''>Azure Kubernetes Service</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//installation/kubernetes/gke-deployment" class=''>Google Kubernetes Engine</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Setting Up<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//setup"
+
+                                class=''
+                            >Setting Up Ignite for Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//setup-dotnet"
+
+                                class=''
+                            >Setting Up Ignite for .NET/C#</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//understanding-configuration" class='' >Understanding Configuration</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//logging" class='' >Configuring Logging</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//starting-nodes" class='' >Starting and Stopping Nodes</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Clustering<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/clustering"
+
+                                class=''
+                            >Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/tcp-ip-discovery"
+
+                                class=''
+                            >TCP/IP Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/zookeeper-discovery"
+
+                                class=''
+                            >ZooKeeper Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/discovery-in-the-cloud"
+
+                                class=''
+                            >Discovery in the Cloud</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/network-configuration"
+
+                                class=''
+                            >Network Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/connect-client-nodes"
+
+                                class=''
+                            >Connecting Client Nodes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//clustering/running-client-nodes-behind-nat"
+
+                                class=''
+                            >Running Client Nodes Behind NAT</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Data Modeling<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//data-modeling/data-modeling"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//data-modeling/data-partitioning"
+
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//data-modeling/affinity-collocation"
+
+                                class=''
+                            >Affinity Colocation</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Configuring Memory<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//memory-architecture"
+
+                                class=''
+                            >Memory Architecture</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//memory-configuration/data-regions"
+
+                                class=''
+                            >Configuring Data Regions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//memory-configuration/eviction-policies"
+
+                                class=''
+                            >Eviction Policies</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Configuring Caches<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/configuration-overview"
+
+                                class=''
+                            >Cache Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/configuring-backups"
+
+                                class=''
+                            >Configuring Partition Backups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/atomicity-modes"
+
+                                class=''
+                            >Atomicity Modes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/expiry-policies"
+
+                                class=''
+                            >Expiry Policy</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/on-heap-caching"
+
+                                class=''
+                            >On-Heap Caching</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//configuring-caches/cache-groups"
+
+                                class=''
+                            >Cache Groups</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Persistence<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/native-persistence"
+
+                                class=''
+                            >Ignite Persistence</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/external-storage"
+
+                                class=''
+                            >External Storage</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/swap"
+
+                                class=''
+                            >Swapping</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/custom-cache-store"
+
+                                class=''
+                            >Implementing Custom Cache Store</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/disk-compression"
+
+                                class=''
+                            >Disk Compression</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//persistence/persistence-tuning"
+
+                                class=''
+                            >Tuning Persistence</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//baseline-topology" class='' >Baseline Topology</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//cluster-states" class='' >Cluster States</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//data-rebalancing" class='' >Data Rebalancing</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//partition-loss-policy" class='' >Partition Loss Policy</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//peer-class-loading" class='' >Peer Class Loading</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//data-streaming" class='' >Data Streaming</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Using Key-Value Cache API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//key-value-api/basic-cache-operations"
+
+                                class=''
+                            >Basic Cache Operations</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//key-value-api/binary-objects"
+
+                                class=''
+                            >Working with Binary Objects</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//key-value-api/using-scan-queries"
+
+                                class=''
+                            >Using Scan Queries</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//key-value-api/continuous-queries" class='' >Using Continuous Queries</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//key-value-api/transactions" class='' >Performing Transactions</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/sql-introduction"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/schemas"
+
+                                class=''
+                            >Understanding Schemas</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/indexes"
+
+                                class=''
+                            >Defining Indexes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/sql-api"
+
+                                class=''
+                            >Using SQL API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/distributed-joins"
+
+                                class=''
+                            >Distributed Joins</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/sql-transactions"
+
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/custom-sql-func"
+
+                                class=''
+                            >Custom SQL Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/JDBC/jdbc-driver"
+
+                                class=''
+                            >JDBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/JDBC/jdbc-client-driver"
+
+                                class=''
+                            >JDBC Client Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//transactions/mvcc"
+
+                                class=''
+                            >Multiversion Concurrency Control</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Distributed Computing<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/distributed-computing"
+
+                                class=''
+                            >Distributed Computing API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/cluster-groups"
+
+                                class=''
+                            >Cluster Groups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/executor-service"
+
+                                class=''
+                            >Executor Service</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/map-reduce"
+
+                                class=''
+                            >MapReduce API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/load-balancing"
+
+                                class=''
+                            >Load Balancing</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/fault-tolerance"
+
+                                class=''
+                            >Fault Tolerance</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//distributed-computing/job-scheduling"
+
+                                class=''
+                            >Job Scheduling</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//collocated-computations" class='' >Colocating Computations with Data</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Working with Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//events/listening-to-events"
+
+                                class=''
+                            >Enabling and Listenting to Events</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//events/events"
+
+                                class=''
+                            >Events</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//near-cache" class='' >Near Caches</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Monitoring<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//monitoring-metrics/intro"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//monitoring-metrics/cluster-id"
+
+                                class=''
+                            >Cluster ID and Tag</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Metrics<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//monitoring-metrics/configuring-metrics" class=''>Configuring Metrics</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//monitoring-metrics/metrics" class=''>JMX Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>New Metrics System<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//monitoring-metrics/new-metrics-system" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//monitoring-metrics/new-metrics" class=''>Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//monitoring-metrics/system-views"
+
+                                class=''
+                            >System Views</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//monitoring-metrics/tracing"
+
+                                class=''
+                            >Tracing</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/security" class='group-toggle collapsed '>Security<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//security/authentication"
+
+                                class=''
+                            >Authentication</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//security/ssl-tls"
+
+                                class=''
+                            >SSL/TLS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Transparent Data Encryption<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//security/tde" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0//security/master-key-rotation" class=''>Master key rotation</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Thin Clients<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/getting-started-with-thin-clients"
+
+                                class=''
+                            >Thin Clients Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/java-thin-client"
+
+                                class=''
+                            >Java Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/dotnet-thin-client"
+
+                                class=''
+                            >.NET Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/cpp-thin-client"
+
+                                class=''
+                            >C++ Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/python-thin-client"
+
+                                class=''
+                            >Python Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/php-thin-client"
+
+                                class=''
+                            >PHP Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//thin-clients/nodejs-thin-client"
+
+                                class=''
+                            >Node.js Thin Client</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>ODBC Driver<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/odbc-driver"
+
+                                class=''
+                            >ODBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/connection-string-dsn"
+
+                                class=''
+                            >Connection String and DSN</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/querying-modifying-data"
+
+                                class=''
+                            >Querying and Modifying Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/specification"
+
+                                class=''
+                            >Specification</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//SQL/ODBC/error-codes"
+
+                                class=''
+                            >Error Codes</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//restapi" class='' >REST API</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//control-script" class='' >Control Script</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//plugins" class='' >Plugins</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0//sqlline" class='' >SQLLine</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/sql-reference/sql-reference-overview" class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/ddl"
+
+                                class=''
+                            >Data Definition Language (DDL)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/dml"
+
+                                class=''
+                            >Data Manipulation Language (DML)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/transactions"
+
+                                class=''
+                            >Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/operational-commands"
+
+                                class=''
+                            >Operational Commands</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/aggregate-functions"
+
+                                class=''
+                            >Aggregate functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/numeric-functions"
+
+                                class=''
+                            >Numeric Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/string-functions"
+
+                                class=''
+                            >String Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/date-time-functions"
+
+                                class=''
+                            >Data and Time Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/system-functions"
+
+                                class=''
+                            >System Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0//sql-reference/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+</nav>
+<div class="left-nav__overlay"></div>
+
+
+    <article data-swiftype-index='true'>
+        
+            <h1>Working with Binary Objects</h1>
+        
+        <div class="sect1">
+<h2 id="overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Ignite, data is stored in <a href="/docs/2.9.0/data-modeling/data-modeling#binary-object-format">binary format</a> and is deserialized into objects every time you call cache methods. However, you can work directly with the binary objects avoiding deserialization.</p>
+</div>
+<div class="paragraph">
+<p>A binary object is a wrapper over the binary representation of an entry stored in a cache. Each binary object has the <code>field(name)</code> method which returns the value of the given field and the <code>type()</code> method that extracts the <a href="#binary-type-and-binary-fields">information about the type of the object</a>.
+Binary objects are useful when you want to work only with some fields of the objects and do not need to deserialize the entire object.</p>
+</div>
+<div class="paragraph">
+<p>You do not need to have the class definition to work with binary objects and can <a href="#creating-and-modifying-binary-objects">change the structure of objects dynamically</a> without restarting the cluster.</p>
+</div>
+<div class="paragraph">
+<p>The binary object format is universal for all supported platforms, i.e. Java, .NET, and C&#43;&#43;. You can start a Java cluster, then connect to it from .NET or C&#43;&#43; clients and use binary objects in those platforms with no need to define classes on the client side.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<h3 id="restrictions" class="discrete">Restrictions</h3>
+<div class="paragraph">
+<p>There are several restrictions that are implied by the binary object format implementation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Internally, the type and fields of a binary object are identified by their IDs. The IDs are calculated as the hash codes of the corresponding string names. Consequently, fields or types with the identical name hash are not allowed. However, you can <a href="#configuring-binary-objects">provide your own implementation of ID generation</a> via the configuration.</p>
+</li>
+<li>
+<p>For the same reason, the binary object format does not allow identical field names on different levels of class hierarchy.</p>
+</li>
+<li>
+<p>If a class implements the <code>Externalizable</code> interface, Ignite uses <code>OptimizedMarshaller</code> instead of the binary one. <code>OptimizedMarshaller</code> uses the <code>writeExternal()</code> and <code>readExternal()</code> methods to serialize and deserialize objects; therefore, the class must be added to the classpath of the server nodes.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="enabling-binary-mode-for-caches">Enabling Binary Mode for Caches</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, when you request entries from a cache, they are returned in the deserialized format.
+To work with the binary format, obtain an instance of the cache using the <code>withKeepBinary()</code> method.
+This instance returns objects in the binary format (when possible).</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Create a regular Person object and put it into the cache.</span>
+<span class="nc">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"FirstPerson"</span><span class="o">);</span>
+<span class="n">ignite</span><span class="o">.</span><span class="na">cache</span><span class="o">(</span><span class="s">"personCache"</span><span class="o">).</span><span class="na">put</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">person</span><span class="o">);</span>
+
+<span class="c1">// Get an instance of binary-enabled cache.</span>
+<span class="nc">IgniteCache</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">BinaryObject</span><span class="o">&gt;</span> <span class="n">binaryCache</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">cache</span><span class="o">(</span><span class="s">"personCache"</span><span class="o">).</span><span class="na">withKeepBinary</span><span class="o">();</span>
+<span class="nc">BinaryObject</span> <span class="n">binaryPerson</span> <span class="o">=</span> <span class="n">binaryCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that not all objects are converted to the binary object format.
+The following classes are never converted (e.g., the <code>toBinary(Object)</code> method returns the original object, and instances of these classes are stored without changes):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All primitives (<code>byte</code>, <code>int</code>, etc) and their wrapper classes (<code>Byte</code>, <code>Integer</code>, etc)</p>
+</li>
+<li>
+<p>Arrays of primitives (byte[], int[], &#8230;&#8203;)</p>
+</li>
+<li>
+<p><code>String</code> and array of <code>Strings</code></p>
+</li>
+<li>
+<p><code>UUID</code> and array of <code>UUIDs</code></p>
+</li>
+<li>
+<p><code>Date</code> and array of <code>Dates</code></p>
+</li>
+<li>
+<p><code>Timestamp</code> and array of <code>Timestamps</code></p>
+</li>
+<li>
+<p><code>Enums</code> and array of enums</p>
+</li>
+<li>
+<p>Maps, collections and arrays of objects (but the objects inside them are reconverted if they are binary)</p>
+</li>
+</ul>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="n">ICache</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">IBinaryObject</span><span class="p">&gt;</span> <span class="n">binaryCache</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">WithKeepBinary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">IBinaryObject</span><span class="p">&gt;();</span>
+<span class="n">IBinaryObject</span> <span class="n">binaryPerson</span> <span class="p">=</span> <span class="n">binaryCache</span><span class="p">[</span><span class="m">1</span><span class="p">];</span>
+<span class="kt">string</span> <span class="n">name</span> <span class="p">=</span> <span class="n">binaryPerson</span><span class="p">.</span><span class="n">GetField</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"Name"</span><span class="p">);</span>
+
+<span class="n">IBinaryObjectBuilder</span> <span class="n">builder</span> <span class="p">=</span> <span class="n">binaryPerson</span><span class="p">.</span><span class="nf">ToBuilder</span><span class="p">();</span>
+<span class="n">builder</span><span class="p">.</span><span class="nf">SetField</span><span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="n">name</span> <span class="p">+</span> <span class="s">" - Copy"</span><span class="p">);</span>
+
+<span class="n">IBinaryObject</span> <span class="n">binaryPerson2</span> <span class="p">=</span> <span class="n">builder</span><span class="p">.</span><span class="nf">Build</span><span class="p">();</span>
+<span class="n">binaryCache</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="n">binaryPerson2</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that not all types can be represented as <code>IBinaryObject</code>. Primitive types, <code>string</code>, <code>Guid</code>, <code>DateTime</code>, collections and arrays of these types are always returned as is.</p>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-and-modifying-binary-objects">Creating and Modifying Binary Objects</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Instances of binary objects are immutable. To update fields or create a new binary object, use a binary object builder. A binary object builder is a utility class that allows you to modify the fields of binary objects without having the class definition of the objects.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<h3 id="limitations" class="discrete">Limitations</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>You cannot change the types of existing fields.</p>
+</li>
+<li>
+<p>You cannot change the order of enum values or add new constants at the beginning or in the middle of the list of enum&#8217;s values. You can add new constants to the end of the list though.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can obtain an instance of the binary object builder for a specific type as follows:</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">BinaryObjectBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">binary</span><span class="o">().</span><span class="na">builder</span><span class="o">(</span><span class="s">"org.apache.ignite.snippets.Person"</span><span class="o">);</span>
+
+<span class="n">builder</span><span class="o">.</span><span class="na">setField</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">2L</span><span class="o">);</span>
+<span class="n">builder</span><span class="o">.</span><span class="na">setField</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"SecondPerson"</span><span class="o">);</span>
+
+<span class="n">binaryCache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">builder</span><span class="o">.</span><span class="na">build</span><span class="o">());</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgnite</span> <span class="n">ignite</span> <span class="p">=</span> <span class="n">Ignition</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+
+<span class="n">IBinaryObjectBuilder</span> <span class="n">builder</span> <span class="p">=</span> <span class="n">ignite</span><span class="p">.</span><span class="nf">GetBinary</span><span class="p">().</span><span class="nf">GetBuilder</span><span class="p">(</span><span class="s">"Book"</span><span class="p">);</span>
+
+<span class="n">IBinaryObject</span> <span class="n">book</span> <span class="p">=</span> <span class="n">builder</span>
+  <span class="p">.</span><span class="nf">SetField</span><span class="p">(</span><span class="s">"ISBN"</span><span class="p">,</span> <span class="s">"xyz"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">SetField</span><span class="p">(</span><span class="s">"Title"</span><span class="p">,</span> <span class="s">"War and Peace"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">Build</span><span class="p">();</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>Builders created in this way contain no fields.
+You can add fields by calling the <code>setField(&#8230;&#8203;)</code> method.</p>
+</div>
+<div class="paragraph">
+<p>You can also obtain a binary object builder from an existing binary object by calling the <code>toBuilder()</code> method.
+In this case, all field values are copied from the binary object to the builder.</p>
+</div>
+<div class="paragraph">
+<p>In the following example, we use an entry processor to update an object on the server node without having the object&#8217;s class deployed on that node and without full object deserialization.</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// The EntryProcessor is to be executed for this key.</span>
+<span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="n">ignite</span><span class="o">.</span><span class="na">cache</span><span class="o">(</span><span class="s">"personCache"</span><span class="o">).&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">BinaryObject</span><span class="o">&gt;</span><span class="n">withKeepBinary</span><span class="o">().</span><span class="na">invoke</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="o">(</span><span class="n">entry</span><span class="o">,</span> <span class="n">arguments</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="c1">// Create a builder from the old value.</span>
+    <span class="nc">BinaryObjectBuilder</span> <span class="n">bldr</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">toBuilder</span><span class="o">();</span>
+
+    <span class="c1">//Update the field in the builder.</span>
+    <span class="n">bldr</span><span class="o">.</span><span class="na">setField</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"Ignite"</span><span class="o">);</span>
+
+    <span class="c1">// Set new value to the entry.</span>
+    <span class="n">entry</span><span class="o">.</span><span class="na">setValue</span><span class="o">(</span><span class="n">bldr</span><span class="o">.</span><span class="na">build</span><span class="o">());</span>
+
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">});</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="c1">// Not supported in C# for now</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="binary-type-and-binary-fields">Binary Type and Binary Fields</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Binary objects hold the information about the type of objects they represent. The type information includes the field names, field types and the affinity field name.</p>
+</div>
+<div class="paragraph">
+<p>The type of each field is represented by a <code>BinaryField</code> object.
+Once obtained, a <code>BinaryField</code> object can be reused multiple times if you need to read the same field from each object in a collection.
+Reusing a <code>BinaryField</code> object is faster than reading the field value directly from each binary object.
+Below is an example of using a binary field.</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">BinaryObject</span><span class="o">&gt;</span> <span class="n">persons</span> <span class="o">=</span> <span class="n">getPersons</span><span class="o">();</span>
+
+<span class="nc">BinaryField</span> <span class="n">salary</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="kt">double</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+<span class="k">for</span> <span class="o">(</span><span class="nc">BinaryObject</span> <span class="n">person</span> <span class="o">:</span> <span class="n">persons</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">salary</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">salary</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="na">type</span><span class="o">().</span><span class="na">field</span><span class="o">(</span><span class="s">"salary"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">total</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span> <span class="n">salary</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+    <span class="n">count</span><span class="o">++;</span>
+<span class="o">}</span>
+
+<span class="kt">double</span> <span class="n">avg</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="n">count</span><span class="o">;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C#/.NET.</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="recommendations-on-binary-objects-tuning">Recommendations on Binary Objects Tuning</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite keeps a <em>schema</em> for every  Binary Object of a given type, which specifies the fields present in the object as well as their order and types.
+Schemas are replicated to all cluster nodes.
+Binary objects that have the same fields but in different order are considered to have different schemas.
+We strongly recommend you should always add fields to binary objects in the same order.</p>
+</div>
+<div class="paragraph">
+<p>A null field would normally take five bytes to store — four bytes for the field ID plus one byte for the field length.
+Memory-wise, it&#8217;s preferable to not include a field, rather than include a null field.
+However, if you do not include a field, Ignite creates a new schema for this object, and that schema is different from the schema of the objects that do include the field.
+If you have multiple fields that are set to <code>null</code> in random combinations, Ignite maintains a different Binary Object schema for each combination, and your heap may be exhausted by the total size of the Binary Object schemas.
+It is better to have a few schemas for your Binary Objects, with the same set of fields of same types, set in the same order.
+Choose one of them when creating Binary Object by supplying the same set of fields, even with null value.
+This is also the reason you need to supply field type for null field.</p>
+</div>
+<div class="paragraph">
+<p>You can also nest your Binary Objects if you have a subset of fields which are optional but either all absent or all present.
+You can put them in a separate BinaryObject, which is either stored under a field in the parent object or set as null.</p>
+</div>
+<div class="paragraph">
+<p>If you have a large number of fields which are all optional in any combinations, and very often null, you can store them in a map field.
+You will have several fixed fields in your value object, and one map for extra properties.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-binary-objects">Configuring Binary Objects</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the vast majority of use cases, there is no need to configure binary objects. However, if you need to change the type and field IDs generation or plug in a custom serializer, you can do this via the configuration.</p>
+</div>
+<div class="paragraph">
+<p>The type and fields of a binary object are identified by their IDs. The IDs are calculated as the hash codes of the corresponding string names and are stored in each binary object. You can define your own implementation of ID generation in the configuration.</p>
+</div>
+<div class="paragraph">
+<p>The name-to-ID conversion is done in two steps.
+First, the type name (class name) or a field name is transformed by a name mapper, then an ID mapper calculates the IDs.
+You can specify a global name mapper, a global ID mapper, and a global binary serializer as well as per-type mappers and serializers.
+Wildcards are supported for per-type configuration, in which case the provided configuration is applied to all types that match the type name template.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"binaryConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.BinaryConfiguration"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"nameMapper"</span> <span class="na">ref=</span><span class="s">"globalNameMapper"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"idMapper"</span> <span class="na">ref=</span><span class="s">"globalIdMapper"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"typeConfigurations"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;list&gt;</span>
+                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.binary.BinaryTypeConfiguration"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"typeName"</span> <span class="na">value=</span><span class="s">"org.apache.ignite.examples.*"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serializer"</span> <span class="na">ref=</span><span class="s">"exampleSerializer"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/bean&gt;</span>
+                <span class="nt">&lt;/list&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">igniteCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="nc">BinaryConfiguration</span> <span class="n">binaryConf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BinaryConfiguration</span><span class="o">();</span>
+<span class="n">binaryConf</span><span class="o">.</span><span class="na">setNameMapper</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyBinaryNameMapper</span><span class="o">());</span>
+<span class="n">binaryConf</span><span class="o">.</span><span class="na">setIdMapper</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyBinaryIdMapper</span><span class="o">());</span>
+
+<span class="nc">BinaryTypeConfiguration</span> <span class="n">binaryTypeCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BinaryTypeConfiguration</span><span class="o">();</span>
+<span class="n">binaryTypeCfg</span><span class="o">.</span><span class="na">setTypeName</span><span class="o">(</span><span class="s">"org.apache.ignite.snippets.*"</span><span class="o">);</span>
+<span class="n">binaryTypeCfg</span><span class="o">.</span><span class="na">setSerializer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleSerializer</span><span class="o">());</span>
+
+<span class="n">binaryConf</span><span class="o">.</span><span class="na">setTypeConfigurations</span><span class="o">(</span><span class="nc">Collections</span><span class="o">.</span><span class="na">singleton</span><span class="o">(</span><span class="n">binaryTypeCfg</span><span class="o">));</span>
+
+<span class="n">igniteCfg</span><span class="o">.</span><span class="na">setBinaryConfiguration</span><span class="o">(</span><span class="n">binaryConf</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IgniteConfiguration</span>
+<span class="p">{</span>
+    <span class="n">BinaryConfiguration</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BinaryConfiguration</span>
+    <span class="p">{</span>
+        <span class="n">NameMapper</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ExampleGlobalNameMapper</span><span class="p">(),</span>
+        <span class="n">IdMapper</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ExampleGlobalIdMapper</span><span class="p">(),</span>
+        <span class="n">TypeConfigurations</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span>
+        <span class="p">{</span>
+            <span class="k">new</span> <span class="n">BinaryTypeConfiguration</span>
+            <span class="p">{</span>
+                <span class="n">TypeName</span> <span class="p">=</span> <span class="s">"org.apache.ignite.examples.*"</span><span class="p">,</span>
+                <span class="n">Serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ExampleSerializer</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+    </article>
+    <nav class="right-nav" data-swiftype-index='false'>
+    <ul class="sectlevel1">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#enabling-binary-mode-for-caches">Enabling Binary Mode for Caches</a></li>
+<li><a href="#creating-and-modifying-binary-objects">Creating and Modifying Binary Objects</a></li>
+<li><a href="#binary-type-and-binary-fields">Binary Type and Binary Fields</a></li>
+<li><a href="#recommendations-on-binary-objects-tuning">Recommendations on Binary Objects Tuning</a></li>
+<li><a href="#configuring-binary-objects">Configuring Binary Objects</a></li>
+</ul>
+          
+      
+<footer>
+</footer>
+
+</nav>
+    
+</section>
+<script type='module' src='/assets/js/code-copy-to-clipboard.js' async crossorigin></script>
+
+    <script>
+    // inits deep anchors -- needs to be done here because of https://www.bryanbraun.com/anchorjs/#dont-run-it-too-late 
+    anchors.add('.page-docs h1, .page-docs h2, .page-docs h3:not(.discrete), .page-docs h4, .page-docs h5');
+    anchors.options = {
+        placement: 'right',
+        visible: 'always'
+    };
+    </script>
+    <!-- load google fonts async -->
+    <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:300,400,600,700&display=swap' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+    <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script>
+      docsearch({
+        // Your apiKey and indexName will be given to you once
+        // we create your config
+        apiKey: '25626fae796133dc1e734c6bcaaeac3c',
+        indexName: 'docsearch',
+        //appId: '<APP_ID>', // Should be only included if you are running DocSearch on your own.
+        // Replace inputSelector with a CSS selector
+        // matching your search input
+        inputSelector: '#search-input',
+        // Set debug to true to inspect the dropdown
+        debug: true,
+      });
+    </script>
+<script type='module' src='/assets/js/index.js?1598500266' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1598500266' async crossorigin></script>
+</body>
+
+</html>
