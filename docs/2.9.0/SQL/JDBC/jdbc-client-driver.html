@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+
+      
+      
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-61232409-1');
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <meta name="ignite-version" content="2.9.0" />
+    <title>JDBC Client Driver | Ignite Documentation</title>
+    
+    <link rel="canonical" href="/docs/2.9.0/SQL/JDBC/jdbc-client-driver" />
+    
+	
+	<link rel="stylesheet" href="/assets/css/styles.css?1598536166">
+    <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
+
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1598536166"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"
+  />
+
+</head>
+<body>
+    <header>
+    <div class="container">
+        <button type='button' class='menu' title='Docs menu'>
+        <img src="/assets/images/menu-icon.svg"/>
+        </button>
+        <div class='home'>
+            <a href="/" class='home' title='Apache Ignite home'>
+                <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" >
+            </a>
+        </div>
+        
+        <nav>
+            
+        </nav>
+        
+        <select id="version-selector">
+            <option value="2.9.0">2.9.0</option>
+        </select>
+        
+        <a href="https://github.com/apache/ignite" title='GitHub' class='github' target="_blank">
+            <img src="/assets/images/github-gray.svg" alt="GitHub logo">
+        </a>
+        
+        <form class='search'>
+            <button class="search-close" type='button'><img src='/assets/images/cancel.svg'></button>
+            <input type="search" placeholder="Search…" id="search-input">
+        </form>
+        <button type='button' class='search-toggle'><img src='/assets/images/search.svg'></button>
+        <button type='button' class='top-nav-toggle'>⋮</button>
+
+        
+        
+    </div>
+</header>
+
+
+    	 <link rel="stylesheet" href="/assets/css/docs.css">
+<section class='page-docs'>
+    
+
+
+
+<nav class='left-nav' data-swiftype-index='false'>
+
+      
+        <li>
+            
+
+            <a href="/docs/2.9.0/preface" class='' >Preface</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Quick Start Guides<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/java"
+
+                                class=''
+                            >Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/dotnet"
+
+                                class=''
+                            >.NET/C#</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/cpp"
+
+                                class=''
+                            >C++</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/python"
+
+                                class=''
+                            >Python</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/nodejs"
+
+                                class=''
+                            >Node.JS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/sql"
+
+                                class=''
+                            >SQL</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/php"
+
+                                class=''
+                            >PHP</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/restapi"
+
+                                class=''
+                            >REST API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/installation" class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/installing-using-zip"
+
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/installing-using-docker"
+
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/deb-rpm"
+
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Kubernetes<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/amazon-eks-deployment" class=''>Amazon EKS</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/azure-deployment" class=''>Azure Kubernetes Service</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/gke-deployment" class=''>Google Kubernetes Engine</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Setting Up<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/setup"
+
+                                class=''
+                            >Setting Up Ignite for Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/setup-dotnet"
+
+                                class=''
+                            >Setting Up Ignite for .NET/C#</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/understanding-configuration" class='' >Understanding Configuration</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/logging" class='' >Configuring Logging</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/starting-nodes" class='' >Starting and Stopping Nodes</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Clustering<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/clustering"
+
+                                class=''
+                            >Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/tcp-ip-discovery"
+
+                                class=''
+                            >TCP/IP Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/zookeeper-discovery"
+
+                                class=''
+                            >ZooKeeper Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/discovery-in-the-cloud"
+
+                                class=''
+                            >Discovery in the Cloud</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/network-configuration"
+
+                                class=''
+                            >Network Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/connect-client-nodes"
+
+                                class=''
+                            >Connecting Client Nodes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/running-client-nodes-behind-nat"
+
+                                class=''
+                            >Running Client Nodes Behind NAT</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Data Modeling<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/data-modeling"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/data-partitioning"
+
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/affinity-collocation"
+
+                                class=''
+                            >Affinity Colocation</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Configuring Memory<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-architecture"
+
+                                class=''
+                            >Memory Architecture</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-configuration/data-regions"
+
+                                class=''
+                            >Configuring Data Regions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-configuration/eviction-policies"
+
+                                class=''
+                            >Eviction Policies</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Configuring Caches<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/configuration-overview"
+
+                                class=''
+                            >Cache Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/configuring-backups"
+
+                                class=''
+                            >Configuring Partition Backups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/atomicity-modes"
+
+                                class=''
+                            >Atomicity Modes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/expiry-policies"
+
+                                class=''
+                            >Expiry Policy</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/on-heap-caching"
+
+                                class=''
+                            >On-Heap Caching</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/cache-groups"
+
+                                class=''
+                            >Cache Groups</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Persistence<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/native-persistence"
+
+                                class=''
+                            >Ignite Persistence</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/external-storage"
+
+                                class=''
+                            >External Storage</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/swap"
+
+                                class=''
+                            >Swapping</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/custom-cache-store"
+
+                                class=''
+                            >Implementing Custom Cache Store</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/disk-compression"
+
+                                class=''
+                            >Disk Compression</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/persistence-tuning"
+
+                                class=''
+                            >Tuning Persistence</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/baseline-topology" class='' >Baseline Topology</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/cluster-states" class='' >Cluster States</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/data-rebalancing" class='' >Data Rebalancing</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/partition-loss-policy" class='' >Partition Loss Policy</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/peer-class-loading" class='' >Peer Class Loading</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/data-streaming" class='' >Data Streaming</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Using Key-Value Cache API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/basic-cache-operations"
+
+                                class=''
+                            >Basic Cache Operations</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/binary-objects"
+
+                                class=''
+                            >Working with Binary Objects</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
+
+                                class=''
+                            >Using Scan Queries</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/key-value-api/continuous-queries" class='' >Using Continuous Queries</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/key-value-api/transactions" class='' >Performing Transactions</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle expanded '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group expanded'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-introduction"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/schemas"
+
+                                class=''
+                            >Understanding Schemas</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/indexes"
+
+                                class=''
+                            >Defining Indexes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-api"
+
+                                class=''
+                            >Using SQL API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/distributed-joins"
+
+                                class=''
+                            >Distributed Joins</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/custom-sql-func"
+
+                                class=''
+                            >Custom SQL Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/JDBC/jdbc-driver"
+
+                                class=''
+                            >JDBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/JDBC/jdbc-client-driver"
+
+                                class='active'
+                            >JDBC Client Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/transactions/mvcc"
+
+                                class=''
+                            >Multiversion Concurrency Control</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Distributed Computing<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/distributed-computing"
+
+                                class=''
+                            >Distributed Computing API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/cluster-groups"
+
+                                class=''
+                            >Cluster Groups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/executor-service"
+
+                                class=''
+                            >Executor Service</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/map-reduce"
+
+                                class=''
+                            >MapReduce API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/load-balancing"
+
+                                class=''
+                            >Load Balancing</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/fault-tolerance"
+
+                                class=''
+                            >Fault Tolerance</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/job-scheduling"
+
+                                class=''
+                            >Job Scheduling</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/collocated-computations" class='' >Colocating Computations with Data</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Working with Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/events/listening-to-events"
+
+                                class=''
+                            >Enabling and Listenting to Events</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/events/events"
+
+                                class=''
+                            >Events</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/near-cache" class='' >Near Caches</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/platform-cache" class='' >.NET Platform Cache</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Monitoring<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/intro"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/cluster-id"
+
+                                class=''
+                            >Cluster ID and Tag</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Metrics<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/configuring-metrics" class=''>Configuring Metrics</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/metrics" class=''>JMX Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>New Metrics System<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/new-metrics-system" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/new-metrics" class=''>Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/system-views"
+
+                                class=''
+                            >System Views</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/tracing"
+
+                                class=''
+                            >Tracing</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/security" class='group-toggle collapsed '>Security<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/security/authentication"
+
+                                class=''
+                            >Authentication</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/security/ssl-tls"
+
+                                class=''
+                            >SSL/TLS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Transparent Data Encryption<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/security/tde" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Thin Clients<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/getting-started-with-thin-clients"
+
+                                class=''
+                            >Thin Clients Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/java-thin-client"
+
+                                class=''
+                            >Java Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/dotnet-thin-client"
+
+                                class=''
+                            >.NET Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/cpp-thin-client"
+
+                                class=''
+                            >C++ Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/python-thin-client"
+
+                                class=''
+                            >Python Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/php-thin-client"
+
+                                class=''
+                            >PHP Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/nodejs-thin-client"
+
+                                class=''
+                            >Node.js Thin Client</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>ODBC Driver<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/odbc-driver"
+
+                                class=''
+                            >ODBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/connection-string-dsn"
+
+                                class=''
+                            >Connection String and DSN</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/querying-modifying-data"
+
+                                class=''
+                            >Querying and Modifying Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/specification"
+
+                                class=''
+                            >Specification</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/error-codes"
+
+                                class=''
+                            >Error Codes</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/restapi" class='' >REST API</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/control-script" class='' >Control Script</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/plugins" class='' >Plugins</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/sqlline" class='' >SQLLine</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/sql-reference/sql-reference-overview" class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/ddl"
+
+                                class=''
+                            >Data Definition Language (DDL)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/dml"
+
+                                class=''
+                            >Data Manipulation Language (DML)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/transactions"
+
+                                class=''
+                            >Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/operational-commands"
+
+                                class=''
+                            >Operational Commands</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/aggregate-functions"
+
+                                class=''
+                            >Aggregate functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/numeric-functions"
+
+                                class=''
+                            >Numeric Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/string-functions"
+
+                                class=''
+                            >String Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/date-time-functions"
+
+                                class=''
+                            >Data and Time Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/system-functions"
+
+                                class=''
+                            >System Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+</nav>
+<div class="left-nav__overlay"></div>
+
+
+    <article data-swiftype-index='true'>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/SQL/JDBC/jdbc-client-driver.adoc" target="_blank">Edit</a>
+        
+            <h1>JDBC Client Driver</h1>
+        
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>JDBC Client Driver interacts with the cluster by means of a client node.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jdbc-client-driver">JDBC Client Driver</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The JDBC Client Driver connects to the cluster by using a lclient node connection. You must provide a complete Spring XML configuration as part of the JDBC connection string, and copy all the JAR files mentioned below to the classpath of your application or SQL tool:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All the JARs under <code>{IGNITE_HOME}\libs</code> directory.</p>
+</li>
+<li>
+<p>All the JARs under <code>{IGNITE_HOME}\ignite-indexing</code> and <code>{IGNITE_HOME}\ignite-spring</code> directories.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The driver itself is more robust, and might not support the latest SQL features of Ignite. However, because it uses the client node connection underneath, it can execute and distribute queries, and aggregate their results directly from the application side.</p>
+</div>
+<div class="paragraph">
+<p>The JDBC connection URL has the following pattern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">jdbc:ignite:cfg://[&lt;params&gt;@]&lt;config_url&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;config_url&gt;</code> is required and must represent a valid URL that points to the configuration file for the client node. This node will be started within the Ignite JDBC Client Driver when it (the JDBC driver) tries to establish a connection with the cluster.</p>
+</li>
+<li>
+<p><code>&lt;params&gt;</code> is optional and has the following format:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="text">param1=value1:param2=value2:...:paramN=valueN</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The name of the driver&#8217;s class is <code>org.apache.ignite.IgniteJdbcDriver</code>. For example, here&#8217;s how to open a JDBC connection to the Ignite cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Registering the JDBC driver.</span>
+<span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.apache.ignite.IgniteJdbcDriver"</span><span class="o">);</span>
+
+<span class="c1">// Opening JDBC connection (cache name is not specified, which means that we use default cache).</span>
+<span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:cfg://config/ignite-jdbc.xml"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<h3 id="securing-connection" class="discrete">Securing Connection</h3>
+<div class="paragraph">
+<p>For information on how to secure the JDBC client driver connection, you can refer to the <a href="/docs/2.9.0/security/ssl-tls">Security documentation</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="supported-parameters">Supported Parameters</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cache</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache name. If it is not defined, then the default cache will be used. Note that the cache name is case sensitive.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nodeId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ID of node where query will be executed. Useful for querying through local caches.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>local</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query will be executed only on a local node. Use this parameter with the <code>nodeId</code> parameter in order to limit data set by specified node.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>collocated</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flag that is used for optimization purposes. Whenever Ignite executes a distributed query, it sends sub-queries to individual cluster members. If you know in advance that the elements of your query selection are colocated together on the same node, Ignite can make significant performance and network optimizations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>distributedJoins</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows use of distributed joins for non-colocated data.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>streaming</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turns on bulk data load mode via INSERT statements for this connection. Refer to the <a href="#streaming-mode">Streaming Mode</a> section for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>streamingAllowOverwrite</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tells Ignite to overwrite values for existing keys on duplication instead of skipping them. Refer to the <a href="#streaming-mode">Streaming Mode</a> section for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>streamingFlushFrequency</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timeout, in milliseconds, that data streamer should use to flush data. By default, the data is flushed on connection close. Refer to the <a href="#streaming-mode">Streaming Mode</a> section for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>streamingPerNodeBufferSize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data streamer&#8217;s per node buffer size. Refer to the <a href="#streaming-mode">Streaming Mode</a> section for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1024</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>streamingPerNodeParallelOperations</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data streamer&#8217;s per node parallel operations number. Refer to the <a href="#streaming-mode">Streaming Mode</a> section for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>16</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transactionsAllowed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Presently ACID Transactions are supported, but only at the key-value API level. At the SQL level, Ignite supports atomic, but not transactional consistency.</p>
+<p class="tableblock">This means that the JDBC driver might throw a <code>Transactions are not supported</code> exception if you try to use this functionality.</p>
+<p class="tableblock">However, in cases when you need transactional syntax to work (even without transactional semantics), e.g. some BI tools might force the transactional behavior, set this parameter to <code>true</code> to prevent exceptions from being thrown.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>multipleStatementsAllowed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JDBC driver will be able to process multiple SQL statements at a time, returning multiple <code>ResultSet</code> objects. If the parameter is disabled, the query with multiple statements fails.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lazy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lazy query execution.</p>
+<p class="tableblock">By default, Ignite attempts to fetch the whole query result set to memory and send it to the client. For small and medium result sets, this provides optimal performance and minimizes the duration of internal database locks, thus increasing concurrency.</p>
+<p class="tableblock">However, if the result set is too big to fit in the available memory, it can lead to excessive GC pauses and even <code>OutOfMemoryError</code> errors. Use this flag to tell Ignite to fetch the result set lazily, thus minimizing memory consumption at the cost of a moderate performance hit.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skipReducerOnUpdate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables server side update feature.</p>
+<p class="tableblock">When Ignite executes a DML operation, it first fetches all of the affected intermediate rows for analysis to the query initiator (also known as reducer), and then prepares batches of updated values to be sent to remote nodes.</p>
+<p class="tableblock">This approach might impact performance and saturate the network if a DML operation has to move many entries over it.</p>
+<p class="tableblock">Use this flag as a hint for Ignite to perform all intermediate rows analysis and updates "in-place" on the corresponding remote data nodes.</p>
+<p class="tableblock">Defaults to <code>false</code>, meaning that intermediate results will be fetched to the query initiator first.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<h3 id="cross-cache-queries" class="discrete">Cross-Cache Queries</h3>
+<div class="paragraph">
+<p>The cache to which the driver is connected is treated as the default schema. To query across multiple caches, you can use Cross-Cache queries.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="streaming-mode">Streaming Mode</h3>
+<div class="paragraph">
+<p>It&#8217;s feasible to add data into a cluster in streaming mode (bulk mode) using the JDBC driver. In this mode, the driver instantiates <code>IgniteDataStreamer</code> internally and feeds data to it. To activate this mode, add the <code>streaming</code> parameter set to <code>true</code> to a JDBC connection string:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Register JDBC driver.</span>
+<span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.apache.ignite.IgniteJdbcDriver"</span><span class="o">);</span>
+
+<span class="c1">// Opening connection in the streaming mode.</span>
+<span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:cfg://streaming=true@file:///etc/config/ignite-jdbc.xml"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Presently, streaming mode is supported only for INSERT operations. This is useful in cases when you want to achieve fast data preloading into a cache. The JDBC driver defines multiple connection parameters that affect the behavior of the streaming mode. These parameters are listed in the parameters table above.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<h3 id="cache-name" class="discrete">Cache Name</h3>
+<div class="paragraph">
+<p>Make sure you specify a target cache for streaming as an argument to the <code>cache=</code> parameter in the JDBC connection string. If a cache is not specified or does not match the table used in streaming DML statements, updates will be ignored.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The parameters cover almost all of the settings of a general <code>IgniteDataStreamer</code> and allow you to tune the streamer according to your needs. Please refer to the <a href="/docs/2.9.0/data-streaming">Data Streaming</a> section for more information on how to configure the streamer.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<h3 id="time-based-flushing" class="discrete">Time Based Flushing</h3>
+<div class="paragraph">
+<p>By default, the data is flushed when either a connection is closed or <code>streamingPerNodeBufferSize</code> is met. If you need to flush the data more frequently, adjust the <code>streamingFlushFrequency</code> parameter.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Register JDBC driver.</span>
+   <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.apache.ignite.IgniteJdbcDriver"</span><span class="o">);</span>
+
+   <span class="c1">// Opening a connection in the streaming mode and time based flushing set.</span>
+   <span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:cfg://streaming=true:streamingFlushFrequency=1000@file:///etc/config/ignite-jdbc.xml"</span><span class="o">);</span>
+
+   <span class="nc">PreparedStatement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>
+     <span class="s">"INSERT INTO Person(_key, name, age) VALUES(CAST(? as BIGINT), ?, ?)"</span><span class="o">);</span>
+
+   <span class="c1">// Adding the data.</span>
+   <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="c1">// Inserting a Person object with a Long key.</span>
+         <span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+         <span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"John Smith"</span><span class="o">);</span>
+         <span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">25</span><span class="o">);</span>
+
+         <span class="n">stmt</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+   <span class="o">}</span>
+
+   <span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+   <span class="c1">// Beyond this point, all data is guaranteed to be flushed into the cache.</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To start processing the data located in the cluster, you need to create a JDBC <code>Connection</code> object using one of the methods below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Register JDBC driver.</span>
+<span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.apache.ignite.IgniteJdbcDriver"</span><span class="o">);</span>
+
+<span class="c1">// Open JDBC connection (cache name is not specified, which means that we use default cache).</span>
+<span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:cfg://file:///etc/config/ignite-jdbc.xml"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Right after that you can execute your SQL <code>SELECT</code> queries:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Query names of all people.</span>
+<span class="nc">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">().</span><span class="na">executeQuery</span><span class="o">(</span><span class="s">"select name from Person"</span><span class="o">);</span>
+
+<span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Query people with specific age using prepared statement.</span>
+<span class="nc">PreparedStatement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="s">"select name, age from Person where age = ?"</span><span class="o">);</span>
+
+<span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">30</span><span class="o">);</span>
+
+<span class="nc">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+
+<span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"name"</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"age"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can use DML statements to modify the data.</p>
+</div>
+<div class="sect2">
+<h3 id="insert">INSERT</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Insert a Person with a Long key.</span>
+<span class="nc">PreparedStatement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="s">"INSERT INTO Person(_key, name, age) VALUES(CAST(? as BIGINT), ?, ?)"</span><span class="o">);</span>
+
+<span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"John Smith"</span><span class="o">);</span>
+<span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">25</span><span class="o">);</span>
+
+<span class="n">stmt</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="merge">MERGE</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Merge a Person with a Long key.</span>
+<span class="nc">PreparedStatement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="s">"MERGE INTO Person(_key, name, age) VALUES(CAST(? as BIGINT), ?, ?)"</span><span class="o">);</span>
+
+<span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"John Smith"</span><span class="o">);</span>
+<span class="n">stmt</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">25</span><span class="o">);</span>
+
+<span class="n">stmt</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">();</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update">UPDATE</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Update a Person.</span>
+<span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">().</span>
+  <span class="n">executeUpdate</span><span class="o">(</span><span class="s">"UPDATE Person SET age = age + 1 WHERE age = 25"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="delete">DELETE</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="s">"DELETE FROM Person WHERE age = 25"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+    </article>
+    <nav class="right-nav" data-swiftype-index='false'>
+    <ul class="sectlevel1">
+<li><a href="#jdbc-client-driver">JDBC Client Driver</a>
+<ul class="sectlevel2">
+<li><a href="#supported-parameters">Supported Parameters</a></li>
+<li><a href="#streaming-mode">Streaming Mode</a></li>
+</ul>
+</li>
+<li><a href="#example">Example</a>
+<ul class="sectlevel2">
+<li><a href="#insert">INSERT</a></li>
+<li><a href="#merge">MERGE</a></li>
+<li><a href="#update">UPDATE</a></li>
+<li><a href="#delete">DELETE</a></li>
+</ul>
+</li>
+</ul>
+          
+      
+<footer>
+</footer>
+
+</nav>
+    
+</section>
+<script type='module' src='/assets/js/code-copy-to-clipboard.js' async crossorigin></script>
+
+    <script>
+    // inits deep anchors -- needs to be done here because of https://www.bryanbraun.com/anchorjs/#dont-run-it-too-late 
+    anchors.add('.page-docs h1, .page-docs h2, .page-docs h3:not(.discrete), .page-docs h4, .page-docs h5');
+    anchors.options = {
+        placement: 'right',
+        visible: 'always'
+    };
+    </script>
+    <!-- load google fonts async -->
+    <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:300,400,600,700&display=swap' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+    <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script>
+      docsearch({
+        // Your apiKey and indexName will be given to you once
+        // we create your config
+        apiKey: '25626fae796133dc1e734c6bcaaeac3c',
+        indexName: 'docsearch',
+        //appId: '<APP_ID>', // Should be only included if you are running DocSearch on your own.
+        // Replace inputSelector with a CSS selector
+        // matching your search input
+        inputSelector: '#search-input',
+        // Set debug to true to inspect the dropdown
+        debug: true,
+      });
+    </script>
+<script type='module' src='/assets/js/index.js?1598536166' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1598536166' async crossorigin></script>
+</body>
+
+</html>

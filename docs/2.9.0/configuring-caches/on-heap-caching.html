@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+
+      
+      
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-61232409-1');
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <meta name="ignite-version" content="2.9.0" />
+    <title>On-Heap Caching | Ignite Documentation</title>
+    
+    <link rel="canonical" href="/docs/2.9.0/configuring-caches/on-heap-caching" />
+    
+	
+	<link rel="stylesheet" href="/assets/css/styles.css?1598536167">
+    <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
+
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1598536167"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"
+  />
+
+</head>
+<body>
+    <header>
+    <div class="container">
+        <button type='button' class='menu' title='Docs menu'>
+        <img src="/assets/images/menu-icon.svg"/>
+        </button>
+        <div class='home'>
+            <a href="/" class='home' title='Apache Ignite home'>
+                <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" >
+            </a>
+        </div>
+        
+        <nav>
+            
+        </nav>
+        
+        <select id="version-selector">
+            <option value="2.9.0">2.9.0</option>
+        </select>
+        
+        <a href="https://github.com/apache/ignite" title='GitHub' class='github' target="_blank">
+            <img src="/assets/images/github-gray.svg" alt="GitHub logo">
+        </a>
+        
+        <form class='search'>
+            <button class="search-close" type='button'><img src='/assets/images/cancel.svg'></button>
+            <input type="search" placeholder="Search…" id="search-input">
+        </form>
+        <button type='button' class='search-toggle'><img src='/assets/images/search.svg'></button>
+        <button type='button' class='top-nav-toggle'>⋮</button>
+
+        
+        
+    </div>
+</header>
+
+
+    	 <link rel="stylesheet" href="/assets/css/docs.css">
+<section class='page-docs'>
+    
+
+
+
+<nav class='left-nav' data-swiftype-index='false'>
+
+      
+        <li>
+            
+
+            <a href="/docs/2.9.0/preface" class='' >Preface</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Quick Start Guides<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/java"
+
+                                class=''
+                            >Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/dotnet"
+
+                                class=''
+                            >.NET/C#</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/cpp"
+
+                                class=''
+                            >C++</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/python"
+
+                                class=''
+                            >Python</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/nodejs"
+
+                                class=''
+                            >Node.JS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/sql"
+
+                                class=''
+                            >SQL</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/php"
+
+                                class=''
+                            >PHP</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/quick-start/restapi"
+
+                                class=''
+                            >REST API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/installation" class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/installing-using-zip"
+
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/installing-using-docker"
+
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/installation/deb-rpm"
+
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Kubernetes<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/amazon-eks-deployment" class=''>Amazon EKS</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/azure-deployment" class=''>Azure Kubernetes Service</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/installation/kubernetes/gke-deployment" class=''>Google Kubernetes Engine</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Setting Up<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/setup"
+
+                                class=''
+                            >Setting Up Ignite for Java</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/setup-dotnet"
+
+                                class=''
+                            >Setting Up Ignite for .NET/C#</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/understanding-configuration" class='' >Understanding Configuration</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/logging" class='' >Configuring Logging</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/starting-nodes" class='' >Starting and Stopping Nodes</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Clustering<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/clustering"
+
+                                class=''
+                            >Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/tcp-ip-discovery"
+
+                                class=''
+                            >TCP/IP Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/zookeeper-discovery"
+
+                                class=''
+                            >ZooKeeper Discovery</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/discovery-in-the-cloud"
+
+                                class=''
+                            >Discovery in the Cloud</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/network-configuration"
+
+                                class=''
+                            >Network Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/connect-client-nodes"
+
+                                class=''
+                            >Connecting Client Nodes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/clustering/running-client-nodes-behind-nat"
+
+                                class=''
+                            >Running Client Nodes Behind NAT</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Data Modeling<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/data-modeling"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/data-partitioning"
+
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/data-modeling/affinity-collocation"
+
+                                class=''
+                            >Affinity Colocation</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Configuring Memory<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-architecture"
+
+                                class=''
+                            >Memory Architecture</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-configuration/data-regions"
+
+                                class=''
+                            >Configuring Data Regions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/memory-configuration/eviction-policies"
+
+                                class=''
+                            >Eviction Policies</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle expanded '>Configuring Caches<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group expanded'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/configuration-overview"
+
+                                class=''
+                            >Cache Configuration</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/configuring-backups"
+
+                                class=''
+                            >Configuring Partition Backups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/atomicity-modes"
+
+                                class=''
+                            >Atomicity Modes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/expiry-policies"
+
+                                class=''
+                            >Expiry Policy</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/on-heap-caching"
+
+                                class='active'
+                            >On-Heap Caching</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/configuring-caches/cache-groups"
+
+                                class=''
+                            >Cache Groups</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Persistence<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/native-persistence"
+
+                                class=''
+                            >Ignite Persistence</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/external-storage"
+
+                                class=''
+                            >External Storage</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/swap"
+
+                                class=''
+                            >Swapping</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/custom-cache-store"
+
+                                class=''
+                            >Implementing Custom Cache Store</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/disk-compression"
+
+                                class=''
+                            >Disk Compression</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/persistence/persistence-tuning"
+
+                                class=''
+                            >Tuning Persistence</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/baseline-topology" class='' >Baseline Topology</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/cluster-states" class='' >Cluster States</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/data-rebalancing" class='' >Data Rebalancing</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/partition-loss-policy" class='' >Partition Loss Policy</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/peer-class-loading" class='' >Peer Class Loading</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/data-streaming" class='' >Data Streaming</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Using Key-Value Cache API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/basic-cache-operations"
+
+                                class=''
+                            >Basic Cache Operations</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/binary-objects"
+
+                                class=''
+                            >Working with Binary Objects</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
+
+                                class=''
+                            >Using Scan Queries</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/key-value-api/continuous-queries" class='' >Using Continuous Queries</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/key-value-api/transactions" class='' >Performing Transactions</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-introduction"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/schemas"
+
+                                class=''
+                            >Understanding Schemas</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/indexes"
+
+                                class=''
+                            >Defining Indexes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-api"
+
+                                class=''
+                            >Using SQL API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/distributed-joins"
+
+                                class=''
+                            >Distributed Joins</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/custom-sql-func"
+
+                                class=''
+                            >Custom SQL Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/JDBC/jdbc-driver"
+
+                                class=''
+                            >JDBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/JDBC/jdbc-client-driver"
+
+                                class=''
+                            >JDBC Client Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/transactions/mvcc"
+
+                                class=''
+                            >Multiversion Concurrency Control</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Distributed Computing<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/distributed-computing"
+
+                                class=''
+                            >Distributed Computing API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/cluster-groups"
+
+                                class=''
+                            >Cluster Groups</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/executor-service"
+
+                                class=''
+                            >Executor Service</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/map-reduce"
+
+                                class=''
+                            >MapReduce API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/load-balancing"
+
+                                class=''
+                            >Load Balancing</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/fault-tolerance"
+
+                                class=''
+                            >Fault Tolerance</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/distributed-computing/job-scheduling"
+
+                                class=''
+                            >Job Scheduling</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/collocated-computations" class='' >Colocating Computations with Data</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Working with Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/events/listening-to-events"
+
+                                class=''
+                            >Enabling and Listenting to Events</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/events/events"
+
+                                class=''
+                            >Events</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/near-cache" class='' >Near Caches</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/platform-cache" class='' >.NET Platform Cache</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Monitoring<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/intro"
+
+                                class=''
+                            >Introduction</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/cluster-id"
+
+                                class=''
+                            >Cluster ID and Tag</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Metrics<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/configuring-metrics" class=''>Configuring Metrics</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/metrics" class=''>JMX Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>New Metrics System<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/new-metrics-system" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/monitoring-metrics/new-metrics" class=''>Metrics</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/system-views"
+
+                                class=''
+                            >System Views</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/monitoring-metrics/tracing"
+
+                                class=''
+                            >Tracing</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/security" class='group-toggle collapsed '>Security<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/security/authentication"
+
+                                class=''
+                            >Authentication</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/security/ssl-tls"
+
+                                class=''
+                            >SSL/TLS</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Transparent Data Encryption<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/security/tde" class=''>Introduction</a></li>
+                            
+                                  
+
+								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>Thin Clients<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/getting-started-with-thin-clients"
+
+                                class=''
+                            >Thin Clients Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/java-thin-client"
+
+                                class=''
+                            >Java Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/dotnet-thin-client"
+
+                                class=''
+                            >.NET Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/cpp-thin-client"
+
+                                class=''
+                            >C++ Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/python-thin-client"
+
+                                class=''
+                            >Python Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/php-thin-client"
+
+                                class=''
+                            >PHP Thin Client</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/thin-clients/nodejs-thin-client"
+
+                                class=''
+                            >Node.js Thin Client</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="" class='group-toggle collapsed '>ODBC Driver<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/odbc-driver"
+
+                                class=''
+                            >ODBC Driver</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/connection-string-dsn"
+
+                                class=''
+                            >Connection String and DSN</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/querying-modifying-data"
+
+                                class=''
+                            >Querying and Modifying Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/specification"
+
+                                class=''
+                            >Specification</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/SQL/ODBC/error-codes"
+
+                                class=''
+                            >Error Codes</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/restapi" class='' >REST API</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/control-script" class='' >Control Script</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/plugins" class='' >Plugins</a>
+            
+        </li>
+    
+        <li>
+            
+
+            <a href="/docs/2.9.0/sqlline" class='' >SQLLine</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' data-guide-url="/sql-reference/sql-reference-overview" class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/ddl"
+
+                                class=''
+                            >Data Definition Language (DDL)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/dml"
+
+                                class=''
+                            >Data Manipulation Language (DML)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/transactions"
+
+                                class=''
+                            >Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/operational-commands"
+
+                                class=''
+                            >Operational Commands</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/aggregate-functions"
+
+                                class=''
+                            >Aggregate functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/numeric-functions"
+
+                                class=''
+                            >Numeric Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/string-functions"
+
+                                class=''
+                            >String Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/date-time-functions"
+
+                                class=''
+                            >Data and Time Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/system-functions"
+
+                                class=''
+                            >System Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.9.0/sql-reference/data-types"
+
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+</nav>
+<div class="left-nav__overlay"></div>
+
+
+    <article data-swiftype-index='true'>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/configuring-caches/on-heap-caching.adoc" target="_blank">Edit</a>
+        
+            <h1>On-Heap Caching</h1>
+        
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite uses off-heap memory to allocate memory regions outside of Java heap. However, you can enable on-heap caching  by setting <code>CacheConfiguration.setOnheapCacheEnabled(true)</code>.</p>
+</div>
+<div class="paragraph">
+<p>On-heap caching is useful in scenarios when you do a lot of cache reads on server nodes that work with cache entries in <a href="/docs/2.9.0/data-modeling/data-modeling#binary-object-format">binary form</a> or invoke cache entries' deserialization. For instance, this might happen when a distributed computation or deployed service gets some data from caches for further processing.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"cacheConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.CacheConfiguration"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"myCache"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"onheapCacheEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CacheConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="o">();</span>
+<span class="n">cfg</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"myCache"</span><span class="o">);</span>
+<span class="n">cfg</span><span class="o">.</span><span class="na">setOnheapCacheEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">CacheConfiguration</span>
+<span class="p">{</span>
+    <span class="n">Name</span> <span class="p">=</span> <span class="s">"myCache"</span><span class="p">,</span>
+    <span class="n">OnheapCacheEnabled</span> <span class="p">=</span> <span class="k">true</span>
+<span class="p">};</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-eviction-policy">Configuring Eviction Policy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When on-heap caching is enabled, you can use one of the on-heap eviction policies to manage the growing on-heap cache.</p>
+</div>
+<div class="paragraph">
+<p>Eviction policies control the maximum number of elements that can be stored in a cache&#8217;s on-heap memory. Whenever the maximum on-heap cache size is reached, entries are evicted from Java heap.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The on-heap eviction policies remove the cache entries from Java heap only. The entries stored in the off-heap region of the memory are not affected.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Some eviction policies support batch eviction and eviction by memory size limit. If batch eviction is enabled, then eviction starts when cache size becomes <code>batchSize</code> elements greater than the maximum cache size. In this case, <code>batchSize</code> entries are evicted. If eviction by memory size limit is enabled, then eviction starts when the size of cache entries in bytes becomes greater than the maximum memory size.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Batch eviction is supported only if maximum memory limit isn&#8217;t set.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Eviction policies are pluggable and are controlled via the <code>EvictionPolicy</code> interface. The implementation of eviction policy is notified of every cache change and defines the algorithm of choosing the entries to evict from the on-heap cache.</p>
+</div>
+<div class="sect2">
+<h3 id="least-recently-used-lru">Least Recently Used (LRU)</h3>
+<div class="paragraph">
+<p>LRU eviction policy, based on the <a href="http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used">Least Recently Used (LRU)</a> algorithm, ensures that the least recently used entry (i.e. the entry that has not been touched for the longest time) is evicted first.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+LRU eviction policy nicely fits most of the use cases for on-heap caching. Use it whenever in doubt.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This eviction policy can be enabled in the cache configuration as shown in the example below. It supports batch eviction and eviction by memory size limit.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.CacheConfiguration"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"myCache"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- Enabling on-heap caching for this distributed cache. --&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"onheapCacheEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"evictionPolicy"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- LRU eviction policy. --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.eviction.lru.LruEvictionPolicy"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Set the maximum cache size to 1 million (default is 100,000). --&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxSize"</span> <span class="na">value=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CacheConfiguration</span> <span class="n">cacheCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="o">();</span>
+
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"cacheName"</span><span class="o">);</span>
+
+<span class="c1">// Enabling on-heap caching for this distributed cache.</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setOnheapCacheEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+<span class="c1">// Set the maximum cache size to 1 million (default is 100,000).</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setEvictionPolicyFactory</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">LruEvictionPolicy</span><span class="o">(</span><span class="mi">1000000</span><span class="o">));</span>
+
+<span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setCacheConfiguration</span><span class="o">(</span><span class="n">cacheCfg</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IgniteConfiguration</span>
+<span class="p">{</span>
+    <span class="n">CacheConfiguration</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span>
+    <span class="p">{</span>
+        <span class="k">new</span> <span class="n">CacheConfiguration</span>
+        <span class="p">{</span>
+            <span class="n">Name</span> <span class="p">=</span> <span class="s">"cacheName"</span><span class="p">,</span>
+            <span class="n">OnheapCacheEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">EvictionPolicy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LruEvictionPolicy</span>
+            <span class="p">{</span>
+                <span class="n">MaxSize</span> <span class="p">=</span> <span class="m">100000</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="first-in-first-out-fifo">First In First Out (FIFO)</h3>
+<div class="paragraph">
+<p>FIFO eviction policy, based on the <a href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)">First-In-First-Out (FIFO)</a> algorithm, ensures that the entry that has been in the on-heap cache for the longest time is evicted first.
+It is different from <code>LruEvictionPolicy</code> because it ignores the order in which the entries are accessed.</p>
+</div>
+<div class="paragraph">
+<p>This eviction policy can be enabled in the cache configuration as shown in the example below.
+It supports batch eviction and eviction by memory size limit.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.CacheConfiguration"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"myCache"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- Enabling on-heap caching for this distributed cache. --&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"onheapCacheEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"evictionPolicy"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- FIFO eviction policy. --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.eviction.fifo.FifoEvictionPolicy"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Set the maximum cache size to 1 million (default is 100,000). --&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxSize"</span> <span class="na">value=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CacheConfiguration</span> <span class="n">cacheCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="o">();</span>
+
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"cacheName"</span><span class="o">);</span>
+
+<span class="c1">// Enabling on-heap caching for this distributed cache.</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setOnheapCacheEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+<span class="c1">// Set the maximum cache size to 1 million (default is 100,000).</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setEvictionPolicyFactory</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">FifoEvictionPolicy</span><span class="o">(</span><span class="mi">1000000</span><span class="o">));</span>
+
+<span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setCacheConfiguration</span><span class="o">(</span><span class="n">cacheCfg</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IgniteConfiguration</span>
+<span class="p">{</span>
+    <span class="n">CacheConfiguration</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span>
+    <span class="p">{</span>
+        <span class="k">new</span> <span class="n">CacheConfiguration</span>
+        <span class="p">{</span>
+            <span class="n">Name</span> <span class="p">=</span> <span class="s">"cacheName"</span><span class="p">,</span>
+            <span class="n">OnheapCacheEnabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">EvictionPolicy</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FifoEvictionPolicy</span>
+            <span class="p">{</span>
+                <span class="n">MaxSize</span> <span class="p">=</span> <span class="m">100000</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="sorted">Sorted</h3>
+<div class="paragraph">
+<p>Sorted eviction policy is similar to FIFO eviction policy with the difference that entries' order is defined by default or by a user defined comparator and ensures that the minimal entry (i.e. the entry that has an integer key with the smallest value) gets evicted first.</p>
+</div>
+<div class="paragraph">
+<p>The default comparator uses cache entries' keys for comparison that imposes a requirement for keys to implement the <code>Comparable</code> interface. You can provide your own comparator implementation which can use keys, values, or both for entries comparison.</p>
+</div>
+<div class="paragraph">
+<p>Enable sorted eviction policy in the cache configuration as shown below. It supports batch eviction and eviction by memory size limit.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.CacheConfiguration"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"myCache"</span><span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- Enabling on-heap caching for this distributed cache. --&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"onheapCacheEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"evictionPolicy"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Sorted eviction policy. --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.eviction.sorted.SortedEvictionPolicy"</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!--
+      Set the maximum cache size to 1 million (default is 100,000)
+      and use default comparator.
+      --&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxSize"</span> <span class="na">value=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CacheConfiguration</span> <span class="n">cacheCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="o">();</span>
+
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"cacheName"</span><span class="o">);</span>
+
+<span class="c1">// Enabling on-heap caching for this distributed cache.</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setOnheapCacheEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+<span class="c1">// Set the maximum cache size to 1 million (default is 100,000).</span>
+<span class="n">cacheCfg</span><span class="o">.</span><span class="na">setEvictionPolicyFactory</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">SortedEvictionPolicy</span><span class="o">(</span><span class="mi">1000000</span><span class="o">));</span>
+
+<span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setCacheConfiguration</span><span class="o">(</span><span class="n">cacheCfg</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+</div>
+    </article>
+    <nav class="right-nav" data-swiftype-index='false'>
+    <ul class="sectlevel1">
+<li><a href="#configuring-eviction-policy">Configuring Eviction Policy</a>
+<ul class="sectlevel2">
+<li><a href="#least-recently-used-lru">Least Recently Used (LRU)</a></li>
+<li><a href="#first-in-first-out-fifo">First In First Out (FIFO)</a></li>
+<li><a href="#sorted">Sorted</a></li>
+</ul>
+</li>
+</ul>
+          
+      
+<footer>
+</footer>
+
+</nav>
+    
+</section>
+<script type='module' src='/assets/js/code-copy-to-clipboard.js' async crossorigin></script>
+
+    <script>
+    // inits deep anchors -- needs to be done here because of https://www.bryanbraun.com/anchorjs/#dont-run-it-too-late 
+    anchors.add('.page-docs h1, .page-docs h2, .page-docs h3:not(.discrete), .page-docs h4, .page-docs h5');
+    anchors.options = {
+        placement: 'right',
+        visible: 'always'
+    };
+    </script>
+    <!-- load google fonts async -->
+    <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans:300,400,600,700&display=swap' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+    <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+    <script>
+      docsearch({
+        // Your apiKey and indexName will be given to you once
+        // we create your config
+        apiKey: '25626fae796133dc1e734c6bcaaeac3c',
+        indexName: 'docsearch',
+        //appId: '<APP_ID>', // Should be only included if you are running DocSearch on your own.
+        // Replace inputSelector with a CSS selector
+        // matching your search input
+        inputSelector: '#search-input',
+        // Set debug to true to inspect the dropdown
+        debug: true,
+      });
+    </script>
+<script type='module' src='/assets/js/index.js?1598536167' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1598536167' async crossorigin></script>
+</body>
+
+</html>
