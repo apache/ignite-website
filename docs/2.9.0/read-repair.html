@@ -18,17 +18,17 @@
 
     <meta charset="UTF-8">
     <meta name="ignite-version" content="2.9.0" />
-    <title>Cluster States | Ignite Documentation</title>
+    <title>Read Repair | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/2.9.0/cluster-states" />
+    <link rel="canonical" href="/docs/2.9.0/read-repair" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1598947897">
+	<link rel="stylesheet" href="/assets/css/styles.css?1598947898">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1598947897"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1598947898"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -778,7 +778,7 @@
         <li>
             
 
-            <a href="/docs/2.9.0/cluster-states" class='active' >Cluster States</a>
+            <a href="/docs/2.9.0/cluster-states" class='' >Cluster States</a>
             
         </li>
     
@@ -817,8 +817,8 @@
 
             
 
-			<button type='button' data-guide-url="" class='group-toggle collapsed '>Using Key-Value Cache API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' data-guide-url="" class='group-toggle expanded '>Using Key-Value Cache API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -868,7 +868,7 @@
                         
                             <a href="/docs/2.9.0/read-repair"
 
-                                class=''
+                                class='active'
                             >Read Repair</a>
                         
                     </li>
@@ -1785,29 +1785,12 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/cluster-states.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/read-repair.adoc" target="_blank">Edit</a>
         
-            <h1>Cluster States</h1>
+            <h1>Read Repair</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>An Ignite cluster can be in one of the three states: <code>ACTIVE</code>, <code>ACTIVE_READ_ONLY</code>, and <code>INACTIVE</code>.</p>
-</div>
-<div class="paragraph">
-<p>When you start a pure in-memory cluster (no persistent data regions) for the first time, the cluster is in the <code>ACTIVE</code> state.
-When you start a cluster with persistent data regions for the first time, the cluster is <code>INACTIVE</code>.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>INACTIVE</code>: All operations are prohibited.</p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>When you change the cluster state from active to <code>INACTIVE</code> (deactivation), the cluster deallocates all memory resources.</p>
-</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1815,113 +1798,81 @@ When you start a cluster with persistent data regions for the first time, the cl
 <div class="title">Warning</div>
 </td>
 <td class="content">
-<div class="paragraph">
-<p>Deactivation deallocates all memory resources, including your application data, on all cluster nodes and disables public cluster API.
-If you have in-memory caches that are not backed up by a persistent storage (neither <a href="/docs/2.9.0/persistence/native-persistence">native persistent storage</a> nor <a href="/docs/2.9.0/persistence/external-storage">external storage</a>), you will lose the data and will have to repopulate these caches.</p>
-</div>
+Experimental API.
 </td>
 </tr>
 </table>
 </div>
-</div>
-</div>
-</li>
-<li>
-<p><code>ACTIVE</code>: This is the normal mode of the cluster. You can execute any operation.</p>
-</li>
-<li>
-<p><code>ACTIVE_READ_ONLY</code>: The read-only mode. Only read operations are allowed.</p>
-<div class="openblock">
-<div class="content">
 <div class="paragraph">
-<p>Any attempt to create a cache or modify the data in an existing cache results in an <code>IgniteClusterReadOnlyException</code> exception.
-DDL or DML statements that modify the data are prohibited as well.</p>
+<p>"Read Repair" refers to a technique of repairing inconsistencies between primary and backup copies of data during normal read operations. When a specific key (or keys) is read by a user operation, Ignite checks the values for the given key in all backup copies.</p>
+</div>
+<div class="paragraph">
+<p>The Read Repair mode is designed to maintain consistency. However, read operations become ~2 times more costly because backup copies are checked. It is generally not advisable to use this mode all the time, but rather on a once-in-a-while basis.</p>
+</div>
+<div class="paragraph">
+<p>To enable Read Repair mode, obtain an instance of the cache that enables Read Repair reads as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteCache</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">cache</span><span class="o">(</span><span class="s">"my_cache"</span><span class="o">).</span><span class="na">withReadRepair</span><span class="o">();</span>
+
+<span class="nc">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>A consistency check is incompatible with the following cache configurations:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Caches without backups.</p>
+</li>
+<li>
+<p>Local caches.</p>
+</li>
+<li>
+<p>Near caches.</p>
+</li>
+<li>
+<p>Caches that use "read-through" mode.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="changing-cluster-state">Changing Cluster State</h2>
+<h2 id="transactional-caches">Transactional Caches</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can change the cluster state in multiple ways:</p>
+<p>Values across the topology will be replaced by the latest versioned value.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="/docs/2.9.0/control-script#getting-cluster-state">Control script</a>:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--set-state</span> ACTIVE_READ_ONLY</code></pre>
-</div>
-</div>
+<p>Automatically for transactions that have <code>TransactionConcurrency.OPTIMISTIC</code> concurrency mode or <code>TransactionIsolation.READ_COMMITTED</code> isolation level</p>
 </li>
 <li>
-<p><a href="/docs/2.9.0/restapi#change-cluster-state">REST command</a>:</p>
-<div class="openblock">
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="url">http://localhost:8080/ignite?cmd=setstate&amp;state=ACTIVE_READ_ONLY</code></pre>
-</div>
-</div>
-</div>
-</div>
-</li>
-<li>
-<p>Programmatically:</p>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">cluster</span><span class="o">().</span><span class="na">state</span><span class="o">(</span><span class="nc">ClusterState</span><span class="o">.</span><span class="na">ACTIVE_READ_ONLY</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C#/.NET'></code-tab><code-tab data-tab='C++'></code-tab></code-tabs>
-</li>
-<li>
-<p>JMX Bean:</p>
-<div class="openblock">
-<div class="content">
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Mbean&#8217;s Object Name: </dt>
-</dl>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>group="Kernal",name=IgniteKernal</pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 80%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Operation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clusterState()</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Get the current cluster state.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clusterState(String)</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set the cluster state.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p>at the commit() phase for transactions that have <code>TransactionConcurrency.PESSIMISTIC</code> concurrency mode and isolation level other than <code>TransactionIsolation.READ_COMMITTED</code></p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>When a backup inconsistency is detected, Ignite will generate a <a href="https://ignite.apache.org/releases/2.9.0/javadoc/org/apache/ignite/events/EventType.html#EVT_CONSISTENCY_VIOLATION">consistency violation event</a> (if the event is enabled in the configuration). You can listen to this event to get notified about inconsistency issues. Refer to the <a href="/docs/2.9.0/events/listening-to-events">Working with Events</a> section for the information on how to listen to events.</p>
+</div>
+<div class="paragraph">
+<p>Read Repair does not guarantee "all copies check" in case value already cached inside the transaction.
+For example, in case you use !TransactionIsolation.READ_COMMITTED isolation mode and already read the value or performed a write, you&#8217;ll gain the cached value.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="atomic-caches">Atomic Caches</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The consistency violation exception is thrown if differences are found.</p>
+</div>
+<div class="paragraph">
+<p>Due to the nature of the atomic cache, false-positive results can be observed. For example, an attempt to check consistency under cache loading may lead to consistency violation exception. By default, the implementation tries to check the given key three times. The number of attempts can be changed by setting <code>IGNITE_NEAR_GET_MAX_REMAPS</code> system property.</p>
 </div>
 </div>
 </div>
@@ -1934,8 +1885,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#changing-cluster-state">Changing Cluster State</a></li>
+<li><a href="#transactional-caches">Transactional Caches</a></li>
+<li><a href="#atomic-caches">Atomic Caches</a></li>
 </ul>
           
       
@@ -1984,8 +1935,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1598947897' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1598947897' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1598947898' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1598947898' async crossorigin></script>
 </body>
 
 </html>
