@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/restapi" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600377060">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600382367">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600377060"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600382367"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -2656,10 +2656,15 @@ Failure to provide either a <code>sessionToken</code> or <code>user</code> &amp;
 <h2 id="data-types">Data Types</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The REST API also supports Java built-in types for put/get operations via <code>keyType</code> and <code>valueType</code> optional parameters.
-Note that unless one of the below mentioned types are explicitly specified, the REST protocol exchanges the key-value data in <code>String</code> format.
-This means that the data is stored and retrieved to/from the cluster as a <code>String</code>.</p>
+<p>By default, the REST API exchanges query parameters in the <code>String</code> format. The cluster works with the parameters as
+with <code>String</code> objects.</p>
 </div>
+<div class="paragraph">
+<p>If a type of a parameter is different from <code>String</code>, you can use the <code>keyType</code> or <code>valueType</code> to specify the real type
+of the argument. The REST API supports both <a href="#java-types">Java Types</a> and <a href="#custom-types">Custom Types</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="java-types">Java Types</h3>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2742,6 +2747,111 @@ This means that the data is stored and retrieved to/from the cluster as a <code>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="text">http://[host]:[port]/ignite?cmd=get&amp;key=1&amp;cacheName=myCache&amp;keyType=int&amp;valueType=date</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom-types">Custom Types</h3>
+<div class="paragraph">
+<p>The JSON format is used to exchange complex custom objects via the Ignite REST protocol.</p>
+</div>
+<div class="paragraph">
+<p>For example, let&#8217;s assume you have a <code>Person</code> class, and below is the JSON representation of an object instance that
+you need to send to the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="javascript"> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>
+ <span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, you use this REST request to put the object in the cluster by setting the <code>valueType</code> parameter to <code>Person</code> and
+the <code>val</code> parameter to the value of the JSON object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="text">http://[host]:[port]/ignite?cacheName=testCache&amp;cmd=put&amp;keyType=int&amp;key=1&amp;valueType=Person
+&amp;val=%7B%0A+++++%22uid%22%3A+%227e51118b%22%2C%0A+++++%22name%22%3A+%22John+Doe%22%2C%0A+++++%22organization%22%3A+5678901%2C%0A+++++%22married%22%3A+false%2C%0A+++++%22salary%22%3A+156.1%0A++%7D&amp;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once a server receives the request, it converts the object from the JSON into the internal
+<a href="/docs/data-modeling/data-modeling#binary-object-format">binary object</a> format following the conversion procedure below:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the <code>Person</code> class exists and available on the server&#8217;s classpath, the JSON object is resolved to an instance of the <code>Person</code> class.</p>
+</li>
+<li>
+<p>If the <code>Person</code> class is not available on the server’s classpath, but there is a <code>QueryEntity</code> object that defines
+the <code>Person</code>, then the JSON object is resolved to a binary object of that <code>Person</code> type:</p>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Query entity</th>
+<th class="tableblock halign-left valign-top">Binary Object (Person)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.QueryEntity"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"keyType"</span>   <span class="na">value=</span><span class="s">"java.lang.Integer"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"valueType"</span> <span class="na">value=</span><span class="s">"Person"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"fields"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;map&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"uid"</span>          <span class="na">value=</span><span class="s">"java.util.UUID"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"name"</span>         <span class="na">value=</span><span class="s">"java.lang.String"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"organization"</span> <span class="na">value=</span><span class="s">"java.lang.Long"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"married"</span>      <span class="na">value=</span><span class="s">"java.lang.Boolean"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"salary"</span>       <span class="na">value=</span><span class="s">"java.lang.Float"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/map&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="javascript">  <span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// UUID</span>
+  <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// string</span>
+  <span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span> <span class="c1">// long</span>
+  <span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// boolean</span>
+  <span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>  <span class="c1">// float</span></code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Otherwise, the JSON object’s field types are resolved following the regular JSON convention:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="javascript"><span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>          <span class="c1">// string</span>
+<span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>         <span class="c1">// string</span>
+<span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>    <span class="c1">// int</span>
+<span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>           <span class="c1">// boolean</span>
+<span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>             <span class="c1">// double</span></code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The same conversion rules apply when you have a custom key type set via the <code>keyType</code> parameter of the Ignite
+REST protocol.</p>
 </div>
 </div>
 </div>
@@ -6007,6 +6117,13 @@ Once the property is set, the <code>getall</code> command provides the response 
 <td class="tableblock halign-left valign-top"><p class="tableblock">Encoding sql query</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>salary+%3E+%3F+and+salary+%3C%3D+%3F</code></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keepBinary</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">do not deserialize <a href="/docs/data-modeling/data-modeling#binary-object-format">binary objects</a>, <code>false</code> by default</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
 </tbody>
 </table>
 </dd>
@@ -6093,6 +6210,13 @@ Once the property is set, the <code>getall</code> command provides the response 
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Encoding sql fields query.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>select+firstName%2C+lastName+from+Person</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keepBinary</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">do not deserialize <a href="/docs/data-modeling/data-modeling#binary-object-format">binary objects</a>, <code>false</code> by default</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -6185,6 +6309,13 @@ Once the property is set, the <code>getall</code> command provides the response 
 <td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Predicate class name for scan query. Class should implement <code>IgniteBiPredicate</code> interface.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.apache.ignite.filters.PersonPredicate</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keepBinary</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">do not deserialize <a href="/docs/data-modeling/data-modeling#binary-object-format">binary objects</a>, <code>false</code> by default</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -6397,7 +6528,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#security">Security</a></li>
 </ul>
 </li>
-<li><a href="#data-types">Data Types</a></li>
+<li><a href="#data-types">Data Types</a>
+<ul class="sectlevel2">
+<li><a href="#java-types">Java Types</a></li>
+<li><a href="#custom-types">Custom Types</a></li>
+</ul>
+</li>
 <li><a href="#returned-value">Returned Value</a></li>
 <li><a href="#rest-api-reference">REST API Reference</a>
 <ul class="sectlevel2">
@@ -6491,8 +6627,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600377060' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600377060' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600382367' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600382367' async crossorigin></script>
 </body>
 
 </html>
