@@ -18,17 +18,17 @@
 
     <meta charset="UTF-8">
     <meta name="ignite-version" content="2.9.0" />
-    <title>CountDownLatch | Ignite Documentation</title>
+    <title>Cluster Snapshots | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/data-structures/countdownlatch" />
+    <link rel="canonical" href="/docs/latest/persistence/snapshots" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600377058">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600377059">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600377058"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600377059"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -2360,48 +2360,340 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/data-structures/countdownlatch.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/persistence/snapshots.adoc" target="_blank">Edit</a>
         
-            <h1>CountDownLatch</h1>
+            <h1>Cluster Snapshots</h1>
         
-        <div class="paragraph">
-<p><code>IgniteCountDownLatch</code> provides functionality that is similar to that of <code>java.util.concurrent.CountDownLatch</code> and allows you to synchronize operations accross cluster nodes.</p>
+        <div class="sect1">
+<h2 id="overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite provides an ability to create full cluster snapshots for deployments using
+<a href="/docs/latest/persistence/native-persistence">Ignite Persistence</a>. An Ignite snapshot includes a consistent cluster-wide copy of
+all data records persisted on disk and some other files needed for a recovery procedure.</p>
 </div>
 <div class="paragraph">
-<p>A distributed CountDownLatch can be created as follows:</p>
+<p>The snapshot structure is similar to the layout of the
+<a href="/docs/latest/persistence/native-persistence#configuring-persistent-storage-directory">Ignite Persistence storage directory</a>,
+with several exceptions. Let&#8217;s take this snapshot as an example to review the structure:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-<span class="nc">IgniteCountDownLatch</span> <span class="n">latch</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">countDownLatch</span><span class="o">(</span><span class="s">"latchName"</span><span class="o">,</span> <span class="c1">// Latch name.</span>
-        <span class="mi">10</span><span class="o">,</span> <span class="c1">// Initial count.</span>
-        <span class="kc">false</span><span class="o">,</span> <span class="c1">// Auto remove, when counter has reached zero.</span>
-        <span class="kc">true</span> <span class="c1">// Create if it does not exist.</span>
-<span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">work
+└── snapshots
+    └── backup23012020
+        ├── binary_meta
+        │   ├── node1
+        │   ├── node2
+        │   └── node3
+        ├── db
+        │   ├── node1
+        │   │   └── my-sample-cache
+        │   │       ├── cache_data.dat
+        │   │       ├── part-3.bin
+        │   │       ├── part-4.bin
+        │   │       └── part-6.bin
+        │   ├── node2
+        │   │   └── my-sample-cache
+        │   │       ├── cache_data.dat
+        │   │       ├── part-1.bin
+        │   │       ├── part-5.bin
+        │   │       └── part-7.bin
+        │   └── node3
+        │       └── my-sample-cache
+        │           ├── cache_data.dat
+        │           ├── part-0.bin
+        │           └── part-2.bin
+        └── marshaller</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The snapshot is located under the <code>work\snapshots</code> directory and named as <code>backup23012020</code> where <code>work</code> is Ignite&#8217;s work
+directory.</p>
+</li>
+<li>
+<p>The snapshot is created for a 3-node cluster with all the nodes running on the same machine. In this example,
+the nodes are named as <code>node1</code>, <code>node2</code>, and <code>node3</code>, while in practice, the names are equal to nodes'
+<a href="https://cwiki.apache.org/confluence/display/IGNITE/Ignite+Persistent+Store+-+under+the+hood#IgnitePersistentStoreunderthehood-SubfoldersGeneration">consistent IDs</a>.</p>
+</li>
+<li>
+<p>The snapshot keeps a copy of the <code>my-sample-cache</code> cache.</p>
+</li>
+<li>
+<p>The <code>db</code> folder keeps a copy of data records in <code>part-N.bin</code> and <code>cache_data.dat</code> files. Write-ahead and checkpointing
+are not added into the snapshot as long as those are not required for the current recovery procedure.</p>
+</li>
+<li>
+<p>The <code>binary_meta</code> and <code>marshaller</code> directories store metadata and marshaller-specific information needed for the recovery.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<h3 id="usually-snapshot-is-spread-across-the-cluster" class="discrete">Usually Snapshot is Spread Across the Cluster</h3>
+<div class="paragraph">
+<p>The previous example shows the snapshot created for the cluster running on the same physical machine. Thus, the whole
+snapshot is located in a single place. While in practice, all the nodes will be running on different machines having the
+snapshot data spread across the cluster. Each node keeps a segment of the snapshot with the data belonging to this particular node.
+The <a href="/docs/latest/persistence/snapshots#restoring-from-snapshot">restore procedure</a> explains how to tether together all the segments during recovery.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-snapshot-directory">Configuring Snapshot Directory</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, a segment of the snapshot is stored in the work directory of a respective Ignite node and uses the same storage
+media where Ignite Persistence keeps data, index, WAL, and other files. Since the snapshot can consume as much space as
+already taken by the persistence files and can affect your applications' performance by sharing the disk I/O with the
+Ignite Persistence routines, it&#8217;s suggested to store the snapshot and persistence files on different media.</p>
 </div>
 <div class="paragraph">
-<p>After the above code is executed, all nodes in the specified cache will be able to synchronize on the latch named <code>latchName</code>.
-Below is a code example of such synchronization:</p>
+<p>You can avoid this interference between Ignite Native persistence and snapshotting
+by either changing <a href="/docs/latest/persistence/native-persistence#configuring-persistent-storage-directory">storage directories of the persistence files</a>
+or overriding the default snapshots' location as shown below:</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--
+       Sets a path to the root directory where snapshot files will be persisted.
+       By default, the `snapshots` directory is placed under the `IGNITE_HOME/db`.
+    --&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"snapshotPath"</span> <span class="na">value=</span><span class="s">"/snapshots"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"cacheConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.CacheConfiguration"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"snapshot-cache"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="nc">File</span> <span class="n">exSnpDir</span> <span class="o">=</span> <span class="no">U</span><span class="o">.</span><span class="na">resolveWorkDirectory</span><span class="o">(</span><span class="no">U</span><span class="o">.</span><span class="na">defaultWorkDirectory</span><span class="o">(),</span> <span class="s">"ex_snapshots"</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setSnapshotPath</span><span class="o">(</span><span class="n">exSnpDir</span><span class="o">.</span><span class="na">getAbsolutePath</span><span class="o">());</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-snapshot">Creating Snapshot</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite provides several APIs for the snapshot creation. Let&#8217;s review all the options.</p>
+</div>
+<div class="sect2">
+<h3 id="using-control-script">Using Control Script</h3>
+<div class="paragraph">
+<p>Ignite ships the <a href="/docs/latest/control-script">control script</a> that supports snapshots-related commands listed below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="shell"><span class="c">#Create a cluster snapshot:</span>
+control.<span class="o">(</span>sh|bat<span class="o">)</span> <span class="nt">--snapshot</span> create snapshot_name
 
-<span class="kd">final</span> <span class="nc">IgniteCountDownLatch</span> <span class="n">latch</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">countDownLatch</span><span class="o">(</span><span class="s">"latchName"</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="c">#Cancel a running snapshot:</span>
+control.<span class="o">(</span>sh|bat<span class="o">)</span> <span class="nt">--snapshot</span> cancel snapshot_name
 
-<span class="c1">// Execute jobs.</span>
-<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-    <span class="c1">// Execute a job on some remote cluster node.</span>
-    <span class="n">ignite</span><span class="o">.</span><span class="na">compute</span><span class="o">().</span><span class="na">run</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">newCnt</span> <span class="o">=</span> <span class="n">latch</span><span class="o">.</span><span class="na">countDown</span><span class="o">();</span>
+<span class="c">#Kill a running snapshot:</span>
+control.<span class="o">(</span>sh|bat<span class="o">)</span> <span class="nt">--kill</span> SNAPSHOT snapshot_name</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-jmx">Using JMX</h3>
+<div class="paragraph">
+<p>Use the <code>SnapshotMXBean</code> interface to perform the snapshot-specific procedures via JMX:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">createSnapshot(String snpName)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create a snapshot.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cancelSnapshot(String snpName)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cancel a snapshot on the node initiated its creation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="using-java-api">Using Java API</h3>
+<div class="paragraph">
+<p>Also, it&#8217;s possible to create a snapshot programmatically in Java:</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CacheConfiguration</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">ccfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;(</span><span class="s">"snapshot-cache"</span><span class="o">);</span>
 
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Counted down: newCnt="</span> <span class="o">+</span> <span class="n">newCnt</span><span class="o">);</span>
-    <span class="o">});</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">IgniteCache</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">getOrCreateCache</span><span class="o">(</span><span class="n">ccfg</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"Maxim"</span><span class="o">);</span>
 
-<span class="c1">// Wait for all jobs to complete.</span>
-<span class="n">latch</span><span class="o">.</span><span class="na">await</span><span class="o">();</span></code></pre>
+    <span class="c1">// Start snapshot operation.</span>
+    <span class="n">ignite</span><span class="o">.</span><span class="na">snapshot</span><span class="o">().</span><span class="na">createSnapshot</span><span class="o">(</span><span class="s">"snapshot_02092020"</span><span class="o">).</span><span class="na">get</span><span class="o">();</span>
+<span class="o">}</span>
+<span class="k">finally</span> <span class="o">{</span>
+    <span class="n">ignite</span><span class="o">.</span><span class="na">destroyCache</span><span class="o">(</span><span class="n">ccfg</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="restoring-from-snapshot">Restoring From Snapshot</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Currently, the data restore procedure has to be performed manually. In a nutshell, you need to stop the cluster,
+replace persistence data and other files with the data from the snapshot, and restart the nodes. The detailed procedure
+looks as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Stop the cluster you intend to restore</p>
+</li>
+<li>
+<p>Do the following on each node:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Remove all the files and directories under the <code>$IGNITE_HOME/work/{node_id}</code> directory. Clean the
+<a href="/docs/latest/link:persistence/native-persistence#configuring-persistent-storage-directory"><code>db/{node_id}</code></a> directory separately if
+it&#8217;s not located under the Ignite <code>work</code> dir.</p>
+</li>
+<li>
+<p>Copy the files of belonging to a node with the <code>{node_id}</code> from the snapshot into the <code>$IGNITE_HOME/work/{node_id}</code> directory.
+If the <code>db/{node_id}</code> directory is not located under the Ignite <code>work</code> dir then you need to copy data files there.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Restart the cluster</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Restore On Cluster of Different Topology</strong></p>
+</div>
+<div class="paragraph">
+<p>Sometimes you might want to create a snapshot of an N-node cluster and use it to restore on an M-node cluster. The table
+below explains what options are supported:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Condition</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N == M</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The <strong>recommended</strong> case. Create and use the snapshot on clusters of a similar topology.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N &lt; M</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start the first N nodes of the M-node cluster and apply the snapshot. Add the rest of the M-cluster nodes to
+the topology and wait while the data gets rebalanced and indexes are rebuilt.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N &gt; M</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsupported.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="consistency-guarantees">Consistency Guarantees</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All snapshots are fully consistent in terms of concurrent cluster-wide operations as well as ongoing changes with Ignite
+Persistence and other files on nodes.</p>
+</div>
+<div class="paragraph">
+<p>The cluster-wide snapshot consistency is achieved by triggering the <a href="https://cwiki.apache.org/confluence/display/IGNITE/%28Partition+Map%29+Exchange+-+under+the+hood">Partition-Map-Exchange</a>
+procedure. By doing that, the cluster will eventually get to the point in time when all previously started transactions are completed, and new
+ones are paused. Once this happens, the cluster initiates the snapshot creation procedure.</p>
+</div>
+<div class="paragraph">
+<p>The consistency between the primary Ignite Persistence files and their snapshot copies is achieved by copying the primary
+files to the destination snapshot directory with tracking all concurrent ongoing changes. The tracking of the changes
+might require extra space on your storage media.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="current-limitations">Current Limitations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The snapshot procedure has some limitations that you should be aware of before using the feature in your production environment:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Snapshotting of specific caches/tables is unsupported. You always create a full cluster snapshot.</p>
+</li>
+<li>
+<p>Incremental snapshots are not supported.</p>
+</li>
+<li>
+<p>Caches/tables that are not persisted in Ignite Persistence are not added into the snapshot.</p>
+</li>
+<li>
+<p>Encrypted caches are not included in the snapshot.</p>
+</li>
+<li>
+<p>You can have only one snapshotting operation running at a time.</p>
+</li>
+<li>
+<p>The snapshot procedure is interrupted if the cluster topology changes (new node join the cluster or some leave it).</p>
+</li>
+<li>
+<p>Snapshot may be restored only at the same cluster topology with the same node IDs;</p>
+</li>
+<li>
+<p>The automatic restore procedure is not available yet. You have to restore it manually.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If any of these limitations prevent you from using Apache Ignite, then select alternate snapshotting implementations for
+Ignite provided by enterprise vendors.</p>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -2412,7 +2704,20 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
-    
+    <ul class="sectlevel1">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#configuring-snapshot-directory">Configuring Snapshot Directory</a></li>
+<li><a href="#creating-snapshot">Creating Snapshot</a>
+<ul class="sectlevel2">
+<li><a href="#using-control-script">Using Control Script</a></li>
+<li><a href="#using-jmx">Using JMX</a></li>
+<li><a href="#using-java-api">Using Java API</a></li>
+</ul>
+</li>
+<li><a href="#restoring-from-snapshot">Restoring From Snapshot</a></li>
+<li><a href="#consistency-guarantees">Consistency Guarantees</a></li>
+<li><a href="#current-limitations">Current Limitations</a></li>
+</ul>
           
       
 <footer>
@@ -2460,8 +2765,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600377058' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600377058' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600377059' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600377059' async crossorigin></script>
 </body>
 
 </html>
