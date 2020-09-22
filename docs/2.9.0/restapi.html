@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/restapi" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600382367">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600803312">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600382367"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600803312"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -2764,7 +2764,7 @@ you need to send to the cluster:</p>
 <pre class="rouge highlight"><code data-lang="javascript"> <span class="p">{</span>
   <span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">orgId</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>
  <span class="p">}</span></code></pre>
@@ -2777,7 +2777,7 @@ the <code>val</code> parameter to the value of the JSON object:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="text">http://[host]:[port]/ignite?cacheName=testCache&amp;cmd=put&amp;keyType=int&amp;key=1&amp;valueType=Person
-&amp;val=%7B%0A+++++%22uid%22%3A+%227e51118b%22%2C%0A+++++%22name%22%3A+%22John+Doe%22%2C%0A+++++%22organization%22%3A+5678901%2C%0A+++++%22married%22%3A+false%2C%0A+++++%22salary%22%3A+156.1%0A++%7D&amp;</code></pre>
+&amp;val=%7B%0A+++++%22uid%22%3A+%227e51118b%22%2C%0A+++++%22name%22%3A+%22John+Doe%22%2C%0A+++++%22orgId%22%3A+5678901%2C%0A+++++%22married%22%3A+false%2C%0A+++++%22salary%22%3A+156.1%0A++%7D&amp;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2808,15 +2808,15 @@ the <code>Person</code>, then the JSON object is resolved to a binary object of 
 <td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.cache.QueryEntity"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"keyType"</span>   <span class="na">value=</span><span class="s">"java.lang.Integer"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"keyType"</span> <span class="na">value=</span><span class="s">"java.lang.Integer"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"valueType"</span> <span class="na">value=</span><span class="s">"Person"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"fields"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;map&gt;</span>
-<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"uid"</span>          <span class="na">value=</span><span class="s">"java.util.UUID"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"name"</span>         <span class="na">value=</span><span class="s">"java.lang.String"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"organization"</span> <span class="na">value=</span><span class="s">"java.lang.Long"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"married"</span>      <span class="na">value=</span><span class="s">"java.lang.Boolean"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"salary"</span>       <span class="na">value=</span><span class="s">"java.lang.Float"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"uid"</span>     <span class="na">value=</span><span class="s">"java.util.UUID"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"name"</span>    <span class="na">value=</span><span class="s">"java.lang.String"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"orgId"</span>   <span class="na">value=</span><span class="s">"java.lang.Long"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"married"</span> <span class="na">value=</span><span class="s">"java.lang.Boolean"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"salary"</span>  <span class="na">value=</span><span class="s">"java.lang.Float"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/map&gt;</span>
 <span class="nt">&lt;/property&gt;</span>
 <span class="nt">&lt;/bean&gt;</span></code></pre>
@@ -2824,11 +2824,11 @@ the <code>Person</code>, then the JSON object is resolved to a binary object of 
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript">  <span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// UUID</span>
-  <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// string</span>
-  <span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span> <span class="c1">// long</span>
-  <span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// boolean</span>
-  <span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>  <span class="c1">// float</span></code></pre>
+<pre class="rouge highlight"><code data-lang="javascript"><span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>  <span class="c1">// UUID</span>
+<span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// string</span>
+<span class="dl">"</span><span class="s2">orgId</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>   <span class="c1">// long</span>
+<span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>   <span class="c1">// boolean</span>
+<span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>     <span class="c1">// float</span></code></pre>
 </div>
 </div></div></td>
 </tr>
@@ -2839,11 +2839,11 @@ the <code>Person</code>, then the JSON object is resolved to a binary object of 
 <p>Otherwise, the JSON object’s field types are resolved following the regular JSON convention:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="javascript"><span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>          <span class="c1">// string</span>
-<span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>         <span class="c1">// string</span>
-<span class="dl">"</span><span class="s2">organization</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>    <span class="c1">// int</span>
-<span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>           <span class="c1">// boolean</span>
-<span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>             <span class="c1">// double</span></code></pre>
+<pre class="rouge highlight"><code data-lang="javascript"><span class="dl">"</span><span class="s2">uid</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">7e51118b</span><span class="dl">"</span><span class="p">,</span>   <span class="c1">// string</span>
+<span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>  <span class="c1">// string</span>
+<span class="dl">"</span><span class="s2">orgId</span><span class="dl">"</span><span class="p">:</span> <span class="mi">5678901</span><span class="p">,</span>    <span class="c1">// int</span>
+<span class="dl">"</span><span class="s2">married</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>    <span class="c1">// boolean</span>
+<span class="dl">"</span><span class="s2">salary</span><span class="dl">"</span><span class="p">:</span> <span class="mf">156.1</span>      <span class="c1">// double</span></code></pre>
 </div>
 </div>
 </li>
@@ -6627,8 +6627,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600382367' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600382367' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600803312' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600803312' async crossorigin></script>
 </body>
 
 </html>

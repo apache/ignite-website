@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/persistence/snapshots" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600382367">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600803312">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600382367"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600803312"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -2370,7 +2370,7 @@
 <div class="paragraph">
 <p>Ignite provides an ability to create full cluster snapshots for deployments using
 <a href="/docs/latest/persistence/native-persistence">Ignite Persistence</a>. An Ignite snapshot includes a consistent cluster-wide copy of
-all data records persisted on disk and some other files needed for a recovery procedure.</p>
+all data records persisted on disk and some other files needed for a restore procedure.</p>
 </div>
 <div class="paragraph">
 <p>The snapshot structure is similar to the layout of the
@@ -2382,29 +2382,32 @@ with several exceptions. Let&#8217;s take this snapshot as an example to review 
 <pre class="rouge highlight"><code data-lang="shell">work
 └── snapshots
     └── backup23012020
-        ├── binary_meta
-        │   ├── node1
-        │   ├── node2
-        │   └── node3
-        ├── db
-        │   ├── node1
-        │   │   └── my-sample-cache
-        │   │       ├── cache_data.dat
-        │   │       ├── part-3.bin
-        │   │       ├── part-4.bin
-        │   │       └── part-6.bin
-        │   ├── node2
-        │   │   └── my-sample-cache
-        │   │       ├── cache_data.dat
-        │   │       ├── part-1.bin
-        │   │       ├── part-5.bin
-        │   │       └── part-7.bin
-        │   └── node3
-        │       └── my-sample-cache
-        │           ├── cache_data.dat
-        │           ├── part-0.bin
-        │           └── part-2.bin
-        └── marshaller</code></pre>
+        └── db
+            ├── binary_meta
+            │         ├── node1
+            │         ├── node2
+            │         └── node3
+            ├── marshaller
+            │         ├── node1
+            │         ├── node2
+            │         └── node3
+            ├── node1
+            │    └── my-sample-cache
+            │        ├── cache_data.dat
+            │        ├── part-3.bin
+            │        ├── part-4.bin
+            │        └── part-6.bin
+            ├── node2
+            │    └── my-sample-cache
+            │        ├── cache_data.dat
+            │        ├── part-1.bin
+            │        ├── part-5.bin
+            │        └── part-7.bin
+            └── node3
+                └── my-sample-cache
+                    ├── cache_data.dat
+                    ├── part-0.bin
+                    └── part-2.bin</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -2423,10 +2426,10 @@ the nodes are named as <code>node1</code>, <code>node2</code>, and <code>node3</
 </li>
 <li>
 <p>The <code>db</code> folder keeps a copy of data records in <code>part-N.bin</code> and <code>cache_data.dat</code> files. Write-ahead and checkpointing
-are not added into the snapshot as long as those are not required for the current recovery procedure.</p>
+are not added into the snapshot as long as those are not required for the current restore procedure.</p>
 </li>
 <li>
-<p>The <code>binary_meta</code> and <code>marshaller</code> directories store metadata and marshaller-specific information needed for the recovery.</p>
+<p>The <code>binary_meta</code> and <code>marshaller</code> directories store metadata and marshaller-specific information.</p>
 </li>
 </ul>
 </div>
@@ -2572,8 +2575,10 @@ control.<span class="o">(</span>sh|bat<span class="o">)</span> <span class="nt">
 <div class="sectionbody">
 <div class="paragraph">
 <p>Currently, the data restore procedure has to be performed manually. In a nutshell, you need to stop the cluster,
-replace persistence data and other files with the data from the snapshot, and restart the nodes. The detailed procedure
-looks as follows:</p>
+replace persistence data and other files with the data from the snapshot, and restart the nodes.</p>
+</div>
+<div class="paragraph">
+<p>The detailed procedure looks as follows:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2581,16 +2586,25 @@ looks as follows:</p>
 <p>Stop the cluster you intend to restore</p>
 </li>
 <li>
-<p>Do the following on each node:</p>
+<p>Remove all files from the checkpoint <code>$IGNITE_HOME/work/cp</code> directory</p>
+</li>
+<li>
+<p>Do the following on each node. Clean the
+<a href="/docs/latest/link:persistence/native-persistence#configuring-persistent-storage-directory"><code>db/{node_id}</code></a> directory separately if
+it&#8217;s not located under the Ignite <code>work</code> dir:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Remove all the files and directories under the <code>$IGNITE_HOME/work/{node_id}</code> directory. Clean the
-<a href="/docs/latest/link:persistence/native-persistence#configuring-persistent-storage-directory"><code>db/{node_id}</code></a> directory separately if
-it&#8217;s not located under the Ignite <code>work</code> dir.</p>
+<p>Remove the files related to the <code>{nodeId}</code> from the <code>$IGNITE_HOME/work/db/binary_meta</code> directory</p>
 </li>
 <li>
-<p>Copy the files of belonging to a node with the <code>{node_id}</code> from the snapshot into the <code>$IGNITE_HOME/work/{node_id}</code> directory.
+<p>Remote the files related to the <code>{nodeId}</code> from the <code>$IGNITE_HOME/work/db/marshaller</code> directory</p>
+</li>
+<li>
+<p>Remove the files and sub-directories related to the <code>{nodeId}</code> under your <code>$IGNITE_HOME/work/db</code> directory. Clean the</p>
+</li>
+<li>
+<p>Copy the files belonging to a node with the <code>{node_id}</code> from the snapshot into the <code>$IGNITE_HOME/work/</code> directory.
 If the <code>db/{node_id}</code> directory is not located under the Ignite <code>work</code> dir then you need to copy data files there.</p>
 </li>
 </ul>
@@ -2642,17 +2656,18 @@ the topology and wait while the data gets rebalanced and indexes are rebuilt.</p
 <div class="sectionbody">
 <div class="paragraph">
 <p>All snapshots are fully consistent in terms of concurrent cluster-wide operations as well as ongoing changes with Ignite
-Persistence and other files on nodes.</p>
+Persistence data, index, schema, binary metadata, marshaller and other files on nodes.</p>
 </div>
 <div class="paragraph">
 <p>The cluster-wide snapshot consistency is achieved by triggering the <a href="https://cwiki.apache.org/confluence/display/IGNITE/%28Partition+Map%29+Exchange+-+under+the+hood">Partition-Map-Exchange</a>
 procedure. By doing that, the cluster will eventually get to the point in time when all previously started transactions are completed, and new
-ones are paused. Once this happens, the cluster initiates the snapshot creation procedure.</p>
+ones are paused. Once this happens, the cluster initiates the snapshot creation procedure. The PME procedure ensures
+that the snapshot includes primary and backup in a consistent state.</p>
 </div>
 <div class="paragraph">
-<p>The consistency between the primary Ignite Persistence files and their snapshot copies is achieved by copying the primary
+<p>The consistency between the Ignite Persistence files and their snapshot copies is achieved by copying the original
 files to the destination snapshot directory with tracking all concurrent ongoing changes. The tracking of the changes
-might require extra space on your storage media.</p>
+might require extra space on the Ignite Persistence storage media (up to the 1x size of the storage media).</p>
 </div>
 </div>
 </div>
@@ -2668,10 +2683,7 @@ might require extra space on your storage media.</p>
 <p>Snapshotting of specific caches/tables is unsupported. You always create a full cluster snapshot.</p>
 </li>
 <li>
-<p>Incremental snapshots are not supported.</p>
-</li>
-<li>
-<p>Caches/tables that are not persisted in Ignite Persistence are not added into the snapshot.</p>
+<p>Caches/tables that are not persisted in Ignite Persistence are not included into the snapshot.</p>
 </li>
 <li>
 <p>Encrypted caches are not included in the snapshot.</p>
@@ -2680,7 +2692,7 @@ might require extra space on your storage media.</p>
 <p>You can have only one snapshotting operation running at a time.</p>
 </li>
 <li>
-<p>The snapshot procedure is interrupted if the cluster topology changes (new node join the cluster or some leave it).</p>
+<p>The snapshot procedure is interrupted if a server node leaves the cluster.</p>
 </li>
 <li>
 <p>Snapshot may be restored only at the same cluster topology with the same node IDs;</p>
@@ -2765,8 +2777,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600382367' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600382367' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600803312' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600803312' async crossorigin></script>
 </body>
 
 </html>
