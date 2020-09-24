@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/quick-start/cpp" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600803312">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600975887">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600803312"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600975887"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -1821,6 +1821,19 @@
                         
                     </li>
                 
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/latest/security/sandbox"
+
+                                class=''
+                            >Sandbox</a>
+                        
+                    </li>
+                
               
                      
              </nav>   
@@ -2389,28 +2402,20 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (any flavor), Mac OSX (10.6 and up), Windows (XP and up),
-Windows Server (2008 and up), Oracle Solaris</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ISA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x86, x64, SPARC, PowerPC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Windows Vista, Windows Server 2008 and later versions, Ubuntu (18.04 64 bit)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Network</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No restrictions (10G recommended)</p></td>
 </tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>and:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hardware</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No restrictions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C++ compiler</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MS Visual C (10.0 and up), g (4.4.0 and up)</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Visual Studio</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2010 and above</p></td>
@@ -2585,60 +2590,103 @@ To get started with Ignite and C&#43;&#43;, you will need to be familiar with bu
 <div class="sect2">
 <h3 id="prerequisites-2">Prerequisites</h3>
 <div class="paragraph">
-<p>The following packages should be installed:
-- C++ compiler
-- libssl
-- autotools
-- automake
-- libtool</p>
+<p>The following packages need to be installed:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>C++ compiler</p>
+</li>
+<li>
+<p>cmake 3.6+</p>
+</li>
+<li>
+<p>jdk</p>
+</li>
+<li>
+<p>openssl, including header files</p>
+</li>
+<li>
+<p>unixODBC</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Installation instructions for several popular distributions are listed below:</p>
+</div>
+<code-tabs><code-tab data-tab='Ubuntu 18.04/20.04'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> build-essential cmake openjdk-11-jdk unixodbc-dev libssl-dev</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL 7'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> epel-release
+<span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> java-11-openjdk-devel cmake3 unixODBC-devel openssl-devel make gcc-c++</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL 8'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> java-11-openjdk-devel cmake3 unixODBC-devel openssl-devel make gcc-c++</code></pre>
+</div>
+</div></code-tab></code-tabs>
 </div>
 <div class="sect2">
 <h3 id="building-c-ignite">Building C++ Ignite</h3>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
-<p>Download and unzip the Ignite binary release into a directory. We&#8217;ll refer to this as <code>{IGNITE_HOME}</code>.</p>
+<p>Download and unzip the Ignite binary release. We&#8217;ll refer to a resulting directory as to <code>${IGNITE_HOME}</code>.</p>
 </li>
 <li>
-<p><code>cd {IGNITE_HOME}/platforms/cpp</code></p>
+<p>Create a build directory for CMake. We&#8217;ll refer to this as <code>${CPP_BUILD_DIR}</code></p>
 </li>
 <li>
-<p><code>libtoolize &amp;&amp; aclocal &amp;&amp; autoheader &amp;&amp; automake --add-missing &amp;&amp; autoreconf</code></p>
+<p>Build and install Ignite.C++ by executing the following commands:</p>
 </li>
-<li>
-<p><code>./configure</code></p>
-</li>
-<li>
-<p><code>make</code></p>
-</li>
-</ol>
+</ul>
 </div>
+<code-tabs><code-tab data-tab='Ubuntu'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_ODBC</span><span class="o">=</span>ON <span class="nt">-DWITH_THIN_CLIENT</span><span class="o">=</span>ON <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp
+make
+<span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake3 <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_ODBC</span><span class="o">=</span>ON <span class="nt">-DWITH_THIN_CLIENT</span><span class="o">=</span>ON <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp
+make
+<span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
 </div>
 <div class="sect2">
-<h3 id="running-the-thick-client-example">Running the Thick Client Example</h3>
-<div class="olist arabic">
-<ol class="arabic">
+<h3 id="building-and-running-the-thick-client-example">Building and running the Thick Client Example</h3>
+<div class="ulist">
+<ul>
 <li>
-<p><code>cd {IGNITE_HOME}/platforms/cpp/examples</code></p>
+<p>Create a build directory for cmake. We&#8217;ll refer to it as <code>${CPP_EXAMPLES_BUILD_DIR}</code></p>
 </li>
 <li>
-<p><code>libtoolize &amp;&amp; aclocal &amp;&amp; autoheader &amp;&amp; automake --add-missing &amp;&amp; autoreconf</code></p>
+<p>Build the examples by executing the following commands:</p>
 </li>
-<li>
-<p><code>./configure</code></p>
-</li>
-<li>
-<p><code>cd put-get-example</code></p>
-</li>
-<li>
-<p><code>make</code></p>
-</li>
-<li>
-<p><code>./ignite-put-get-example</code></p>
-</li>
-</ol>
+</ul>
 </div>
+<code-tabs><code-tab data-tab='Ubuntu'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_EXAMPLES_BUILD_DIR</span><span class="k">}</span>
+cmake <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp/examples <span class="o">&amp;&amp;</span> make
+<span class="nb">cd</span> ./put-get-example
+./ignite-put-get-example</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_EXAMPLES_BUILD_DIR</span><span class="k">}</span>
+cmake3 <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp/examples <span class="o">&amp;&amp;</span> make
+<span class="nb">cd</span> ./put-get-example
+./ignite-put-get-example</code></pre>
+</div>
+</div></code-tab></code-tabs>
 </div>
 </div>
 </div>
@@ -2674,7 +2722,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <ul class="sectlevel2">
 <li><a href="#prerequisites-2">Prerequisites</a></li>
 <li><a href="#building-c-ignite">Building C++ Ignite</a></li>
-<li><a href="#running-the-thick-client-example">Running the Thick Client Example</a></li>
+<li><a href="#building-and-running-the-thick-client-example">Building and running the Thick Client Example</a></li>
 </ul>
 </li>
 <li><a href="#next-steps">Next Steps</a></li>
@@ -2726,8 +2774,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600803312' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600803312' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600975887' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600975887' async crossorigin></script>
 </body>
 
 </html>

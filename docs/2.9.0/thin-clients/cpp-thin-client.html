@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/thin-clients/cpp-thin-client" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600803312">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600975888">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600803312"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600975888"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -1821,6 +1821,19 @@
                         
                     </li>
                 
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/latest/security/sandbox"
+
+                                class=''
+                            >Sandbox</a>
+                        
+                    </li>
+                
               
                      
              </nav>   
@@ -2383,46 +2396,27 @@
 <h2 id="installation">Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The source code of the C++ thin client comes with the Ignite distribution package under the <code>{IGNITE_HOME}/platforms/cpp</code> directory.</p>
+<p>The source code of the C++ thin client comes with the Ignite distribution package under the <code>${IGNITE_HOME}/platforms/cpp</code> directory.</p>
 </div>
 <code-tabs><code-tab data-tab='Windows'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bat"><span class="nb">cd</span> <span class="o">{</span><span class="kd">IGNITE_HOME</span><span class="o">}</span>\platforms\cpp\project\vs
+<pre class="rouge highlight"><code data-lang="bat"><span class="nb">cd</span> <span class="nv">%IGNITE_HOME%</span>\platforms\cpp\project\vs
 
 <span class="kd">msbuild</span> <span class="kd">ignite</span>.sln <span class="na">/p</span><span class="nl">:Configuration</span><span class="o">=</span><span class="kd">Release</span> <span class="na">/p</span><span class="nl">:Platform</span><span class="o">=</span><span class="kd">x64</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='Linux (system wide)'><div class="listingblock">
+</div></code-tab><code-tab data-tab='Ubuntu'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="o">{</span>IGNITE_HOME<span class="o">}</span>/platforms/cpp
-libtoolize <span class="o">&amp;&amp;</span> aclocal <span class="o">&amp;&amp;</span> autoheader <span class="o">&amp;&amp;</span> automake <span class="nt">--add-missing</span> <span class="o">&amp;&amp;</span> autoreconf
-
-<span class="c"># You can call the following command to see all the available</span>
-<span class="c"># configuration options:</span>
-<span class="c"># ./configure --help</span>
-<span class="c"># To use default configuration just type:</span>
-./configure
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_THIN_CLIENT</span><span class="o">=</span>ON <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp
 make
-
-<span class="c">#The following step is optional if you want to install Ignite</span>
-<span class="c">#for your system. It would probably require root:</span>
 <span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='Linux (local directory)'><div class="listingblock">
+</div></code-tab><code-tab data-tab='CentOS/RHEL'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd </span>platforms/cpp
-libtoolize <span class="o">&amp;&amp;</span> aclocal <span class="o">&amp;&amp;</span> autoheader <span class="o">&amp;&amp;</span> automake <span class="nt">--add-missing</span> <span class="o">&amp;&amp;</span> autoreconf
-
-<span class="c"># You can call the following command to see all the available</span>
-<span class="c"># configuration options:</span>
-<span class="c"># ./configure --help</span>
-<span class="c">#</span>
-<span class="c"># Specify a target subdirectory in your user's home dir:</span>
-./configure <span class="nt">--prefix</span><span class="o">=</span>/home/user/odbc
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake3 <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_THIN_CLIENT</span><span class="o">=</span>ON <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp
 make
-
-<span class="c">#The following step is needed if you want to install Ignite</span>
-<span class="c">#under specified prefix directory.</span>
-make <span class="nb">install</span></code></pre>
+<span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 </div>
@@ -2723,8 +2717,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600803312' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600803312' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600975888' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600975888' async crossorigin></script>
 </body>
 
 </html>

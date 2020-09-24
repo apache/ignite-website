@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/SQL/ODBC/odbc-driver" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1600803309">
+	<link rel="stylesheet" href="/assets/css/styles.css?1600975885">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1600803309"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1600975885"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -1821,6 +1821,19 @@
                         
                     </li>
                 
+
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/latest/security/sandbox"
+
+                                class=''
+                            >Sandbox</a>
+                        
+                    </li>
+                
               
                      
              </nav>   
@@ -2553,7 +2566,7 @@ When this parameter is set to zero or a negative value, idle timeout will be dis
 <p>Windows Server (2008 and up, both 32-bit and 64-bit versions)</p>
 </li>
 <li>
-<p>Ubuntu (14.x and 15.x 64-bit)</p>
+<p>Ubuntu (18.04 64-bit)</p>
 </li>
 </ul>
 </div></div></td>
@@ -2656,23 +2669,90 @@ light.exe <span class="nt">-ext</span> WixUIExtension ignite-odbc-x86.wixobj</co
 <div class="paragraph">
 <p>On a Linux-based operating system, you will need to install an ODBC Driver Manager of your choice to be able to build and use the Ignite ODBC Driver. The ODBC Driver has been tested with <a href="http://www.unixodbc.org">UnixODBC</a>.</p>
 </div>
+<div class="sect3">
+<h4 id="prerequisites-2">Prerequisites</h4>
 <div class="paragraph">
-<p>Additionally, you will need <code>GCC</code>, <code>G++</code>, and <code>make</code> to build the driver and its dependencies.</p>
+<p>The following packages need to be installed:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>C++ compiler</p>
+</li>
+<li>
+<p>cmake 3.6+</p>
+</li>
+<li>
+<p>jdk</p>
+</li>
+<li>
+<p>openssl, including header files</p>
+</li>
+<li>
+<p>unixODBC</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Once all the above mentioned are installed, you can build the Ignite ODBC driver:</p>
+<p>Installation instructions for several popular distributions are listed below:</p>
 </div>
-<div class="listingblock">
+<code-tabs><code-tab data-tab='Ubuntu 18.04/20.04'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="nv">$IGNITE_HOME</span>/platforms/cpp
-libtoolize <span class="o">&amp;&amp;</span> aclocal <span class="o">&amp;&amp;</span> autoheader <span class="o">&amp;&amp;</span> automake <span class="nt">--add-missing</span> <span class="o">&amp;&amp;</span> autoreconf
-./configure <span class="nt">--enable-odbc</span> <span class="nt">--disable-node</span> <span class="nt">--disable-core</span>
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> build-essential cmake openjdk-11-jdk unixodbc-dev libssl-dev</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL 7'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> epel-release
+<span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> java-11-openjdk-devel cmake3 unixODBC-devel openssl-devel make gcc-c++</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL 8'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> java-11-openjdk-devel cmake3 unixODBC-devel openssl-devel make gcc-c++</code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The JDK is used only during the build process and not by the ODBC driver itself.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="building-odbc-driver-2">Building ODBC driver</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Create a build directory for cmake. We&#8217;ll refer to it as <code>${CPP_BUILD_DIR}</code></p>
+</li>
+<li>
+<p>(Optional) Choose installation directory prefix (by default <code>/usr/local</code>). We&#8217;ll refer to it as <code>${CPP_INSTALL_DIR}</code></p>
+</li>
+<li>
+<p>Build and install the driver by executing the following commands:</p>
+</li>
+</ul>
+</div>
+<code-tabs><code-tab data-tab='Ubuntu'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_ODBC</span><span class="o">=</span>ON <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp <span class="nt">-DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="k">${</span><span class="nv">CPP_INSTALL_DIR</span><span class="k">}</span>
 make
-
-<span class="c">#The following step will most probably require root privileges:</span>
-make <span class="nb">install</span></code></pre>
+<span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
 </div>
+</div></code-tab><code-tab data-tab='CentOS/RHEL'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="k">${</span><span class="nv">CPP_BUILD_DIR</span><span class="k">}</span>
+cmake3 <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release <span class="nt">-DWITH_ODBC</span><span class="o">=</span>ON  <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp <span class="nt">-DCMAKE_INSTALL_PREFIX</span><span class="o">=</span><span class="k">${</span><span class="nv">CPP_INSTALL_DIR</span><span class="k">}</span>
+make
+<span class="nb">sudo </span>make <span class="nb">install</span></code></pre>
 </div>
+</div></code-tab></code-tabs>
 <div class="paragraph">
 <p>After the build process is over, you can find out where your ODBC driver has been placed by running the following command:</p>
 </div>
@@ -2683,6 +2763,7 @@ make <span class="nb">install</span></code></pre>
 </div>
 <div class="paragraph">
 <p>The path should look something like: <code>/usr/local/lib/libignite-odbc.so</code></p>
+</div>
 </div>
 </div>
 </div>
@@ -2766,18 +2847,20 @@ ODBC Driver Manager. The ODBC driver has been tested with <a href="http://www.un
 </div>
 </li>
 <li>
-<p>Edit file <code>$IGNITE_HOME/platforms/cpp/odbc/install/ignite-odbc-install.ini</code> and ensure that Driver parameter of the Apache Ignite section points to where <code>libignite-odbc.so</code> is located.</p>
+<p>Edit file <code>${IGNITE_HOME}/platforms/cpp/odbc/install/ignite-odbc-install.ini</code> and ensure that Driver parameter of the Apache Ignite section points to where <code>libignite-odbc.so</code> is located.</p>
 </li>
 <li>
 <p>To install the ODBC driver, use the following command:</p>
-<div class="paragraph">
-<p><code>odbcinst -i -d -f $IGNITE_HOME/platforms/cpp/odbc/install/ignite-odbc-install.ini</code></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">odbcinst <span class="nt">-i</span> <span class="nt">-d</span> <span class="nt">-f</span> <span class="k">${</span><span class="nv">IGNITE_HOME</span><span class="k">}</span>/platforms/cpp/odbc/install/ignite-odbc-install.ini</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>To perform this command, you may need root privileges.</p>
-</div>
-</li>
-</ul>
 </div>
 <div class="paragraph">
 <p>Now the Apache Ignite ODBC driver is installed and ready for use. You can connect to it and use it just like any other ODBC driver.</p>
@@ -2802,7 +2885,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <ul class="sectlevel2">
 <li><a href="#building-on-windows">Building on Windows</a></li>
 <li><a href="#building-installers-on-windows">Building installers on Windows</a></li>
-<li><a href="#building-on-linux">Building on Linux</a></li>
+<li><a href="#building-on-linux">Building on Linux</a>
+<ul class="sectlevel3">
+<li><a href="#prerequisites-2">Prerequisites</a></li>
+<li><a href="#building-odbc-driver-2">Building ODBC driver</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#installing-odbc-driver">Installing ODBC Driver</a>
@@ -2864,8 +2952,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1600803309' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1600803309' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1600975885' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1600975885' async crossorigin></script>
 </body>
 
 </html>
