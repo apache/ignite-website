@@ -70,4 +70,4 @@ rm -r _config.yml
 rm -rf _data
 rm -rf _docs
 rm -rf _plugins
-rm -rf  $tmp_dir
+
