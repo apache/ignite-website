@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/key-value-api/continuous-queries" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1602007649">
+	<link rel="stylesheet" href="/assets/css/styles.css?1602025536">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1602007649"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1602025536"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -3646,6 +3646,27 @@ You can do this in two ways:</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="events-delivery-guarantees">Events Delivery Guarantees</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Continuous queries ensure the exactly-once semantic for the delivery of events to the clients' local listeners.</p>
+</div>
+<div class="paragraph">
+<p>Both primary and backup nodes maintain an update queue that holds events that are processed by continuous queries
+on the server side but yet to be delivered to the clients. Suppose a primary node crashes
+or the cluster topology changes for any reason. In that case, every backup node flushes the content of its update
+queue to the client, making sure that every event is delivered to the client&#8217;s local listener.</p>
+</div>
+<div class="paragraph">
+<p>Ignite manages a special per-partition update counter that helps to avoid duplicate notifications. Once an entry in
+some partition is updated, a counter for this partition is incremented on both primary and backup nodes. The value of
+this counter is also sent along with the event notification to the client. Thus, the client can skip already-processed
+events. Once the client confirms that an event is received, the primary and backup nodes remove the record for this event
+from their backup queues.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="examples">Examples</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -3675,6 +3696,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#initial-query">Initial Query</a></li>
 <li><a href="#remote-filter">Remote Filter</a></li>
 <li><a href="#remote-transformer">Remote Transformer</a></li>
+<li><a href="#events-delivery-guarantees">Events Delivery Guarantees</a></li>
 <li><a href="#examples">Examples</a></li>
 </ul>
           
@@ -3724,8 +3746,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1602007649' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1602007649' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1602025536' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1602025536' async crossorigin></script>
 </body>
 
 </html>
