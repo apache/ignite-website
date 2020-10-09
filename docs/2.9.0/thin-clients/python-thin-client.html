@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/thin-clients/python-thin-client" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1602025539">
+	<link rel="stylesheet" href="/assets/css/styles.css?1602204474">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1602025539"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1602204474"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -3304,20 +3304,6 @@ When the client fails to reconnect, it throws a special <code>ReconnectError</co
 <div class="paragraph">
 <p>Partition awareness allows the thin client to send query requests directly to the node that owns the queried data.</p>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Warning</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Partition awareness is an experimental feature whose API or design architecture might change before a GA version is released.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Without partition awareness, an application that is connected to the cluster via a thin client executes all queries and operations via a single server node that acts as a proxy for the incoming requests.
 These operations are then re-routed to the node that stores the data that is being requested.
@@ -3921,7 +3907,8 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 <h2 id="scan-queries">Scan Queries</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>scan()</code> method of the cache object can be used to get all objects from the cache. It returns a generator that yields <code>(key,value)</code> tuples. You can iterate through the generated pairs as follows:</p>
+<p>The <code>scan()</code> method of the cache object can be used to get all objects from the cache. It returns a generator that yields
+<code>(key,value)</code> tuples. You can iterate through the generated pairs as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3952,6 +3939,18 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 # ... 20 elements in total...
 # 'key_16' 16
 # 'key_12' 12
+</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">scan</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="c1"># {
+#     'key_17': 17,
+#     'key_10': 10,
+#     'key_6': 6,
+#     ... 20 elements in total...
+#     'key_16': 16,
+#     'key_12': 12
+# }
 </span></code></pre>
 </div>
 </div>
@@ -3999,7 +3998,22 @@ The <code>sql()</code> method returns a generator that yields the resulting rows
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="c1"># Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+</span>
+<span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
 <span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
@@ -4152,7 +4166,22 @@ if provided,</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="c1"># Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+</span>
+<span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">import</span> <span class="nn">ssl</span>
 
 
@@ -4278,8 +4307,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1602025539' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1602025539' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1602204474' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1602204474' async crossorigin></script>
 </body>
 
 </html>
