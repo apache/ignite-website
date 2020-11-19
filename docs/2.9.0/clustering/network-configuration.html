@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/clustering/network-configuration" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1605297238">
+	<link rel="stylesheet" href="/assets/css/styles.css?1605746741">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1605297238"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1605746741"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -3194,6 +3194,23 @@
 <p>The following table describes some most important properties of <code>TcpDiscoverySpi</code>.
 You can find the complete list of properties in the <a href="https://ignite.apache.org/releases/2.9.0/javadoc/org/apache/ignite/spi/discovery/tcp/TcpDiscoverySpi.html" target="_blank" rel="noopener">TcpDiscoverySpi</a> javadoc.</p>
 </div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You should initialize the <code>IgniteConfiguration.localHost</code> or <code>TcpDiscoverySpi.localAddress</code> parameter with the network
+interface that will be used for inter-node communication. By default, a node binds to and listens on all available IP
+addresses of an environment it&#8217;s running on. It can prolong node failures detection if some of the node&#8217;s addresses are
+not reachable from other cluster nodes.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3210,8 +3227,8 @@ You can find the complete list of properties in the <a href="https://ignite.apac
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">By default, the node uses the first non-loopback address it finds. If there is no non-loopback address available, then <code>java.net.InetAddress.getLocalHost()</code> is used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default, a node binds to all available network addresses. If there is a non-loopback address available, then java.net.InetAddress.getLocalHost() is used.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localPort</code></p></td>
@@ -3345,7 +3362,7 @@ You can find the list of all properties in the <a href="https://ignite.apache.or
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -3522,8 +3539,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1605297238' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1605297238' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1605746741' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1605746741' async crossorigin></script>
 </body>
 
 </html>
