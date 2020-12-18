@@ -23,12 +23,12 @@
     <link rel="canonical" href="/docs/latest/net-specific/net-troubleshooting" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1608259561">
+	<link rel="stylesheet" href="/assets/css/styles.css?1608323206">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1608259561"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1608323206"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -56,27 +56,46 @@
             <li><a href="/developer">APIs</a>
             
                 <nav class='dropdown'>
-                    <li class="dropdown-item"><a href="/releases/latest/javadoc/index.html">JavaDoc</a></li>
+                    <li class="dropdown-item"><a href="/releases/latest/javadoc/index.html">Java</a></li>
 
-                    <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">.NET</a></li>
+                    <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">C#/.NET</a></li>
 
                     <li class="dropdown-item"><a href="/releases/latest/cppdoc/index.html">C++</a></li>
 
                     <li class="dropdown-item"><a href="/releases/latest/scaladoc/scalar/index.html#org.apache.ignite.scalar.scalar$">Scala</a></li>
+
+                    <li class="dropdown-item dropdown-item-heading"><span>Examples</span></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/examples" title="Apache Ignite Java examples">Java</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/dotnet/examples" title="Apache Ignite C#/.NET examples">C#/.NET</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/cpp/examples" title="Apache Ignite C++ examples">C++</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/python/examples" title="Apache Ignite Python examples">Python</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/nodejs/examples" title="Apache Ignite NodeJS examples">NodeJS</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/php/examples" title="Apache Ignite PHP examples">PHP</a></li>
                 </nav>
             </li>
         </nav>
-        
-        
-        <a href="https://github.com/apache/ignite" title='GitHub' class='github' target="_blank">
-            <img src="/assets/images/github-gray.svg" alt="GitHub logo">
-        </a>
         
         <form class='search'>
             <button class="search-close" type='button'><img src='/assets/images/cancel.svg'></button>
             <input type="search" placeholder="Search…" id="search-input">
         </form>
         <button type='button' class='search-toggle'><img src='/assets/images/search.svg'></button>
+
+        <nav id="lang-selector">
+            <li><a href="/"><img src="/assets/images/icon_lang_en.png" alt="English language icon" /><span>▼</span></a>
+                <nav class="dropdown">
+                    <li class="dropdown-item"><a href="/docs/latest/" ><img src="/assets/images/icon_lang_en.png" alt="English language icon" /><span>English</span></a></li>
+                    <li class="dropdown-item"><a href="https://www.ignite-service.cn/doc/java/" target="_blank" rel="noopener"><img src="/assets/images/icon_lang_cn.png" alt="Chinese language icon" /><span>Chinese</span></a></li>
+                </nav>
+            </li>
+        </nav>
+
         <button type='button' class='top-nav-toggle'>⋮</button>
 
         
@@ -3325,6 +3344,43 @@ JVM runs in the same process as .NET, it overrides that handler, breaking .NET e
 by setting the <code>COMPlus_EnableAlternateStackCheck</code> environment variable to <code>1</code>.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="zombie-processes-on-linux">Zombie processes on Linux</h3>
+<div class="paragraph">
+<p>On Linux, both .NET and Java install <code>SIGCHLD</code> handler to deal with child process termination.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Handlers are installed lazily (when a <code>Process</code> is first started)</p>
+</li>
+<li>
+<p>Only one handler can exist at a time</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Therefore, it is possible that Java overwrites .NET handler, or vice versa,
+making it impossible to clean up child processes on one of the platforms,
+resulting in <a href="https://en.wikipedia.org/wiki/Parent_process">zombie processes</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Ignite uses child processes on Java side in one particular case: when Persistence is enabled and <code>direct-io</code> module is used.</strong>
+In this case .NET <code>System.Diagnostics.Process</code> API should not be used.</p>
+</div>
+<div class="sect3">
+<h4 id="workaround">Workaround</h4>
+<div class="paragraph">
+<p>To work around the issue, make sure that child processes are created either only on Java side, or only on .NET side.</p>
+</div>
+<div class="paragraph">
+<p>For example, when <code>direct-io</code> is used, and .NET code requires starting a child process,
+move the process handling logic to Java side and invoke it with
+<a href="/docs/latest/developers-guide/distributed-computing/distributed-computing">Compute</a> <code>ExecuteJavaTask</code> API.
+Alternatively, use Services API to call Java service from .NET.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -3347,6 +3403,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#failed-to-start-manager-gridmanageradapter">Failed to start manager : GridManagerAdapter</a></li>
 <li><a href="#could-not-load-file-or-assembly-myassembly-or-one-of-its-dependencies-the-system-cannot-find-the-file-specified">Could not load file or assembly 'MyAssembly' or one of its dependencies. The system cannot find the file specified.</a></li>
 <li><a href="#stack-smashing-detected-dotnet-terminated">Stack smashing detected: dotnet terminated</a></li>
+<li><a href="#zombie-processes-on-linux">Zombie processes on Linux</a>
+<ul class="sectlevel3">
+<li><a href="#workaround">Workaround</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -3397,8 +3458,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1608259561' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1608259561' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1608323206' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1608323206' async crossorigin></script>
 </body>
 
 </html>
