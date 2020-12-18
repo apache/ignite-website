@@ -93,7 +93,7 @@ exports.minifyCss = minifyCss;
  * observes for changes on the .scss file, and compiles 
  */
 function watch() {
-    gulp.watch('scss/ignite-redesign.scss', compileCss)
+    gulp.watch('scss/*.scss', compileCss)
 }
 
 exports.watch = watch;
