@@ -63,6 +63,17 @@ if [ "$action" = "build" ]; then
     rm ../docs/latest
     ln -s ../docs/$version ../docs/latest
   fi
+
+  # add the version number to the .txt file used by the version selector dropdown on the UI
+  if ! grep -Fxq "$version" ../docs/available-versions.txt; then
+    # adds the version to the top of the list if 'latest', otherwise to the bottom
+    if [ "$latest" = "yes" ]; then
+      cat <(echo "$version") ../docs/available-versions.txt > ../docs/available-versions.new
+      mv ../docs/available-versions.new ../docs/available-versions.txt
+    else
+     echo "$version" >> ../docs/available-versions.txt
+    fi
+  fi
 fi
 
 # clean up some stuff
