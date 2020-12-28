@@ -25,13 +25,16 @@ function initVersioning()
                     dropdown.length = 0;
 
                     for(let i = 0; i < lines.length; i++){
-                        new_option = document.createElement('option');
-                        new_option.text = lines[i];
-                        let r = isLatest?"latest":currentDocVersion;
-                        new_option.value = currentPath.replace(r, lines[i]);
-                        dropdown.add(new_option);
-                        if(lines[i] == currentDocVersion) 
-                            dropdown.selectedIndex = i;
+                        if(String(lines[i]).trim().length > 0){
+                            new_option = document.createElement('option');
+                            new_option.text = lines[i];
+                            let r = isLatest?"latest":currentDocVersion;
+                            new_option.value = currentPath.replace(r, lines[i]);
+                            dropdown.add(new_option);
+                            if(lines[i] == currentDocVersion) 
+                                dropdown.selectedIndex = i;
+                        }
+                        
                     }
 
                     dropdown.addEventListener('change', function(){
