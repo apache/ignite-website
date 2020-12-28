@@ -1,0 +1,75 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/latest/release_notes.html" />
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache IGNITE 2.9.1</h1>
+			<div></div>
+
+    <h2>Ignite Core:</h2><ul>
+        <li>Added support to graceful shutdown for ZookeeperDiscoverySpi</li>
+        <li>Added System view for binary metadata</li>
+        <li>Added System view for metastorage items</li>
+        <li>Added RebalancingPartitionsTotal metrics</li>
+        <li>Improved checkpoint concurrent behaviour</li>
+        <li>Fixed critical system error when unregister a JMX bean</li>
+        <li>Fixed IgniteCache#isClosed() returns false on server node even if the cache had been closed before</li>
+        <li>Fixed inability to eagerly remove expired cache entries</li>
+        <li>Fixed partial index rebuild issue in case indexed cache contains different datatypes</li>
+        <li>Fixed local metastorage system view error if unmarshallable values present</li>
+        <li>Fixed deadlock between grid-timeout-worker and a thread opening a communication connection</li>
+        <li>Fixed deadlock in IgniteServiceProcessor</li>
+        <li>Fixed issue when rebalance future might hang in no final state though all partitions are owned</li>
+        <li>Fixed issue when scan query fails with an assertion error: Unexpected row key</li>
+        <li>Fixed issue with archiving and enabled wal compaction setting on server restart</li>
+        <li>Fixed NPE during Cassandra Store initialization with PRIMITIVE strategy</li>
+        <li>Fixed synchronization problems when different classloaders are used for deployment of same class</li>
+        <li>Fixed exception on SQL caches when client reconnect</li>
+        <li>Fixed deadlock on multiple cache delete</li>
+        <li>Fixed NPE in IgniteServiceProcessor when destroying a cache</li>
+        <li>Fixed issue when DurableBackgroundTask can abandon incomplete task</li>
+        <li>Fixed issue related to cache interceptor deserialization on client nodes</li>
+        <li>Fixed issue when control.sh doesn't start if JMX port was set</li>
+        <li>Fixed issue when ZookeeperDiscoverySpiMBeanImpl#getCoordinator can return invalid node as coordinator</li>
+        <li>Fixed issue when valid blocking section in GridNioWorker and GridNioClientWorker leads to false positive blocking thread detection</li>
+        <li>Fixed several logging issues</li>
+        <li>Fixed issue when exchange worker, waiting for new task from queue, considered as blocked</li>
+        <li>Fixed incorrect topology snapshot logger output about coordinator change</li>
+        <li>Fixed slowdown during node initialization</li>
+        <li>Fixed incorrect usage of Class.isAssignableFrom in SystemViewLocal and SystemViewMBean classes</li>
+        <li>Fixed several concurrent metrics issues</li>
+        <li>Fixed issue related to incorrect work of predicates (< and >) in where clause with compound primary key</li>
+        <li>Removed unnecessary dependency to curator-client from and improved ZookeeperDiscoverySpi</li>
+        <li>Removed unnecessary failure trace in IgnitionEx</li>
+    </ul>
+    <h2>Java thin-client:</h2><ul>
+        <li>Fixed issue when thin client connect/disconnect during topology update may lead to partition divergence in ignite-sys-cache</li>
+        <li>Fixed issue when thin client silently closes channel after inactivity</li>
+        <li>Fixed unsupported protocol version exception when getting cache configuration from Java thin client</li>
+    </ul>
+    <h2>JDBC:</h2><ul>
+        <li>Fixed thin driver reports incorrect property names</li>
+        <li>Updated JDBC metadata to match actual capabilities</li>
+    </ul>
+    <h2>Ignite .NET:</h2><ul>
+        <li>Improved slow Enum serialization</li>
+        <li>Fixed issue when deserializing IBinaryObject containing an IBinaryObject field fails</li>
+        <li>Fixed issue TransactionImpl finalizer can crash the process</li>
+        <li>Fixed child processes become zombies when persistence is used with direct-io on Linux</li>
+    </ul>
+    <h2>Ignite C++:</h2><ul>
+        <li>Added Windows support to CMake build system</li>
+        <li>Fixed issue when odbc-example loses values if run with 1 additional node</li>
+    </ul>
+</body>
+		
