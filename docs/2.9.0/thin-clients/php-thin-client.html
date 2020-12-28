@@ -24,12 +24,12 @@
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1609180381">
+	<link rel="stylesheet" href="/assets/css/styles.css?1609184064">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
 
-	<script type="text/javascript" src="/assets/js/anchor.min.js?1609180381"></script>
+	<script type="text/javascript" src="/assets/js/anchor.min.js?1609184064"></script>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
 
@@ -3210,9 +3210,9 @@ as needed. All of them will work independently.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="kn">use</span> <span class="nc">Apache\Ignite\Client</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="kn">use</span> <span class="nn">Apache\Ignite\Client</span><span class="p">;</span>
 
-<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Client</span><span class="p">();</span></code></pre>
+<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">();</span></code></pre>
 </div>
 </div>
 </div>
@@ -3225,24 +3225,24 @@ as needed. All of them will work independently.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="kn">use</span> <span class="nc">Apache\Ignite\Client</span><span class="p">;</span>
-<span class="kn">use</span> <span class="nc">Apache\Ignite\ClientConfiguration</span><span class="p">;</span>
-<span class="kn">use</span> <span class="nc">Apache\Ignite\Exception\ClientException</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="kn">use</span> <span class="nn">Apache\Ignite\Client</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nn">Apache\Ignite\ClientConfiguration</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nn">Apache\Ignite\Exception\ClientException</span><span class="p">;</span>
 
-<span class="k">function</span> <span class="n">connectClient</span><span class="p">():</span> <span class="kt">void</span>
+<span class="k">function</span> <span class="nf">connectClient</span><span class="p">()</span><span class="o">:</span> <span class="kt">void</span>
 <span class="p">{</span>
-    <span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Client</span><span class="p">();</span>
+    <span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">();</span>
     <span class="k">try</span> <span class="p">{</span>
-        <span class="nv">$clientConfiguration</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="p">(</span>
+        <span class="nv">$clientConfiguration</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientConfiguration</span><span class="p">(</span>
             <span class="s1">'127.0.0.1:10800'</span><span class="p">,</span> <span class="s1">'127.0.0.1:10801'</span><span class="p">,</span> <span class="s1">'127.0.0.1:10802'</span><span class="p">);</span>
         <span class="c1">// Connect to Ignite node</span>
-        <span class="nv">$client</span><span class="o">-&gt;</span><span class="nf">connect</span><span class="p">(</span><span class="nv">$clientConfiguration</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nc">ClientException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span><span class="p">(</span><span class="nv">$e</span><span class="o">-&gt;</span><span class="nf">getMessage</span><span class="p">());</span>
+        <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="nv">$clientConfiguration</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ClientException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">echo</span><span class="p">(</span><span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">());</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nf">connectClient</span><span class="p">();</span></code></pre>
+<span class="nx">connectClient</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3287,11 +3287,11 @@ The client will try to reconnect to the next node specified in the configuration
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="nv">$cacheCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheConfiguration</span><span class="p">();</span>
-<span class="nv">$cacheCfg</span><span class="o">-&gt;</span><span class="nf">setCacheMode</span><span class="p">(</span><span class="nc">CacheConfiguration</span><span class="o">::</span><span class="no">CACHE_MODE_REPLICATED</span><span class="p">);</span>
-<span class="nv">$cacheCfg</span><span class="o">-&gt;</span><span class="nf">setWriteSynchronizationMode</span><span class="p">(</span><span class="nc">CacheConfiguration</span><span class="o">::</span><span class="no">WRITE_SYNC_MODE_FULL_SYNC</span><span class="p">);</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="nv">$cacheCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CacheConfiguration</span><span class="p">();</span>
+<span class="nv">$cacheCfg</span><span class="o">-&gt;</span><span class="na">setCacheMode</span><span class="p">(</span><span class="nx">CacheConfiguration</span><span class="o">::</span><span class="na">CACHE_MODE_REPLICATED</span><span class="p">);</span>
+<span class="nv">$cacheCfg</span><span class="o">-&gt;</span><span class="na">setWriteSynchronizationMode</span><span class="p">(</span><span class="nx">CacheConfiguration</span><span class="o">::</span><span class="na">WRITE_SYNC_MODE_FULL_SYNC</span><span class="p">);</span>
 
-<span class="nv">$cache</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="nf">getOrCreateCache</span><span class="p">(</span><span class="s1">'References'</span><span class="p">,</span> <span class="nv">$cacheCfg</span><span class="p">);</span></code></pre>
+<span class="nv">$cache</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getOrCreateCache</span><span class="p">(</span><span class="s1">'References'</span><span class="p">,</span> <span class="nv">$cacheCfg</span><span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -3305,39 +3305,39 @@ The client will try to reconnect to the next node specified in the configuration
 <pre class="rouge highlight"><code data-lang="php"><span class="nv">$val</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
 <span class="nv">$keys</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$keys</span> <span class="k">as</span> <span class="nv">$number</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$val</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CacheEntry</span><span class="p">(</span><span class="nv">$number</span><span class="p">,</span> <span class="nb">strval</span><span class="p">(</span><span class="nv">$number</span><span class="p">));</span>
+    <span class="nv">$val</span><span class="p">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CacheEntry</span><span class="p">(</span><span class="nv">$number</span><span class="p">,</span> <span class="nb">strval</span><span class="p">(</span><span class="nv">$number</span><span class="p">));</span>
 <span class="p">}</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">putAll</span><span class="p">(</span><span class="nv">$val</span><span class="p">);</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">putAll</span><span class="p">(</span><span class="nv">$val</span><span class="p">);</span>
 
-<span class="nv">$replace</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">replaceIfEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">);</span>
+<span class="nv">$replace</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">replaceIfEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$replace</span> <span class="o">?</span> <span class="s1">'true'</span> <span class="o">:</span> <span class="s1">'false'</span><span class="p">;</span> <span class="c1">//false</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$value</span><span class="p">;</span> <span class="c1">//1</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$replace</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">replaceIfEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="nv">$replace</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">replaceIfEquals</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$replace</span> <span class="o">?</span> <span class="s1">'true'</span> <span class="o">:</span> <span class="s1">'false'</span><span class="p">;</span> <span class="c1">//true</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$value</span><span class="p">;</span> <span class="c1">//3</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">put</span><span class="p">(</span><span class="mi">101</span><span class="p">,</span> <span class="s1">'101'</span><span class="p">);</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">put</span><span class="p">(</span><span class="mi">101</span><span class="p">,</span> <span class="s1">'101'</span><span class="p">);</span>
 
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">removeKeys</span><span class="p">(</span><span class="nv">$keys</span><span class="p">);</span>
-<span class="nv">$sizeIsOne</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">getSize</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">removeKeys</span><span class="p">(</span><span class="nv">$keys</span><span class="p">);</span>
+<span class="nv">$sizeIsOne</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">getSize</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
 <span class="k">echo</span> <span class="nv">$sizeIsOne</span> <span class="o">?</span> <span class="s1">'true'</span> <span class="o">:</span> <span class="s1">'false'</span><span class="p">;</span> <span class="c1">//true</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">(</span><span class="mi">101</span><span class="p">);</span>
+<span class="nv">$value</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="mi">101</span><span class="p">);</span>
 <span class="k">echo</span> <span class="nv">$value</span><span class="p">;</span> <span class="c1">//101</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">removeAll</span><span class="p">();</span>
-<span class="nv">$sizeIsZero</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">getSize</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">removeAll</span><span class="p">();</span>
+<span class="nv">$sizeIsZero</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">getSize</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
 <span class="k">echo</span> <span class="nv">$sizeIsZero</span> <span class="o">?</span> <span class="s1">'true'</span> <span class="o">:</span> <span class="s1">'false'</span><span class="p">;</span> <span class="c1">//true</span>
 <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span></code></pre>
 </div>
@@ -3353,13 +3353,13 @@ The client will try to reconnect to the next node specified in the configuration
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="nv">$cache</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="nf">getOrCreateCache</span><span class="p">(</span><span class="s1">'personCache'</span><span class="p">);</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="nv">$cache</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">getOrCreateCache</span><span class="p">(</span><span class="s1">'personCache'</span><span class="p">);</span>
 
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nc">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'John Smith'</span><span class="p">));</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nc">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'John Johnson'</span><span class="p">));</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'John Smith'</span><span class="p">));</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'John Johnson'</span><span class="p">));</span>
 
-<span class="nv">$qry</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ScanQuery</span><span class="p">();</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">query</span><span class="p">(</span><span class="k">new</span> <span class="nc">ScanQuery</span><span class="p">());</span></code></pre>
+<span class="nv">$qry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ScanQuery</span><span class="p">();</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="k">new</span> <span class="nx">ScanQuery</span><span class="p">());</span></code></pre>
 </div>
 </div>
 </div>
@@ -3375,29 +3375,29 @@ The <code>query()</code> method returns a cursor object with the standard PHP It
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="nv">$create_table</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SqlFieldsQuery</span><span class="p">(</span>
-    <span class="nb">sprintf</span><span class="p">(</span><span class="s1">'CREATE TABLE IF NOT EXISTS Person (id INT PRIMARY KEY, name VARCHAR) WITH "VALUE_TYPE=%s"'</span><span class="p">,</span> <span class="nc">Person</span><span class="o">::</span><span class="n">class</span><span class="p">)</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="nv">$create_table</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SqlFieldsQuery</span><span class="p">(</span>
+    <span class="nb">sprintf</span><span class="p">(</span><span class="s1">'CREATE TABLE IF NOT EXISTS Person (id INT PRIMARY KEY, name VARCHAR) WITH "VALUE_TYPE=%s"'</span><span class="p">,</span> <span class="nx">Person</span><span class="o">::</span><span class="na">class</span><span class="p">)</span>
 <span class="p">);</span>
-<span class="nv">$create_table</span><span class="o">-&gt;</span><span class="nf">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">query</span><span class="p">(</span><span class="nv">$create_table</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">getAll</span><span class="p">();</span>
+<span class="nv">$create_table</span><span class="o">-&gt;</span><span class="na">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="nv">$create_table</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">getAll</span><span class="p">();</span>
 
 <span class="nv">$key</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="nv">$val</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'Person 1'</span><span class="p">);</span>
+<span class="nv">$val</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'Person 1'</span><span class="p">);</span>
 
-<span class="nv">$insert</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SqlFieldsQuery</span><span class="p">(</span><span class="s1">'INSERT INTO Person(id, name) VALUES(?, ?)'</span><span class="p">);</span>
-<span class="nv">$insert</span><span class="o">-&gt;</span><span class="nf">setArgs</span><span class="p">(</span><span class="nv">$val</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="nv">$val</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">);</span>
-<span class="nv">$insert</span><span class="o">-&gt;</span><span class="nf">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
-<span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">query</span><span class="p">(</span><span class="nv">$insert</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">getAll</span><span class="p">();</span>
+<span class="nv">$insert</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SqlFieldsQuery</span><span class="p">(</span><span class="s1">'INSERT INTO Person(id, name) VALUES(?, ?)'</span><span class="p">);</span>
+<span class="nv">$insert</span><span class="o">-&gt;</span><span class="na">setArgs</span><span class="p">(</span><span class="nv">$val</span><span class="o">-&gt;</span><span class="na">id</span><span class="p">,</span> <span class="nv">$val</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">);</span>
+<span class="nv">$insert</span><span class="o">-&gt;</span><span class="na">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
+<span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="nv">$insert</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">getAll</span><span class="p">();</span>
 
-<span class="nv">$select</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SqlFieldsQuery</span><span class="p">(</span><span class="s1">'SELECT name FROM Person WHERE id = ?'</span><span class="p">);</span>
-<span class="nv">$select</span><span class="o">-&gt;</span><span class="nf">setArgs</span><span class="p">(</span><span class="nv">$key</span><span class="p">);</span>
-<span class="nv">$select</span><span class="o">-&gt;</span><span class="nf">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
-<span class="nv">$cursor</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="nf">query</span><span class="p">(</span><span class="nv">$select</span><span class="p">);</span>
+<span class="nv">$select</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SqlFieldsQuery</span><span class="p">(</span><span class="s1">'SELECT name FROM Person WHERE id = ?'</span><span class="p">);</span>
+<span class="nv">$select</span><span class="o">-&gt;</span><span class="na">setArgs</span><span class="p">(</span><span class="nv">$key</span><span class="p">);</span>
+<span class="nv">$select</span><span class="o">-&gt;</span><span class="na">setSchema</span><span class="p">(</span><span class="s1">'PUBLIC'</span><span class="p">);</span>
+<span class="nv">$cursor</span> <span class="o">=</span> <span class="nv">$cache</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="nv">$select</span><span class="p">);</span>
 <span class="c1">// Get the results; the `getAll()` methods closes the cursor; you do not have to call cursor.close();</span>
-<span class="nv">$results</span> <span class="o">=</span> <span class="nv">$cursor</span><span class="o">-&gt;</span><span class="nf">getAll</span><span class="p">();</span>
+<span class="nv">$results</span> <span class="o">=</span> <span class="nv">$cursor</span><span class="o">-&gt;</span><span class="na">getAll</span><span class="p">();</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nb">sizeof</span><span class="p">(</span><span class="nv">$results</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s1">'name = '</span> <span class="mf">.</span> <span class="nv">$results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">echo</span> <span class="s1">'name = '</span> <span class="o">.</span> <span class="nv">$results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
     <span class="k">echo</span> <span class="s2">"</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
 <span class="p">}</span></code></pre>
 </div>
@@ -3423,11 +3423,11 @@ The <code>query()</code> method returns a cursor object with the standard PHP It
     <span class="s1">'local_pk'</span> <span class="o">=&gt;</span> <span class="s1">'/path/to/key/file'</span>
 <span class="p">];</span>
 
-<span class="nv">$config</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="p">(</span><span class="s1">'localhost:10800'</span><span class="p">);</span>
-<span class="nv">$config</span><span class="o">-&gt;</span><span class="nf">setTLSOptions</span><span class="p">(</span><span class="nv">$tlsOptions</span><span class="p">);</span>
+<span class="nv">$config</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientConfiguration</span><span class="p">(</span><span class="s1">'localhost:10800'</span><span class="p">);</span>
+<span class="nv">$config</span><span class="o">-&gt;</span><span class="na">setTLSOptions</span><span class="p">(</span><span class="nv">$tlsOptions</span><span class="p">);</span>
 
-<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Client</span><span class="p">();</span>
-<span class="nv">$client</span><span class="o">-&gt;</span><span class="nf">connect</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span></code></pre>
+<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">();</span>
+<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -3438,13 +3438,13 @@ The <code>query()</code> method returns a cursor object with the standard PHP It
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="php"><span class="nv">$config</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="p">(</span><span class="s1">'localhost:10800'</span><span class="p">);</span>
-<span class="nv">$config</span><span class="o">-&gt;</span><span class="nf">setUserName</span><span class="p">(</span><span class="s1">'ignite'</span><span class="p">);</span>
-<span class="nv">$config</span><span class="o">-&gt;</span><span class="nf">setPassword</span><span class="p">(</span><span class="s1">'ignite'</span><span class="p">);</span>
+<pre class="rouge highlight"><code data-lang="php"><span class="nv">$config</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientConfiguration</span><span class="p">(</span><span class="s1">'localhost:10800'</span><span class="p">);</span>
+<span class="nv">$config</span><span class="o">-&gt;</span><span class="na">setUserName</span><span class="p">(</span><span class="s1">'ignite'</span><span class="p">);</span>
+<span class="nv">$config</span><span class="o">-&gt;</span><span class="na">setPassword</span><span class="p">(</span><span class="s1">'ignite'</span><span class="p">);</span>
 <span class="c1">//$config-&gt;setTLSOptions($tlsOptions);</span>
 
-<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Client</span><span class="p">();</span>
-<span class="nv">$client</span><span class="o">-&gt;</span><span class="nf">connect</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span></code></pre>
+<span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Client</span><span class="p">();</span>
+<span class="nv">$client</span><span class="o">-&gt;</span><span class="na">connect</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -3525,8 +3525,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1609180381' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1609180381' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1609184064' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1609184064' async crossorigin></script>
 </body>
 
 </html>
