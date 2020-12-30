@@ -34,12 +34,18 @@ if [ -z "$version" ]; then
   exit 1
 fi
 
+# there are different repos for version 2 and 3.
+export repo_url="https://github.com/apache/ignite.git"
+if [[ "${version:0:1}" == "3" ]] ; then
+  repo_url="https://github.com/apache/ignite-3.git"
+fi
+
 # clone Ignite repo locally to copy only the content for docs. 
 #   @todo: is there a way to avoid cloning the entire branch and bring only the docs/ dir?
 export tmp_dir=tmp
 rm -rf $tmp_dir
 mkdir $tmp_dir
-git -C $tmp_dir  clone --single-branch --branch $branch  https://github.com/apache/ignite.git docs_$version
+git -C $tmp_dir  clone --single-branch --branch $branch $repo_url docs_$version
 rm -rf _docs _data _plugins
 cp -R $tmp_dir/docs_$version/docs/_docs _docs
 cp -R $tmp_dir/docs_$version/docs/_data/ _data
@@ -73,7 +79,8 @@ if [ "$action" = "build" ]; then
       cat <(echo "$version") "$versions_filename" > ../docs/available-versions.new
       mv ../docs/available-versions.new "$versions_filename"
     else
-      if ! [ -z "$tail -c 1 <"$versions_filename")" ]; then  #just in case the file doesn't end with an EOL already
+      #just in case the file doesn't end with an EOL already
+      if [ -z "$tail -c 1 <"$versions_filename")" ]; then  
         echo "" >> "$versions_filename"
       fi
      
