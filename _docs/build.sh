@@ -4,6 +4,8 @@ export latest=no
 export branch=master
 export action=build
 
+export versions_filename="../docs/available-versions.txt"
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --version=*)
@@ -59,9 +61,24 @@ if [ "$action" = "build" ]; then
   cp -R _site/docs/$version ../docs/$version
   cp -R _site/assets ../
 
-  if [ "$latest" = "yes" ]; then
-    rm ../docs/latest
-    ln -s ../docs/$version ../docs/latest
+  # if [ "$latest" = "yes" ]; then
+    # rm ../docs/latest
+    # ln -s ../docs/$version ../docs/latest
+  # fi
+
+  # add the version number to the .txt file used by the version selector dropdown on the UI
+  if ! grep -Fxq "$version" "$versions_filename"; then
+    # adds the version to the top of the list if 'latest', otherwise to the bottom
+    if [ "$latest" = "yes" ]; then
+      cat <(echo "$version") "$versions_filename" > ../docs/available-versions.new
+      mv ../docs/available-versions.new "$versions_filename"
+    else
+      if ! [ -z "$tail -c 1 <"$versions_filename")" ]; then  #just in case the file doesn't end with an EOL already
+        echo "" >> "$versions_filename"
+      fi
+     
+      echo "$version" >> "$versions_filename"
+    fi
   fi
 fi
 
