@@ -915,6 +915,7 @@ under the License.
         google: {families: ['Open+Sans:300,400,600,700&display=swap']}
     };
     document.querySelector('#apache_ignite_text_download').addEventListener('click', async (e) => {
+        e.preventDefault()
         let blob = await fetch(e.currentTarget.getAttribute('href')).then(r => r.blob());
         let url = window.URL.createObjectURL(blob);
         var a = document.createElement("a");
@@ -924,6 +925,7 @@ under the License.
         a.download = "text";
         a.click();
         window.URL.revokeObjectURL(url);
+        return false;
     })
     (function () {
         var wf = document.createElement('script');
