@@ -149,6 +149,10 @@ Redirect 301 /releases/latest/javadoc/org/apache/ignite/yarn/class-use/IgnitePro
 RewriteEngine On
 RewriteBase /
 
+
+RewriteCond %{HTTP_HOST} ^(www\.)?ignite.incubator.apache.org$
+RewriteRule ^/?(.*)$ https://ignite.apache.org/$1 [L,R=301]
+
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=301,L]
 
