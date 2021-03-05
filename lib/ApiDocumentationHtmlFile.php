@@ -13,16 +13,40 @@ class ApiDocumentationHtmlFile  {
 
     public $GAPropertyId = 'UA-61232409-1';
 
-    protected $GAtrackingCode = "<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    protected $GAtrackingCode = '<script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag(\'js\', new Date());
+    
+      gtag(\'config\', \'__GA_PROPERTY_ID__\');
+    </script>';
 
-  ga('create', '__GA_PROPERTY_ID__', 'auto');
-  ga('send', 'pageview');
+    protected $LuckyOrangeTrackingCode = "<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>";
 
-</script>";
+    protected $yandexMetricaTrackingCode = '<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->';
 
 
     public function __construct(\SplFileInfo $file)
@@ -86,6 +110,33 @@ class ApiDocumentationHtmlFile  {
             if($this->_debug) print 'GA tracking code added.'.PHP_EOL;
         }
 
+    }
+
+    public function hasYandexTrackingCode()
+    {
+        return strpos($this->getContent(), $this->yandexMetricaTrackingCode) !== false;
+    }
+
+    public function hasLuckyOrangeCode()
+    {
+        return strpos($this->getContent(), $this->LuckyOrangeTrackingCode) !== false;
+    }
+
+    public function addYandexMetricaTrackingCode()
+    {
+        if(!$this->hasYandexTrackingCode()){
+            
+            $this->fileContent = str_ireplace('<head>', '<head>'.PHP_EOL.$this->yandexMetricaTrackingCode, $this->getContent());
+            if($this->_debug) print 'YandexMetrica tracking code added.'.PHP_EOL;
+        }
+    }
+
+    public function addLuckyOrangeTrackingCode()
+    {
+        if(!$this->hasLuckyOrangeCode()){
+            $this->fileContent = str_ireplace('<head>', '<head>'.PHP_EOL.$this->LuckyOrangeTrackingCode, $this->getContent());
+            if($this->_debug) print 'LuckyOrange tracking code added.'.PHP_EOL;
+        }
     }
 
     public function hasNoindexTag()
