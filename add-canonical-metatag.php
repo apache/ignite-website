@@ -17,10 +17,12 @@ $base_url = 'https://ignite.apache.org';
     'add-ga-tracking-code' --> Usually the API docs comes without Google Analytics tracking code. This action adds the code.
     'add-noindex' --> Adds metatag that avoids crawlers to index this page.
     'remove-noindex' --> Removes robots NOINDEX metatag
+    'add-luckyorange-tracking-code' --> 
+    'add-yandexmetrica-tracking-code' --> 
  */
 $work_directories = [ 
-    $base_path.'/releases/2.9.0' => [ 'add-noindex', 'remove-canonical', 'add-canonical'],
-    $base_path.'/releases/2.9.1' => [ 'set-as-latest', 'add-ga-tracking-code']
+    // $base_path.'/releases/2.9.0' => [ 'add-noindex', 'remove-canonical', 'add-canonical'],
+    $base_path.'/releases/2.9.1' => [ 'set-as-latest', 'add-ga-tracking-code', 'add-luckyorange-tracking-code', 'add-yandexmetrica-tracking-code']
     ];
 
 
@@ -52,6 +54,14 @@ foreach ($work_directories as $w_base_dir => $w_actions)
                     break;
                 case('add-ga-tracking-code'):
                     $docHtmlFile->addAnalyticsTrackingCode();
+                    break;
+                
+                case('add-luckyorange-tracking-code'):
+                    $docHtmlFile->addLuckyOrangeTrackingCode();
+                    break;
+                    
+                case('add-yandexmetrica-tracking-code'):
+                    $docHtmlFile->addYandexMetricaTrackingCode();
                     break;
                 case('add-noindex'):
                     $docHtmlFile->addNoindexTag();
