@@ -21,8 +21,8 @@ $base_url = 'https://ignite.apache.org';
     'add-yandexmetrica-tracking-code' --> 
  */
 $work_directories = [ 
-    // $base_path.'/releases/2.9.0' => [ 'add-noindex', 'remove-canonical', 'add-canonical'],
-    $base_path.'/releases/2.9.1' => [ 'set-as-latest', 'add-ga-tracking-code', 'add-luckyorange-tracking-code', 'add-yandexmetrica-tracking-code']
+    $base_path.'/releases/2.9.1' => [ 'add-noindex', 'remove-canonical', 'add-canonical'],
+    $base_path.'/releases/2.10.0' => [ 'set-as-latest', 'add-ga-tracking-code', 'add-luckyorange-tracking-code', 'add-yandexmetrica-tracking-code']
     ];
 
 
