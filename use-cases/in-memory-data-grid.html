@@ -59,59 +59,53 @@ under the License.
     <div class="container">
 
         <p>
-            The Apache Ignite® in-memory data grid accelerates and scales your databases, services, 
-            and APIs. It supports key-value and ANSI SQL APIs, ACID transactions, co-located processing, 
-            and machine learning libraries. As an in-memory data grid, Ignite is frequently used to increase the performance and
-            scalability of existing real-time applications, for <a href="/use-cases/high-performance-computing.html">
-            high-performance computing</a>, or for caching of data scattered across databases.
+            Apache Ignite can be used as an in-memory data grid that accelerates and scales your existing databases and
+            data stores. The grid supports key-value and ANSI SQL APIs, ACID transactions, co-located processing,
+            and machine learning libraries. As an in-memory data grid, Ignite is frequently used to increase the
+            performance and scalability of real-time applications, to support <a href="/use-cases/high-performance-computing.html">
+            high-performance computing</a>, and to cache data that is scattered across databases.
         </p>
         <img class="img-fluid diagram-right" src="/images/svg-diagrams/data_grid.svg" alt="In-Memory Data Grid with Apache Ignite" width="555" height="600" />
         
         <h2>What is an In-Memory Data Grid?</h2>
 
-        <p>An in-memory data grid is a read-through/write-through caching strategy in which the application 
-        layer treats the data grid as the primary data store. Applications write to and read
-        from the in-memory cluster that propagates all the changes to any underlying databases automatically keeping them
-        updated and consistent with the in-memory data.</p>
+        <p>
+            An in-memory data grid is an advanced read-through/write-through cache that is deployed on top of multiple databases.
+            The grid supports various APIs, such as SQL, compute, and key-value. Applications write to and read from the
+            grid, and the grid propagates changes to the underlying data stores in a consistent way.
+        </p>
+        <p>
+            With Ignite, your applications can utilize multiple APIs for data processing. Key-value and SQL queries
+            enable you to request, join, and group distributed datasets. Compute and machine-learning APIs execute
+            logic close to the data, thus eliminating expensive data shuffling over the network.
+        </p>
 
-        <p>Ignite as an in-memory data grid provides all essential APIs needed to simplify its adoption. The
-        APIs include <a href="/use-cases/key-value-store.html">distributed key-value</a> and <a href="/features/sql.html">ANSI SQL</a> queries, <a href="/features/acid-transactions.html">ACID transactions</a>, <a href="/features/collocated-processing.html">co-located processing</a>, 
-        and <a href="/features/machinelearning.html">machine learning</a> models. While key-value and SQL calls let you request, join, and group 
-        distributed data sets, the compute and machine learning components help to eliminate data 
-        shuffling over the network, thus, boosting compute and data-intensive calculations.</p>
+        <h2>IGNITE AS AN IN-MEMORY DATA GRID AND EXTERNAL DATABASES</h2>
 
-        <p>Ignite can store data both in memory and on disk with two options for data persistence. You 
-        can persist changes in an external database or have Ignite keep data in its <a href="/arch/native-persistence.html">native persistence</a>. </p>
+        <p>
+            Ignite can improve the performance and scalability of most external databases and data stores (such as RDBMS,
+            NoSQL, and  Hadoop) by sliding in as an in-memory data grid between the application and the database layers.
+            When the application writes data to the cache, Ignite writes-through or writes-behind all data modifications
+            to the underlying external store. Ignite also performs ACID transactions (coordinating and committing transactions
+            across both the cluster and the database).
+        </p>
 
-        <h2>IGNITE as an in-memory data grid AND EXTERNAL DATABASES</h2>
-
-        <p>Ignite can improve the performance and scalability of any external
-            database such as RDBMS, NoSQL or Hadoop, by sliding in as an in-memory data grid between the
-            application and the database layer. When an application writes data to the cache, Ignite 
-            automatically writes-through or writes-behind all data modifications to the underlying 
-            external store. Ignite also performs ACID transactions where it coordinates and commits 
-            a transaction across the cluster as well as the database.</p>
-
-        <p>Additionally, Ignite can be deployed as a shared and unified in-memory layer that stores 
-            data sets originating from disjointed databases. Your applications can consume all the 
-            data from Ignite as a single store while Ignite can keep the original databases in sync 
-            whenever in-memory data gets updated.</p>
-
-        <p>However, there are some limitations if an external database is used as a persistence 
-            layer for Ignite in-memory data grid deployments. For instance, if you run Ignite SQL 
-            or scan queries, you need to ensure that all data is preloaded to the in-memory cluster. 
-            Note that Ignite SQL or scan queries can read data from disk only if the data is stored 
-            in the Ignite native persistence.</p>
+        <p>
+            Additionally, Ignite can be deployed as a shared and unified in-memory layer that stores datasets that originate
+            from disjointed databases. Your applications can consume all the data from Ignite as a single store while Ignite
+            synchronizes the original databases whenever in-memory data is updated.
+        </p>
 
         <h2>IGNITE NATIVE PERSISTENCE</h2>
 
-        <p>Ignite native persistence is a distributed ACID and SQL-compliant disk store that 
-            transparently integrates with the Ignite in-memory layer. With native persistence 
-            enabled, Ignite stores both data and indexes on disk and eliminates the time-consuming 
-            cache warm-up step. The native persistence always keeps a full copy of data on disk so 
-            you are free to cache a subset of records in memory. If a required data record is missing 
-            in memory, Ignite reads it from the disk automatically regardless of the API, whether 
-            you use SQL, key-value, or scan queries.</p>
+        <p>
+            Ignite Native Persistence is a distributed ACID-compliant, SQL-compliant disk store that transparently
+            integrates with the Ignite in-memory layer. When Native Persistence is enabled, Ignite stores both
+            data and indexes on disk, thus eliminating the time-consuming cache warm-up step. Native Persistence
+            keeps a full copy of data on disk, so you are free to cache a subset of records in memory. If a required
+            data record is missing from memory, Ignite reads the record from the disk automatically, regardless of the
+            API (whether SQL, key-value, or scan queries).
+        </p>
 
 
         <div class="jumbotron jumbotron-fluid">
