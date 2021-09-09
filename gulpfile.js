@@ -121,6 +121,7 @@ function extractCritical(cb) {
 
     });
 }
+exports.extractCritical = extractCritical;
 
 const inject = require('gulp-inject-string');
 const rename = require('gulp-rename');
@@ -138,4 +139,5 @@ exports.inlineCritical = inlineCritical;
 
 exports.critical = series(extractCritical, inlineCritical);
 
-exports.build = series(compileCss, extractCritical, inlineCritical);
+// exports.build = series(compileCss, extractCritical, inlineCritical);
+exports.build = compileCss; //, extractCritical, inlineCritical);
