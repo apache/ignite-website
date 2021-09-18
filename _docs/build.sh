@@ -58,6 +58,7 @@ else
   sed  "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g"  _config.template  > _config.yml
 fi
 # build/serve
+bundle install
 bundle exec jekyll $action  
 
 # move built files to /docs/ dir under website root dir.
