@@ -62,9 +62,9 @@
 
     
     <meta name="ignite-version" content="3.0.0-alpha" />
-    <title>Installing Using Distributive | Ignite Documentation</title>
+    <title>Data Rebalancing | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-alpha/installation/installing-using-exe" />
+    <link rel="canonical" href="/docs/3.0.0-alpha/rebalance" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -223,7 +223,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-alpha/rebalance" class='' >Data Rebalancing</a>
+                <a href="/docs/3.0.0-alpha/rebalance" class='active' >Data Rebalancing</a>
             
         </li>
     
@@ -232,76 +232,34 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/installation/installing-using-exe.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/rebalance.adoc" target="_blank">Edit</a>
         
-            <h1>Installing Using Distributive</h1>
+            <h1>Data Rebalancing</h1>
         
-        <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite was tested on:</p>
+<p>When a new node joins the cluster, some of the partitions are relocated to the new node so that the data remains distributed equally in the cluster. This process is called data rebalancing.
+If an existing node permanently leaves the cluster and backups are not configured, you lose the partitions stored on this node. When backups are configured, one of the backup copies of the lost partitions becomes a primary partition and the rebalancing process is initiated.</p>
 </div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">11 and later</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Ubuntu 20.04), Windows (10 Home), macOS</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="installing-using-distributive">Installing Using Distributive</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>WARNING:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>If you have installed one of the Ignite 3 Alpha releases before, please remove the `~/.ignitecfg` file before proceeding. This is a temporary step, the procedure will be improved in the future releases.</pre>
+<pre>Data rebalancing is triggered by changes in the Baseline Topology. In pure in-memory clusters, the default behavior is to start rebalancing immediately when a node leaves or joins the cluster (the baseline topology changes automatically). In clusters with persistence, the baseline topology has to be changed manually (default behavior), or can be changed automatically when automatic baseline adjustment is enabled.</pre>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="running-an-example">Running an Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Examples are shipped as a separate Maven project, which is located in the <code>examples</code> folder. <code>RebalanceExample</code> demonstrates the data rebalancing process.</p>
 </div>
 <div class="paragraph">
-<p>To install Apache Ignite, perform the following steps:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <a href="https://ignite.apache.org/download.cgi" target="_blank" rel="noopener">Apache Ignite Downloads</a> page to download the distributive.</p>
-</li>
-<li>
-<p>Put the distributed file into the installation folder in your system.</p>
-</li>
-<li>
-<p>Either execute the file or run it in the command line.</p>
-</li>
-<li>
-<p>Optionally, set the Windows PATH to point to the installation folder and make sure there is no trailing / (or \ for Windows) in the path.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Depending on your system, you may need additional permissions during the installation.
-To grant permissions for Linux, run the <code>chmod +x ignite</code> standard command.
-</td>
-</tr>
-</table>
+<p>To start running <code>RebalanceExample</code>, please refer to its <a href="https://github.com/apache/ignite-3/blob/3.0.0-alpha3/examples/src/main/java/org/apache/ignite/example/rebalance/RebalanceExample.java" target="_blank" rel="noopener">JavaDoc</a> for instructions.</p>
 </div>
 </div>
 </div>
@@ -315,8 +273,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#installing-using-distributive">Installing Using Distributive</a></li>
+<li><a href="#running-an-example">Running an Example</a></li>
 </ul>
     </div>
           

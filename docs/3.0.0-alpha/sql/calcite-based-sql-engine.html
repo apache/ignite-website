@@ -62,9 +62,9 @@
 
     
     <meta name="ignite-version" content="3.0.0-alpha" />
-    <title>Installing Using Distributive | Ignite Documentation</title>
+    <title>Calcite-Based SQL Engine | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-alpha/installation/installing-using-exe" />
+    <link rel="canonical" href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -195,7 +195,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine" class='' >Calcite-Based SQL Engine</a>
+                <a href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine" class='active' >Calcite-Based SQL Engine</a>
             
         </li>
     
@@ -232,76 +232,449 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/installation/installing-using-exe.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/sql/calcite-based-sql-engine.adoc" target="_blank">Edit</a>
         
-            <h1>Installing Using Distributive</h1>
+            <h1>Calcite-Based SQL Engine</h1>
         
-        <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite was tested on:</p>
+<p>This Alpha release introduces new SQL engine based on the Apache Calcite framework to parse and optimize queries and generate execution plans. Previously, it was based on H2 Database.</p>
 </div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">11 and later</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Ubuntu 20.04), Windows (10 Home), macOS</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>Apache Calcite is a dynamic data management framework, which mainly serves for mediating between applications and one or more data storage locations and data processing engines.
+For more information on Apache Calcite, please see the <a href="https://calcite.apache.org/docs/" target="_blank" rel="noopener">product documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>Replacing H2 SQL engine with Apache Calcite incorporates the following general improvements:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Wider SQL support</strong>: Apache Calcite, unlike H2, is specifically designed for SQL enablement on top of an arbitrary external data storage;</p>
+</li>
+<li>
+<p><strong>Better optimization algorithms</strong>: Apache Calcite optimizes queries by repeatedly applying planner rules to a relational expression;</p>
+</li>
+<li>
+<p><strong>Higher overall performance</strong>: Calcite offers much higher levels of execution flexibility, as well as higher efficiency in terms of both memory and CPU consumption.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="installing-using-distributive">Installing Using Distributive</h2>
+<h2 id="data-manipulation-language-dml">Data Manipulation Language (DML)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>WARNING:</p>
+<p>This section walks you through all data manipulation language (DML) commands supported by Apache Ignite Alpha 3.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre>If you have installed one of the Ignite 3 Alpha releases before, please remove the `~/.ignitecfg` file before proceeding. This is a temporary step, the procedure will be improved in the future releases.</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To install Apache Ignite, perform the following steps:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Navigate to <a href="https://ignite.apache.org/download.cgi" target="_blank" rel="noopener">Apache Ignite Downloads</a> page to download the distributive.</p>
-</li>
-<li>
-<p>Put the distributed file into the installation folder in your system.</p>
-</li>
-<li>
-<p>Either execute the file or run it in the command line.</p>
-</li>
-<li>
-<p>Optionally, set the Windows PATH to point to the installation folder and make sure there is no trailing / (or \ for Windows) in the path.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
+<div class="admonitionblock warning">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<div class="title">Warning</div>
 </td>
 <td class="content">
-Depending on your system, you may need additional permissions during the installation.
-To grant permissions for Linux, run the <code>chmod +x ignite</code> standard command.
+Currently, <code>WITH</code> and <code>MERGE</code> commands are not supported.
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="select">SELECT</h3>
+<div class="paragraph">
+<p>Retrieves data from a table or multiple tables.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="p">[</span> <span class="n">hintComment</span> <span class="p">]</span> <span class="p">[</span> <span class="n">STREAM</span> <span class="p">]</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span>
+    <span class="err">{</span> <span class="o">*</span> <span class="o">|</span> <span class="n">projectItem</span> <span class="p">[,</span> <span class="n">projectItem</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span>
+<span class="k">FROM</span> <span class="n">tableExpression</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="err">{</span> <span class="n">groupItem</span> <span class="p">[,</span> <span class="n">groupItem</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">HAVING</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="insert">INSERT</h3>
+<div class="paragraph">
+<p>Inserts data into a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="err">{</span> <span class="k">INSERT</span> <span class="o">|</span> <span class="n">UPSERT</span> <span class="err">}</span> <span class="k">INTO</span> <span class="n">tablePrimary</span>
+<span class="p">[</span> <span class="s1">'('</span> <span class="k">column</span> <span class="p">[,</span> <span class="k">column</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span>
+<span class="n">query</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update">UPDATE</h3>
+<div class="paragraph">
+<p>Updates data in a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">UPDATE</span> <span class="n">tablePrimary</span>
+<span class="k">SET</span> <span class="n">assign</span> <span class="p">[,</span> <span class="n">assign</span> <span class="p">]</span><span class="o">*</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="delete">DELETE</h3>
+<div class="paragraph">
+<p>Deletes data from a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">tablePrimary</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supported-operators-and-functions">Supported Operators and Functions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="aggregate-functions">Aggregate Functions</h3>
+<div class="sect3">
+<h4 id="count">COUNT</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">COUNT</span><span class="p">(</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span> <span class="n">value</span> <span class="p">[,</span> <span class="n">value</span> <span class="p">]</span><span class="o">*</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the number of input rows for which value is not null (wholly not null if value is composite).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="avg">AVG</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">AVG</span><span class="p">(</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span> <span class="nb">numeric</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the average (arithmetic mean) of numeric across all input values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sum">SUM</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SUM</span><span class="p">(</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span> <span class="nb">numeric</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the sum of numeric across all input values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="min">MIN</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">MIN</span><span class="p">(</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span> <span class="n">value</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the minimum value of value across all input values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="max">MAX</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">MAX</span><span class="p">(</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span> <span class="n">value</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Returns the maximum value of value across all input values.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="string_agg">STRING_AGG</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="n">STRING_AGG</span><span class="p">(</span> <span class="n">value</span> <span class="p">[,</span> <span class="n">separator</span> <span class="p">]</span> <span class="p">[</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="p">...])</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Concatenates the values of string expressions and places separator values between them.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="string_concat">STRING_CONCAT</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="n">STRING_CONCAT</span><span class="p">(</span><span class="n">string1</span><span class="p">,</span> <span class="n">string2</span><span class="p">,</span> <span class="p">...</span> <span class="n">stringN</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Concatenates the text values in the specified data ranges.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="functions">Functions</h3>
+<div class="sect3">
+<h4 id="json">JSON</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>JSON_EXISTS</p>
+</li>
+<li>
+<p>JSON_VALUE</p>
+</li>
+<li>
+<p>JSON_QUERY</p>
+</li>
+<li>
+<p>JSON_OBJECT</p>
+</li>
+<li>
+<p>JSON_ARRAY</p>
+</li>
+<li>
+<p>JSON_PRETTY</p>
+</li>
+<li>
+<p>STRING</p>
+</li>
+<li>
+<p>CHAR_LENGTH</p>
+</li>
+<li>
+<p>CHARACTER_LENGTH</p>
+</li>
+<li>
+<p>UPPER</p>
+</li>
+<li>
+<p>LOWER</p>
+</li>
+<li>
+<p>POSITION</p>
+</li>
+<li>
+<p>TRIM</p>
+</li>
+<li>
+<p>OVERLAY</p>
+</li>
+<li>
+<p>SUBSTRING</p>
+</li>
+<li>
+<p>INITCAP</p>
+</li>
+<li>
+<p>SPACE</p>
+</li>
+<li>
+<p>STRCMP</p>
+</li>
+<li>
+<p>REVERSE</p>
+</li>
+<li>
+<p>REGEXP_REPLACE</p>
+</li>
+<li>
+<p>SHA1</p>
+</li>
+<li>
+<p>MD5</p>
+</li>
+<li>
+<p>LTRIM</p>
+</li>
+<li>
+<p>TO_BASE64</p>
+</li>
+<li>
+<p>FROM_BASE64</p>
+</li>
+<li>
+<p>COMPRESS</p>
+</li>
+<li>
+<p>CONCAT</p>
+</li>
+<li>
+<p>TRANSLATE</p>
+</li>
+<li>
+<p>ASCII</p>
+</li>
+<li>
+<p>LEFT</p>
+</li>
+<li>
+<p>RIGHT</p>
+</li>
+<li>
+<p>REPEAT</p>
+</li>
+<li>
+<p>SOUNDEX</p>
+</li>
+<li>
+<p>For more information on functions supported by Apache Calcite, see the <a href="https://calcite.apache.org/docs/reference.html#operators-and-functions" target="_blank" rel="noopener">product documentation</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="numeric">NUMERIC</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>POWER</p>
+</li>
+<li>
+<p>ABS</p>
+</li>
+<li>
+<p>MOD</p>
+</li>
+<li>
+<p>SQRT</p>
+</li>
+<li>
+<p>LN</p>
+</li>
+<li>
+<p>LOG10</p>
+</li>
+<li>
+<p>EXP</p>
+</li>
+<li>
+<p>CEIL</p>
+</li>
+<li>
+<p>FLOOR</p>
+</li>
+<li>
+<p>RAND</p>
+</li>
+<li>
+<p>ACOS</p>
+</li>
+<li>
+<p>ASIN</p>
+</li>
+<li>
+<p>ATAN</p>
+</li>
+<li>
+<p>ATAN2</p>
+</li>
+<li>
+<p>CBRT</p>
+</li>
+<li>
+<p>COS</p>
+</li>
+<li>
+<p>COT</p>
+</li>
+<li>
+<p>DEGREES</p>
+</li>
+<li>
+<p>PI()</p>
+</li>
+<li>
+<p>RADIANS</p>
+</li>
+<li>
+<p>ROUND</p>
+</li>
+<li>
+<p>SIGN</p>
+</li>
+<li>
+<p>SIN</p>
+</li>
+<li>
+<p>TAN</p>
+</li>
+<li>
+<p>TRUNCATE</p>
+</li>
+<li>
+<p>CHR</p>
+</li>
+<li>
+<p>COSH</p>
+</li>
+<li>
+<p>SINH</p>
+</li>
+<li>
+<p>TANH</p>
+</li>
+<li>
+<p>For more information on functions supported by Apache Calcite, see the <a href="https://calcite.apache.org/docs/reference.html#operators-and-functions" target="_blank" rel="noopener">product documentation</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="general">GENERAL</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>NULLIF</p>
+</li>
+<li>
+<p>COALESCE</p>
+</li>
+<li>
+<p>CAST</p>
+</li>
+<li>
+<p>NVL</p>
+</li>
+<li>
+<p>GREATEST</p>
+</li>
+<li>
+<p>For more information on functions supported by Apache Calcite, see the <a href="https://calcite.apache.org/docs/reference.html#operators-and-functions" target="_blank" rel="noopener">product documentation</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="timestamp">TIMESTAMP</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>TIMESTAMP_ADD</p>
+</li>
+<li>
+<p>TIMESTAMP_DIFF</p>
+</li>
+<li>
+<p>EXTRACT</p>
+</li>
+<li>
+<p>LAST_DAY</p>
+</li>
+<li>
+<p>For more information on functions supported by Apache Calcite, see the <a href="https://calcite.apache.org/docs/reference.html#operators-and-functions" target="_blank" rel="noopener">product documentation</a>.</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -315,8 +688,37 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#installing-using-distributive">Installing Using Distributive</a></li>
+<li><a href="#data-manipulation-language-dml">Data Manipulation Language (DML)</a>
+<ul class="sectlevel2">
+<li><a href="#select">SELECT</a></li>
+<li><a href="#insert">INSERT</a></li>
+<li><a href="#update">UPDATE</a></li>
+<li><a href="#delete">DELETE</a></li>
+</ul>
+</li>
+<li><a href="#supported-operators-and-functions">Supported Operators and Functions</a>
+<ul class="sectlevel2">
+<li><a href="#aggregate-functions">Aggregate Functions</a>
+<ul class="sectlevel3">
+<li><a href="#count">COUNT</a></li>
+<li><a href="#avg">AVG</a></li>
+<li><a href="#sum">SUM</a></li>
+<li><a href="#min">MIN</a></li>
+<li><a href="#max">MAX</a></li>
+<li><a href="#string_agg">STRING_AGG</a></li>
+<li><a href="#string_concat">STRING_CONCAT</a></li>
+</ul>
+</li>
+<li><a href="#functions">Functions</a>
+<ul class="sectlevel3">
+<li><a href="#json">JSON</a></li>
+<li><a href="#numeric">NUMERIC</a></li>
+<li><a href="#general">GENERAL</a></li>
+<li><a href="#timestamp">TIMESTAMP</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
     </div>
           
