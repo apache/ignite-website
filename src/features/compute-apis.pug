@@ -1,0 +1,190 @@
+extend ../_components/base.pug
+
+block pagetitle
+    | Compute APIs   
+
+block css 
+    link(rel="stylesheet", href="../css/native-persistence.css")
+    link(rel="stylesheet", href="../css/compute-apis.css")
+    link(rel="stylesheet", href="../js/vendor/highlight/night-owl.css")
+
+    script(src="../js/vendor/highlight/highlight.min.js")
+    script(src="../js/vendor/highlight/java.min.js")
+    script(src="../js/vendor/highlight/xml.min.js")
+    script(src="../js/vendor/highlight/csharp.min.js")
+
+
+
+block main
+    - global.pageHref = "features"
+    - config.hdrClassName = "hdr__blue"
+    include ../_components/header.pug
+
+
+    section.innerhero
+        .container.innerhero__cont
+            .innerhero__main
+                .innerhero__pre.pb-3 Apache Ignite
+                h1.h1.innerhero__h1 Compute APIs
+                .innerhero__descr.pt-2.h5.
+                    Develop custom tasks in contemporary languages<br> and get the logic executed over a distributed cluster
+                .innerhero__action 
+                    a.button.innerhero__button(href="https://ignite.apache.org/docs/latest/index") Start Coding
+            img.innerhero__pic.innerhero__pic--computeapis(src="/public/img/features/compute-apis/compute-hero.svg", alt="Distributed In-Memory Cache")
+    // /.innerhero
+
+  
+
+    section.compute1.container
+       h2.compute1__h2.h4 Execute Data-Intensive And Compute-Intensive Tasks At High Speeds
+       .compute1__deskr Get an order-of-magnitude performance increase for custom complex logic:
+       .compute1__block.flexi
+         .compute1__item
+           img(src="/public/img/features/compute-apis/icon-one.svg" alt="").compute1__icon
+           p.compute1__text By minimizing or avoiding network<br> utilization
+         .compute1__item
+           img(src="/public/img/features/compute-apis/icon-two.svg" alt="").compute1__icon
+           p.compute1__text By executing the logic straight on the <br>cluster nodes
+    // /.compute1
+    
+    section.compute2
+     .container
+       h2.compute2__h2 Benefits Of Apache Ignite Compute APIs
+       .compute2__grid 
+            .compute2item
+              .compute2-points__item.fz20
+              .compute2item__block
+                h3.fz20.compute2item__title Broadcast or execute<br> on specific nodes
+                p.compute2__text – Broadcast your tasks to use all<br> the CPUs of your distributed cluster.
+                p.compute2__text – Or schedule the tasks for execution on a subset of the nodes based<br> on custom criteria
+            .compute2item
+              .compute2-points__item.fz20
+              .compute2item__block
+                h3.fz20.compute2item__title Load balance your querie
+                p.compute2__text If some of the nodes are overutilized, Ignite can automatically load-balance your computations to other nodes.
+                p.compute2__text There are three ways to enable that:<br> – Round-robin load balancing <br>– Random and weighted load balancing<br> – Job stealing.
+            .compute2item
+              .compute2-points__item.fz20
+              .compute2item__block
+                h3.fz20.compute2item__title Execute computations<br> in a fault-tolerant fashion
+                p.compute2__text Some computations might take minutes or hours to complete, e.g. <em> drugs discovery or logistics simulations.</em>
+                p.compute2__text You don't need to begin from scratch if the execution fails in the middle. Restart a calculation from the point<br> of failure. 
+    // /.compute2
+
+    section.nativecode.container.jsTabWrap
+        header.blockheader.blockheader--spl.flexi
+            h2.h4.blockheader__left Forget about PLSQL, use<br> the language you code with daily
+            .blockheader__right.fz20
+                p Create tasks in the language of your choice. You don’t need<br> to learn PLSQL any more.
+        .nativecode__tabctrls.flexi
+            a(href="#", data-tablink="nativeTabJava").nativecode__link.active Java
+            a(href="#", data-tablink="nativeTabNET").nativecode__link C#/.NET
+            a(href="#", data-tablink="nativeTabCpp").nativecode__link C++
+        .nativecode__tabs
+            .nativecode__tab(data-tab="nativeTabJava").active
+                pre.nativecode__codebox 
+                    code.java.
+                        // Broadcast the task to server nodes only.
+                        IgniteCompute compute = ignite.compute(ignite.cluster().forServers());
+
+                        // Each remote server node will execute the logic of the task/lambda below.
+                        compute.broadcast(() -> System.out.println(
+                        "Hello Node: " + ignite.cluster().localNode().id()));
+            
+            .nativecode__tab(data-tab="nativeTabNET")
+                pre.nativecode__codebox 
+                    code.csharp.
+                        // Broadcast the task to server nodes only.
+                        var compute = ignite.GetCluster().ForServers().GetCompute();
+
+                        // Each remote server node will execute the custom PrintNodeIdAction task.
+                        compute.Broadcast(new PrintNodeIdAction());
+            .nativecode__tab(data-tab="nativeTabCpp")
+                pre.nativecode__codebox 
+                    code.java.
+                         // Broadcast the task to server nodes only.
+                        IgniteCompute compute = ignite.compute(ignite.cluster().forServers());
+
+                        // Each remote server node will execute the logic of the task/lambda below.
+                        compute.broadcast(() -> System.out.println(
+                        "Hello Node: " + ignite.cluster().localNode().id()));
+    // /.nativecode
+
+    section.compute3.container 
+      h3.compute2__h2 Example Of Logic Building
+      h2.compute3__h2.h4 Execute the logic in place and eliminate network impact on the performance of the calculation
+      p.compute3__text Imagine that a winter storm is about to hit a highly-populated city. As a telecommunication company, you have to send a text message to 20 million residents notifying about the blizzard.
+      .compute4.flexi
+        .compute4__block.compute4__block--bad
+            img.compute4__icon(src="/public/img/features/icon-check-err.svg", alt="")
+            p.pt-3 With the client-server approach, the company would read all 20 million records from a database to an application that needs to execute some logic and send a message to the residents eventually.
+        .compute4__block
+            img.compute4__icon(src="/public/img/features/icon-check-ok.svg", alt="")
+            p.pt-3 A much more efficient approach would be to broadcast this logic to the cluster nodes that keep data about the city's residents. The logic gets executed on those nodes only and text messages are sent from there.
+            p.pt-3 With this technique, instead of pulling 20 million records via the network, you execute the logic in place and eliminate the network impact on the performance of the calculation.
+      
+      .jsTabWrap
+        header.blockheader.blockheader--spl.flexi
+            
+        .nativecode__tabs
+           
+            .nativecode__tab(data-tab="nativeTabJava").active
+                pre.nativecode__codebox 
+                    code.java.
+                        Ignite ignite = ...
+          
+                        // NewYork ID.
+                        long newYorkId = 2;
+
+                        // Send the logic to the cluster node that stores NewYork and all its inhabitants.
+                        ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
+
+                          @IgniteInstanceResource
+                          Ignite ignite;
+
+                          @Override
+                          public void run() {
+                            // Get access to the Person cache.
+                            IgniteCache&#60;BinaryObject, BinaryObject&#62; people = ignite.cache("Person").withKeepBinary();
+
+
+                            ScanQuery&#60;BinaryObject, BinaryObject&#62; query = new ScanQuery &#60;BinaryObject, BinaryObject&#62;();
+
+                            try (QueryCursor&#60;Cache.Entry&#60;BinaryObject, BinaryObject&#62;&#62; cursor = people.query(query)) {
+                              // Iteration over the local cluster node data using the scan query.
+                              for (Cache.Entry&#60;BinaryObject, BinaryObject&#62; entry : cursor) {
+                                BinaryObject personKey = entry.getKey();
+
+                                // Pick NewYorkers only.
+                                if (personKey.&#60;Long&#62;field("CITY_ID") == newYorkId) {
+                                  person = entry.getValue();
+
+                                  // Send the warning message to the person.
+
+                                }
+                              }
+                            }
+                          }
+                        }
+    // /.compute4 
+
+   
+    section.native-bottom.container
+        .native-bottom__grid 
+            article.nativebotblock
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-rocket.svg", alt="").nativebotblock__icon
+                    span Ready to Start?
+                p.nativebotblock__text Start coding distributed computing APIs
+                a.nativebotblock__link.arrowlink(href="https://ignite.apache.org/docs/latest/key-value-api/transactions", target="_blank") Performing Distributed Computing 
+            article.nativebotblock.nativebotblock--learn
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-docs.svg", alt="").nativebotblock__icon
+                    span Want to Learn More?
+                p.nativebotblock__text Learn more about high-performance computing use cases and see how it works in practice 
+                a.nativebotblock__link.arrowlink(href="https://ignite.apache.org/use-cases/high-performance-computing.html", target="_blank") High-Performance Computing Use-Cases
+
+
+
+
+

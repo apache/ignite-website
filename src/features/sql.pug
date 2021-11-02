@@ -1,0 +1,159 @@
+extend ../_components/base.pug
+
+block pagetitle
+    | Distributed ANSI SQL 
+
+block css 
+    link(rel="stylesheet", href="../css/native-persistence.css")
+    link(rel="stylesheet", href="../css/compute-apis.css")
+    link(rel="stylesheet", href="../css/sql.css")
+ 
+
+  
+
+
+
+block main
+    - global.pageHref = "features"
+    - config.hdrClassName = "hdr__blue"
+    include ../_components/header.pug
+
+
+    section.innerhero
+        .container.innerhero__cont
+            .innerhero__main
+                .innerhero__pre.pb-3 Apache Ignite
+                h1.h1.innerhero__h1 Distributed ANSI SQL
+                .innerhero__descr.pt-2.h5.
+                    The same SQL you've been using for years but now with<br> in-memory speed and at unlimited scale
+                .innerhero__action 
+                    a.button.innerhero__button(href="https://ignite.apache.org/docs/latest/index") Start Coding
+            img.innerhero__pic.innerhero__pic--sql(src="/public/img/features/sql/hero-image.svg", alt="sql-hero")
+    // /.innerhero
+
+    section.dist
+       .container
+         .dist__block.flexi
+            .dist__info
+              h2.dist__h2.h4 Apache Ignite as a SQL Database
+              p.dist__text The native support for SQL let’s you work with Ignite as with a standard SQL database. Literally, you can use just SQL if your applications need nothing else:
+              .dist__items.flexi
+                .dist__item
+                  h3.dist__item-title DDL commands
+                  .dist__item-grey.dist__item-grey1.flexi
+                      .dist__itemitem.flexi
+                          span.dist__item-span CREATE
+                          span.dist__item-span ALTER
+                          span.dist__item-span DROP
+                    
+                .dist__item
+                  h3.dist__item-title DML commands
+                  .dist__item-grey.dist__item-grey2.flexi
+                     .dist__itemitem.flexi
+                         span.dist__item-span SELECT
+                         span.dist__item-span INSERT
+                         span.dist__item-span UPDATE
+                     .dist__itemitem.dist__itemitem__end.flexi
+                         span.dist__item-span MERGE
+                         span.dist__item-span DELETE
+                         
+              h3.dist__h3 Apache Ignite is shipped with:
+              .dist__parts.flexi
+                .dist__part.flexi
+                   .compute2-points__item.fz20
+                   .dist__part-text JDBC driver
+                .dist__part.flexi
+                   .compute2-points__item.fz20
+                   .dist__part-text ODBC driver
+                .dist__part.flexi
+                   .compute2-points__item.fz20
+                   .dist__part-text.dist__part-textend.flexi Built-in SQL APIs
+                      .dist__part-grey Available for Java, C#, C++, Python, and other programming languages
+                      
+                
+            img.dist__image(src="/public/img/features/sql/image.svg", alt="sql-hero")
+    // /.dist
+
+    section.dist1
+       .container 
+          h2.dist1__h2.h4 Join, Group and Aggregate Distributed Data Sets
+          .dist1__subtext Whether you use a two or thousand-node cluster, you always can do the following:
+          .dist1__parts.flexi
+            .dist1__part group data
+            .dist1__part join data
+            .dist1__part order data
+            .dist1__part.dist1__partend aggregate data
+          .dist1__title What is a distributed join?
+          p.dist1__text.h4 A distributed join is a SQL statement with a join clause that combines two or more tables that have their data distributed across many cluster nodes.
+          h3.dist1__h3.h4 Types of joins in Ignite
+          .dist1__blocks.flexi
+              .dist1__block 
+                 h4.dist1__h4 Co-located joins
+                 p.dist1__texts this is the most performant type of joins that avoid data shuffling between nodes and minimize network usage.
+                 p.dist1__texts.pt-1 This type of join is used if you join <a class="dist1__link" href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation" target="_blank">partitioned and replicated tables</a> or partitioned tables that are co-located with each other.
+              .dist1__block 
+                 h4.dist1__h4 Non-colocated joins:
+                 p.dist1__texts less performant type of joins that join data of non-colocated tables. Ignite needs to shuffle data over the network to produce a correct result set.
+              .dist1__block 
+                 h4.dist1__h4 Hash joins:
+                 p.dist1__texts Ignite supports classic hash join algorithm that is more efficient than nested loop joins for many scenarios.
+    // /.dist1
+
+    section.dist2
+       .container
+          h2.dist2__h2.h4 Ignite SQL Engine and Multi-Tier Storage
+          p.dist2__p Depending on your storage configuration, Ignite SQL engine can query both in-memory and disk-only records
+          .dist2__blocks.flexi
+             .dist2__block
+                h3.dist2__h3 In-Memory Mode
+                p.dist2__text.dist2__text1 Ignite caches data only in memory   
+                details.dist2__details 
+                   summary.dist2__active
+                     img(src="/public/img/features/sql/plus.svg", alt="sql-hero")
+                   .dist2__subtext 
+                     p In this mode, Ignite SQL performs the fastest way possible as long as all the data is served from memory with no usage of the disk tier at all.
+             .dist2__block
+                h3.dist2__h3 In-Memory <br>+ Native Persistence Mode
+                p.dist2__text Ignite scales beyond available<br> memory capacity   
+                details.dist2__details 
+                   summary.dist2__active
+                     img(src="/public/img/features/sql/plus.svg", alt="sql-hero")
+                   .dist2__subtext 
+                      p Ignite persists 100% of data and indexes in the <a href="/arch/native-persistence.html">native persistence</a> while caching as much as possible in memory. 
+                      p.pt-1 Ignite SQL engine does not require to cache an entire data set in memory to operate correctly.
+                      p.pt-1 If the engine finds that a record is not cached, then it will read the record from disk. Your application only executes SQL queries, and Ignite gets the records from both memory and disk automatically.
+                      p.pt-1 On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up, which significantly decreases downtime.
+                
+             .dist2__block
+                h3.dist2__h3 In-Memory<br>+ External Database Mode
+                p.dist2__text Ignite accelerates your<br> existing databases   
+                details.dist2__details 
+                   summary.dist2__active
+                     img(src="/public/img/features/sql/plus.svg", alt="sql-hero")
+                   .dist2__subtext 
+                     p In this mode, the Ignite SQL engine requires caching all the data needed for distributed queries in memory since the engine currently does not support federated queries.
+                     p.pt-1 If federated queries between Ignite and an external database are required, then you can consider Ignite integration for Spark, where the DataFrames API can join the data stored in Ignite and other systems.
+           
+          
+
+    // /.dist2
+
+    section.native-bottom.container
+        .native-bottom__grid 
+            article.nativebotblock
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-rocket.svg", alt="").nativebotblock__icon
+                    span Ready to Start?
+                p.nativebotblock__text Discover more details about Apache Ignite SQL engine<br> and apply it for your use-case
+                a.nativebotblock__link.arrowlink(href="https://ignite.apache.org/docs/latest/persistence/native-persistence", target="_blank") Memory Architecture
+            article.nativebotblock.nativebotblock--learn
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-docs.svg", alt="").nativebotblock__icon
+                    span Want to Learn More?
+                p.nativebotblock__text Ignite SQL will become even more powerful and advanced with the release of the Apache Calcite based engine
+                .dist__link Coming in Ignite 3.0  
+                a.nativebotblock__link.arrowlink(href="https://cwiki.apache.org/confluence/display/IGNITE/Apache+Calcite-powered+SQL+Engine+Roadmap", target="_blank") New Calcite powered SQL engine
+
+
+
+

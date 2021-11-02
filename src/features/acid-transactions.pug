@@ -1,0 +1,109 @@
+extend ../_components/base.pug
+
+block pagetitle
+    | ACID transactions  
+
+block css 
+    link(rel="stylesheet", href="../css/native-persistence.css")
+    link(rel="stylesheet", href="../css/acid-transactions.css")
+
+
+
+block main
+    - global.pageHref = "features"
+    - config.hdrClassName = "hdr__blue"
+    include ../_components/header.pug
+
+
+    section.innerhero
+        .container.innerhero__cont
+            .innerhero__main
+                h1.h1.innerhero__h1 Distributed ACID <br>transactions
+                .pt-2.h3 with Apache Ignite
+                .innerhero__descr.pt-4.h5.
+                    Classical ACID transactions that let you update distributed data <br>consistently, durably and with in-memory speed
+                .innerhero__action 
+                    a.button.innerhero__button(href="https://ignite.apache.org/docs/latest/index") Start Coding
+            img.innerhero__pic.innerhero__pic--acid(src="/public/img/features/acid/hero.svg", alt="Distributed ACID transactions")
+    // /.innerhero
+
+
+
+
+
+
+    section.acid1.container 
+        h2.acid1__h2.h4 Update multiple records from different tables that span across many cluster nodes
+        .acid1__wrap.flexi
+            .acid1__item
+                .acid1__title.fz20 Consistency
+                .acid1__text.pt-3
+                    p Ignite transactional APIs are used by&nbsp;banks to&nbsp;implement payments services that transfer money between accounts in&nbsp;real-time.
+            .acid1__item
+                .acid1__title.fz20 Durability
+                .acid1__text.pt-3
+                    p Multi-tier storage persists changes durably to&nbsp;disk. Committed transactions always survive failures, incomplete transactions are rolled back.
+            .acid1__item
+                .acid1__title.fz20 Fault-Tolerance
+                .acid1__text.pt-3
+                    p The transactional engine avoids inconsistencies even if&nbsp;your transaction is&nbsp;failed in&nbsp;the middle of&nbsp;a&nbsp;commit.
+    // /.acid1
+
+
+
+
+    section.acid2.container 
+        h2.acid2__h2 To guarantee data consistency, durability and fault-<br>tolerance Ignite implements the two-phase commit protocol
+        .acid2__wrap.flexi.pt-5
+            .acid2__main
+                p In distributed systems, a transaction usually spans across multiple cluster nodes. 
+                p To handle possible distributed failures properly and avoid data inconsistencies cluster-wide, a two-phase commit protocol (2PC) is used.
+                h3.acid2__subtitle.h5.pb-2 How ACID transactions work
+                p Whenever the records get updated within a&nbsp;transaction, Ignite keeps the transactional state in&nbsp;a&nbsp;local transaction map until the changes are committed.
+                p At&nbsp;which point, the data is&nbsp;transferred to&nbsp;the participating remote nodes. Only the nodes that hold primary or&nbsp;backup copies of&nbsp;the data participate in&nbsp;the transaction.
+                p If&nbsp;a&nbsp;transaction is&nbsp;mapped to&nbsp;a&nbsp;single node, then, Ignite optimizes the transaction execution by&nbsp;switching to&nbsp;the one-phase-commit (1PC) protocol.
+            aside.acid2__right
+                img(src="/public/img/features/acid/acid-func.svg", alt="").acid2__funcimg
+    // /.acid2
+
+
+
+    section.acid3.container.pt-5
+        h2.h4.acid3__title Records are updated consistently across <br>memory and disk tiers
+        .acid3__wrap.pt-5.flexi
+            .acid3__col 
+                h3.h5.pb-2 Transactions with Ignite native persistence
+                p.fz20.acid3__collead In case of any failure you can always recover to a consistent state
+                .acid3__small.pt-4
+                    p When native persistence mode is&nbsp;enabled and Apache Ignite is&nbsp;used as&nbsp;a&nbsp;database that scales beyond available memory capacity, the distributed transactions update data across memory and disk in&nbsp;a&nbsp;consistent way.
+                    p All the changes stay durable, because they are written to&nbsp;the write-ahead log (WAL) files. It&nbsp;guarantees data consistency even if&nbsp;the cluster or&nbsp;individual nodes go&nbsp;down in&nbsp;the middle of&nbsp;a&nbsp;transaction.
+                a.acid3__detlink(href="#", data-hideopen="acidbox")  WAL in details
+                .acid3__detwrap(data-hidebox="acidbox")
+                    .acid3__detmore
+                        button.acid3__close(data-hideopen="acidbox")
+                            img(src="/public/img/features/acid/icon-cross.svg", alt="")
+                        p The purpose of&nbsp;the WAL is&nbsp;to&nbsp;propagate updates to&nbsp;the disk in&nbsp;the append-only mode, which is&nbsp;the fastest way to&nbsp;persist data to&nbsp;disk.
+                        p.pt-1 The WAL provides a&nbsp;recovery mechanism for failure scenarios when a&nbsp;single node or&nbsp;the whole cluster goes down. A&nbsp;cluster can always be&nbsp;recovered to&nbsp;the latest successfully committed transaction.
+            .acid3__col
+                h3.h5.pb-2 Transactions with external databases
+                p.fz20.acid3__collead Your transactions will be updated both i&nbsp;external database and Apache Ignite
+                .acid3__small.pt-4
+                    p When Apache Ignite is&nbsp;used as&nbsp;a&nbsp;caching layer for an&nbsp;external database, such as&nbsp;RDBMS, transactions span the cached data in&nbsp;Ignite as&nbsp;well as&nbsp;the data persisted in&nbsp;a&nbsp;database supporting transactional APIs.
+                    p For instance, if&nbsp;a&nbsp;relational database is&nbsp;configured as&nbsp;a&nbsp;disk tier, Ignite writes the transactional changes to&nbsp;the database before sending a&nbsp;commit message to&nbsp;participating cluster nodes.
+                    p This way, if&nbsp;a&nbsp;transaction fails at&nbsp;the database level, Ignite can still send the rollback message to&nbsp;the cluster nodes, keeping the data consistent across memory and disk tiers.
+
+    
+    section.native-bottom.container
+        .native-bottom__grid 
+            article.nativebotblock
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-rocket.svg", alt="").nativebotblock__icon
+                    span Ready to Start?
+                p.nativebotblock__text Create your transactional application <br>with Apache Ignite
+                a.nativebotblock__link.arrowlink(href="https://ignite.apache.org/docs/latest/key-value-api/transactions", target="_blank") Performing ACID Transactions
+            article.nativebotblock.nativebotblock--learn
+                h3.h4.nativebotblock__title
+                    img(src="/public/img/features/native-docs.svg", alt="").nativebotblock__icon
+                    span Want to&nbsp;Learn More?
+                p.nativebotblock__text Ignite&nbsp;3.0 advances its replication and transactional components with the support of&nbsp;the <strong>Raft consensus algorithm</strong>
+                a.nativebotblock__link.arrowlink(href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-61%3A+Common+Replication+Infrastructure", target="_blank") Ignite 3.0 and Raft Details
