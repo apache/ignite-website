@@ -1,0 +1,24 @@
+extend _components/base.pug
+
+block pagetitle
+    | Main Page 
+
+
+
+block main
+    - global.pageHref = ""
+    - var user = {description: 'foo bar baz'}
+    include ./_components/header.pug
+
+    section.temppages.container.pt-5 
+        h2.pt-5 Committers List
+        include ./_components/committers.pug
+        -
+            let arrayCommitters = JSON.parse(committers);
+        p здесь будет вывод
+        //- p !{arrayCommitters}
+        each val in arrayCommitters
+            p !{val["Name"]}
+        
+
+            

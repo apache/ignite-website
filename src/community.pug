@@ -160,7 +160,55 @@ block main
             .cmty-committers__text.pt-2 Most active contributors who make a&nbsp;significant contribution <br>to&nbsp;the project become Apache Ignite committers.
             p.cmty-committers__small.pt-2 <a href="https://ignite.apache.org/community/resources.html#people" target="_blank">Here is</a> the list of committers for the project.
             .committers__wrap.flexi 
-                include _components/cmty-committers.pug
+
+
+                mixin committerNew(obj)
+                    if obj["Comitter"]
+                        .committer.flexi
+                            .committer__name #{obj["Name"]}
+                            if obj["GitHub"]
+                                a.committer__github(href=obj["GitHub"])
+                                    img(src="/public/img/icon-github.svg", alt="")
+                            if obj["Apache profile"]
+                                a.committer__apache(href=obj["Apache profile"])
+                                    img(src="/public/img/icon-pero.svg", alt="")
+                            else
+                                span.committer__apache
+
+
+                include ./_components/committers.pug
+                -
+                    let arrayCommitters = JSON.parse(committers);
+                    let committersLeft = arrayCommitters.slice(0,arrayCommitters.length / 2);
+                    let committersRight = arrayCommitters.slice(arrayCommitters.length / 2);
+                    let pmc = arrayCommitters.filter((el) => {
+                        return el.PMC;
+                    })
+                .committers__left
+                    each val, index in committersLeft
+                        if index > 6
+                            - break;
+                        +committerNew(val)
+                    a.committers__morelink(href="#", data-hideopen="committersLeft", data-invis="1") Load more
+                    .committers__more.jsOpener(data-hidebox="committersLeft")
+                        .jsOpenerWrap
+                            each val, index in committersLeft
+                                if index <= 6
+                                    - continue;
+                                +committerNew(val)
+                .committers__right
+                    each val, index in committersRight
+                        if index > 6
+                            - break;
+                        +committerNew(val)
+                    a.committers__morelink(href="#", data-hideopen="committersRight", data-invis="1") Load more
+                    .committers__more.jsOpener(data-hidebox="committersRight")
+                        .jsOpenerWrap
+                            each val, index in committersRight
+                                if index <= 6
+                                    - continue;
+                                +committerNew(val)
+                //- include _components/cmty-committers.pug
     // /.cmty-committers 
 
 
@@ -171,7 +219,39 @@ block main
             .cmty-committers__text.pt-2 A group of Ignite committers who oversee project management and operational matters. <br>They vote on new committers, releases and do other vital decisions.
             p.cmty-committers__small.pt-2 <a href="#">Here is</a> the list of PMC members for the project.
             
-            include _components/cmty-phs.pug
+
+
+            mixin projectManagers(obj)
+                article.cmty-pmitem
+                    if obj["PMC"] == "PMC Chair"
+                        .cmty-pmitem__proff
+                            img(src="/public/img/community/b7-chair-star.svg", alt="")
+                            span Chair
+                    h3.cmty-pmitem__name.h5 !{obj["Name"]}
+                    small.cmty-pmitem__work.pt-2 #{obj["Company"]}
+                    .cmty-pmitem__links.flexi 
+                        if obj["GitHub"]
+                            a.cmty-pmitem__github(href=obj["GitHub"], target="_blank")
+                                img(src="/public/img/icon-github.svg", alt="")
+                        if obj["Apache profile"]
+                            a.cmty-pmitem__apache(href=obj["Apache profile"], target="_blank")
+                                img(src="/public/img/icon-pero.svg", alt="")
+            //- include _components/cmty-phs.pug
+
+            .cmty-pm__wrap.pt-5
+                each val, index in pmc
+                    if index > 3
+                        - break;
+                    +projectManagers(val)
+            .cmty-pm__more.jsOpener(data-hidebox="pmMore")
+                .jsOpenerWrap.cmty-pm__wrap
+                    each val, index in pmc
+                        if index < 4
+                            - continue;
+                        +projectManagers(val)
+            a.cmty-pm__morelink(href="#", data-hideopen="pmMore") 
+                i Load more
+                span Hide
     // /.cmty-pm
 
 
@@ -298,9 +378,13 @@ block main
                     i 02
                     h3.cmty-redstep__h3 If you want to help application developpers
                     p Look for new questions on the <a href="mailto:user-subscribe@ignite.apache.org">user mailing list</a> or <a href="https://stackoverflow.com/questions/tagged/ignite" target="_blank">StackOverflow</a> (#ignite) and help others to use Ignite successfully.
-            .cmty-redstart__bottom.flexi 
-                h3.cmty-redstart__bottitle.h5.
-                    We do recognise and welcome non-code contributions. There are dozens of Apache Ignite community members who contribute this way
+            .cmty-redstart__bottom.flexi
+                .cmty-redstart__left
+                    h3.h4.pb-1 Project Awareness <br>Top Contributors
+                    p.h5.cmty-redstart__grey Previous Quarter 
+                    h3.cmty-redstart__bottitle.h5.pt-4.pb-3
+                        We do recognise and welcome non-code contributions. There are dozens of Apache Ignite community members who contribute this way
+                    a(href="https://recognition.gridgain.com/main?product=ignite", target="_blank") See all contributors and contributions  
                 a.cmty-redstart__botright(href="https://recognition.gridgain.com/main?date=prev-quarter", target="_blank") 
                     iframe(src="https://recognition-dev.gridgain.com/leaderboard-frame?limit=10&interval=prev-quarter", frameborder="0").cmty-redstart__iframe.themescroll
     // /.cmty-redstart
