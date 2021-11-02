@@ -1,4 +1,0 @@
-var namespace_apache_1_1_ignite_1_1_core_1_1_plugin_1_1_cache =
-[
-    [ "ICachePluginConfiguration", "interface_apache_1_1_ignite_1_1_core_1_1_plugin_1_1_cache_1_1_i_cache_plugin_configuration.html", "interface_apache_1_1_ignite_1_1_core_1_1_plugin_1_1_cache_1_1_i_cache_plugin_configuration" ]
-];
