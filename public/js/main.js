@@ -215,15 +215,16 @@ function simpleTabs(){
         if(!link) return;
         e.preventDefault();
         let wrap = e.target.closest('.jsTabWrap');
-        wrap.querySelectorAll('[data-tablink]').forEach(el => {
-            el.classList.remove('active');
-        })
-        link.classList.add('active');
         let needTab = document.querySelector('[data-tab="' + link.dataset.tablink + '"]');
         if(!needTab){
             console.log("Tab - " + link.dataset.tablink + " not found");
             return;
         }
+        wrap.querySelectorAll('[data-tablink]').forEach(el => {
+            el.classList.remove('active');
+        })
+        link.classList.add('active');
+
         wrap.querySelectorAll('[data-tab]').forEach(el => {
             el.classList.remove('active');
         });
