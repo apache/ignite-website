@@ -1,72 +1,510 @@
 extend _components/base.pug
 
 block pagetitle
-    | Main Page 
+    | Main 
 
+
+block css
+    link(rel="stylesheet", href="../js/vendor/swiper/swiper-bundle.min.css")
+    link(rel="stylesheet", href="../js/vendor/highlight/default.min.css")
+    link(rel="stylesheet", href="../js/vendor/highlight/night-owl.css")
+    link(rel="stylesheet", href="../css/native-persistence.css")
+    link(rel="stylesheet", href="../css/events.css")
+    link(rel="stylesheet", href="../css/tooling.css")
+    link(rel="stylesheet", href="../css/frontpage.css")
+    script(src="../js/vendor/highlight/highlight.min.js")
+    script(src="../js/vendor/swiper/swiper-bundle.min.js")
 
 
 block main
     - global.pageHref = ""
-    - var user = {description: 'foo bar baz'}
-    include ./_components/header.pug
+    - config.hdrClassName = "hdr__dark"
 
-    section.temppages.container.pt-5 
-        h2.pt-5 Pages List
-        ul.dashlist.pt-4.pb-5
-            li 
-                a(href="/community.html") Сommunity 
-            li 
-                a(href="/use-cases/") UseCases Root Page
-            li 
-                a(href="/features/") Features Root Page
-            li 
-                a(href="/arch/multi-tier-storage.html") Features: multi-tier-storage
-            li 
-                a(href="/arch/native-persistence.html") Features: native-persistence
-            li 
-                a(href="/use-cases/in-memory-cache.html") Use Cases: in-memory-cache
-            li 
-                a(href="/events.html") Events
-            li 
-                a(href="/use-cases/provenusecases.html") Use Cases: Powered By
-            li
-                a(href="/resources.html") Resources
-            li
-                a(href="/features/tooling.html") Tooling
-            li 
-                a(href="/features/acid-transactions.html") Features: ACID transactions
-            li 
-                a(href="/faq.html") FAQ
-            li
-                a(href="/features/compute-apis.html") Features: Compute APIs
-            li
-                a(href="/use-cases/high-performance-computing.html") Use Cases: High Performance Computing
-            li
-                a(href="/features/distributed-key-value-store.html") Features: Distributed Key-Value APIs
-            li
-                a(href="/features/multilanguage.html") Features: Multi-Language Support
-            li
-                a(href="/features/servicegrid.html") Features: Service APIs
-            li
-                a(href="/features/machinelearning.html") Features: Machine Learning APIs
-            li
-                a(href="/features/streaming.html") Features: Streaming
-            li
-                a(href="/features/sql.html") Features: Distributed ANSI SQL
-            li
-                a(href="/use-cases/digital-integration-hub.html") Use Cases: Digital Integration Hub
-            li 
-                a(href="/use-cases/in-memory-data-grid.html") Use Cases: In-Memory Data Grid
-            li 
-                a(href="/use-cases/in-memory-database.html") Use Cases: In-Memory Database
-            li
-                a(href="/arch/clustering.html") Features: Deployment Options
-            li 
-                a(href="/download.html") Downloads  
-            li 
-                a(href="/use-cases/hadoop-acceleration.html") Use Cases: Hadoop Acceleration
-            li 
-                a(href="/use-cases/spark-acceleration.html") Use Cases: Apache Spark
-            li 
-                a(href="/use-cases/key-value-store.html") Use Cases: Key-Value Store
+    .fronttop 
+        include ./_components/header.pug
+
+        section.innerhero.fronthero
+            .container.innerhero__cont
+                .innerhero__main.innerhero__main--long
+                    .innerhero__pre.pb-4 Scale Across Memory And Disk With No Compromises
+                    h1.h1.innerhero__h1.innerhero__mega Open-Source<br>Distributed Database
+                    .innerhero__h2.h4.pt-2 For High-Performance Computing <br>With In-Memory Speed and On-Disk Scale
+                    .innerhero__action.pt-4
+                        a.button.fronthero__button(href="https://ignite.apache.org/docs/latest/index") Start Coding
+        // /.innerhero
+
+
+
+    section.frontblue
+        aside.fronttopcards.flexi.container 
+            article.frontcard
+                .frontcard__title.h5 One of top-5 project of the Apache Software Foundation
+                .frontcard__prises.pt-3.flexi 
+                    .frontcard__price.flexi
+                        .frontcard__iconwrap
+                            img(src="/public/img/frontpage/b1-prize1.svg", alt="")
+                        span Big Data <br>Users Lists
+                    .frontcard__price.flexi 
+                        .frontcard__iconwrap.frontcard__iconwrap--blue
+                            img(src="/public/img/frontpage/b1-prize1.svg", alt="")
+                        span Users Lists
+                    .frontcard__price.flexi 
+                        .frontcard__iconwrap.frontcard__iconwrap--grey
+                            img(src="/public/img/frontpage/b1-prize1.svg", alt="")
+                        span Dev Lists
+            // /.frontcard
+
+            article.frontcard
+                .frontcard__network
+                    img(src="/public/img/frontpage/b1-planet.svg", alt="")
+                .frontcard__title.h5.pt-3 World's leading companies select Ignite to power applications used by millions of people daily
+            // /.frontcard
+        // /.fronttopcards
+
+
+
+        .container.forntcodes 
+            h3.h3 Use Ignite Core Capabilities To Start Easily <br>And Scale Faster
+            .forntcodes__wrap.flexi.jsTabWrap.pt-4
+                .forntcodes__menu
+                    ul.fz20
+                        li
+                            a(href="#", data-ftablink="frontcode-1").active Multi-Tier Storage
+                        li
+                            a(href="#", data-ftablink="frontcode-2") Distributed SQL
+                        li
+                            a(href="#", data-ftablink="frontcode-3") ACID Transactions
+                        li
+                            a(href="#", data-ftablink="frontcode-4") Compute APIs
+                        li
+                            a(href="#", data-ftablink="frontcode-5") Machine Learning
+                        li
+                            a(href="#", data-ftablink="frontcode-6") Continuous Queries
+                    a.forntcodes__menumore.fz20(href="/features/") View all features
                 
+                .forntcodes__tabwraps 
+                    .forntcodes__tab(data-ftab="frontcode-1").active
+                        p.forntcodes__tabtitle.fz20.pb-1 Multi-Tier Storage
+                        p Ignite scales up and out across memory and disk. By default, Ignite operates in a pure in-memory mode. But, by toggling a single configuration setting, you can turn a cluster into a database that can grow beyond the cluster's memory capacity:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="nativeTabXML").nativecode__link.active XML
+                                a(href="#", data-tablink="nativeTabJava").nativecode__link Java
+                                a(href="#", data-tablink="nativeTabNET").nativecode__link C#/.NET
+                            -
+                                let xmlMultiTierStorge = `<bean class="org.apache.ignite.configuration.IgniteConfiguration">
+                                    <property name="dataStorageConfiguration">
+                                        <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                                            <property name="defaultDataRegionConfiguration">
+                                                <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                                                    <property name="persistenceEnabled" value="true"/>
+                                                </bean>
+                                            </property>
+                                        </bean>
+                                    </property>
+                                </bean>`;
+
+                                let javaMultiTierStorge = `IgniteConfiguration cfg = new IgniteConfiguration();
+
+                                DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+
+                                // Enable Ignite Persistence
+                                storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+
+                                // Using the new storage configuration
+                                cfg.setDataStorageConfiguration(storageCfg);
+                                `;
+
+                                let csharpMultiTierStorge = `var cfg = new IgniteConfiguration
+                                {
+                                    DataStorageConfiguration = new DataStorageConfiguration
+                                    {
+                                        DefaultDataRegionConfiguration = new DataRegionConfiguration
+                                        {
+                                            Name = "Default_Region",
+                                            PersistenceEnabled = true
+                                        }
+                                    }
+                                };
+                                `;
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="nativeTabXML").active
+                                    pre.nativecode__codebox 
+                                        code.xml #{xmlMultiTierStorge}
+                                .nativecode__tab(data-tab="nativeTabJava")
+                                    pre.nativecode__codebox 
+                                        code.java #{javaMultiTierStorge}
+                                            
+                                .nativecode__tab(data-tab="nativeTabNET")
+                                    pre.nativecode__codebox 
+                                        code.csharp #{csharpMultiTierStorge}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/docs/latest/memory-architecture") Learn more about multi-tier storage
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab1 (END Multi-Tier Storage)
+
+
+
+
+                    .forntcodes__tab(data-ftab="frontcode-2")
+                        p.forntcodes__tabtitle.fz20.pb-1 Distributed SQL
+                        p Use Ignite as a traditional SQL database by leveraging JDBC drivers, ODBC drivers, or the native SQL APIs that are available for Java, C#, C++, Python, and other programming languages. Seamlessly join, group, aggregate, and order your distributed in-memory and on-disk data:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="sqlTabSQL").nativecode__link.active SQL
+                            -
+                                let sqlCode = `SELECT country.name, city.name, MAX(city.population) as max_pop
+                                FROM country JOIN city ON city.countrycode = country.code
+                                WHERE country.code IN ('USA','BRA','ESP','JPN')
+                                GROUP BY country.name, city.name
+                                ORDER BY max_pop DESC LIMIT 3;`;
+
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="sqlTabSQL").active
+                                    pre.nativecode__codebox 
+                                        code.sql #{sqlCode}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/docs/latest/SQL/sql-introduction") Start Using SQL
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab2 (END Distributed SQL)
+
+
+
+                    .forntcodes__tab(data-ftab="frontcode-3")
+                        p.forntcodes__tabtitle.fz20.pb-1 ACID Transactions
+                        p Ignite can operate in a strongly consistent mode that provides full support for distributed ACID transactions. Transact across multiple cluster nodes, caches, tables, and partitions:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="acidTabJava").nativecode__link.active Java
+                                a(href="#", data-tablink="acidTabSharp").nativecode__link C#/.NET
+                            -
+                                let acidJava = `IgniteTransactions transactions = ignite.transactions();
+
+                                try (Transaction tx = transactions.txStart()) {
+                                    Integer hello = cache.get("Hello");
+
+                                    if (hello == 1)
+                                        cache.put("Hello", 11);
+
+                                    cache.put("World", 22);
+
+                                    tx.commit();
+                                }`;
+
+                                let acidSharp = `var transactions = ignite.GetTransactions();
+
+                                using (var tx = transactions.TxStart()) {
+                                    int hello = cache.Get("Hello");
+
+                                    if (hello == 1) {
+                                        cache.Put("Hello", 11);
+                                    }
+
+                                    cache.Put("World", 22);
+
+                                    tx.Commit();
+                                }`;
+
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="acidTabJava").active
+                                    pre.nativecode__codebox 
+                                        code.java #{acidJava}
+                                .nativecode__tab(data-tab="acidTabSharp")
+                                    pre.nativecode__codebox 
+                                        code.csharp #{acidSharp}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/features/acid-transactions.html") Learn More About Transactions
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab3 (END ACID Transactions)
+
+
+
+
+
+                    .forntcodes__tab(data-ftab="frontcode-4")
+                        p.forntcodes__tabtitle.fz20.pb-1 Co-located Compute in Java, Scala, Kotlin, C#, C++
+                        p With traditional databases, for in-place calculations, you use stored procedures that are written in a language such as PL/SQL. With Ignite, you use modern JVM languages, C# or C++ to develop and execute custom tasks across your distributed database:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="compTabJava").nativecode__link.active Java
+                                a(href="#", data-tablink="compTabSharp").nativecode__link C#/.NET
+                            -
+                                let compJava = `// Broadcast the task to server nodes only.
+                                IgniteCompute compute = ignite.compute(ignite.cluster().forServers());
+
+                                // Each remote server node will execute the logic of the task/lambda below.
+                                compute.broadcast(() -> System.out.println(
+                                    "Hello Node: " + ignite.cluster().localNode().id()));`;
+
+                                let compSharp = `// Broadcast the task to server nodes only.
+                                var compute = ignite.GetCluster().ForServers().GetCompute();
+
+                                // Each remote server node will execute the custom PrintNodeIdAction task.
+                                compute.Broadcast(new PrintNodeIdAction());`;
+
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="compTabJava").active
+                                    pre.nativecode__codebox 
+                                        code.java #{compJava}
+                                .nativecode__tab(data-tab="compTabSharp")
+                                    pre.nativecode__codebox 
+                                        code.csharp #{compSharp}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/docs/latest/distributed-computing/distributed-computing") Start Using Compute APIs
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab4 (END Compute APIs)
+
+
+
+
+
+                    .forntcodes__tab(data-ftab="frontcode-5")
+                        p.forntcodes__tabtitle.fz20.pb-1 Built-In Machine Learning
+                        p Ignite machine learning uses built-in algorithms and tools, as well as TensorFlow integration, to enable the building of scalable machine learning models and avoid costly data transfers. Train, deploy, evaluate, and update your ML and DL models continuously and at scale:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="machineTabJava").nativecode__link.active Java
+                            -
+                                let machineJava = `// Create the trainer
+                                KNNClassificationTrainer trainer = new KNNClassificationTrainer()
+                                .withK(3).withIdxType(SpatialIndexType.BALL_TREE)
+                                .withDistanceMeasure(new EuclideanDistance())
+                                .withWeighted(true);
+
+                                // Train the model
+                                KNNClassificationModel knnMdl = trainer.fit(ignite, dataCache, vectorizer);
+
+                                // Make a prediction
+                                double prediction = knnMdl.predict(observation);`;
+
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="machineTabJava").active
+                                    pre.nativecode__codebox 
+                                        code.java #{machineJava}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/docs/latest/machine-learning/machine-learning") Start Using Ignite Machine Learning
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab5 (END Machine Learning)
+
+
+
+
+                    .forntcodes__tab(data-ftab="frontcode-6")
+                        p.forntcodes__tabtitle.fz20.pb-1 Continuous Queries
+                        p With relational databases, you use triggers to react to certain events. With Ignite, you deploy continuous queries that are written in a modern programming language such as Java or C# and process streams of changes on the database and application side:
+                        
+                        .forntcodes__innertabs.jsTabWrap
+                            .nativecode__tabctrls.flexi
+                                a(href="#", data-tablink="contTabJava").nativecode__link.active Java
+                                a(href="#", data-tablink="contTabSharp").nativecode__link C#/.NET
+                            -
+                                let contJava = `ContinuousQuery qry = new ContinuousQuery<>();
+
+                                // The callback that will be triggered on the application side.
+                                qry.setLocalListener(new MyLocalListener());
+
+                                // The callback that will be executed on the server side.
+                                qry.setRemoteFilterFactory(new MyRemoteFilterFactory());
+
+                                // Deploy the query in the cluster.
+                                cache.query(query);`;
+
+                                let contSharp = `var cache = ignite.GetOrCreateCache("myCache");
+
+                                var query = new ContinuousQuery(
+                                    new MyLocalListener(), // Will be triggered on the application side.
+                                    new MyRemoteFilter()); // Will be executed on the server side.
+
+                                // Deploy the query in the cluster.
+                                var handle = cache.QueryContinuous(query);`;
+
+                            .nativecode__tabs
+                                .nativecode__tab(data-tab="contTabJava").active
+                                    pre.nativecode__codebox 
+                                        code.java #{contJava}
+                                .nativecode__tab(data-tab="contTabSharp")
+                                    pre.nativecode__codebox 
+                                        code.csharp #{contSharp}
+                            .forntcodes__bottom
+                                a.button(href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries") Start Using Continuous Queries
+                        // /.forntcodes__innertabs
+                    // /.forntcodes__tab6 (END Continuous Queries)
+        // /.forntcodes
+    // /.frontblue
+
+
+
+
+
+    section.frontnewcards.container
+        h3.h3 New to Ignite? <br>Three Primary Usage Scenarios
+        .frontnewcards__wrap.pt-5
+            article.usecasecard.cardsimple
+                h4.cardsimple__title Applications Acceleration <br>& Scale Out
+                .cardsimple__text.cardsimple__text--long.
+                    Accelerate your existing applications by&nbsp;100x using Ignite as&nbsp;an&nbsp;in-memory cache or&nbsp;in-memory data grid that is&nbsp;deployed over one or&nbsp;more external databases.
+                .cardsimple__bottom
+                    a(href="/use-cases/in-memory-data-grid.html").cardsimple__button.button.button--shadow Learn more
+            article.usecasecard.cardsimple
+                h4.cardsimple__title Distributed Database For <br>HTAP Workloads
+                .cardsimple__text.cardsimple__text--long.
+                    Build applications that support transactional and&nbsp;analytical workloads by&nbsp;using Ignite as&nbsp;a&nbsp;database that scales beyond available memory capacity.
+                .cardsimple__bottom
+                    a(href="/use-cases/in-memory-database.html").cardsimple__button.button.button--shadow Learn more
+            article.usecasecard.cardsimple
+                h4.cardsimple__title Digital Integration Hub<br>&nbsp;
+                .cardsimple__text.cardsimple__text--long.
+                    Create an&nbsp;advanced platform architecture that aggregates multiple back-end systems and databases into a&nbsp;low-latency and shared data store.
+                .cardsimple__bottom
+                    a(href="/use-cases/digital-integration-hub.html").cardsimple__button.button.button--shadow Learn more
+    // /.frontnewcards
+
+
+
+
+
+
+    section.frontstories.container
+        h3.h3 Ignite User Stories
+        ul.frontstories__checkers.pt-5.capstext
+            li Software & SaaS
+            li Banking
+            li Logistics & Transportation
+            li Financial Services
+            li Retail
+            li Biotech
+            li And others
+        .frontstories__sliderwrap 
+            button.ctrl.ctrl--prev
+                img(src="/public/img/frontpage/icon-slider-arrow.svg", alt="")
+            button.ctrl.ctrl--next
+                img(src="/public/img/frontpage/icon-slider-arrow.svg", alt="")
+            .swiper.jsFrontVideosSwiper
+                .swiper-wrapper 
+                    .swiper-slide
+                        +powvideo(
+                            "https://www.youtube.com/watch?v=3FFexcYIpmA",
+                            "/public/img/poweredby/videos/001.png",
+                            "",
+                            "Leveraging In&nbsp;Memory Compute Grids With Core Systems Of&nbsp;Record",
+                            "comvideo__txt--medium"
+                        )
+                    .swiper-slide
+                        +powvideo(
+                            "https://www.youtube.com/watch?v=Mhtt2QL_qCQ",
+                            "/public/img/poweredby/videos/002.png",
+                            "",
+                            "How To&nbsp;Use Apache Ignite To&nbsp;Rescue The Backend Of&nbsp;A&nbsp;Bank",
+                            "comvideo__txt--black comvideo__txt--medium"
+                                )
+                    .swiper-slide
+                        +powvideo(
+                            "https://www.youtube.com/watch?v=z28rthKIrDk",
+                            "/public/img/poweredby/videos/003.png",
+                            "",
+                            "S9D Using Apache Ignite As&nbsp;A&nbsp;Part Of&nbsp;Real Time Campaigning",
+                            "comvideo__txt--medium"
+                        )
+            .frontstories__pag
+        .frontstories__bottom.pt-5
+            a.button.button--shadow(href="/use-cases/provenusecases.html") View all case-studies
+    // /.frontstories
+
+
+
+
+    section.frontconfs.container 
+        h3.h3 Join The Community At Events <br>And Meetups Worldwide
+        .frontconfs__wrap
+            a(href="/events.html#online").frontconfcard.frontconfcard--red
+                .frontconfs__iconwrap.pb-3
+                    img(src="/public/img/frontpage/events/001.svg", alt="")
+                h4.h5.frontconfcard__title.pb-2 Ignite Virtual Meetup
+                p Experts and practitioners make <strong>online-talks and presentations</strong> and share their Apache Ignite experience.
+                .frontconfcard__bottom
+                    p.capstext Online
+                    .frontconfcard__cal Regularly
+            
+            a(href="/events.html#summit").frontconfcard.frontconfcard--blue
+                .frontconfs__iconwrap.pb-3
+                    img(src="/public/img/frontpage/events/002.svg", alt="")
+                h4.h5.frontconfcard__title.pb-2 Ignite Summit
+                p This <strong>virtual conference</strong> is a chance to learn more about up-to-date in-memory computing solutions.
+                p There are speakers from industry-leading companies and hundreds of participants from all over the world.
+                .frontconfcard__bottom
+                    p.capstext Online
+                    .frontconfcard__cal Annually
+
+            a(href="/events.html#offline").frontconfcard
+                .frontconfs__iconwrap.pb-3
+                    img(src="/public/img/frontpage/events/003.svg", alt="")
+                h4.h5.frontconfcard__title.pb-2 Other Events
+                p Join us for <strong>conferences, presentations, and webinars</strong> to learn more about in-memory computing technologies.
+                .frontconfcard__bottom
+                    p.capstext ONLINE <small>and</small> OFFLINE
+                    .frontconfcard__cal Regularly
+        .frontconfs__bottom.pt-5
+            a.button.button--shadow(href="/events.html") View all events
+    // /.frontconfs
+
+
+    section.event-featured.container.fronteventsbanner
+        p.capstext Featured Event
+        a(href="https://ignite-summit.org/schedule/", target="_blank").event-featured__banner.pt-5
+            picture
+                source(srcset="/public/img/events/event-banner-vert.jpg" media="(max-width: 767px)")
+                img(src="/public/img/events/event-banner.jpg", alt="")
+    // /.event-featured
+
+
+
+
+    section.frontresourse.container 
+        h3.h3 Resources To Elevate Your <br>Ignite Experience
+        .frontresourse__subtitle.pt-2 Get an access to the variety of free technical <br>and learning resources
+        .frontresourse__wrap.flexi.fz20
+            .frontresourse__col
+                .capstext.pb-5 Technical resources
+                .frontresitem.flexi.frontresitem--black 
+                    .frontresitem__icon 
+                        img(src="/public/img/frontpage/res-docs.svg", alt="")
+                    .frontresitem__text Apache Ignite technical documentation
+                .frontresitem.flexi.frontresitem--gray
+                    .frontresitem__icon 
+                        img(src="/public/img/frontpage/res-wiki.svg", alt="")
+                    .frontresitem__text Ignite Wiki with a collection of low-level design documents and instructions
+                .frontresitem.flexi.frontresitem--gray
+                    .frontresitem__icon 
+                        img(src="/public/img/icon-github.svg", alt="")
+                    .frontresitem__text Git repositories with Ignite source code and code samples and examples
+            .frontresourse__col
+                .capstext.pb-5 Technical resources
+                .frontresitem.flexi.frontresitem--red 
+                    .frontresitem__icon 
+                        img(src="/public/img/frontpage/res-videos.svg", alt="")
+                    .frontresitem__text Dozens of essential videos and webinar <br>recordings
+                .frontresitem.flexi.frontresitem--rose
+                    .frontresitem__icon 
+                        img(src="/public/img/frontpage/res-vebinar.svg", alt="")
+                    .frontresitem__text Trainings and courses that help building high-performance and data-intensive applications with&nbsp;the Apache Ignite
+                .frontresitem.flexi.frontresitem--rose
+                    .frontresitem__icon 
+                        img(src="/public/img/frontpage/res-book.svg", alt="")
+                    .frontresitem__text Apache Ignite book to expand knowledge <br>in in-memory computing and distributed databases
+
+    section.toolingend.toolingend--front
+        .container.flexi
+            .toolingend__main
+                h2.toolingend__title.h3 Ready To Start?
+                p.fz20.pt-1x Discover our quick start guides and build your first <br>application in 5-10 minutes
+            .toolingend__action
+                a.button(href="#") Discover Quick Start Guide
+
+
+
+                        

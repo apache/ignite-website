@@ -235,6 +235,33 @@ simpleTabs();
 
 
 
+function frontpageTabs(){
+    if(!document.querySelector('*[data-ftab]')) return;
+    document.addEventListener('click', (e) => {
+        let link = e.target.closest('[data-ftablink]');
+        if(!link) return;
+        e.preventDefault();
+        let wrap = e.target.closest('.jsTabWrap');
+        let needTab = document.querySelector('[data-ftab="' + link.dataset.ftablink + '"]');
+        if(!needTab){
+            console.log("Tab - " + link.dataset.ftablink + " not found");
+            return;
+        }
+        wrap.querySelectorAll('[data-ftablink]').forEach(el => {
+            el.classList.remove('active');
+        })
+        link.classList.add('active');
+
+        wrap.querySelectorAll('[data-ftab]').forEach(el => {
+            el.classList.remove('active');
+        });
+        needTab.classList.add('active');
+    });
+}
+frontpageTabs();
+
+
+
 
 
 function youtube_parser(url){
@@ -288,4 +315,67 @@ function downloadPopBlock(){
         popup.querySelector('.downtable__button').classList.add('active');
     });
 }
-downloadPopBlock();
+// downloadPopBlock();
+
+
+
+/**
+ * Download change HREF of all link
+ */
+function downloadChangeHref() {
+    let selectBox = document.querySelector('.jsDownloadDomenSelect');
+    if(!selectBox) return;
+
+    let saveButton = document.querySelector('.jsChangeLink');
+    saveButton.addEventListener('click', (e) => {
+        let neededHostName = selectBox.value;
+        let allLinks = document.querySelectorAll('.jsLinksInside a');
+        allLinks.forEach((link) => {
+            let linkElem = new URL(link.href);
+            if(linkElem.hostname == "archive.apache.org") return;
+            linkElem.hostname = neededHostName;
+            link.href = linkElem.toString();
+        });
+        e.target.innerHTML = "Changed";
+        e.target.classList.remove('download-choser__button--blue');
+        // alert('Changed to ' + neededHostName);
+        e.preventDefault();
+    });
+    selectBox.addEventListener('change', (e)=>{
+        saveButton.innerHTML = "Change";
+        saveButton.classList.add('download-choser__button--blue');
+    });
+}
+downloadChangeHref();
+
+
+
+
+
+
+
+
+let jsMainSlider = new Swiper('.jsFrontVideosSwiper', {
+    autoHeight: false,
+    loop: true,
+    spaceBetween: 30,
+    slidesPerView: 'auto',
+    pagination: {
+        el: ".frontstories__pag",
+        type: "bullets",
+        clickable: true,
+    },
+    navigation: {
+        prevEl: ".frontstories__sliderwrap .ctrl--prev",
+        nextEl: ".frontstories__sliderwrap .ctrl--next",
+    },
+    breakpoints: {
+        //when window width is >= 768px
+        768: {
+            slidesPerView: 2,
+        },
+        1199 : {
+            slidesPerView: 3,
+        },
+    },
+});

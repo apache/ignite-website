@@ -1,7 +1,7 @@
 extend _components/base.pug
 
 block pagetitle
-    | Resources  
+    | Downloads  
 
 block css 
     link(rel="stylesheet", href="../css/native-persistence.css")
@@ -31,7 +31,7 @@ block main
                 if(params.notes)
                     a(href=params.notes, target="_blank") release notes
             td !{params.date}
-            td 
+            td.jsLinksInside
                 
                 if(params.sourcelink)
                     - let fileNameArr = params.sourcelink.split("/");
@@ -42,6 +42,18 @@ block main
                     a(href=params.sourcelink + ".sha512", target="_blank") sha512
                     | )
 
+    mixin downloadDockerRow(params)
+        tr 
+            td !{params.name}
+            td
+                if(params.guide)
+                    a(href=params.guide, target="_blank") guide
+            td !{params.date}
+            td
+                
+                if(params.links)
+                    each link in params.links
+                        a.sourcelink(href=link, target="_blank") !{link}<br>
 
 
 
@@ -80,7 +92,7 @@ block main
     section.download-src#source.container
         .capstext.pb-5 SOURCE RELEASES
 
-        include ./_components/tabletest.pug
+        include ./_components/download-source.pug
         .download-src__bottom.flexi.pt-5
             .download-src__left
                 p.
@@ -90,9 +102,9 @@ block main
                     .download-choser__label Selected mirror:
                     .download-choser__select.flexi
                         select(name="download_domain").jsDownloadDomenSelect
-                            option(value="https://dlcdn.apache.org") https://dlcdn.apache.org
-                            option(value="https://dlcdn.apache.org") https://dlcdn.apache.org
-                        a.download-choser__button(href="#")  Change
+                            option(value="dlcdn.apache.org") dlcdn.apache.org
+                            option(value="downloads.apache.org") downloads.apache.org
+                        a.download-choser__button.download-choser__button--blue(href="#").jsChangeLink Change
     // /.download-src
 
 
@@ -106,7 +118,7 @@ block main
             p.
                 Binary release packages are provided for your convenience and not considered as primary release artifacts of the ASF. It's recommended to verify a release downloadable, following <a href="#verification">this guidelines.</a> For more information about Apache release policy see <a href="http://www.apache.org/dev/release.html#what" target="_blank">What is a Release?</a>
 
-        include ./_components/tabletest.pug
+        include ./_components/download-binary.pug
         // /.downtable__wrap
         p.pt-5 f you are looking for previous release versions of Apache Ignite, please have a look in the <a href="https://archive.apache.org/dist/ignite" target="_blank">archive</a>.
     // /.download-bin
@@ -120,14 +132,14 @@ block main
 
     section.downloadslim.container 
         h3.h5.pb-2 Slim binary releases
-        include ./_components/tabletest.pug
+        include ./_components/download-slim.pug
     // /.downloadslim
 
 
 
     section.download-docker.container#docker
         h3.capstext.pb-5 DOCKER AND CLOUD IMAGES
-        include ./_components/tabletest.pug
+        include ./_components/download-docker.pug
     // /.download-docker
 
 
