@@ -44,6 +44,17 @@
 }
 
 
+// window.__forceSmoothScrollPolyfill__ = true;
+
+let submenuItems = Array.prototype.slice.call(document.querySelectorAll(".cmtynavblock__list a"));
+let submenuItemsArray = submenuItems.map(el => {
+    return {
+        link: el,
+        href: el.getAttribute('href'),
+        block: document.querySelector(el.getAttribute('href'))
+    }
+});
+
 
 
 //scroll to top button
@@ -60,7 +71,7 @@
         trigger = false;
         let scrolled = window.pageYOffset || document.documentElement.scrollTop;
         scrollActions(scrolled);
-    }, 250);
+    }, 150);
     scrollButton.addEventListener('click', function (e) {
         e.preventDefault();
         window.scrollTo({
@@ -69,6 +80,9 @@
         });
     });
 })();
+
+
+
 
 
 
@@ -106,21 +120,70 @@ function topmeny(){
         } 
     });
 }
-topmeny();
+if(window.innerWidth > 1199){topmeny();}
 
 
-// const jsNavBlock = document.querySelector('.jsNavBlock');
-// const startNavBlockCoord = jsNavBlock.getBoundingClientRect().y + window.pageYOffset;
-// console.log(startNavBlockCoord);
+
+let isMenuFloated = false;
+let isMenuPinned = false;
 
 function scrollActions(scrolled){
     const scrollButton = document.querySelector('.scrollTop');
     const stikyHeader = document.querySelector('.hdrfloat');
-    
+    const menuLine = document.querySelector('.jsHdrLine');
+    const menuBase = document.querySelector('.jsHdrBase');
+    const menuFloatBase = document.querySelector('.jsHdrFloatBase');
 
     scrollButton.classList.toggle('active', scrolled >= 100);
-    document.documentElement.classList.toggle('hdr-active', scrolled >= 600);
+
+    if(scrolled >= 600 && !isMenuPinned){
+        document.documentElement.classList.add('hdr-active');
+        isMenuPinned = true;
+    }
+    if(scrolled < 500 && isMenuPinned){
+        document.documentElement.classList.remove('hdr-active');
+        isMenuPinned = false;
+    }
+
+    if(scrolled >= 600 && !isMenuFloated){
+        // console.log("Переносим меню");
+        menuFloatBase.append(menuLine);
+        isMenuFloated = true;
+    }
+
+    if(scrolled < 600 && isMenuFloated){
+        // console.log("Возвращаем меню обратно");
+        menuBase.append(menuLine);
+        isMenuFloated = false;
+    }
+
+    if(submenuItemsArray.length){
+        reactivateSubmenu(scrolled);
+    }
 }
+
+
+function reactivateSubmenu(scrolled){
+    let hdr = document.querySelector('.hdr__wrap');
+    let menuEl = document.querySelector('.cmtynavblock__list');
+    let offset = menuEl.scrollHeight + hdr.scrollHeight + 10;
+    if(!submenuItemsArray.length) return;
+    submenuItemsArray.forEach((el, index, arr) => {
+        let blockCoord = el.block.getBoundingClientRect().top + window.scrollY - offset;
+        let blockCoordNext = Infinity;
+        if(arr[index + 1]){
+            blockCoordNext = arr[index + 1].block.getBoundingClientRect().top + window.scrollY - offset;
+        }
+        if(scrolled >= blockCoord && scrolled < blockCoordNext){
+            el.link.classList.add('cmtynavblock__active');
+        } else {
+            el.link.classList.remove('cmtynavblock__active');
+        }
+    })
+    // console.log(submenuItemsArray);
+}
+
+
 
 
 
@@ -152,21 +215,6 @@ accordeons();
 
 
 
-// function checkMenuIsPinned() {
-//     const el = document.querySelector(".cmtynavblock");
-//     if(!el) return;
-//     const observer = new IntersectionObserver(function(arrayEvent) {
-//         console.log(arrayEvent);
-//         let topCoord = arrayEvent[0].boundingClientRect.top;
-//         let ratio = arrayEvent[0].intersectionRatio;
-//         el.classList.toggle("is-pinned", (topCoord < 10 && ratio < 1));
-//     }, { threshold: [1] });
-//     observer.observe(el);
-// }
-// checkMenuIsPinned();
-
-
-
 
 function reActivateMenuClass(elem, selectors, activeClassName) {
     document.querySelectorAll(selectors).forEach(el => {
@@ -177,60 +225,31 @@ function reActivateMenuClass(elem, selectors, activeClassName) {
 
 
 
-function menuScroller() {
+
+function submenuScroller(){
+    let hdr = document.querySelector('.hdr__wrap');
     let menuEl = document.querySelector('.cmtynavblock__list');
     if(!menuEl) return;
 
-    let isNeedObserve = true;
-
     menuEl.addEventListener('click', (e) => {
         let link = e.target.closest('.cmtynavblock__list a');
-        // console.log(link);
         if(!link) return;
         e.preventDefault();
-
-        let targetBlock = document.querySelector(link.getAttribute("href"));
-        let coords = targetBlock.getBoundingClientRect().top + window.scrollY;
-        isNeedObserve = false;
-        window.scrollTo({
-            top: coords - menuEl.scrollHeight,
-            behavior: 'smooth',
-        });
-        setTimeout(() => {
-            isNeedObserve = true;
-        }, 400);
-        reActivateMenuClass(link, ".cmtynavblock__list a", 'cmtynavblock__active');
+        scrollToBlock(e, link.getAttribute('href'), (menuEl.scrollHeight + hdr.scrollHeight));
     });
-
-
-    let cmtyObserver = new IntersectionObserver((e) => {
-        let eventTar = e[0];
-        // console.log(eventTar);
-        if(isNeedObserve && eventTar.isIntersecting){
-            reActivateMenuClass(
-                document.querySelector('.cmtynavblock__list a[href="#' + eventTar.target.id + '"]'),
-                ".cmtynavblock__list a",
-                'cmtynavblock__active'
-            );
-        }
-    }, { threshold: 0 });
-    menuEl.querySelectorAll('li a').forEach(el => {
-        cmtyObserver.observe(document.querySelector(el.getAttribute('href')));
-    })
-
-
 }
-menuScroller();
+submenuScroller();
 
 
 
 
 
-function scrollToBlock(e,selector) {
+
+function scrollToBlock(e, selector, offset = 0) {
     let elem = document.querySelector(selector);
     if(!elem) return;
     e.preventDefault();
-    let coords = elem.getBoundingClientRect().top + window.scrollY;
+    let coords = elem.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({
         top: coords,
         behavior: 'smooth',
@@ -301,17 +320,14 @@ frontpageTabs();
 
 
 
-
+/**
+ * Change Video Block into Iframe with Youtube Video
+ */
 function youtube_parser(url){
     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = url.match(regExp);
     return (match&&match[7].length==11)? match[7] : false;
 }
-
-
-/**
- * Change Video Block into Iframe with Youtube Video
- */
 document.addEventListener('click', function(e) {
     let videoLink = e.target.closest('[data-youtube]');
     if(!videoLink) return;
@@ -391,29 +407,32 @@ downloadChangeHref();
 
 
 
-
-
-let jsMainSlider = new Swiper('.jsFrontVideosSwiper', {
-    autoHeight: false,
-    loop: false,
-    spaceBetween: 30,
-    slidesPerView: 'auto',
-    pagination: {
-        el: ".frontstories__pag",
-        type: "bullets",
-        clickable: true,
-    },
-    navigation: {
-        prevEl: ".frontstories__sliderwrap .ctrl--prev",
-        nextEl: ".frontstories__sliderwrap .ctrl--next",
-    },
-    breakpoints: {
-        //when window width is >= 768px
-        768: {
-            slidesPerView: 2,
+/**
+ * FrontPage videos Slider
+ */
+if (typeof Swiper !== "undefined") {
+    let jsMainSlider = new Swiper('.jsFrontVideosSwiper', {
+        autoHeight: false,
+        loop: false,
+        spaceBetween: 30,
+        slidesPerView: 'auto',
+        pagination: {
+            el: ".frontstories__pag",
+            type: "bullets",
+            clickable: true,
         },
-        1199 : {
-            slidesPerView: 3,
+        navigation: {
+            prevEl: ".frontstories__sliderwrap .ctrl--prev",
+            nextEl: ".frontstories__sliderwrap .ctrl--next",
         },
-    },
-});
+        breakpoints: {
+            //when window width is >= 768px
+            768: {
+                slidesPerView: 2,
+            },
+            1199 : {
+                slidesPerView: 3,
+            },
+        },
+    });
+}
