@@ -1,0 +1,43 @@
+mixin menuItem(link, text)
+    if global.pageHref == link
+        li 
+            a(href="/" + link).hdrmenu__current #{text}
+    else
+        li 
+            a(href="/" + link) #{text}
+
+
+include mobmenu.html
+header(class="hdr " + config.hdrClassName)
+    .hdr__wrap.flexi
+        button.hdr__burger(data-menumodal="#jsMenuModal")
+            img(src="/public/img/menu.svg", alt="")
+        a.hdr__logo(href="/")
+            if ["hdr__blue", "hdr__dark"].includes(config.hdrClassName)
+                img(src="/public/img/logo-white.svg", alt="").hdr__logoimg
+            else
+                img(src="/public/img/logo.svg", alt="").hdr__logoimg
+        a.button.hdr__button(href="/download.html") Download Ignite 2.11 
+        nav.hdrmenu
+            ul.flexi
+                +menuItem("", "Get started")
+                +menuItem("features", "Features")
+                +menuItem("community.html", "Community")
+                +menuItem("use-cases/provenusecases.html", "Powered by")
+                +menuItem("//ignite.apache.org/docs/latest/", "Docs")
+
+
+header.hdrfloat
+    .hdr__wrap.flexi
+        button.hdr__burger(data-menumodal="#jsMenuModal")
+            img(src="/public/img/menu.svg", alt="")
+        a.hdr__logo(href="/")
+            img(src="/public/img/logo.svg", alt="").hdr__logoimg
+        a.button.hdr__button(href="/download.html") Download Ignite 2.11 
+        nav.hdrmenu
+            ul.flexi
+                +menuItem("", "Get started")
+                +menuItem("features", "Features")
+                +menuItem("community.html", "Community")
+                +menuItem("use-cases/provenusecases.html", "Powered by")
+                +menuItem("docs.html", "Docs")

@@ -71,6 +71,44 @@
 })();
 
 
+
+
+function topmeny(){
+    let dropMenu = document.querySelector('.dropmenu');
+    let dropBack = document.querySelector('.dropmenu__back');
+    let hdr = document.querySelector('.hdr');
+    if(!dropMenu) return;
+
+    document.addEventListener('mouseover', (e) => {
+        e.preventDefault();
+        let item = e.target.closest('a[data-panel].hdrmenu--expanded');
+        if(item && item.dataset.panel !== ""){
+            document.querySelectorAll('.dropmenu__panel').forEach(el => {
+                el.classList.toggle('active', el.dataset.menupanel === item.dataset.panel);
+            });
+            document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
+                el.classList.remove('active');
+            })
+
+            hdr && hdr.classList.add('opened');
+            item.classList.add('active');
+            dropMenu.classList.add('active');
+            dropBack.classList.add('active');
+        }
+        let shadow = e.target.closest('.dropmenu__back');
+        if(shadow){
+            dropMenu.classList.remove('active');
+            dropBack.classList.remove('active');
+            document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
+                el.classList.remove('active');
+            });
+            hdr && hdr.classList.remove('opened');
+        } 
+    });
+}
+topmeny();
+
+
 // const jsNavBlock = document.querySelector('.jsNavBlock');
 // const startNavBlockCoord = jsNavBlock.getBoundingClientRect().y + window.pageYOffset;
 // console.log(startNavBlockCoord);
@@ -357,7 +395,7 @@ downloadChangeHref();
 
 let jsMainSlider = new Swiper('.jsFrontVideosSwiper', {
     autoHeight: false,
-    loop: true,
+    loop: false,
     spaceBetween: 30,
     slidesPerView: 'auto',
     pagination: {
