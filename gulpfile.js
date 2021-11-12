@@ -18,9 +18,9 @@ let pugPath = "";
 
 //Компилятор PUG -> HTML
 const html = () => {
-    let pugTruePath = 'src/**/' + pugPath;
+    let pugTruePath = './_src/**/' + pugPath;
     if(!pugPath || pugPath.includes("_")){
-        pugTruePath = ['src/**/*.pug', '!src/_*/**'];
+        pugTruePath = ['./_src/**/*.pug', '!./_src/_*/**'];
     }
     return gulp.src(pugTruePath)
         .pipe(gulpPlumber())
@@ -39,7 +39,7 @@ const html = () => {
         .on('data', function(file){
             console.log('▒ PUG→HTML: ' + file.path.replace(file.cwd, '') );
         })
-        .pipe(gulp.dest('./public')).on('end', (e) => {
+        .pipe(gulp.dest('./')).on('end', (e) => {
         });
 }
 
@@ -86,14 +86,14 @@ export function buildCode(){
 export const watchpug = () => {
     browserSync.init({
         server: {
-            baseDir: "./public",
+            baseDir: "./",
             open: true,
             cors: true,
             notify: false,
         },
-        watch: true,
+        watch: false,
     });
-    gulp.watch(['src/**/*.pug', 'src/**/*.html'], {
+    gulp.watch(['_src/**/*.pug', '_src/**/*.html'], {
 
     }).on('change', function(pathPug, stats){
         pugPath = null;
