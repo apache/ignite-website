@@ -59,7 +59,15 @@ export function img(){
 
 
 export function clearBuild() {
-    return gulp.src('build/*').pipe(clean());
+    let srcWithIgnores = [
+        'build/*',
+        '!build/docs',
+        '!build/_docs',
+        '!build/releases',
+        '!build/*.yaml',
+        '!build/.htaccess',
+    ]
+    return gulp.src(srcWithIgnores).pipe(clean());
 }
 
 
@@ -119,6 +127,10 @@ export const ftp = (cb) => {
 
     let globs = [
         './build/**',
+        '!./build/docs',
+        '!./build/_docs',
+        '!./build/releases',
+        '!./build/*.yaml',
         './build/**/.htaccess',
     ];
     return gulp.src( globs, { buffer: false } )
