@@ -1,0 +1,148 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.10.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.11.0</h1>
+			<div></div>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added the ability to restore cache groups from a snapshot on an active cluster by using the Java API or command line control script.</li>
+        <li>Added the check snapshot procedure that validates snapshot consistency or individual cache groups.</li>
+        <li>Added cluster metastorage to process of creating a snapshot.</li>
+        <li>Added command to control.(sh|bin) that makes possible performance statistics management.</li>
+        <li>Added clock and Segmented-LRU page replacement modes.</li>
+        <li>Added node attribute collocated affinity backup filter.</li>
+        <li>Added system views for data structures.</li>
+        <li>Added system view for baseline node attributes.</li>
+        <li>Added metrics for monitoring the number of memory pages related to SQL indexes. These metrics can be made available via JMX and viewed as part of data region and cache group properties under the name `InMemoryIndexPages`.</li>
+        <li>Added metrics for the number of written and compressed bytes for WAL.</li>
+        <li>Added SSL connection metrics.</li>
+        <li>Added list of indices that will not be rebuilt forcibly to control.sh utility output.</li>
+        <li>Added the argument "pages" to the IgniteWalConverter for searching pages in the WAL.</li>
+        <li>Added support for IGNITE_ENABLE_FORCIBLE_NODE_KILL flag in inverse connection protocol.</li>
+        <li>Added property `checkpoint.deviation` for randomization of checkpoint interval. It sets the checkpoint frequency in per cent via control.sh utility: `control.sh --property set --name checkpoint.deviation --val 25`.</li>
+        <li>Added support of Spring Data repositories initialisation with Spring Boot auto-starter.</li>
+        <li>Fixed incorrect values of cache, cache group, data region metrics after cluster re-activation.</li>
+        <li>Fixed error with nodes fallabck. Now nodes will  properly fallback to full rebalance if historical rebalance fails.</li>
+        <li>Fixed possible deadlock in concurrent cache data store initialization, exchange initialization and start of checkpoint.</li>
+        <li>Fixed potential JVM crash due to integer overflow in binary streams.</li>
+        <li>Fixed node fail due to deleting DurableBackgroundTask's at the end of a checkpoint when stopping a node.</li>
+        <li>Fixed an issue causing omitting of NOT NULL constraint validation for columns that are part of compound primary key.</li>
+        <li>Fixed an issue causing an error on modification binary object that contains reference to its own inner collection (binary HANDLE to collection).</li>
+        <li>Fixed an issue where exception in static initializer during remote filter deployment could lead to the server node failure.</li>
+        <li>Fixed deploying of continuous queries. They won't be deployed to the client nodes, since the clients don't store any data.</li>
+        <li>Fixed behaviour while  writing to Distributed Metastorage. Now exception is thrown on client if client is not connected to topology.</li>
+        <li>Fixed node failure when a class was not found by UriDeploymentSpi.</li>
+        <li>Fixed an issue causing corruption of PK index tree in case the table was created via SQL API and the PK has several fields in order different from those specified in thr field list.</li>
+        <li>Fixed failure to connect to node leading to freezing connection future if paired connections are used.</li>
+        <li>Fixed possible index partition corruption after drop index with failed checkpoint scenario.</li>
+        <li>Fixed cache group re-encryption after cluster secondary activation.</li>
+        <li>Fixed an issue that led to the fact that baseline auto adjustment was not triggered under certain conditions.</li>
+        <li>Fixed the race between auto rollover segments and WAL deactivation.</li>
+        <li>Fixed an issue when Data Streamer flushing could freeze due to a connectivity problem.</li>
+        <li>Fixed an issue that prevented a node from startup in case it can't obtain IP addresses to connect to.</li>
+        <li>Fixed the ability to force rebuild indexes for caches.</li>
+        <li>Fixed rebuilding indexes. Synchronously stop rebuilding indexes when the cache is stopped to avoid a node fail.</li>
+        <li>Fixed a corner case when a node could ignore an OutOfMemoryError and fail to stop.</li>
+        <li>Fixed merge query with no unique colons for the Oracle dialect.</li>
+        <li>Fixed an issue when connection closed by the one node could lead to infinite connection attempts on the other node.</li>
+        <li>Fixed (decreased) an exclusive checkpoint lock time.</li>
+        <li>Fixed issue, when CPU checkpoint pool size is not initialized.</li>
+        <li>Fixed NullPointerException when run out automatic segment archiving after last record logging.</li>
+        <li>Fixed possible cluster fail when the socket read freezes during establishing a new communication connection.</li>
+        <li>Fixed node not joining baseline topology after auto adjustment is enabled.</li>
+        <li>Fixed inconsistent WAL mode state when changing the state on unstable topology.</li>
+        <li>Fixed Allocated RAM metric for in-memory data regions on persistent node.</li>
+        <li>Fixed safe restart of node with switching from disabled to enabled WAL archiving.</li>
+        <li>Fixed sync-free switch on node(s) fail. Cellular switch's Multi-cell transaction's recovery HB of node(s) fail fixed.</li>
+        <li>Fixed an issue that led to JVM crash during index removal on a deactivated cluster.</li>
+        <li>Fixed bug when messaging-related metrics were updated before full initialization of Tcp Communication SPI.</li>
+        <li>Fixed partitions validator behaiviour. It checks sizes even if update counters are different and prints information about all copies, if partition is in inconsistent state.</li>
+        <li>Fixed restart rebuild indexes, if they were not rebuilt, on node restart / reactivation.</li>
+        <li>Fixed an exception that may happen when a thick client reconnects.</li>
+        <li>Changed IO discovery metric names. Now they are starting with the metric registry name.</li>
+        <li>Implemented asynchronous execution of durable background tasks.</li>
+        <li>Migrated Spring Cache integration to the Ignite extensions.</li>
+        <li>Migrated Spring-transactions module to ignite-extensions.</li>
+        <li>Optimized collection of rebalance statistics. This has positive influence on rebalance time.</li>
+        <li>Removed diagnostics at a node stop due to an CorruptedTreeException.</li>
+        <li>Removed delay from node ping.</li>
+        <li>Removed Ignite bean name requirement for Spring Data Repository.</li>
+    </ul>
+    <h2>.Net</h2>
+    <ul>
+        <li>Added string.Compare support to LINQ provider.</li>
+        <li>Added thin client DataStreamer API.</li>
+        <li>Added an automated check that client binary configuration is compatible to server binary configuration on client start.</li>
+        <li>Added services exceptions interoperability between java and .NET.</li>
+        <li>Added examples reworked to .NET Core, can be run from CLI or any IDE, on any OS. Examples can be downloaded from NuGet with dotnet-new command.</li>
+        <li>Fixed binary type handling when NamespaceToLower or NamespacePrefix is specified.</li>
+        <li>Fixed race condition in Events example.</li>
+        <li>Fixed inferred SQL table name when query entity value type is generic.</li>
+        <li>Fixed arrays and collections deserialization when elements share a reference to the same object.</li>
+        <li>Fixed SQL type name for generic query types.</li>
+        <li>Fixed DllNotFoundException in single file deployment on .NET 5.</li>
+        <li>Fixed string and array cache keys handling when partition awareness is enabled.</li>
+        <li>Removed the requirement to have bash installed on Linux and macOS systems.</li>
+        <li>Improved DataStreamer API - added FlushAsync, deprecated and replaced confusing methods and properties, fixed resource cleanup.</li>
+        <li>Extended ConfigurationManager dependency version range.</li>
+    </ul>
+    <h2>Java thin-client</h2>
+    <ul>
+        <li>Added continuous queries support.</li>
+        <li>Added containsKeys, clearKey, clearKeys and getAndPutIfAbsent.</li>
+        <li>Added Ignite thin client Spring bean.</li>
+    </ul>
+    <h2>Thin-clients</h2>
+    <ul>
+        <li>Partition awareness is enabled by default (Java, .NET, C++).</li>
+    </ul>
+    <h2>SQL</h2>
+    <ul>
+        <li>Added a new field INITIATOR_ID to the LOCAL_SQL_RUNNING_QUERIES system view. This field indicates the originator of the query: thin client, JDBC/ODBC, compute task.</li>
+        <li>Added support of alter/drop/create user SQL commands for security plugins.</li>
+        <li>Added tag sql.query.id' for SQL tracing.</li>
+        <li>Fixed SQL Constant hidden from logs and views when in IGNITE_TO_STRING_INCLUDE_SENSITIVE=false mode.</li>
+    </ul>
+</body>

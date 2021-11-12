@@ -1,0 +1,112 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.8.1/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+
+
+
+	
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache IGNITE 2.8.1<h1>
+			<div></div>
+
+<h2>Security:</h2>
+<ul>
+    <li>Fied vulnerability of using H2 admin rights for user SQL connections</li>
+</ul>
+
+<h2>Ignite Core:</h2>
+<ul>
+    <li>Added cluster achieving fully rebalanced (PME-free ready) state metric</li>
+    <li>Added compute job system view</li>
+    <li>Added support long keys in DistributedMetaStorage</li>
+    <li>Added transaction operations metrics</li>
+    <li>Fixed ClassCastException in Thin Client</li>
+    <li>Fixed IllegalArgumentException on activation of LogExporterSpi</li>
+    <li>Fixed JDBC thin client SELECT hanging under 2.8.0</li>
+    <li>Fixed Java thin client: Wrong typeId generation for system types</li>
+    <li>Fixed MERGE INTO query failing on Ignite client node</li>
+    <li>Fixed MetricRegistryMBean and OpenCensusExporterSpi memory leak</li>
+    <li>Fixed MetricRegistryMBean nit showing histogram values when histogram name contains underscore</li>
+    <li>Fixed MetricRegistryMBean thread safety</li>
+    <li>Fixed NullPointerException while initializing Cassandra Store</li>
+    <li>Fixed NullPointerException thrown by ExchangeLatchManager during cache creation</li>
+    <li>Fixed SQL: H2Connection leaking on INSERT</li>
+    <li>Fixed SQL: KILL QUERY command hanging on query when query cursor is held by user or leak</li>
+    <li>Fixed SQL: Potential race on MapResult close</li>
+    <li>Fixed SQL: Query reduce can failing with NPE on retry</li>
+    <li>Fixed SQL: Local queries cursors must be closed or full read to unlock the GridH2Table</li>
+    <li>Fixed TcpCommunicationSpi metrics implementation</li>
+    <li>Fixed Thin client thread not stopping</li>
+    <li>Fixed affinity cache for version of last server event being wiped from history</li>
+    <li>Fixed all binary types being registered twice</li>
+    <li>Fixed empty cluster failing if wal segment size small</li>
+    <li>Fixed cache stopping on supplier during rebalance causing NPE and supplying failure</li>
+    <li>Fixed not being able to set serialized enum to a BinaryObject's field</li>
+    <li>Fixed cluster failing to find the node by consistent ID</li>
+    <li>Fixed cluster restart leading to cluster activation error</li>
+    <li>Fixed continuously generating thread dumps in failure processor slowing down the whole system</li>
+    <li>Fixed destroy of big cache which is not only cache in cache group causing IgniteOOME</li>
+    <li>Fixed dynamic SQL index recreation after cache clear resulting in AssertionError or JVM crash</li>
+    <li>Fixed contention on ConcurrentHashMap.size()</li>
+    <li>Fixed consistency issues for atomic and mixed tx-atomic cache groups</li>
+    <li>Fixed getting SecurityContext from GridSecurityProcessor</li>
+    <li>Fixed h2Tree going into illegal state when non-indexed columns are dropped</li>
+    <li>Fixed historical (WAL) rebalance starting on cleared partition if some baseline node leaves the cluster and then rejoins</li>
+    <li>Fixed igniteQueue.removeAll throwing NPE</li>
+    <li>Fixed ignitevisorcmd not connecting to cluster</li>
+    <li>Fixed inconsistency between cache data and indexes when cache operation is interrupted</li>
+    <li>Fixed incorrect rewriting of wal record type in marshalled mode during iteration</li>
+    <li>Fixed intermittent [Failed to notify direct custom event listener] exception on node shutdown</li>
+    <li>Fixed dynamically setting used cache for Spring Data</li>
+    <li>Fixed logging exceptions inside IgniteSecurityProcessor#withContext(java.util.UUID)</li>
+    <li>Fixed long exchange on deactivation process</li>
+    <li>Fixed memory leak on unstable topology caused by partition reservation</li>
+    <li>Fixed metric exporter implementation issue leading to NullPointerException from gauge which invokes communication</li>
+    <li>Fixed node failing after get operation when entries from the cache expired concurrently</li>
+    <li>Fixed node failing after putting incorrect key class for indexed type to transactional cache</li>
+    <li>Fixed node leaving causing NullPointerException during IO message processing if security is enabled</li>
+    <li>Fixed node stopping on type mismatch error between index type and type of value from searched row</li>
+    <li>Fixed non-comparable keys for eviction policy causing failure handle and node shutdown</li>
+    <li>Fixed pages leak suspicion in PDS</li>
+    <li>Fixed partition desync if a partition is evicted then owned again and historically rebalanced</li>
+    <li>Fixed possible extra page release when throttling and checkpoint thread store it concurrently</li>
+    <li>Fixed possible tx desync during recovery on near node left</li>
+    <li>Fixed partitions owned by other nodes switching their state to MOVING due to counter difference on node join</li>
+    <li>Fixed Spring Data query annotations not working if statement keywords are in lower case</li>
+    <li>Fixed remote thin client operations not being authorized correctly</li>
+    <li>Fixed scan query shutting down the node in some cases</li>
+    <li>Fixed scan query/iterator on a replicated cache getting wrong results</li>
+    <li>Fixed searching checkpoint record in WAL not working with segment compaction</li>
+    <li>Fixed some of rentingFutures in GridDhtPartitionTopologyImpl accumulating a huge number of eviction callbacks</li>
+    <li>Fixed cache#putAllAsync method not collecting statistics</li>
+    <li>Fixed thin JDBC streaming failing with BatchUpdateException if function is used</li>
+    <li>Fixed page difference output throttling in PageMemoryTracker</li>
+    <li>Fixed transaction hanging after too many open files NIO exception</li>
+    <li>Fixed update of partition states becoming stuck when rebalance completed during exchange</li>
+    <li>Fixed zookeeper discovery not working due to missed dependency</li>
+</ul>
+
+<h2>Ignite .Net:</h2>
+<ul>
+    <li>Fixed services failing to call method with DateTime or Guid argument</li>
+    <li>Fixed NullReferenceException when serializing fields of the same type in different order</li>
+</ul>
+
+		</body>
+		

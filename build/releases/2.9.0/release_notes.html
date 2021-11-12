@@ -1,0 +1,203 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.9.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache IGNITE 2.9.0</h1>
+			<div></div>
+
+    <h2>Ignite Core:</h2><ul>
+        <li>Added the feature of cluster snapshots for persistence caches</li>
+        <li>Added tracing of transactions, discovery, exchange, and communication components</li>
+        <li>Added new cluster-wide state: read-only. In this state caches available for cache read operations. Cache operations with data modification (update, remove, clear, create, destroy and etc.) don't allowed</li>
+        <li>Added TDE master key rotation feature</li>
+        <li>Added functionality to run user-defined code inside a sandbox</li>
+        <li>Added Cluster ID and tag properties to identify the cluster</li>
+        <li>Added support for one-way thick-client to server connections</li>
+        <li>Added the ability to not open server sockets (for incoming connections) by thick client</li>
+        <li>Added management API to cancel user-provided tasks and queries</li>
+        <li>Added partition states system view and free-lists system view</li>
+        <li>Added txKeyCollisions cache metric</li>
+        <li>Added OffHeapEntriesCount, OffHeapBackupEntriesCount, OffHeapPrimaryEntriesCount, HeapEntriesCount, CacheSize to cache metrics</li>
+        <li>Added query pool starvation monitoring</li>
+        <li>Added the ability to put non-primitive data types via HTTP-REST</li>
+        <li>Added the ability to use CACHE_CREATE and CACHE_DESTROY permissions on per-cache level</li>
+        <li>Added the ability to restrict access to the internal package of Ignite</li>
+        <li>Added nodes caching in cluster groups</li>
+        <li>Added warning of deadlock when an unordered collection is passed to putAll-style bulk cache operation</li>
+        <li>Added the ability to set user attributes for thin clients connections</li>
+        <li>Added a new public API for the cluster state change (activation/deactivation and etc.)</li>
+        <li>Added EVT_BASELINE_..., EVT_CLUSTER_STATE_CHANGE_STARTED, EVT_PAGE_REPLACEMENT_STARTED events</li>
+        <li>Added the ability to hide sensitive data in logs, exceptions, and utilities output (IGNITE_TO_STRING_INCLUDE_SENSITIVE system property)</li>
+        <li>Added the ability to change long-running operation timeout in run-time</li>
+        <li>Added dedicated thread pool for creating and rebuilding indexes</li>
+        <li>Added possibility to pass client SSL certificate to security plugin (for clients: JDBC thin, thin-client, grid-client, REST)</li>
+        <li>Added Apache Ignite Slim binary distribution with essential modules only</li>
+        <li>Added the ability to set fetch size for JDBC cache store</li>
+        <li>Added "features" to thin client protocol</li>
+        <li>Added support for node discovery using AWS ALB</li>
+        <li>Updated Bouncy Castle dependency for AWS module to 1.60 version</li>
+        <li>Fixed security context propagation for remote filters and listeners (for ContinuousQueries, IgniteMessaging, IgniteEvents)</li>
+        <li>Fixed ConcurrentModificationException when DEBUG logging continuous queries</li>
+        <li>Fixed critical errors handling by thin-client server-side threads</li>
+        <li>Fixed memory leaks in continuous query handlers</li>
+        <li>Fixed data streamer pool MXBean (from ThreadPoolMXBean to StripedExecutorMXBean)</li>
+        <li>Fixed memory leaks in MVCC processor</li>
+        <li>Fixed deadlock on concurrent removeAll() on the same cache</li>
+        <li>Fixed sensitive user data leak in a diagnostic exchange log message</li>
+        <li>Fixed checkpoint block for all duration of index deletion</li>
+        <li>Fixed WAL flush issue in LOG-ONLY/FSYNC modes and null flush pointer</li>
+        <li>Fixed limiter for a dump of long-running transactions</li>
+        <li>Fixed thread group for Ignite threads (do not use dedicated thread group anymore)</li>
+        <li>Fixed exception during creating string representation of the binary object</li>
+        <li>Fixed potential partition map exchange hanging on Zookeeper discovery clusters</li>
+        <li>Fixed NPE in checkpoint thread</li>
+        <li>Fixed fail of optimistic serializable transactions when read-through is enabled</li>
+        <li>Fixed node startup after upgrade in case of using Local cache with persistence enabled</li>
+        <li>Fixed awaiting for service deployment in the event-driven service processor</li>
+        <li>Fixed incorrect collecting cache configuration on the coordinator</li>
+        <li>Fixed node failure when DistributedProcess unable to send a single message to the coordinator</li>
+        <li>Fixed binary metadata folder, now it's moved to PDS storage folder</li>
+        <li>Fixed EVT_CACHE_STOPPED event local listener issue</li>
+        <li>Fixed processing of failure detection timeout in TcpDiscoverySpi. If a node fails to send a message or ping, now it drops the current connection strictly within this timeout and begins establishing a new connection much faster</li>
+        <li>Fixed WAL FSYNC mode problem with a disabled archiver</li>
+        <li>Fixed the ability to set number of WAL segments to less than 2</li>
+        <li>Fixed race condition in the state processor.</li>
+        <li>Fixed deadlock between topology update and CQ registration</li>
+        <li>Fixed potential NullPointerException on cache operations after client reconnect</li>
+        <li>Fixed class loading exception when package name starts from 'class'</li>
+        <li>Fixed ClassCastException in cache group metrics on client nodes</li>
+        <li>Fixed registration of capturingClass in marshaller making lambdas fragile on code update.</li>
+        <li>Fixed NPE, when IgniteLock removed before it's used</li>
+        <li>Fixed processing of connection recovery timeout in TcpDiscoverySpi. If a node loses connection, now it strictly obtains a new connection to the ring of gets segmented within this timeout.</li>
+        <li>Fixed p2p deployment of scan queries transformer class</li>
+        <li>Fixed exception on initialization in push metrics exporters</li>
+        <li>Fixed AssertionError on getting cache size from the MBean on the inactive cluster</li>
+        <li>Fixed JVM option in .sh/.bat scripts to support CPU load metric on java 11 and higher</li>
+        <li>Fixed broken redis mget command</li>
+        <li>Improved transaction recovery mechanism on topology change</li>
+        <li>Improved checkpoint logic to write checkpoint buffer pages first to avoid throttling</li>
+        <li>Improved node recovery time by executing partition state restore phase in parallel</li>
+        <li>Improved node start-up and periodic metrics logging.</li>
+        <li>Improved rebalancing scheduling (SYNC caches rebalance first)</li>
+        <li>Improved node host resolving (don't try to resolve hostnames when localHost is set as IP)</li>
+        <li>Improved data loss handling</li>
+        <li>A lot of stability and performance fixes</li>
+        <li>Replaced ignite.sh invocation with the direct JVM call for Docker deployment</li>
+        <li>Discontinued IGFS and Hadoop Accelerator components</li>
+    </ul>
+    <h2>SQL:</h2><ul>
+        <li>Added the ability to create tables for existing caches</li>
+        <li>Added metrics: sql.parser.cache.hits - count of hits for queries cache, sql.parser.cache.misses - count of misses for queries cache</li>
+        <li>Added metrics to count the number of successful and failed SQL queries</li>
+        <li>Added validation of the uniqueness of a field's name annotated with @QuerySqlEntity. Previously cache could be started without errors, but the key's field would not be queryable</li>
+        <li>Added an option to validate field types against SQL schema on key-value insert</li>
+        <li>Added separate SQL configuration</li>
+        <li>Fixed SQL schema name validation (prohibit empty schema names)</li>
+        <li>Fixed duplicate definition of a column by "create table"</li>
+        <li>Fixed SQL wildcard to java regex translation</li>
+        <li>Fixed custom GROUP_CONCAT separator support</li>
+        <li>Fixed data race when getting index rebuild status</li>
+        <li>Fixed incorrect "not null" constraint check on key field</li>
+        <li>Fixed an issue when a node stops if an index is created on a field with invalid data type</li>
+        <li>Fixed QuerySqlField annotation's "name" property validation</li>
+        <li>Fixed improper index usage, fields enumeration not used with pk index creation</li>
+        <li>Fixed an issue when the primary key was created with invalid fields order</li>
+        <li>Improved row count statistic calculation (index scan replaced with cache.localSize)</li>
+        <li>Improved indexing of JavaObject. Only hash bytes are stored now, which reduces the size of the index and reduces the time for objects comparison.</li>
+    </ul>
+    <h2>Ignite .Net:</h2><ul>
+        <li>Added IgniteLock</li>
+        <li>Added ICache.EnableStatistics, ICluster.EnableStatistics</li>
+        <li>Added native platform cache</li>
+        <li>Added the ability to use platform cache to execute local ScanQuery with partition</li>
+        <li>Added the ability to call .NET services from Java</li>
+        <li>Added the ability to get metadata for FieldsQueryCursor</li>
+        <li>Added partition-based AffinityCall and AffinityRun overloads, fixed existing AffinityCall and AffinityRun to reserve partition</li>
+        <li>Added the ability to use SqlFieldsQuery as ContinuousQuery.InitialQuery</li>
+        <li>Fixed query cursor thread safety</li>
+        <li>Fixed issue with starting Ignite under Mono on Linux</li>
+        <li>Fixed searching of service method with user type array parameter</li>
+        <li>Fixed OutOfMemory exception when calling grid service from .NET with user type array parameter</li>
+        <li>Fixed TransactionScope behavior with read-only cache operations</li>
+        <li>Fixed stale local node info after client reconnect</li>
+    </ul>
+    <h2>Ignite C++:</h2><ul>
+        <li>Added CMake build support</li>
+        <li>Fixed compilation error for boost versions greater than 1.70</li>
+        <li>Removed autotools build support</li>
+    </ul>
+    <h2>JDBC:</h2><ul>
+        <li>Added connections failover support</li>
+        <li>Added support for 'connectionTimeout' and 'queryTimout' properties</li>
+        <li>Added SSL CipherSuites support</li>
+        <li>Added support for individual reconnect in case of best effort affinity mode</li>
+        <li>Added the ability to control affinity cache size</li>
+        <li>Added support of custom user's java object</li>
+        <li>Fixed an issue where a metadata request through a JDBC Connection could fail if metadata is requested for cache without explicit query entity configured</li>
+    </ul>
+    <h2>Java thin-client:</h2><ul>
+        <li>Added cluster API support</li>
+        <li>Added cluster group API support</li>
+        <li>Added compute support</li>
+        <li>Added Ignite services support</li>
+        <li>Fixed size overhead after unmarshalling Collections/Arrays of objects</li>
+        <li>Fixed binary type schema registration for nested objects when CompactFooter is enabled</li>
+        <li>Fixed transactions withLabel issue</li>
+        <li>Fixed binary type issue when more than one schema for one type is used</li>
+    </ul>
+    <h2>.Net thin client:</h2><ul>
+        <li>Added cluster API support</li>
+        <li>Added cluster group API support</li>
+        <li>Added compute support</li>
+        <li>Added automatic server node discovery</li>
+    </ul>
+    <h2>Python thin-client:</h2><ul>
+        <li>Added the ability to specify keyfile password</li>
+        <li>Fixed wrong fields order in queries when fields count > 10</li>
+    </ul>
+    <h2>Control utility:</h2><ul>
+        <li>Added commands to manage cluster binary metadata to control.sh command-line utility</li>
+        <li>Added commands to view and change Cluster Id and Tag</li>
+        <li>Added "--force" flag for "deactivate" and "set-state" commands</li>
+        <li>Added "--check-crc" flag for "validate_indexes" command</li>
+        <li>Added "--verbose " option to print stack trace errors</li>
+        <li>Added "--check-sizes" option for "validate_indexes" to check whether index and cache size are equal</li>
+        <li>Added "--cache check_index_inline_sizes" command to check that indexes inline size the same on all cluster nodes</li>
+        <li>Fixed double password requests for keystore and truststore</li>
+        <li>Fixed corrupted indexes detection</li>
+        <li>Fixed GridClient instances leakage after various errors</li>
+        <li>Fixed return code swallowing by control.sh bash script</li>
+    </ul>
+    <h2>Spring Data integration:</h2><ul>
+        <li>Added multiple Ignite instances on same JVM support (@RepositoryConfig)</li>
+        <li>Added query tuning parameters in @Query annotation support</li>
+        <li>Added projections support</li>
+        <li>Added Page and Stream responses support</li>
+        <li>Added SQL Fields Query resultset transformation into the domain entity support</li>
+        <li>Added named parameters (:myParam) in SQL queries support (declared using @Param("myParam"))</li>
+        <li>Added advanced parameter binding and SpEL expressions in SQL queries support</li>
+        <li>Added SpEL expressions in Text queries (TextQuery) support</li>
+        <li>Fixed incorrect processing of non-comparable keys in spring-data for repository methods: findAllById(ids) and deleteAllById(ids).</li>
+        <li>Fixed cursors leakage in RunningQueryManager when executing queries via spring-data repositories.</li>
+    </ul>
+    <h2>ML:</h2><ul>
+        <li>Added more distances between two Vectors</li>
+    </ul>
+    <h2>Web Console:</h2><ul>
+        <li>Moved to separate repository</li>
+    </ul>
+</body>
+		

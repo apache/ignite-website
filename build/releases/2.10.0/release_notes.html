@@ -1,0 +1,276 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.10.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache IGNITE 2.10.0</h1>
+			<div></div>
+
+    <h2>(!) WARNINGS</h2>
+    <ul>
+        <li>The community accepted MVCC API discontinuation in future releases</li>
+        <li>Enabling disabling WAL doesn't work properly on unstable topology and will be fixed soon</li>
+        <li>Spring Data moved to ignite-extension and will be released separately</li>
+        <li>Node.js, Python, PHP thin clients moved to a dedicated repository</li>
+    </ul>
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added API for checking network connectivity between all nodes in a cluster</li>
+        <li>Added API to get segment sizes</li>
+        <li>Added InitialSize and MaxSize to DataRegion metrics</li>
+        <li>Added RebalancingPartitionsTotal metrics</li>
+        <li>Added TDE CLI management tool</li>
+        <li>Added TDE cache key rotation</li>
+        <li>Added a metric for processed keys when rebuilding indexes</li>
+        <li>Added an ability to check driver metrics in Cassandra store</li>
+        <li>Added a cluster performance profiling</li>
+        <li>Added cluster snapshot security permissions</li>
+        <li>Added a command to control.sh to get an arbitrary Metric</li>
+        <li>Added a command to control.sh to get an arbitrary SystemView</li>
+        <li>Added control.sh API - schedule & cancel</li>
+        <li>Added control.sh API - status</li>
+        <li>Added core defragmentation functions</li>
+        <li>Added deadlock detection for cache entry reentrant locks</li>
+        <li>Added defragmentation JMX API for schedule/cancel/status</li>
+        <li>Added defragmentation parallelism implementation</li>
+        <li>Added events for snapshot operation state</li>
+        <li>Added explicit command.sh option to enable experimental commands</li>
+        <li>Added an extension for tracing the communication socket write with a number of sent bytes</li>
+        <li>Added fallback to full partition rebalancing in case historical supplier failed to read all necessary data updates from WAL</li>
+        <li>Added generic to maintenance mode feature</li>
+        <li>Added implementation readiness probe REST endpoint</li>
+        <li>Added new advanced heuristics for historical rebalance</li>
+        <li>Added new checkpoint metrics</li>
+        <li>Added new event firing before query execution</li>
+        <li>Added new event for node join validation failure</li>
+        <li>Added new index manipulation commands to control.sh</li>
+        <li>Added new metrics framework in ZookeeperDiscovery</li>
+        <li>Added new type of WAL records to track atomic updates on backup nodes</li>
+        <li>Added non markers checkpoint implementation</li>
+        <li>Added output IgniteSystemProperties via control.sh</li>
+        <li>Added special mode for maintenance of Ignite node. Employing Maintenance Mode for clearing corrupted PDS files</li>
+        <li>Added stopping warm-up to control.sh</li>
+        <li>Added support to graceful shutdown for ZookeeperDiscoverySpi</li>
+        <li>Added system view for binary metadata</li>
+        <li>Added system view for metastorage items</li>
+        <li>Added thin client support for Spring Transactions</li>
+        <li>Added thread dumps on failure processor invocations enabled by default</li>
+        <li>Added warming up strategy</li>
+        <li>Fixed AuthenticationContext did not contain subject address when subject is IgniteClient</li>
+        <li>Fixed BPlus tree lock retried limit reached with sqlOnHeapCacheEnabled</li>
+        <li>Fixed BinaryMarshaller needed to use context class loader for deserialization</li>
+        <li>Fixed CLI command to execute maintenance action in corrupted PDS scenario</li>
+        <li>Fixed ComputeScheduleExample</li>
+        <li>Fixed Continuous Query buffers to reduce heap usage</li>
+        <li>Fixed DurableBackgroundTask that could abandon incomplete task</li>
+        <li>Fixed FileWriteAheadLogManager creates 0-length WAL segments and could not start later</li>
+        <li>Fixed GridCacheOffheapManager which ignored candidate pages count for index partition</li>
+        <li>Fixed IgniteCache#isClosed() returned false on server node even if the cache had been closed before</li>
+        <li>Fixed IgniteScheduler that had to run inside the Ignite Sandbox with appropriate security context</li>
+        <li>Fixed NullPointerException at dumping long running operations</li>
+        <li>Fixed NullPointerException due to race on cache stop and transaction commit</li>
+        <li>Fixed NullPointerException during Cassandra Store initialization with PRIMITIVE strategy</li>
+        <li>Fixed NullPointerException in IgniteServiceProcessor when destroying a cache</li>
+        <li>Fixed NullPointerException in logSupplierDone(UUID nodeId)</li>
+        <li>Fixed NullPointerException on client start</li>
+        <li>Fixed NullPointerException on tx recovery</li>
+        <li>Fixed NullPointerException with empty persistence data region</li>
+        <li>Fixed OOM on creating rebalance iterator while rebalancing cache with large values</li>
+        <li>Fixed OpenCensus module had no runtime dependencies</li>
+        <li>Fixed Query cancellation froze on local lazy queries</li>
+        <li>Fixed UnsupportedOperationException on stopping grid</li>
+        <li>Fixed WAL archive cleanup from checkpoint to rollover</li>
+        <li>Fixed WAL compression did not work for binary recovery</li>
+        <li>Fixed WAL iterators required WRITE permissions</li>
+        <li>Fixed WAL segments did not released on releaseHistoryForPreloading()</li>
+        <li>Fixed assertion error of expired cache entries, which relate to a non-persistent data region in the persistent cluster</li>
+        <li>Fixed assertion error which happened on stale latch's acknowledge</li>
+        <li>Fixed blocking section in GridNioWorker and GridNioClientWorker which lead to false positive blocking thread detection</li>
+        <li>Fixed cache Interceptors deserialization on client nodes</li>
+        <li>Fixed checkpoint read lock failed if it was taking under write lock during the stopping node</li>
+        <li>Fixed checkpoint write lock missed during snapshot operation</li>
+        <li>Fixed client node with a static encrypted cache generation on node join</li>
+        <li>Fixed connection recovery timeout</li>
+        <li>Fixed control.sh baseline printed node IP addresses</li>
+        <li>Fixed control.sh did not print results to stdout</li>
+        <li>Fixed control.sh did not start if JMX port was set</li>
+        <li>Fixed control.sh showed passwords in the output</li>
+        <li>Fixed control.sh validate_indexes threw CorruptedTreeException and fails server node during check</li>
+        <li>Fixed critical system error happened on unregistering a JMX bean</li>
+        <li>Fixed deadlock between grid-timeout-worker and a thread opening a communication connection</li>
+        <li>Fixed deadlock between in GridEncryptionManager</li>
+        <li>Fixed deadlock in IgniteServiceProcessor</li>
+        <li>Fixed deadlock on Cache.putAll(Map<KV>)</KV>
+        <li>Fixed deadlock when deleting multiple caches</li>
+        <li>Fixed deadlock when receiving ComputeTask result by IgniteClient</li>
+        <li>Fixed deb package dependence on a non-existent package which could not be installed on Debian 10</li>
+        <li>Fixed deserialization failed at IBinaryObject containing an IBinaryObject field</li>
+        <li>Fixed disabling the archive procedure with walCompactionEnabled might broke reading from wal on server restart</li>
+        <li>Fixed disco-notifier-worker handles IgniteInterruptedCheckedException incorrectly</li>
+        <li>Fixed duplication in select query during partition eviction for caches with 0 backups</li>
+        <li>Fixed error during purges by expiration: Unknown page type</li>
+        <li>Fixed exception was discarded in GridCacheProcessor</li>
+        <li>Fixed exchange worker waiting for new task from queue was considered as blocked</li>
+        <li>Fixed a few issues of command line warm-up in control.sh</li>
+        <li>Fixed handling of a rebalancing with disabled WAL</li>
+        <li>Fixed help information output for control.sh --property help</li>
+        <li>Fixed high contention on GridCachePartitionExchangeManager.ExchangeFutureSet#values</li>
+        <li>Fixed historical iterator on atomic group transferring additional rows</li>
+        <li>Fixed incorrect calculation of WAL segments that should be deleted from WAL archive</li>
+        <li>Fixed incorrect topology snapshot output on coordinator change</li>
+        <li>Fixed incorrect usage of Class.isAssignableFrom in SystemViewLocal and SystemViewMBean classes</li>
+        <li>Fixed incorrect work of predicates (< and >) in where clause with compound primary key</li>
+        <li>Fixed local metastorage system view failure if unmarshalled values were present</li>
+        <li>Fixed metastore which might leave uncompleted write futures during a node stop</li>
+        <li>Fixed model classes which required manual deserialization if used inside loaded job by p2p</li>
+        <li>Fixed operations started on client nodes were not traced</li>
+        <li>Fixed partial index rebuild failed in case indexed cache contained different data types</li>
+        <li>Fixed partition loss detection was not working if a dynamic cache was not started on a client</li>
+        <li>Fixed performance drop when there were many thin clients per server</li>
+        <li>Fixed pingNode() failure pinging nodes with unresolved addresses</li>
+        <li>Fixed printing warning if unordered map was used for bulk update operation on atomic cache</li>
+        <li>Fixed hanging rebalance not in the final state although all partitions were owned</li>
+        <li>Fixed releasing a segment if it was not present in FileWriteAheadLogManager#reserve</li>
+        <li>Fixed removing expired cache entries</li>
+        <li>Fixed restorePartitionStates triggered FailureHandler on node startup</li>
+        <li>Fixed rows buffers usage by reducing index for simple one-way reducer</li>
+        <li>Fixed scan query failure with an assertion error: Unexpected row key</li>
+        <li>Fixed security issue of JMX configuration</li>
+        <li>Fixed speed base throttling unexpectedly degraded to zero</li>
+        <li>Fixed spring data integration which did not introspect the fields of the key object</li>
+        <li>Fixed starvation in mgmt pool caused by MetadataTask execution</li>
+        <li>Fixed synchronization issues when different classloaders were used for deployment of same class</li>
+        <li>Fixed transaction commit completed successfully if a partition was lost on commit phase</li>
+        <li>Fixed validate index did not stop after process of control.sh was interrupted</li>
+        <li>Fixed validateKeyAndValue which attempted to deserialize key and value when QueryEntity.fields was not set</li>
+        <li>Fixed waiting for completion of operations on indexes before cache stop</li>
+        <li>Moved ClusterMetrics to the new metrics framework</li>
+        <li>Moved TcpDiscoveryStatistics to new metrics framework</li>
+        <li>Moved spring-data modules to ignite-extensions</li>
+        <li>Removed 'default' cache usage from REST API</li>
+        <li>Removed the WALPointer interface and using the FileWALPointer instead</li>
+        <li>Removed ability to delete segments from the middle of WAL archive</li>
+        <li>Removed unnecessary dependency to curator-client from ZookeeperDiscoverySpi</li>
+        <li>Removed unnecessary ZkPinger from ZookeeperDiscovery</li>
+
+    </ul>
+    <h2>SQL</h2>
+    <ul>
+        <li>Added lazy flag to synthetic SELECT used by first step of DML query</li>
+        <li>Added tracing of SQL queries</li>
+        <li>Added unification of fallback properties for SSL settings as per Java standard</li>
+        <li>Fixed REPLICATED cache could not be left-joined to PARTITIONED</li>
+        <li>Fixed decimal columns in SQL result set had invalid precision and scale</li>
+        <li>Fixed exception occurred on SQL caches during the client reconnection</li>
+        <li>Fixed tracing of SELECT queries caused incorrect span inheritance</li>
+        <li>Fixed transformation of sub-queries to JOINs when possible</li>
+    </ul>
+    <h2>JDBC ODBC</h2>
+    <ul>
+        <li>Added ODBC SQLNumResultCols for prepared statement</li>
+        <li>Added ODBC driver assigned SQL_BINARY type to DATE fields</li>
+        <li>Added ODBC driver showed real nullability info</li>
+        <li>Added ODBC implementation of SQLRowCount for select queries</li>
+        <li>Added ODBC support of SQL_ATTR_ROW_ARRAY_SIZE with value more than one</li>
+        <li>Fixed thin driver reported incorrect property names</li>
+    </ul>
+    <h2>Java thin-client</h2><ul>
+        <li>Added non-blocking socket IO usage</li>
+        <li>Added support for IPv6 addresses</li>
+        <li>Added thin client Java API - async API</li>
+        <li>Added thin client Kubernetes discovery</li>
+        <li>Fixed unnecessary CHM get/remove on each request to server</li>
+        <li>Fixed connect/disconnect during topology update might lead to partition divergence in ignite-sys-cache</li>
+        <li>Fixed exception type was lost on rethrow</li>
+        <li>Fixed message not fully read by client after SECURITY_VIOLATION error</li>
+        <li>Fixed thin client silently closed channel after inactivity</li>
+        <li>Fixed thin clients could not access the Ignite Service deployed through UriDeploymentSpi</li>
+        <li>Fixed unsupported protocol version exception on getting cache configuration</li>
+    </ul>
+    <h2>Thin-client</h2><ul>
+        <li>Moved Node.js thin client to a separate git repo</li>
+        <li>Moved PHP thin client to a separate git repo</li>
+        <li>Moved Python thin client to a separate git repo</li>
+    </ul>
+    <h2>Ignite .NET</h2><ul>
+        <li>Added CacheConfiguration.NodeFilter</li>
+        <li>Added Partitions and UpdateBatchSize to SqlFieldsQuery</li>
+        <li>Added RendezvousAffinityFunction.BackupFilter</li>
+        <li>Added includeExpired to ContinuousQuery</li>
+        <li>Added thin client continuous query</li>
+        <li>Added thin client service invocation</li>
+        <li>Added thin client transactions</li>
+        <li>Fixed CachePartialUpdateException: failed to update keys (using Cache.PutAsync)</li>
+        <li>Fixed DateTime usage as a cache key or value</li>
+        <li>Fixed GetAffinity failure with NullPointerException on client node</li>
+        <li>Fixed LINQ provider emitted incorrect table alias for queries with JOIN and GROUP BY combined</li>
+        <li>Fixed Service could not assign correct type to passed array parameters (.Net -> .Net call)</li>
+        <li>Fixed Service lost returned array type information</li>
+        <li>Fixed binary configuration for Compute API invocation</li>
+        <li>Fixed binary configuration of Ignite Java service params and result when calling it from Ignite.NET</li>
+        <li>Fixed child processes became zombies when persistence was used with direct-io on Linux</li>
+        <li>Fixed client should have peerClassLoading property in the IgniteConfiguration class</li>
+        <li>Fixed dispose hangs when continuous query was active on .NET Core 3.x</li>
+        <li>Fixed incorrect GetTotalPhysicalMemory result in Docker</li>
+        <li>Fixed interoperable DateTime</li>
+        <li>Fixed misleading LINQ exception when expression could not be translated</li>
+        <li>Fixed service that could not assign correct type to passed array parameters</li>
+        <li>Fixed slow enum serialization</li>
+        <li>Fixed wrong affinity key registration with AffinityKeyMapped attribute</li>
+    </ul>
+    <h2>Ignite C++</h2><ul>
+        <li>Added Windows support to CMake build system</li>
+        <li>Added implementation of Cluster API</li>
+        <li>Added implementation of SQL API</li>
+        <li>Added thin client transactions</li>
+        <li>Fixed compilation using msvc 14.1</li>
+        <li>Fixed odbc-example losing some values if run with 1 additional node</li>
+    </ul>
+    <h2>ML</h2><ul>
+        <li>Added catboost inference integration</li>
+        <li>Added initial JSON export/import support for all models</li>
+        <li>Added more distances between two Vectors</li>
+        <li>Added target encoding preprocessor</li>
+        <li>Fixed Incorrect Vector::kNorm evaluation for odd powers</li>
+    </ul>
+</body>
+		

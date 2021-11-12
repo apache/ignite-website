@@ -1,0 +1,1040 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.7.6/dotnetdoc/api/Apache.Ignite.Core.Cluster.IClusterGroup.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IClusterGroup
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IClusterGroup
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup">
+  
+  
+  <h1 id="Apache_Ignite_Core_Cluster_IClusterGroup" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup" class="text-break">Interface IClusterGroup
+  </h1>
+  <div class="markdown level0 summary"><p>Defines grid projection which represents a common functionality over a group of nodes.
+Grid projection allows to group Ignite nodes into various subgroups to perform distributed
+operations on them. All ForXXX(...)&apos; methods will create a child grid projection
+from existing projection. If you create a new projection from current one, then the resulting
+projection will include a subset of nodes from current projection. The following code snippet
+shows how to create grid projections:</p>
+<pre><code>var g = Ignition.GetIgnite();
+
+// Projection over remote nodes.
+var remoteNodes = g.ForRemotes();
+
+// Projection over random remote node.
+var randomNode = g.ForRandom();
+
+// Projection over all nodes with cache named &quot;myCache&quot; enabled.
+var cacheNodes = g.ForCacheNodes(&quot;myCache&quot;);
+
+// Projection over all nodes that have user attribute &quot;group&quot; set to value &quot;worker&quot;.
+var workerNodes = g.ForAttribute(&quot;group&quot;, &quot;worker&quot;);</code></pre>
+<p>Grid projection provides functionality for executing tasks and closures over 
+nodes in this projection using <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html#Apache_Ignite_Core_Cluster_IClusterGroup_GetCompute">GetCompute()</a>.
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Cluster.html">Apache.Ignite.Core.Cluster</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Cluster_IClusterGroup_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IClusterGroup</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_Ignite_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.Ignite*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_Ignite" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.Ignite">Ignite</h4>
+  <div class="markdown level1 summary"><p>Instance of Ignite.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IIgnite Ignite { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.IIgnite.html">IIgnite</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForAttribute_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForAttribute*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForAttribute_System_String_System_String_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForAttribute(System.String,System.String)">ForAttribute(String, String)</h4>
+  <div class="markdown level1 summary"><p>Creates projection for nodes containing given name and value
+specified in user attributes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForAttribute(string name, string val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Name of the attribute.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Optional attribute value to match.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection for nodes containing specified attribute.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForCacheNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForCacheNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForCacheNodes_System_String_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForCacheNodes(System.String)">ForCacheNodes(String)</h4>
+  <div class="markdown level1 summary"><p>Creates projection for all nodes that have cache with specified name running.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForCacheNodes(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Cache name to include into projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over nodes that have specified cache running.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForClientNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForClientNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForClientNodes_System_String_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForClientNodes(System.String)">ForClientNodes(String)</h4>
+  <div class="markdown level1 summary"><p>Creates projection for all nodes that have cache with specified name running 
+and cache distribution mode is CLIENT_ONLY or NEAR_ONLY.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForClientNodes(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Cache name to include into projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over nodes that have specified cache running.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDaemons_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDaemons*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDaemons" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDaemons">ForDaemons()</h4>
+  <div class="markdown level1 summary"><p>Gets a cluster group consisting of the daemon nodes.
+<p>
+Daemon nodes are the usual grid nodes that participate in topology but not visible on the main APIs, 
+i.e. they are not part of any cluster group. The only way to see daemon nodes is to use this method.
+<p>
+Daemon nodes are used primarily for management and monitoring functionality that
+is build on Ignite and needs to participate in the topology, but also needs to be
+excluded from the &quot;normal&quot; topology, so that it won&apos;t participate in the task execution
+or in-memory data grid storage.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForDaemons()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Cluster group consisting of the daemon nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDataNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDataNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDataNodes_System_String_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDataNodes(System.String)">ForDataNodes(String)</h4>
+  <div class="markdown level1 summary"><p>Creates projection for all nodes that have cache with specified name running 
+and cache distribution mode is PARTITIONED_ONLY or NEAR_PARTITIONED.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForDataNodes(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Cache name to include into projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over nodes that have specified cache running.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDotNet_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDotNet*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForDotNet" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForDotNet">ForDotNet()</h4>
+  <div class="markdown level1 summary"><p>Creates grid projection for nodes supporting .Net, i.e. for nodes started with Apache.Ignite.exe.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForDotNet()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection for nodes supporting .Net.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForHost_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForHost*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForHost_Apache_Ignite_Core_Cluster_IClusterNode_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForHost(Apache.Ignite.Core.Cluster.IClusterNode)">ForHost(IClusterNode)</h4>
+  <div class="markdown level1 summary"><p>Gets grid projection consisting from the nodes in this projection residing on the
+same host as given node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForHost(IClusterNode node)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">node</span></td>
+        <td><p>Node residing on the host for which projection is created.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection for nodes residing on the same host as passed in node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodeIds_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodeIds*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodeIds_System_Collections_Generic_IEnumerable_System_Guid__" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodeIds(System.Collections.Generic.IEnumerable{System.Guid})">ForNodeIds(IEnumerable&lt;Guid&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a grid projection over a given set of node IDs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForNodeIds(IEnumerable&lt;Guid&gt; ids)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td><span class="parametername">ids</span></td>
+        <td><p>Collection of node IDs to create a projection from.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over provided Ignite node IDs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodeIds_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodeIds*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodeIds_System_Guid___" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodeIds(System.Guid[])">ForNodeIds(Guid[])</h4>
+  <div class="markdown level1 summary"><p>Creates a grid projection over a given set of node IDs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForNodeIds(params Guid[] ids)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span>[]</td>
+        <td><span class="parametername">ids</span></td>
+        <td><p>Collection of node IDs to create a projection from.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over provided Ignite node IDs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodes_Apache_Ignite_Core_Cluster_IClusterNode___" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodes(Apache.Ignite.Core.Cluster.IClusterNode[])">ForNodes(IClusterNode[])</h4>
+  <div class="markdown level1 summary"><p>Creates a grid projection over a given set of nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForNodes(params IClusterNode[] nodes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>[]</td>
+        <td><span class="parametername">nodes</span></td>
+        <td><p>Collection of nodes to create a projection from.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over provided Ignite nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForNodes_System_Collections_Generic_IEnumerable_Apache_Ignite_Core_Cluster_IClusterNode__" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForNodes(System.Collections.Generic.IEnumerable{Apache.Ignite.Core.Cluster.IClusterNode})">ForNodes(IEnumerable&lt;IClusterNode&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a grid projection over a given set of nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForNodes(IEnumerable&lt;IClusterNode&gt; nodes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><span class="parametername">nodes</span></td>
+        <td><p>Collection of nodes to create a projection from.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Projection over provided Ignite nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForOldest_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForOldest*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForOldest" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForOldest">ForOldest()</h4>
+  <div class="markdown level1 summary"><p>Creates grid projection with one oldest node in the current projection.
+The resulting projection is dynamic and will always pick the next oldest
+node if the previous one leaves topology even after the projection has
+been created.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForOldest()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection with one oldest node from the current projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForPredicate_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForPredicate*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForPredicate_System_Func_Apache_Ignite_Core_Cluster_IClusterNode_System_Boolean__" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForPredicate(System.Func{Apache.Ignite.Core.Cluster.IClusterNode,System.Boolean})">ForPredicate(Func&lt;IClusterNode, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a grid projection which includes all nodes that pass the given predicate filter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForPredicate(Func&lt;IClusterNode, bool&gt; p)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">p</span></td>
+        <td><p>Predicate filter for nodes to include into this projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection for nodes that passed the predicate filter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForRandom_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForRandom*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForRandom" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForRandom">ForRandom()</h4>
+  <div class="markdown level1 summary"><p>Creates grid projection with one random node from current projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForRandom()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection with one random node from current projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForRemotes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForRemotes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForRemotes" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForRemotes">ForRemotes()</h4>
+  <div class="markdown level1 summary"><p>Gets grid projection consisting from the nodes in this projection excluding the local node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForRemotes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection consisting from the nodes in this projection excluding the local node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForServers_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForServers*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForServers" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForServers">ForServers()</h4>
+  <div class="markdown level1 summary"><p>Creates a cluster group of nodes started in server mode (<a class="xref" href="Apache.Ignite.Core.IgniteConfiguration.html#Apache_Ignite_Core_IgniteConfiguration_ClientMode">ClientMode</a>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForServers()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Cluster group of nodes started in server mode.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_ForYoungest_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForYoungest*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_ForYoungest" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.ForYoungest">ForYoungest()</h4>
+  <div class="markdown level1 summary"><p>Creates grid projection with one youngest node in the current projection.
+The resulting projection is dynamic and will always pick the newest
+node in the topology, even if more nodes entered after the projection
+has been created.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterGroup ForYoungest()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></td>
+        <td><p>Grid projection with one youngest node from the current projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetCompute_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetCompute*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetCompute" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetCompute">GetCompute()</h4>
+  <div class="markdown level1 summary"><p>Gets compute functionality over this grid projection. All operations
+on the returned ICompute instance will only include nodes from
+this projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICompute GetCompute()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Compute.ICompute.html">ICompute</a></td>
+        <td><p>Compute instance over this grid projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetEvents_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetEvents*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetEvents" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetEvents">GetEvents()</h4>
+  <div class="markdown level1 summary"><p>Gets events facade over nodes within this cluster group.  All operations on the returned 
+<a class="xref" href="Apache.Ignite.Core.Events.IEvents.html">IEvents</a>&gt; instance will only include nodes from current cluster group.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEvents GetEvents()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Events.IEvents.html">IEvents</a></td>
+        <td><p>Events instance over this cluster group.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetMessaging_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetMessaging*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetMessaging" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetMessaging">GetMessaging()</h4>
+  <div class="markdown level1 summary"><p>Gets messaging facade over nodes within this cluster group.  All operations on the returned 
+<a class="xref" href="Apache.Ignite.Core.Messaging.IMessaging.html">IMessaging</a>&gt; instance will only include nodes from current cluster group.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IMessaging GetMessaging()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Messaging.IMessaging.html">IMessaging</a></td>
+        <td><p>Messaging instance over this cluster group.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetMetrics_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetMetrics*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetMetrics" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetMetrics">GetMetrics()</h4>
+  <div class="markdown level1 summary"><p>Gets a metrics snapshot for this projection</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterMetrics GetMetrics()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterMetrics.html">IClusterMetrics</a></td>
+        <td><p>Grid projection metrics snapshot.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNode_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNode*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNode" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNode">GetNode()</h4>
+  <div class="markdown level1 summary"><p>Gets first node from the list of nodes in this projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterNode GetNode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNode_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNode*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNode_System_Guid_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNode(System.Guid)">GetNode(Guid)</h4>
+  <div class="markdown level1 summary"><p>Gets a node for given ID from this grid projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterNode GetNode(Guid id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Guid</span></td>
+        <td><span class="parametername">id</span></td>
+        <td><p>Node ID.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><p>Node with given ID from this projection or null if such node does not 
+exist in this projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNodes_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetNodes" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetNodes">GetNodes()</h4>
+  <div class="markdown level1 summary"><p>Gets read-only collections of nodes in this projection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICollection&lt;IClusterNode&gt; GetNodes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><p>All nodes in this projection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cluster_IClusterGroup_GetServices_" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetServices*"></a>
+  <h4 id="Apache_Ignite_Core_Cluster_IClusterGroup_GetServices" data-uid="Apache.Ignite.Core.Cluster.IClusterGroup.GetServices">GetServices()</h4>
+  <div class="markdown level1 summary"><p>Gets services facade over nodes within this cluster group.  All operations on the returned 
+<a class="xref" href="Apache.Ignite.Core.Services.IServices.html">IServices</a>&gt; instance will only include nodes from current cluster group.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IServices GetServices()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Services.IServices.html">IServices</a></td>
+        <td><p>Services instance over this cluster group.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

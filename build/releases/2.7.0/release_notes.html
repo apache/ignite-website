@@ -1,0 +1,197 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.7.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+
+<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+<body>
+	<h1>Apache IGNITE 2.7</h1>
+	<div></div>
+
+	<h2>Ignite:</h2>
+	<ul>
+		<li>Added experimental support for multi-version concurrency control with snapshot isolation</li>
+		<ul>
+		  <li>available for both cache API and SQL</li>
+		  <li>use CacheAtomicityMode.TRANSACTIONAL_SNAPSHOT to enable it</li>
+		  <li>not production ready, data consistency is not guaranteed in case of node failures</li>
+		</ul>
+		<li>Implemented Transparent Data Encryption based on JKS certificates</li>
+		<li>Implemented Node.JS Thin Client</li>
+		<li>Implemented Python Thin Client</li>
+		<li>Implemented PHP Thin Client</li>
+		<li>Ignite start scripts now support Java 9 and higher</li>
+		<li>Added ability to set WAL history size in bytes</li>
+		<li>Added SslContextFactory.protocols and SslContextFactory.cipherSuites properties to control which SSL encryption algorithms can be used</li>
+		<li>Added JCache 1.1 compliance</li>
+		<li>Added IgniteCompute.withNoResultCache method with semantics similar to ComputeTaskNoResultCache annotation</li>
+		<li>Spring Data 2.0 is now supported in the separate module 'ignite-spring-data_2.0'</li>
+		<li>Added monitoring of critical system workers</li>
+		<li>Added ability to provide custom implementations of ExceptionListener for JmsStreamer</li>
+		<li>Ignite KafkaStreamer was upgraded to use new KafkaConsmer configuration</li>
+		<li>S3 IP Finder now supports subfolder usage instead of bucket root</li>
+		<li>Improved dynamic cache start speed</li>
+		<li>Improved checkpoint performance by decreasing mark duration.</li>
+		<li>Added ability to manage compression level for compressed WAL archives.</li>
+		<li>Added metrics for Entry Processor invocations.</li>
+		<li>Added JMX metrics: ClusterMetricsMXBean.getTotalBaselineNodes and ClusterMetricsMXBean.getActiveBaselineNodes</li>
+		<li>Node uptime metric now includes days count</li>
+		<li>Exposed info about thin client connections through JMX</li>
+		<li>Introduced new system property IGNITE_REUSE_MEMORY_ON_DEACTIVATE to enable reuse of allocated memory on node deactivation (disabled by default)</li>
+		<li>Optimistic transaction now will be properly rolled back if waiting too long for a new topology on remap</li>
+		<li>ScanQuery with setLocal flag now checks if the partition is actually present on local node</li>
+		<li>Improved cluster behaviour when a left node does not cause partition affinity assignment changes</li>
+		<li>Interrupting user thread during partition initialization will no longer cause node to stop</li>
+		<li>Fixed problem when partition lost event was not triggered if multiple nodes left cluster</li>
+		<li>Fixed massive node drop from the cluster on temporary network issues</li>
+		<li>Fixed service redeployment on cluster reactivation</li>
+		<li>Fixed client node stability under ZooKeeper discovery</li>
+		<li>Massive performance and stability improvements</li>
+	</ul>
+
+<h2>Ignite .Net:</h2>
+	<ul>
+<li>Add .NET Core 2.1 support</li>
+<li>Added thin client connection failover</li>
+	</ul>
+<h2>Ignite C++:</h2>
+	<ul>
+<li>Implemented Thin Client with base cache operations</li>
+<li>Implemented smart affinity routing for Thin Client to send requests directly to nodes containing data when possible</li>
+<li>Added Clang compiler support</li>
+	</ul>
+
+<h2>SQL:</h2>
+	<ul>
+<li>Added experimental support for fully ACID transactional SQL with the snapshot isolation:</li>
+	<ul>
+  <li>use CacheAtomicityMode.TRANSACTIONAL_SNAPSHOT to enable it</li>
+  <li>a transaction can be started through native API (IgniteTransactions), thin JDBC driver or ODBC driver</li>
+  <li>not production ready, data consistency is not guaranteed in case of node failures</li>
+	</ul>
+<li>Added a set of system views located in "IGNITE" schema to view cluster information (NODES, NODE_ATTRIBUTES, NODE_METRICS, BASELINE_NODES)</li>
+<li>Added ability to create predefined SQL schemas</li>
+<li>Added GROUP_CONCAT function support</li>
+<li>Added string length constraint</li>
+<li>Custom Java objects are now inlined into primary and secondary indexes what may significantly improve performance when AFFINITY_KEY is used</li>
+<li>Added timeout to fail query execution in case it cannot be mapped to topology</li>
+<li>Restricted number of cores allocated for CREATE INDEX by default to 4 to avoid contention on index tree Fixed transaction hanging during runtime error on commit.</li>
+<li>Fixed possible memory leak when result set size is multiple of the page size</li>
+<li>Fixed situation when data may be returned from cache partitions in LOST state even when PartitionLossPolicy doesn't permit it</li>
+<li>Fixed "Caches have distinct sets of data nodes" during SQL JOIN query execution between REPLICATED and PARTITIONED caches</li>
+<li>Fixed wrong result for SQL queries when item size exceeds the page size</li>
+<li>Fixed error during SQL query from client node with the local flag set to "true"</li>
+<li>Fixed handling UUID as a column type</li>
+
+	</ul>
+<h2>JDBC:</h2>
+	<ul>
+<li>Implemented DataSource interface for the thin driver</li>
+
+	</ul>
+<h2>ODBC:</h2>
+	<ul>
+<li>Added streaming mode support</li>
+<li>Fixed crash in Linux when there are more than 1023 open file descriptors</li>
+<li>Fixed bug that prevented cursors on a server from being closed</li>
+<li>Fixed segmentation fault when reusing a closed connection</li>
+
+	</ul>
+<h2>Web Console:</h2>
+	<ul>
+<li>Added new metrics: WAL and Data size on disk</li>
+<li>Added support for "collocated" query mode on Query screen</li>
+<li>Added support for Java 9+ for Web Agent.</li>
+<li>Added ability to show/hide password field value</li>
+<li>Implemented execution of selected part of SQL query</li>
+<li>Implemented explain of the selected part of SQL query</li>
+<li>Implemented connection to a secured cluster</li>
+<li>Implemented responsive full-screen layout</li>
+<li>Split "Sign In" page to three separate pages</li>
+<li>UI updated to modern look and feel</li>
+<li>Improved backend stability</li>
+<li>Fixed fail when working with web sockets</li>
+
+	</ul>
+<h2>REST:</h2>
+	<ul>
+<li>Added option IGNITE_REST_GETALL_AS_ARRAY for array format in "getAll" call</li>
+
+	</ul>
+<h2>Visor:</h2>
+	<ul>
+<li>Added output of node "Consistent ID"</li>
+<li>Visor now collects information about cache groups instead of separate caches to reduce memory consumption</li>
+<li>Improved help for "start" command</li>
+<li>Fixed output of cache metrics</li>
+
+	</ul>
+<h2>Control utility:</h2>
+	<ul>
+<li>Added information about transaction start time</li>
+<li>Added command to collect information about a distribution of partitions</li>
+<li>Added command to reset lost partitions</li>
+<li>Added support for empty label (control.sh --tx label null)</li>
+<li>Added atomicity mode to utility output.</li>
+<li>Added orphaned local and remote transactions and ability to rollback them</li>
+<li>Added "--dump" flag to dump current partition state to file.</li>
+<li>Renamed command argument '--force' to '--yes'</li>
+<li>Removed "initOrder" and "loc keys" from an info</li>
+<li>Fixed control utility hanging when connected to a joining node with PME</li>
+
+	</ul>
+<h2>ML:</h2>
+	<ul>
+<li>Added TensorFlow integration</li>
+<li>Added Estimator API support to TensorFlow cluster on top of Apache Ignite</li>
+<li>Added ANN algorithm based on ACD concept</li>
+<li>Added Random Forest algorithm</li>
+<li>Added OneHotEncoder for categorical features</li>
+<li>Added model estimation</li>
+<li>Added K-fold cross-validation for ML models</li>
+<li>Added splitter for splitting the dataset into test and train subsets</li>
+<li>Added ability of filtering data during datasets creation</li>
+<li>Added encoding categorical features with One-of-K Encoder</li>
+<li>Added MinMax scaler preprocessor</li>
+<li>Added gradient boosting for trees</li>
+<li>Added indexing for decision trees</li>
+<li>Added GDB convergence by error support</li>
+<li>Added ability to build pipeline of data preprocessing and model training</li>
+<li>Added ability to start and maintain TensorFlow cluster on top of Apache Ignite</li>
+<li>Added support of Multi-Class for Logistic Regression</li>
+<li>Implemented distributed binary logistic regression</li>
+
+	</ul>
+<h2>Dependency updates:</h2>
+	<ul>
+<li>Apache Camel updated to 2.22.0</li>
+<li>Apache Commons Beanutils updated to 1.9.3</li>
+<li>Apache Hadoop Yarn updated to 2.7.7</li>
+<li>Apache Kafka updated to 1.1.0</li>
+<li>Apache Lucene updated to 7.4.0</li>
+<li>Apache Mesos updated to 1.5.0</li>
+<li>Apache Tomcat updated to 9.0.10</li>
+<li>Apache Zookeeper updated to 3.4.13</li>
+<li>Guava updated to 25.1-jre</li>
+<li>Jackson Databind updated to 2.9.6</li>
+<li>Jackson 1 usages replaced with Jackson 2</li>
+<li>JCraft updated to 0.1.54</li>
+<li>H2 version updated to 1.4.197</li>
+<li>Log4j 2.x updated to 2.11.0</li>
+<li>Netty updated to 4.1.27.Final</li>
+<li>RocketMQ updated to 4.3.0</li>
+<li>Scala 2.10.x was updated to 2.10.7</li>
+<li>Scala 2.11.x updated to 2.11.12</li>
+	</ul>
+</body>

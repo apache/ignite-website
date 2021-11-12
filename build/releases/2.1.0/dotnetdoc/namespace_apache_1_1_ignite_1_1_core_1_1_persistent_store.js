@@ -1,0 +1,5 @@
+var namespace_apache_1_1_ignite_1_1_core_1_1_persistent_store =
+[
+    [ "IPersistentStoreMetrics", "interface_apache_1_1_ignite_1_1_core_1_1_persistent_store_1_1_i_persistent_store_metrics.html", "interface_apache_1_1_ignite_1_1_core_1_1_persistent_store_1_1_i_persistent_store_metrics" ],
+    [ "PersistentStoreConfiguration", "class_apache_1_1_ignite_1_1_core_1_1_persistent_store_1_1_persistent_store_configuration.html", "class_apache_1_1_ignite_1_1_core_1_1_persistent_store_1_1_persistent_store_configuration" ]
+];

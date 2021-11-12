@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.3.0/dotnetdoc/api/Apache.Ignite.Core.Cluster.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Apache.Ignite.Core.Cluster
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Apache.Ignite.Core.Cluster
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Cluster">
+  
+  <h1 id="Apache_Ignite_Core_Cluster" data-uid="Apache.Ignite.Core.Cluster" class="text-break">Namespace Apache.Ignite.Core.Cluster
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.ClusterGroupEmptyException.html">ClusterGroupEmptyException</a></h4>
+      <section><p>Indicates an illegal call on empty projection. Thrown by projection when operation
+that requires at least one node is called on empty projection.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.ClusterTopologyException.html">ClusterTopologyException</a></h4>
+      <section><p>Indicates an error with grid topology (e.g., crashed node, etc.)</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.ICluster.html">ICluster</a></h4>
+      <section><p>Represents whole cluster (group of all nodes in a cluster).
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html">IClusterGroup</a></h4>
+      <section><p>Defines grid projection which represents a common functionality over a group of nodes.
+Grid projection allows to group Ignite nodes into various subgroups to perform distributed
+operations on them. All ForXXX(...)&apos; methods will create a child grid projection
+from existing projection. If you create a new projection from current one, then the resulting
+projection will include a subset of nodes from current projection. The following code snippet
+shows how to create grid projections:</p>
+<pre><code>var g = Ignition.GetIgnite();
+
+// Projection over remote nodes.
+var remoteNodes = g.ForRemotes();
+
+// Projection over random remote node.
+var randomNode = g.ForRandom();
+
+// Projection over all nodes with cache named &quot;myCache&quot; enabled.
+var cacheNodes = g.ForCacheNodes(&quot;myCache&quot;);
+
+// Projection over all nodes that have user attribute &quot;group&quot; set to value &quot;worker&quot;.
+var workerNodes = g.ForAttribute(&quot;group&quot;, &quot;worker&quot;);</code></pre>
+<p>Grid projection provides functionality for executing tasks and closures over 
+nodes in this projection using <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html#Apache_Ignite_Core_Cluster_IClusterGroup_GetCompute">GetCompute()</a>.
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterMetrics.html">IClusterMetrics</a></h4>
+      <section><p>Represents runtime information of a cluster. Apart from obvious
+statistical value, this information is used for implementation of
+load balancing, failover, and collision SPIs. For example, collision SPI
+in combination with fail-over SPI could check if other nodes don&apos;t have
+any active or waiting jobs and fail-over some jobs to those nodes.
+<p>
+Node metrics for any node can be accessed via <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html#Apache_Ignite_Core_Cluster_IClusterNode_GetMetrics">GetMetrics()</a> 
+method. Keep in mind that there will be a certain network delay (usually
+equal to heartbeat delay) for the accuracy of node metrics. However, when accessing
+metrics on local node the metrics are always accurate and up to date.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></h4>
+      <section><p>Interface representing a single cluster node. Use <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html#Apache_Ignite_Core_Cluster_IClusterNode_GetAttribute__1_System_String_">GetAttribute&lt;T&gt;(String)</a> or
+<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html#Apache_Ignite_Core_Cluster_IClusterNode_GetMetrics">GetMetrics()</a> to get static and dynamic information about remote nodes.
+You can get a list of all nodes in grid by calling <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterGroup.html#Apache_Ignite_Core_Cluster_IClusterGroup_GetNodes">GetNodes()</a> 
+on <a class="xref" href="Apache.Ignite.Core.IIgnite.html">IIgnite</a> instance.
+<p>
+You can use Ignite node attributes to provide static information about a node.
+This information is initialized once within grid, during node startup, and
+remains the same throughout the lifetime of a node. 
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNodeFilter.html">IClusterNodeFilter</a></h4>
+      <section><p>Represents cluster node filter.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2017 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

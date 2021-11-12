@@ -1,0 +1,931 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.8.1/dotnetdoc/api/Apache.Ignite.Core.Cache.ICacheAffinity.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ICacheAffinity
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ICacheAffinity
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity">
+  
+  
+  <h1 id="Apache_Ignite_Core_Cache_ICacheAffinity" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity" class="text-break">Interface ICacheAffinity
+  </h1>
+  <div class="markdown level0 summary"><p>Provides affinity information to detect which node is primary and which nodes are
+backups for a partitioned cache. You can get an instance of this interface by calling
+<a class="xref" href="Apache.Ignite.Core.IIgnite.html#Apache_Ignite_Core_IIgnite_GetAffinity_System_String_">GetAffinity(String)</a> method.
+<p>
+Mapping of a key to a node is a three-step operation. First step will get an affinity key for 
+given key using <code>CacheAffinityKeyMapper</code>. If mapper is not specified, the original key 
+will be used. Second step will map affinity key to partition using 
+<code>CacheAffinityFunction.partition(Object)</code> method. Third step will map obtained partition 
+to nodes for current grid topology version.
+<p>
+Interface provides various <code>mapKeysToNodes(...)</code> methods which provide node affinity mapping 
+for given keys. All <code>mapKeysToNodes(...)</code> methods are not transactional and will not enlist
+keys into ongoing transaction.
+<p>
+All members are thread-safe and may be used concurrently from multiple threads.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Cache.html">Apache.Ignite.Core.Cache</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Cache_ICacheAffinity_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ICacheAffinity</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_Partitions_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.Partitions*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_Partitions" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.Partitions">Partitions</h4>
+  <div class="markdown level1 summary"><p>Gets number of partitions in cache according to configured affinity function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int Partitions { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>Number of cache partitions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_GetAffinityKey_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetAffinityKey*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_GetAffinityKey__2___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetAffinityKey``2(``0)">GetAffinityKey&lt;TK, TR&gt;(TK)</h4>
+  <div class="markdown level1 summary"><p>Maps passed in key to a key which will be used for node affinity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TR GetAffinityKey&lt;TK, TR&gt;(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to map.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TR</span></td>
+        <td><p>Key to be used for node-to-affinity mapping (may be the same key as passed in).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TR</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_GetAllPartitions_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetAllPartitions*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_GetAllPartitions_Apache_Ignite_Core_Cluster_IClusterNode_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetAllPartitions(Apache.Ignite.Core.Cluster.IClusterNode)">GetAllPartitions(IClusterNode)</h4>
+  <div class="markdown level1 summary"><p>Gets partition ids for which nodes of the given projection has ownership
+(either primary or backup).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int[] GetAllPartitions(IClusterNode n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><p>Partition ids for which given projection has ownership.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_GetBackupPartitions_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetBackupPartitions*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_GetBackupPartitions_Apache_Ignite_Core_Cluster_IClusterNode_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetBackupPartitions(Apache.Ignite.Core.Cluster.IClusterNode)">GetBackupPartitions(IClusterNode)</h4>
+  <div class="markdown level1 summary"><p>Gets partition ids for which nodes of the given projection has backup
+ownership.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int[] GetBackupPartitions(IClusterNode n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><p>Partition ids for which given projection has backup ownership.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_GetPartition_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetPartition*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_GetPartition__1___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetPartition``1(``0)">GetPartition&lt;TK&gt;(TK)</h4>
+  <div class="markdown level1 summary"><p>Gets partition id for the given key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int GetPartition&lt;TK&gt;(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to get partition id for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>Partition id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_GetPrimaryPartitions_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetPrimaryPartitions*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_GetPrimaryPartitions_Apache_Ignite_Core_Cluster_IClusterNode_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.GetPrimaryPartitions(Apache.Ignite.Core.Cluster.IClusterNode)">GetPrimaryPartitions(IClusterNode)</h4>
+  <div class="markdown level1 summary"><p>Gets partition ids for which nodes of the given projection has primary
+ownership.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int[] GetPrimaryPartitions(IClusterNode n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><p>Partition ids for which given projection has primary ownership.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_IsBackup_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsBackup*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_IsBackup__1_Apache_Ignite_Core_Cluster_IClusterNode___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsBackup``1(Apache.Ignite.Core.Cluster.IClusterNode,``0)">IsBackup&lt;TK&gt;(IClusterNode, TK)</h4>
+  <div class="markdown level1 summary"><p>Returns &apos;true&apos; if given node is the backup node for given key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsBackup&lt;TK&gt;(IClusterNode n, TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>&apos;True&apos; if given node is the backup node for given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_IsPrimary_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsPrimary*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_IsPrimary__1_Apache_Ignite_Core_Cluster_IClusterNode___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsPrimary``1(Apache.Ignite.Core.Cluster.IClusterNode,``0)">IsPrimary&lt;TK&gt;(IClusterNode, TK)</h4>
+  <div class="markdown level1 summary"><p>Returns &apos;true&apos; if given node is the primary node for given key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsPrimary&lt;TK&gt;(IClusterNode n, TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>&apos;True&apos; if given node is the primary node for given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_IsPrimaryOrBackup_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsPrimaryOrBackup*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_IsPrimaryOrBackup__1_Apache_Ignite_Core_Cluster_IClusterNode___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.IsPrimaryOrBackup``1(Apache.Ignite.Core.Cluster.IClusterNode,``0)">IsPrimaryOrBackup&lt;TK&gt;(IClusterNode, TK)</h4>
+  <div class="markdown level1 summary"><p>Returns &apos;true&apos; if given node is either primary or backup node for given key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsPrimaryOrBackup&lt;TK&gt;(IClusterNode n, TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Node.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>&apos;True&apos; if given node is either primary or backup node for given key.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeysToNodes_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeysToNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeysToNodes__1_System_Collections_Generic_IEnumerable___0__" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeysToNodes``1(System.Collections.Generic.IEnumerable{``0})">MapKeysToNodes&lt;TK&gt;(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>This method provides ability to detect which keys are mapped to which nodes.
+Use it to determine which nodes are storing which keys prior to sending
+jobs that access these keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IDictionary&lt;IClusterNode, IList&lt;TK&gt;&gt; MapKeysToNodes&lt;TK&gt;(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys to map to nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>, <span class="xref">System.Collections.Generic.IList</span>&lt;TK&gt;&gt;</td>
+        <td><p>Map of nodes to keys or empty map if there are no alive nodes for this cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeyToNode_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeyToNode*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeyToNode__1___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeyToNode``1(``0)">MapKeyToNode&lt;TK&gt;(TK)</h4>
+  <div class="markdown level1 summary"><p>This method provides ability to detect to which primary node the given key
+is mapped. Use it to determine which nodes are storing which keys prior to sending
+jobs that access these keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterNode MapKeyToNode&lt;TK&gt;(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Keys to map to a node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><p>Primary node for the key or null if there are no alive nodes for this cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeyToPrimaryAndBackups_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeyToPrimaryAndBackups*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapKeyToPrimaryAndBackups__1___0_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapKeyToPrimaryAndBackups``1(``0)">MapKeyToPrimaryAndBackups&lt;TK&gt;(TK)</h4>
+  <div class="markdown level1 summary"><p>Gets primary and backup nodes for the key. Note that primary node is always
+first in the returned collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IList&lt;IClusterNode&gt; MapKeyToPrimaryAndBackups&lt;TK&gt;(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionsToNodes_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionsToNodes*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionsToNodes_System_Collections_Generic_IEnumerable_System_Int32__" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionsToNodes(System.Collections.Generic.IEnumerable{System.Int32})">MapPartitionsToNodes(IEnumerable&lt;Int32&gt;)</h4>
+  <div class="markdown level1 summary"><p>Gets primary nodes for the given partitions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IDictionary&lt;int, IClusterNode&gt; MapPartitionsToNodes(IEnumerable&lt;int&gt; parts)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">parts</span></td>
+        <td><p>Partition ids.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.Int32</span>, <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><p>Mapping of given partitions to their primary nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionToNode_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionToNode*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionToNode_System_Int32_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionToNode(System.Int32)">MapPartitionToNode(Int32)</h4>
+  <div class="markdown level1 summary"><p>Gets primary node for the given partition.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IClusterNode MapPartitionToNode(int part)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">part</span></td>
+        <td><p>Partition id.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a></td>
+        <td><p>Primary node for the given partition.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionToPrimaryAndBackups_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionToPrimaryAndBackups*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_ICacheAffinity_MapPartitionToPrimaryAndBackups_System_Int32_" data-uid="Apache.Ignite.Core.Cache.ICacheAffinity.MapPartitionToPrimaryAndBackups(System.Int32)">MapPartitionToPrimaryAndBackups(Int32)</h4>
+  <div class="markdown level1 summary"><p>Gets primary and backup nodes for partition. Note that primary node is always
+first in the returned collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IList&lt;IClusterNode&gt; MapPartitionToPrimaryAndBackups(int part)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">part</span></td>
+        <td><p>Partition to get affinity nodes for.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><p>Collection of primary and backup nodes for partition with primary node always first</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

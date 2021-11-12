@@ -1,0 +1,254 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.0.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+<title>2.0 Release Notes - Apache Ignite</title>
+<style>h2 {  border-bottom: 2px solid #ccc;
+  color: #113847;
+  font-size: 29px;
+  font-weight: normal;
+  margin: 30px 0 15px 0;
+  padding-bottom: 7px;  width: 700px;
+}a {
+  color: #cc0000;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}ul,
+ol {
+  list-style: disc;
+  margin-left: 30px;
+}
+ul li,
+ol li {
+  margin: 5px 0;
+}h1 {
+  color: #113847;
+  font-size: 33px;
+  font-weight: bold;
+  margin: 30px 0 15px 0;
+  padding-bottom: 7px;
+  width: 700px;
+}</style>
+</head>
+<body>
+<h1 id="Apache IGNITE 2.0 Overview">Apache Ignite 2.0 Overview</h1>
+
+Apache Ignite 2.0 incorporates significant as well as breakthrough changes some of the are described below.
+
+<h2>Redesigned Off-Heap Memory Architecture</h2>
+
+The whole memory architecture of the platform was redesigned from scratch.
+In a nutshell, all the data and indexes are stored in a completely <a href="https://apacheignite.readme.io/docs/page-memory" target="_blank">new manageable off-heap memory</a>
+that has no issues with memory fragmentation, accelerates SQL Grid significantly and helps your application tolerate Java GC
+pauses easily. The architecture allows integrating easily with SSD and Flash drives.
+
+<h2>Data Definition Language</h2>
+
+The release <a href="https://apacheignite.readme.io/docs/distributed-ddl" target="_blank">introduces support</a>
+for Data Definition Language (DDL) as a part of its SQL Grid functionality.
+Now you can define and, what's more important, to alter indexes in runtime without a need to restart your cluster.
+Apache Ignite users have been waiting for this feature for a long time and it's more exciting that they can leverage
+from this by using standard SQL commands like CREATE or DROP index. More DDL commands will be supported in upcoming
+releases.
+
+<h2>Machine Learning Grid Beta</h2>
+
+With Apache Ignite 2.0 you can check up project's own <a href="https://apacheignite.readme.io/docs/machine-learning" target="_blank">distributed algebra implementation</a>.
+The distributed algebra is the foundation for the whole component and pretty soon you can expect to get
+distributed versions of widely used regression algorithms, decision trees and more.
+
+<h2>Spring Data Integration</h2>
+
+<a href="https://apacheignite-mix.readme.io/docs/spring-data" target="_blank">Spring Data integration</a> allows interacting with an Apache Ignite cluster using well-known and highly adopted
+Spring Data Framework. You can connect to the cluster by means of Spring Data repositories and start executing
+distributed SQL queries as well as simple CRUD operations.
+
+<h2>Rocket MQ Integration</h2>
+
+Starting with Apache Ignite 2.0 you can easily stream data from <a href="https://apacheignite-mix.readme.io/docs/rocketmq-streamer" target="_blank">RocketMQ to an Apache Ignite cluster</a>.
+
+<h2>Hibernate 5 Support</h2>
+
+Hibernate L2 cache users have been anticipating support of Hibernate 5 on Apache Ignite side pretty long time.
+Apache Ignite 2.0 fulfilled this demand.
+<a href="https://apacheignite-mix.readme.io/docs/hibernate-l2-cache" target="_blank">The integration</a> now supports Hibernate 5 and contains a number of bug fixes and improvements.
+
+<h2>Ignite.NET</h2>
+
+Ignite.NET now supports <a href="https://apacheignite-net.readme.io/docs/serialization" target="_blank">dynamic type registration</a> and provides a
+<a href="https://apacheignite-net.readme.io/docs/plugins" target="_blank">plugin system</a> that allows 3rd parties to extend existing functionality.
+
+<h2>Ignite.C++</h2>
+
+Eventually, Ignite.C++ part of the community made up a way on how to execute arbitrary C++ code on remote cluster machines.
+
+The approach was initially tested for continuous queries and now you can <a href="https://apacheignite-cpp.readme.io/docs/continuous-queries" target="_blank">register continuous queries' remote filters</a>
+on any cluster node you like. Going forward you can expect support for Ignite.C++ compute grid and more.
+
+<h1 id="Apache IGNITE 2.0">Full Set of Changes</h1>
+<h2>New Features</h2>
+<ul>
+<li>Implement index hints for SQL<a href="https://issues.apache.org/jira/browse/IGNITE-4594"> [#IGNITE-4594]</a>
+<li>Support CREATE INDEX DDL statements<a href="https://issues.apache.org/jira/browse/IGNITE-4565"> [#IGNITE-4565]</a>
+<li>RocketMQ data streamer<a href="https://issues.apache.org/jira/browse/IGNITE-4539"> [#IGNITE-4539]</a>
+<li>Implement cluster ACTIVE/INACTIVE state<a href="https://issues.apache.org/jira/browse/IGNITE-4335"> [#IGNITE-4335]</a>
+</ul>
+<h2>New Features .NET</h2>
+<ul>
+<li>.NET: Dynamically registered classes must use binary serialization if possible<a href="https://issues.apache.org/jira/browse/IGNITE-2703"> [#IGNITE-2703]</a>
+<li>.NET: Plugin system<a href="https://issues.apache.org/jira/browse/IGNITE-2940"> [#IGNITE-2940]</a>
+</ul>
+<h2>Improvements</h2>
+<ul>
+<li>Move memory metrics to snapshots<a href="https://issues.apache.org/jira/browse/IGNITE-5072"> [#IGNITE-5072]</a>
+<li>Default MemoryPolicy settings improvements<a href="https://issues.apache.org/jira/browse/IGNITE-5024"> [#IGNITE-5024]</a>
+<li>Need to add an option to write all updates in write-behind store<a href="https://issues.apache.org/jira/browse/IGNITE-4933"> [#IGNITE-4933]</a>
+<li>Create separate thread pool for services<a href="https://issues.apache.org/jira/browse/IGNITE-4802"> [#IGNITE-4802]</a>
+<li>Inherit TransactionException and update Javadoc<a href="https://issues.apache.org/jira/browse/IGNITE-4795"> [#IGNITE-4795]</a>
+<li>Better optimistic tx lock conflict client information<a href="https://issues.apache.org/jira/browse/IGNITE-4710"> [#IGNITE-4710]</a>
+<li>Refresh client attributes during reconnect<a href="https://issues.apache.org/jira/browse/IGNITE-4641"> [#IGNITE-4641]</a>
+<li>ScanQuery shows poor performance<a href="https://issues.apache.org/jira/browse/IGNITE-4624"> [#IGNITE-4624]</a>
+<li>Write IgniteUuid with BinaryMarshaller<a href="https://issues.apache.org/jira/browse/IGNITE-4611"> [#IGNITE-4611]</a>
+<li>Use BinaryArrayIdentityResolver by default<a href="https://issues.apache.org/jira/browse/IGNITE-4558"> [#IGNITE-4558]</a>
+<li>BinaryObjectImpl: lack of context information upon deserialization<a href="https://issues.apache.org/jira/browse/IGNITE-4538"> [#IGNITE-4538]</a>
+<li>Allow distributed SQL query execution over explicit set of partitions<a href="https://issues.apache.org/jira/browse/IGNITE-4523"> [#IGNITE-4523]</a>
+<li>Set QueryIndexType.SORTED by default for an index <a href="https://issues.apache.org/jira/browse/IGNITE-4511"> [#IGNITE-4511]</a>
+<li>Add MBean for StripedExecutor<a href="https://issues.apache.org/jira/browse/IGNITE-4492"> [#IGNITE-4492]</a>
+<li>Call commit for read-only transactions<a href="https://issues.apache.org/jira/browse/IGNITE-4484"> [#IGNITE-4484]</a>
+<li>ODBC: Add support for logger configuration<a href="https://issues.apache.org/jira/browse/IGNITE-4470"> [#IGNITE-4470]</a>
+<li>Make sure data structures do not use outTx call<a href="https://issues.apache.org/jira/browse/IGNITE-4437"> [#IGNITE-4437]</a>
+<li>Exchange binary metadata with discovery custom messages instead of system cache<a href="https://issues.apache.org/jira/browse/IGNITE-4302"> [#IGNITE-4302]</a>
+<li>Update Spring dependency to latest stable version<a href="https://issues.apache.org/jira/browse/IGNITE-4211"> [#IGNITE-4211]</a>
+<li>Use discovery custom messages instead of marshaller cache<a href="https://issues.apache.org/jira/browse/IGNITE-4157"> [#IGNITE-4157]</a>
+<li>JDBC driver should always set withKeepBinary flag when querying cache<a href="https://issues.apache.org/jira/browse/IGNITE-4141"> [#IGNITE-4141]</a>
+<li>Add an option to serialize specific type(s) with OptimizedMarshaller when binary format is used<a href="https://issues.apache.org/jira/browse/IGNITE-3904"> [#IGNITE-3904]</a>
+<li>Improve Enum fields handling in SQL<a href="https://issues.apache.org/jira/browse/IGNITE-3595"> [#IGNITE-3595]</a>
+<li>Set copyOnRead property to FALSE for marshaller cache<a href="https://issues.apache.org/jira/browse/IGNITE-3569"> [#IGNITE-3569]</a>
+<li>Prohibit null as name in all the components (cache name first of all)<a href="https://issues.apache.org/jira/browse/IGNITE-3488"> [#IGNITE-3488]</a>
+<li>_key and _val fields should be excluded from 'select * from' queries<a href="https://issues.apache.org/jira/browse/IGNITE-3487"> [#IGNITE-3487]</a>
+<li>Rename IgniteConfiguration.gridName<a href="https://issues.apache.org/jira/browse/IGNITE-3207"> [#IGNITE-3207]</a>
+<li>Binary marshaller: sort fields alphabetically<a href="https://issues.apache.org/jira/browse/IGNITE-2626"> [#IGNITE-2626]</a>
+<li>NearCacheConfiguration should not extend MutableConfiguration<a href="https://issues.apache.org/jira/browse/IGNITE-2558"> [#IGNITE-2558]</a>
+</ul>
+<h2>Improvements .NET</h2>
+<ul>
+<li>.NET: CacheConfiguration.WriteBehindCoalescing<a href="https://issues.apache.org/jira/browse/IGNITE-5043"> [#IGNITE-5043]</a>
+<li>.NET: Add partition loss APIs<a href="https://issues.apache.org/jira/browse/IGNITE-5031"> [#IGNITE-5031]</a>
+<li>.NET: IgniteConfiguration.MemoryConfiguration<a href="https://issues.apache.org/jira/browse/IGNITE-5023"> [#IGNITE-5023]</a>
+<li>.NET: QueryEntity.TableName<a href="https://issues.apache.org/jira/browse/IGNITE-4870"> [#IGNITE-4870]</a>
+<li>.NET: StopAll on AppDomain unload<a href="https://issues.apache.org/jira/browse/IGNITE-4856"> [#IGNITE-4856]</a>
+<li>.NET: Support complex type dictionaries in app.config configuration<a href="https://issues.apache.org/jira/browse/IGNITE-4846"> [#IGNITE-4846]</a>
+<li>.NET: Add IgniteUuid system type support<a href="https://issues.apache.org/jira/browse/IGNITE-4716"> [#IGNITE-4716]</a>
+<li>.NET: Add ClassName and Message to JavaException<a href="https://issues.apache.org/jira/browse/IGNITE-4692"> [#IGNITE-4692]</a>
+<li>.NET: Sort binary object fields<a href="https://issues.apache.org/jira/browse/IGNITE-4669"> [#IGNITE-4669]</a>
+<li>.NET: Rename IgniteConfiguration.gridName<a href="https://issues.apache.org/jira/browse/IGNITE-4576"> [#IGNITE-4576]</a>
+<li>.NET: Expose default concurrency and isolation on ITransactions<a href="https://issues.apache.org/jira/browse/IGNITE-4504"> [#IGNITE-4504]</a>
+<li>.NET: Optimize ExamplesTest.TestRemoteNodes<a href="https://issues.apache.org/jira/browse/IGNITE-4494"> [#IGNITE-4494]</a>
+<li>.NET: Provide default-config-dotnet.xml<a href="https://issues.apache.org/jira/browse/IGNITE-4410"> [#IGNITE-4410]</a>
+<li>.NET: Support BinaryFieldsIdentityResolver<a href="https://issues.apache.org/jira/browse/IGNITE-4397"> [#IGNITE-4397]</a>
+<li>.NET: Use BinaryArrayIdentityResolver by default<a href="https://issues.apache.org/jira/browse/IGNITE-4351"> [#IGNITE-4351]</a>
+<li>.NET: EventType.SwapspaceAll inconsistent naming<a href="https://issues.apache.org/jira/browse/IGNITE-4217"> [#IGNITE-4217]</a>
+<li>.NET: Generic ICacheStore methods<a href="https://issues.apache.org/jira/browse/IGNITE-4102"> [#IGNITE-4102]</a>
+<li>.NET: Throw an exception when user tries to run SQL over [Serializable] types<a href="https://issues.apache.org/jira/browse/IGNITE-3734"> [#IGNITE-3734]</a>
+<li>.NET: Remove IgniteProxy<a href="https://issues.apache.org/jira/browse/IGNITE-3689"> [#IGNITE-3689]</a>
+<li>.NET: Inconsistent namespace imports in examples<a href="https://issues.apache.org/jira/browse/IGNITE-3604"> [#IGNITE-3604]</a>
+<li>.NET: Rename ILifecycleBean<a href="https://issues.apache.org/jira/browse/IGNITE-3548"> [#IGNITE-3548]</a>
+<li>.NET: Review access modifiers<a href="https://issues.apache.org/jira/browse/IGNITE-3540"> [#IGNITE-3540]</a>
+<li>.NET: Remove deprecated code<a href="https://issues.apache.org/jira/browse/IGNITE-3539"> [#IGNITE-3539]</a>
+<li>.NET: Review namespace structure<a href="https://issues.apache.org/jira/browse/IGNITE-3510"> [#IGNITE-3510]</a>
+<li>.NET: Fix ContinuousQuery, QueryBase, and SqlFieldsQuery class constants<a href="https://issues.apache.org/jira/browse/IGNITE-3506"> [#IGNITE-3506]</a>
+<li>.NET: Remove "Default" prefix from BinaryConfiguration properties<a href="https://issues.apache.org/jira/browse/IGNITE-3503"> [#IGNITE-3503]</a>
+<li>.NET: Write Serializable as binary<a href="https://issues.apache.org/jira/browse/IGNITE-2825"> [#IGNITE-2825]</a>
+<li>.NET: Native object comparison<a href="https://issues.apache.org/jira/browse/IGNITE-2578"> [#IGNITE-2578]</a>
+</ul>
+<h2>Fixed</h2>
+<ul>
+<li>NPE during deadlock detection because cache isn't started on node<a href="https://issues.apache.org/jira/browse/IGNITE-5041"> [#IGNITE-5041]</a>
+<li>Timeout in ignite-cassandra SessionPool is not configurable<a href="https://issues.apache.org/jira/browse/IGNITE-4954"> [#IGNITE-4954]</a>
+<li>Web session clustering fails to work with Spring Security<a href="https://issues.apache.org/jira/browse/IGNITE-4948"> [#IGNITE-4948]</a>
+<li>LocalDeploymentSpi resources cleanup on spi.register() might clean resources from other tasks using delegating classloader<a href="https://issues.apache.org/jira/browse/IGNITE-4920"> [#IGNITE-4920]</a>
+<li>Excessive service instances can be started with dynamic deployment<a href="https://issues.apache.org/jira/browse/IGNITE-4907"> [#IGNITE-4907]</a>
+<li>ClassCastException in DML benchmarks<a href="https://issues.apache.org/jira/browse/IGNITE-4905"> [#IGNITE-4905]</a>
+<li>OptimizedMarshaller should not failed on GridClientNodeBean serialization<a href="https://issues.apache.org/jira/browse/IGNITE-4896"> [#IGNITE-4896]</a>
+<li>Key is deserialized during transactional get() even if withKeepBinary is set<a href="https://issues.apache.org/jira/browse/IGNITE-4891"> [#IGNITE-4891]</a>
+<li>VisorServiceTask should properly handle ClassNotFound exceptions<a href="https://issues.apache.org/jira/browse/IGNITE-4886"> [#IGNITE-4886]</a>
+<li>System pool starvation while partition evicting<a href="https://issues.apache.org/jira/browse/IGNITE-4879"> [#IGNITE-4879]</a>
+<li>Log4jLogger can change RootLogger logging level unexpectedly<a href="https://issues.apache.org/jira/browse/IGNITE-4863"> [#IGNITE-4863]</a>
+<li>NPE on execution of unknown internal task by name<a href="https://issues.apache.org/jira/browse/IGNITE-4838"> [#IGNITE-4838]</a>
+<li>Service is deployed on client when service configuration is provided on startup<a href="https://issues.apache.org/jira/browse/IGNITE-4832"> [#IGNITE-4832]</a>
+<li>SQL: Eviction to swap failed if segmented index is used<a href="https://issues.apache.org/jira/browse/IGNITE-4826"> [#IGNITE-4826]</a>
+<li>Ignite map-reduce engine should set MRJobConfig.TASK_ATTEMPT_ID<a href="https://issues.apache.org/jira/browse/IGNITE-4813"> [#IGNITE-4813]</a>
+<li>Disable EventStorageSpi by default<a href="https://issues.apache.org/jira/browse/IGNITE-4812"> [#IGNITE-4812]</a>
+<li>ServiceProcessor hangs while stopping on unstable topology<a href="https://issues.apache.org/jira/browse/IGNITE-4761"> [#IGNITE-4761]</a>
+<li>Print a warning when option 'ignite.job.shared.classloader' is on<a href="https://issues.apache.org/jira/browse/IGNITE-4755"> [#IGNITE-4755]</a>
+<li>Service could be deployed/undeployed twice on concurrent cancel and discovery event<a href="https://issues.apache.org/jira/browse/IGNITE-4740"> [#IGNITE-4740]</a>
+<li>FairAffinityFunction fails on node restart with backupFilter set and no backups<a href="https://issues.apache.org/jira/browse/IGNITE-4671"> [#IGNITE-4671]</a>
+<li>Throw exception on starting client cache when indexed types cannot be loaded<a href="https://issues.apache.org/jira/browse/IGNITE-4667"> [#IGNITE-4667]</a>
+<li>Value from IgniteQueue in atomic mode could be lost<a href="https://issues.apache.org/jira/browse/IGNITE-4644"> [#IGNITE-4644]</a>
+<li>Possible starvation during rebalancing for marshaller cache<a href="https://issues.apache.org/jira/browse/IGNITE-4589"> [#IGNITE-4589]</a>
+<li>Optimize GridDhtLocalPartition.rmvQueue<a href="https://issues.apache.org/jira/browse/IGNITE-4552"> [#IGNITE-4552]</a>
+<li>Near reader is not created when value is loaded from store<a href="https://issues.apache.org/jira/browse/IGNITE-4525"> [#IGNITE-4525]</a>
+<li>CacheQueryExample and CacheClientBinaryQueryExample print class name and hash instead of smth meaningful<a href="https://issues.apache.org/jira/browse/IGNITE-4508"> [#IGNITE-4508]</a>
+<li>TcpDiscoverySpi is not reliable in some network split scenarios<a href="https://issues.apache.org/jira/browse/IGNITE-4499"> [#IGNITE-4499]</a>
+<li>ODBC: Add missing diagnostic records in case of API errors<a href="https://issues.apache.org/jira/browse/IGNITE-4493"> [#IGNITE-4493]</a>
+<li>ODBC: First query execution takes much more time than any subsequent<a href="https://issues.apache.org/jira/browse/IGNITE-4488"> [#IGNITE-4488]</a>
+<li>Client should re-try connection attempt in case of concurrent network failure<a href="https://issues.apache.org/jira/browse/IGNITE-4473"> [#IGNITE-4473]</a>
+<li>ODBC: Can not retrieve table metadata<a href="https://issues.apache.org/jira/browse/IGNITE-4471"> [#IGNITE-4471]</a>
+<li>JclLogger ignores IGNITE_QUIET system property<a href="https://issues.apache.org/jira/browse/IGNITE-4464"> [#IGNITE-4464]</a>
+<li>Web console: Implement configuration of affinity function in cache configuration<a href="https://issues.apache.org/jira/browse/IGNITE-4442"> [#IGNITE-4442]</a>
+<li>REPLICATED cache isn't synced across nodes<a href="https://issues.apache.org/jira/browse/IGNITE-4424"> [#IGNITE-4424]</a>
+<li>ODBC: SQLFetch fails if result set contains non-primitive column<a href="https://issues.apache.org/jira/browse/IGNITE-4421"> [#IGNITE-4421]</a>
+<li>Web console: Failed to edit File system checkpoint spi paths<a href="https://issues.apache.org/jira/browse/IGNITE-4396"> [#IGNITE-4396]</a>
+<li>Incorrect Karaf OSGI feature for ignite-rest-http<a href="https://issues.apache.org/jira/browse/IGNITE-4387"> [#IGNITE-4387]</a>
+<li>Hadoop tests affect each other through IgniteHadoopClientProtocolProvider#cliMap<a href="https://issues.apache.org/jira/browse/IGNITE-4386"> [#IGNITE-4386]</a>
+<li>SQL: Failed to run reduce query locally with a valid query<a href="https://issues.apache.org/jira/browse/IGNITE-4376"> [#IGNITE-4376]</a>
+<li>Inner properties mutation broken in SQL UPDATE<a href="https://issues.apache.org/jira/browse/IGNITE-4363"> [#IGNITE-4363]</a>
+<li>DML: BinaryObjectBuilder does not sort fields in some cases<a href="https://issues.apache.org/jira/browse/IGNITE-4354"> [#IGNITE-4354]</a>
+<li>Failed second client node join with continuous query and peer class loading enabled<a href="https://issues.apache.org/jira/browse/IGNITE-4284"> [#IGNITE-4284]</a>
+<li>SSL misconfiguration is not handled properly<a href="https://issues.apache.org/jira/browse/IGNITE-4147"> [#IGNITE-4147]</a>
+<li>Assertion in ClientImpl.updateMetrics()<a href="https://issues.apache.org/jira/browse/IGNITE-4142"> [#IGNITE-4142]</a>
+<li>Client is stopped if communication to servers is lost during (re)connect routine<a href="https://issues.apache.org/jira/browse/IGNITE-4112"> [#IGNITE-4112]</a>
+<li>BinaryType.isEnum() throws an exception if typeId==0<a href="https://issues.apache.org/jira/browse/IGNITE-4109"> [#IGNITE-4109]</a>
+<li>BinaryType.fieldNames() should return names in consistent order<a href="https://issues.apache.org/jira/browse/IGNITE-4063"> [#IGNITE-4063]</a>
+<li>Incorrect errors/warnings while odbc driver installation<a href="https://issues.apache.org/jira/browse/IGNITE-4002"> [#IGNITE-4002]</a>
+<li>Hadoop: automatically add ${HADOOP_HOME}/lib/native to java.library.path system property<a href="https://issues.apache.org/jira/browse/IGNITE-3966"> [#IGNITE-3966]</a>
+<li>IgniteCache.invokeAll returns empty result set in ATOMIC cache<a href="https://issues.apache.org/jira/browse/IGNITE-3955"> [#IGNITE-3955]</a>
+<li>Web Console: Summary page - Download button should show progress of downloading<a href="https://issues.apache.org/jira/browse/IGNITE-3923"> [#IGNITE-3923]</a>
+<li>Clarify if IgfsFile -> FileStatus conversion should treat groupBlockSize as blockSize<a href="https://issues.apache.org/jira/browse/IGNITE-3877"> [#IGNITE-3877]</a>
+<li>CreatedExpiryPolicy doesn't work if entry is loaded from store<a href="https://issues.apache.org/jira/browse/IGNITE-3699"> [#IGNITE-3699]</a>
+<li>CPP: JVM crash on "Failed to start SPI" exception<a href="https://issues.apache.org/jira/browse/IGNITE-3514"> [#IGNITE-3514]</a>
+<li>IGFS: Does not correctly deallocate free space in courner case<a href="https://issues.apache.org/jira/browse/IGNITE-3400"> [#IGNITE-3400]</a>
+<li>Reentrant lock is lost when lock owner leaves topology<a href="https://issues.apache.org/jira/browse/IGNITE-3386"> [#IGNITE-3386]</a>
+<li>Marshaling works wrong for the BigDecimals that have negative scale<a href="https://issues.apache.org/jira/browse/IGNITE-3196"> [#IGNITE-3196]</a>
+<li>Hadoop module cannot load native libraries when running inside HDP 2.3.4<a href="https://issues.apache.org/jira/browse/IGNITE-3085"> [#IGNITE-3085]</a>
+<li>NearCacheConfiguration incorrectly extends MutableConfiguration<a href="https://issues.apache.org/jira/browse/IGNITE-3081"> [#IGNITE-3081]</a>
+<li>Eviction policy must consider either max size or max entries count<a href="https://issues.apache.org/jira/browse/IGNITE-2552"> [#IGNITE-2552]</a>
+<li>'Put' cache event treats entry created at lock acquisition time as old value<a href="https://issues.apache.org/jira/browse/IGNITE-2231"> [#IGNITE-2231]</a>
+<li>IgniteCacheProxy is not serialized properly<a href="https://issues.apache.org/jira/browse/IGNITE-2194"> [#IGNITE-2194]</a>
+<li>IgniteSemaphore's failover related tests lead to the deadlock or fail<a href="https://issues.apache.org/jira/browse/IGNITE-1977"> [#IGNITE-1977]</a>
+<li>[Test] IgniteProjectionStartStopRestartSelfTest.testStopNodesByIdsC	fails<a href="https://issues.apache.org/jira/browse/IGNITE-1725"> [#IGNITE-1725]</a>
+<li>[Test] IgniteProjectionStartStopRestartSelfTest.testStartOneNode fails<a href="https://issues.apache.org/jira/browse/IGNITE-1724"> [#IGNITE-1724]</a>
+<li>Cache SQL query metadata index's fields have wrong register<a href="https://issues.apache.org/jira/browse/IGNITE-1495"> [#IGNITE-1495]</a>
+<li>Provide integration with Spring Data<a href="https://issues.apache.org/jira/browse/IGNITE-1192"> [#IGNITE-1192]</a>
+<li>NPE in GridCacheProcessor.onKernalStop()<a href="https://issues.apache.org/jira/browse/IGNITE-1178"> [#IGNITE-1178]</a>
+<li>Need to automatically support LocalDateTime class in indexing<a href="https://issues.apache.org/jira/browse/IGNITE-1072"> [#IGNITE-1072]</a>
+<li>Failed to start node if 'textFields' in 'CacheTypeMetadata' contains non String value (Integer in my case)<a href="https://issues.apache.org/jira/browse/IGNITE-969"> [#IGNITE-969]</a>
+<li>TTL is not updated for reader when entry is accessed on backup<a href="https://issues.apache.org/jira/browse/IGNITE-518"> [#IGNITE-518]</a>
+</ul>
+<h2>Fixed .NET</h2>
+<ul>
+<li>.NET: Continuous query fails with exception on Java side<a href="https://issues.apache.org/jira/browse/IGNITE-5066"> [#IGNITE-5066]</a>
+<li>.NET: build.ps1 fails for Any CPU config on PowerShell 4.0 and lower<a href="https://issues.apache.org/jira/browse/IGNITE-5057"> [#IGNITE-5057]</a>
+<li>.NET: SQL does not work with F# record types<a href="https://issues.apache.org/jira/browse/IGNITE-5006"> [#IGNITE-5006]</a>
+<li>.NET: StartFromApplicationConfiguration does not work in ASP.NET<a href="https://issues.apache.org/jira/browse/IGNITE-4902"> [#IGNITE-4902]</a>
+<li>.NET: Meaningless exception on generic type in BinaryConfiguration<a href="https://issues.apache.org/jira/browse/IGNITE-4885"> [#IGNITE-4885]</a>
+<li>.NET: Contains fails in LINQ when subquery comes from a variable<a href="https://issues.apache.org/jira/browse/IGNITE-4817"> [#IGNITE-4817]</a>
+<li>.NET: Binary enums are handled incorrectly<a href="https://issues.apache.org/jira/browse/IGNITE-4592"> [#IGNITE-4592]</a>
+<li>.NET: BinaryConfiguration handles nested type names incorrectly<a href="https://issues.apache.org/jira/browse/IGNITE-4546"> [#IGNITE-4546]</a>
+<li>.NET: SqlQuery with DateTime arguments does not work<a href="https://issues.apache.org/jira/browse/IGNITE-4413"> [#IGNITE-4413]</a>
+<li>.NET: NLogLoggerTest is not thread safe<a href="https://issues.apache.org/jira/browse/IGNITE-4412"> [#IGNITE-4412]</a>
+<li>.NET: LINQ requires IQueryable in joins<a href="https://issues.apache.org/jira/browse/IGNITE-4385"> [#IGNITE-4385]</a>
+<li>.NET: Java and .NET nodes with default configs can not join<a href="https://issues.apache.org/jira/browse/IGNITE-3267"> [#IGNITE-3267]</a>
+</ul>
+</body>

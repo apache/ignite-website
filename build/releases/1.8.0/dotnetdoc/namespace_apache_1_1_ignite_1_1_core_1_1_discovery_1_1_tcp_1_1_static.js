@@ -1,0 +1,4 @@
+var namespace_apache_1_1_ignite_1_1_core_1_1_discovery_1_1_tcp_1_1_static =
+[
+    [ "TcpDiscoveryStaticIpFinder", "class_apache_1_1_ignite_1_1_core_1_1_discovery_1_1_tcp_1_1_static_1_1_tcp_discovery_static_ip_finder.html", "class_apache_1_1_ignite_1_1_core_1_1_discovery_1_1_tcp_1_1_static_1_1_tcp_discovery_static_ip_finder" ]
+];

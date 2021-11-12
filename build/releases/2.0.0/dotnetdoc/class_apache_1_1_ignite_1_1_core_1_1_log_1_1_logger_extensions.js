@@ -1,0 +1,28 @@
+var class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions =
+[
+    [ "Debug", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a7111a7c7c0943606c71a061b3427ef6a", null ],
+    [ "Debug", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a518e1007c819b53897d0231ba8901ca4", null ],
+    [ "Debug", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a6cd2a83145445eb6d6cacca393bd971e", null ],
+    [ "Debug", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#aa4d12fa384e45e62d8a6bb434781b519", null ],
+    [ "Error", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a2307ac4697e63603c89a851e60ed5341", null ],
+    [ "Error", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#aec15484e84c2ffcf02aaaf6ad1934bb7", null ],
+    [ "Error", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#af831760545aaffcde4b67ab178a332ab", null ],
+    [ "Error", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#afc1be7d1cb80ad35c590c07080a69cf4", null ],
+    [ "GetLogger", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a5db07700d182f9b299efe074973fcac3", null ],
+    [ "Info", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a18af1585fb31ccde36473b3910e00758", null ],
+    [ "Info", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a3eab56dc04d234b68f376cd3c2bd51d9", null ],
+    [ "Info", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a5b0fa6aad3469ed52f8616f7f3be62c0", null ],
+    [ "Info", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a30725e45e8a864156d5c41fcd58b3e6f", null ],
+    [ "Log", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#ae8eda50cb650f455aa8044af20ebc439", null ],
+    [ "Log", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a336c66bc6b9b435074cd5ea5d1451b81", null ],
+    [ "Log", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#ab0db90dc4935f124f917dc18def86b63", null ],
+    [ "Log", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a7739aa0d43e9dbaa0dad4452f9a6ee08", null ],
+    [ "Trace", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a86184516bb924b120af2d564f670926e", null ],
+    [ "Trace", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a78be553e1e2a562c43ac3fa5c6b42a0a", null ],
+    [ "Trace", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#ad4dbde6c2c1238a39f2d803f1ba37601", null ],
+    [ "Trace", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a6041421654a6041b337df074d4983cf3", null ],
+    [ "Warn", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a0889466965190e53783ac67dd37cf049", null ],
+    [ "Warn", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a64ceccf67425de73ec43f504bfe85b40", null ],
+    [ "Warn", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a6272623680d2ee90070b9c47dfc0544e", null ],
+    [ "Warn", "class_apache_1_1_ignite_1_1_core_1_1_log_1_1_logger_extensions.html#a32640634506636b23588e4baf7151ca2", null ]
+];

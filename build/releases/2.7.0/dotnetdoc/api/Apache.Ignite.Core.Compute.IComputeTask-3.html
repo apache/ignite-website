@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.7.0/dotnetdoc/api/Apache.Ignite.Core.Compute.IComputeTask-3.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IComputeTask&lt;TArg, TJobRes, TRes&gt;
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IComputeTask&lt;TArg, TJobRes, TRes&gt;
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3">
+  
+  
+  <h1 id="Apache_Ignite_Core_Compute_IComputeTask_3" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3" class="text-break">Interface IComputeTask&lt;TArg, TJobRes, TRes&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Ignite task interface defines a task that can be executed on the grid. Ignite task
+is responsible for splitting business logic into multiple Ignite jobs, receiving
+results from individual Ignite jobs executing on remote nodes, and reducing
+(aggregating) received jobs&apos; results into final Ignite task result.
+<p>
+Upon request to execute a task, the system will do the following:
+<ul><li>Inject annotated resources into task instance.</li><li>Apply <a class="xref" href="Apache.Ignite.Core.Compute.IComputeTask-3.html#Apache_Ignite_Core_Compute_IComputeTask_3_Map_System_Collections_Generic_IList_Apache_Ignite_Core_Cluster_IClusterNode___0_">Map(IList&lt;IClusterNode&gt;, TArg)</a>.
+        This method is responsible for splitting business logic into multiple jobs 
+        (units of execution) and mapping them to Ignite nodes.</li><li>System will send mapped Ignite jobs to their respective nodes.</li><li>Once job execution results become available, <a class="xref" href="Apache.Ignite.Core.Compute.IComputeTask-3.html#Apache_Ignite_Core_Compute_IComputeTask_3_OnResult_Apache_Ignite_Core_Compute_IComputeJobResult__1__System_Collections_Generic_IList_Apache_Ignite_Core_Compute_IComputeJobResult__1___">OnResult(IComputeJobResult&lt;TJobRes&gt;, IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt;)</a> method
+        will be called for ech received job result. The policy returned by this method will
+        determine the way task reacts to every job result.
+<p>
+If <a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html#Apache_Ignite_Core_Compute_ComputeJobResultPolicy_Wait">Wait</a> is returned, task will continue to wait
+for other job results. If this result is the last job result, then reduce phase will be
+started.
+<p>
+If <a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html#Apache_Ignite_Core_Compute_ComputeJobResultPolicy_Reduce">Reduce</a> is returned, reduce phase will be started
+right away without waiting for other jobs completion (all remaining jobs will receive cancel 
+request).
+<p>
+If <a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html#Apache_Ignite_Core_Compute_ComputeJobResultPolicy_Failover">Failover</a> is returned, job will be failed over to 
+another node for execution. Note that if you use <a class="xref" href="Apache.Ignite.Core.Compute.ComputeTaskAdapter-3.html">ComputeTaskAdapter&lt;TArg, TJobRes, TTaskRes&gt;</a>, it will
+automatically fail jobs to another node for 2 well-known failure cases: 1) job has failed to due
+to node crash (in this case <a class="xref" href="Apache.Ignite.Core.Compute.IComputeJobResult-1.html#Apache_Ignite_Core_Compute_IComputeJobResult_1_Exception">Exception</a> will return 
+<a class="xref" href="Apache.Ignite.Core.Cluster.ClusterTopologyException.html">ClusterTopologyException</a>); 2) job execution was rejected, i.e. remote node 
+has cancelled job before it got a chance to execute, while it still was on the waiting list. 
+(in this case <a class="xref" href="Apache.Ignite.Core.Compute.IComputeJobResult-1.html#Apache_Ignite_Core_Compute_IComputeJobResult_1_Exception">Exception</a> will return 
+<a class="xref" href="Apache.Ignite.Core.Compute.ComputeExecutionRejectedException.html">ComputeExecutionRejectedException</a>).
+</li><li>Once all results are received or  <a class="xref" href="Apache.Ignite.Core.Compute.IComputeTask-3.html#Apache_Ignite_Core_Compute_IComputeTask_3_OnResult_Apache_Ignite_Core_Compute_IComputeJobResult__1__System_Collections_Generic_IList_Apache_Ignite_Core_Compute_IComputeJobResult__1___">OnResult(IComputeJobResult&lt;TJobRes&gt;, IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt;)</a>
+method returned <a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html#Apache_Ignite_Core_Compute_ComputeJobResultPolicy_Reduce">Reduce</a> policy, method <a class="xref" href="Apache.Ignite.Core.Compute.IComputeTask-3.html#Apache_Ignite_Core_Compute_IComputeTask_3_Reduce_System_Collections_Generic_IList_Apache_Ignite_Core_Compute_IComputeJobResult__1___">Reduce(IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt;)</a>
+is called to aggregate received results into one final result. Once this method is finished the 
+execution of the Ignite task is complete. This result will be returned to the user through future.
+</li></ul></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Compute.html">Apache.Ignite.Core.Compute</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Compute_IComputeTask_3_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IComputeTask&lt;in TArg, TJobRes, out TRes&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TArg</span></td>
+        <td><p>Argument type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TJobRes</span></td>
+        <td><p>Type of job result.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TRes</span></td>
+        <td><p>Type of final task result after reduce.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Compute_IComputeTask_3_Map_" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.Map*"></a>
+  <h4 id="Apache_Ignite_Core_Compute_IComputeTask_3_Map_System_Collections_Generic_IList_Apache_Ignite_Core_Cluster_IClusterNode___0_" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.Map(System.Collections.Generic.IList{Apache.Ignite.Core.Cluster.IClusterNode},`0)">Map(IList&lt;IClusterNode&gt;, TArg)</h4>
+  <div class="markdown level1 summary"><p>This method is called to map or split Ignite task into multiple Ignite jobs. This is the
+first method that gets called when task execution starts.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IDictionary&lt;IComputeJob&lt;TJobRes&gt;, IClusterNode&gt; Map(IList&lt;IClusterNode&gt; subgrid, TArg arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><span class="parametername">subgrid</span></td>
+        <td><p>Nodes available for this task execution. Note that order of nodes is
+guaranteed to be randomized by container. This ensures that every time you simply iterate 
+through Ignite nodes, the order of nodes will be random which over time should result into 
+all nodes being used equally.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TArg</span></td>
+        <td><span class="parametername">arg</span></td>
+        <td><p>Task execution argument. Can be <code>null</code>. This is the same argument
+as the one passed into <code>ICompute.Execute()</code> methods.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<a class="xref" href="Apache.Ignite.Core.Compute.IComputeJob-1.html">IComputeJob</a>&lt;TJobRes&gt;, <a class="xref" href="Apache.Ignite.Core.Cluster.IClusterNode.html">IClusterNode</a>&gt;</td>
+        <td><p>Map of Ignite jobs assigned to subgrid node. If <code>null</code> or empty map is returned,
+exception will be thrown.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Compute_IComputeTask_3_OnResult_" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.OnResult*"></a>
+  <h4 id="Apache_Ignite_Core_Compute_IComputeTask_3_OnResult_Apache_Ignite_Core_Compute_IComputeJobResult__1__System_Collections_Generic_IList_Apache_Ignite_Core_Compute_IComputeJobResult__1___" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.OnResult(Apache.Ignite.Core.Compute.IComputeJobResult{`1},System.Collections.Generic.IList{Apache.Ignite.Core.Compute.IComputeJobResult{`1}})">OnResult(IComputeJobResult&lt;TJobRes&gt;, IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Asynchronous callback invoked every time a result from remote execution is
+received. It is ultimately upto this method to return a policy based
+on which the system will either wait for more results, reduce results
+received so far, or failover this job to another node. See 
+<a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html">ComputeJobResultPolicy</a> for more information.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ComputeJobResultPolicy OnResult(IComputeJobResult&lt;TJobRes&gt; res, IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt; rcvd)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Compute.IComputeJobResult-1.html">IComputeJobResult</a>&lt;TJobRes&gt;</td>
+        <td><span class="parametername">res</span></td>
+        <td><p>Received remote Ignite executable result.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Apache.Ignite.Core.Compute.IComputeJobResult-1.html">IComputeJobResult</a>&lt;TJobRes&gt;&gt;</td>
+        <td><span class="parametername">rcvd</span></td>
+        <td><p>All previously received results. Note that if task class has
+<a class="xref" href="Apache.Ignite.Core.Compute.ComputeTaskNoResultCacheAttribute.html">ComputeTaskNoResultCacheAttribute</a> attribute, then this list will be empty.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Compute.ComputeJobResultPolicy.html">ComputeJobResultPolicy</a></td>
+        <td><p>Result policy that dictates how to process further upcoming job results.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Compute_IComputeTask_3_Reduce_" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.Reduce*"></a>
+  <h4 id="Apache_Ignite_Core_Compute_IComputeTask_3_Reduce_System_Collections_Generic_IList_Apache_Ignite_Core_Compute_IComputeJobResult__1___" data-uid="Apache.Ignite.Core.Compute.IComputeTask`3.Reduce(System.Collections.Generic.IList{Apache.Ignite.Core.Compute.IComputeJobResult{`1}})">Reduce(IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Reduces (or aggregates) results received so far into one compound result to be returned to 
+caller via future.
+<p>
+Note, that if some jobs did not succeed and could not be failed over then the list of
+results passed into this method will include the failed results. Otherwise, failed
+results will not be in the list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TRes Reduce(IList&lt;IComputeJobResult&lt;TJobRes&gt;&gt; results)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Apache.Ignite.Core.Compute.IComputeJobResult-1.html">IComputeJobResult</a>&lt;TJobRes&gt;&gt;</td>
+        <td><span class="parametername">results</span></td>
+        <td><p>Received job results. Note that if task class has 
+<a class="xref" href="Apache.Ignite.Core.Compute.ComputeTaskNoResultCacheAttribute.html">ComputeTaskNoResultCacheAttribute</a> attribute, then this list will be empty.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TRes</span></td>
+        <td><p>Task result constructed from results of remote executions.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2018 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

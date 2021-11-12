@@ -1,0 +1,28 @@
+var interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group =
+[
+    [ "ForAttribute", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a98ac52aec111b845c8205e8f7263bfae", null ],
+    [ "ForCacheNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#ab9328f2775f17f6ef8c640244f1dfae7", null ],
+    [ "ForClientNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a98646bfeb281d83540d24a45b35a4732", null ],
+    [ "ForDataNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#abcaefc0a0f4b868d36b824da035e3706", null ],
+    [ "ForDotNet", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a2dbdf64a4f735d458d345c913b009246", null ],
+    [ "ForHost", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a2d74904d2541e29b5fb8cc95b515dac4", null ],
+    [ "ForNodeIds", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a58ad979838a1253b67a881b518b9b50f", null ],
+    [ "ForNodeIds", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a0712a1d2e2130d550ac455e64b0dba48", null ],
+    [ "ForNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#aa478e418fb9cbb830e1defbbd9808c84", null ],
+    [ "ForNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#ae13ad47dc2f39b49d17a59052a7edb20", null ],
+    [ "ForOldest", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a939a7659ca62bd6b90ece25eddcce772", null ],
+    [ "ForPredicate", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a9fdb9c4a37d4270360748e31b1f24b46", null ],
+    [ "ForRandom", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#ac5b6cbb1008ccd1e33930e9484aa6749", null ],
+    [ "ForRemotes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a166ed07be4f809419063b312ec6a26c6", null ],
+    [ "ForServers", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a4e5086d9db67ef1f94b4fc2d06ccbe92", null ],
+    [ "ForYoungest", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a99cf8236abcba0ec8063ad95364e99e1", null ],
+    [ "GetCompute", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a7d43b7243f8c921e626d629d9eb369a8", null ],
+    [ "GetEvents", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a532c122d8006f624ab4b62f058c2e8ab", null ],
+    [ "GetMessaging", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a1babf1fbe5660a014741644ba4d5bf78", null ],
+    [ "GetMetrics", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#afe0e9901c1278c6e24cc771c68be0bd5", null ],
+    [ "GetNode", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a32171b45d66e457e6e21f2175a2cdef7", null ],
+    [ "GetNode", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#aeaf9853085e38d7f06311c04a8b069e5", null ],
+    [ "GetNodes", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#acf4f953056fa4ab4fec7a410fd366765", null ],
+    [ "GetServices", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#a2d9b808286fa95dda9fd3cb9f4dc835c", null ],
+    [ "Ignite", "interface_apache_1_1_ignite_1_1_core_1_1_cluster_1_1_i_cluster_group.html#acb7e62fa04c3b80aeba992ddc902d61f", null ]
+];

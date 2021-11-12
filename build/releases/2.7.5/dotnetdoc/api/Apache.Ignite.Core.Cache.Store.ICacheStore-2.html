@@ -1,0 +1,635 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.7.5/dotnetdoc/api/Apache.Ignite.Core.Cache.Store.ICacheStore-2.html" />
+
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ICacheStore&lt;TK, TV&gt;
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ICacheStore&lt;TK, TV&gt;
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.24.0.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+</script></head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items"></div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2">
+  
+  
+  <h1 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2" class="text-break">Interface ICacheStore&lt;TK, TV&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>API for cache persistent storage for read-through and write-through behavior.
+<p>
+Generic argument types depend on <a class="xref" href="Apache.Ignite.Core.Cache.Configuration.CacheConfiguration.html#Apache_Ignite_Core_Cache_Configuration_CacheConfiguration_KeepBinaryInStore">KeepBinaryInStore</a> property.
+When <code>true</code> (default), cache store operates on <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObject.html">IBinaryObject</a> instances.
+Otherwise, generic arguments should be the same as in corresponding <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html">ICache&lt;TK, TV&gt;</a>.
+<p>
+Persistent store is configured in Ignite&apos;s Spring XML configuration file via
+<code>CacheConfiguration.setStore()</code> property. If you have an implementation
+of cache store in .NET, you should use special Java wrapper which accepts assembly name and
+class name of .NET store implementation (both properties are mandatory).</p>
+<p>Optionally, you may specify &quot;properies&quot; property to set any property values on an instance of your store.
+<example>
+Here is an example:<p>
+<pre><code>&lt;bean class=&quot;org.apache.ignite.configuration.CacheConfiguration&quot;>
+    ...
+    &lt;property name=&quot;cacheStoreFactory&quot;>
+        &lt;bean class=&quot;org.apache.ignite.platform.dotnet.PlatformDotNetCacheStoreFactory&quot;>
+            &lt;property name=&quot;assemblyName&quot; value=&quot;MyAssembly&quot;/>
+            &lt;property name=&quot;className&quot; value=&quot;MyApp.MyCacheStore&quot;/>
+            &lt;property name=&quot;properties&quot;>
+                &lt;map>
+                    &lt;entry key=&quot;IntProperty&quot;>
+                        &lt;value type=&quot;java.lang.Integer&quot;>42&lt;/value>
+                    &lt;/entry>
+                    &lt;entry key=&quot;StringProperty&quot; value=&quot;String value&quot;/>
+                &lt;/map>
+            &lt;/property>
+        &lt;/bean>
+    &lt;/property>
+    ...
+&lt;/bean></code></pre>
+<p></example>
+Assemply name and class name are passed to <a target="_blank" href="http://msdn.microsoft.com/en-us/library/d133hta4.aspx"><strong>System.Activator.CreateInstance(String, String)</strong></a>
+method during node startup to create an instance of cache store. Refer to its documentation for details.
+<p>
+All transactional operations of this API are provided with ongoing <a class="xref" href="Apache.Ignite.Core.Transactions.ITransaction.html">ITransaction</a>,
+if any. You can attach any metadata to transaction, e.g. to recognize if several operations 
+belong to the same transaction or not.
+<example>
+Here is an example of how attach a ODBC connection as transaction metadata:<p>
+<pre><code>OdbcConnection conn = tx.Meta(&quot;some.name&quot;);
+
+if (conn == null)
+{
+    conn = ...; // Create or get connection.
+
+    // Store connection in transaction metadata, so it can be accessed
+    // for other operations on the same transaction.
+    tx.AddMeta(&quot;some.name&quot;, conn);
+}</code></pre>
+<p></example></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Cache.Store.html">Apache.Ignite.Core.Cache.Store</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ICacheStore&lt;TK, TV&gt; : ICacheStore</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TK</span></td>
+        <td><p>Key type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TV</span></td>
+        <td><p>Value type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Delete_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Delete*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Delete__0_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Delete(`0)">Delete(TK)</h4>
+  <div class="markdown level1 summary"><p>Delete the cache entry from the external resource.
+<p>
+Expiry of a cache entry is not a delete hence will not cause this method to be invoked.
+<p>
+This method is invoked even if no mapping for the key exists.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Delete(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key that is used for the delete operation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_DeleteAll_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.DeleteAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_DeleteAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.DeleteAll(System.Collections.Generic.IEnumerable{`0})">DeleteAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Remove data and keys from the external resource for the given collection of keys, if present.
+<p>
+The order that individual deletes occur is undefined.
+<p>
+If this operation fails (by throwing an exception) after a partial success, 
+the writer must remove any successfully written entries from the entries collection 
+so that the caching implementation knows what succeeded and can mutate the cache.
+<p>
+Expiry of a cache entry is not a delete hence will not cause this method to be invoked.
+<p>
+This method may include keys even if there is no mapping for that key, 
+in which case the data represented by that key should be removed from the underlying resource.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void DeleteAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>a mutable collection of keys for entries to delete. Upon invocation, 
+it contains the keys to delete for write-through. Upon return the collection must only contain 
+the keys that were not successfully deleted.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Load_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Load*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Load__0_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Load(`0)">Load(TK)</h4>
+  <div class="markdown level1 summary"><p>Loads an object. Application developers should implement this method to customize the loading 
+of a value for a cache entry. 
+This method is called by a cache when a requested entry is not in the cache. 
+If the object can&apos;t be loaded <code>null</code> should be returned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TV Load(TK key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key identifying the object being loaded.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><p>The value for the entry that is to be stored in the cache 
+or <code>null</code> if the object can&apos;t be loaded</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadAll_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.LoadAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadAll_System_Collections_Generic_IEnumerable__0__" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.LoadAll(System.Collections.Generic.IEnumerable{`0})">LoadAll(IEnumerable&lt;TK&gt;)</h4>
+  <div class="markdown level1 summary"><p>Loads multiple objects. Application developers should implement this method to customize 
+the loading of cache entries. This method is called when the requested object is not in the cache. 
+If an object can&apos;t be loaded, it is not returned in the resulting map.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt; LoadAll(IEnumerable&lt;TK&gt; keys)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TK&gt;</td>
+        <td><span class="parametername">keys</span></td>
+        <td><p>Keys identifying the values to be loaded.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;TK, TV&gt;&gt;</td>
+        <td><p>A map of key, values to be stored in the cache.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.LoadCache*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_LoadCache_System_Action__0__1__System_Object___" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.LoadCache(System.Action{`0,`1},System.Object[])">LoadCache(Action&lt;TK, TV&gt;, Object[])</h4>
+  <div class="markdown level1 summary"><p>Loads all values from underlying persistent storage. Note that keys are
+not passed, so it is up to implementation to figure out what to load.
+This method is called whenever <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___">LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</a>
+method is invoked which is usually to preload the cache from persistent storage.
+<p>
+This method is optional, and cache implementation
+does not depend on this method to do anything.
+<p>
+For every loaded value method provided action should be called.
+The action will then make sure that the loaded value is stored in cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void LoadCache(Action&lt;TK, TV&gt; act, params object[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;TK, TV&gt;</td>
+        <td><span class="parametername">act</span></td>
+        <td><p>Action for loaded values.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td><p>Optional arguemnts passed to <a class="xref" href="Apache.Ignite.Core.Cache.ICache-2.html#Apache_Ignite_Core_Cache_ICache_2_LocalLoadCache_Apache_Ignite_Core_Cache_ICacheEntryFilter__0__1__System_Object___">LocalLoadCache(ICacheEntryFilter&lt;TK, TV&gt;, Object[])</a> method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_SessionEnd_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.SessionEnd*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_SessionEnd_System_Boolean_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.SessionEnd(System.Boolean)">SessionEnd(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Tells store to commit or rollback a transaction depending on the value of the
+<code>commit</code> parameter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void SessionEnd(bool commit)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">commit</span></td>
+        <td><p><code>True</code> if transaction should commit, <code>false</code> for rollback.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Write_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Write*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_Write__0__1_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.Write(`0,`1)">Write(TK, TV)</h4>
+  <div class="markdown level1 summary"><p>Write the specified value under the specified key to the external resource.
+<p>
+This method is intended to support both key/value creation and value update.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Write(TK key, TV val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TK</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>Key to write.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TV</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Value to write.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_WriteAll_" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.WriteAll*"></a>
+  <h4 id="Apache_Ignite_Core_Cache_Store_ICacheStore_2_WriteAll_System_Collections_Generic_IEnumerable_System_Collections_Generic_KeyValuePair__0__1___" data-uid="Apache.Ignite.Core.Cache.Store.ICacheStore`2.WriteAll(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">WriteAll(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Write the specified entries to the external resource. 
+This method is intended to support both insert and update.
+<p>
+The order that individual writes occur is undefined.
+<p>
+If this operation fails (by throwing an exception) after a partial success, 
+the writer must remove any successfully written entries from the entries collection 
+so that the caching implementation knows what succeeded and can mutate the cache.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void WriteAll(IEnumerable&lt;KeyValuePair&lt;TK, TV&gt;&gt; entries)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;TK, TV&gt;&gt;</td>
+        <td><span class="parametername">entries</span></td>
+        <td><p>a mutable collection to write. Upon invocation,  it contains the entries 
+to write for write-through. Upon return the collection must only contain entries 
+that were not successfully written. (see partial success above).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Cache.Store.CacheStoreException.html">CacheStoreException</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2018 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
