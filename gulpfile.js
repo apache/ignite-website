@@ -65,6 +65,7 @@ export function clearBuild() {
         '!build/_docs',
         '!build/releases',
         '!build/assets',
+        '!build/jcache',
         '!build/*.yaml',
         '!build/.htaccess',
     ]
@@ -132,6 +133,7 @@ export const ftp = (cb) => {
         '!./build/_docs',
         '!./build/releases',
         '!./build/assets',
+        '!./build/jcache',
         '!./build/*.yaml',
         './build/**/.htaccess',
     ];
