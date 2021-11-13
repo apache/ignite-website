@@ -1,6 +1,3 @@
-I change structure of the project in last commits. Now, html files are generated to repository root folder.
-I wrote small documentation about working and building of the project. I apologize in advance, because English is not my native language.
-
 Working with the site is simple. The repository has already configured task-manager gulp.js (https://gulpjs.com/). If a new developer starts work, then he needs to do the following:
 - install node.js, version 13.2 or higher (need supports for ES imports), and npm.
 - open the root directory of the repository and install all dependencies with the `npm install` command
