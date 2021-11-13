@@ -4,19 +4,12 @@ import gulpPlumber from 'gulp-plumber';
 import pug from 'gulp-pug';
 import replace from 'gulp-replace';
 import prettier from 'gulp-prettier';
-import imagemin, {mozjpeg, gifsicle, svgo} from 'gulp-imagemin';
-import imageminPngquant from 'imagemin-pngquant'
-import clean from 'gulp-clean';
-import vinylFtp from 'vinyl-ftp';
-
-import {readFileSync} from 'fs';
 
 
 let pugPath = "";
 
 
-
-//Компилятор PUG -> HTML
+//Compiler PUG -> HTML
 const html = () => {
     let pugTruePath = './_src/**/' + pugPath;
     if(!pugPath || pugPath.includes("_")){
@@ -44,45 +37,7 @@ const html = () => {
 }
 
 
-
-//Оптимизаци изображений
-export function img(){
-    return gulp.src('public/img/**/*')
-    .pipe(imagemin([
-        gifsicle({interlaced: true}),
-        mozjpeg({quality: 90, progressive: true}),
-        imageminPngquant(),
-        svgo()
-    ]))
-    .pipe(gulp.dest('build/img'))
-}
-
-
-export function clearBuild() {
-    let srcWithIgnores = [
-        'build/*',
-        '!build/docs',
-        '!build/_docs',
-        '!build/releases',
-        '!build/assets',
-        '!build/jcache',
-        '!build/*.yaml',
-        '!build/.htaccess',
-    ]
-    return gulp.src(srcWithIgnores).pipe(clean());
-}
-
-
-export function buildCode(){
-    return gulp.src('public/**/*', "!public/img/**/*").pipe(gulp.dest('build')).on('end', (e) => {
-        console.log("Код перемещен");
-    });
-}
-
-
-
-
-//Слежка за файлами, обновление браузера
+//Filewatcher and live-reload
 export const watchpug = () => {
     browserSync.init({
         server: {
@@ -104,47 +59,16 @@ export const watchpug = () => {
             pugPath = filename;
         }
         html();
-
-
+        browserSync.reload();
     });
+
+    gulp.watch(['./css/**/*.css', './js/**/*.js'], {}).on('change', function() {
+        browserSync.reload();
+    })
 }
 
 
 
 
-export const ftp = (cb) => {
-    let ftpJson = JSON.parse(readFileSync('./.vscode/sftp.json'));
-
-    //Отправка на FTP
-    let connection = vinylFtp.create( {
-        host:     ftpJson.host,
-        user:     ftpJson.username,
-        password: ftpJson.password,
-        parallel: ftpJson.port,
-        log: console.log,
-        port: 21,
-    } );
-    let connFolder = ftpJson.remotePath;
-
-
-    let globs = [
-        './build/**',
-        '!./build/docs',
-        '!./build/_docs',
-        '!./build/releases',
-        '!./build/assets',
-        '!./build/jcache',
-        '!./build/*.yaml',
-        './build/**/.htaccess',
-    ];
-    return gulp.src( globs, { buffer: false } )
-        .pipe( connection.newerOrDifferentSize( connFolder ) )
-        .pipe( connection.dest( connFolder ) );
-}
-
-
-
-
-export let build = gulp.series(html, clearBuild, buildCode, img);
-export let fix = gulp.series(html, clearBuild, buildCode);
+export let build = gulp.series(html);
 export default gulp.series(html, watchpug);
