@@ -20,7 +20,7 @@ const html = () => {
         .pipe(pug({
             pretty: false,
         }))
-        .pipe(replace('/public/', '/'))
+        .pipe(replace('"../img', '"/img'))
         .pipe(prettier({
             singleQuote: true,
             parser:"html",
