@@ -413,7 +413,7 @@ downloadChangeHref();
 if (typeof Swiper !== "undefined") {
     let jsMainSlider = new Swiper('.jsFrontVideosSwiper', {
         autoHeight: false,
-        loop: false,
+        loop: true,
         spaceBetween: 30,
         slidesPerView: 'auto',
         pagination: {
