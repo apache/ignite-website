@@ -4,6 +4,7 @@ import gulpPlumber from 'gulp-plumber';
 import pug from 'gulp-pug';
 import replace from 'gulp-replace';
 import prettier from 'gulp-prettier';
+import gulpSitemap from 'gulp-sitemap';
 
 
 let pugPath = "";
@@ -65,6 +66,48 @@ export const watchpug = () => {
     gulp.watch(['./css/**/*.css', './js/**/*.js'], {}).on('change', function() {
         browserSync.reload();
     })
+}
+
+
+
+/**
+ * XML Sitemap Generate for site and /docs/latest folder
+ */
+export const sitemap = () => {
+    let srcForSitemap = [
+        './**/*.html',
+        '!./_*/**',
+        '!./jcache/**',
+        '!./releases/**',
+        '!./docs/2.9.0/**',
+        '!./docs/2.9.1/**',
+        '!./docs/2.10.0/**',
+        '!./docs/3.0.0-alpha/**',
+        '!./node_modules/**'
+    ];
+    return gulp.src(srcForSitemap, {
+        read: false
+    })
+    .pipe(gulpSitemap({
+            siteUrl: 'https://ignite.apache.com',
+            changefreq: 'monthly',
+            priority: function(siteUrl, loc, entry) {
+                // Give pages inside root path (i.e. no slashes) a higher priority
+                return loc.includes('docs') ? 0.7 : 1;
+            },
+            getLoc: function(siteUrl, loc, entry) {
+                if(loc.includes('/docs/')){
+                    //Remove .html for all docs files
+                    let newloc = loc.replace(/.html$/, "")
+                    //Change version folders into "latest"
+                    newloc = newloc.replace("2.11.0", "latest");
+                    //console.log(newloc);
+                    return newloc;
+                }
+                return loc;
+            }
+        }))
+    .pipe(gulp.dest('./'));
 }
 
 
