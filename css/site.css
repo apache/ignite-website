@@ -209,7 +209,6 @@ body .hdr.opened .hdr__wrap{
   transition: opacity 0.2s ease;
 }
 .dropmenu.active{
-  height: 320px;
   opacity: 1;
 }
 .dropmenu__back.active{
@@ -218,22 +217,29 @@ body .hdr.opened .hdr__wrap{
 }
 .dropmenu__panel{
   box-shadow: inset 0 0 0 1px var(--grey3);
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 0;
+  overflow: hidden;
   background: #fff;
-  padding: 48px 0 0px;
   opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* transform: translateY(-10px); */
+  /* transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease; */
   pointer-events: none;
+  display: none;
 }
 .dropmenu__panel.active{
+  display: block;
   opacity: 1;
+  height: auto;
   pointer-events: auto;
   transform: translateY(0px);
+}
+.dropmenu__panel>.container{
+  padding-top: 50px;
+  padding-bottom: 20px;
 }
 
 .dropmenu1__grid,
@@ -303,6 +309,10 @@ body .hdr.opened .hdr__wrap{
   font-size: 12px;
   line-height: 18px;
 }
+.dropmenu__capslink{
+  text-decoration: underline;
+  color:var(--grey4);
+}
 .dropmenu__redbutton{
   height: 60px;
   padding: 0 30px;
@@ -355,6 +365,7 @@ body .hdr.opened .hdr__wrap{
 .panelmorelinkwrap{
   text-align: center;
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 .panellink{
   color:#000;

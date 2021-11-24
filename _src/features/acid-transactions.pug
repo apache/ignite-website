@@ -63,14 +63,14 @@ block main
 
 
     section.acid2.container 
-        h2.acid2__h2 To guarantee data consistency, durability and fault-tolerance<br> <strong>Ignite implements the two-phase commit protocol</strong>
+        h2.acid2__h2 To guarantee data consistency, durability and fault-tolerance<br> <strong>Ignite implements a two-phase commit protocol</strong>
         .acid2__wrap.flexi.pt-5
             .acid2__main
                 p In distributed systems, a transaction usually spans across multiple cluster nodes. 
                 p To handle possible distributed failures properly and avoid data inconsistencies cluster-wide, a two-phase commit protocol (2PC) is used.
                 h3.acid2__subtitle.h5.pb-2 How ACID transactions work
                 p Whenever the records get updated within a&nbsp;transaction, Ignite keeps the transactional state in&nbsp;a&nbsp;local transaction map until the changes are committed.
-                p At&nbsp;which point, the data is&nbsp;transferred to&nbsp;the participating remote nodes. Only the nodes that hold primary or&nbsp;backup copies of&nbsp;the data participate in&nbsp;the transaction.
+                p From here, the data is&nbsp;transferred to&nbsp;the participating remote nodes. Only the nodes that hold primary or&nbsp;backup copies of&nbsp;the data participate in&nbsp;the transaction.
                 p If&nbsp;a&nbsp;transaction is&nbsp;mapped to&nbsp;a&nbsp;single node, then, Ignite optimizes the transaction execution by&nbsp;switching to&nbsp;the one-phase-commit (1PC) protocol.
             aside.acid2__right
                 img(src="/img/features/acid/acid-func.svg", alt="").acid2__funcimg
@@ -96,7 +96,7 @@ block main
                         p.pt-1 The WAL provides a&nbsp;recovery mechanism for failure scenarios when a&nbsp;single node or&nbsp;the whole cluster goes down. A&nbsp;cluster can always be&nbsp;recovered to&nbsp;the latest successfully committed transaction.
             .acid3__col
                 h3.h5.pb-2 Transactions with external databases
-                p.fz20.acid3__collead Your transactions will be updated both i&nbsp;external database and Apache Ignite
+                p.fz20.acid3__collead Your transactions will be updated both in&nbsp;external database and in Apache Ignite
                 .acid3__small.pt-4
                     p When Apache Ignite is&nbsp;used as&nbsp;a&nbsp;caching layer for an&nbsp;external database, such as&nbsp;RDBMS, transactions span the cached data in&nbsp;Ignite as&nbsp;well as&nbsp;the data persisted in&nbsp;a&nbsp;database supporting transactional APIs.
                     p For instance, if&nbsp;a&nbsp;relational database is&nbsp;configured as&nbsp;a&nbsp;disk tier, Ignite writes the transactional changes to&nbsp;the database before sending a&nbsp;commit message to&nbsp;participating cluster nodes.

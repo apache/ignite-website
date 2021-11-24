@@ -93,25 +93,37 @@ function topmeny(){
     let hdr = document.querySelector('.hdr');
     if(!dropMenu) return;
 
+    let timeoutMenu;
+
     document.addEventListener('mouseover', (e) => {
         e.preventDefault();
         let item = e.target.closest('a[data-panel].hdrmenu--expanded');
         if(item && item.dataset.panel !== ""){
-            document.querySelectorAll('.dropmenu__panel').forEach(el => {
-                el.classList.toggle('active', el.dataset.menupanel === item.dataset.panel);
-            });
-            document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
-                el.classList.remove('active');
-            })
-
-            hdr && hdr.classList.add('opened');
-            item.classList.add('active');
-            dropMenu.classList.add('active');
-            dropBack.classList.add('active');
+            clearTimeout(timeoutMenu);
+            timeoutMenu = setTimeout(()=> {
+                if(!document.querySelector('.hdr__wrap:hover')){
+                    clearTimeout(timeoutMenu);
+                    console.log("Menu is stopped");
+                    return;
+                }
+                document.querySelectorAll('.dropmenu__panel').forEach(el => {
+                    el.classList.toggle('active', el.dataset.menupanel === item.dataset.panel);                    
+                });
+                document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
+                    el.classList.remove('active');
+                });
+                hdr && hdr.classList.add('opened');
+                item.classList.add('active');
+                dropMenu.classList.add('active');
+                dropBack.classList.add('active');
+                console.log("Run height recalc");
+                dropMenu.style.height = document.querySelector('.dropmenu__panel.active').scrollHeight + "px";
+            }, 200);
         }
         let shadow = e.target.closest('.dropmenu__back');
         if(shadow){
             dropMenu.classList.remove('active');
+            dropMenu.style.height = "";
             dropBack.classList.remove('active');
             document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
                 el.classList.remove('active');
@@ -119,6 +131,13 @@ function topmeny(){
             hdr && hdr.classList.remove('opened');
         } 
     });
+    document.querySelector('.hdr__wrap').addEventListener('mouseout', (e) => {
+        if(e.relatedTarget && !e.relatedTarget.closest('.hdr__wrap')){
+            // clearTimeout(timeoutMenu);
+            // console.log(timeoutMenu);
+            // console.log("Таймаут отключен");
+        }
+    })
 }
 if(window.innerWidth > 1199){topmeny();}
 
