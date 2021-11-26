@@ -172,56 +172,28 @@ block main
             h3.h4 Committers
             .cmty-committers__text.pt-2 Most active contributors who make a&nbsp;significant contribution <br>to&nbsp;the project become Apache Ignite committers.
             p.cmty-committers__small.pt-2 Here is the list of committers for the project.
-            .committers__wrap.flexi 
 
-
-                mixin committerNew(obj)
-                    if obj["Comitter"]
-                        .committer.flexi
-                            .committer__name #{obj["Name"]}
-                            if obj["GitHub"]
-                                a.committer__github(href=obj["GitHub"])
-                                    img(src="/img/icon-github.svg", alt="")
-                            if obj["Apache profile"]
-                                a.committer__apache(href=obj["Apache profile"])
-                                    img(src="/img/icon-pero.svg", alt="")
-                            else
-                                span.committer__apache
-
-
+            .committers__wrap
                 include ./_components/committers.pug
-                -
-                    let arrayCommitters = JSON.parse(committers);
-                    let committersLeft = arrayCommitters.slice(0,arrayCommitters.length / 2);
-                    let committersRight = arrayCommitters.slice(arrayCommitters.length / 2);
-                    let pmc = arrayCommitters.filter((el) => {
+                - 
+                    const arrayCommitters = JSON.parse(committers);
+                    const pmc = arrayCommitters.filter((el) => {
                         return el.PMC;
-                    })
-                .committers__left
-                    each val, index in committersLeft
-                        if index > 6
-                            - break;
-                        +committerNew(val)
-                    a.committers__morelink(href="#", data-hideopen="committersLeft", data-invis="1") Load more
-                    .committers__more.jsOpener(data-hidebox="committersLeft")
-                        .jsOpenerWrap
-                            each val, index in committersLeft
-                                if index <= 6
-                                    - continue;
-                                +committerNew(val)
-                .committers__right
-                    each val, index in committersRight
-                        if index > 6
-                            - break;
-                        +committerNew(val)
-                    a.committers__morelink(href="#", data-hideopen="committersRight", data-invis="1") Load more
-                    .committers__more.jsOpener(data-hidebox="committersRight")
-                        .jsOpenerWrap
-                            each val, index in committersRight
-                                if index <= 6
-                                    - continue;
-                                +committerNew(val)
-                //- include _components/cmty-committers.pug
+                    });
+                
+                each val, index in arrayCommitters
+                    if index > 13
+                        - break;
+                    +committerNew(val)
+
+            .committers__more.jsOpener(data-hidebox="committersMore")
+                each val, index in arrayCommitters
+                    if index <= 13
+                        - continue;
+                    +committerNew(val)
+            a.committers__morelink(href="#", data-hideopen="committersMore")
+                i Load more
+                span Hide
     // /.cmty-committers 
 
 
@@ -436,12 +408,20 @@ block main
                     p.faqblock__rightitle By e-mail
                     p For general questions about Ignite <a href="mailto:user@ignite.apache.org">user@ignite.apache.org</a>
                     .faqblock__buttons.flexi.pb-5.pt-2
-                        a.faqblock__button.flexi(href="mailto:user-subscribe@ignite.apache.org") 
+                        .faqblock__button.flexi(data-poplink="gen-sub")
                             img(src="/img/icon-email+.svg", alt="").faqblock__eicon
                             span Subscribe
-                        a.faqblock__button.flexi(href="mailto:user-unsubscribe@ignite.apache.org") 
+                            .pushup(data-pop="gen-sub")
+                                p By sending a 
+                                    a(href="mailto:user-subscribe@ignite.apache.org") default e-mail
+                                p By sending Hello to this e-mail <b>user-subscribe@ignite.apache.org</b> 
+                        .faqblock__button.flexi(data-poplink="gen-unsub")
                             img(src="/img/icon-email-.svg", alt="").faqblock__eicon
                             span Unsubscribe
+                            .pushup(data-pop="gen-unsub")
+                                p By sending a 
+                                    a(href="mailto:mailto:user-unsubscribe@ignite.apache.org?subject=Unsubscribe&body=Stop") default e-mail
+                                p By sending Stop to this e-mail <b>user-unsubscribe@ignite.apache.org</b>
                         a.faqblock__button.flexi(href="https://lists.apache.org/list.html?user@ignite.apache.org" target="_blank") 
                             img(src="/img/icon-folder.svg", alt="")
                             span Archives
@@ -460,12 +440,20 @@ block main
                     p.faqblock__rightitle By e-mail
                     p For contribution-related discussions <a href="mailto:dev@ignite.apache.org">dev@ignite.apache.org</a>
                     .faqblock__buttons.flexi.pb-4.pt-2
-                        a.faqblock__button.flexi(href="mailto:dev-subscribe@ignite.apache.org") 
+                        .faqblock__button.flexi(data-poplink="cont-sub")
                             img(src="/img/icon-email+.svg", alt="").faqblock__eicon
                             span Subscribe
-                        a.faqblock__button.flexi(href="mailto:dev-unsubscribe@ignite.apache.org") 
+                            .pushup(data-pop="cont-sub")
+                                p By sending a 
+                                    a(href="mailto:mailto:dev-subscribe@ignite.apache.org?subject=Subscribe&body=Hello") default e-mail
+                                p By sending Hello to this e-mail <b>dev-subscribe@ignite.apache.org</b> 
+                        .faqblock__button.flexi(data-poplink="cont-unsub")
                             img(src="/img/icon-email-.svg", alt="").faqblock__eicon
                             span Unsubscribe
+                            .pushup(data-pop="cont-unsub")
+                                p By sending a 
+                                    a(href="mailto:mailto:dev-unsubscribe@ignite.apache.org?subject=Unsubscribe&body=Stop") default e-mail
+                                p By sending Stop to this e-mail <b>dev-unsubscribe@ignite.apache.org</b>
                         a.faqblock__button.flexi(href="https://lists.apache.org/list.html?user@ignite.apache.org" target="_blank") 
                             img(src="/img/icon-folder.svg", alt="")
                             span Archives

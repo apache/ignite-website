@@ -205,6 +205,31 @@ function reactivateSubmenu(scrolled){
 
 
 
+function mobilemeny() {
+    const testEl = document.querySelector('.mobmenu__opener');
+    if(!testEl) return;
+    document.addEventListener('click', (e) => {
+        const opener = e.target.closest('.mobmenu__opener');
+        if(!opener) return;
+        e.preventDefault();
+        const listLi = opener.closest('li');
+        const listUl = listLi.querySelector('ul');
+
+        if(listLi.classList.contains('isopen')){
+            listUl.style.height = '';
+            listLi.classList.remove('isopen')
+            return;
+        }
+        listUl.style.height = listUl.scrollHeight + 'px';
+        listLi.classList.add('isopen');
+
+    });
+};
+mobilemeny();
+
+
+
+
 
 function accordeons(){
     let testEl = document.querySelector('[data-hidebox]');
@@ -455,3 +480,29 @@ if (typeof Swiper !== "undefined") {
         },
     });
 }
+
+
+
+
+
+
+
+/**
+ * Subscrube buttons drop-downs
+ */
+function minidropdowns() {
+    document.addEventListener('click', (e) => {
+        let buttonLink = e.target.closest('[data-poplink]');
+        let dropLink = e.target.closest('.pushup');
+        document.querySelectorAll('.isopen[data-poplink]').forEach((el) => {
+            el !== buttonLink ? el.classList.remove('isopen') : null;
+        })
+        if (!buttonLink || dropLink) return;
+        e.preventDefault();
+        const dropBlock = document.querySelector(`[data-pop="${buttonLink.dataset.poplink}"]`);
+        if (!dropBlock) { console.log("dropdown not found"); return; }
+        // console.log(dropBlock);
+        buttonLink.classList.toggle('isopen');
+    });
+};
+minidropdowns();
