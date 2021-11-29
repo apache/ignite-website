@@ -121,7 +121,11 @@ function topmeny(){
             }, 200);
         }
         let shadow = e.target.closest('.dropmenu__back');
-        if(shadow){
+        if(!shadow) {
+            shadow = !(e.target.closest('.dropmenu') || e.target.closest('.js-hasdrop'));
+            console.log(shadow);
+        }
+        if (shadow) {
             dropMenu.classList.remove('active');
             dropMenu.style.height = "";
             dropBack.classList.remove('active');
@@ -131,13 +135,6 @@ function topmeny(){
             hdr && hdr.classList.remove('opened');
         } 
     });
-    document.querySelector('.hdr__wrap').addEventListener('mouseout', (e) => {
-        if(e.relatedTarget && !e.relatedTarget.closest('.hdr__wrap')){
-            // clearTimeout(timeoutMenu);
-            // console.log(timeoutMenu);
-            // console.log("Таймаут отключен");
-        }
-    })
 }
 if(window.innerWidth > 1199){topmeny();}
 

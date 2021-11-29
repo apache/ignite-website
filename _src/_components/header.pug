@@ -1,9 +1,9 @@
 mixin menuItem(link, text, isExpClass = "")
     if global.pageHref == link
-        li 
+        li(class=(isExpClass ? "js-hasdrop": null))
             a(href="/" + link, class="hdrmenu__current " + (isExpClass ? "hdrmenu--expanded":""), data-panel=isExpClass) #{text}
     else
-        li 
+        li(class=(isExpClass ? "js-hasdrop": null))
             a(href="/" + link, class=(isExpClass ? "hdrmenu--expanded":""), data-panel=isExpClass) #{text}
 
 
@@ -26,11 +26,11 @@ header(class="hdr " + (config.hdrClassName ? config.hdrClassName : "hdr__white")
         .dropmenu
             .dropmenu__panel(data-menupanel="getStarted")
                 .container.dropmenu1__grid
-                    .dropmenu1__buttonwrap
+                    .dropmenu1__buttonwrap &nbsp;
+                    .dropmenu__box.dropmenu__box--buttonin
                         a.dropmenu__redbutton(href="https://ignite.apache.org/docs/latest/") 
                             img(src="/img/menu/icon-red-rocket.svg", alt="")
                             span Quick Start Guide
-                    .dropmenu__box
                         ul.dropmenu__menu 
                             li 
                                 a.dropmenu__iconitem(href="/resources.html")
@@ -79,7 +79,7 @@ header(class="hdr " + (config.hdrClassName ? config.hdrClassName : "hdr__white")
                                     img(src="/img/menu/icon-folder.svg", alt="")
                                     span Hadoop Acceleration
                 // /.dropmenu1__grid
-                .panelmorelinkwrap 
+                .panelmorelinkwrap.panelmorelinkwrap--end.container
                     a.panellink(href="/use-cases.html") View all
             // /.dropmenu__panel
 
@@ -133,7 +133,7 @@ header(class="hdr " + (config.hdrClassName ? config.hdrClassName : "hdr__white")
                             li 
                                 a.dropmenu__iconitem(href="/features/streaming.html")
                                     img(src="/img/menu/icon-cube.svg", alt="")
-                                    span Streaming
+                                    span Real-Time Streaming APIs
                             li
                                 a.dropmenu__iconitem(href="https://ignite.apache.org/docs/latest/messaging")
                                     img(src="/img/menu/icon-cube.svg", alt="")
