@@ -1,10 +1,8 @@
 extend _components/base.pug
-
 block pagetitle
     title Download - Apache Ignite
     meta(name="description", content="Download Apache Ignite here and install in your environment. It’s for free – just select from one of the available options and download.")
     link(rel="canonical", href="https://ignite.apache.org/download.html")
-
     meta(property="og:title", content="Download - Apache Ignite")
     meta(property="og:type", content="article")
     meta(property="og:url", content="https://ignite.apache.org/download.html")
@@ -63,7 +61,11 @@ block main
                     each link in params.links
                         a.sourcelink(href=link, target="_blank") !{link}<br>
 
-
+    
+    .cgi(hidden).
+        <!-- Update the following template variables for every release -->
+        [define distdir]ignite[end]
+        [define disturl]https://www.apache.org/dist[end]
 
 
 
@@ -105,14 +107,8 @@ block main
             .download-src__left
                 p.
                     If you are looking for an earlier version of Apache Ignite, please find it in the archive. If you encounter a problem with the selected mirror, please choose another one. If primary mirrors are not reachable, switch to backup servers added to the end of the list.
-            .download-src__right 
-                .download-choser.flexi 
-                    .download-choser__label Selected mirror:
-                    .download-choser__select.flexi
-                        select(name="download_domain").jsDownloadDomenSelect
-                            option(value="dlcdn.apache.org") dlcdn.apache.org
-                            option(value="downloads.apache.org") downloads.apache.org
-                        a.download-choser__button.download-choser__button--blue(href="#").jsChangeLink Change
+            .download-src__right
+                include _components/download-select.html
     // /.download-src
 
 

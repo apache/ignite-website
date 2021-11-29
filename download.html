@@ -137,7 +137,7 @@
       <div class="hdr__wrap flexi jsHdrLine">
         <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
         ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
-        ><a class="button hdr__button" href="/download.html">Download Ignite 2.11 </a>
+        ><a class="button hdr__button" href="/download.cgi">Download Ignite 2.11 </a>
         <nav class="hdrmenu">
           <ul class="flexi">
             <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
@@ -316,6 +316,10 @@
     </header>
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <div class="cgi" hidden>
+      <!-- Update the following template variables for every release -->
+      [define distdir]ignite[end] [define disturl]https://www.apache.org/dist[end]
+    </div>
     <section class="innerhero innerhero--download">
       <div class="container innerhero__cont">
         <div class="innerhero__main">
@@ -359,15 +363,15 @@
             <tbody>
               <tr>
                 <td>3.0.0 (Alpha 3)</td>
-                <td><a href="https://ignite.apache.org/docs/3.0.0-alpha" target="_blank">guide</a></td>
+                <td><a href="/docs/3.0.0-alpha" target="_blank">guide</a></td>
                 <td></td>
                 <td>2021-10-18</td>
                 <td class="jsLinksInside">
-                  <a class="sourcelink" href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip" target="_blank">apache-ignite-3.0.0-alpha3-src.zip</a> (<a
-                    href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip.asc"
+                  <a class="sourcelink" href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip" target="_blank">apache-ignite-3.0.0-alpha3-src.zip</a> (<a
+                    href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip.asc"
                     target="_blank"
                     >pgp</a
-                  ><a href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip.sha512" target="_blank">sha512</a>)
+                  ><a href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3-src.zip.sha512" target="_blank">sha512</a>)
                 </td>
               </tr>
               <tr>
@@ -376,11 +380,9 @@
                 <td><a href="https://ignite.apache.org/releases/2.11.0/release_notes.html" target="_blank">release notes</a></td>
                 <td>2021-09-17</td>
                 <td class="jsLinksInside">
-                  <a class="sourcelink" href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-src.zip" target="_blank">apache-ignite-2.11.0-src.zip</a> (<a
-                    href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-src.zip.asc"
-                    target="_blank"
+                  <a class="sourcelink" href="[preferred][distdir]/2.11.0/apache-ignite-2.11.0-src.zip" target="_blank">apache-ignite-2.11.0-src.zip</a> (<a href="[preferred][distdir]/2.11.0/apache-ignite-2.11.0-src.zip.asc" target="_blank"
                     >pgp</a
-                  ><a href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-src.zip.sha512" target="_blank">sha512</a>)
+                  ><a href="[preferred][distdir]/2.11.0/apache-ignite-2.11.0-src.zip.sha512" target="_blank">sha512</a>)
                 </td>
               </tr>
               <tr>
@@ -479,15 +481,21 @@
           </p>
         </div>
         <div class="download-src__right">
-          <div class="download-choser flexi">
+          <form action="/download.cgi" method="get" class="download-choser flexi">
             <div class="download-choser__label">Selected mirror:</div>
             <div class="download-choser__select flexi">
-              <select class="jsDownloadDomenSelect" name="download_domain">
-                <option value="dlcdn.apache.org">dlcdn.apache.org</option>
-                <option value="downloads.apache.org">downloads.apache.org</option></select
-              ><a class="download-choser__button download-choser__button--blue jsChangeLink" href="#">Change</a>
+              <select name="Preferred" class="jsDownloadDomenSelect">
+                [if-any http] [for http]
+                <option value="[http]" [is http preferred] selected="selected" [end]>[http]</option>
+                [end] [end] [if-any ftp] [for ftp]
+                <option value="[ftp]" [is ftp preferred] selected="selected" [end]>[ftp]</option>
+                [end] [end] [if-any backup] [for backup]
+                <option value="[backup]" [is backup preferred] selected="selected" [end]>[backup] (backup)</option>
+                [end] [end]
+              </select>
+              <a class="download-choser__button download-choser__button--blue jsChangeLink" href="#">Change</a>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </section>
@@ -517,11 +525,11 @@
                 <td></td>
                 <td>2021-10-18</td>
                 <td class="jsLinksInside">
-                  <a class="sourcelink" href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip" target="_blank">apache-ignite-3.0.0-alpha3.zip</a> (<a
-                    href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip.asc"
+                  <a class="sourcelink" href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip" target="_blank">apache-ignite-3.0.0-alpha3.zip</a> (<a
+                    href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip.asc"
                     target="_blank"
                     >pgp</a
-                  ><a href="https://dlcdn.apache.org/ignite/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip.sha512" target="_blank">sha512</a>)
+                  ><a href="[preferred][distdir]/3.0.0-alpha3/apache-ignite-3.0.0-alpha3.zip.sha512" target="_blank">sha512</a>)
                 </td>
               </tr>
               <tr>
@@ -530,11 +538,11 @@
                 <td><a href="https://ignite.apache.org/releases/2.11.0/release_notes.html" target="_blank">release notes</a></td>
                 <td>2021-09-17</td>
                 <td class="jsLinksInside">
-                  <a class="sourcelink" href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-bin.zip" target="_blank">apache-ignite-2.11.0-bin.zip</a> (<a
-                    href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-bin.zip.asc"
+                  <a class="sourcelink" href="[preferred][distdir]/ignite/2.11.0/apache-ignite-2.11.0-bin.zip" target="_blank">apache-ignite-2.11.0-bin.zip</a> (<a
+                    href="[preferred][distdir]/ignite/2.11.0/apache-ignite-2.11.0-bin.zip.asc"
                     target="_blank"
                     >pgp</a
-                  ><a href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-2.11.0-bin.zip.sha512" target="_blank">sha512</a>)
+                  ><a href="[preferred][distdir]/ignite/2.11.0/apache-ignite-2.11.0-bin.zip.sha512" target="_blank">sha512</a>)
                 </td>
               </tr>
               <tr>
@@ -648,11 +656,11 @@
                 <td><a href="https://ignite.apache.org/releases/2.11.0/release_notes.html" target="_blank">release notes</a></td>
                 <td>2021-09-17</td>
                 <td class="jsLinksInside">
-                  <a class="sourcelink" href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-slim-2.11.0-bin.zip" target="_blank">apache-ignite-slim-2.11.0-bin.zip</a> (<a
-                    href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-slim-2.11.0-bin.zip.asc"
+                  <a class="sourcelink" href="[preferred][distdir]/2.11.0/apache-ignite-slim-2.11.0-bin.zip" target="_blank">apache-ignite-slim-2.11.0-bin.zip</a> (<a
+                    href="[preferred][distdir]/2.11.0/apache-ignite-slim-2.11.0-bin.zip.asc"
                     target="_blank"
                     >pgp</a
-                  ><a href="https://dlcdn.apache.org/ignite/2.11.0/apache-ignite-slim-2.11.0-bin.zip.sha512" target="_blank">sha512</a>)
+                  ><a href="[preferred][distdir]/2.11.0/apache-ignite-slim-2.11.0-bin.zip.sha512" target="_blank">sha512</a>)
                 </td>
               </tr>
               <tr>

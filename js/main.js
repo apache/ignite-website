@@ -123,7 +123,7 @@ function topmeny(){
         let shadow = e.target.closest('.dropmenu__back');
         if(!shadow) {
             shadow = !(e.target.closest('.dropmenu') || e.target.closest('.js-hasdrop'));
-            console.log(shadow);
+            // console.log(shadow);
         }
         if (shadow) {
             dropMenu.classList.remove('active');
@@ -416,6 +416,7 @@ function downloadPopBlock(){
 
 /**
  * Download change HREF of all link
+ * === turned OFF ===
  */
 function downloadChangeHref() {
     let selectBox = document.querySelector('.jsDownloadDomenSelect');
@@ -441,9 +442,26 @@ function downloadChangeHref() {
         saveButton.classList.add('download-choser__button--blue');
     });
 }
-downloadChangeHref();
+// downloadChangeHref();
 
 
+
+
+/**
+ * Submit form to download.cgi on change soruce button clicked
+ */
+function chanheDowloadPreferred() {
+    if (!document.querySelector('.jsChangeLink')) return;
+    document.addEventListener('click', (e) => {
+        const button = e.target.closest('.jsChangeLink');
+        if(!button) return;
+        e.preventDefault();
+        const formBox = e.target.closest('form');
+        if(!formBox) return;
+        formBox.submit();
+    });
+}
+chanheDowloadPreferred();
 
 
 
