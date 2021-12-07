@@ -60,10 +60,9 @@ export const watchpug = () => {
             pugPath = filename;
         }
         html();
-        browserSync.reload();
     });
 
-    gulp.watch(['./css/**/*.css', './js/**/*.js'], {}).on('change', function() {
+    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function() {
         browserSync.reload();
     })
 }

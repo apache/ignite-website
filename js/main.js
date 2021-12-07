@@ -206,7 +206,7 @@ function mobilemeny() {
     const testEl = document.querySelector('.mobmenu__opener');
     if(!testEl) return;
     document.addEventListener('click', (e) => {
-        const opener = e.target.closest('.mobmenu__opener');
+        const opener = e.target.closest('.mobmenu__parent');
         if(!opener) return;
         e.preventDefault();
         const listLi = opener.closest('li');
@@ -219,7 +219,6 @@ function mobilemeny() {
         }
         listUl.style.height = listUl.scrollHeight + 'px';
         listLi.classList.add('isopen');
-
     });
 };
 mobilemeny();
