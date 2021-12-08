@@ -83,22 +83,54 @@ let submenuItemsArray = submenuItems.map(el => {
 
 
 
-
-
-
-
-function topmeny(){
+function universalTopMenu(){
     let dropMenu = document.querySelector('.dropmenu');
     let dropBack = document.querySelector('.dropmenu__back');
     let hdr = document.querySelector('.hdr');
     if(!dropMenu) return;
-
     let timeoutMenu;
 
-    document.addEventListener('mouseover', (e) => {
+    function openMenuPanel(panelEl){
+        document.querySelectorAll('.dropmenu__panel').forEach(item => {
+            item.classList.toggle('active', item.dataset.menupanel === panelEl.dataset.panel);                    
+        });
+        document.querySelectorAll('.hdrmenu--expanded.active').forEach(item => {
+            item.classList.remove('active');
+        });
+        hdr.classList.add('opened');
+        panelEl.classList.add('active');
+        dropMenu.classList.add('active');
+        dropBack.classList.add('active');
+        dropMenu.style.height = document.querySelector('.dropmenu__panel.active').scrollHeight + "px";
+    };
+
+    function closeAllMenu(){
+        dropMenu.classList.remove('active');
+        dropMenu.style.height = "";
+        dropBack.classList.remove('active');
+        document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
+            el.classList.remove('active');
+        });
+        hdr.classList.remove('opened');
+    };
+
+    //event will run in tablet screen
+    function clickMenuEvent(e){
+        const menuLink = e.target.closest('a[data-panel].hdrmenu--expanded');
+        if (menuLink){
+            e.preventDefault();
+            openMenuPanel(menuLink);
+        };
+        if(e.target.closest('.dropmenu__back')){
+            closeAllMenu();
+        }
+    }
+
+    //event will run in desctop screen
+    function hoverMenuEvent(e){
         e.preventDefault();
-        let item = e.target.closest('a[data-panel].hdrmenu--expanded');
-        if(item && item.dataset.panel !== ""){
+        let menuLink = e.target.closest('a[data-panel].hdrmenu--expanded');
+        if(menuLink && menuLink.dataset.panel !== ""){
             clearTimeout(timeoutMenu);
             timeoutMenu = setTimeout(()=> {
                 if(!document.querySelector('.hdr__wrap:hover')){
@@ -106,18 +138,7 @@ function topmeny(){
                     console.log("Menu is stopped");
                     return;
                 }
-                document.querySelectorAll('.dropmenu__panel').forEach(el => {
-                    el.classList.toggle('active', el.dataset.menupanel === item.dataset.panel);                    
-                });
-                document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
-                    el.classList.remove('active');
-                });
-                hdr && hdr.classList.add('opened');
-                item.classList.add('active');
-                dropMenu.classList.add('active');
-                dropBack.classList.add('active');
-                console.log("Run height recalc");
-                dropMenu.style.height = document.querySelector('.dropmenu__panel.active').scrollHeight + "px";
+                openMenuPanel(menuLink);
             }, 200);
         }
         let shadow = e.target.closest('.dropmenu__back');
@@ -126,17 +147,27 @@ function topmeny(){
             // console.log(shadow);
         }
         if (shadow) {
-            dropMenu.classList.remove('active');
-            dropMenu.style.height = "";
-            dropBack.classList.remove('active');
-            document.querySelectorAll('.hdrmenu--expanded.active').forEach(el => {
-                el.classList.remove('active');
-            });
-            hdr && hdr.classList.remove('opened');
+            closeAllMenu();
         } 
-    });
+    }
+
+    function resizeChanger(){
+        closeAllMenu();
+        if(window.innerWidth > 1199){
+            document.removeEventListener('click', clickMenuEvent);
+            document.addEventListener('mouseover', hoverMenuEvent);
+        } else {
+            document.removeEventListener('mouseover', hoverMenuEvent);
+            document.addEventListener('click', clickMenuEvent);
+        }
+    }
+    resizeChanger();
+
+    window.addEventListener('resize', resizeChanger);
+
 }
-if(window.innerWidth > 1199){topmeny();}
+universalTopMenu();
+
 
 
 
