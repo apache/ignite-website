@@ -47,11 +47,11 @@ export const watchpug = () => {
             cors: true,
             notify: false,
         },
+        ui: false,
+        injectChanges: true,
         watch: false,
     });
-    gulp.watch(['_src/**/*.pug', '_src/**/*.html'], {
-
-    }).on('change', function(pathPug, stats){
+    gulp.watch(['_src/**/*.pug', '_src/**/*.html'], {}).on('change', function(pathPug, stats){
         pugPath = null;
         console.log("Изм.: " + pathPug);
         if(!pathPug.includes("_components")){
@@ -62,9 +62,9 @@ export const watchpug = () => {
         html();
     });
 
-    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function() {
+    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function(path) {
         browserSync.reload();
-    })
+    });
 }
 
 
@@ -112,5 +112,6 @@ export const sitemap = () => {
 
 
 
-export let build = gulp.series(html);
+export const build = gulp.series(html);
+export const watch = gulp.series(watchpug);
 export default gulp.series(html, watchpug);
