@@ -1,157 +1,585 @@
-<!--
- ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
-▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
-▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
-░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
- ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
- ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
-  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
-  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
-      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
--->
-
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Distributed ANSI SQL Database - Apache Ignite</title>
+    <meta
+      name="description"
+      content="Apache Ignite comes with an ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that allows you to interact with Ignite as with a regular SQL database. Ignite can function in a pure in-memory mode in which it shows the highest performance."
+    />
     <link rel="canonical" href="https://ignite.apache.org/features/sql.html" />
-    <!--#include virtual="/includes/scriptshead.html" -->
+    <meta property="og:title" content="Distributed ANSI SQL Database - Apache Ignite" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ignite.apache.org/features/sql.html" />
+    <meta property="og:image" content="/img/og-pic.png" />
+    <meta
+      property="og:description"
+      content="Apache Ignite comes with an ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that allows you to interact with Ignite as with a regular SQL database. Ignite can function in a pure in-memory mode in which it shows the highest performance."
+    />
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/native-persistence.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/compute-apis.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/sql.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+  </head>
+  <body>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        (k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      ym(72949126, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      });
+    </script>
+    <noscript
+      ><div><img src="https://mc.yandex.ru/watch/72949126" style="position: absolute; left: -9999px" alt="" /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
 
-    <title>Distributed ANSI SQL - Apache Ignite</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-61232409-1');
+    </script>
+    <!-- MOBILE MENU START -->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button data-hystclose class="hystmodal__close">Close</button>
+          <div class="mobmenu__wrap">
+            <a href="/" class="mobmenu__logo"><img src="/img/logo.svg" alt="Логотип" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li>
+                  <a href="/docs/latest/">Quick Start</a>
+                </li>
+                <li>
+                  <a href="/resources.html">Resources</a>
+                </li>
+                <li>
+                  <a href="/faq.html">FAQ</a>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/use-cases/in-memory-cache.html">In-Memory Cache</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-database.html">In-Memory Database</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/key-value-store.html">Key-Value Store</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/high-performance-computing.html">High Performance Computing</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/spark-acceleration.html">Spark Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <meta name="description"
-          content="Apache Ignite comes with a ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that
-           allows you to interact with Ignite as with a regular SQL database."/>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/features/">Features</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a>
+                    </li>
+                    <li>
+                      <a href="/arch/native-persistence.html">Native Persistence</a>
+                    </li>
+                    <li>
+                      <a href="/features/sql.html">Distributed SQL</a>
+                    </li>
+                    <li>
+                      <a href="/features/key-value-apis.html">Key-Value APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/acid-transactions.html">ACID Transactions</a>
+                    </li>
+                    <li>
+                      <a href="/features/compute-apis.html">Compute APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/service-apis.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="/features/machinelearning.html">Machine Learning</a>
+                    </li>
+                    <li>
+                      <a href="/features/streaming.html">Real-Time Streaming APIs</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/messaging">Messaging</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a>
+                    </li>
+                    <li>
+                      <a href="/features/index.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <!--#include virtual="/includes/styles.html" -->
-
-    
-</head>
-<body>
-
-    <!--#include virtual="/includes/header.html" -->
-<article>
-    <header>
-        <div class="container">
-            <h1>Distributed ANSI SQL <strong>With JOINs</strong></h1>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/use-cases/provenusecases.html">Powered by</a>
+                </li>
+                <li>
+                  <a href="/docs/latest/">Docs</a>
+                </li>
+              </ul>
+              <a href="/download.cgi" class="button mobmenu__button">Download Ignite 2.11</a>
+            </div>
+            <!-- //mobmenu__menu -->
+          </div>
+          <!-- //mobmenu__wrap -->
+        </div>
+        <!-- //mobmenu -->
+      </div>
+    </div>
+    <!-- MOBILE MENU END -->
+    <header class="hdr hdr__blue jsHdrBase">
+      <div class="hdr__wrap flexi jsHdrLine">
+        <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+        ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+        ><a class="button hdr__button" href="/download.cgi">Download Ignite 2.11 </a>
+        <nav class="hdrmenu">
+          <ul class="flexi">
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu__current hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+            <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+            <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+          </ul>
+        </nav>
+        <div class="dropmenu">
+          <div class="dropmenu__panel" data-menupanel="getStarted">
+            <div class="container dropmenu1__grid">
+              <div class="dropmenu1__buttonwrap">&nbsp;</div>
+              <div class="dropmenu__box dropmenu__box--buttonin">
+                <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/resources.html"><img src="/img/menu/icon-resources.svg" alt="" /><span>Resources</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/faq.html"><img src="/img/menu/icon-question.svg" alt="" /><span>FAQ</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu1__grid-->
+            <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-->
+          <div class="dropmenu__panel" data-menupanel="features">
+            <div class="container dropmenu2__grid">
+              <div class="dropmenu__box">
+                <div class="capstext">MULTI-TIER STORAGE</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">ESSENTIAL Developer APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">High-Performance <br />Computing APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">Real-Streaming APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu2__grid-->
+            <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-2-->
+          <div class="dropmenu__panel" data-menupanel="community">
+            <div class="container dropmenu3__grid">
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu3__grid-->
+          </div>
+          <!-- /.dropmenu__panel-->
+        </div>
+        <!-- /.dropmeu-->
       </div>
     </header>
-    <div class="container">
-        <p>
-            Apache Ignite® comes with a ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine
-            that allows you to interact with Ignite as with a regular SQL database using JDBC, ODBC drivers, or
-            native SQL APIs available for Java, C#, C++, Python, and other programming languages.
-        </p>
-        <img class="img-responsive diagram-right" alt="SQL Database diagram" src="/images/svg-diagrams/distributed_sql.svg" alt="Distributed ANSI SQL With JOINs" />
-        <p>
-            Ignite supports all DML commands, including SELECT, UPDATE, INSERT, and DELETE queries as well
-            as a subset of DDL commands relevant for distributed systems.
-        </p>
-        
-        <h2>SQL Joins</h2>
-        <p>
-            Ignite fully supports distributed joins for advanced querying needs. A distributed join is a SQL statement
-            with a join clause that combines two or more tables. If the tables are joined on the partitioning column
-            (affinity or primary key), the join is called a co-located join. Otherwise, if the tables were not
-            co-located initially, then Ignite does the join in a non-colocated fashion. Co-located joins avoid data
-            shuffling between nodes and minimize network usage, thus, performing much faster than a non-colocated
-            counterpart.
-        </p>
-
-        <h2>SQL and In-Memory Mode</h2>
-        <p>
-            Apache Ignite can function in a pure in-memory mode when all the data and indexes are located solely in
-            memory. In this mode, Ignite SQL shows the highest performance since all the data is served from memory
-            with no usage of the disk tier at all.
-        </p>
-
-        <h2>SQL and Native Persistence</h2>
-        <p>
-            In this mode, Ignite persists 100% of data and indexes in the native persistence while caching as much
-            as possible in memory. Ignite SQL engine does not require to cache an entire data set in memory to
-            operate correctly. If the engine finds that a record is not cached, then it will read the record from
-            disk. Your application only executes SQL queries, and Ignite gets the records from both memory and disk
-            automatically.
-        </p>
-        <p>
-            On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up,
-            which significantly decreases the time of any potential downtimes.
-
-        </p>
-
-        <h2>SQL and 3rd Party Databases</h2>
-        <p>
-            Ignite can be used as a caching layer for external databases such as RDBMS, NoSQL, or Hadoop. In this mode,
-            the Ignite SQL engine requires caching all the data needed for SQL queries in memory since the engine
-            currently does not support federated queries.
-        </p>
-
-        <p>
-            If federated queries between Ignite and an external database are required, then you can consider Ignite
-            integration for Spark, where the DataFrames API can join the data stored in Ignite and other systems.
-        </p>
-
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                  <div class="display-6 title">Learn More</div>
-                  <hr class="my-4">
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <ul>
-                        <li>
-                          <p><a href="/docs/latest/SQL/sql-introduction">Ignite SQL implementation details <i class="fas fa-angle-double-right"></i></a></p>
-                        </li>
-                        <li>
-                          <p><a href="/docs/latest/SQL/distributed-joins">Distributed JOINs <i class="fas fa-angle-double-right"></i></a></p>
-                        </li>
-                        <li>
-                          <p><a href="/docs/latest/sql-reference/sql-conformance">SQL Reference <i class="fas fa-angle-double-right"></i></a></p>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="col-sm-6">
-                      <ul>
-                        <li>
-                          <p><a href="/use-cases/spark-acceleration.html">Apache Ignite and Spark <i class="fas fa-angle-double-right"></i></a></p>
-                        </li>
-                        <li>
-                          <p><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fas fa-angle-double-right"></i></a></p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <section class="innerhero">
+      <div class="container innerhero__cont">
+        <div class="innerhero__main">
+          <div class="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 class="h1 innerhero__h1">Distributed ANSI SQL</h1>
+          <div class="innerhero__descr pt-2 h5">
+            The same SQL you've been using for years but now with<br />
+            in-memory speed and at unlimited scale
+          </div>
+          <div class="innerhero__action"><a class="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">Start Coding</a></div>
+        </div>
+        <img class="innerhero__pic innerhero__pic--sql" src="/img/features/sql/hero-image.svg" alt="sql-hero" />
+      </div>
+    </section>
+    <!-- /.innerhero-->
+    <section class="dist">
+      <div class="container">
+        <div class="dist__block flexi">
+          <div class="dist__info">
+            <h2 class="dist__h2 h4">Apache Ignite as a SQL Database</h2>
+            <p class="dist__text">The native support for SQL let’s you work with Ignite as with a standard SQL database. You can use simply SQL if your applications need nothing else:</p>
+            <div class="dist__items flexi">
+              <div class="dist__item">
+                <h3 class="dist__item-title">DDL commands</h3>
+                <div class="dist__item-grey dist__item-grey1 flexi">
+                  <div class="dist__itemitem flexi"><span class="dist__item-span">CREATE</span><span class="dist__item-span">ALTER</span><span class="dist__item-span">DROP</span></div>
                 </div>
               </div>
-
-</div>
-</article>
-
-
-<!--#include virtual="/includes/footer.html" -->
-
-<!--#include virtual="/includes/scripts.html" -->
-</body>
+              <div class="dist__item">
+                <h3 class="dist__item-title">DML commands</h3>
+                <div class="dist__item-grey dist__item-grey2 flexi">
+                  <div class="dist__itemitem flexi"><span class="dist__item-span">SELECT</span><span class="dist__item-span">INSERT</span><span class="dist__item-span">UPDATE</span></div>
+                  <div class="dist__itemitem dist__itemitem__end flexi"><span class="dist__item-span">MERGE</span><span class="dist__item-span">DELETE</span></div>
+                </div>
+              </div>
+            </div>
+            <h3 class="dist__h3">Apache Ignite is shipped with:</h3>
+            <div class="dist__parts flexi">
+              <div class="dist__part flexi">
+                <div class="compute2-points__item fz20"></div>
+                <div class="dist__part-text">JDBC driver</div>
+              </div>
+              <div class="dist__part flexi">
+                <div class="compute2-points__item fz20"></div>
+                <div class="dist__part-text">ODBC driver</div>
+              </div>
+              <div class="dist__part flexi">
+                <div class="compute2-points__item fz20"></div>
+                <div class="dist__part-text dist__part-textend flexi">
+                  Built-in SQL APIs
+                  <div class="dist__part-grey">Available for Java, C#, C++, Python, and other programming languages</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <img class="dist__image" src="/img/features/sql/image.svg" alt="sql-hero" />
+        </div>
+      </div>
+    </section>
+    <!-- /.dist-->
+    <section class="dist1">
+      <div class="container">
+        <h2 class="dist1__h2 h4">Join, Group and Aggregate Distributed Data Sets</h2>
+        <div class="dist1__subtext">Whether you use a two or thousand-node cluster, you can always do the following:</div>
+        <div class="dist1__parts flexi">
+          <div class="dist1__part">group data</div>
+          <div class="dist1__part">join data</div>
+          <div class="dist1__part">order data</div>
+          <div class="dist1__part dist1__partend">aggregate data</div>
+        </div>
+        <div class="dist1__title">What is a distributed join?</div>
+        <p class="dist1__text h4">A distributed join is a SQL statement with a join clause that combines two or more tables that have their data distributed across many cluster nodes.</p>
+        <h3 class="dist1__h3 h4">Types of joins in Ignite</h3>
+        <div class="dist1__blocks flexi">
+          <div class="dist1__block">
+            <h4 class="dist1__h4">Co-located joins</h4>
+            <p class="dist1__texts">These are the most performant types of joins that avoid data shuffling between nodes and minimize network usage.</p>
+            <p class="dist1__texts pt-1">
+              This type of join is used if you join <a class="dist1__link" href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation" target="_blank">partitioned and replicated tables</a> or partitioned tables that are
+              co-located with each other.
+            </p>
+          </div>
+          <div class="dist1__block">
+            <h4 class="dist1__h4">Non-colocated joins</h4>
+            <p class="dist1__texts">A less performant type of join that joins data of non&#8209;colocated tables. Ignite needs to shuffle data over the network to produce a correct result set.</p>
+          </div>
+          <div class="dist1__block">
+            <h4 class="dist1__h4">Hash joins</h4>
+            <p class="dist1__texts">Ignite supports classic hash join algorithm that is more efficient than nested loop joins for many scenarios.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.dist1-->
+    <section class="dist2">
+      <div class="container">
+        <h2 class="dist2__h2 h4">Ignite SQL Engine and Multi-Tier Storage</h2>
+        <p class="dist2__p">Depending on your storage configuration, Ignite SQL engine can query both in-memory and disk-only records</p>
+        <div class="dist2__blocks flexi">
+          <div class="dist2__block">
+            <h3 class="dist2__h3">In-Memory Mode</h3>
+            <p class="dist2__text dist2__text1">Ignite caches data only in memory</p>
+            <details class="dist2__details">
+              <summary class="dist2__active"><img src="/img/features/sql/plus.svg" alt="sql-hero" /></summary>
+              <div class="dist2__subtext"><p>In this mode, Ignite SQL carries out tasks as&nbsp;quickly as possible, as long as all the data is&nbsp;served from memory, with no usage of the disk tier at all.</p></div>
+            </details>
+          </div>
+          <div class="dist2__block">
+            <h3 class="dist2__h3">In-Memory <br />+ Native Persistence Mode</h3>
+            <p class="dist2__text">
+              Ignite scales beyond available<br />
+              memory capacity
+            </p>
+            <details class="dist2__details">
+              <summary class="dist2__active"><img src="/img/features/sql/plus.svg" alt="sql-hero" /></summary>
+              <div class="dist2__subtext">
+                <p>Ignite persists 100% of data and indexes in the <a href="/arch/native-persistence.html">native persistence</a> while caching as much as possible in memory.</p>
+                <p class="pt-1">Ignite SQL engine does not require the caching of&nbsp;entire data set in memory to operate correctly.</p>
+                <p class="pt-1">If the engine finds that a record is not cached, then it will read the record from disk. Your application only executes SQL queries, and Ignite gets the records from both memory and disk automatically.</p>
+                <p class="pt-1">On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up, which significantly decreases downtime.</p>
+              </div>
+            </details>
+          </div>
+          <div class="dist2__block">
+            <h3 class="dist2__h3">In-Memory<br />+ External Database Mode</h3>
+            <p class="dist2__text">
+              Ignite accelerates your<br />
+              existing databases
+            </p>
+            <details class="dist2__details">
+              <summary class="dist2__active"><img src="/img/features/sql/plus.svg" alt="sql-hero" /></summary>
+              <div class="dist2__subtext">
+                <p>In this mode, the Ignite SQL engine requires caching of all the data needed for distributed queries in memory, since the engine does not currently support federated queries.</p>
+                <p class="pt-1">
+                  If federated queries between Ignite and an&nbsp;external database are required, then you can consider Ignite integration for Spark, where the DataFrames API can combine the data stored in&nbsp;Ignite and other systems.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.dist2-->
+    <section class="native-bottom container">
+      <div class="native-bottom__grid">
+        <article class="nativebotblock">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-rocket.svg" alt="" /><span>Ready to Start?</span></div>
+          <p class="nativebotblock__text">
+            Discover more details about Apache Ignite SQL engine<br />
+            and apply it for your use-case
+          </p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/persistence/native-persistence" target="_blank">Memory Architecture</a>
+        </article>
+        <article class="nativebotblock nativebotblock--learn">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-docs.svg" alt="" /><span>Want to Learn More?</span></div>
+          <p class="nativebotblock__text">Ignite SQL will become even more powerful and advanced with the release of the Apache Calcite based engine</p>
+          <div class="dist__link">Coming in Ignite 3.0</div>
+          <a class="nativebotblock__link arrowlink" href="https://cwiki.apache.org/confluence/display/IGNITE/Apache+Calcite-powered+SQL+Engine+Roadmap" target="_blank">New Calcite powered SQL engine</a>
+        </article>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use-Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2021 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
 </html>

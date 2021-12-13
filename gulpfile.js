@@ -1,143 +1,117 @@
-  
-const  gulp  = require('gulp');
-const {  series } = require('gulp');
+import browserSync from 'browser-sync';
+import gulp from 'gulp';
+import gulpPlumber from 'gulp-plumber';
+import pug from 'gulp-pug';
+import replace from 'gulp-replace';
+import prettier from 'gulp-prettier';
+import gulpSitemap from 'gulp-sitemap';
 
-const svgSprite = require('gulp-svg-sprite');
 
-function svg(cb){
+let pugPath = "";
 
 
-    cb();
+//Compiler PUG -> HTML
+const html = () => {
+    let pugTruePath = './_src/**/' + pugPath;
+    if(!pugPath || pugPath.includes("_")){
+        pugTruePath = ['./_src/**/*.pug', '!./_src/_*/**'];
+    }
+    return gulp.src(pugTruePath)
+        .pipe(gulpPlumber())
+        .pipe(pug({
+            pretty: false,
+        }))
+        .pipe(replace('"../img', '"/img'))
+        .pipe(prettier({
+            singleQuote: true,
+            parser:"html",
+            tabWidth: 2,
+            useTabs: false,
+            htmlWhitespaceSensitivity:"css",
+            printWidth:240,
+        }))
+        .on('data', function(file){
+            console.log('▒ PUG→HTML: ' + file.path.replace(file.cwd, '') );
+        })
+        .pipe(gulp.dest('./')).on('end', (e) => {
+        });
+}
 
-    var svgConfig = {
-        mode: {
-            inline: true,
-            symbol: true
+
+//Filewatcher and live-reload
+export const watchpug = () => {
+    browserSync.init({
+        server: {
+            baseDir: "./",
+            open: true,
+            cors: true,
+            notify: false,
         },
-        // Some more settings to keep
-        // the SVG's code clean:
-        svg: {
-            xmlDeclaration: false,
-            doctypeDeclaration: false,
-            
-            namespaceIDs: false,
-            namespaceClassnames: false,
-            transform: [
-                function(svg) {
-                    // removes styles and class="" attributes
-                    
-                    const reStyles = /<\s*style[^>]*>(.*?)<\s*\/\s*style>/g;
-                    // console.log(svg.replace(reStyles, ' '));
-                    svg = svg.replace(reStyles, '');
-
-                    const reClasses = /class="(.*?)"/g;
-                    svg = svg.replace(reClasses, '');
-
-                    return svg;
-                },
-            ]
+        ui: false,
+        injectChanges: true,
+        watch: false,
+    });
+    gulp.watch(['_src/**/*.pug', '_src/**/*.html'], {}).on('change', function(pathPug, stats){
+        pugPath = null;
+        console.log("Изм.: " + pathPug);
+        if(!pathPug.includes("_components")){
+            let pathArray = pathPug.split("\\");
+            let filename = pathArray[pathArray.length - 1];
+            pugPath = filename;
         }
-    };
+        html();
+    });
 
-    
-    // Set the source folder.
-    return gulp.src( 'images/svg/**/*.svg' )
-    // Include our options.
-    .pipe( svgSprite( svgConfig ) )
-    .on('error', function(error){
-        console.log(error);
-    })
-    // Set the destination folder.
-    .pipe( gulp.dest( 'images/svg-sprites' ) );
-}
-
-exports.svg = svg;
-
-
-  /**
-   * build css
-   */
-
-const sass = require('gulp-sass');
-const browserSync = require('browser-sync').create();
-
-function compileCss(cb){
-
-    cb();
-
-    let buildRet = gulp.src('./scss/ignite-redesign.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(cleanCSS())
-    .pipe(gulp.dest('./css'))
-    .pipe(browserSync.stream());
-
-    
-    return buildRet;
-}
-
-
-
-/**
- * minifies the css
- */
-let cleanCSS = require('gulp-clean-css');
-function minifyCss()
-{
-    return gulp.src('./css/*.css')
-    .pipe(cleanCSS())
-    .pipe(gulp.dest('./css'));
-}
-exports.minifyCss = minifyCss;
-
-/**
- * observes for changes on the .scss file, and compiles 
- */
-function watch() {
-    gulp.watch('scss/*.scss', compileCss)
-}
-
-exports.watch = watch;
-
-
-
-const critical = require('critical');
-/**
- * use critical module to generate and embed css critical path
- */
-function extractCritical(cb) {
-    cb();
-    return critical.generate({
-        inline: false,
-        base: './',
-        src: 'http://127.0.0.1:8080/',
-        dimensions: [{
-            width: 1280,
-            height: 1600
-        }],
-        dest: 'css/critical.css',
-        minify: true,
-        extract: false,
-        ignore: ['@font-face',/url\(/]
-
+    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function(path) {
+        browserSync.reload();
     });
 }
-exports.extractCritical = extractCritical;
 
-const inject = require('gulp-inject-string');
-const rename = require('gulp-rename');
 
-function inlineCritical(cb)
-{
-    cb();
-    return gulp.src('css/critical.css')
-    .pipe(inject.wrap('<!-- remember to copy this content to downloads.html --><style>', 'body {opacity: 0;}.fa{display: none;}</style>'))
-    .pipe(rename('styles.html'))
-    .pipe(gulp.dest('includes'));
+
+/**
+ * XML Sitemap Generate for site and /docs/latest folder
+ */
+export const sitemap = () => {
+    let srcForSitemap = [
+        './**/*.html',
+        '!./_*/**',
+        '!./jcache/**',
+        '!./releases/**',
+        '!./docs/2.9.0/**',
+        '!./docs/2.9.1/**',
+        '!./docs/2.10.0/**',
+        '!./docs/3.0.0-alpha/**',
+        '!./node_modules/**'
+    ];
+    return gulp.src(srcForSitemap, {
+        read: false
+    })
+    .pipe(gulpSitemap({
+            siteUrl: 'https://ignite.apache.com',
+            changefreq: 'monthly',
+            priority: function(siteUrl, loc, entry) {
+                // Give pages inside root path (i.e. no slashes) a higher priority
+                return loc.includes('docs') ? 0.7 : 1;
+            },
+            getLoc: function(siteUrl, loc, entry) {
+                if(loc.includes('/docs/')){
+                    //Remove .html for all docs files
+                    let newloc = loc.replace(/.html$/, "")
+                    //Change version folders into "latest"
+                    newloc = newloc.replace("2.11.0", "latest");
+                    //console.log(newloc);
+                    return newloc;
+                }
+                return loc;
+            }
+        }))
+    .pipe(gulp.dest('./'));
 }
 
-exports.inlineCritical = inlineCritical;
 
-exports.critical = series(extractCritical, inlineCritical);
 
-// exports.build = series(compileCss, extractCritical, inlineCritical);
-exports.build = compileCss; //, extractCritical, inlineCritical);
+
+export const build = gulp.series(html);
+export const watch = gulp.series(watchpug);
+export default gulp.series(html, watchpug);

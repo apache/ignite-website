@@ -1,161 +1,614 @@
-<!--
- ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
-▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
-▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
-░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
- ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
- ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
-  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
-  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
-      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
--->
-
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-
-    <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-data-grid.html"/>
-    <!--#include virtual="/includes/scriptshead.html" -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-          content="The Apache Ignite® in-memory data grid accelerates and scales out databases, services, and APIs and supports key-value, ANSI SQL, and machine learning APIs"/>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>In-Memory Data Grid - Apache Ignite</title>
+    <meta name="description" content="The Apache Ignite in-memory data grid accelerates and scales out distributed databases, services, and APIs. Learn more about an IMDG with Apache Ignite." />
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-data-grid.html" />
+    <meta property="og:title" content="In-Memory Data Grid - Apache Ignite" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ignite.apache.org/use-cases/in-memory-data-grid.html" />
+    <meta property="og:image" content="/img/og-pic.png" />
+    <meta property="og:description" content="The Apache Ignite in-memory data grid accelerates and scales out distributed databases, services, and APIs. Learn more about an IMDG with Apache Ignite." />
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/native-persistence.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/compute-apis.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/digital-hub.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/database.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/datagrid.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+  </head>
+  <body>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        (k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-    <!--#include virtual="/includes/styles.html" -->
+      ym(72949126, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      });
+    </script>
+    <noscript
+      ><div><img src="https://mc.yandex.ru/watch/72949126" style="position: absolute; left: -9999px" alt="" /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
 
-    
-</head>
-<body>
-<!--#include virtual="/includes/header.html" -->
-<article>
-    <header>
-        <div class="container">
-            <h1><strong>In-Memory Data Grid</strong> with Apache Ignite</h1>
-        </div>
-    </header>
-    <div class="container">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-61232409-1');
+    </script>
+    <!-- MOBILE MENU START -->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button data-hystclose class="hystmodal__close">Close</button>
+          <div class="mobmenu__wrap">
+            <a href="/" class="mobmenu__logo"><img src="/img/logo.svg" alt="Логотип" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li>
+                  <a href="/docs/latest/">Quick Start</a>
+                </li>
+                <li>
+                  <a href="/resources.html">Resources</a>
+                </li>
+                <li>
+                  <a href="/faq.html">FAQ</a>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/use-cases/in-memory-cache.html">In-Memory Cache</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-database.html">In-Memory Database</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/key-value-store.html">Key-Value Store</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/high-performance-computing.html">High Performance Computing</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/spark-acceleration.html">Spark Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-        <p>
-            Apache Ignite can be used as an in-memory data grid that accelerates and scales your existing databases and
-            data stores. The grid supports key-value and ANSI SQL APIs, ACID transactions, co-located processing,
-            and machine learning libraries. As an in-memory data grid, Ignite is frequently used to increase the
-            performance and scalability of real-time applications, to support <a href="/use-cases/high-performance-computing.html">
-            high-performance computing</a>, and to cache data that is scattered across databases.
-        </p>
-        <img class="img-fluid diagram-right" src="/images/svg-diagrams/data_grid.svg" alt="In-Memory Data Grid with Apache Ignite" width="555" height="600" />
-        
-        <h2>What is an In-Memory Data Grid?</h2>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/features/">Features</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a>
+                    </li>
+                    <li>
+                      <a href="/arch/native-persistence.html">Native Persistence</a>
+                    </li>
+                    <li>
+                      <a href="/features/sql.html">Distributed SQL</a>
+                    </li>
+                    <li>
+                      <a href="/features/key-value-apis.html">Key-Value APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/acid-transactions.html">ACID Transactions</a>
+                    </li>
+                    <li>
+                      <a href="/features/compute-apis.html">Compute APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/service-apis.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="/features/machinelearning.html">Machine Learning</a>
+                    </li>
+                    <li>
+                      <a href="/features/streaming.html">Real-Time Streaming APIs</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/messaging">Messaging</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a>
+                    </li>
+                    <li>
+                      <a href="/features/index.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-        <p>
-            An in-memory data grid is an advanced read-through/write-through cache that is deployed on top of multiple databases.
-            The grid supports various APIs, such as SQL, compute, and key-value. Applications write to and read from the
-            grid, and the grid propagates changes to the underlying data stores in a consistent way.
-        </p>
-        <p>
-            With Ignite, your applications can utilize multiple APIs for data processing. Key-value and SQL queries
-            enable you to request, join, and group distributed datasets. Compute and machine-learning APIs execute
-            logic close to the data, thus eliminating expensive data shuffling over the network.
-        </p>
-
-        <h2>IGNITE AS AN IN-MEMORY DATA GRID AND EXTERNAL DATABASES</h2>
-
-        <p>
-            Ignite can improve the performance and scalability of most external databases and data stores (such as RDBMS,
-            NoSQL, and  Hadoop) by sliding in as an in-memory data grid between the application and the database layers.
-            When the application writes data to the cache, Ignite writes-through or writes-behind all data modifications
-            to the underlying external store. Ignite also performs ACID transactions (coordinating and committing transactions
-            across both the cluster and the database).
-        </p>
-
-        <p>
-            Additionally, Ignite can be deployed as a shared and unified in-memory layer that stores datasets that originate
-            from disjointed databases. Your applications can consume all the data from Ignite as a single store while Ignite
-            synchronizes the original databases whenever in-memory data is updated.
-        </p>
-
-        <h2>IGNITE NATIVE PERSISTENCE</h2>
-
-        <p>
-            Ignite Native Persistence is a distributed ACID-compliant, SQL-compliant disk store that transparently
-            integrates with the Ignite in-memory layer. When Native Persistence is enabled, Ignite stores both
-            data and indexes on disk, thus eliminating the time-consuming cache warm-up step. Native Persistence
-            keeps a full copy of data on disk, so you are free to cache a subset of records in memory. If a required
-            data record is missing from memory, Ignite reads the record from the disk automatically, regardless of the
-            API (whether SQL, key-value, or scan queries).
-        </p>
-
-
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <div class="display-6 title">Learn More</div>
-                <hr class="my-4">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <ul>
-                            <li>
-                                <a href="/features/sql.html">
-                                    Distributed SQL <i class="fas fa-angle-double-right"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/features/collocated-processing.html">
-                                    Co-located Processing <i class="fas fa-angle-double-right"></i>
-                                </a>
-                            </li>
-                            <li><a href="/features/acid-transactions.html">
-                                ACID Transactions <i class="fas fa-angle-double-right"></i>
-                            </a></li>
-                            <li><a href="/features/machinelearning.html">
-                                Machine and Deep Learning <i class="fas fa-angle-double-right"></i>
-                            </a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6">
-                        <ul>
-                            <li>
-                                <a href="/arch/native-persistence.html">
-                                    Native Persistence <i class="fas fa-angle-double-right"></i>
-                                </a>
-                            </li>
-                            <li><a href="/use-cases/in-memory-database.html">
-                                Ignite as an In-Memory Database <i class="fas fa-angle-double-right"></i>
-                            </a></li>
-                            <li><a href="/use-cases/digital-integration-hub.html">
-                                Ignite as a Digital Integration Hub <i class="fas fa-angle-double-right"></i>
-                            </a></li>
-                        </ul>
-                    </div>
-                </div>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/use-cases/provenusecases.html">Powered by</a>
+                </li>
+                <li>
+                  <a href="/docs/latest/">Docs</a>
+                </li>
+              </ul>
+              <a href="/download.cgi" class="button mobmenu__button">Download Ignite 2.11</a>
             </div>
+            <!-- //mobmenu__menu -->
+          </div>
+          <!-- //mobmenu__wrap -->
         </div>
-
-
+        <!-- //mobmenu -->
+      </div>
     </div>
-</article>
-<!--#include virtual="/includes/footer.html" -->
-<!--#include virtual="/includes/scripts.html" -->
-</body>
+    <!-- MOBILE MENU END -->
+    <header class="hdr hdr__blue jsHdrBase">
+      <div class="hdr__wrap flexi jsHdrLine">
+        <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+        ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+        ><a class="button hdr__button" href="/download.cgi">Download Ignite 2.11 </a>
+        <nav class="hdrmenu">
+          <ul class="flexi">
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+            <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+            <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+          </ul>
+        </nav>
+        <div class="dropmenu">
+          <div class="dropmenu__panel" data-menupanel="getStarted">
+            <div class="container dropmenu1__grid">
+              <div class="dropmenu1__buttonwrap">&nbsp;</div>
+              <div class="dropmenu__box dropmenu__box--buttonin">
+                <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/resources.html"><img src="/img/menu/icon-resources.svg" alt="" /><span>Resources</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/faq.html"><img src="/img/menu/icon-question.svg" alt="" /><span>FAQ</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu1__grid-->
+            <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-->
+          <div class="dropmenu__panel" data-menupanel="features">
+            <div class="container dropmenu2__grid">
+              <div class="dropmenu__box">
+                <div class="capstext">MULTI-TIER STORAGE</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">ESSENTIAL Developer APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">High-Performance <br />Computing APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">Real-Streaming APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu2__grid-->
+            <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-2-->
+          <div class="dropmenu__panel" data-menupanel="community">
+            <div class="container dropmenu3__grid">
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu3__grid-->
+          </div>
+          <!-- /.dropmenu__panel-->
+        </div>
+        <!-- /.dropmeu-->
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <section class="innerhero">
+      <div class="container innerhero__cont">
+        <div class="innerhero__main">
+          <h1 class="h1 innerhero__h1">
+            In-Memory Data Grid<br />
+            <span class="with-apache"> With Apache Ignite</span>
+          </h1>
+          <div class="innerhero__descr pt-2 h5">
+            Use an advanced read-through / write-through cache<br />
+            that is deployed on top of one or several databases
+          </div>
+          <div class="innerhero__action"><a class="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">Start Coding</a></div>
+        </div>
+        <img class="innerhero__pic innerhero__pic--datagrid" src="/img/usecases/datagrid/hero-image.svg" alt="hero-image" />
+      </div>
+    </section>
+    <!-- /.innerhero-->
+    <section class="grid1">
+      <div class="container">
+        <h2 class="grid1__h2 h4">In-memory data grid with Apache Ignite <strong>accelerates and scales</strong> your existing databases and data stores.</h2>
+      </div>
+    </section>
+    <!-- /.grid1-->
+    <section class="hub1 grid2">
+      <div class="container">
+        <h2 class="compute2__h2">In-Memory Data Grid Overview</h2>
+        <div class="hub1__block flexi">
+          <div class="hub1__info">
+            <h3 class="h5 hub1__title">What is an in-memory data grid?</h3>
+            <p class="hub1__text">An in-memory data grid (IMDG) is an advanced read-through/write-through cache that is deployed on top of multiple databases.</p>
+            <p class="hub1__text">Applications write to and read from the grid, and the grid propagates changes to the underlying data stores in a consistent way.</p>
+            <h3 class="h5 hub1__title hub1__titleend">How does an in-memory data grid work?</h3>
+            <p class="hub1__text">Co-location is the main IMDG feature. It organizes related data for storage in the same node and enables low latency with high throughput computing.</p>
+            <p class="hub1__text">Co-located applications can access in-memory data without network movement.</p>
+            <p class="hub1__text">In an in-memory data grid queries are processed at high speeds and scaled to multiple nodes, because there's no distance between data and applications.</p>
+          </div>
+          <img class="hub1__image" src="/img/usecases/datagrid/image.svg" alt="image" />
+        </div>
+      </div>
+    </section>
+    <!-- /.hub1 -->
+    <section class="base3">
+      <div class="container">
+        <h2 class="base3__h2 h4">Apache Ignite as a data grid supports a variety of developer APIs</h2>
+        <div class="base3__blocks flexi">
+          <div class="base3__block">
+            <h3 class="base3__h3">Essential Developer APIs</h3>
+            <div class="base3__images flexi">
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/03-distributed-SQL.svg" alt="sql" />
+                <div class="base3__subtext">SQL</div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/05-key-value-APIs.svg" alt="apis" />
+                <div class="base3__subtext">Key-value</div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/04-ACID-transactions.svg" alt="acid" />
+                <div class="base3__subtext">
+                  ACID<br />
+                  transactions
+                </div>
+              </div>
+            </div>
+            <p class="base3__text">Enable you to request, join, and group distributed datasets.</p>
+          </div>
+          <div class="base3__block">
+            <h3 class="base3__h3">High-Performance Computing APIs</h3>
+            <div class="base3__images flexi">
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/06-compute-APIs.svg" alt="sql" />
+                <div class="base3__subtext">Compute</div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/07-machine-learning.svg" alt="apis" />
+                <div class="base3__subtext">
+                  Machine<br />
+                  learning
+                </div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/08-services.svg" alt="acid" />
+                <div class="base3__subtext">Services</div>
+              </div>
+            </div>
+            <p class="base3__text">Execute logic close to the data, thus eliminating expensive data shuffling over the network.</p>
+          </div>
+          <div class="base3__block">
+            <h3 class="base3__h3">Real-Time Streaming APIs</h3>
+            <div class="base3__images flexi">
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/09-streaming.svg" alt="sql" />
+                <div class="base3__subtext">Streaming</div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/10-continuous-queries.svg" alt="apis" />
+                <div class="base3__subtext">
+                  Continuous<br />
+                  Queries
+                </div>
+              </div>
+              <div class="base3__item flexi">
+                <img class="base3__image" src="/img/features/11-messaging.svg" alt="acid" />
+                <div class="base3__subtext">Messaging</div>
+              </div>
+            </div>
+            <p class="base3__text base3__textend">Allow the seamless implementation of event-driven architectures.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.base3 -->
+    <section class="grid4">
+      <div class="container">
+        <div class="grid4__blocks flexi">
+          <h2 class="grid4__h2 h5">Native Persistence And In-Memory Data</h2>
+          <div class="grid4__block">
+            <p class="grid4__text">
+              When <a href="/arch/native-persistence.html">native persistence</a> is enabled, Ignite stores both data and indexes<br />
+              on disk, thus eliminating the time-consuming cache warm-up step.
+            </p>
+            <p class="grid4__text pt-1">
+              Native persistence keeps a full copy of data on disk, so you are free<br />
+              to cache a subset of records in memory.
+            </p>
+            <p class="grid4__text pt-1">If a required data record is missing from memory, Ignite reads the record from the disk automatically.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.grid4-->
+    <section class="grid5">
+      <div class="container">
+        <h2 class="grid5__h2 h4">An in-memory data grid is frequently used when a business works with large datasets at low latency and high throughput.</h2>
+        <div class="grid5__blocks flexi">
+          <article class="native2item grid5__item"><p class="grid5__text">Increase the performance and scalability of real-time applications and external databases.</p></article>
+          <article class="native2item grid5__item">
+            <p class="grid5__text">Support <a href="/use-cases/high-performance-computing.html"> high-performance computing.</a></p>
+          </article>
+          <article class="native2item grid5__item"><p class="grid5__text">Cache data that is scattered across databases.</p></article>
+        </div>
+      </div>
+    </section>
+    <!-- /.grid5                -->
+    <section class="hub5">
+      <div class="container">
+        <h2 class="compute2__h2">In-Memory Data Grid Ignite User Stories</h2>
+        <div class="highcases__two">
+          <div class="hub5__twowrap flexi pt-5">
+            <div class="hub5__item">
+              <article class="comvideo">
+                <div class="comvideo__box">
+                  <a class="comvideo__screen" href="https://www.youtube.com/watch?v=78UE11GrWzk&amp;t=2586s " data-youtube="data-youtube"
+                    ><span class="comvideo__txt comvideo__txt--white hub5__video">Leveraging In Memory Data Grid For Faster Time To Market </span><img src="/img/usecases/database/one-video.png" alt=""
+                  /></a>
+                </div>
+                <div class="comvideo__descr pt-1"></div>
+              </article>
+              <div class="h4 hub5__title">Agilent Technologies Inc.</div>
+              <p class="hub5__text base5__text">improved its online channel by implementing in-memory solutions. They leveraged an in-memory data grid to achieve faster time-to-market, and data flexibility across digital channels.</p>
+            </div>
+            <div class="hub5__item">
+              <article class="comvideo">
+                <div class="comvideo__box">
+                  <a class="comvideo__screen" href="https://www.youtube.com/watch?v=CPmwnjDJ1Sk&amp;feature=emb_imp_woyt" data-youtube="data-youtube"
+                    ><span class="comvideo__txt comvideo__txt--white comvideo__txthub hub5__video">Embracing The Service Consumption Shift In Banking</span><img src="/img/usecases/database/two-video.png" alt=""
+                  /></a>
+                </div>
+                <div class="comvideo__descr pt-1"></div>
+              </article>
+              <div class="h4 hub5__title">ING Bank</div>
+              <p class="hub5__text base5__text base5__textend">used in-memory computing platforms to meet increasing demand for performance and scalability.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="native-bottom container">
+      <div class="native-bottom__grid">
+        <article class="nativebotblock">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-rocket.svg" alt="" /><span>Ready to Start?</span></div>
+          <p class="nativebotblock__text">
+            Discover our quick start guide and build your first<br />
+            application in 5-10 minutes
+          </p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/" target="_blank">Quick Start Guide</a>
+        </article>
+        <article class="nativebotblock nativebotblock--learn">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-docs.svg" alt="" /><span>Want to View More Use-Cases?</span></div>
+          <p class="nativebotblock__text">Read the In-Memory Database article</p>
+          <a class="nativebotblock__link arrowlink" href="/use-cases/in-memory-database.html">In-Memory Database</a>
+        </article>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use-Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2021 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
 </html>
