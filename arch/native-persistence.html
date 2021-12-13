@@ -1,166 +1,598 @@
-<!--
-▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
-▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
-▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
-░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
-▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
-▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
- ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
- ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
-     ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
--->
-
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Native Persistence - Apache Ignite</title>
+    <meta name="description" content="Apache Ignite native persistence is a distributed, ACID, and SQL-compliant disk-based store. It let Ignite store more data on disk than it can cache in memory and to enable fast cluster restarts." />
+    <link rel="canonical" href="https://ignite.apache.org/arch/native-persistence.html" />
+    <meta property="og:title" content="Native Persistence - Apache Ignite" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ignite.apache.org/arch/native-persistence.html" />
+    <meta property="og:image" content="/img/og-pic.png" />
+    <meta
+      property="og:description"
+      content="Apache Ignite native persistence is a distributed, ACID, and SQL-compliant disk-based store. It let Ignite store more data on disk than it can cache in memory and to enable fast cluster restarts."
+    />
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/native-persistence.css?ver=0.9" />
+    <link rel="stylesheet" href="../js/vendor/highlight/default.min.css?ver=0.9" />
+    <link rel="stylesheet" href="../js/vendor/highlight/night-owl.css?ver=0.9" />
+    <script src="../js/vendor/highlight/highlight.min.js"></script>
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+  </head>
+  <body>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        (k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-    <link rel="canonical" href="https://ignite.apache.org/arch/native-persistence.html"/>
-    <!--#include virtual="/includes/scriptshead.html" -->
+      ym(72949126, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      });
+    </script>
+    <noscript
+      ><div><img src="https://mc.yandex.ru/watch/72949126" style="position: absolute; left: -9999px" alt="" /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
-    <meta http-equiv="Pragma" content="no-cache"/>
-    <meta http-equiv="Expires" content="0"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-61232409-1');
+    </script>
+    <!-- MOBILE MENU START -->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button data-hystclose class="hystmodal__close">Close</button>
+          <div class="mobmenu__wrap">
+            <a href="/" class="mobmenu__logo"><img src="/img/logo.svg" alt="Логотип" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li>
+                  <a href="/docs/latest/">Quick Start</a>
+                </li>
+                <li>
+                  <a href="/resources.html">Resources</a>
+                </li>
+                <li>
+                  <a href="/faq.html">FAQ</a>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/use-cases/in-memory-cache.html">In-Memory Cache</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-database.html">In-Memory Database</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/key-value-store.html">Key-Value Store</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/high-performance-computing.html">High Performance Computing</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/spark-acceleration.html">Spark Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <title>Distributed Persistence - Apache Ignite</title>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/features/">Features</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a>
+                    </li>
+                    <li>
+                      <a href="/arch/native-persistence.html">Native Persistence</a>
+                    </li>
+                    <li>
+                      <a href="/features/sql.html">Distributed SQL</a>
+                    </li>
+                    <li>
+                      <a href="/features/key-value-apis.html">Key-Value APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/acid-transactions.html">ACID Transactions</a>
+                    </li>
+                    <li>
+                      <a href="/features/compute-apis.html">Compute APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/service-apis.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="/features/machinelearning.html">Machine Learning</a>
+                    </li>
+                    <li>
+                      <a href="/features/streaming.html">Real-Time Streaming APIs</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/messaging">Messaging</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a>
+                    </li>
+                    <li>
+                      <a href="/features/index.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <meta name="description"
-          content="The native persistence integrates into the Ignite multi-tier storage as a disk tier that can
-     be turned on to let Ignite store more data on disk than it can cache in memory and to enable fast cluster restarts."/>
-
-    <!--#include virtual="/includes/styles.html" -->
-
-    
-</head>
-<body>
-    <!--#include virtual="/includes/header.html" -->
-    <article>
-      <header>
-        <div class="container">
-          <h1><strong>Native Persistence</strong> in Apache Ignite</h1>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/use-cases/provenusecases.html">Powered by</a>
+                </li>
+                <li>
+                  <a href="/docs/latest/">Docs</a>
+                </li>
+              </ul>
+              <a href="/download.cgi" class="button mobmenu__button">Download Ignite 2.11</a>
+            </div>
+            <!-- //mobmenu__menu -->
+          </div>
+          <!-- //mobmenu__wrap -->
         </div>
-      </header>
-      <div class="container">
-        
-          <p>
-            Even though Apache Ignite® is broadly used as a caching layer on top of external databases, it
-            comes with its native persistence - a distributed, ACID, and SQL-compliant disk-based
-            store. The native persistence integrates into the Ignite multi-tier storage as a disk tier that
-            can be turned on to let Ignite store more data on disk than it can cache in memory and to enable
-            fast cluster restarts.
-        </p>
-        <img class="img-responsive diagram-right" src="/images/svg-diagrams/native_persistence.svg" alt="Apache Ignite Native Persistence"/></a>
-        <p>
-            When the native persistence enabled, Ignite stores a superset of data on disk and caches as
-            much as it can in memory. For example, if your application needs to store 200 records in an
-            Ignite cluster and the memory capacity allows caching only 150 records, then all 200 will be
-            stored on disk, out of which 150 will be served from memory while the rest 50 from disk whenever
-            the application requests them.
-        </p>
-    
-          <h2>Ignite Persistence vs. External Databases</h2>
-          <p>
-            The native persistence has the following advantages over external databases:
-          </p>
-          <ul>
-            <li>
-                The ability to cache a subset of the data - Ignite stores 100% of data on disk and lets you cache as
-                much as required in memory.
-            </li>
-            <li>
-                The ability to query data from disk - if any record is missing in memory, then Ignite reads it from
-                disk. This is supported for all the APIs including SQL.
-            </li>
-            <li>
-                Instantaneous cluster restarts - Ignite becomes fully operational from disk upon a cluster
-                startup or restarts without requiring to preload or warm up the memory tier.
-            </li>
+        <!-- //mobmenu -->
+      </div>
+    </div>
+    <!-- MOBILE MENU END -->
+    <header class="hdr hdr__blue jsHdrBase">
+      <div class="hdr__wrap flexi jsHdrLine">
+        <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+        ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+        ><a class="button hdr__button" href="/download.cgi">Download Ignite 2.11 </a>
+        <nav class="hdrmenu">
+          <ul class="flexi">
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu__current hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+            <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+            <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
           </ul>
-
-          <h2>Write-Ahead Logging and Checkpointing</h2>
-          <p>
-            If Ignite native persistence is selected as a disk tier, then every time a record is updated in memory,
-            the change is added to the write-ahead log (WAL). The purpose of the WAL is to propagate updates to disk
-            in the fastest way possible and provide a consistent recovery mechanism that supports full cluster
-            failures.
-
-            As the WAL grows, it periodically gets checkpointed to the main storage. Checkpointing is the process of
-            copying dirty pages from the memory tier to the partition files on disk. A dirty page is a page that was
-            updated in memory, was appended to the WAL, but was not written to the respective partition file on disk yet.
-          </p>
-
-          <h2>Durability</h2>
-          <p>
-            Ignite native persistence provides the following ACID guarantees across the cluster:
-          </p>
-
-          <ul>
-            <li>
-                Committed transactions always survive failures.
-            </li>
-            <li>
-                The cluster can always be recovered to the latest successfully committed transaction.
-            </li>
-          </ul>
-				
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <div class="display-6 title">Learn More</div>
-          <hr class="my-4">
-          <div class="row">
-            <div class="col-sm-6">
-              <ul>
-                <li>
-                  <p><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fas fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="/docs/latest/persistence/native-persistence">Native Persistence Usage and Configuration <i class="fas fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="https://cwiki.apache.org/confluence/display/IGNITE/Ignite+Persistent+Store+-+under+the+hood" target="docs">Native Persistence Implementation Details <i class="fas fa-angle-double-right"></i></a></p>
-                </li>
-              </ul>
+        </nav>
+        <div class="dropmenu">
+          <div class="dropmenu__panel" data-menupanel="getStarted">
+            <div class="container dropmenu1__grid">
+              <div class="dropmenu1__buttonwrap">&nbsp;</div>
+              <div class="dropmenu__box dropmenu__box--buttonin">
+                <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/resources.html"><img src="/img/menu/icon-resources.svg" alt="" /><span>Resources</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/faq.html"><img src="/img/menu/icon-question.svg" alt="" /><span>FAQ</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="col-sm-6">
-              <ul>
-                <li>
-                  <p><a href="/features/sql.html">Distributed SQL <i class="fas fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                  <p><a href="/features/collocated-processing.html">Co-located Processing <i class="fas fa-angle-double-right"></i></a></p>
-                </li>
-                <li>
-                <p><a href="/features/acid-transactions.html">ACID Transactions <i class="fas fa-angle-double-right"></i></a></p> 
-                </li>
-              </ul>
+            <!-- /.dropmenu1__grid-->
+            <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-->
+          <div class="dropmenu__panel" data-menupanel="features">
+            <div class="container dropmenu2__grid">
+              <div class="dropmenu__box">
+                <div class="capstext">MULTI-TIER STORAGE</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">ESSENTIAL Developer APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">High-Performance <br />Computing APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">Real-Streaming APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                  </li>
+                </ul>
+              </div>
             </div>
+            <!-- /.dropmenu2__grid-->
+            <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-2-->
+          <div class="dropmenu__panel" data-menupanel="community">
+            <div class="container dropmenu3__grid">
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu3__grid-->
+          </div>
+          <!-- /.dropmenu__panel-->
+        </div>
+        <!-- /.dropmeu-->
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <section class="innerhero">
+      <div class="container innerhero__cont">
+        <div class="innerhero__main">
+          <div class="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 class="h1 innerhero__h1">Native Persistence</h1>
+          <div class="innerhero__descr pt-2 h5">
+            Scale beyond available memory capacity <br />
+            and skip memory warm-ups on restarts
+          </div>
+          <div class="innerhero__action"><a class="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">Start Coding</a></div>
+        </div>
+        <img class="innerhero__pic innerhero__pic--native" src="/img/features/native-header.svg" alt="Native Persistence" />
+      </div>
+    </section>
+    <!-- /.innerhero-->
+    <section class="native1 container flexi">
+      <div class="native1__block native1__block--bad">
+        <img class="native1__icon" src="/img/features/smile-doesnt-have.svg" alt="" />
+        <div class="native1__title fz20 pt-1x">Usually, in-memory caches and databases provide limited persistence capabilities.</div>
+        <p class="pt-2">For instance, some solutions create a backup copy of <br />the in-memory data purely for restart purposes.</p>
+      </div>
+      <div class="native1__block">
+        <img class="native1__icon" src="/img/features/smile-done.svg" alt="" />
+        <div class="native1__title fz20 pt-1x">
+          Ignite persistence doesn’t have any limitations. <br />
+          Our native persistence behaves like a classic <br />disk-based database.
+        </div>
+      </div>
+    </section>
+    <section class="native2 container">
+      <div class="native2__grid">
+        <article class="native2item">
+          <h3 class="fz20 native2item__title">Scale beyond memory <br />capacity</h3>
+          <p class="pt-1x">100% of&nbsp;data is&nbsp;always stored on&nbsp;disk. You decide how much memory to allocate to&nbsp;your data.</p>
+        </article>
+        <article class="native2item">
+          <h3 class="fz20 native2item__title">Just seconds needed <br />for recovery</h3>
+          <p class="pt-1x">Ignite becomes operational from disk instantaneously. There is&nbsp;no&nbsp;need to&nbsp;wait for the data to&nbsp;get preloaded on&nbsp;restarts.</p>
+        </article>
+        <article class="native2item">
+          <h3 class="fz20 native2item__title">Query in-memory <br />and on-disk data</h3>
+          <p class="pt-1x">If&nbsp;any record is&nbsp;missing in&nbsp;memory, then Ignite reads it&nbsp;from disk. This is&nbsp;supported for all the APIs including SQL.</p>
+        </article>
+      </div>
+    </section>
+    <section class="native-howwork container">
+      <div class="native-howwork__wrap flexi">
+        <div class="native-howwork__left">
+          <h3 class="h5">How it works</h3>
+          <div class="native-howwork__text pt-1">
+            <p>
+              The native persistence functions as&nbsp;a&nbsp;distributed, ACID, and SQL-compliant disk-based store. It&nbsp;integrates into the Ignite <a href="/features/multi-tier-storage.html">multi-tier storage</a> as&nbsp;a&nbsp;disk
+              tier.
+            </p>
+            <p class="pt-1">When the native persistence is enabled, Ignite stores a&nbsp;superset of&nbsp;data on&nbsp;disk and caches as&nbsp;much as&nbsp;it&nbsp;can in&nbsp;memory.</p>
           </div>
         </div>
-      </div>      
-  </div><!-- end .container -->
-</article>
-<!--#include virtual="/includes/footer.html" -->
-<!--#include virtual="/includes/scripts.html" -->
-</body>
+        <div class="native-howwork__right">
+          <p>For example</p>
+          <p class="pt-1x">
+            If&nbsp;your application needs to&nbsp;store 200 records in&nbsp;an&nbsp;Ignite cluster and the memory capacity allows caching only 150&nbsp;records, then all 200 will be&nbsp;stored on&nbsp;disk, out of&nbsp;which 150 will
+            be&nbsp;served from memory while the rest 50&nbsp;records from disk whenever the application requests them.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="native-points container">
+      <h2 class="h4">Checkpointing And Write-Ahead Logging <br />Ensure Durability And Consistency Of&nbsp;Data</h2>
+      <div class="native-points__grid pt-5">
+        <div class="native-points__item fz20"><p>Committed transactions always survive failures</p></div>
+        <div class="native-points__item fz20"><p>The cluster can always be&nbsp;recovered to&nbsp;the latest successfully committed transaction</p></div>
+      </div>
+    </section>
+    <section class="native-steps">
+      <div class="container">
+        <h2 class="h4">Three-Step Process To&nbsp;Update Your Data <br />At&nbsp;In-Memory Speed But Not Losing A&nbsp;Bit</h2>
+        <img class="native-steps__pic" src="/img/features/native-stepspic.svg" alt="" />
+        <div class="native-steps__grid">
+          <article class="nativestepitem">
+            <i class="fz20 pb-1x">01</i>
+            <div class="nativestepitem__text">
+              <p>
+                As&nbsp;soon as&nbsp;the update comes from the application side, a&nbsp;record is&nbsp;updated in&nbsp;memory. Then, the change is&nbsp;added
+                <a href="https://ignite.apache.org/docs/latest/persistence/native-persistence.html#write-ahead-log">to&nbsp;the write-ahead log (WAL).</a>
+              </p>
+              <p>The purpose is&nbsp;to&nbsp;propagate updates to&nbsp;disk in&nbsp;the fastest way possible and provide a&nbsp;consistent recovery mechanism that remediates full cluster failures.</p>
+            </div>
+          </article>
+          <article class="nativestepitem">
+            <i class="fz20 pb-1x">02</i>
+            <div class="nativestepitem__text">
+              <p>As&nbsp;the WAL grows, it&nbsp;periodically gets checkpointed to&nbsp;the main storage.</p>
+              <p>
+                <a href="https://ignite.apache.org/docs/latest/persistence/native-persistence.html#checkpointing">Checkpointing</a> is&nbsp;the process of&nbsp;copying dirty pages from the memory tier to&nbsp;the partition files
+                on&nbsp;disk.
+              </p>
+              <p class="nativestepitem__small">A dirty page is a page that has been updated in&nbsp;memory and appended to the WAL, but has not yet been written to&nbsp;the respective partition file on disk.</p>
+            </div>
+          </article>
+          <article class="nativestepitem">
+            <i class="fz20 pb-1x">03</i>
+            <div class="nativestepitem__text">
+              <p>After a&nbsp;while, the information about updates in&nbsp;WAL can be&nbsp;removed, compressed or&nbsp;moved to&nbsp;archive.</p>
+              <p>So&nbsp;you can reuse your disk space.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="nativecode container jsTabWrap">
+      <header class="blockheader blockheader--spl flexi">
+        <h2 class="h4 blockheader__left">You Decide Which Data To Persist</h2>
+        <div class="blockheader__right fz20">
+          <p>Toggle a&nbsp;single configuration setting to&nbsp;turn a&nbsp;cluster into a&nbsp;database <br />that scales across memory and disk</p>
+        </div>
+      </header>
+      <div class="nativecode__tabctrls flexi">
+        <a class="nativecode__link active" href="#" data-tablink="nativeTabXML">XML</a><a class="nativecode__link" href="#" data-tablink="nativeTabJava">Java</a><a class="nativecode__link" href="#" data-tablink="nativeTabNET">C#/.NET</a>
+      </div>
+      <div class="nativecode__tabs">
+        <div class="nativecode__tab active" data-tab="nativeTabXML">
+          <pre class="nativecode__codebox"> <code class="xml">&lt;bean class="org.apache.ignite.configuration.IgniteConfiguration"&gt;
+    &lt;property name="dataStorageConfiguration"&gt;
+        &lt;bean class="org.apache.ignite.configuration.DataStorageConfiguration"&gt;
+            &lt;property name="defaultDataRegionConfiguration"&gt;
+                &lt;bean class="org.apache.ignite.configuration.DataRegionConfiguration"&gt;
+                    &lt;property name="persistenceEnabled" value="true"/&gt;
+                &lt;/bean&gt;
+            &lt;/property&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+        </div>
+        <div class="nativecode__tab" data-tab="nativeTabJava">
+          <pre class="nativecode__codebox"> <code class="java">IgniteConfiguration cfg = new IgniteConfiguration();
+
+DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+
+// Enable Ignite Persistence
+storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+
+// Using the new storage configuration
+cfg.setDataStorageConfiguration(storageCfg);</code></pre>
+        </div>
+        <div class="nativecode__tab" data-tab="nativeTabNET">
+          <pre class="nativecode__codebox"> <code class="csharp">var cfg = new IgniteConfiguration
+{
+    DataStorageConfiguration = new DataStorageConfiguration
+    {
+        DefaultDataRegionConfiguration = new DataRegionConfiguration
+        {
+            Name = "Default_Region",
+            PersistenceEnabled = true
+        }
+    }
+};</code></pre>
+        </div>
+      </div>
+    </section>
+    <!-- /.nativecode-->
+    <section class="native-bottom container">
+      <div class="native-bottom__grid">
+        <article class="nativebotblock">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-rocket.svg" alt="" /><span>Ready to Start?</span></div>
+          <p class="nativebotblock__text">Discover more details about native persistence <br />and configure it&nbsp;for your use-case</p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/persistence/native-persistence" target="_blank">Native Persistence Usage and Configuration</a>
+        </article>
+        <article class="nativebotblock nativebotblock--learn">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-docs.svg" alt="" /><span>Want to&nbsp;Learn More?</span></div>
+          <p class="nativebotblock__text">
+            Check out the details of&nbsp;native persistence <br />implementation, <a href="https://www.youtube.com/watch?v=6Yg5QW-XFVc&list=PLMc7NR20hA-I2EfyXeaSRHY5dRFtK_NF0&index=6" target="_blank">or&nbsp;watch a&nbsp;video</a>
+          </p>
+          <a class="nativebotblock__link arrowlink" href="https://cwiki.apache.org/confluence/display/IGNITE/Ignite+Persistent+Store+-+under+the+hood" target="_blank">Native Persistence Implementation Details</a>
+        </article>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use-Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2021 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
 </html>

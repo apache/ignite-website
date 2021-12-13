@@ -1,157 +1,523 @@
-<!--
- ▄▄▄       ██▓███   ▄▄▄       ▄████▄   ██░ ██ ▓█████     ██▓  ▄████  ███▄    █  ██▓▄▄▄█████▓▓█████
-▒████▄    ▓██░  ██▒▒████▄    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀    ▓██▒ ██▒ ▀█▒ ██ ▀█   █ ▓██▒▓  ██▒ ▓▒▓█   ▀
-▒██  ▀█▄  ▓██░ ██▓▒▒██  ▀█▄  ▒▓█    ▄ ▒██▀▀██░▒███      ▒██▒▒██░▄▄▄░▓██  ▀█ ██▒▒██▒▒ ▓██░ ▒░▒███
-░██▄▄▄▄██ ▒██▄█▓▒ ▒░██▄▄▄▄██ ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄    ░██░░▓█  ██▓▓██▒  ▐▌██▒░██░░ ▓██▓ ░ ▒▓█  ▄
- ▓█   ▓██▒▒██▒ ░  ░ ▓█   ▓██▒▒ ▓███▀ ░░▓█▒░██▓░▒████▒   ░██░░▒▓███▀▒▒██░   ▓██░░██░  ▒██▒ ░ ░▒████▒
- ▒▒   ▓▒█░▒▓▒░ ░  ░ ▒▒   ▓▒█░░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░   ░▓   ░▒   ▒ ░ ▒░   ▒ ▒ ░▓    ▒ ░░   ░░ ▒░ ░
-  ▒   ▒▒ ░░▒ ░       ▒   ▒▒ ░  ░  ▒    ▒ ░▒░ ░ ░ ░  ░    ▒ ░  ░   ░ ░ ░░   ░ ▒░ ▒ ░    ░     ░ ░  ░
-  ░   ▒   ░░         ░   ▒   ░         ░  ░░ ░   ░       ▒ ░░ ░   ░    ░   ░ ░  ▒ ░  ░         ░
-      ░  ░               ░  ░░ ░       ░  ░  ░   ░  ░    ░        ░          ░  ░              ░  ░
--->
-
-<!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
--->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Key-Value Store / Database - Apache Ignite</title>
+    <meta name="description" content="Apache Ignite is the best and fastest key-value database that stores data both in memory and on disk with support for key-value, SQL, ACID transactions, compute, and machine learning APIs." />
+    <link rel="canonical" href="https://ignite.apache.org/use-cases/key-value-store.html" />
+    <meta property="og:title" content="Key-Value Store / Database - Apache Ignite" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ignite.apache.org/use-cases/key-value-store.html" />
+    <meta property="og:image" content="/img/og-pic.png" />
+    <meta property="og:description" content="Apache Ignite is the best and fastest key-value database that stores data both in memory and on disk with support for key-value, SQL, ACID transactions, compute, and machine learning APIs." />
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/native-persistence.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/compute-apis.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/digital-hub.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/datagrid.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/hadoop.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/key-value-store.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+  </head>
+  <body>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        (k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-    <link rel="canonical" href="https://ignite.apache.org/use-cases/database/key-value-store.html"/>
-    <!--#include virtual="/includes/scriptshead.html" -->
+      ym(72949126, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+      });
+    </script>
+    <noscript
+      ><div><img src="https://mc.yandex.ru/watch/72949126" style="position: absolute; left: -9999px" alt="" /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-61232409-1');
+    </script>
+    <!-- MOBILE MENU START -->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button data-hystclose class="hystmodal__close">Close</button>
+          <div class="mobmenu__wrap">
+            <a href="/" class="mobmenu__logo"><img src="/img/logo.svg" alt="Логотип" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li>
+                  <a href="/docs/latest/">Quick Start</a>
+                </li>
+                <li>
+                  <a href="/resources.html">Resources</a>
+                </li>
+                <li>
+                  <a href="/faq.html">FAQ</a>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/use-cases/in-memory-cache.html">In-Memory Cache</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/in-memory-database.html">In-Memory Database</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/key-value-store.html">Key-Value Store</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/high-performance-computing.html">High Performance Computing</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/spark-acceleration.html">Spark Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a>
+                    </li>
+                    <li>
+                      <a href="/use-cases.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <meta name="description"
-          content="Apache Ignite operates as a distributed key-value store that stores data both in memory and on disk
-          with support for key-value, SQL, ACID transactions, compute, and machine learning APIs."/>
+                <li>
+                  <span class="mobmenu__parent"> <a href="/features/">Features</a><button class="mobmenu__opener"></button> </span>
+                  <ul>
+                    <li>
+                      <a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a>
+                    </li>
+                    <li>
+                      <a href="/arch/native-persistence.html">Native Persistence</a>
+                    </li>
+                    <li>
+                      <a href="/features/sql.html">Distributed SQL</a>
+                    </li>
+                    <li>
+                      <a href="/features/key-value-apis.html">Key-Value APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/acid-transactions.html">ACID Transactions</a>
+                    </li>
+                    <li>
+                      <a href="/features/compute-apis.html">Compute APIs</a>
+                    </li>
+                    <li>
+                      <a href="/features/service-apis.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="/features/machinelearning.html">Machine Learning</a>
+                    </li>
+                    <li>
+                      <a href="/features/streaming.html">Real-Time Streaming APIs</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/messaging">Messaging</a>
+                    </li>
+                    <li>
+                      <a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a>
+                    </li>
+                    <li>
+                      <a href="/features/index.html">View All</a>
+                    </li>
+                  </ul>
+                </li>
 
-    <title>Distributed Key-Value Store - Apache Ignite</title>
-
-    <!--#include virtual="/includes/styles.html" -->
-
-    
-</head>
-<body>
-
-    <!--#include virtual="/includes/header.html" -->
-<article>
-    <header>
-        <div class="container">
-            <h1>Distributed <strong>Key-Value Store</strong></h1>
-        </div>
-    </header>
-    <div class="container">
-            <p>
-                Apache Ignite® is a distributed key-value store that stores data in memory and on disk. Ignite functions
-                as a distributed partitioned hash map with every cluster node owning a portion of the overall data set
-                in this deployment mode. You can access the cluster with key-value requests or take advantage of APIs
-                available exclusively in Ignite which include distributed ACID transactions, SQL,
-                co-located computations, and machine learning.
-            </p>
-            
-            <img class="img-responsive diagram-right" src="/images/svg-diagrams/key_value_store.svg" alt="Distributed Key-Value Store" width="555" height="600" />
-            
-            <h2>JCache and Extended Key-Value APIs</h2>
-            <p>
-                Ignite key-value APIs comply with the JCache (JSR 107) specification and support:
-            </p>
-
-            <ul class="page-list">
-                <li>Basic Cache Put/Get Operations</li>
-                <li>ConcurrentMap APIs</li>
-                <li>EntryProcessor and CacheInterceptor APIs</li>
-                <li>Events and Metrics</li>
-            </ul>
-
-            <p>
-                Ignite also extends the JCache specification and supports distributed key-value ACID transactions,
-                scan and continuous queries, co-located computations, and much more. For instance, continuous
-                queries are useful if you want an application to be notified whenever a record gets updated on
-                the server nodes. The ACID transactions support lets you update a set of records stored in different
-                caches/tables with data consistency.
-            </p>
-
-            <h2>Near Cache</h2>
-
-            <p>
-                A near cache is a local client-side cache that stores the most frequently used data on the application end.
-                This caching technique is supported for key-value APIs only and can be considered for applications that
-                require a consistent response time ranging in microseconds. Ignite automatically invalidates and
-                updates the near cache. Whenever the primary copy of a record gets updated on a server node, Ignite
-                propagates the change to all the nodes that store the record's backup copy as well as to your
-                applications that keep the record's copy in their near caches.
-            </p>
-
-            <h2>Read-through and Write-Through/Behind</h2>
-
-            <p>
-                If Ignite is deployed as a key-value store on top of an external database, then Ignite can automatically
-                write-through or write-behind all the changes to that external store for every key-value request
-                issued by your applications. It also includes key-value ACID transactions - Ignite coordinates and
-                commits a transaction across its in-memory cluster as well as a relational database.
-            </p>
-
-            <p>
-                The read-through capability means that Ignite can read data from an external database if a record is
-                missing in memory. This feature is fully supported for both JCache and extended key-value APIs.
-            </p>
-
-            <h2>Ignite Native Persistence</h2>
-
-            <p>
-                If you want Ignite to function as a key-value store that caches data in memory and persists it to
-                disk instead of an external database, then you can enable Ignite native persistence. The native
-                persistence feature lets you eliminate the time-consuming cache warm-up step as well as the data reloading phase
-                from external databases. Furthermore, since the native persistence always keeps a full copy of data on disk,
-                you are free to cache a subset of records in memory. If a required data record is missing in memory,
-                then Ignite reads it from disk automatically regardless of the API you use.
-            </p>
-
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                  <div class="title display-6">Learn More</div>
-                  <hr class="my-4">
-                  <div class="row">
-                    <div class="col-sm-6">
-                        <ul>
-                            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage <i class="fas fa-angle-double-right"></i></a></li>
-                            <li><a href="/arch/native-persistence.html">Native Persistence <i class="fas fa-angle-double-right"></i></a></li>
-                            <li><a href="/features/acid-transactions.html">ACID Transactions <i class="fas fa-angle-double-right"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6">
-                        <ul>
-                            <li><a href="/features/collocated-processing.html">Co-located Processing <i class="fas fa-angle-double-right"></i></a></li>
-                            <li><a href="/features/sql.html">Distributed SQL <i class="fas fa-angle-double-right"></i></a></li>
-                            <li><a href="/features/machinelearning.html">Machine and Deep Learning <i class="fas fa-angle-double-right"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/use-cases/provenusecases.html">Powered by</a>
+                </li>
+                <li>
+                  <a href="/docs/latest/">Docs</a>
+                </li>
+              </ul>
+              <a href="/download.cgi" class="button mobmenu__button">Download Ignite 2.11</a>
             </div>
+            <!-- //mobmenu__menu -->
+          </div>
+          <!-- //mobmenu__wrap -->
         </div>
+        <!-- //mobmenu -->
+      </div>
     </div>
-</article>         
-    <!--#include virtual="/includes/footer.html" -->
-
-<!--#include virtual="/includes/scripts.html" -->
-</body>
+    <!-- MOBILE MENU END -->
+    <header class="hdr hdr__blue jsHdrBase">
+      <div class="hdr__wrap flexi jsHdrLine">
+        <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+        ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+        ><a class="button hdr__button" href="/download.cgi">Download Ignite 2.11 </a>
+        <nav class="hdrmenu">
+          <ul class="flexi">
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+            <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+            <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+            <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+          </ul>
+        </nav>
+        <div class="dropmenu">
+          <div class="dropmenu__panel" data-menupanel="getStarted">
+            <div class="container dropmenu1__grid">
+              <div class="dropmenu1__buttonwrap">&nbsp;</div>
+              <div class="dropmenu__box dropmenu__box--buttonin">
+                <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/resources.html"><img src="/img/menu/icon-resources.svg" alt="" /><span>Resources</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/faq.html"><img src="/img/menu/icon-question.svg" alt="" /><span>FAQ</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu1__grid-->
+            <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-->
+          <div class="dropmenu__panel" data-menupanel="features">
+            <div class="container dropmenu2__grid">
+              <div class="dropmenu__box">
+                <div class="capstext">MULTI-TIER STORAGE</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">ESSENTIAL Developer APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">High-Performance <br />Computing APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext">Real-Streaming APIs</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu2__grid-->
+            <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+          </div>
+          <!-- /.dropmenu__panel-2-->
+          <div class="dropmenu__panel" data-menupanel="community">
+            <div class="container dropmenu3__grid">
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box">
+                <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="dropmenu__box no-border">
+                <div class="capstext">&nbsp;</div>
+                <ul class="dropmenu__menu">
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                  </li>
+                  <li>
+                    <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.dropmenu3__grid-->
+          </div>
+          <!-- /.dropmenu__panel-->
+        </div>
+        <!-- /.dropmeu-->
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <section class="innerhero">
+      <div class="container innerhero__cont">
+        <div class="innerhero__main">
+          <h1 class="h1 innerhero__h1">
+            Key-Value Store<br />
+            <span class="with-apache"> With Apache Ignite</span>
+          </h1>
+          <div class="innerhero__descr pt-2 h5">Distributed store for high-performance data access</div>
+          <div class="innerhero__action"><a class="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">Start Coding</a></div>
+        </div>
+        <img class="innerhero__pic innerhero__pic--key" src="/img/usecases/key-value/hero-image.svg" alt="hero-image" />
+      </div>
+    </section>
+    <!-- /.innerhero-->
+    <section class="key1">
+      <div class="container">
+        <div class="hub1__block key1__block flexi">
+          <div class="hub1__info">
+            <h2 class="h5 hub1__title">What is a key-value store?</h2>
+            <p class="hub1__text">A key-value store is a data storage software. It stores, retrieves, and manages data as a set of unique keys. Each one is associated with one and only one value.</p>
+            <h2 class="h5 hub1__title hub1__titleend">How a key-value store works</h2>
+            <p class="hub1__text">A key-value store, or a key-value database, holds a collection of data records in various fields. The data records have unique keys to retrieve and modify records quickly.</p>
+          </div>
+          <img class="hub1__image" src="/img/usecases/key-value/image.svg" alt="image" />
+        </div>
+      </div>
+    </section>
+    <!-- /.hub1 -->
+    <section class="compute2">
+      <div class="container">
+        <div class="doop2__block">
+          <h2 class="compute2__h2">Benefits Of Key-Value Store</h2>
+          <div class="compute2__grid flexi hub2__grid doop2__grid">
+            <div class="compute2item hub2item doop2__item">
+              <div class="compute2-points__item fz20"></div>
+              <div class="compute2item__block">
+                <h3 class="fz20 compute2item__title">Low-latency access and high-performance</h3>
+                <p class="compute2__text base2__text">Thanks to their design, key-value stores can perform many more operations in a given amount of time than other database models</p>
+              </div>
+            </div>
+            <div class="compute2item hub2item doop2__item">
+              <div class="compute2-points__item fz20"></div>
+              <div class="compute2item__block">
+                <h3 class="fz20 compute2item__title">Horizontal scalability</h3>
+                <p class="compute2__text base2__text">Key-value stores can keep and process large volumes of data by&nbsp;scaling horizontally</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.compute2-->
+    <section class="key4">
+      <div class="container">
+        <div class="grid4__blocks flexi">
+          <h2 class="grid4__h2 h5 key4__h2">With Apache Ignite, a key-value store can cache data in memory and persist it on disk</h2>
+          <div class="grid4__block">
+            <p class="grid4__text">The <a href="/arch/native-persistence.html">native persistence</a> feature eliminates the time-consuming cache warm-up step as well as the data reloading phase from external databases.</p>
+            <p class="grid4__text pt-1">Since native persistence always keeps a full copy of data on disk, you are free to cache a subset of records in memory.</p>
+            <p class="grid4__text pt-1">If a required data record is missing in memory, then Ignite reads it from disk automatically, regardless of the API you use.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.grid4-->
+    <section class="key5">
+      <div class="container">
+        <h2 class="grid5__h2 key5__h2 h4">Key-value store is used when <strong>speed and scale are top priorities</strong></h2>
+        <div class="grid5__blocks flexi">
+          <article class="native2item grid5__item">
+            <h3 class="key5__h3">User sessions caching</h3>
+            <p class="grid5__text key5__text">Key-value stores are used to accumulate user session details in web applications to personalize content.</p>
+          </article>
+          <article class="native2item grid5__item">
+            <h3 class="key5__h3">360 Customer View</h3>
+            <p class="grid5__text key5__text">Applications can collect user preferences and behavioral patterns to offer better services. The records can be stored in a key-value database to enable fast customer data lookups.</p>
+          </article>
+          <article class="native2item grid5__item">
+            <h3 class="key5__h3">Back-end systems acceleration</h3>
+            <p class="grid5__text key5__text">Developers use key-value stores to cache specific records that don’t require a&nbsp;regular update. This reduces the load on core back-end systems and databases.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- /.key5  -->
+    <section class="native-bottom container">
+      <div class="native-bottom__grid">
+        <article class="nativebotblock">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-rocket.svg" alt="" /><span>Ready to Start?</span></div>
+          <p class="nativebotblock__text">
+            Discover our quick start guide and build your first<br />
+            application in 5-10 minutes
+          </p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/" target="_blank">Quick Start Guide</a>
+        </article>
+        <article class="nativebotblock nativebotblock--learn">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-docs.svg" alt="" /><span>Want to Learn More?</span></div>
+          <p class="nativebotblock__text">Check out Ignite key-value APIs article</p>
+          <a class="nativebotblock__link arrowlink" href="/features/distributed-key-value-store.html">Key-Value APIs Article</a>
+        </article>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use-Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2021 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
 </html>
