@@ -48,6 +48,28 @@ block main
                     a(href=params.sourcelink + ".sha512", target="_blank") sha512
                     | )
 
+    mixin downloadExtensionRow(params)
+        tr 
+            td !{params.name}
+            td !{params.ver}
+            td
+                if(params.guide)
+                    a(href=params.guide, target="_blank") guide
+            td
+                if(params.notes)
+                    a(href=params.notes, target="_blank") release notes
+            td !{params.date}
+            td.jsLinksInside
+                
+                if(params.sourcelink)
+                    - let fileNameArr = params.sourcelink.split("/");
+                    - let fileName = fileNameArr[fileNameArr.length - 1];
+                    a.sourcelink(href=params.sourcelink, target="_blank", onclick=params.onclick) !{fileName}
+                    |  (
+                    a(href=params.sourcelink + ".asc", target="_blank") pgp
+                    a(href=params.sourcelink + ".sha512", target="_blank") sha512
+                    | )
+
     mixin downloadDockerRow(params)
         tr 
             td !{params.name}
@@ -169,8 +191,17 @@ block main
                 $ git clone https://gitbox.apache.org/repos/asf/ignite
         
         .downfooter__spacer.pt-5.pb-5
-        h2.capstext.pb-3#extensions EXTENSIONS
 
+    section.download-extenstions.container#extensions
+        h2.capstext.pb-3 EXTENSIONS
+
+        h3.h5.pb-2 Source Releases
+        include ./_components/download-extension-source.pug
+
+        h3.h5.pt-5.pb-2 Binary Releases
+        p.pb-2 Binary release packages are provided for your convenience and not considered as primary release artifacts of the ASF. It's recommended to verify a release downloadable, following <a href="#verify">this guidelines</a>. For more information about Apache release policy see <a href="https://www.apache.org/legal/release-policy.html#what" target="_blank">What is a Release?</a>
+        include ./_components/download-extension-binary.pug
+        p.pt-2.pb-2 Spring Boot extensions:
         -
             var xmlCode = `<dependency>
                 <groupId>org.apache.ignite</groupId>
