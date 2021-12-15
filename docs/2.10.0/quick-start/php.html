@@ -30,18 +30,6 @@
     <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 
-    <!-- LuckyOrange code -->
-    <script type='text/javascript'>
-      window.__lo_site_id = 284467;
-    
-      (function() {
-        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
-        })();
-      </script>
-      <!-- /LuckyOrange code -->
-
 <!-- Bugyard widget embed -->
 <script type="text/javascript">!function(){if("function"!=typeof window.bugyard){var a=function(){a.c(arguments)};a.q=[],a.c=function(b){a.q.push(b)},window.bugyard=a;var b=document.createElement("script");b.setAttribute("data-bugyard","610961912c35ff001493163a"),b.setAttribute("async","async"),b.setAttribute("defer","defer"),b.setAttribute("src","https://widget.bugyard.io/bugyard.min.js"),document.getElementsByTagName("head")[0].appendChild(b)}}(); window.bugyard("hideButton"); </script>
 
@@ -875,6 +863,19 @@
                         
                     </li>
                 
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
+                                class=''
+                            >Replacement Policies</a>
+                        
+                    </li>
+                
               
                      
              </nav>   
@@ -951,9 +952,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshots"
+                            <a href="/docs/2.10.0/persistence/snapshot-directory"
                                 class=''
-                            >Cluster Snapshots</a>
+                            >Configuring Snapshot Directory</a>
                         
                     </li>
                 
@@ -986,6 +987,13 @@
               
                      
              </nav>   
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1168,9 +1176,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
                                 class=''
-                            >Using Scan Queries</a>
+                            >Using Cache Queries</a>
                         
                     </li>
                 
@@ -1283,19 +1291,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/SQL/sql-transactions"
-                                class=''
-                            >SQL Transactions</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1387,6 +1382,19 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.10.0/SQL/sql-statistics"
+                                class=''
+                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2256,6 +2264,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/net-specific/net-async"
+                                class=''
+                            >Asynchronous APIs</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2910,6 +2931,11 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -3107,6 +3133,19 @@
                             <a href="/docs/2.10.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
+                                class=''
+                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3339,11 +3378,19 @@ point to the installation folder and make sure there is no trailing <code>/</cod
 </ol>
 </div>
 <div class="paragraph">
-<p>Once that&#8217;s done, go to <code>{IGNITE_HOME}/platforms/php</code> and install Ignite PHP Thin Client as a Composer package using the command below:</p>
+<p>Once that&#8217;s done, install PHP Thin Client as a Composer package using the command below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="ruby"><span class="n">composer</span> <span class="n">install</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">dev</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">composer require apache/apache-ignite-client</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use the client in your application, include the <code>vendor/autoload.php</code> file, generated by Composer, to your source code, eg.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="php"><span class="k">require_once</span> <span class="k">__DIR__</span> <span class="mf">.</span> <span class="s1">'/vendor/autoload.php'</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3436,16 +3483,17 @@ By default, <code>ignite.sh|bat</code> starts a node with the default configurat
 <div class="sectionbody">
 <div class="paragraph">
 <p>Once at least one node is started, you can use the Ignite PHP thin client to perform cache operations.
-Your Ignite installation includes several ready-to-run PHP examples in the <code>{IGNITE_HOME}/platforms/php/examples</code> directory. For example,</p>
+Your Ignite installation includes several ready-to-run PHP examples in the <code>{client_dir}/examples</code> directory.
+Here is example how to run one of them:</p>
 </div>
 <code-tabs><code-tab data-tab='Unix'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="o">{</span>IGNITE_HOME<span class="o">}</span>/platforms/php/examples
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="o">{</span>client_dir<span class="o">}</span>/examples
 php CachePutGetExample.php</code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="o">{</span>IGNITE_HOME<span class="o">}</span><span class="se">\p</span>latforms<span class="se">\p</span>hp<span class="se">\e</span>xamples
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> <span class="o">{</span>client_dir<span class="o">}</span><span class="se">\e</span>xamples
 php CachePutGetExample.php</code></pre>
 </div>
 </div></code-tab></code-tabs>
@@ -3500,6 +3548,9 @@ If you followed the instructions above, and if you place this hello world exampl
 <ul>
 <li>
 <p>Read more about using  <a href="/docs/2.10.0/thin-clients/php-thin-client">PHP Thin Client</a></p>
+</li>
+<li>
+<p>Explore the <a href="https://github.com/apache/ignite-php-thin-client/tree/master/examples">additional examples</a> included with GridGain</p>
 </li>
 </ul>
 </div>
@@ -3559,11 +3610,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1631996417' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1631996417' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639576940' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639576940' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1631996417" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1631996417"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639576940" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576940"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
