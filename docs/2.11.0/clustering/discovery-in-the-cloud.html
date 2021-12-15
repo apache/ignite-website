@@ -30,18 +30,6 @@
     <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 
-    <!-- LuckyOrange code -->
-    <script type='text/javascript'>
-      window.__lo_site_id = 284467;
-    
-      (function() {
-        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
-        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
-        })();
-      </script>
-      <!-- /LuckyOrange code -->
-
 <!-- Bugyard widget embed -->
 <script type="text/javascript">!function(){if("function"!=typeof window.bugyard){var a=function(){a.c(arguments)};a.q=[],a.c=function(b){a.q.push(b)},window.bugyard=a;var b=document.createElement("script");b.setAttribute("data-bugyard","610961912c35ff001493163a"),b.setAttribute("async","async"),b.setAttribute("defer","defer"),b.setAttribute("src","https://widget.bugyard.io/bugyard.min.js"),document.getElementsByTagName("head")[0].appendChild(b)}}(); window.bugyard("hideButton"); </script>
 
@@ -1187,9 +1175,9 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/key-value-api/using-scan-queries"
+                            <a href="/docs/latest/key-value-api/using-cache-queries"
                                 class=''
-                            >Using Scan Queries</a>
+                            >Using Cache Queries</a>
                         
                     </li>
                 
@@ -1302,19 +1290,6 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/SQL/sql-transactions"
-                                class=''
-                            >SQL Transactions</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/latest/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1406,6 +1381,19 @@
                             <a href="/docs/latest/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/latest/SQL/sql-statistics"
+                                class=''
+                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -3343,6 +3331,9 @@ static IPs virtually unusable in such environments.</p>
 <li>
 <p>Google Cloud Storage IP Finder</p>
 </li>
+<li>
+<p>Azure Blob Storage IP Finder</p>
+</li>
 </ul>
 </div>
 <div class="admonitionblock tip">
@@ -3452,16 +3443,16 @@ All virtual machines must start Ignite instances on the same port, otherwise the
 <div class="paragraph">
 <p>Amazon S3-based discovery allows Ignite nodes to register their IP addresses on start-up in an Amazon S3 store.
 This way other nodes can try to connect to any of the IP addresses stored in S3 and initiate automatic node discovery.
-To use S3 based automatic node discovery, you need to configure the <code>TcpDiscoveryS3IpFindera</code> type of <code>ipFinder</code>.</p>
+To use S3 based automatic node discovery, you need to configure the <code>TcpDiscoveryS3IpFinder</code> type of <code>ipFinder</code>.</p>
 </div>
-<div class="admonitionblock caution">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Caution</div>
+<div class="title">Important</div>
 </td>
 <td class="content">
-You must <a href="/docs/latest/setup#enabling-modules">enable the 'ignite-aws' module</a>.
+You must download and <a href="/docs/latest/setup#enabling-modules">enable the 'ignite-aws-ext' extension</a>.
 </td>
 </tr>
 </table>
@@ -3722,6 +3713,81 @@ To use <code>TcpDiscoveryGoogleStorageIpFinder</code>, enable the <code>ignite-g
 </div></code-tab></code-tabs>
 </div>
 </div>
+<div class="sect1">
+<h2 id="azure-blob-storage">Azure Blob Storage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite supports automatic node discovery by utilizing Azure Blob Storage.
+This mechanism is implemented in <code>TcpDiscoveryAzureBlobStorageIpFinder</code>.
+On start-up, each node registers its IP address in the storage and discovers other nodes by reading the storage.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+To use <code>TcpDiscoveryAzureBlobStorageIpFinder</code> you must download and <a href="/docs/latest/setup#enabling-modules">enable the 'ignite-azure-ext' extension</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is an example of how to configure Azure Blob Storage based IP finder:</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"discoverySpi"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"ipFinder"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.ipfinder.azure.TcpDiscoveryAzureBlobStoreIpFinder"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"accountName"</span> <span class="na">value=</span><span class="s">"YOUR_AZURE_BLOB_STORAGE_ACCOUNT_NAME"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"accountKey"</span> <span class="na">value=</span><span class="s">"YOUR_AZURE_BLOB_STORAGE_ACCOUNT_KEY"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"accountEndpoint"</span> <span class="na">value=</span><span class="s">"YOUR_END_POINT"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"containerName"</span> <span class="na">value=</span><span class="s">"YOUR_CONTAINER_NAME"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+      <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">TcpDiscoverySpi</span> <span class="n">spi</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TcpDiscoverySpi</span><span class="o">();</span>
+
+<span class="nc">TcpDiscoveryGoogleStorageIpFinder</span> <span class="n">ipFinder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TcpDiscoveryGoogleStorageIpFinder</span><span class="o">();</span>
+
+<span class="n">ipFinder</span><span class="o">.</span><span class="na">setServiceAccountId</span><span class="o">(</span><span class="s">"yourServiceAccountId"</span><span class="o">);</span>
+<span class="n">ipFinder</span><span class="o">.</span><span class="na">setServiceAccountP12FilePath</span><span class="o">(</span><span class="s">"pathToYourP12Key"</span><span class="o">);</span>
+<span class="n">ipFinder</span><span class="o">.</span><span class="na">setProjectName</span><span class="o">(</span><span class="s">"yourGoogleClourPlatformProjectName"</span><span class="o">);</span>
+
+<span class="c1">// Bucket name must be unique across the whole Google Cloud Platform.</span>
+<span class="n">ipFinder</span><span class="o">.</span><span class="na">setBucketName</span><span class="o">(</span><span class="s">"your_bucket_name"</span><span class="o">);</span>
+
+<span class="n">spi</span><span class="o">.</span><span class="na">setIpFinder</span><span class="o">(</span><span class="n">ipFinder</span><span class="o">);</span>
+
+<span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="c1">// Override default discovery SPI.</span>
+<span class="n">cfg</span><span class="o">.</span><span class="na">setDiscoverySpi</span><span class="o">(</span><span class="n">spi</span><span class="o">);</span>
+
+<span class="c1">// Start the node.</span>
+<span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
         <div class="copyright">
  © 2021 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -3736,6 +3802,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#amazon-s3-ip-finder">Amazon S3 IP Finder</a></li>
 <li><a href="#amazon-elb-based-discovery">Amazon ELB Based Discovery</a></li>
 <li><a href="#google-compute-discovery">Google Compute Discovery</a></li>
+<li><a href="#azure-blob-storage">Azure Blob Storage</a></li>
 </ul>
     </div>
           
@@ -3775,11 +3842,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1637781938' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1637781938' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639574490' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639574490' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1637781938" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1637781938"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639574490" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639574490"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
