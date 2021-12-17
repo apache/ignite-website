@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshot-directory"
+                            <a href="/docs/2.10.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2931,11 +2898,6 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -3136,19 +3098,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -3324,12 +3273,12 @@
 <div class="sect2">
 <h3 id="using-zip-archive">Using ZIP Archive</h3>
 <div class="paragraph">
-<p>The thin client can be installed from the zip archive available for download from the Apache Ignite website:</p>
+<p>The thin client can be installed from the zip archive:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Download the <a href="https://ignite.apache.org/download.cgi#binaries" target="_blank" rel="noopener">Apache Ignite Python Thin Client</a>.</p>
+<p>Download the <a href="https://ignite.apache.org/download.cgi#binaries" target="_blank" rel="noopener">Apache Ignite binary package</a>.</p>
 </li>
 <li>
 <p>Unpack the archive and navigate to the root folder.</p>
@@ -3374,8 +3323,8 @@ about the mode from the <a href="https://pip.pypa.io/en/stable/reference/pip_ins
 <h2 id="connecting-to-cluster">Connecting to Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The ZIP distribution package contains runnable examples that demonstrate basic usage scenarios of the Python thin client.
-The examples are located in the <code>{client_dir}/examples</code> directory.</p>
+<p>The distribution package contains runnable examples that demonstrate basic usage scenarios of the Python thin client.
+The examples are located in the <code>{ROOT_FOLDER}/examples</code> directory.</p>
 </div>
 <div class="paragraph">
 <p>The following code snippet shows how to connect to a cluster from the Python thin client:</p>
@@ -3470,6 +3419,23 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 <div class="content">
 <img src="/docs/2.10.0/images/partitionawareness02.png" alt="With Partition Awareness">
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Note that for non-Java clients presently you need to provide addresses of all the server nodes in the connection properties.
+This also means that if a new server node joins the cluster, you should add the server&#8217;s address to the connection properties and reconnect the thin client.
+Otherwise, the thin client will not be able to send direct requests to this server.
+This limitation is planned to be addressed before the GA release of the feature.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To enable partition awareness, set the <code>partition_aware</code> parameter to true in the client constructor and provide
@@ -4427,11 +4393,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639576942' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639576942' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729141' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729141' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639576942" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576942"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729141" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729141"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

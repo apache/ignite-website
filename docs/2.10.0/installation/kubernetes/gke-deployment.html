@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshot-directory"
+                            <a href="/docs/2.10.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2931,11 +2898,6 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -3133,19 +3095,6 @@
                             <a href="/docs/2.10.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3547,13 +3496,7 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
 <div class="listingblock">
 <div class="title">node-configuration.xml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">"
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
 
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"discoverySpi"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"</span><span class="nt">&gt;</span>
@@ -3561,16 +3504,15 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
                     <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder"</span><span class="nt">&gt;</span>
                         <span class="nt">&lt;constructor-arg&gt;</span>
                             <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.kubernetes.configuration.KubernetesConnectionConfiguration"</span><span class="nt">&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"default"</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
                             <span class="nt">&lt;/bean&gt;</span>
                         <span class="nt">&lt;/constructor-arg&gt;</span>
                     <span class="nt">&lt;/bean&gt;</span>
                 <span class="nt">&lt;/property&gt;</span>
             <span class="nt">&lt;/bean&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+    <span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Configuration with persistence'><div class="paragraph">
 <p>In the configuration file, we will:</p>
@@ -3591,12 +3533,7 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
 <div class="listingblock">
 <div class="title">node-configuration.xml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
 
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"workDirectory"</span> <span class="na">value=</span><span class="s">"/ignite/work"</span><span class="nt">/&gt;</span>
 
@@ -3620,8 +3557,8 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
                     <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder"</span><span class="nt">&gt;</span>
                         <span class="nt">&lt;constructor-arg&gt;</span>
                             <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.kubernetes.configuration.KubernetesConnectionConfiguration"</span><span class="nt">&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"default"</span> <span class="nt">/&gt;</span>
+                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
                             <span class="nt">&lt;/bean&gt;</span>
                         <span class="nt">&lt;/constructor-arg&gt;</span>
                     <span class="nt">&lt;/bean&gt;</span>
@@ -3629,8 +3566,7 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
             <span class="nt">&lt;/bean&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
 
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+    <span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="paragraph">
@@ -4093,18 +4029,6 @@ Note that we use the external IP address (LoadBalancer Ingress) of the service.<
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="connecting-to-rest-api">Connecting to REST API</h3>
-<div class="paragraph">
-<p>Connect to the cluster&#8217;s REST API as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>curl http://13.86.186.145:8080/ignite?cmd<span class="o">=</span>version
-<span class="o">{</span><span class="s2">"successStatus"</span>:0,<span class="s2">"error"</span>:null,<span class="s2">"response"</span>:<span class="s2">"2.10.0"</span>,<span class="s2">"sessionToken"</span>:null<span class="o">}</span></code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -4135,6 +4059,23 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 <img src="/docs/2.10.0/images/partitionawareness02.png" alt="With Partition Awareness">
 </div>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Note that for non-Java clients presently you need to provide addresses of all the server nodes in the connection properties.
+This also means that if a new server node joins the cluster, you should add the server&#8217;s address to the connection properties and reconnect the thin client.
+Otherwise, the thin client will not be able to send direct requests to this server.
+This limitation is planned to be addressed before the GA release of the feature.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>To enable the partition awareness feature within scaling Kubernetes enviroment, one should start a client within the cluster and configure it with <code>KubernetesConnectionConfiguration</code>.
 In this case, a client can connect to every pod in a cluster.</p>
@@ -4157,6 +4098,18 @@ In this case, a client can connect to every pod in a cluster.</p>
 <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
 
 <span class="n">client</span><span class="o">.</span><span class="na">close</span><span class="o">();</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="connecting-to-rest-api">Connecting to REST API</h3>
+<div class="paragraph">
+<p>Connect to the cluster&#8217;s REST API as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>curl http://13.86.186.145:8080/ignite?cmd<span class="o">=</span>version
+<span class="o">{</span><span class="s2">"successStatus"</span>:0,<span class="s2">"error"</span>:null,<span class="s2">"response"</span>:<span class="s2">"2.10.0"</span>,<span class="s2">"sessionToken"</span>:null<span class="o">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -4187,10 +4140,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <ul class="sectlevel2">
 <li><a href="#connecting-client-nodes">Connecting Client Nodes</a></li>
 <li><a href="#connecting-with-thin-clients">Connecting with Thin Clients</a></li>
+</ul>
+</li>
+<li><a href="#partition-awareness">Partition Awareness</a>
+<ul class="sectlevel2">
 <li><a href="#connecting-to-rest-api">Connecting to REST API</a></li>
 </ul>
 </li>
-<li><a href="#partition-awareness">Partition Awareness</a></li>
 </ul>
     </div>
           
@@ -4230,11 +4186,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639576935' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639576935' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729138' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729138' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639576935" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576935"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729138" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729138"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

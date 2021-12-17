@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshot-directory"
+                            <a href="/docs/2.10.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2931,11 +2898,6 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -3133,19 +3095,6 @@
                             <a href="/docs/2.10.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3466,8 +3415,7 @@ Activation is required only if you use <a href="/docs/2.10.0/persistence/native-
 <td class="content">
 <div class="paragraph">
 <p>Deactivation deallocates all memory resources, including your application data, on all cluster nodes and disables public cluster API.
-If you have in-memory caches that are not backed up by a persistent storage (neither <a href="/docs/2.10.0/persistence/native-persistence">native persistent storage</a> nor <a href="/docs/2.10.0/persistence/external-storage">external storage</a>), you will lose the data and will have to repopulate these caches.
-The non-persistent system caches are cleared too.</p>
+If you have in-memory caches that are not backed up by a persistent storage (neither <a href="/docs/2.10.0/persistence/native-persistence">native persistent storage</a> nor <a href="/docs/2.10.0/persistence/external-storage">external storage</a>), you will lose the data and will have to repopulate these caches.</p>
 </div>
 </td>
 </tr>
@@ -3791,56 +3739,6 @@ control.sh|bat <span class="nt">--cache</span> list counter-.<span class="k">*</
 </div>
 </div>
 <div class="sect1">
-<h2 id="destroying-caches">Destroying Caches</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can use the control script to destroy specific caches.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh|bat <span class="nt">--cache</span> destroy <span class="nt">--caches</span> cache1,...,cacheN|--destroy-all-caches</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--caches cache1,&#8230;&#8203;,cacheN</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a comma-separated list of cache names to be destroyed.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--destroy-all-caches</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Permanently destroy all user-created caches.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="c"># Destroy cache1 and cache2.</span>
-control.sh|bat <span class="nt">--cache</span> destroy <span class="nt">--caches</span> cache1,cache2
-
-<span class="c"># Destroy all user-created caches.</span>
-control.sh|bat <span class="nt">--cache</span> destroy <span class="nt">--destroy-all-caches</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="resetting-lost-partitions">Resetting Lost Partitions</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -3976,24 +3874,6 @@ validate_indexes has finished with errors (listed above).</code></pre>
 </tr>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="checking-snapshot-consistency">Checking Snapshot Consistency</h3>
-<div class="paragraph">
-<p>The checking snapshot consistency command works the same way as the <code>idle_verify</code> command does. It compares hashes between
-a primary partition and a corresponding backup partitions and prints a report if any differences are found.
-Differences may be the result of inconsistencies in some data on the cluster from which the snapshot was taken. It is
-recommended to perform the <code>idle_verify</code> procedure on the cluster if this case occurs.</p>
-</div>
-<div class="paragraph">
-<p>This procedure does not require the cluster to be in the <code>idle</code> state.</p>
-</div>
-<code-tabs><code-tab data-tab='Shell'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="c"># Checks that partitions of all snapshot caches have the correct checksums and primary/backup ones actually contain the same data.</span>
-control.<span class="o">(</span>sh|bat<span class="o">)</span> <span class="nt">--snapshot</span> check snapshot_name</code></pre>
-</div>
-</div></code-tab></code-tabs>
 </div>
 <div class="sect2">
 <h3 id="check-sql-index-inline-size">Check SQL Index Inline Size</h3>
@@ -4395,7 +4275,7 @@ Command [METRIC] finished with code: 0</code></pre>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--system-view</span> views</code></pre>
 </div>
-</div></code-tab></code-tabs>
+</div>
 <div class="paragraph">
 <p>Examples of the output:</p>
 </div>
@@ -4450,188 +4330,7 @@ CACHES                         SYS       Caches
 TASKS                          SYS       Running compute tasks
 Command [SYSTEM-VIEW] finished with code: 0</code></pre>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="performance-statistics">Performance Statistics</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite provides a built-in tool for cluster profiling. Read <a href="/docs/2.10.0/monitoring-metrics/performance-statistics">Performance Statistics</a> for more information.</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--performance-statistics</span> <span class="o">[</span>start|stop|rotate|status]</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Window'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--performance-statistics</span> <span class="o">[</span>start|stop|rotate|status]</code></pre>
-</div>
 </div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>start</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Start collecting performance statistics in the cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stop</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stop collecting performance statistics in the cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rotate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rotate collecting performance statistics in the cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Get status of collecting performance statistics in the cluster.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="working-with-cluster-properties">Working with Cluster Properties</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The <code>control.sh|bat</code> script provides an ability to work with <a href="/docs/2.10.0/SQL/sql-statistics" target="_blank" rel="noopener">SQL statistics</a> functionality.</p>
-</div>
-<div class="paragraph">
-<p>To get the full list of available properties, use the <code>--property list</code> command. This command returns the list of all available properties to work with:</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--property</span> list</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat  <span class="nt">--property</span> list</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>You can set property value with <code>--property set</code> command. For example, to enable or disable SQL statistics in cluster use, specify <code>ON</code>, <code>OFF</code>,  or <code>NO_UPDATE</code> values:</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--property</span> <span class="nb">set</span> <span class="nt">--name</span> <span class="s1">'statistics.usage.state'</span> <span class="nt">--val</span> <span class="s1">'ON'</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat  <span class="nt">--property</span> <span class="nb">set</span> <span class="nt">--name</span> <span class="s1">'statistics.usage.state'</span> <span class="nt">--val</span> <span class="s1">'ON'</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>You can also get property value with <code>--property get</code> command. For example:</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--property</span> get <span class="nt">--name</span> <span class="s1">'statistics.usage.state'</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows'><div id="preamble">
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--property</span> get <span class="nt">--name</span> <span class="s1">'statistics.usage.state'</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="cache-consistency">Cache Consistency</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="repair">Repair</h3>
-<div class="paragraph">
-<p>The command allows to perform cache consistency check and repair (when possible) using Read Repair approach.</p>
-</div>
-</div>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>tab:Unix[]</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--enable-experimental</span> <span class="nt">--consistency</span> repair cache-name partition</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>tab:Window[]</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--enable-experimental</span> <span class="nt">--consistency</span> repair cache-name partition</code></pre>
-</div>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cache-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cache to be checked/repaired..</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>partition</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cache&#8217;s partition to be checked/repaired.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>=== Status</p>
-</div>
-<div class="paragraph">
-<p>The command allows performing cache consistency check/repair operations status check.</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>tab:Unix[]</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--enable-experimental</span> <span class="nt">--consistency</span> status</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>tab:Window[]</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--enable-experimental</span> <span class="nt">--consistency</span> status</code></pre>
-</div>
-</div>
-<div class="openblock">
-<div class="content">
-
-</div>
-</div>
 </div>
 </div>
         <div class="copyright">
@@ -4660,13 +4359,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#transaction-management">Transaction Management</a></li>
 <li><a href="#contention-detection-in-transactions">Contention Detection in Transactions</a></li>
 <li><a href="#monitoring-cache-state">Monitoring Cache State</a></li>
-<li><a href="#destroying-caches">Destroying Caches</a></li>
 <li><a href="#resetting-lost-partitions">Resetting Lost Partitions</a></li>
 <li><a href="#consistency-check-commands">Consistency Check Commands</a>
 <ul class="sectlevel2">
 <li><a href="#verifying-partition-checksums">Verifying Partition Checksums</a></li>
 <li><a href="#validating-sql-index-consistency">Validating SQL Index Consistency</a></li>
-<li><a href="#checking-snapshot-consistency">Checking Snapshot Consistency</a></li>
 <li><a href="#check-sql-index-inline-size">Check SQL Index Inline Size</a></li>
 </ul>
 </li>
@@ -4675,8 +4372,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#metric-command">Metric Command</a></li>
 <li><a href="#indexes-management">Indexes Management</a></li>
 <li><a href="#system-view-command">System View Command</a></li>
-<li><a href="#performance-statistics">Performance Statistics</a></li>
-<li><a href="#working-with-cluster-properties">Working with Cluster Properties</a></li>
 </ul>
     </div>
           
@@ -4716,11 +4411,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639576942' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639576942' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729141' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729141' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639576942" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576942"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729141" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729141"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

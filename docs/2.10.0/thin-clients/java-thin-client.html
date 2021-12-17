@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshot-directory"
+                            <a href="/docs/2.10.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2931,11 +2898,6 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -3133,19 +3095,6 @@
                             <a href="/docs/2.10.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3397,6 +3346,23 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 <img src="/docs/2.10.0/images/partitionawareness02.png" alt="With Partition Awareness">
 </div>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Note that for non-Java clients presently you need to provide addresses of all the server nodes in the connection properties.
+This also means that if a new server node joins the cluster, you should add the server&#8217;s address to the connection properties and reconnect the thin client.
+Otherwise, the thin client will not be able to send direct requests to this server.
+This limitation is planned to be addressed before the GA release of the feature.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The following code sample illustrates how to use the partition awareness feature with the java thin client.</p>
 </div>
@@ -3427,7 +3393,7 @@ The following code sample illustrates how to use it.</p>
 <span class="o">};</span>
 
 <span class="nc">ClientConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">setAddressesFinder</span><span class="o">(</span><span class="n">finder</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">setAddressFinder</span><span class="o">(</span><span class="n">finder</span><span class="o">)</span>
     <span class="o">.</span><span class="na">setPartitionAwarenessEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
 
 <span class="k">try</span> <span class="o">(</span><span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">startClient</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
@@ -3528,10 +3494,10 @@ To execute key-value operations on a specific cache, you need to get an instance
 <div class="sect2">
 <h3 id="executing-scan-queries">Executing Scan Queries</h3>
 <div class="paragraph">
-<p>Use the <code>ScanQuery&lt;K, V&gt;</code> class to get a set of entries that satisfy a given condition. The thin client sends the query to the cluster node where it is executed as a regular <a href="/docs/2.10.0/key-value-api/using-cache-queries">scan query</a>.</p>
+<p>Use the <code>ScanQuery&lt;K, V&gt;</code> class to get a set of entries that satisfy a given condition. The thin client sends the query to the cluster node where it is executed as a normal <a href="/docs/2.10.0/key-value-api/using-scan-queries">scan query</a>.</p>
 </div>
 <div class="paragraph">
-<p>The query condition is specified by an <code>IgniteBiPredicate&lt;K, V&gt;</code> object that is passed to the query constructor as an argument. The predicate is applied on the server side. If there is no predicate provided, the query returns all cache entries.</p>
+<p>The query condition is specified by an <code>IgniteBiPredicate&lt;K, V&gt;</code> object that is passed to the query constructor as an argument. The predicate is applied on the server side. If you don&#8217;t provide any predicate, the query returns all cache entries.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3651,69 +3617,6 @@ Use <code>IgniteClient.binary()</code> to get an instance of <code>IgniteBinary<
 </div>
 <div class="paragraph">
 <p>Refer to the <a href="/docs/2.10.0/key-value-api/binary-objects">Working with Binary Objects</a> page for detailed information.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="cache-entry-listening">Cache Entry Listening</h3>
-<div class="paragraph">
-<p>When a cache is modified (an entry is inserted, updated, deleted, or expired), an event can be sent to notify the client.
-To listen to these events, you can use one of the following approaches:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Continuous queries</p>
-</li>
-<li>
-<p>Cache <code>registerCacheEntryListener</code> methods</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Both approaches require a local listener to be provided, which is triggered on every cache modification event.</p>
-</div>
-<div class="paragraph">
-<p>For both approaches you can also specify a remote filter to narrow down the range of entries that are monitored for updates. This filter is executed for each updated entry on the server-side and evaluates whether the event should be propagated to the client&#8217;s local listener.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The classes of the remote filter factory must be available on the server nodes of the cluster.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Refer to the <a href="/docs/2.10.0/key-value-api/continuous-queries">thick client continuous queries</a> page for more information about continuous queries.</p>
-</div>
-<div class="paragraph">
-<p>In case of connection to server failure, a thin client cannot silently reconnect with guarantees that no events are lost, so continuous queries and registered cache event listeners are closed after the server disconnection. There are also several methods with the additional parameter: disconnect listener. This listener allows to catch server disconnection events and react appropriately.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">ClientCache</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">getOrCreateCache</span><span class="o">(</span><span class="s">"myCache"</span><span class="o">);</span>
-
-<span class="nc">ContinuousQuery</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContinuousQuery</span><span class="o">&lt;&gt;();</span>
-
-<span class="n">query</span><span class="o">.</span><span class="na">setLocalListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">CacheEntryUpdatedListener</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span>
-    <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onUpdated</span><span class="o">(</span><span class="nc">Iterable</span><span class="o">&lt;</span><span class="nc">CacheEntryEvent</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">Integer</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">events</span><span class="o">)</span>
-        <span class="kd">throws</span> <span class="nc">CacheEntryListenerException</span> <span class="o">{</span>
-        <span class="c1">// react to the update events here</span>
-    <span class="o">}</span>
-<span class="o">});</span>
-
-<span class="nc">ClientDisconnectListener</span> <span class="n">disconnectListener</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientDisconnectListener</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onDisconnected</span><span class="o">(</span><span class="nc">Exception</span> <span class="n">reason</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// react to the disconnect event here</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-
-<span class="n">cache</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">query</span><span class="o">,</span> <span class="n">disconnectListener</span><span class="o">);</span></code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -4097,7 +4000,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 </ul>
 </li>
 <li><a href="#working-with-binary-objects">Working with Binary Objects</a></li>
-<li><a href="#cache-entry-listening">Cache Entry Listening</a></li>
 </ul>
 </li>
 <li><a href="#executing-sql-statements">Executing SQL Statements</a></li>
@@ -4159,11 +4061,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639576942' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639576942' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729141' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729141' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639576942" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576942"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729141" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729141"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
