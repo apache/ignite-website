@@ -1175,9 +1175,9 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/key-value-api/using-cache-queries"
+                            <a href="/docs/latest/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1290,6 +1290,19 @@
 
                     <li> 
                         
+                            <a href="/docs/latest/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/latest/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1381,19 +1394,6 @@
                             <a href="/docs/latest/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/latest/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -3456,118 +3456,9 @@ If you create your caches as SQL tables using SQL statements, the PRIMARY KEY is
     <span class="p">}</span>
 <span class="p">}</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">struct</span> <span class="nc">Person</span>
-<span class="p">{</span>
-    <span class="kt">int32_t</span> <span class="n">id</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-    <span class="kt">int32_t</span> <span class="n">cityId</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">companyId</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="nc">PersonKey</span>
-<span class="p">{</span>
-    <span class="kt">int32_t</span> <span class="n">id</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">companyId</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="nc">Company</span>
-<span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">namespace</span> <span class="n">ignite</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">binary</span> <span class="p">{</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">BinaryType</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">BinaryTypeDefaultAll</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span>
-<span class="p">{</span>
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">GetTypeName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="s">"Person"</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Write</span><span class="p">(</span><span class="n">BinaryWriter</span><span class="o">&amp;</span> <span class="n">writer</span><span class="p">,</span> <span class="k">const</span> <span class="n">Person</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteInt32</span><span class="p">(</span><span class="s">"id"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteString</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteInt32</span><span class="p">(</span><span class="s">"cityId"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">cityId</span><span class="p">);</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteString</span><span class="p">(</span><span class="s">"companyId"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">companyId</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Read</span><span class="p">(</span><span class="n">BinaryReader</span><span class="o">&amp;</span> <span class="n">reader</span><span class="p">,</span> <span class="n">Person</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadInt32</span><span class="p">(</span><span class="s">"id"</span><span class="p">);</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadString</span><span class="p">(</span><span class="s">"name"</span><span class="p">);</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">cityId</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadInt32</span><span class="p">(</span><span class="s">"cityId"</span><span class="p">);</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">companyId</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadString</span><span class="p">(</span><span class="s">"companyId"</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">BinaryType</span><span class="o">&lt;</span><span class="n">PersonKey</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">BinaryTypeDefaultAll</span><span class="o">&lt;</span><span class="n">PersonKey</span><span class="o">&gt;</span>
-<span class="p">{</span>
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">GetTypeName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="s">"PersonKey"</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">GetAffinityFieldName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="s">"companyId"</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Write</span><span class="p">(</span><span class="n">BinaryWriter</span><span class="o">&amp;</span> <span class="n">writer</span><span class="p">,</span> <span class="k">const</span> <span class="n">PersonKey</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteInt32</span><span class="p">(</span><span class="s">"id"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteString</span><span class="p">(</span><span class="s">"companyId"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">companyId</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Read</span><span class="p">(</span><span class="n">BinaryReader</span><span class="o">&amp;</span> <span class="n">reader</span><span class="p">,</span> <span class="n">PersonKey</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadInt32</span><span class="p">(</span><span class="s">"id"</span><span class="p">);</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">companyId</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadString</span><span class="p">(</span><span class="s">"companyId"</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">BinaryType</span><span class="o">&lt;</span><span class="n">Company</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">BinaryTypeDefaultAll</span><span class="o">&lt;</span><span class="n">Company</span><span class="o">&gt;</span>
-<span class="p">{</span>
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">GetTypeName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span> <span class="o">=</span> <span class="s">"Company"</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Write</span><span class="p">(</span><span class="n">BinaryWriter</span><span class="o">&amp;</span> <span class="n">writer</span><span class="p">,</span> <span class="k">const</span> <span class="n">Company</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">writer</span><span class="p">.</span><span class="n">WriteString</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">static</span> <span class="kt">void</span> <span class="n">Read</span><span class="p">(</span><span class="n">BinaryReader</span><span class="o">&amp;</span> <span class="n">reader</span><span class="p">,</span> <span class="n">Company</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">dst</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">ReadString</span><span class="p">(</span><span class="s">"name"</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-<span class="p">}};</span>  <span class="c1">// namespace ignite::binary</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-    <span class="k">using</span> <span class="k">namespace</span> <span class="n">cache</span><span class="p">;</span>
-
-    <span class="n">IgniteConfiguration</span> <span class="n">cfg</span><span class="p">;</span>
-    <span class="n">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">Ignition</span><span class="o">::</span><span class="n">Start</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
-
-    <span class="n">Cache</span><span class="o">&lt;</span><span class="n">PersonKey</span><span class="p">,</span> <span class="n">Person</span><span class="o">&gt;</span> <span class="n">personCache</span> <span class="o">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetOrCreateCache</span><span class="o">&lt;</span><span class="n">PersonKey</span><span class="p">,</span> <span class="n">Person</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"person"</span><span class="p">);</span>
-    <span class="n">Cache</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">Company</span><span class="o">&gt;</span> <span class="n">companyCache</span> <span class="o">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetOrCreateCache</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">Company</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"company"</span><span class="p">);</span>
-
-    <span class="n">Person</span> <span class="n">person</span><span class="p">{};</span>
-    <span class="n">person</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Vasya"</span><span class="p">;</span>
-
-    <span class="n">Company</span> <span class="n">company</span><span class="p">{};</span>
-    <span class="n">company</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"Company1"</span><span class="p">;</span>
-
-    <span class="n">personCache</span><span class="p">.</span><span class="n">Put</span><span class="p">(</span><span class="n">PersonKey</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="s">"company1_key"</span><span class="p">},</span> <span class="n">person</span><span class="p">);</span>
-    <span class="n">companyCache</span><span class="p">.</span><span class="n">Put</span><span class="p">(</span><span class="s">"company1_key"</span><span class="p">,</span> <span class="n">company</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre>
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
 </div>
 </div></code-tab><code-tab data-tab='SQL'><div class="listingblock">
 <div class="content">
@@ -3761,11 +3652,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639574491' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639574491' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729441' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729441' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639574491" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639574491"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729441" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729441"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

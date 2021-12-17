@@ -1175,9 +1175,9 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/key-value-api/using-cache-queries"
+                            <a href="/docs/latest/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1290,6 +1290,19 @@
 
                     <li> 
                         
+                            <a href="/docs/latest/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/latest/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1381,19 +1394,6 @@
                             <a href="/docs/latest/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/latest/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -3534,8 +3534,8 @@ Addition functionality is provided by various Ignite modules.</p>
 <h2 id="enabling-modules">Enabling Modules</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite ships with a number of modules and have a lot of extensions that provide various functionality.
-You can enable modules or extensions one by one, as required.</p>
+<p>Ignite ships with a number of modules that provide various
+functionality. You can enable modules one by one, as required.</p>
 </div>
 <div class="paragraph">
 <p>All modules are included in the binary distribution, but by default they
@@ -3545,10 +3545,7 @@ directory of the distribution package (each module is located in a
 separate sub-directory).</p>
 </div>
 <div class="paragraph">
-<p>Also, you can download any of Ignite extensions you require.</p>
-</div>
-<div class="paragraph">
-<p>Depending on how you use Ignite, you can enable modules or extensions using one of
+<p>Depending on how you use Ignite, you can enable modules using one of
 the following methods:</p>
 </div>
 <div class="ulist">
@@ -3622,6 +3619,10 @@ For example, to install <code>ignite-hibernate</code> into your local repository
 adding @Gridify annotation to it.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-aws</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster discovery on AWS S3. Refer to <a href="/docs/latest/clustering/discovery-in-the-cloud#amazon-s3-ip-finder">Amazon S3 IP Finder</a> for details.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ignite-cassandra-serializers</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Ignite Cassandra Serializers module provides additional serializers to store objects as BLOBs in Cassandra. The module could be used as in conjunction with the Ignite Cassandra Store module.</p></td>
 </tr>
@@ -3636,6 +3637,10 @@ adding @Gridify annotation to it.</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ignite-direct-io</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Direct IO is a plugin that provides a page store with the ability to write and read cache partitions in O_DIRECT mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-gce</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite GCE provides Google Cloud Storage based implementations of IP finder for TCP discovery.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ignite-indexing</p></td>
@@ -3723,6 +3728,14 @@ by the Pax Logging API - the logging framework used by Apache Karaf.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This module provides an implementation of Spark RDD abstraction that enables easy access to Ignite caches.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-spring-data</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Spring Data provides an integration with Spring Data framework.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-spring-data_2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Spring Data 2.0 provides an integration with Spring Data 2.0 framework.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ignite-ssh</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Ignite SSH module provides capabilities to start Ignite nodes on remote machines via SSH.</p></td>
 </tr>
@@ -3746,47 +3759,6 @@ by the Pax Logging API - the logging framework used by Apache Karaf.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ignite-zookeeper</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Ignite ZooKeeper provides a TCP Discovery IP Finder that uses a ZooKeeper
 directory to discover other Ignite nodes.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>The following extensions are available:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Extension’s artifactId</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-aws-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cluster discovery on AWS S3. Refer to <a href="/docs/latest/clustering/discovery-in-the-cloud#amazon-s3-ip-finder">Amazon S3 IP Finder</a> for details.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-azure-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Azure provides Azure Blob Storage-based implementation of IP finder for TCP discovery.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-gce-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite GCE provides Google Cloud Storage based implementations of IP finder for TCP discovery.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-spring-data-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Spring Data provides an integration with Spring Data framework.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-spring-data_2.0-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Spring Data 2.0 provides an integration with Spring Data 2.0 framework.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ignite-spring-data_2.2-ext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite Spring Data 2.2 provides an integration with Spring Data 2.2 framework.</p></td>
 </tr>
 </tbody>
 </table>
@@ -3976,11 +3948,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639574495' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639574495' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729445' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729445' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639574495" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639574495"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729445" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729445"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

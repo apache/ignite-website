@@ -1175,9 +1175,9 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/key-value-api/using-cache-queries"
+                            <a href="/docs/latest/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1290,6 +1290,19 @@
 
                     <li> 
                         
+                            <a href="/docs/latest/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/latest/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1381,19 +1394,6 @@
                             <a href="/docs/latest/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/latest/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -3381,30 +3381,17 @@ The <a href="/docs/latest/persistence/snapshots#restoring-from-snapshot">restore
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration">Configuration</h2>
+<h2 id="configuring-snapshot-directory">Configuring Snapshot Directory</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="snapshot-directory">Snapshot Directory</h3>
 <div class="paragraph">
 <p>By default, a segment of the snapshot is stored in the work directory of a respective Ignite node and uses the same storage
 media where Ignite Persistence keeps data, index, WAL, and other files. Since the snapshot can consume as much space as
-already taken by the persistence files and can affect your application&#8217;s performance by sharing the disk I/O with the
+already taken by the persistence files and can affect your applications' performance by sharing the disk I/O with the
 Ignite Persistence routines, it&#8217;s suggested to store the snapshot and persistence files on different media.</p>
 </div>
 <div class="paragraph">
 <p>See the <a href="/docs/latest/persistence/snapshot-directory#configuring-snapshot-directory">Configuring Snapshot Directory</a> page for
 configuration examples.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="snapshot-execution-pool">Snapshot Execution Pool</h3>
-<div class="paragraph">
-<p>By default, the snapshot thread pool size has a value of <code>4</code>. Decreasing the number of threads involved in the snapshot creation process
-increases the total amount of time for taking a snapshot. However, this keeps the disk load within reasonable limits.</p>
-</div>
-<div class="paragraph">
-<p>See the <a href="/docs/latest/perf-and-troubleshooting/thread-pools-tuning" target="_blank" rel="noopener">Ignite Snapshot Execution Pool</a> page for more details.</p>
-</div>
 </div>
 </div>
 </div>
@@ -3691,6 +3678,12 @@ might require extra space on the Ignite Persistence storage media (up to the 1x 
 <li>
 <p>The snapshot procedure is interrupted if a server node leaves the cluster.</p>
 </li>
+<li>
+<p>Snapshot may be restored only at the same cluster topology with the same node IDs;</p>
+</li>
+<li>
+<p>The automatic restore procedure is not available yet. You have to restore it manually.</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -3710,12 +3703,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#configuration">Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#snapshot-directory">Snapshot Directory</a></li>
-<li><a href="#snapshot-execution-pool">Snapshot Execution Pool</a></li>
-</ul>
-</li>
+<li><a href="#configuring-snapshot-directory">Configuring Snapshot Directory</a></li>
 <li><a href="#creating-snapshot">Creating Snapshot</a>
 <ul class="sectlevel2">
 <li><a href="#using-control-script">Using Control Script</a></li>
@@ -3776,11 +3764,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639574495' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639574495' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729445' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729445' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639574495" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639574495"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729445" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729445"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
