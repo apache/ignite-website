@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/persistence/snapshot-directory"
+                            <a href="/docs/2.9.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3136,19 +3080,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -3299,18 +3230,6 @@
 <p>Ignite Persistence, or Native Persistence, is a set of features designed to provide persistent storage.
 When it is enabled, Ignite always stores all the data on disk, and loads as much data as it can into RAM for processing.
 For example, if there are 100 entries and RAM has the capacity to store only 20, then all 100 are stored on disk and only 20 are cached in RAM for better performance.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-For more information on Native Persistence, watch <a href="https://www.youtube.com/watch?v=6Yg5QW-XFVc&amp;list=PLMc7NR20hA-KF8c_hVICKpzKnWkjzfC2V&amp;index=19" target="_blank" rel="noopener">the architectural deep dive</a> on the internals of the Ignite storage engine.
-</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>When Native persistence is turned off and no external storage is used, Ignite behaves as a pure in-memory store.</p>
@@ -3655,18 +3574,6 @@ A larger size of WAL segments can help increase performance under high loads at 
 </div>
 <div class="sect2">
 <h3 id="disabling-wal">Disabling WAL</h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Warning</div>
-</td>
-<td class="content">
-Disabling or enabling WAL should only be done on stable topology: all baseline nodes should be present, no nodes should join or leave the cluster for the duration of this operation. Otherwise, cache may be stuck in inconsistent state. If that happens, it is advised to destroy the affected cache(s).
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>There are situations when it is reasonable to have the WAL disabled to get better performance. For instance, it is useful to disable WAL during initial data loading and enable it after the pre-loading is complete.</p>
 </div>
@@ -3955,11 +3862,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639580146' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639580146' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728691' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728691' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639580146" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639580146"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728691" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728691"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
