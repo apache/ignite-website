@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/persistence/snapshot-directory"
+                            <a href="/docs/2.9.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3358,23 +3289,6 @@
 <p>The following table describes some most important properties of <code>TcpDiscoverySpi</code>.
 You can find the complete list of properties in the <a href="https://ignite.apache.org/releases/2.9.0/javadoc/org/apache/ignite/spi/discovery/tcp/TcpDiscoverySpi.html" target="_blank" rel="noopener">TcpDiscoverySpi</a> javadoc.</p>
 </div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Caution</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>You should initialize the <code>IgniteConfiguration.localHost</code> or <code>TcpDiscoverySpi.localAddress</code> parameter with the network
-interface that will be used for inter-node communication. By default, a node binds to and listens on all available IP
-addresses of an environment it&#8217;s running on. It can prolong node failures detection if some of the node&#8217;s addresses are
-not reachable from other cluster nodes.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3391,8 +3305,8 @@ not reachable from other cluster nodes.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">By default, a node binds to all available network addresses. If there is a non-loopback address available, then java.net.InetAddress.getLocalHost() is used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default, the node uses the first non-loopback address it finds. If there is no non-loopback address available, then <code>java.net.InetAddress.getLocalHost()</code> is used.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localPort</code></p></td>
@@ -3403,15 +3317,6 @@ not reachable from other cluster nodes.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localPortRange</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">If the <code>localPort</code> is busy, the node attempts to bind to the next port (incremented by 1) and continues this process until it finds a free port. The <code>localPortRange</code> property defines the number of ports the node will try (starting from <code>localPort</code>).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>100</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>soLinger</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a linger-on-close timeout of TCP sockets used by Discovery SPI. See Java <code>Socket.setSoLinger</code> API
-for details on how to adjust this setting. In Ignite, the timeout defaults to a non-negative value to prevent
-<a href="https://bugs.openjdk.java.net/browse/JDK-8219658" target="_blank" rel="noopener">potential deadlocks with SSL connections</a> but,
-as a side effect, this can prolong the detection of cluster node failures. Alternatively, update your JRE version to the
-one with the SSL issue fixed and adjust this setting accordingly.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reconnectCount</code></p></td>
@@ -3545,7 +3450,7 @@ You can find the list of all properties in the <a href="https://ignite.apache.or
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -3733,11 +3638,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639580143' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639580143' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728688' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728688' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639580143" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639580143"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728688" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728688"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

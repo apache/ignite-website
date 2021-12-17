@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/persistence/snapshot-directory"
+                            <a href="/docs/2.9.1/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.1/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.1/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.1/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.1/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.1/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.1/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.1/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3353,34 +3284,9 @@ how to broadcast a job only to remote nodes (excluding the local node).</p>
     <span class="n">compute</span><span class="p">.</span><span class="nf">Broadcast</span><span class="p">(</span><span class="k">new</span> <span class="nf">PrintNodeIdAction</span><span class="p">());</span>
 <span class="p">}</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">class</span> <span class="nc">PrintNodeIdAction</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ComputeFunc</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="p">{</span>
-<span class="nl">public:</span>
-    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">Call</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello node "</span> <span class="o">&lt;&lt;</span>  <span class="n">Ignition</span><span class="o">::</span><span class="n">Get</span><span class="p">().</span><span class="n">GetCluster</span><span class="p">().</span><span class="n">GetLocalNode</span><span class="p">().</span><span class="n">GetId</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-<span class="k">namespace</span> <span class="n">ignite</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">binary</span> <span class="p">{</span>
-    <span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span> <span class="k">struct</span> <span class="nc">BinaryType</span><span class="o">&lt;</span><span class="n">PrintNodeIdAction</span><span class="o">&gt;:</span> <span class="n">BinaryTypeDefaultAll</span><span class="o">&lt;</span><span class="n">PrintNodeIdAction</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">GetTypeName</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">dst</span> <span class="o">=</span> <span class="s">"PrintNodeIdAction"</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">Write</span><span class="p">(</span><span class="n">BinaryWriter</span><span class="o">&amp;</span> <span class="n">writer</span><span class="p">,</span> <span class="k">const</span> <span class="n">PrintNodeIdAction</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{}</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">Read</span><span class="p">(</span><span class="n">BinaryReader</span><span class="o">&amp;</span> <span class="n">reader</span><span class="p">,</span> <span class="n">PrintNodeIdAction</span><span class="o">&amp;</span> <span class="n">dst</span><span class="p">)</span> <span class="p">{}</span>
-    <span class="p">};</span>
-<span class="p">}}</span>
-<span class="kt">void</span> <span class="kt">void</span> <span class="nf">RemotesBroadcastDemo</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">Ignition</span><span class="o">::</span><span class="n">Get</span><span class="p">();</span>
-    <span class="n">IgniteCluster</span> <span class="n">cluster</span> <span class="o">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetCluster</span><span class="p">();</span>
-    <span class="c1">// Get compute instance which will only execute</span>
-    <span class="c1">// over remote nodes, i.e. all the nodes except for this one.</span>
-    <span class="n">Compute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetCompute</span><span class="p">(</span><span class="n">cluster</span><span class="p">.</span><span class="n">AsClusterGroup</span><span class="p">().</span><span class="n">ForRemotes</span><span class="p">());</span>
-    <span class="c1">// Broadcast to all remote nodes and print the ID of the node</span>
-    <span class="c1">// on which this closure is executing.</span>
-    <span class="n">compute</span><span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="n">PrintNodeIdAction</span><span class="p">());</span>
-<span class="p">}</span></code></pre>
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="paragraph">
@@ -3414,17 +3320,9 @@ how to broadcast a job only to remote nodes (excluding the local node).</p>
 <span class="c1">// All client nodes that access "myCache".</span>
 <span class="kt">var</span> <span class="n">clientGroup</span> <span class="p">=</span> <span class="n">cluster</span><span class="p">.</span><span class="nf">ForClientNodes</span><span class="p">(</span><span class="s">"myCache"</span><span class="p">);</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="n">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">Ignition</span><span class="o">::</span><span class="n">Get</span><span class="p">();</span>
-<span class="n">ClusterGroup</span> <span class="n">cluster</span> <span class="o">=</span> <span class="n">ignite</span><span class="p">.</span><span class="n">GetCluster</span><span class="p">().</span><span class="n">AsClusterGroup</span><span class="p">();</span>
-<span class="c1">// All nodes on which cache with name "myCache" is deployed,</span>
-<span class="c1">// either in client or server mode.</span>
-<span class="n">ClusterGroup</span> <span class="n">cacheGroup</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ForCacheNodes</span><span class="p">(</span><span class="s">"myCache"</span><span class="p">);</span>
-<span class="c1">// All data nodes responsible for caching data for "myCache".</span>
-<span class="n">ClusterGroup</span> <span class="n">dataGroup</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ForDataNodes</span><span class="p">(</span><span class="s">"myCache"</span><span class="p">);</span>
-<span class="c1">// All client nodes that access "myCache".</span>
-<span class="n">ClusterGroup</span> <span class="n">clientGroup</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">.</span><span class="n">ForClientNodes</span><span class="p">(</span><span class="s">"myCache"</span><span class="p">);</span></code></pre>
+<pre class="rouge highlight"><code>This API is not presently available for C++.</code></pre>
 </div>
 </div></code-tab></code-tabs>
         <div class="copyright">
@@ -3475,11 +3373,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639578925' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639578925' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728903' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728903' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639578925" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639578925"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728903" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728903"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

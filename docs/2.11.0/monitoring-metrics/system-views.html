@@ -1175,9 +1175,9 @@
 
                     <li> 
                         
-                            <a href="/docs/latest/key-value-api/using-cache-queries"
+                            <a href="/docs/latest/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1290,6 +1290,19 @@
 
                     <li> 
                         
+                            <a href="/docs/latest/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/latest/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1381,19 +1394,6 @@
                             <a href="/docs/latest/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/latest/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -3387,30 +3387,6 @@ See the <a href="/docs/latest/SQL/schemas">Understanding Schemas</a> page for th
 <span class="o">}</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>System views can also be queried through the <a href="/docs/latest/tools/control-script#system-view-command">Control Script system view command</a>.
-Note that the mentioned above command result contains all columns of the requested system view. If filtering is necessary, it should be performed manually.</p>
-</div>
-<div class="paragraph">
-<p>Examples of the use of <a href="/docs/latest/tools/control-script#system-view-command">Control Script system view command</a>:</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="c"># get the list of nodes</span>
-control.sh <span class="nt">--system-view</span> NODES
-
-<span class="c"># get the list of metrics from the node with the specific ID</span>
-control.sh <span class="nt">--system-view</span> NODE_METRICS <span class="nt">--node-id</span> a1b77663-b37f-4ddf-87a6-1e2d684f3bae</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="c"># get the list of nodes</span>
-control.bat <span class="nt">--system-view</span> NODES
-
-<span class="c"># get the list of metrics from the node with the specific ID</span>
-control.bat <span class="nt">--system-view</span> NODE_METRICS <span class="nt">--node-id</span> a1b77663-b37f-4ddf-87a6-1e2d684f3bae</code></pre>
-</div>
-</div></code-tab></code-tabs>
 </div>
 </div>
 <div class="sect1">
@@ -6402,248 +6378,6 @@ Note, lock will be shown on the non parent node only after initial usage on that
 </table>
 </div>
 </div>
-<div class="sect1">
-<h2 id="statistics_configuration">STATISTICS_CONFIGURATION</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The STATISTICS_CONFIGURATION view contains information about <a href="/docs/latest/SQL/sql-statistics" target="_blank" rel="noopener">SQL statistics</a> configuration.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 28.5714%;">
-<col style="width: 14.2857%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Column</th>
-<th class="tableblock halign-left valign-top">Data Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SCHEMA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Schema name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TYPE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object type.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NAME</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">COLUMN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Column name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MAX_PARTITION_OBSOLESCENCE_PERCENT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TINYINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum percentage of obsolescent rows in statistics. See the <a href="/docs/latest/SQL/sql-statistics#statistics-obsolescence" target="_blank" rel="noopener">SQL Statistics</a> page for more details.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MANUAL_NULLS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If not null - overrided number of null values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MANUAL_DISTINCT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If not null - overrided number of distinct values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MANUAL_TOTAL</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If not null - overrided total number of values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MANUAL_SIZE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If not null - overrided average size of non null values in column.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VERSION</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Configuration version.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="statistics_local_data">STATISTICS_LOCAL_DATA</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The STATISTICS_LOCAL_DATA view contains <a href="/docs/latest/SQL/sql-statistics" target="_blank" rel="noopener">SQL statistics</a> for locally managed (or stored) data. This view is node-specific, so each node has an instance of the view that contains information about its local data statistics.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 28.5714%;">
-<col style="width: 14.2857%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Column</th>
-<th class="tableblock halign-left valign-top">Data Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SCHEMA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Schema name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TYPE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object type.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NAME</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">COLUMN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Column name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ROWS_COUNT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count of column rows.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DISTINCT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of unique non-null values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NULLS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of null values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TOTAL</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of values in column.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SIZE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INTEGER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Average value size in bytes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VERSION</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Statistics version.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LAST_UPDATE_TIME</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time of all partition statistics which was used to generate local one.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="statistics_partition_data">STATISTICS_PARTITION_DATA</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The STATISTICS_PARTITION_DATA view contains information about <a href="/docs/latest/SQL/sql-statistics" target="_blank" rel="noopener">SQL statistics</a> on every partition data stored on a local node.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 28.5714%;">
-<col style="width: 14.2857%;">
-<col style="width: 57.1429%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Column</th>
-<th class="tableblock halign-left valign-top">Data Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SCHEMA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Schema name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TYPE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object type.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NAME</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Object name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">COLUMN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Column name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PARTITION</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INTEGER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Partition number.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ROWS_COUNT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count of column rows.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UPDATE_COUNTER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Partition counter update when statistics are collected.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DISTINCT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of unique non-null values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">NULLS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of null values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TOTAL</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of values in column.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SIZE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INTEGER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Average value size in bytes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VERSION</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BIGINT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Statistics version.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LAST_UPDATE_TIME</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VARCHAR</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time of all partition statistics which was used to generate local one.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
         <div class="copyright">
  © 2021 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -6697,9 +6431,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#ds_countdownlatches">DS_COUNTDOWNLATCHES</a></li>
 <li><a href="#ds_semaphores">DS_SEMAPHORES</a></li>
 <li><a href="#ds_reentrantlocks">DS_REENTRANTLOCKS</a></li>
-<li><a href="#statistics_configuration">STATISTICS_CONFIGURATION</a></li>
-<li><a href="#statistics_local_data">STATISTICS_LOCAL_DATA</a></li>
-<li><a href="#statistics_partition_data">STATISTICS_PARTITION_DATA</a></li>
 </ul>
     </div>
           
@@ -6739,11 +6470,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639574493' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639574493' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729443' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729443' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639574493" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639574493"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729443" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729443"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

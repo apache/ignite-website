@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/persistence/snapshot-directory"
+                            <a href="/docs/2.9.1/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.1/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.1/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.1/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.1/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.1/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.1/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.1/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3437,10 +3368,10 @@ Using these addresses, the new node discovers all cluster nodes.</p>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
 <span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
-<span class="na">metadata</span><span class="pi">:</span>
-  <span class="c1"># The name must be equal to KubernetesConnectionConfiguration.serviceName</span>
+<span class="na">metadata</span><span class="pi">:</span> 
+  <span class="c1"># The name must be equal to TcpDiscoveryKubernetesIpFinder.serviceName</span>
   <span class="na">name</span><span class="pi">:</span> <span class="s">ignite-service</span>
-  <span class="c1"># The name must be equal to KubernetesConnectionConfiguration.namespace</span>
+  <span class="c1"># The name must be equal to TcpDiscoveryKubernetesIpFinder.namespace</span>
   <span class="na">namespace</span><span class="pi">:</span> <span class="s">ignite</span>
   <span class="na">labels</span><span class="pi">:</span>
     <span class="na">app</span><span class="pi">:</span> <span class="s">ignite</span>
@@ -3455,7 +3386,7 @@ Using these addresses, the new node discovers all cluster nodes.</p>
       <span class="na">targetPort</span><span class="pi">:</span> <span class="m">10800</span>
   <span class="c1"># Optional - remove 'sessionAffinity' property if the cluster</span>
   <span class="c1"># and applications are deployed within Kubernetes</span>
-  <span class="c1">#  sessionAffinity: ClientIP</span>
+  <span class="c1">#  sessionAffinity: ClientIP   </span>
   <span class="na">selector</span><span class="pi">:</span>
     <span class="c1"># Must be equal to the label set for pods.</span>
     <span class="na">app</span><span class="pi">:</span> <span class="s">ignite</span>
@@ -3547,30 +3478,19 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
 <div class="listingblock">
 <div class="title">node-configuration.xml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">"
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
 
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"discoverySpi"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"</span><span class="nt">&gt;</span>
                 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"ipFinder"</span><span class="nt">&gt;</span>
                     <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder"</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;constructor-arg&gt;</span>
-                            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.kubernetes.configuration.KubernetesConnectionConfiguration"</span><span class="nt">&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span> <span class="nt">/&gt;</span>
-                            <span class="nt">&lt;/bean&gt;</span>
-                        <span class="nt">&lt;/constructor-arg&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span><span class="nt">/&gt;</span>
                     <span class="nt">&lt;/bean&gt;</span>
                 <span class="nt">&lt;/property&gt;</span>
             <span class="nt">&lt;/bean&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+    <span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Configuration with persistence'><div class="paragraph">
 <p>In the configuration file, we will:</p>
@@ -3591,12 +3511,7 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
 <div class="listingblock">
 <div class="title">node-configuration.xml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
 
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"workDirectory"</span> <span class="na">value=</span><span class="s">"/ignite/work"</span><span class="nt">/&gt;</span>
 
@@ -3618,23 +3533,18 @@ This IP finder connects to the service via the Kubernetes API and obtains the li
             <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi"</span><span class="nt">&gt;</span>
                 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"ipFinder"</span><span class="nt">&gt;</span>
                     <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder"</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;constructor-arg&gt;</span>
-                            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.kubernetes.configuration.KubernetesConnectionConfiguration"</span><span class="nt">&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span> <span class="nt">/&gt;</span>
-                                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span> <span class="nt">/&gt;</span>
-                            <span class="nt">&lt;/bean&gt;</span>
-                        <span class="nt">&lt;/constructor-arg&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"namespace"</span> <span class="na">value=</span><span class="s">"ignite"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"serviceName"</span> <span class="na">value=</span><span class="s">"ignite-service"</span><span class="nt">/&gt;</span>
                     <span class="nt">&lt;/bean&gt;</span>
                 <span class="nt">&lt;/property&gt;</span>
             <span class="nt">&lt;/bean&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
 
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+    <span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="paragraph">
-<p>The <code>namespace</code> and <code>serviceName</code> properties of the IP finder configuration must be the same as specified in the <a href="#creating-service">service configuration</a>.
+<p>The <code>namespace</code> and <code>serviceName</code> properties of the IP finder must be the same as specified in the <a href="#creating-service">service configuration</a>.
 Add other properties as required for your use case.</p>
 </div>
 <div class="paragraph">
@@ -4107,60 +4017,6 @@ Note that we use the external IP address (LoadBalancer Ingress) of the service.<
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="partition-awareness">Partition Awareness</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Partition awareness allows the thin client to send query requests directly to the node that owns the queried data.</p>
-</div>
-<div class="paragraph">
-<p>Without partition awareness, an application that is connected to the cluster via a thin client executes all queries and operations via a single server node that acts as a proxy for the incoming requests.
-These operations are then re-routed to the node that stores the data that is being requested.
-This results in a bottleneck that could prevent the application from scaling linearly.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/docs/2.9.1/images/partitionawareness01.png" alt="Without Partition Awareness">
-</div>
-</div>
-<div class="paragraph">
-<p>Notice how queries must pass through the proxy server node, where they are routed to the correct node.</p>
-</div>
-<div class="paragraph">
-<p>With partition awareness in place, the thin client can directly route queries and operations to the primary nodes that own the data required for the queries.
-This eliminates the bottleneck, allowing the application to scale more easily.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/docs/2.9.1/images/partitionawareness02.png" alt="With Partition Awareness">
-</div>
-</div>
-<div class="paragraph">
-<p>To enable the partition awareness feature within scaling Kubernetes enviroment, one should start a client within the cluster and configure it with <code>KubernetesConnectionConfiguration</code>.
-In this case, a client can connect to every pod in a cluster.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">KubernetesConnectionConfiguration</span> <span class="n">kcfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">KubernetesConnectionConfiguration</span><span class="o">();</span>
-<span class="n">kcfg</span><span class="o">.</span><span class="na">setNamespace</span><span class="o">(</span><span class="s">"ignite"</span><span class="o">);</span>
-<span class="n">kcfg</span><span class="o">.</span><span class="na">setServiceName</span><span class="o">(</span><span class="s">"ignite-service"</span><span class="o">);</span>
-
-<span class="nc">ClientConfiguration</span> <span class="n">ccfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="o">();</span>
-<span class="n">ccfg</span><span class="o">.</span><span class="na">setAddressesFinder</span><span class="o">(</span><span class="k">new</span> <span class="nc">ThinClientKubernetesAddressFinder</span><span class="o">(</span><span class="n">kcfg</span><span class="o">));</span>
-
-<span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">startClient</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
-
-<span class="nc">ClientCache</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">getOrCreateCache</span><span class="o">(</span><span class="s">"test_cache"</span><span class="o">);</span>
-
-<span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"first test value"</span><span class="o">);</span>
-
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
-
-<span class="n">client</span><span class="o">.</span><span class="na">close</span><span class="o">();</span></code></pre>
-</div>
-</div>
-</div>
-</div>
         <div class="copyright">
  © 2021 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -4190,7 +4046,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#connecting-to-rest-api">Connecting to REST API</a></li>
 </ul>
 </li>
-<li><a href="#partition-awareness">Partition Awareness</a></li>
 </ul>
     </div>
           
@@ -4230,11 +4085,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639578926' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639578926' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728904' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728904' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639578926" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639578926"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728904" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728904"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

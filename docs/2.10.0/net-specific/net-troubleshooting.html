@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/persistence/snapshot-directory"
+                            <a href="/docs/2.10.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.10.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.10.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.10.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.10.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.10.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.10.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.10.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2931,11 +2898,6 @@
 
 								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.10.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -3133,19 +3095,6 @@
                             <a href="/docs/2.10.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.10.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3494,25 +3443,6 @@ Alternatively, use Services API to call Java service from .NET.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="dllnotfoundexception-unable-to-load-shared-library-libcoreclr-so-or-one-of-its-dependencies"><a id="libcoreclr-not-found"></a> DllNotFoundException: Unable to load shared library 'libcoreclr.so' or one of its dependencies</h3>
-<div class="paragraph">
-<p>Occurs on .NET 5 in a single-file publish mode (e.g. <code>dotnet publish --self-contained true -r linux-x64 -p:PublishSingleFile=true</code>).</p>
-</div>
-<div class="sect3">
-<h4 id="workaround-2">Workaround</h4>
-<div class="paragraph">
-<p>Add the following code before starting the Ignite node:</p>
-</div>
-<code-tabs><code-tab data-tab='C#'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">NativeLibrary</span><span class="p">.</span><span class="nf">SetDllImportResolver</span><span class="p">(</span>
-    <span class="k">typeof</span><span class="p">(</span><span class="n">Ignition</span><span class="p">).</span><span class="n">Assembly</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">lib</span> <span class="p">==</span> <span class="s">"libcoreclr.so"</span> <span class="p">?</span> <span class="p">(</span><span class="n">IntPtr</span><span class="p">)</span> <span class="p">(-</span><span class="m">1</span><span class="p">)</span> <span class="p">:</span> <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">);</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
 </div>
 </div>
         <div class="copyright">
@@ -3539,11 +3469,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#zombie-processes-on-linux">Zombie processes on Linux</a>
 <ul class="sectlevel3">
 <li><a href="#workaround">Workaround</a></li>
-</ul>
-</li>
-<li><a href="#dllnotfoundexception-unable-to-load-shared-library-libcoreclr-so-or-one-of-its-dependencies"> DllNotFoundException: Unable to load shared library 'libcoreclr.so' or one of its dependencies</a>
-<ul class="sectlevel3">
-<li><a href="#workaround-2">Workaround</a></li>
 </ul>
 </li>
 </ul>
@@ -3587,11 +3512,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639576939' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639576939' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639729140' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639729140' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639576939" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639576939"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639729140" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639729140"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

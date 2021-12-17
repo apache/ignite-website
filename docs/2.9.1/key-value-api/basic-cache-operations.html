@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/persistence/snapshot-directory"
+                            <a href="/docs/2.9.1/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.1/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.1/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.1/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.1/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.1/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.1/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.1/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3619,7 +3550,7 @@ If this happens, a <code>CachePartialUpdateException</code> is thrown and contai
 <p>The asynchronous operations return an object that represents the result of the operation. You can wait for the completion of the operation in either blocking or non-blocking manner.</p>
 </div>
 <div class="paragraph">
-<p>To wait for the results in a non-blocking fashion, register a callback using the <code>IgniteFuture.listen()</code> or <code>IgniteFuture.chain()</code> method. The callback is called when the operation is completed.</p>
+<p>To wait for the results in a non-blocking fashion, register a closure using the <code>IgniteFuture.listen()</code> or <code>IgniteFuture.chain()</code> method. The closure is called when the operation is completed.</p>
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
@@ -3764,41 +3695,15 @@ If this happens, a <code>CachePartialUpdateException</code> is thrown and contai
 <div class="title">Note</div>
 </td>
 <td class="content">
-<h3 id="callbacks-execution-and-thread-pools" class="discrete">Callbacks Execution and Thread Pools</h3>
+<h3 id="closures-execution-and-thread-pools" class="discrete">Closures Execution and Thread Pools</h3>
 <div class="paragraph">
-<p>If an asynchronous operation is completed by the time the callback is passed to either the <code>IgniteFuture.listen()</code> or <code>IgniteFuture.chain()</code> method, then the callback is executed synchronously by the calling thread.
-Otherwise, the callback is executed asynchronously when the operation is completed.</p>
-</div>
-<div class="paragraph">
-<p>Callbacks for asynchronous compute operations are invoked by threads from the <a href="/docs/2.9.1/perf-and-troubleshooting/thread-pools-tuning">Ignite public pool</a>.
-Calling synchronous cache and compute operations from inside the callback may lead to a deadlock due to pools starvation.
-To achieve nested execution of asynchronous compute operations, you can take advantage of <a href="/docs/2.9.1/perf-and-troubleshooting/thread-pools-tuning#creating-custom-thread-pool">custom thread pools</a>.</p>
+<p>If an asynchronous operation is completed by the time the closure is passed to either the <code>IgniteFuture.listen()</code> or <code>IgniteFuture.chain()</code> method, then the closure is executed synchronously by the calling thread. Otherwise, the closure is executed asynchronously when the operation is completed.</p>
 </div>
 <div class="paragraph">
-<p>Callbacks for asynchronous cache operations are invoked by using <code>ForkJoinPool#commonPool</code>, unless a different executor is configured with <code>IgniteConfiguration#asyncContinuationExecutor</code>.</p>
+<p>Depending on the type of operation, the closure might be called by a thread from the system pool (asynchronous cache operations) or by a thread from the public pool (asynchronous compute operations). Therefore, you should avoid calling synchronous cache and compute operations from inside the closure, because it may lead to a deadlock due to pools starvation.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>This default executor is safe for any operations inside the callback.</p>
-</li>
-<li>
-<p>Default behavior was changed in Ignite 2.11. Before that, async cache operation callbacks were called from an Ignite system pool (so-called "striped pool").</p>
-</li>
-<li>
-<p>To restore previous behavior, use <code>IgniteConfiguration.setAsyncContinuationExecutor(Runnable::run)</code>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Previous behavior can provide a small performance improvement, because callbacks are executed without any indirection or scheduling.</p>
-</li>
-<li>
-<p>UNSAFE: cache operations cannot proceed while system threads execute callbacks, and deadlocks are possible if other cache operations are invoked from the callback.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
+<div class="paragraph">
+<p>To achieve nested execution of asynchronous compute operations, you can take advantage of <a href="/docs/2.9.1/perf-troubleshooting-guide/thread-pools-tuning#creating-custom-thread-pool">custom thread pools</a>.</p>
 </div>
 </td>
 </tr>
@@ -3860,11 +3765,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639578926' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639578926' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728904' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728904' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639578926" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639578926"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728904" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728904"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

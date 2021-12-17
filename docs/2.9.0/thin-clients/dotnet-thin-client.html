@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/persistence/snapshot-directory"
+                            <a href="/docs/2.9.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3405,6 +3336,20 @@ Server nodes provide their addresses and ports to the client, but when the clien
 <div class="sectionbody">
 <div class="paragraph">
 <p>Partition awareness allows the thin client to send query requests directly to the node that owns the queried data.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Partition awareness is an experimental feature whose API or design architecture might change before a GA version is released.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Without partition awareness, an application that is connected to the cluster via a thin client executes all queries and operations via a single server node that acts as a proxy for the incoming requests.
@@ -3737,29 +3682,6 @@ task named <code>org.foo.bar.AddOneTask</code> passing <code>1</code> as an inpu
 </div>
 </div>
 <div class="sect1">
-<h2 id="executing-ignite-services">Executing Ignite Services</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can use the <code>IServicesClient</code> API to invoke an <a href="/docs/2.9.0/services/services">Ignite Service</a> that
-is <strong>already deployed</strong> in the cluster. See <a href="/docs/2.9.0/services/services">Using Ignite Services</a> for more information on service deployment.</p>
-</div>
-<div class="paragraph">
-<p>The example below shows how to invoke the service named <code>MyService</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Ignition</span><span class="p">.</span><span class="nf">StartClient</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span>
-<span class="n">IServicesClient</span> <span class="n">services</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetServices</span><span class="p">();</span>
-<span class="n">IMyService</span> <span class="n">serviceProxy</span> <span class="p">=</span> <span class="n">services</span><span class="p">.</span><span class="n">GetServiceProxy</span><span class="p">&lt;</span><span class="n">IMyService</span><span class="p">&gt;(</span><span class="s">"MyService"</span><span class="p">);</span>
-<span class="n">serviceProxy</span><span class="p">.</span><span class="nf">MyServiceMethod</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The thin client allows to execute services implemented in Java or .NET.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="security">Security</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -3844,7 +3766,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 </ul>
 </li>
 <li><a href="#executing-compute-tasks">Executing Compute Tasks</a></li>
-<li><a href="#executing-ignite-services">Executing Ignite Services</a></li>
 <li><a href="#security">Security</a>
 <ul class="sectlevel2">
 <li><a href="#ssltls">SSL/TLS</a></li>
@@ -3890,11 +3811,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639580147' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639580147' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728692' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728692' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639580147" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639580147"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728692" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728692"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

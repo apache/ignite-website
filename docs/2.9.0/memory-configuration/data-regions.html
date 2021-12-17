@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/persistence/snapshot-directory"
+                            <a href="/docs/2.9.0/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.0/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.0/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.0/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.0/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.0/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.0/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.0/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.0/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.0/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.0/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.0/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3591,217 +3522,6 @@ Note that further below in the configuration, we create a cache that resides in 
 </div></code-tab></code-tabs>
 </div>
 </div>
-<div class="sect1">
-<h2 id="cache-warm-up-strategy">Cache Warm-Up Strategy</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite does not require you to warm memory up from disk on restarts. As soon as a cluster is inter-connected, your application can query and compute on it. At the same time, the memory warm-up feature is designed for low-latency applications that prefer data being loaded in memory before it can be queried.</p>
-</div>
-<div class="paragraph">
-<p>Presently, the Ignite warm-up strategy implies loading data into all or specific data regions of Ignite, starting with indexes, until it runs out of free space. It can be configured both for all regions (by default) or for each region separately.</p>
-</div>
-<div class="paragraph">
-<p>To warm up all data regions, pass the configuration parameter <code>LoadAllWarmUpStrategy</code> to the <code>DataStorageConfiguration#setDefaultWarmUpConfiguration</code> as follows:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultWarmUpConfiguration"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.LoadAllWarmUpConfiguration"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/property&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
-
-<span class="c1">//Changing the default warm-up strategy for all data regions</span>
-<span class="n">storageCfg</span><span class="o">.</span><span class="na">setDefaultWarmUpConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="nc">LoadAllWarmUpConfiguration</span><span class="o">());</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>To warm up a specific data region, pass the configuration parameter <code>LoadAllWarmUpStrategy</code> to the <code>DataStorageConfiguration#setWarmUpConfiguration</code> as follows:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionConfigurations"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"NewDataRegion"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"persistenceEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"warmUpConfiguration"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.LoadAllWarmUpConfiguration"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/property&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
-
-<span class="c1">//Setting another warm-up strategy for a custom data region</span>
-<span class="nc">DataRegionConfiguration</span> <span class="n">myNewDataRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataRegionConfiguration</span><span class="o">();</span>
-
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"NewDataRegion"</span><span class="o">);</span>
-
-<span class="c1">//You can tweak the initial size as well as other settings</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setInitialSize</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">);</span>
-
-<span class="c1">//Performing data loading from disk in DRAM on restarts.</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setWarmUpConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="nc">LoadAllWarmUpConfiguration</span><span class="o">());</span>
-
-<span class="c1">//Enabling Ignite persistence. Ignite reads data from disk when queried for tables/caches from this region.</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setPersistenceEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-
-<span class="c1">//Applying the configuration.</span>
-<span class="n">storageCfg</span><span class="o">.</span><span class="na">setDataRegionConfigurations</span><span class="o">(</span><span class="n">myNewDataRegion</span><span class="o">);</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>To stop the warm-up for all data regions, pass the configuration parameter <code>NoOpWarmUpConfiguration</code> to the <code>DataStorageConfiguration#setDefaultWarmUpConfiguration</code> as follows:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultWarmUpConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.NoOpWarmUpConfiguration"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
-
-<span class="n">storageCfg</span><span class="o">.</span><span class="na">setDefaultWarmUpConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="nc">NoOpWarmUpConfiguration</span><span class="o">());</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>To stop the warm-up for a specific data region, pass the configuration parameter <code>NoOpWarmUpStrategy</code> to the <code>DataStorageConfiguration#setWarmUpConfiguration</code> as follows:</p>
-</div>
-<code-tabs><code-tab data-tab='XML'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionConfigurations"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"NewDataRegion"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"persistenceEnabled"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"warmUpConfiguration"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.NoOpWarmUpConfiguration"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/property&gt;</span>
-        <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-<span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
-
-<span class="c1">//Setting another warm-up strategy for a custom data region</span>
-<span class="nc">DataRegionConfiguration</span> <span class="n">myNewDataRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataRegionConfiguration</span><span class="o">();</span>
-
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"NewDataRegion"</span><span class="o">);</span>
-
-<span class="c1">//You can tweak the initial size as well as other settings</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setInitialSize</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">);</span>
-
-<span class="c1">//Skip data loading from disk in DRAM on restarts.</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setWarmUpConfiguration</span><span class="o">(</span><span class="k">new</span> <span class="nc">NoOpWarmUpConfiguration</span><span class="o">());</span>
-
-<span class="c1">//Enabling Ignite persistence. Ignite reads data from disk when queried for tables/caches from this region.</span>
-<span class="n">myNewDataRegion</span><span class="o">.</span><span class="na">setPersistenceEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-
-<span class="c1">//Applying the configuration.</span>
-<span class="n">storageCfg</span><span class="o">.</span><span class="na">setDataRegionConfigurations</span><span class="o">(</span><span class="n">myNewDataRegion</span><span class="o">);</span>
-
-<span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C#/.NET' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C#/.NET. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++' data-unavailable='true'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>This API is not presently available for C++. You can use XML configuration.</code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>You can also stop the cache warm-up by using <code>control.sh</code> and JMX.</p>
-</div>
-<div class="paragraph">
-<p>To stop the warm-up using control.sh:</p>
-</div>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--warm-up</span> <span class="nt">--stop</span> <span class="nt">--yes</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--warm-up</span> <span class="nt">--stop</span> <span class="nt">--yes</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>To stop the warm-up using JMX, use the method:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">ignite</span><span class="o">.</span><span class="na">mxbean</span><span class="o">.</span><span class="na">WarmUpMXBean</span><span class="err">#</span><span class="n">stopWarmUp</span></code></pre>
-</div>
-</div>
-</div>
-</div>
         <div class="copyright">
  © 2021 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -3815,7 +3535,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#overview">Overview</a></li>
 <li><a href="#configuring-default-data-region">Configuring Default Data Region</a></li>
 <li><a href="#adding-custom-data-regions">Adding Custom Data Regions</a></li>
-<li><a href="#cache-warm-up-strategy">Cache Warm-Up Strategy</a></li>
 </ul>
     </div>
           
@@ -3855,11 +3574,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639580145' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639580145' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728690' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728690' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639580145" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639580145"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728690" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728690"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
