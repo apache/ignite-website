@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/persistence/snapshot-directory"
+                            <a href="/docs/2.9.1/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.1/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.1/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.1/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.1/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.1/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.1/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3136,19 +3080,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -3297,68 +3228,11 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>Apache Ignite.NET consists of .NET assemblies and Java jar files. The .NET assemblies are referenced by your project and
-are copied to an output folder during the build automatically. The JAR files can be handled automatically or manually, depending on the approach.
+are copied to an output folder during the build automatically. The JAR files should be copied manually.
 Ignite.NET discovers them via the <code>IgniteHome</code> or <code>JvmClasspath</code> settings.</p>
 </div>
 <div class="paragraph">
 <p>This page introduces several most-commonly used deployment options of Ignite.NET nodes.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="nuget-deployment">NuGet Deployment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><code>Apache.Ignite</code> NuGet package includes a <code>lib</code> folder with all the required jar files. This folder has
-the <code>&lt;CopyToOutputDirectory&gt;PreserveNewest&lt;/CopyToOutputDirectory&gt;</code> build action, and is copied automatically to the output directory
-during the build or publish process.</p>
-</div>
-<div class="paragraph">
-<p>Make sure <code>IGNITE_HOME</code> is not set globally. Normally you don&#8217;t need to set <code>IGNITE_HOME</code> with NuGet, except for
-ASP.NET deployments (see below).</p>
-</div>
-<div class="paragraph">
-<p>To disable this default build action, add the <code>&lt;ExcludeAssets&gt;build&lt;/ExcludeAssets&gt;</code> <a href="https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets">property</a> to the corresponding <code>&lt;PackageReference&gt;</code> in your <code>.csproj</code> file.
-This can be useful for thin client use cases and custom deployments.</p>
-</div>
-<code-tabs><code-tab data-tab='MyApp.csproj'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;Project</span> <span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
-    ...
-
-    <span class="nt">&lt;ItemGroup&gt;</span>
-      <span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Apache.Ignite"</span> <span class="na">Version=</span><span class="s">"2.9.1"</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;ExcludeAssets&gt;</span>build<span class="nt">&lt;/ExcludeAssets&gt;</span>
-      <span class="nt">&lt;/PackageReference&gt;</span>
-    <span class="nt">&lt;/ItemGroup&gt;</span>
-
-<span class="nt">&lt;/Project&gt;</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-<div class="sect1">
-<h2 id="single-file-deployment">Single File Deployment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite.NET supports <a href="https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file">single file deployment</a> that is available in .NET Core 3 / .NET 5+.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Use the <code>IncludeAllContentForSelfExtract</code> MSBuild property to include jar files into the single-file bundle, or ship them separately.</p>
-</li>
-<li>
-<p>See <a href="net-troubleshooting.html#libcoreclr-not-found">Troubleshooting: DllNotFoundException</a> for a workaround that is required
-on .NET 5 with some Ignite versions.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Publish command example:</p>
-</div>
-<div class="paragraph">
-<p><code>dotnet publish --self-contained true -r linux-x64 -p:PublishSingleFile=true -p:IncludeAllContentForSelfExtract=true</code></p>
 </div>
 </div>
 </div>
@@ -3368,13 +3242,33 @@ on .NET 5 with some Ignite versions.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Copy the <a href="https://ignite.apache.org/download.cgi#binaries" target="_blank" rel="noopener">whole Ignite distribution package</a> along with your application</p>
+<p>Copy the <a href="https://ignite.apache.org" target="_blank" rel="noopener">whole Ignite distribution package</a> along with your application</p>
 </li>
 <li>
 <p>Set the <code>IGNITE_HOME</code> environment variable or <code>IgniteConfiguration.IgniteHome</code> setting to point to that folder</p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="nuget-deployment">NuGet Deployment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The post-build event is updated automatically during the Ignite.NET NuGet package installation to copy jar files to
+<code>Libs</code> folder in the output directory (see <a href="/docs/2.9.1/quick-start/dotnet">Getting Started</a>).
+Make sure to include that <code>Libs</code> folder when distributing your binaries.</p>
+</div>
+<div class="paragraph">
+<p>Make sure <code>IGNITE_HOME</code> is not set globally. Normally you don&#8217;t need to set <code>IGNITE_HOME</code> with NuGet, except for
+ASP.NET deployments (see below).</p>
+</div>
+<code-tabs><code-tab data-tab='Post-Build Event'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="k">if </span>not exist <span class="s2">"</span><span class="si">$(</span>TargetDir<span class="si">)</span><span class="s2">Libs"</span> md <span class="s2">"</span><span class="si">$(</span>TargetDir<span class="si">)</span><span class="s2">Libs"</span>
+xcopy /s /y <span class="s2">"</span><span class="si">$(</span>SolutionDir<span class="si">)</span><span class="s2">packages</span><span class="se">\A</span><span class="s2">pache.Ignite.1.6.0</span><span class="se">\L</span><span class="s2">ibs</span><span class="se">\*</span><span class="s2">.*"</span> <span class="s2">"</span><span class="si">$(</span>TargetDir<span class="si">)</span><span class="s2">Libs"</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
 </div>
 </div>
 <div class="sect1">
@@ -3405,7 +3299,7 @@ The minimum set of jars for Ignite.NET is:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Copy the JAR files to the <code>libs</code> folder next to Apache.Ignite.Core.dll</p>
+<p>Copy the JAR files to the <code>Libs</code> folder next to Apache.Ignite.Core.dll</p>
 </li>
 <li>
 <p>Do not set the <code>IgniteConfiguration.JvmClasspath</code>, <code>IgniteConfiguration.IgniteHome</code> properties and <code>IGNITE_HOME</code> environment variable</p>
@@ -3520,9 +3414,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#nuget-deployment">NuGet Deployment</a></li>
-<li><a href="#single-file-deployment">Single File Deployment</a></li>
 <li><a href="#full-binary-package-deployment">Full Binary Package Deployment</a></li>
+<li><a href="#nuget-deployment">NuGet Deployment</a></li>
 <li><a href="#custom-deployment">Custom Deployment</a>
 <ul class="sectlevel2">
 <li><a href="#deploying-jars-to-a-default-location">Deploying JARs to a default location:</a></li>
@@ -3570,11 +3463,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639578927' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639578927' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728905' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728905' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639578927" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639578927"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728905" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728905"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

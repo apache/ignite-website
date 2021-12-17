@@ -863,19 +863,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/memory-configuration/replacement-policies"
-                                class=''
-                            >Replacement Policies</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -952,9 +939,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/persistence/snapshot-directory"
+                            <a href="/docs/2.9.1/persistence/snapshots"
                                 class=''
-                            >Configuring Snapshot Directory</a>
+                            >Cluster Snapshots</a>
                         
                     </li>
                 
@@ -987,13 +974,6 @@
               
                      
              </nav>   
-            
-        </li>
-    
-        <li>
-            
-                
-                <a href="/docs/2.9.1/snapshots/snapshots" class='' >Cluster Snapshots</a>
             
         </li>
     
@@ -1176,9 +1156,9 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/key-value-api/using-cache-queries"
+                            <a href="/docs/2.9.1/key-value-api/using-scan-queries"
                                 class=''
-                            >Using Cache Queries</a>
+                            >Using Scan Queries</a>
                         
                     </li>
                 
@@ -1291,6 +1271,19 @@
 
                     <li> 
                         
+                            <a href="/docs/2.9.1/SQL/sql-transactions"
+                                class=''
+                            >SQL Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/2.9.1/SQL/custom-sql-func"
                                 class=''
                             >Custom SQL Functions</a>
@@ -1382,19 +1375,6 @@
                             <a href="/docs/2.9.1/transactions/mvcc"
                                 class=''
                             >Multiversion Concurrency Control</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/SQL/sql-statistics"
-                                class=''
-                            >SQL Statistics</a>
                         
                     </li>
                 
@@ -2264,19 +2244,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/net-specific/net-async"
-                                class=''
-                            >Asynchronous APIs</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/net-specific/net-logging"
                                 class=''
                             >Logging</a>
@@ -2624,19 +2591,6 @@
 
                     <li> 
                         
-                            <a href="/docs/2.9.1/monitoring-metrics/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
                             <a href="/docs/2.9.1/monitoring-metrics/tracing"
                                 class=''
                             >Tracing</a>
@@ -2862,11 +2816,6 @@
 
 								  <li><a href="/docs/2.9.1/security/master-key-rotation" class=''>Master key rotation</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/security/cache-encryption-key-rotation" class=''>Cache encryption key rotation</a></li>
-                            
                             </nav>
                         
                     </li>
@@ -2930,11 +2879,6 @@
                                   
 
 								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-caching" class=''>Spring Caching</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/2.9.1/extensions-and-integrations/spring/spring-tx" class=''>Spring Transactions</a></li>
                             
                             </nav>
                         
@@ -3133,19 +3077,6 @@
                             <a href="/docs/2.9.1/extensions-and-integrations/php-pdo"
                                 class=''
                             >PHP PDO</a>
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/2.9.1/extensions-and-integrations/performance-statistics"
-                                class=''
-                            >Performance Statistics</a>
                         
                     </li>
                 
@@ -3514,9 +3445,9 @@ represent the operations on cache objects, such as 'get', 'put', 'remove', 'lock
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EVT_CACHE_OBJECT_READ</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">An object is read from a cache.
-This event is not emitted when you use <a href="/docs/2.9.1/key-value-api/using-cache-queries">scan queries</a> (use <a href="#cache-query-events">Cache Query Events</a> to monitor scan queries).</p></td>
+This event is not emitted when you use <a href="/docs/2.9.1/key-value-api/using-scan-queries">scan queries</a> (use <a href="#cache-query-events">Cache Query Events</a> to monitor scan queries).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The node where read operation is executed.
-It can be either the primary or backup node (the latter case is only possible when <a href="/docs/2.9.1/configuring-caches/configuration-overview#readfrombackup">reading from backups</a> is enabled).
+It can be either the primary or backup node (the latter case is only possible when <a href="/docs/2.9.1/configuring-caches/configuration-overview#readfrombackup">reading from backups is enabled</a>).
 In transactional caches, the event can be generated on both the primary and backup nodes depending on the concurrency and isolation levels.</p></td>
 </tr>
 <tr>
@@ -3606,7 +3537,7 @@ If you want to monitor cache remove operations, use the <code>EVT_CACHE_OBJECT_R
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EVT_CACHE_QUERY_OBJECT_READ</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An object is read as part of a query execution. This event is generated for every object that matches the <a href="/docs/2.9.1/key-value-api/using-cache-queries#executing-scan-queries">query filter</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An object is read as part of a query execution. This event is generated for every object that matches the <a href="/docs/2.9.1/key-value-api/using-scan-queries#executing-scan-queries">query filter</a>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The primary node of the object that is read.</p></td>
 </tr>
 <tr>
@@ -3995,82 +3926,6 @@ They allow you to get notification about different stages of transaction executi
 </table>
 </div>
 </div>
-<div class="sect1">
-<h2 id="snapshot-events">Snapshot Events</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>All snapshot events are instances of the <a href="https://ignite.apache.org/releases/2.9.1/javadoc/org/apache/ignite/events/SnapshotEvent.html">SnapshotEvent</a> class. The snapshot events
-are always triggered at the node initiated a snapshot operation. They are also associated with the particular snapshot operation name.
-These events can notify you about the states and the result of the cluster snapshot operation, which can be used for further processing in
-your custom procedures.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 50%;">
-<col style="width: 30%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Event Type</th>
-<th class="tableblock halign-left valign-top">Event Description</th>
-<th class="tableblock halign-left valign-top">Where Event is Fired</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EVT_CLUSTER_SNAPSHOT_STARTED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A cluster snapshot operation is started.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The node where the snapshot operation was initiated.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EVT_CLUSTER_SNAPSHOT_FINISHED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A cluster snapshot operation is finished. The event is fired when the snapshot operation is finished on all the cluster nodes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The node where the snapshot operation was finished.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EVT_CLUSTER_SNAPSHOT_FAILED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A cluster snapshot operation is failed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The node where the snapshot operation was initiated. Note that the message will contain a failure description from another node. You may check the logs for details.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="node-validation-failure-events">Node Validation Failure Events</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>These events are triggered when a new node cannot join the Ignite cluster because some of the cluster member nodes failed to validate it.
-Validation should be understood as the configuration and state compatibility check between the joining node and the cluster member nodes.
-Node validation failure events provide information about the node that tried to join the cluster and the reason for the validation failure.</p>
-</div>
-<div class="paragraph">
-<p>Events related to node validation failures are instances of the <a href="https://ignite.apache.org/releases/2.9.1/javadoc/org/apache/ignite/events/NodeValidationFailedEvent.html">NodeValidationFailedEvent</a> class.</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 50%;">
-<col style="width: 30%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Event Type</th>
-<th class="tableblock halign-left valign-top">Event Description</th>
-<th class="tableblock halign-left valign-top">Where Event Is Fired</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EVT_NODE_VALIDATION_FAILED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Node validation failed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The cluster member node that failed to validate new node that tried to join the cluster.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
         <div class="copyright">
  © 2021 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -4095,8 +3950,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#task-execution-events">Task Execution Events</a></li>
 <li><a href="#cache-rebalancing-events">Cache Rebalancing Events</a></li>
 <li><a href="#transaction-events">Transaction Events</a></li>
-<li><a href="#snapshot-events">Snapshot Events</a></li>
-<li><a href="#node-validation-failure-events">Node Validation Failure Events</a></li>
 </ul>
     </div>
           
@@ -4136,11 +3989,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1639578925' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1639578925' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1639728903' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1639728903' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1639578925" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639578925"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1639728903" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1639728903"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
