@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['enablewal_854',['EnableWal',['../classignite_1_1cluster_1_1IgniteCluster.html#acee0a58a3c7cef464b13bb9361ae4aba',1,'ignite::cluster::IgniteCluster']]],
+  ['executejavatask_855',['ExecuteJavaTask',['../classignite_1_1compute_1_1Compute.html#ade2537d13ab066ad8e215ef4374a3a3b',1,'ignite::compute::Compute::ExecuteJavaTask(const std::string &amp;taskName, const A &amp;taskArg)'],['../classignite_1_1compute_1_1Compute.html#a1087e047416a644a18f5faa5d9a5a172',1,'ignite::compute::Compute::ExecuteJavaTask(const std::string &amp;taskName)'],['../classignite_1_1thin_1_1compute_1_1ComputeClient.html#a8e5e8d6b1b559d976dfce3a3016a409d',1,'ignite::thin::compute::ComputeClient::ExecuteJavaTask(const std::string &amp;taskName, const A &amp;taskArg)'],['../classignite_1_1thin_1_1compute_1_1ComputeClient.html#abf3a2123bb61a97c454a19a6912c5ced',1,'ignite::thin::compute::ComputeClient::ExecuteJavaTask(const std::string &amp;taskName)']]],
+  ['executejavataskasync_856',['ExecuteJavaTaskAsync',['../classignite_1_1compute_1_1Compute.html#a27b8eaba2140197487f2ba72c9617c49',1,'ignite::compute::Compute::ExecuteJavaTaskAsync(const std::string &amp;taskName, const A &amp;taskArg)'],['../classignite_1_1compute_1_1Compute.html#a7de1ab442d8e3bbc860b742ad5ebe230',1,'ignite::compute::Compute::ExecuteJavaTaskAsync(const std::string &amp;taskName)']]]
+];
