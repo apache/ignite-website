@@ -41,7 +41,7 @@ const html = () => {
 //Filewatcher and live-reload
 export const watchpug = () => {
     browserSync.init({
-        server: './features/../',
+        server: './',
         ui: false,
         injectChanges: true,
         watch: false,
@@ -56,8 +56,14 @@ export const watchpug = () => {
         }
         html();
     });
-
-    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function(path) {
+    gulp.watch([
+        './css/**/*.css',
+        './js/**/*.js',
+        './*.html',
+        './features/*.html',
+        './arch/*.html',
+        './use-cases/*.html',
+    ], {}).on('change', function(path) {
         browserSync.reload(path);
     });
 }
