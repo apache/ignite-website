@@ -41,12 +41,7 @@ const html = () => {
 //Filewatcher and live-reload
 export const watchpug = () => {
     browserSync.init({
-        server: {
-            baseDir: "./",
-            open: true,
-            cors: true,
-            notify: false,
-        },
+        server: './',
         ui: false,
         injectChanges: true,
         watch: false,
@@ -61,9 +56,15 @@ export const watchpug = () => {
         }
         html();
     });
-
-    gulp.watch(['./css/**/*.css', './js/**/*.js', './**/*.html', '!./_*/**/*.html'], {}).on('change', function(path) {
-        browserSync.reload();
+    gulp.watch([
+        './css/**/*.css',
+        './js/**/*.js',
+        './*.html',
+        './features/*.html',
+        './arch/*.html',
+        './use-cases/*.html',
+    ], {}).on('change', function(path) {
+        browserSync.reload(path);
     });
 }
 
@@ -88,7 +89,7 @@ export const sitemap = () => {
         read: false
     })
     .pipe(gulpSitemap({
-            siteUrl: 'https://ignite.apache.com',
+            siteUrl: 'https://ignite.apache.org',
             changefreq: 'monthly',
             priority: function(siteUrl, loc, entry) {
                 // Give pages inside root path (i.e. no slashes) a higher priority
