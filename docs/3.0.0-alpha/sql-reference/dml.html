@@ -50,9 +50,9 @@
 
     
     <meta name="ignite-version" content="3.0.0-alpha" />
-    <title>Introduction | Ignite Documentation</title>
+    <title>Data Manipulation Language (DML) | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine" />
+    <link rel="canonical" href="/docs/3.0.0-alpha/sql-reference/dml" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -187,8 +187,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -199,7 +199,7 @@
                     <li> 
                         
                             <a href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine"
-                                class='active'
+                                class=''
                             >Introduction</a>
                         
                     </li>
@@ -230,8 +230,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -255,7 +255,7 @@
                     <li> 
                         
                             <a href="/docs/3.0.0-alpha/sql-reference/dml"
-                                class=''
+                                class='active'
                             >Data Manipulation Language (DML)</a>
                         
                     </li>
@@ -319,32 +319,90 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/sql/calcite-based-sql-engine.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/sql-reference/dml.adoc" target="_blank">Edit</a>
         
-            <h1>Introduction</h1>
+            <h1>Data Manipulation Language (DML)</h1>
         
-        <div class="paragraph">
-<p>Apache Ignite 3.0 Alpha introduces new SQL engine based on the Apache Calcite framework to parse and optimize queries and generate execution plans. Previously, it was based on H2 Database.</p>
-</div>
+        <div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Apache Calcite is a dynamic data management framework, which mainly serves for mediating between applications and one or more data storage locations and data processing engines.
-For more information on Apache Calcite, please see the <a href="https://calcite.apache.org/docs/" target="_blank" rel="noopener">product documentation</a>.</p>
+<p>This section walks you through all data manipulation language (DML) commands supported by Apache Ignite 3.0 Alpha 4.</p>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Currently, <code>WITH</code> and <code>MERGE</code> commands are not supported.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="select">SELECT</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Replacing H2 SQL engine with Apache Calcite incorporates the following general improvements:</p>
+<p>Retrieves data from a table or multiple tables.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Wider SQL support</strong>: Apache Calcite, unlike H2, is specifically designed for SQL enablement on top of an arbitrary external data storage;</p>
-</li>
-<li>
-<p><strong>Better optimization algorithms</strong>: Apache Calcite optimizes queries by repeatedly applying planner rules to a relational expression;</p>
-</li>
-<li>
-<p><strong>Higher overall performance</strong>: Calcite offers much higher levels of execution flexibility, as well as higher efficiency in terms of both memory and CPU consumption.</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="p">[</span> <span class="n">hintComment</span> <span class="p">]</span> <span class="p">[</span> <span class="n">STREAM</span> <span class="p">]</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span>
+    <span class="p">{</span> <span class="o">*</span> <span class="o">|</span> <span class="n">projectItem</span> <span class="p">[,</span> <span class="n">projectItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">}</span>
+<span class="k">FROM</span> <span class="n">tableExpression</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="p">{</span> <span class="n">groupItem</span> <span class="p">[,</span> <span class="n">groupItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">}</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">HAVING</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="insert">INSERT</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Inserts data into a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="p">{</span> <span class="k">INSERT</span> <span class="p">}</span> <span class="k">INTO</span> <span class="n">tablePrimary</span>
+<span class="p">[</span> <span class="s1">'('</span> <span class="k">column</span> <span class="p">[,</span> <span class="k">column</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span>
+<span class="n">query</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="update">UPDATE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Updates data in a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">UPDATE</span> <span class="n">tablePrimary</span>
+<span class="k">SET</span> <span class="n">assign</span> <span class="p">[,</span> <span class="n">assign</span> <span class="p">]</span><span class="o">*</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="delete">DELETE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Deletes data from a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">tablePrimary</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
 </div>
         <div class="copyright">
  © 2022 The Apache Software Foundation.<br/>
@@ -355,7 +413,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
-    
+    <ul class="sectlevel1">
+<li><a href="#select">SELECT</a></li>
+<li><a href="#insert">INSERT</a></li>
+<li><a href="#update">UPDATE</a></li>
+<li><a href="#delete">DELETE</a></li>
+</ul>
     </div>
           
       

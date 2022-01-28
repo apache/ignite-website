@@ -50,9 +50,9 @@
 
     
     <meta name="ignite-version" content="3.0.0-alpha" />
-    <title>Introduction | Ignite Documentation</title>
+    <title>Performing Transactions | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine" />
+    <link rel="canonical" href="/docs/3.0.0-alpha/transactions/performing-transactions" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -187,8 +187,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -199,7 +199,7 @@
                     <li> 
                         
                             <a href="/docs/3.0.0-alpha/sql/calcite-based-sql-engine"
-                                class='active'
+                                class=''
                             >Introduction</a>
                         
                     </li>
@@ -303,7 +303,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-alpha/transactions/performing-transactions" class='' >Performing Transactions</a>
+                <a href="/docs/3.0.0-alpha/transactions/performing-transactions" class='active' >Performing Transactions</a>
             
         </li>
     
@@ -319,32 +319,58 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/sql/calcite-based-sql-engine.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/transactions/performing-transactions.adoc" target="_blank">Edit</a>
         
-            <h1>Introduction</h1>
+            <h1>Performing Transactions</h1>
         
-        <div class="paragraph">
-<p>Apache Ignite 3.0 Alpha introduces new SQL engine based on the Apache Calcite framework to parse and optimize queries and generate execution plans. Previously, it was based on H2 Database.</p>
-</div>
+        <div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Apache Calcite is a dynamic data management framework, which mainly serves for mediating between applications and one or more data storage locations and data processing engines.
-For more information on Apache Calcite, please see the <a href="https://calcite.apache.org/docs/" target="_blank" rel="noopener">product documentation</a>.</p>
+<p>This Alpha release introduces the key-value API that provides an interface for starting and completing transactions.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="executing-transactions">Executing Transactions</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Replacing H2 SQL engine with Apache Calcite incorporates the following general improvements:</p>
+<p>Use the <code>igniteTransactions</code> class to create a transaction object and the <code>commit</code> method to send it.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Wider SQL support</strong>: Apache Calcite, unlike H2, is specifically designed for SQL enablement on top of an arbitrary external data storage;</p>
-</li>
-<li>
-<p><strong>Better optimization algorithms</strong>: Apache Calcite optimizes queries by repeatedly applying planner rules to a relational expression;</p>
-</li>
-<li>
-<p><strong>Higher overall performance</strong>: Calcite offers much higher levels of execution flexibility, as well as higher efficiency in terms of both memory and CPU consumption.</p>
-</li>
-</ul>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Transaction</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">igniteTransactions</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+<span class="n">tx</span><span class="o">.</span><span class="na">commit</span><span class="o">()</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="asynchronous-transactions">Asynchronous Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can also perform transactions asynchronously.</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="nc">Table</span> <span class="n">accounts</span><span class="o">;</span>
+<span class="kd">protected</span> <span class="nc">Table</span> <span class="n">customers</span><span class="o">;</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="no">BALANCE_1</span><span class="o">));</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="no">BALANCE_2</span><span class="o">));</span>
+<span class="n">igniteTransactions</span><span class="o">.</span><span class="na">beginAsync</span><span class="o">()</span>
+<span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+<span class="o">.</span><span class="na">thenCombine</span><span class="o">(</span><span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">2</span><span class="o">)),</span> <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">))</span>
+<span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">pair</span> <span class="o">-&gt;</span> <span class="n">allOf</span><span class="o">(</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
+<span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getFirst</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">-</span> <span class="no">DELTA</span><span class="o">)),</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
+<span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getSecond</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELTA</span><span class="o">))</span>
+<span class="o">)</span>
+<span class="o">.</span><span class="na">thenApply</span><span class="o">(</span><span class="n">ignored</span> <span class="o">-&gt;</span> <span class="n">tx</span><span class="o">)</span>
+<span class="o">)</span>
+<span class="o">).</span><span class="na">thenCompose</span><span class="o">(</span><span class="nl">Transaction:</span><span class="o">:</span><span class="n">commitAsync</span><span class="o">).</span><span class="na">join</span><span class="o">();</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
 </div>
         <div class="copyright">
  © 2022 The Apache Software Foundation.<br/>
@@ -355,7 +381,10 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
-    
+    <ul class="sectlevel1">
+<li><a href="#executing-transactions">Executing Transactions</a></li>
+<li><a href="#asynchronous-transactions">Asynchronous Transactions</a></li>
+</ul>
     </div>
           
       
