@@ -354,20 +354,21 @@
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="nc">Table</span> <span class="n">accounts</span><span class="o">;</span>
 <span class="kd">protected</span> <span class="nc">Table</span> <span class="n">customers</span><span class="o">;</span>
+
 <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="no">BALANCE_1</span><span class="o">));</span>
 <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="no">BALANCE_2</span><span class="o">));</span>
 <span class="n">igniteTransactions</span><span class="o">.</span><span class="na">beginAsync</span><span class="o">()</span>
-<span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
-<span class="o">.</span><span class="na">thenCombine</span><span class="o">(</span><span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">2</span><span class="o">)),</span> <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">))</span>
-<span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">pair</span> <span class="o">-&gt;</span> <span class="n">allOf</span><span class="o">(</span>
-<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
-<span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getFirst</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">-</span> <span class="no">DELTA</span><span class="o">)),</span>
-<span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
-<span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getSecond</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELTA</span><span class="o">))</span>
-<span class="o">)</span>
-<span class="o">.</span><span class="na">thenApply</span><span class="o">(</span><span class="n">ignored</span> <span class="o">-&gt;</span> <span class="n">tx</span><span class="o">)</span>
-<span class="o">)</span>
-<span class="o">).</span><span class="na">thenCompose</span><span class="o">(</span><span class="nl">Transaction:</span><span class="o">:</span><span class="n">commitAsync</span><span class="o">).</span><span class="na">join</span><span class="o">();</span></code></pre>
+    <span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">thenCombine</span><span class="o">(</span><span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="n">makeKey</span><span class="o">(</span><span class="mi">2</span><span class="o">)),</span> <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">Pair</span><span class="o">&lt;&gt;(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">thenCompose</span><span class="o">(</span><span class="n">pair</span> <span class="o">-&gt;</span> <span class="n">allOf</span><span class="o">(</span>
+            <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
+                <span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getFirst</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">-</span> <span class="no">DELTA</span><span class="o">)),</span>
+            <span class="n">accounts</span><span class="o">.</span><span class="na">recordView</span><span class="o">().</span><span class="na">upsertAsync</span><span class="o">(</span>
+                <span class="n">tx</span><span class="o">,</span> <span class="n">makeValue</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">pair</span><span class="o">.</span><span class="na">getSecond</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELTA</span><span class="o">))</span>
+        <span class="o">)</span>
+        <span class="o">.</span><span class="na">thenApply</span><span class="o">(</span><span class="n">ignored</span> <span class="o">-&gt;</span> <span class="n">tx</span><span class="o">)</span>
+        <span class="o">)</span>
+    <span class="o">).</span><span class="na">thenCompose</span><span class="o">(</span><span class="nl">Transaction:</span><span class="o">:</span><span class="n">commitAsync</span><span class="o">).</span><span class="na">join</span><span class="o">();</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 </div>
@@ -423,11 +424,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1643403254' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1643403254' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1643980109' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1643980109' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1643403254" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1643403254"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1643980109" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1643980109"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
