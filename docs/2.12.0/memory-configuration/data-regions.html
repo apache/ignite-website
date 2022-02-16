@@ -3339,95 +3339,41 @@
 </div>
 <code-tabs><code-tab data-tab='XML'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="c">&lt;!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
---&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span> <span class="na">xmlns:util=</span><span class="s">"http://www.springframework.org/schema/util"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans.xsd         http://www.springframework.org/schema/util         http://www.springframework.org/schema/util/spring-util.xsd"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
-                <span class="c">&lt;!--
-                Default memory region that grows endlessly. Any cache will be bound to this memory region
-                unless another region is set in the cache's configuration.
-                --&gt;</span>
-                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultDataRegionConfiguration"</span><span class="nt">&gt;</span>
-                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"Default_Region"</span><span class="nt">/&gt;</span>
-                        <span class="c">&lt;!-- 100 MB memory region with disabled eviction. --&gt;</span>
-                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-                    <span class="nt">&lt;/bean&gt;</span>
-                <span class="nt">&lt;/property&gt;</span>
-            <span class="nt">&lt;/bean&gt;</span>
-        <span class="nt">&lt;/property&gt;</span>
-        <span class="c">&lt;!-- other properties --&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!--
+            Default memory region that grows endlessly. Any cache will be bound to this memory region
+            unless another region is set in the cache's configuration.
+            --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultDataRegionConfiguration"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"Default_Region"</span><span class="nt">/&gt;</span>
+                    <span class="c">&lt;!-- 100 MB memory region with disabled eviction. --&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/bean&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="c">&lt;!-- other properties --&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="cm">/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */</span>
-<span class="kn">package</span> <span class="nn">org.apache.ignite.snippets</span><span class="o">;</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
 
-<span class="kn">import</span> <span class="nn">org.apache.ignite.Ignite</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.IgniteCache</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.Ignition</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.configuration.CacheConfiguration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.configuration.DataPageEvictionMode</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.configuration.DataRegionConfiguration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.configuration.DataStorageConfiguration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.ignite.configuration.IgniteConfiguration</span><span class="o">;</span>
+<span class="nc">DataRegionConfiguration</span> <span class="n">defaultRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataRegionConfiguration</span><span class="o">();</span>
+<span class="n">defaultRegion</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Default_Region"</span><span class="o">);</span>
+<span class="n">defaultRegion</span><span class="o">.</span><span class="na">setInitialSize</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">);</span>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataRegionConfigurationExample</span> <span class="o">{</span>
+<span class="n">storageCfg</span><span class="o">.</span><span class="na">setDefaultDataRegionConfiguration</span><span class="o">(</span><span class="n">defaultRegion</span><span class="o">);</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
 
-        <span class="nc">DataStorageConfiguration</span> <span class="n">storageCfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataStorageConfiguration</span><span class="o">();</span>
+<span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span>
 
-        <span class="nc">DataRegionConfiguration</span> <span class="n">defaultRegion</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DataRegionConfiguration</span><span class="o">();</span>
-        <span class="n">defaultRegion</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Default_Region"</span><span class="o">);</span>
-        <span class="n">defaultRegion</span><span class="o">.</span><span class="na">setInitialSize</span><span class="o">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">);</span>
-
-        <span class="n">storageCfg</span><span class="o">.</span><span class="na">setDefaultDataRegionConfiguration</span><span class="o">(</span><span class="n">defaultRegion</span><span class="o">);</span>
-
-        <span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-
-        <span class="n">cfg</span><span class="o">.</span><span class="na">setDataStorageConfiguration</span><span class="o">(</span><span class="n">storageCfg</span><span class="o">);</span>
-
-        <span class="c1">// Start the node.</span>
-        <span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
-
-        <span class="n">ignite</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre>
+<span class="c1">// Start the node.</span>
+<span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='C#/.NET'><div class="listingblock">
 <div class="content">
@@ -3463,72 +3409,53 @@ Note that further below in the configuration, we create a cache that resides in 
 </div>
 <code-tabs><code-tab data-tab='XML'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="c">&lt;!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
---&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span> <span class="na">xmlns:util=</span><span class="s">"http://www.springframework.org/schema/util"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans.xsd         http://www.springframework.org/schema/util         http://www.springframework.org/schema/util/spring-util.xsd"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
-                <span class="c">&lt;!--
-                Default memory region that grows endlessly. Any cache will be bound to this memory region
-                unless another region is set in the cache's configuration.
-                --&gt;</span>
-                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultDataRegionConfiguration"</span><span class="nt">&gt;</span>
-                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
-                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"Default_Region"</span><span class="nt">/&gt;</span>
-                        <span class="c">&lt;!-- 100 MB memory region with disabled eviction. --&gt;</span>
-                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-                    <span class="nt">&lt;/bean&gt;</span>
-                <span class="nt">&lt;/property&gt;</span>
-                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionConfigurations"</span><span class="nt">&gt;</span>
-                    <span class="nt">&lt;list&gt;</span>
-                        <span class="c">&lt;!--
-                        40MB memory region with eviction enabled.
-                        --&gt;</span>
-                        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
-                            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"40MB_Region_Eviction"</span><span class="nt">/&gt;</span>
-                            <span class="c">&lt;!-- Memory region of 20 MB initial size. --&gt;</span>
-                            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{20 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-                            <span class="c">&lt;!-- Maximum size is 40 MB. --&gt;</span>
-                            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxSize"</span> <span class="na">value=</span><span class="s">"#{40 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
-                            <span class="c">&lt;!-- Enabling eviction for this memory region. --&gt;</span>
-                            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"pageEvictionMode"</span> <span class="na">value=</span><span class="s">"RANDOM_2_LRU"</span><span class="nt">/&gt;</span>
-                        <span class="nt">&lt;/bean&gt;</span>
-                    <span class="nt">&lt;/list&gt;</span>
-                <span class="nt">&lt;/property&gt;</span>
-            <span class="nt">&lt;/bean&gt;</span>
-        <span class="nt">&lt;/property&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"cacheConfiguration"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;list&gt;</span>
-                <span class="c">&lt;!-- Cache that is mapped to a specific data region. --&gt;</span>
-                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.CacheConfiguration"</span><span class="nt">&gt;</span>
-
-                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"SampleCache"</span><span class="nt">/&gt;</span>
-                    <span class="c">&lt;!--
-                    Assigning the cache to the `40MB_Region_Eviction` region.
-                    --&gt;</span>
-                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionName"</span> <span class="na">value=</span><span class="s">"40MB_Region_Eviction"</span><span class="nt">/&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span> <span class="na">id=</span><span class="s">"ignite.cfg"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataStorageConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataStorageConfiguration"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!--
+            Default memory region that grows endlessly. Any cache will be bound to this memory region
+            unless another region is set in the cache's configuration.
+            --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"defaultDataRegionConfiguration"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"Default_Region"</span><span class="nt">/&gt;</span>
+                    <span class="c">&lt;!-- 100 MB memory region with disabled eviction. --&gt;</span>
+                    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{100 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
                 <span class="nt">&lt;/bean&gt;</span>
-            <span class="nt">&lt;/list&gt;</span>
-        <span class="nt">&lt;/property&gt;</span>
-        <span class="c">&lt;!-- other properties --&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-<span class="nt">&lt;/beans&gt;</span></code></pre>
+            <span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionConfigurations"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;list&gt;</span>
+                    <span class="c">&lt;!--
+                    40MB memory region with eviction enabled.
+                    --&gt;</span>
+                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.DataRegionConfiguration"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"40MB_Region_Eviction"</span><span class="nt">/&gt;</span>
+                        <span class="c">&lt;!-- Memory region of 20 MB initial size. --&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"initialSize"</span> <span class="na">value=</span><span class="s">"#{20 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
+                        <span class="c">&lt;!-- Maximum size is 40 MB. --&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maxSize"</span> <span class="na">value=</span><span class="s">"#{40 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
+                        <span class="c">&lt;!-- Enabling eviction for this memory region. --&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"pageEvictionMode"</span> <span class="na">value=</span><span class="s">"RANDOM_2_LRU"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/bean&gt;</span>
+                <span class="nt">&lt;/list&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"cacheConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;list&gt;</span>
+            <span class="c">&lt;!-- Cache that is mapped to a specific data region. --&gt;</span>
+            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.CacheConfiguration"</span><span class="nt">&gt;</span>
+
+                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"SampleCache"</span><span class="nt">/&gt;</span>
+                <span class="c">&lt;!--
+                Assigning the cache to the `40MB_Region_Eviction` region.
+                --&gt;</span>
+                <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataRegionName"</span> <span class="na">value=</span><span class="s">"40MB_Region_Eviction"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/bean&gt;</span>
+        <span class="nt">&lt;/list&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="c">&lt;!-- other properties --&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3867,11 +3794,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1643980323' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1643980323' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1645003753' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1645003753' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1643980323" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1643980323"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1645003753" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1645003753"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

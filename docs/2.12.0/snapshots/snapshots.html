@@ -3385,7 +3385,7 @@ are not added into the snapshot as long as those are not required for the curren
 <p>The previous example shows the snapshot created for the cluster running on the same physical machine. Thus, the whole
 snapshot is located in a single place. While in practice, all the nodes will be running on different machines having the
 snapshot data spread across the cluster. Each node keeps a segment of the snapshot with the data belonging to this particular node.
-The <a href="/docs/latest/persistence/snapshots#restoring-from-snapshot">restore procedure</a> explains how to tether together all the segments during recovery.</p>
+The <a href="/docs/latest/snapshots/snapshots#restoring-from-snapshot">restore procedure</a> explains how to tether together all the segments during recovery.</p>
 </div>
 </td>
 </tr>
@@ -3520,12 +3520,19 @@ commands.</p>
 <h2 id="restoring-from-snapshot">Restoring From Snapshot</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A snapshot can be restored either manually on a stopped cluster or automatically on an active cluster. Both procedures are described below.</p>
+<p>A snapshot can be restored either manually on a stopped cluster or automatically on an active cluster.
+Both procedures are described below, however, it is preferable to use the restore command from Control Script only.</p>
 </div>
 <div class="sect2">
 <h3 id="manual-snapshot-restore-procedure">Manual Snapshot Restore Procedure</h3>
 <div class="paragraph">
-<p>Stop the cluster, then replace persistence data and other files with the data from the snapshot, and restart the nodes.</p>
+<p>The snapshot structure is similar to the layout of the Ignite Native Persistence, so for the manual snapshot restore you must
+do a snapshot restore only on the same cluster with the same node <code>consistentId</code> and on the same topology on which a snapshot
+was taken. If you need to restore a snapshot on a different cluster or on a different cluster topology use the
+<a href="/docs/latest/snapshots/snapshots#automatic-snapshot-restore-procedure">Automatic Snapshot Restore Procedure</a>.</p>
+</div>
+<div class="paragraph">
+<p>In general, stop the cluster, then replace persistence data and other files with the data from the snapshot, and restart the nodes.</p>
 </div>
 <div class="paragraph">
 <p>The detailed procedure looks as follows:</p>
@@ -3562,39 +3569,6 @@ commands.</p>
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p><strong>Restore On Cluster of Different Topology</strong></p>
-</div>
-<div class="paragraph">
-<p>You may want to create a snapshot of an N-node cluster and use it to restore on an M-node cluster. The table below explains what options are supported:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Condition</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">N == M</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The <strong>recommended</strong> case. Create and use the snapshot on clusters of a similar topology.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">N &lt; M</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Start the first N nodes of the M-node cluster and apply the snapshot. Add the rest of the M-cluster nodes to
-the topology and wait while the data gets rebalanced and indexes are rebuilt.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">N &gt; M</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unsupported.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect2">
 <h3 id="automatic-snapshot-restore-procedure">Automatic Snapshot Restore Procedure</h3>
@@ -3696,10 +3670,13 @@ might require extra space on the Ignite Persistence storage media (up to the 1x 
 <p>Caches/tables that are not persisted in Ignite Persistence are not included into the snapshot.</p>
 </li>
 <li>
-<p>Encrypted caches are not included in the snapshot.</p>
+<p>Encrypted caches in the snapshot must be encrypted with the same master key.</p>
 </li>
 <li>
 <p>You can have only one snapshotting operation running at a time.</p>
+</li>
+<li>
+<p>The snapshot operation is prohibited during a master key change and/or cache group key change.</p>
 </li>
 <li>
 <p>The snapshot procedure is interrupted if a server node leaves the cluster.</p>
@@ -3789,11 +3766,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1643980325' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1643980325' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1645003755' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1645003755' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1643980325" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1643980325"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1645003755" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1645003755"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
