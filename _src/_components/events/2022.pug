@@ -1,0 +1,43 @@
+-
+    let events2022 = `[
+    {
+        "title":"Apache Ignite Community Gathering: Ignite 3 Alpha 4",
+        "link":"https://www.meetup.com/Apache-Ignite-Virtual-Meetup/events/283606359",
+        "loc":"Online event",
+        "speaker":[
+            "Maxim Timonin",
+            "Val Kulichenko",
+            "Alexey Scherbakov"
+        ],
+        "data":"February 16, 2022"
+    }]`;
+
+    let events2022Array = JSON.parse(events2022);
+
+.eventspast__tab
+    each val, index in events2022Array
+        if index > 2
+            - break;
+        - let joinSpeacker = val['speaker'].join("<br>");
+        article.eventcard
+            .eventcard__date !{val['data']}
+            .eventcard__title.pt-2 !{val['title']}
+            .eventcard__info.pt-2 
+                .eventcard__speaker !{joinSpeacker}
+                .eventcard__loc !{val['loc']}
+            a.eventcard__button.button.button--shadow(href=val['link'], target="_blank")  Learn more details
+.eventspast__morewrap(data-hidebox="ev2022more")
+    .eventspast__tab
+        each val, index in events2022Array
+            if index < 3
+                - continue;
+            - let joinSpeacker = val['speaker'].join("<br>");
+            article.eventcard
+                .eventcard__date !{val['data']}
+                .eventcard__title.pt-2 !{val['title']}
+                .eventcard__info.pt-2 
+                    .eventcard__speaker !{joinSpeacker}
+                    .eventcard__loc !{val['loc']}
+                a.eventcard__button.button.button--shadow(href=val['link'], target="_blank")  Learn more details 
+//.eventspast__bottom.pt-1
+//    a.eventspast__more.jsLoadMoreEvents(href="#", data-hideopen="ev2022more", data-invis="1") Show more
