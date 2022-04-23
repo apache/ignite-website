@@ -70,21 +70,14 @@ jobs:
           repository: 'apache/ignite'
           ref: ${{ env.IGNITE_BRANCH }}
 
+      - name: Check version is released
+        run: |
+          mvn org.apache.maven.plugins:maven-enforcer-plugin:3.0.0-M3:enforce -Drules=requireReleaseDeps,requireReleaseVersion
+
       - name: Get POM version
         run: |
           ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "IGNITE_VERSION=${ver}" >> $GITHUB_ENV
-          
-          version_check_failed='true'
-          [[ "$ver" =~ ^2\.[0-9][0-9]\.[0-9]$ ]] && version_check_failed='false'
-          echo "VERSION_CHECK_FAILED=$version_check_failed" >> $GITHUB_ENV
-
-      - name: Check git version
-        if: ${{ env.VERSION_CHECK_FAILED == 'true' }}
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Version should be greater 2.10 and not be a snapshot: ${{ env.IGNITE_VERSION }}')
 
       - name: Check out 'ignite-website' repository code
         uses: actions/checkout@v3
