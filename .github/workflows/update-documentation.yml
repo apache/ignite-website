@@ -1,0 +1,131 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+
+#
+# The action to update documentation for released Ignite versions.
+# It builds documentation and pushes changes to the master branch. The server
+#
+# 1. Commit changes to released branch (e.g. ignite-2.12).
+# 2. Run this action with a released branch (e.g. ignite-2.12).
+# 3. Check website is actual: https://ignite.apache.org/docs/latest/
+#
+# Action builds documentation and pushes changes to the master branch. They will be published automatically.
+#
+# Publishing a new release steps:
+# 1. Set new version to the './latest' file and commit to the master. (e.g. 2.13.0)
+# 2. Run this action with new version (e.g. 2.13.0).
+# 3. Run this action with previous version (e.g. 2.12.0). Rebuild is needed to update all internal links on
+#    the previous ‘latest’ docs and to add `noindex`.
+# 4. Set new version in the './.htaccess' file in several RewriteRule's and commit to the master.
+#
+name: Update Documentation
+on:
+  workflow_dispatch:
+    inputs:
+      ignite-branch:
+        description: 'The released Ignite branch (e.g. ignite-2.12)'
+        required: true
+jobs:
+  update-documentation:
+    name: Update documentation for released Ignite versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare environment
+        run: |
+          branch=${{ github.event.inputs.ignite-branch }}
+          echo "IGNITE_BRANCH=$branch" >> $GITHUB_ENV
+          
+          branch_check_failed='true'
+          [[ "$branch" =~ ^ignite-2\.[0-9][0-9](\.[0-9])?$ ]] && branch_check_failed='false'
+          echo "BRANCH_CHECK_FAILED=$branch_check_failed" >> $GITHUB_ENV
+
+      - name: Check inputs
+        if: ${{ env.BRANCH_CHECK_FAILED == 'true' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('The branch should match the released Ignite since 2.10: ${{ env.IGNITE_BRANCH }}')
+
+      - name: Check out 'ignite' repository code
+        uses: actions/checkout@v3
+        with:
+          repository: 'apache/ignite'
+          ref: ${{ env.IGNITE_BRANCH }}
+
+      - name: Get POM version
+        run: |
+          ver=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "IGNITE_VERSION=${ver}" >> $GITHUB_ENV
+          
+          version_check_failed='true'
+          [[ "$ver" =~ ^2\.[0-9][0-9]\.[0-9]$ ]] && version_check_failed='false'
+          echo "VERSION_CHECK_FAILED=$version_check_failed" >> $GITHUB_ENV
+
+      - name: Check git version
+        if: ${{ env.VERSION_CHECK_FAILED == 'true' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Version should be greater 2.10 and not be a snapshot: ${{ env.IGNITE_VERSION }}')
+
+      - name: Check out 'ignite-website' repository code
+        uses: actions/checkout@v3
+
+      - name: Get latest version
+        run: |
+          latest_version=$(cat ./latest | grep "version" | cut -d'=' -f2)
+          echo "LATEST_VERSION=$latest_version" >> $GITHUB_ENV
+
+      - name: Install prerequisites
+        run: |
+          sudo apt-get install ruby-full build-essential zlib1g-dev
+          echo '# Install Ruby Gems to ~/gems' >> ~/.bashrc
+          echo 'export GEM_HOME="$HOME/gems"' >> ~/.bashrc
+          echo 'export PATH="$HOME/gems/bin:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          sudo chown -R $(whoami) /var/lib/gems/*
+          gem install jekyll bundler
+
+      - name: Build ${{ env.IGNITE_VERSION }} documentation
+        run: |
+          cd ${{ github.workspace }}/_docs
+          
+          if [[ "${{ env.IGNITE_VERSION }}" == "${{ env.LATEST_VERSION }}" ]]
+          then
+            echo "Building ${{ env.IGNITE_VERSION }} version (latest)."
+            ./build.sh --version=${{ env.IGNITE_VERSION }} --github-branch=${{ env.IGNITE_BRANCH }} --latest
+          else
+            echo "Building ${{ env.IGNITE_VERSION }} version."
+            ./build.sh --version=${{ env.IGNITE_VERSION }} --github-branch=${{ env.IGNITE_BRANCH }}
+          fi
+
+      - name: Commit changes
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
+          git pull origin master
+          git add --all
+          git commit -a -m "[bot] Update ${{ env.IGNITE_VERSION }} documentation."
+          git push origin master
+
+      - name: Publishing completed successfully
+        run: |
+          echo "The documentation updated successfully. Check that the version was published successfully on"
+          echo "the Ignite website: https://ignite.apache.org/docs/latest/"

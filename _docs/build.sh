@@ -45,7 +45,7 @@ fi
 export tmp_dir=tmp
 rm -rf $tmp_dir
 mkdir $tmp_dir
-git -C $tmp_dir  clone --single-branch --branch $branch $repo_url docs_$version
+git -C $tmp_dir clone --depth 1 --single-branch --branch $branch $repo_url docs_$version
 rm -rf _docs _data _plugins
 cp -R $tmp_dir/docs_$version/docs/_docs _docs
 cp -R $tmp_dir/docs_$version/docs/_data/ _data
