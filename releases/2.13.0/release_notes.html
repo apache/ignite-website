@@ -1,0 +1,197 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.13.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.13.0</h1>
+			<div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>The deprecated legacy service grid implementation was removed.</li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added 'snapshotTransferRate' distributed property to limit the rate at which snapshot files are created.</li>
+        <li>Added CDC hard links check on startup.</li>
+        <li>Added JDBC and ODBC batching support in Calcite query engine.</li>
+        <li>Added JMX management and metrics for snapshot restore operation.</li>
+        <li>Added Maintenance task to rebuild corrupted indexes.</li>
+        <li>Added SNAPSHOT system view to show local snapshots.</li>
+        <li>Added a ServiceCallContext that allows implicitly pass additional parameters on every service call.</li>
+        <li>Added a special option to run snapshot commands synchronously using control.sh.</li>
+        <li>Added an ability for plugins to provide topology validator as extension.</li>
+        <li>Added dynamic restoration of encrypted snapshots.</li>
+        <li>Added ignite-parent pom and bom artifacts to the Ignite release lifecycle.</li>
+        <li>Added new experimental, Apache Calcite based SQL engine.</li>
+        <li>Added non default page size support to CDC.</li>
+        <li>Added saving settings for transactions monitoring to disk.</li>
+        <li>Added separate JVM options for ignite-cdc.sh and ignite.sh.</li>
+        <li>Added separate configuration for system data region.</li>
+        <li>Added serialization of the partition map to the disk to avoid long start up of the node.</li>
+        <li>Added services method invocation duration histogram metric.</li>
+        <li>Added support for JDK 17.</li>
+        <li>Added support of IGNITE_TO_STRING_INCLUDE_SENSITIVE option by Ð¡onsistency check command.</li>
+        <li>Added support of status option in the Control.sh consistency check command.</li>
+        <li>Added task execution time metric to thread pools.</li>
+        <li>Added the LifecycleAware interface support for local event listeners.</li>
+        <li>Added the ability to change the priority of a compute task if PriorityQueueCollisionSpi is configured.</li>
+        <li>Deprecated IgniteServices#service(String) and IgniteServices#services(String).</li>
+        <li>Deprecated the IGNITE_WAIT_FOR_BACKUPS_ON_SHUTDOWN system property.</li>
+        <li>Deprecated the ignite-log4j module.</li>
+        <li>Fixed CDC state restore when record contains multiple DataEntry.</li>
+        <li>Fixed GeoSpatial index creation on client nodes.</li>
+        <li>Fixed IndexQuery incorrect work with indexes built for _VAL field.</li>
+        <li>Fixed NPE if column type is null in the JmxSystemViewExporterSpi.</li>
+        <li>Fixed NPE in PersistenceTask.</li>
+        <li>Fixed NPE in case of simultaneous cache destroy and active tx.</li>
+        <li>Fixed NPE in the distributed process on message unmarshal.</li>
+        <li>Fixed NoClassDefFound on invokeAsync with using BinaryObjects.</li>
+        <li>Fixed NoClassDefFoundError if com.sun.management.OperatingSystemMXBean does not exist.</li>
+        <li>Fixed ODBC connection timeouts.</li>
+        <li>Fixed PME hanging on client due to implicit transaction committing.</li>
+        <li>Fixed TLS 1.3 freeze during handshake.</li>
+        <li>Fixed a rare issue with updating the TTL in the near-cache/backup if the request was initiated from another backup.</li>
+        <li>Fixed an error report deserialization for some failed JMX commands.</li>
+        <li>Fixed an issue that caused a failed deactivation of the cluster.</li>
+        <li>Fixed an issue that caused speed-based writes throttling to fail in protecting Checkpoint Buffer from exhaustion.</li>
+        <li>Fixed an issue that could lead to incorrect working of the IgniteLock after reconnecting the client node.</li>
+        <li>Fixed an issue that led to "Failed to get page store for the given cache ID" error on cache start.</li>
+        <li>Fixed an issue that led to failure to join a new node to the cluster in the Karaf container.</li>
+        <li>Fixed an issue that led to failures of server nodes due to short history of affinity assignments.</li>
+        <li>Fixed an issue when query with 'in' condition with a sub-query returns multiplicative data.</li>
+        <li>Fixed an issue with IgniteAtomicSequence that led to AssertionError.</li>
+        <li>Fixed binary object building in case the original object contains several collection or reference fields.</li>
+        <li>Fixed consistency issue for persistence atomic cache.</li>
+        <li>Fixed expiration failure on cluster re-activation.</li>
+        <li>Fixed hang query when table is dropped concurrently.</li>
+        <li>Fixed index de-fragmentation fails on DECIMAL and VARCHAR columns.</li>
+        <li>Fixed index scan won't find data if SqlFieldsQuery with POJO parameter and the local flag is set.</li>
+        <li>Fixed logging non-informative ClosedChannelException.</li>
+        <li>Fixed metrics in IgniteStripedThreadPoolExecutor.</li>
+        <li>Fixed missed values check by Read Repair.</li>
+        <li>Fixed negative groupId/cacheId parsing by wal-reader.</li>
+        <li>Fixed node crashes with ClosedChannelException.</li>
+        <li>Fixed node failure with ClassNotFoundException: wrong validation for Object type.</li>
+        <li>Fixed page restore on bad CRC does not mark the page as dirty.</li>
+        <li>Fixed peer class loading failure handling.</li>
+        <li>Fixed possible starvation in speed based throttling.</li>
+        <li>Fixed potential OOM in thin client protocol handler caused by malicious or garbage data.</li>
+        <li>Fixed potential data corruption during rapid delete and update operations.</li>
+        <li>Fixed query engine allows to insert rows with logically equal compound PK.</li>
+        <li>Fixed rebalance issue when historical rebalancing is reassigned after the client node joined the cluster.</li>
+        <li>Fixed rollover by timeout that leads to node restart fail.</li>
+        <li>Fixed several Spring contexts instantiation by CdcLoader.</li>
+        <li>Fixed table operations failure when wrap_key and custom value_type are used.</li>
+        <li>Fixed wrong calculation of replies count for queries with partition pruning and enabled parallelism.</li>
+        <li>Implemented CDC for in-memory caches.</li>
+        <li>Implemented NUMA aware allocator for Ignite durable memory.</li>
+        <li>Implemented Read Repair strategies.</li>
+        <li>Implemented annotation-based injection of ServiceContext in services.</li>
+        <li>Implemented array component type in binary object.</li>
+        <li>Implemented forcefully rollover only if DataRecord logged.</li>
+        <li>Implemented generate create table sql key type by original column type.</li>
+        <li>Implemented named params to Read Repair control.sh command.</li>
+        <li>Improved CDC monitoring and logging.</li>
+        <li>Improved IndexQuery for index rows filtering.</li>
+        <li>Improved logging related to the persistent data structure message for in-memory data region.</li>
+        <li>Improved restoring state of data partitions from WAL log on node startup.</li>
+        <li>Improved snapshot partitions move.</li>
+        <li>Removed shared memory communication client.</li>
+        <li>Removed the legacy service grid implementation.</li>
+        <li>Updated JNR POSIX dependency to 3.1.15.</li>
+        <li>Updated Mesos dependency to 1.11.0.</li>
+        <li>Updated hadoop-yarn-client dependency to 3.3.1.</li>
+        <li>Updated sfl4j version to 1.7.33.</li>
+        <li>Updated Spring dependency version to 5.2.21.RELEASE.</li>
+        <li>Updated zookeeper dependency to 3.8.0.</li>
+    </ul>
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added an option to append server exception stack trace to the error messages.</li>
+        <li>Added periodic heartbeat messages to improve connection reliability.</li>
+    </ul>
+    <h2>JDBC/ODBC</h2>
+    <ul>
+        <li>Fixed incorrect queries handling with empty results.</li>
+        <li>Fixed linking failure on Linux if SQLConnect is called.</li>
+        <li>Fixed set streaming on/off queries.</li>
+        <li>Fixed configuration: SSL keystore is not a mandatory parameter.</li>
+        <li>Fixed wrong value of SQLGetStmtAttr(SQL_ATTR_ROW_ARRAY_SIZE) for row array size.</li>
+    </ul>
+    <h2>.Net</h2>
+    <ul>
+        <li>Added GetServiceDescriptors to Thin Client Services.</li>
+        <li>Added ThinClientConfiguration.SendServerExceptionStackTraceToClient.</li>
+        <li>Added services metrics.</li>
+        <li>Fixed platform service with node filter cancellation on joining pure java node.</li>
+        <li>Fixed EntryPointNotFoundException on Alpine Linux.</li>
+        <li>Fixed missing binary schema when field is removed from a type.</li>
+        <li>Fixed platform cache not restoring data from persistent storage after node restart.</li>
+        <li>Fixed serialization of 'System.Enum' fields.</li>
+    </ul>
+    <h2>.Net thin client</h2>
+    <ul>
+        <li>Added IClientRetryPolicy interface to control retry behavior when an operation fails due to a connection issue.</li>
+        <li>Added periodic heartbeat messages to improve connection reliability.</li>
+    </ul>
+    <h2>C++</h2>
+    <ul>
+        <li>Added EventType field to CacheEntryEvent.</li>
+        <li>Fixed OpenSSL shared library load order, added OpenSSL 3.0.x support.</li>
+        <li>Added RetryPolicy interface to control retry behavior when an operation fails due to a connection issue.</li>
+        <li>Added ClientServices#serviceDescriptors.</li>
+        <li>Improved memory usage by avoiding extra buffer copy.</li>
+    </ul>
+    <h2>C++ thin client</h2>
+    <ul>
+        <li>Fixed configuration: SSL keystore is not a mandatory parameter.</li>
+        <li>Implemented asynchronous network events handling.</li>
+        <li>Implemented continuous queries.</li>
+    </ul>
+    <h2>SQL</h2>
+    <ul>
+        <li>Added ability to specify inline size of PK and affinity key indexes from CREATE TABLE.</li>
+        <li>Fixed optimization in case of constants in subquery.</li>
+    </ul>
+</body>
