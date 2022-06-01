@@ -50,7 +50,7 @@
 
     
     <meta name="ignite-version" content="2.13.0" />
-    <title>Data Definition Language (DDL) | Ignite Documentation</title>
+    <title>Ddl | Ignite Documentation</title>
     
     <link rel="canonical" href="/docs/latest/sql-reference/ddl" />
     
@@ -3342,7 +3342,7 @@
     <article data-swiftype-index='true'>
       <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/sql-reference/ddl.adoc" target="_blank">Edit</a>
         
-            <h1>Data Definition Language (DDL)</h1>
+            <h1>Ddl</h1>
         
         <div id="preamble">
 <div class="sectionbody">
@@ -3355,7 +3355,16 @@
 <h2 id="create-table">CREATE TABLE</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Create a new table and an underlying cache.</p>
+<p>The command creates a new Ignite cache and defines a SQL table on top of it. The underlying cache stores the data in
+the form of key-value pairs while the table allows processing the data with SQL queries.</p>
+</div>
+<div class="paragraph">
+<p>The table will reside in the <a href="/docs/latest/SQL/schemas">Schema</a> specified in the connection parameters. If no schema is specified,
+the <code>PUBLIC</code> will be used as a default.</p>
+</div>
+<div class="paragraph">
+<p>The <code>CREATE TABLE</code> command is synchronous. Moreover, it blocks the execution of other DDL commands that are issued before the
+<code>CREATE TABLE</code> command has finished execution. The execution of DML commands is not affected and can be performed in parallel.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3413,7 +3422,8 @@ sets the write synchronization mode for the underlying cache. If neither this no
 <p><code>AFFINITY_KEY=&lt;affinity key column name&gt;</code> - specifies an <a href="/docs/latest/data-modeling/affinity-collocation">affinity key</a> name which is a column of the <code>PRIMARY KEY</code> constraint.</p>
 </li>
 <li>
-<p><code>CACHE_NAME=&lt;custom name of the new cache&gt;</code> - the name of the underlying cache created by the command.</p>
+<p><code>CACHE_NAME=&lt;custom name of the new cache&gt;</code> - the name of the underlying cache created by the command,
+or the <code>SQL_{SCHEMA_NAME}_{TABLE}</code> format will be used if the parameter not specified.</p>
 </li>
 <li>
 <p><code>DATA_REGION=&lt;existing data region name&gt;</code> - name of the <a href="/docs/latest/memory-configuration/data-regions">data region</a> where table entries should be stored. By default, Ignite stores all the data in a default region.</p>
@@ -3437,69 +3447,18 @@ sets the write synchronization mode for the underlying cache. If neither this no
 </ul>
 </div>
 <div class="paragraph">
-<p>The CREATE TABLE command creates a new Ignite cache and defines a SQL table on top of it. The cache stores the data in the form of key-value pairs while the table allows processing the data with SQL queries.</p>
-</div>
-<div class="paragraph">
-<p>The table will reside in the schema specified in the connection parameters. If no schema is specified, the PUBLIC schema will be used. See <a href="/docs/latest/SQL/schemas">Schemas</a> for more information about schemas in Ignite.</p>
-</div>
-<div class="paragraph">
-<p>Note that the CREATE TABLE operation is synchronous and blocks the execution of other DDL commands that are issued while CREATE TABLE is still in progress. The execution of DML commands is not affected and can be performed in parallel.</p>
-</div>
-<div class="paragraph">
-<p>If you wish to access the data using the key-value APIs, then setting the <code>CACHE_NAME</code>, <code>KEY_TYPE</code>, and <code>VALUE_TYPE</code> parameters may be useful for the following reasons:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>When the CREATE TABLE command is executed, the name of the cache is generated with the following format- <code>SQL_{SCHEMA_NAME}_{TABLE}</code>. Use the CACHE_NAME parameter to override the default name.</p>
-</li>
-<li>
-<p>Additionally, the command creates two new binary types - for the key and value respectively. Ignite generates the names of the types randomly including a UUID string. This complicates the usage of these 'types' from a non-SQL API. Use KEY_TYPE and VALUE_TYPE to override the names with custom ones corresponding to your business model objects.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
 <p>Read more about the database architecture on the <a href="/docs/latest/SQL/sql-introduction">SQL Introduction</a> page.</p>
 </div>
+<div class="sect2">
+<h3 id="define-primary-key">Define Primary Key</h3>
 <div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Create Person table:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="p">(</span>
-  <span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-  <span class="n">city_id</span> <span class="nb">int</span><span class="p">,</span>
-  <span class="n">name</span> <span class="nb">varchar</span><span class="p">,</span>
-  <span class="n">age</span> <span class="nb">int</span><span class="p">,</span>
-  <span class="n">company</span> <span class="nb">varchar</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">city_id</span><span class="p">)</span>
-<span class="p">)</span> <span class="k">WITH</span> <span class="nv">"template=partitioned,backups=1,affinity_key=city_id, key_type=PersonKey, value_type=MyPerson"</span><span class="p">;</span></code></pre>
-</div>
+<p>The example below shows how to create a table with <code>PRIMARY KEY</code> specified in the column definition and override cache
+related parameters. A new distributed cache <code>SQL_PUBLIC_PERSON</code> will be created (the <code>SQL_{SCHEMA_NAME}_{TABLE}</code> format
+is used for naming) which stores objects of the <code>Person</code> type that corresponds to a specific Java, .NET, C++ class or BinaryObject.</p>
 </div>
 <div class="paragraph">
-<p>Once the CREATE TABLE command gets executed, the following happens:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A new distributed cache is created and named SQL_PUBLIC_PERSON. This cache stores objects of the <code>Person</code> type that corresponds to a specific Java, .NET, C++ class or BinaryObject. Furthermore, the key type (<code>PersonKey</code>) and value type (<code>MyPerson</code>) are defined explicitly assuming the data is to be processed by key-value and other non-SQL APIs.</p>
-</li>
-<li>
-<p>SQL table/schema with all the parameters will be defined.</p>
-</li>
-<li>
-<p>The data will be stored in the form of key-value pairs. The <code>PRIMARY KEY</code> columns will be used as the object&#8217;s key; the rest of the columns will belong to the value.</p>
-</li>
-<li>
-<p>Distributed cache related parameters are passed in the <code>WITH</code> clause of the statement. If the <code>WITH</code> clause is omitted, then the cache will be created with default parameters set in the CacheConfiguration object.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The example below shows how to create the same table with <code>PRIMARY KEY</code> specified in the column definition and overrid some cache related parameters:</p>
+<p>The distributed cache related parameters are passed in the <code>WITH</code> clause of the statement. If the <code>WITH</code> clause is omitted,
+then the cache will be created with default parameters set in the <code>CacheConfiguration</code> object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3510,6 +3469,103 @@ sets the write synchronization mode for the underlying cache. If neither this no
   <span class="n">age</span> <span class="nb">int</span><span class="p">,</span>
   <span class="n">company</span> <span class="nb">varchar</span>
 <span class="p">)</span> <span class="k">WITH</span> <span class="nv">"atomicity=transactional,cachegroup=somegroup"</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="use-non-sql-api">Use non-SQL API</h3>
+<div class="paragraph">
+<p>If you wish to access the table data by the key-value or other non-SQL API, then you might be need to set the <code>CACHE_NAME</code> and
+<code>KEY_TYPE</code>, <code>VALUE_TYPE</code> parameters corresponding to your business model objects to make non-SQL APIs usage more convenient.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use the <code>CACHE_NAME</code> parameter to override the default name with the following format <code>SQL_{SCHEMA_NAME}_{TABLE}</code>.</p>
+</li>
+<li>
+<p>By default, the command also creates two new binary types - for the key and value respectively. Ignite in turn generates
+the names of the types randomly including a UUID string which complicates the usage of these types from a non-SQL API.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The example below shows how to create a table <code>PERSON</code> and the underlying cache with the same name. The cache will store objects
+of the <code>Person</code> type with explicitly defined the key type <code>PersonKey</code> and value type <code>PersonValue</code>. The <code>PRIMARY KEY</code> columns will
+be used as the object&#8217;s key, the rest of the columns will belong to the value.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">city_id</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">varchar</span><span class="p">,</span>
+  <span class="n">age</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">company</span> <span class="nb">varchar</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">city_id</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="nv">"template=partitioned,backups=1,affinity_key=city_id,CACHE_NAME=Person,KEY_TYPE=PersonKey,VALUE_TYPE=PersonValue"</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="use-non-upper-case-columns">Use non-Upper Case Columns</h3>
+<div class="paragraph">
+<p>Ignite parses all unquoted identifiers, names of a table columns and converts them to uppercase
+during the <code>CREATE TABLE</code> command execution which, in turn, makes the command with explicitly defined key
+and value types a bit more challenging.</p>
+</div>
+<div class="paragraph">
+<p>There are a few options that might help you to deal with such a case:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use <a href="/docs/latest/SQL/sql-api">QuerySqlField</a> annotation. This will prevent checking the field non-UpperCase each time because of
+an alias for the column is created each time the <code>CREATE TABLE</code> command being executed.</p>
+</li>
+<li>
+<p>Keeping in mind that column names converted each time to the upper case by default, you have to be sure that DDL fields
+and cache type fields are always match the letters case.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the example below you can see the usage of quotes for the <code>affKey</code> CamelCase field in the <code>CREATE TABLE</code> command with
+matching of the same field in the <code>PersonKey</code> cache key type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INT</span><span class="p">,</span>
+  <span class="nv">"affKey"</span> <span class="nb">INT</span><span class="p">,</span>
+  <span class="n">val</span> <span class="nb">VARCHAR</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="nv">"affKey"</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="nv">"template=partitioned,backups=1,affinity_key=affKey,CACHE_NAME=Person,KEY_TYPE=PersonKey,VALUE_TYPE=PersonValue"</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">PersonKey</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="cm">/*
+     * This is a camel case field 'affKey' must match the DDL table schema, so you must be sure:
+     * - Using the quoted "affKey" field name in the DDL table definition;
+     * - Convert the 'affKey' field to the upper case 'AFFKEY' to match the DDL table definition;
+     */</span>
+    <span class="nd">@AffinityKeyMapped</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">affKey</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PersonKey</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">,</span> <span class="kt">int</span> <span class="n">affKey</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">affKey</span> <span class="o">=</span> <span class="n">affKey</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that some integrations with the Apache Ignite like the <a href="/docs/latest/extensions-and-integrations/spring/spring-data">Spring Data</a>
+<code>CrudRepository</code> doesn&#8217;t support the quoted fields to access the data.</p>
 </div>
 </div>
 </div>
@@ -4964,7 +5020,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#create-table">CREATE TABLE</a></li>
+<li><a href="#create-table">CREATE TABLE</a>
+<ul class="sectlevel2">
+<li><a href="#define-primary-key">Define Primary Key</a></li>
+<li><a href="#use-non-sql-api">Use non-SQL API</a></li>
+<li><a href="#use-non-upper-case-columns">Use non-Upper Case Columns</a></li>
+</ul>
+</li>
 <li><a href="#alter-table">ALTER TABLE</a></li>
 <li><a href="#drop-table">DROP TABLE</a></li>
 <li><a href="#create-index">CREATE INDEX</a>
@@ -5018,11 +5080,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1651776975' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1651776975' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1654071159' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1654071159' async crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1651776975" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1651776975"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1654071159" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1654071159"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
