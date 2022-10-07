@@ -1,0 +1,1872 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IBinaryObjectBuilder
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IBinaryObjectBuilder
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.59.1.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder">
+  
+  
+  <h1 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder" class="text-break">Interface IBinaryObjectBuilder
+  </h1>
+  <div class="markdown level0 summary"><p>binary object builder. Provides ability to build binary objects dynamically
+without having class definitions.
+<p>
+Note that type ID is required in order to build binary object. Usually it is
+enough to provide a simple type name and Ignite will generate the type ID
+automatically.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Apache.Ignite.Core.Binary.html">Apache.Ignite.Core.Binary</a></h6>
+  <h6><strong>Assembly</strong>: Apache.Ignite.Core.dll</h6>
+  <h5 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IBinaryObjectBuilder</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_Build_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.Build*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_Build" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.Build">Build()</h4>
+  <div class="markdown level1 summary"><p>Build the object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObject Build()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObject.html">IBinaryObject</a></td>
+        <td><p>Resulting binary object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_GetField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.GetField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_GetField__1_System_String_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.GetField``1(System.String)">GetField&lt;T&gt;(String)</h4>
+  <div class="markdown level1 summary"><p>Get object field value. If value is another binary object, then
+builder for this object will be returned. If value is a container
+for other objects (array, ICollection, IDictionary), then container
+will be returned with primitive types in deserialized form and
+binary objects as builders. Any change in builder or collection
+returned through this method will be reflected in the resulting
+binary object after build.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T GetField&lt;T&gt;(string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Field name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>Field value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_RemoveField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.RemoveField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_RemoveField_System_String_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.RemoveField(System.String)">RemoveField(String)</h4>
+  <div class="markdown level1 summary"><p>Remove object field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder RemoveField(string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Field name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetArrayField__1_System_String___0___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetArrayField``1(System.String,``0[])">SetArrayField&lt;T&gt;(String, T[])</h4>
+  <div class="markdown level1 summary"><p>Sets the array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetArrayField&lt;T&gt;(string fieldName, T[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td>T[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetBooleanArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetBooleanArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetBooleanArrayField_System_String_System_Boolean___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetBooleanArrayField(System.String,System.Boolean[])">SetBooleanArrayField(String, Boolean[])</h4>
+  <div class="markdown level1 summary"><p>Sets the boolean array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetBooleanArrayField(string fieldName, bool[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetBooleanField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetBooleanField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetBooleanField_System_String_System_Boolean_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetBooleanField(System.String,System.Boolean)">SetBooleanField(String, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Sets the boolean field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetBooleanField(string fieldName, bool val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetByteArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetByteArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetByteArrayField_System_String_System_Byte___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetByteArrayField(System.String,System.Byte[])">SetByteArrayField(String, Byte[])</h4>
+  <div class="markdown level1 summary"><p>Sets the byte array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetByteArrayField(string fieldName, byte[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetByteField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetByteField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetByteField_System_String_System_Byte_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetByteField(System.String,System.Byte)">SetByteField(String, Byte)</h4>
+  <div class="markdown level1 summary"><p>Sets the byte field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetByteField(string fieldName, byte val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCharArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCharArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCharArrayField_System_String_System_Char___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCharArrayField(System.String,System.Char[])">SetCharArrayField(String, Char[])</h4>
+  <div class="markdown level1 summary"><p>Sets the char array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetCharArrayField(string fieldName, char[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCharField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCharField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCharField_System_String_System_Char_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCharField(System.String,System.Char)">SetCharField(String, Char)</h4>
+  <div class="markdown level1 summary"><p>Sets the char field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetCharField(string fieldName, char val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCollectionField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCollectionField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetCollectionField_System_String_System_Collections_ICollection_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetCollectionField(System.String,System.Collections.ICollection)">SetCollectionField(String, ICollection)</h4>
+  <div class="markdown level1 summary"><p>Sets the collection field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetCollectionField(string fieldName, ICollection val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.ICollection</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDecimalArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDecimalArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDecimalArrayField_System_String_System_Nullable_System_Decimal____" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDecimalArrayField(System.String,System.Nullable{System.Decimal}[])">SetDecimalArrayField(String, Nullable&lt;Decimal&gt;[])</h4>
+  <div class="markdown level1 summary"><p>Sets the decimal array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetDecimalArrayField(string fieldName, decimal? [] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Decimal</span>&gt;[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDecimalField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDecimalField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDecimalField_System_String_System_Nullable_System_Decimal__" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDecimalField(System.String,System.Nullable{System.Decimal})">SetDecimalField(String, Nullable&lt;Decimal&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sets the decimal field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetDecimalField(string fieldName, decimal? val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Decimal</span>&gt;</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDictionaryField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDictionaryField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDictionaryField_System_String_System_Collections_IDictionary_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDictionaryField(System.String,System.Collections.IDictionary)">SetDictionaryField(String, IDictionary)</h4>
+  <div class="markdown level1 summary"><p>Sets the dictionary field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetDictionaryField(string fieldName, IDictionary val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.IDictionary</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDoubleArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDoubleArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDoubleArrayField_System_String_System_Double___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDoubleArrayField(System.String,System.Double[])">SetDoubleArrayField(String, Double[])</h4>
+  <div class="markdown level1 summary"><p>Sets the double array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetDoubleArrayField(string fieldName, double[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDoubleField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDoubleField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetDoubleField_System_String_System_Double_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetDoubleField(System.String,System.Double)">SetDoubleField(String, Double)</h4>
+  <div class="markdown level1 summary"><p>Sets the double field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetDoubleField(string fieldName, double val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetEnumArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetEnumArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetEnumArrayField__1_System_String___0___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetEnumArrayField``1(System.String,``0[])">SetEnumArrayField&lt;T&gt;(String, T[])</h4>
+  <div class="markdown level1 summary"><p>Sets the enum array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetEnumArrayField&lt;T&gt;(string fieldName, T[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td>T[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetEnumField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetEnumField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetEnumField__1_System_String___0_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetEnumField``1(System.String,``0)">SetEnumField&lt;T&gt;(String, T)</h4>
+  <div class="markdown level1 summary"><p>Sets the enum field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetEnumField&lt;T&gt;(string fieldName, T val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetField__1_System_String___0_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetField``1(System.String,``0)">SetField&lt;T&gt;(String, T)</h4>
+  <div class="markdown level1 summary"><p>Set object field value. Value can be of any type including other
+<a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObject.html">IBinaryObject</a> and other builders.
+<p>
+Value type for metadata is determined as <code>typeof(T)</code>;
+use <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html#Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetField__1_System_String___0_System_Type_">SetField&lt;T&gt;(String, T, Type)</a> overload to override.  </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetField&lt;T&gt;(string fieldName, T val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Field name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Field value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetField__1_System_String___0_System_Type_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetField``1(System.String,``0,System.Type)">SetField&lt;T&gt;(String, T, Type)</h4>
+  <div class="markdown level1 summary"><p>Set object field value. Value can be of any type including other
+<a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObject.html">IBinaryObject</a> and other builders.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetField&lt;T&gt;(string fieldName, T val, Type valType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Field name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>Field value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">valType</span></td>
+        <td><p>Field value type for metadata
+(see also <a class="xref" href="Apache.Ignite.Core.Binary.IBinaryType.html#Apache_Ignite_Core_Binary_IBinaryType_GetFieldTypeName_System_String_">GetFieldTypeName(String)</a>).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetFloatArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetFloatArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetFloatArrayField_System_String_System_Single___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetFloatArrayField(System.String,System.Single[])">SetFloatArrayField(String, Single[])</h4>
+  <div class="markdown level1 summary"><p>Sets the float array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetFloatArrayField(string fieldName, float[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetFloatField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetFloatField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetFloatField_System_String_System_Single_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetFloatField(System.String,System.Single)">SetFloatField(String, Single)</h4>
+  <div class="markdown level1 summary"><p>Sets the float field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetFloatField(string fieldName, float val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetGuidArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetGuidArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetGuidArrayField_System_String_System_Nullable_System_Guid____" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetGuidArrayField(System.String,System.Nullable{System.Guid}[])">SetGuidArrayField(String, Nullable&lt;Guid&gt;[])</h4>
+  <div class="markdown level1 summary"><p>Sets the guid array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetGuidArrayField(string fieldName, Guid? [] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetGuidField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetGuidField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetGuidField_System_String_System_Nullable_System_Guid__" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetGuidField(System.String,System.Nullable{System.Guid})">SetGuidField(String, Nullable&lt;Guid&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sets the guid field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetGuidField(string fieldName, Guid? val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetIntArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetIntArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetIntArrayField_System_String_System_Int32___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetIntArrayField(System.String,System.Int32[])">SetIntArrayField(String, Int32[])</h4>
+  <div class="markdown level1 summary"><p>Sets the int array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetIntArrayField(string fieldName, int[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetIntField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetIntField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetIntField_System_String_System_Int32_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetIntField(System.String,System.Int32)">SetIntField(String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Sets the int field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetIntField(string fieldName, int val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetLongArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetLongArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetLongArrayField_System_String_System_Int64___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetLongArrayField(System.String,System.Int64[])">SetLongArrayField(String, Int64[])</h4>
+  <div class="markdown level1 summary"><p>Sets the long array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetLongArrayField(string fieldName, long[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetLongField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetLongField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetLongField_System_String_System_Int64_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetLongField(System.String,System.Int64)">SetLongField(String, Int64)</h4>
+  <div class="markdown level1 summary"><p>Sets the long field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetLongField(string fieldName, long val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetShortArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetShortArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetShortArrayField_System_String_System_Int16___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetShortArrayField(System.String,System.Int16[])">SetShortArrayField(String, Int16[])</h4>
+  <div class="markdown level1 summary"><p>Sets the short array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetShortArrayField(string fieldName, short[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int16</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetShortField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetShortField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetShortField_System_String_System_Int16_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetShortField(System.String,System.Int16)">SetShortField(String, Int16)</h4>
+  <div class="markdown level1 summary"><p>Sets the short field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetShortField(string fieldName, short val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int16</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetStringArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetStringArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetStringArrayField_System_String_System_String___" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetStringArrayField(System.String,System.String[])">SetStringArrayField(String, String[])</h4>
+  <div class="markdown level1 summary"><p>Sets the string array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetStringArrayField(string fieldName, string[] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetStringField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetStringField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetStringField_System_String_System_String_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetStringField(System.String,System.String)">SetStringField(String, String)</h4>
+  <div class="markdown level1 summary"><p>Sets the string field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetStringField(string fieldName, string val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetTimestampArrayField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetTimestampArrayField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetTimestampArrayField_System_String_System_Nullable_System_DateTime____" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetTimestampArrayField(System.String,System.Nullable{System.DateTime}[])">SetTimestampArrayField(String, Nullable&lt;DateTime&gt;[])</h4>
+  <div class="markdown level1 summary"><p>Sets the timestamp array field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetTimestampArrayField(string fieldName, DateTime? [] val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.DateTime</span>&gt;[]</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetTimestampField_" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetTimestampField*"></a>
+  <h4 id="Apache_Ignite_Core_Binary_IBinaryObjectBuilder_SetTimestampField_System_String_System_Nullable_System_DateTime__" data-uid="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.SetTimestampField(System.String,System.Nullable{System.DateTime})">SetTimestampField(String, Nullable&lt;DateTime&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sets the timestamp field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IBinaryObjectBuilder SetTimestampField(string fieldName, DateTime? val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>Name of the field.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.DateTime</span>&gt;</td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Apache.Ignite.Core.Binary.IBinaryObjectBuilder.html">IBinaryObjectBuilder</a></td>
+        <td><p>Current builder instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
