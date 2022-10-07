@@ -1,0 +1,168 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.13.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.14.0</h1>
+			<div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>Removed LOCAL caches support.</li>
+        <li>Removed scalar module.</li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added CDC binary meta change events.</li>
+        <li>Added a control.sh command that schedules index rebuild via the maintenance mode.</li>
+        <li>Added a pluggable affinity mapping function for the partition awareness usage.</li>
+        <li>Added a snapshot creation operation metrics.</li>
+        <li>Added a snapshot status command to control.sh and JMX.</li>
+        <li>Added a user info to the sql queries view.</li>
+        <li>Added an opportunity to specify a single partition for IndexQuery.</li>
+        <li>Added cache change events for CDCConsumer.</li>
+        <li>Added cache metrics command for Control Script.</li>
+        <li>Added support of optional beans for SpringResource annotation injection.</li>
+        <li>Added system view and histogram to show the distribution of hot and cold pages in the page memory.</li>
+        <li>Added the ability to define a custom path for the snapshot operation.</li>
+        <li>Added the ability to intercept calls to service methods.</li>
+        <li>Fixed 'Integer value is out of bounds' issue when the dataregion maxSize is large enough.</li>
+        <li>Fixed 'Invalid cross-device link error' when extending WAL segments size.</li>
+        <li>Fixed ClassCastException that appears during deployment manager stop in Java versions 11.0.16+ and 17.0.4+.</li>
+        <li>Fixed an issue that caused inconsistent keys after deletion during rebalance.</li>
+        <li>Fixed an issue that could lead to a block of the management pool in case of using clearSync.</li>
+        <li>Fixed an issue that could lead to unexpected partition map exchange on client nodes.</li>
+        <li>Fixed an issue where the snapshot error was not propagated to the initiating node.</li>
+        <li>Fixed an issue with potential node failure during the cancellation of computing jobs with cache operations.</li>
+        <li>Fixed applying expiration to CDC-replicated cache entries.</li>
+        <li>Fixed asynchronous operation permits overflow for explicit transaction with single write entry.</li>
+        <li>Fixed durable background task start on BLT node joined to the active cluster.</li>
+        <li>Fixed idle_verify command of control.sh utility.</li>
+        <li>Fixed incorrect node hostname resolution despite IP is configured with IGNITE_LOCAL_HOST.</li>
+        <li>Fixed incorrect params of GridCacheManager#stop method.</li>
+        <li>Fixed node resolving stale addresses from previously restarted and killed nodes.</li>
+        <li>Fixed notification for node start event.</li>
+        <li>Fixed partition update counter tracking after the node restart.</li>
+        <li>Fixed potential deadlock in transactions recovery on node failure.</li>
+        <li>Fixed propagation of a service call exception stacktrace to the client side.</li>
+        <li>Fixed race condition in GridNioServer.</li>
+        <li>Fixed server-side message parsing for big messages from thin clients.</li>
+        <li>Fixed tasks for sending snapshot files.</li>
+        <li>Fixed the "io.datastorage.StorageSize" metrics in case of multiple persistence data regions.</li>
+        <li>Fixed the move of remote partition files during snapshot restore operations.</li>
+        <li>Fixed the run of ignitevisorcmd in JDK 17 environment.</li>
+        <li>Fixed writing of an empty binary object.</li>
+        <li>Fixed wrong checkpoint locks count calculation after lock timeout (wrong calculation leads to node failure in some cases).</li>
+        <li>Improved REST commands: skip authorization for  'Probe' and 'Version' commands.</li>
+        <li>Improved `--consistency repair` command of the control.sh utility; Read Repair now supports arrays and collections as values.</li>
+        <li>Improved `--consistency repair` command of the control.sh utility; Read Repair now supports binary keys.</li>
+        <li>Improved `--consistency repair` command of the control.sh utility; atomic caches can now be repaired by Read Repair.</li>
+        <li>Improved behavior of the speed-based throttling when a dirty-page ratio is low.</li>
+        <li>Improved consistency check, it now supports cacheGroup as a param as well.</li>
+        <li>Improved consistency check, it's now able to fix counters.</li>
+        <li>Improved index-reader.sh utility: add free size calculation.</li>
+        <li>Improved index-reader.sh utility: analyze and output information about the actual usage of inline space in the index.</li>
+        <li>Improved index-reader.sh utility: exclude repeated stack traces.</li>
+        <li>Improved inline size adjustment for fixed size index items.</li>
+        <li>Improved logging levels for situations when dealing with a client node.</li>
+        <li>Improved registered service name lookup performance and reduced service shutdown time.</li>
+        <li>Improved service name lookup performance and reduced service startup time.</li>
+        <li>Improved speed of the index-reader.sh utility.</li>
+        <li>Moved ignite-cloud IP Finder to the Ignite Extensions project.</li>
+        <li>Moved ignite-mesos to the Ignite Extensions project.</li>
+        <li>Moved ignite-spark modules to the Ignite Extensions project.</li>
+        <li>Moved ignite-yarn to the Ignite Extensions project.</li>
+        <li>Moved inigte-aop module to the Ignite Extensions project.</li>
+        <li>Removed deprecated log4j 1.x module.</li>
+        <li>Update Tomcat Servlet API dependency version to 9.0.63.</li>
+        <li>Update jsonpath dependency to 2.7.0.</li>
+        <li>Updated Jackson Databind dependency to 2.12.7 (CVE-2020-36518).</li>
+        <li>Updated Jetty dependency to 9.4.43.</li>
+        <li>Updated Lucene library version to 8.11.2.</li>
+        <li>Updated Spring dependency to 5.2.22.</li>
+        <li>Updated the MySql connector dependency version (fixes CVE-2021-2471, CVE-2022-21363).</li>
+    </ul>
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added AtomicLong.</li>
+        <li>Added IgniteSet.</li>
+        <li>Added automatic binary configuration. Name mapper and compact footer settings will be set according to cluster configuration.</li>
+        <li>Added partition awareness to AtomicLong - send network requests directly to the primary node for the given instance.</li>
+        <li>Added support of IndexQuery feature in Java thin client.</li>
+        <li>Fixed an issue that caused addresses not to be reloaded from ClientAddressFinder on connection loss.</li>
+        <li>Fixed hang on client startup when deprecated TLS version is used.</li>
+        <li>Fixed race condition and potential hang on client close.</li>
+    </ul>
+    <h2>JDBC</h2>
+    <ul>
+        <li>Fixed handling of BinaryObjectException on response to deserialization at the thin JDBC client</li>
+        <li>Fixed parsing quoted delimiters in CSV fields content for SQL command COPY.</li>
+    </ul>
+    <h2>.Net</h2>
+    <ul>
+        <li>Added service interceptors.</li>
+        <li>Fixed StringComparer serialization.</li>
+        <li>Fixed net461 release binaries.</li>
+        <li>Improved Java detection on Linux.</li>
+    </ul>
+    <h2>.Net thin client</h2>
+    <ul>
+        <li>Added AtomicLong.</li>
+    </ul>
+    <h2>C++ thin client</h2>
+    <ul>
+        <li>Added partition property to SqlFieldsQuery for C++ thin client.</li>
+        <li>Added support ScanQuery for C++ thin client.</li>
+        <li>Added user thread pool size to public configuration of the C++ thin client.</li>
+    </ul>
+    <h2>SQL</h2>
+    <ul>
+        <li>Added segmented indexes support for Calcite engine.</li>
+        <li>Added support for IN criterion for IndexQuery: IndexQuery.setCriteria(in("A", Arrays.asList(1, 2 ,3))).</li>
+        <li>Calcite-based SQL engine is now independent of H2-based SQL engine and doesn't require 'ignite-indexing' module and H2 to be in classpath anymore.</li>
+        <li>Fixed incorrect query result if a subquery with a filter was used on the left shoulder of a LEFT JOIN.</li>
+        <li>Fixed indexes registration after add/drop column for Calcite engine.</li>
+        <li>Fixed insertion of values with java LocalDate, LocalTime  and LocalDateTime types via SQL.</li>
+        <li>Improved SQL calcite: use index count scan for COUNT(*).</li>
+    </ul>
+</body>

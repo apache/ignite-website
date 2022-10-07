@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Apache.Ignite.Core.Services
+   | Apache Ignite.NET </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Apache.Ignite.Core.Services
+   | Apache Ignite.NET ">
+    <meta name="generator" content="docfx 2.59.1.0">
+    
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo_ignite_32_32.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Apache.Ignite.Core.Services">
+  
+  <h1 id="Apache_Ignite_Core_Services" data-uid="Apache.Ignite.Core.Services" class="text-break">Namespace Apache.Ignite.Core.Services
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.ServiceCallContextBuilder.html">ServiceCallContextBuilder</a></h4>
+      <section><p>Service call context builder.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.ServiceConfiguration.html">ServiceConfiguration</a></h4>
+      <section><p>Service configuration.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.ServiceDeploymentException.html">ServiceDeploymentException</a></h4>
+      <section><p>Indicates an error during Grid Services deployment.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.ServiceInvocationException.html">ServiceInvocationException</a></h4>
+      <section><p>Indicates an error during Grid Services invocation.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IService.html">IService</a></h4>
+      <section><p>Represents Ignite-managed service.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IServiceCallContext.html">IServiceCallContext</a></h4>
+      <section><p>Represents service call context.
+<p>
+This context is implicitly passed to the service and can be retrieved inside the service
+using <a class="xref" href="Apache.Ignite.Core.Services.IServiceContext.html#Apache_Ignite_Core_Services_IServiceContext_CurrentCallContext">CurrentCallContext</a>. It is accessible only
+from the local thread during the execution of a service method.
+<p>
+Use <a class="xref" href="Apache.Ignite.Core.Services.ServiceCallContextBuilder.html">ServiceCallContextBuilder</a> to instantiate the context.
+<p>
+<strong>Note</strong>: passing the context to the service may lead to performance overhead,
+so it should only be used for &quot;middleware&quot; tasks.
+<p>
+Usage example:</p>
+<pre><code>// Service implementation.
+public class HelloServiceImpl : HelloService
+{
+    private IServiceContext ctx;
+
+    public void Init(IServiceContext ctx)
+    {
+        this.ctx = ctx;
+    }
+
+    public string Call(string msg)
+    {
+        return msg + ctx.CurrentCallContext.Attribute(&quot;user&quot;);
+    }
+    ...
+}
+...
+
+// Call this service with context.
+IServiceCallContext callCtx = new ServiceCallContextBuilder().Set(&quot;user&quot;, &quot;John&quot;).build();
+HelloService helloSvc = ignite.GetServices().GetServiceProxy&lt;HelloService>(&quot;hello-service&quot;, false, callCtx);
+// Print &quot;Hello John&quot;.
+Console.WriteLine( helloSvc.call(&quot;Hello &quot;) );</code></pre>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IServiceCallInterceptor.html">IServiceCallInterceptor</a></h4>
+      <section><p>Represents service call interceptor.
+<p>
+Allows the user to intercept the call to any service method except lifecycle methods
+(<a class="xref" href="Apache.Ignite.Core.Services.IService.html#Apache_Ignite_Core_Services_IService_Init_Apache_Ignite_Core_Services_IServiceContext_">Init(IServiceContext)</a>, <a class="xref" href="Apache.Ignite.Core.Services.IService.html#Apache_Ignite_Core_Services_IService_Execute_Apache_Ignite_Core_Services_IServiceContext_">Execute(IServiceContext)</a> and
+<a class="xref" href="Apache.Ignite.Core.Services.IService.html#Apache_Ignite_Core_Services_IService_Cancel_Apache_Ignite_Core_Services_IServiceContext_">Cancel(IServiceContext)</a>).
+<p>
+A typical use of an interceptor is a middleware logic that applies to all custom methods in a service.
+<p>
+The user can specify multiple interceptors in the <a class="xref" href="Apache.Ignite.Core.Services.ServiceConfiguration.html">ServiceConfiguration</a>.
+Each interceptor invokes the next interceptor in the chain using a delegated call, the last interceptor
+will call the service method.
+<example><p>
+<pre><code>class Security : IServiceCallInterceptor
+{
+  public object Invoke(string mtd, object[] args, IServiceContext ctx, Func&lt;object> next)
+  {
+    if (!CustomSecurityProvider.Instance().Access(ctx.CurrentCallContext.GetAttribute(&quot;sessionId&quot;)))
+      throw new SecurityException();
+
+    // Execute remaining interceptors and service method.
+    return next.Invoke();
+  }
+}
+
+class Audit : IServiceCallInterceptor
+{
+  public object Invoke(string mtd, object[] args, IServiceContext ctx, Func&lt;object> next)
+  {
+    var sessionId = ctx.CurrentCallContext.GetAttribute(&quot;sessionId&quot;);
+    var audit = AuditProvider.Instance();
+
+    audit.RecordEvent(&quot;start&quot;, mtd, sessionId);
+
+    try
+    {
+      // Execute service method.
+      return next.Invoke();
+    }
+    catch (Exception e)
+    {
+      // Record error.
+      audit.RecordEvent(&quot;error&quot;, mtd, &quot;id=&quot; + sessionId + &quot;, err=&quot; + e.Message);
+
+      // Re-throw exception to initiator.
+      throw;
+    }
+    finally
+    {
+      // Record finish event after execution of the service method.
+      audit.RecordEvent(&quot;finish&quot;, mtd, sessionId);
+    }
+  }
+}
+
+...
+
+var svcCfg = new ServiceConfiguration()
+{
+  Name = &quot;service&quot;,
+  Service = new MyService(),
+  MaxPerNodeCount = 1,
+  Interceptors = new List&lt;IServiceCallInterceptor> { new Audit(), new Security() }
+};
+
+// Deploy service.
+ignite.GetServices().Deploy(svcCfg);
+
+// Set context parameters for the service proxy.
+var callCtx = new ServiceCallContextBuilder().Set(&quot;sessionId&quot;, sessionId).Build();
+
+// Make service proxy with caller context to define sessionId attribute.
+var proxy = ignite.GetServices().GetServiceProxy&lt;IMyService>(&quot;service&quot;, false, callCtx);
+
+// Service method call will be intercepted.
+proxy.PlaceOrder(order1);
+proxy.PlaceOrder(order2);</code></pre>
+<p></example></p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IServiceContext.html">IServiceContext</a></h4>
+      <section><p>Represents service execution context.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IServiceDescriptor.html">IServiceDescriptor</a></h4>
+      <section><p>Service deployment descriptor.</p>
+</section>
+      <h4><a class="xref" href="Apache.Ignite.Core.Services.IServices.html">IServices</a></h4>
+      <section><p>Defines functionality to deploy distributed services in the Ignite.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            © 2015 - 2019 The Apache Software Foundation
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
