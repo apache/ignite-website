@@ -160,7 +160,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-beta/index" class='' >Documentation Overview</a>
+                <a href="/docs/3.0.0-beta/index" class='' >About Apache Ignite 3</a>
             
         </li>
     
@@ -168,6 +168,62 @@
             
                 
                 <a href="/docs/3.0.0-beta/quick-start/getting-started-guide" class='' >Getting Started Guide</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-zip"
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-docker"
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/deb-rpm"
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -300,6 +356,13 @@
         <li>
             
                 
+                <a href="/docs/3.0.0-beta/thin-clients/index" class='' >Thin Clients</a>
+            
+        </li>
+    
+        <li>
+            
+                
                 <a href="/docs/3.0.0-beta/compute/compute" class='' >Distributed Computing</a>
             
         </li>
@@ -402,6 +465,13 @@
             
         </li>
     
+        <li>
+            
+                
+                <a href="/docs/3.0.0-beta/glossary/glossary" class='' >Glossary</a>
+            
+        </li>
+    
 </nav>
 <div class="left-nav__overlay"></div>
 
@@ -414,150 +484,32 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can set configuration for data regions by using HOCON format. You can configure your data regions to run either RocksDB or B+Tree storage, and fine-tune their performance. A cluster can have several data regions, and you can select the preferred storage type for each.</p>
+<p>You can set configuration for data regions by using HOCON format. You can configure your data regions to run either RocksDB or B+Tree storage, and fine-tune their performance. A cluster can have several data regions, and you can select the preferred storage type for each. Configuration parameters for data regions are available in the storage-related articles.</p>
 </div>
 <div class="paragraph">
-<p>We recommend to use B+ Tree storage for read-heavy workloads, and RocksDB for write-heavy workloads.</p>
+<p>We recommend to use B+Tree storage for read-heavy workloads, and RocksDB for write-heavy workloads.</p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="rocksdb-region-configuration">RocksDB Region Configuration</h3>
-<div class="paragraph">
-<p>Below is the list of properties for <a href="https://rocksdb.org/" target="_blank" rel="noopener">RocksDB</a> data regions:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-none stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the data region.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">size</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>256 * 1024 * 1024</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size of the offheap cache.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">writeBufferSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>64 * 1024 * 1024</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size of the write buffer.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">cache</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lru</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the cache to use. Currently only lru is supported.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">numShardBits</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The number of parts the cache is sharded to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect1">
-<h2 id="page-memory-region-configuration">Page Memory Region Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Page memory keeps data in B+Tree format. You can set up the following configuration parameters:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-none stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">name</th>
-<th class="tableblock halign-left valign-top"></th>
-<th class="tableblock halign-left valign-top">The name of the data region.</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">persistent</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies if the data region is persistent.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">initSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>256 * 1024 * 1024</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the initial space allocated to the data region.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">maxSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>256 * 1024 * 1024</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the maximum space that can be allocated to the data region.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">evictionMode</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DISABLED</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the eviction algorithm to use.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">replacementMode</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CLOCK</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the page replacement algorithm.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">evictionThreshold</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.9</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Configures when the eviction process starts.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">emptyPagesPoolSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of empty pages Ignite will try to keep.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">checkpointPageBufSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the size of the page buffer.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">lazyMemoryAllocation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If enabled, memory will not be allocated until necessary.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <div class="sect1">
 <h2 id="configuration-example">Configuration Example</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The example below shows how to configure two data regions, one using RocksDB storage, and another using page memory:</p>
+<p>The example below shows how to configure two data regions, one using RocksDB storage, and another using a volatile page memory:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>ignite config set --type cluster \
 "{
-    rocksDb.regions: [{
+    rocksdb.regions: [{
         name: lsm_region,
         size: 256000000,
         cache: lru
     }],
 
-    pageMemory.regions: [{
-        name: btree_region,
-        persistent: false,
-        maxSize: 256000000,
-        lazyMemoryAllocation: true
+    aimem.regions: [{
+        name: btree_volatile_region,
+        maxSize: 256000000
     }]
 }"</pre>
 </div>
@@ -573,9 +525,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
-    <ul class="sectlevel2">
-<li><a href="#rocksdb-region-configuration">RocksDB Region Configuration</a></li>
-<li><a href="#page-memory-region-configuration">Page Memory Region Configuration</a></li>
+    <ul class="sectlevel1">
 <li><a href="#configuration-example">Configuration Example</a></li>
 </ul>
     </div>
@@ -616,12 +566,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1668627604' async></script>
+<script type='module' src='/assets/js/index.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1668632066' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1668627604" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668627604"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1668632066" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668632066"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

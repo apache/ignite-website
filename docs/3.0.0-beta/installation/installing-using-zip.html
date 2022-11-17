@@ -50,9 +50,9 @@
 
     
     <meta name="ignite-version" content="3.0.0-beta" />
-    <title>Installing Using Distributive | Ignite Documentation</title>
+    <title>Installing Using ZIP Archive | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-beta/installation/installing-using-exe" />
+    <link rel="canonical" href="/docs/3.0.0-beta/installation/installing-using-zip" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -178,8 +178,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed parent'>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded parent'>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -190,7 +190,7 @@
                     <li> 
                         
                             <a href="/docs/3.0.0-beta/installation/installing-using-zip"
-                                class=''
+                                class='active'
                             >Installing Using ZIP Archive</a>
                         
                     </li>
@@ -477,9 +477,9 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/installation/installing-using-exe.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/installation/installing-using-zip.adoc" target="_blank">Edit</a>
         
-            <h1>Installing Using Distributive</h1>
+            <h1>Installing Using ZIP Archive</h1>
         
         <div class="sect1">
 <h2 id="prerequisites">Prerequisites</h2>
@@ -506,47 +506,51 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="installing-using-distributive">Installing Using Distributive</h2>
+<h2 id="installing-using-zip-archive">Installing Using ZIP Archive</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>WARNING:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>If you have installed one of the Ignite 3 Alpha releases before, please remove the `~/.ignitecfg` file before proceeding. This is a temporary step, the procedure will be improved in the future releases.</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To install Apache Ignite, perform the following steps:</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to <a href="https://ignite.apache.org/download.cgi" target="_blank" rel="noopener">Apache Ignite Downloads</a> page to download the distributive.</p>
+<p>Download the archive with the Ignite CLI tool:</p>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">curl <span class="nt">-L</span> <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-beta1/ignite3-3.0.0-beta1.zip"</span> <span class="nt">-o</span> ignite3-3.0.0-beta1.zip</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">curl <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-alpha5/apache-ignite-3.0.0-alpha5.zip"</span> <span class="nt">-o</span> apache-ignite-3.0.0-alpha5.zip</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">curl <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-alpha5/apache-ignite-3.0.0-alpha5.zip"</span> <span class="nt">-o</span> apache-ignite-3.0.0-alpha5.zip</code></pre>
+</div>
+</div></code-tab></code-tabs>
 </li>
 <li>
-<p>Put the distributed file into the installation folder in your system.</p>
+<p>Unpack the archive:</p>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">unzip ignite3-3.0.0-beta1.zip <span class="o">&amp;&amp;</span> <span class="nb">cd </span>ignite3-3.0.0-beta1</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">Expand-Archive ignite3-3.0.0-beta1.zip <span class="nt">-DestinationPath</span> <span class="nb">.</span> <span class="p">;</span> <span class="nb">cd </span>ignite3-3.0.0-beta1</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">tar</span> <span class="nt">-xf</span> ignite3-3.0.0-beta1.zip &amp; <span class="nb">cd </span>ignite3-3.0.0-beta1</code></pre>
+</div>
+</div></code-tab></code-tabs>
 </li>
 <li>
-<p>Either execute the file or run it in the command line.</p>
-</li>
-<li>
-<p>Optionally, set the Windows PATH to point to the installation folder and make sure there is no trailing / (or \ for Windows) in the path.</p>
+<p>Add your installation directory to the PATH environment variable:</p>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">export </span><span class="nv">IGNITE_HOME</span><span class="o">=</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
 </li>
 </ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Depending on your system, you may need additional permissions during the installation.
-To grant permissions for Linux, run the <code>chmod +x ignite</code> standard command.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -561,7 +565,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#installing-using-distributive">Installing Using Distributive</a></li>
+<li><a href="#installing-using-zip-archive">Installing Using ZIP Archive</a></li>
 </ul>
     </div>
           

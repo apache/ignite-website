@@ -160,7 +160,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-beta/index" class='' >Documentation Overview</a>
+                <a href="/docs/3.0.0-beta/index" class='' >About Apache Ignite 3</a>
             
         </li>
     
@@ -168,6 +168,62 @@
             
                 
                 <a href="/docs/3.0.0-beta/quick-start/getting-started-guide" class='active' >Getting Started Guide</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-zip"
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-docker"
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/deb-rpm"
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -300,6 +356,13 @@
         <li>
             
                 
+                <a href="/docs/3.0.0-beta/thin-clients/index" class='' >Thin Clients</a>
+            
+        </li>
+    
+        <li>
+            
+                
                 <a href="/docs/3.0.0-beta/compute/compute" class='' >Distributed Computing</a>
             
         </li>
@@ -402,6 +465,13 @@
             
         </li>
     
+        <li>
+            
+                
+                <a href="/docs/3.0.0-beta/glossary/glossary" class='' >Glossary</a>
+            
+        </li>
+    
 </nav>
 <div class="left-nav__overlay"></div>
 
@@ -414,13 +484,10 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide provides essential details on how to start working with Ignite 3.0 Alpha 5 by using the Ignite CLI tool, including the following information:</p>
+<p>This guide provides essential details on how to start working with Ignite 3.0 Beta by using the Ignite CLI tool, including the following information:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p>How to download and install the tool.</p>
-</li>
 <li>
 <p>How to use the Ignite CLI tool to manage nodes.</p>
 </li>
@@ -438,7 +505,7 @@
 <h2 id="prerequisites">Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite 3.0 Alpha 5 was officially tested on:</p>
+<p>Ignite 3.0 Beta was officially tested on:</p>
 </div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
@@ -459,251 +526,63 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="installing-ignite-cli-tool">Installing Ignite CLI Tool</h2>
+<h2 id="starting-ignite-node">Starting Ignite Node</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To download and install the Ignite CLI Tool, follow the steps below:</p>
+<p>In this guide we will use a <a href="/docs/3.0.0-beta/../installation/installing-using-zip">zip</a> archive installation. To start an Ignite node, go to the <code>ignite3-db-3.0.0-beta1</code> folder and run the following command:</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Download the archive with the Ignite CLI tool:</p>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<code-tabs><code-tab data-tab='Linux'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">curl <span class="nt">-L</span> <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-alpha5/apache-ignite-3.0.0-alpha5.zip"</span> <span class="nt">-o</span> apache-ignite-3.0.0-alpha5.zip</code></pre>
+<pre>bin/ignite3db start</pre>
 </div>
-</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">curl <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-alpha5/apache-ignite-3.0.0-alpha5.zip"</span> <span class="nt">-o</span> apache-ignite-3.0.0-alpha5.zip</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">curl <span class="s2">"https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&amp;filename=ignite/3.0.0-alpha5/apache-ignite-3.0.0-alpha5.zip"</span> <span class="nt">-o</span> apache-ignite-3.0.0-alpha5.zip</code></pre>
-</div>
-</div></code-tab></code-tabs>
-</li>
-<li>
-<p>Unpack the archive:</p>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">unzip apache-ignite-3.0.0-alpha5.zip <span class="o">&amp;&amp;</span> <span class="nb">cd </span>apache-ignite-3.0.0-alpha5</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">Expand-Archive apache-ignite-3.0.0-alpha5.zip <span class="nt">-DestinationPath</span> <span class="nb">.</span> <span class="p">;</span> <span class="nb">cd </span>apache-ignite-3.0.0-alpha5</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">tar</span> <span class="nt">-xf</span> apache-ignite-3.0.0-alpha5.zip &amp; <span class="nb">cd </span>apache-ignite-3.0.0-alpha5</code></pre>
-</div>
-</div></code-tab></code-tabs>
-</li>
-<li>
-<p>Add your installation directory to the PATH environment variable:</p>
-<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nb">echo</span> <span class="s1">'export PATH="'</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span><span class="s1">':$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bash_profile <span class="o">&amp;&amp;</span> <span class="nb">source</span> ~/.bash_profile  <span class="o">&amp;&amp;</span> <span class="nb">source </span>ignite_completion.sh</code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ENV</span>:PATH +<span class="o">=</span> <span class="s2">";."</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="text">set PATH=%cd%;%PATH%</code></pre>
-</div>
-</div></code-tab></code-tabs>
-</li>
-</ol>
-</div>
-<div class="admonitionblock note">
+</div></code-tab><code-tab data-tab='Windows'><div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
 <td class="content">
-On Windows, this latter change is not permanent and only affects the current terminal session. If you want the
-<code>ignite</code> command to be available after terminal or system restart, use the <code>System Properties</code> dialog to
-permanently update the <code>PATH</code> environment variable by adding a full path to the Ignite installation directory.
+You need to install Java in Bash environment to run Ignite on Windows.
 </td>
 </tr>
 </table>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre>bash bin\ignite3db start</pre>
+</div>
+</div></code-tab></code-tabs>
 </div>
 </div>
 <div class="sect1">
 <h2 id="using-ignite-cli-tool">Using Ignite CLI Tool</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite CLI is a single entry point for all the Ignite operations. You can perform the following actions with it:</p>
+<p>Ignite CLI is a single entry point for all the Ignite operations. In this guide we will use it to start a cluster on a node you started on the previous step and execute a simple SQL query.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Manage existing nodes.</p>
-</li>
-<li>
-<p>Install new nodes.</p>
-</li>
-<li>
-<p>Update old nodes to new versions.</p>
-</li>
-<li>
-<p>Install or remove optional modules.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s use some of the &lt;&lt;Ignite CLI Tool Commands&gt;&gt;.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Use the command below to see the full list:</p>
-<div class="listingblock">
+<code-tabs><code-tab data-tab='Linux'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite</code></pre>
+<pre>ignite3-cli-3.0.0-beta1/bin/ignite3</pre>
 </div>
-</div>
-</li>
-<li>
-<p>Pass the <code>--help</code> parameter to the previous command to get its detailed description:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite bootstrap <span class="nt">--help</span></code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="installing-ignite-artifacts-and-dependencies">Installing Ignite Artifacts and Dependencies</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite CLI allows to install Ignite modules and 3rd party Maven dependencies.</p>
-</div>
-<div class="admonitionblock warning">
+</div></code-tab><code-tab data-tab='Windows'><div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<div class="title">Note</div>
 </td>
 <td class="content">
-If you have installed one of the Ignite 3 Alpha releases before, please remove the <code>~/.ignitecfg</code> file before proceeding. This is a temporary step, the procedure will be improved in the future releases.
+You need to install Java in Bash environment to run Ignite 3 beta on Windows.
 </td>
 </tr>
 </table>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>To start an Ignite 3.0 Alpha 5 cluster, you need to install Ignite core artifacts first:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite init</code></pre>
+<pre>bash ignite3-cli-3.0.0-beta1\bin\ignite3</pre>
 </div>
-</div>
-</li>
-<li>
-<p>Use the <code>module add</code> command to download Guava from Maven and add it to the Ignite classpath:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite module add mvn:com.google.guava:guava:23.0</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Confirm the library is added to the Ignite dependencies list:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite module list</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="starting-a-node">Starting a Node</h2>
-<div class="sectionbody">
+</div></code-tab></code-tabs>
 <div class="paragraph">
-<p>This section explains how to start a node, how to stop, and perform other basic operations with it.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Start a cluster node setting <code>my-first-node</code> as a node unique identifier:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite node start <span class="nt">--config</span><span class="o">=</span>examples/config/ignite-config.json my-first-node</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Confirm the node is started and running:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite node list</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This command also displays the path to the log file.</p>
-</div>
-</li>
-<li>
-<p>To view the log, use the log file path from the previous step result. To open the log file, use any suitable approach.
-For example, use the <code>cat</code> command on a Unix operating system.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="built-in-examples">Built-in Examples</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite 3.0 Alpha 5 comes with examples that are configured as a separate Maven project located in the <code>examples</code> folder.</p>
-</div>
-<div class="paragraph">
-<p>The project includes the following examples:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>RecordViewExample</code> demonstrates the usage of the <code>org.apache.ignite.table.RecordView</code> API to create a table. It also shows how to get data from a table, or insert a line into a table.</p>
-</li>
-<li>
-<p><code>KeyValueViewExample</code> - demonstrates the usage of the <code>org.apache.ignite.table.KeyValueView</code> API to insert a line into a table.</p>
-</li>
-<li>
-<p><code>SqlJdbcExample</code> - demonstrates the usage of the Apache Ignite JDBC driver.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>To run any example, perform the following steps:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Import the examples project into your IDE.</p>
-</li>
-<li>
-<p>Start a server node using the CLI tool:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell script">ignite node start --config=$IGNITE_HOME/examples/config/ignite-config.json my-first-node</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run the preferred example in the IDE.</p>
-</li>
-</ol>
+<p>After you start the node, you can start working on it. For example, you can perform sql requests from the command line, or use the thin client to perform requests.</p>
 </div>
 </div>
 </div>
@@ -711,13 +590,17 @@ For example, use the <code>cat</code> command on a Unix operating system.</p>
 <h2 id="stopping-the-cluster">Stopping the Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To stop the node, use the command below passing <code>my-first-node</code> as a node unique identifier:</p>
+<p>After you are done working on the cluster, you need to stop the node. Go to the <code>ignite3-db-3.0.0-beta1</code> folder and run the following command:</p>
 </div>
-<div class="listingblock">
+<code-tabs><code-tab data-tab='Linux'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite node stop my-first-node</code></pre>
+<pre>bin/ignite3db stop</pre>
 </div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre>bash bin\ignite3db stop</pre>
 </div>
+</div></code-tab></code-tabs>
 </div>
 </div>
 <div class="sect1">
@@ -730,6 +613,9 @@ For example, use the <code>cat</code> command on a Unix operating system.</p>
 <ul>
 <li>
 <p>Check out the <a href="/docs/3.0.0-beta/ignite-cli-tool">Ignite CLI Tool</a> page for more detail on supported commands.</p>
+</li>
+<li>
+<p>Try out our <a href="https://github.com/apache/ignite-3/tree/main/examples">examples</a>.</p>
 </li>
 </ul>
 </div>
@@ -746,11 +632,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#installing-ignite-cli-tool">Installing Ignite CLI Tool</a></li>
+<li><a href="#starting-ignite-node">Starting Ignite Node</a></li>
 <li><a href="#using-ignite-cli-tool">Using Ignite CLI Tool</a></li>
-<li><a href="#installing-ignite-artifacts-and-dependencies">Installing Ignite Artifacts and Dependencies</a></li>
-<li><a href="#starting-a-node">Starting a Node</a></li>
-<li><a href="#built-in-examples">Built-in Examples</a></li>
 <li><a href="#stopping-the-cluster">Stopping the Cluster</a></li>
 <li><a href="#next-steps">Next Steps</a></li>
 </ul>
@@ -792,12 +675,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1668627604' async></script>
+<script type='module' src='/assets/js/index.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1668632066' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1668627604" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668627604"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1668632066" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668632066"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

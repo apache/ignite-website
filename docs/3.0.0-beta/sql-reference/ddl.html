@@ -160,7 +160,7 @@
         <li>
             
                 
-                <a href="/docs/3.0.0-beta/index" class='' >Documentation Overview</a>
+                <a href="/docs/3.0.0-beta/index" class='' >About Apache Ignite 3</a>
             
         </li>
     
@@ -168,6 +168,62 @@
             
                 
                 <a href="/docs/3.0.0-beta/quick-start/getting-started-guide" class='' >Getting Started Guide</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-zip"
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/installing-using-docker"
+                                class=''
+                            >Installing Using Docker</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/installation/deb-rpm"
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -300,6 +356,13 @@
         <li>
             
                 
+                <a href="/docs/3.0.0-beta/thin-clients/index" class='' >Thin Clients</a>
+            
+        </li>
+    
+        <li>
+            
+                
                 <a href="/docs/3.0.0-beta/compute/compute" class='' >Distributed Computing</a>
             
         </li>
@@ -402,6 +465,13 @@
             
         </li>
     
+        <li>
+            
+                
+                <a href="/docs/3.0.0-beta/glossary/glossary" class='' >Glossary</a>
+            
+        </li>
+    
 </nav>
 <div class="left-nav__overlay"></div>
 
@@ -414,7 +484,7 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section walks you through all data definition language (DDL) commands supported by Apache Ignite 3.0 Alpha 5.</p>
+<p>This section walks you through all data definition language (DDL) commands supported by Apache Ignite 3.0.</p>
 </div>
 </div>
 </div>
@@ -424,14 +494,44 @@
 <div class="paragraph">
 <p>Creates a new table.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="n">simpleName</span> <span class="o">|</span> <span class="n">schemaName</span><span class="p">.</span><span class="n">simpleName</span><span class="p">]</span> <span class="p">(</span><span class="n">tableColumn</span> <span class="p">[,</span> <span class="n">tableColumn</span><span class="p">]...)</span>
-<span class="p">[</span><span class="n">COLOCATE</span> <span class="p">[</span><span class="k">BY</span><span class="p">]</span> <span class="p">(</span><span class="n">columnName</span> <span class="p">[,</span> <span class="n">columnName</span><span class="p">]...)]</span>
-<span class="p">[</span><span class="n">ENGINE</span> <span class="n">engineName</span><span class="p">]</span>
-<span class="p">[</span><span class="k">WITH</span> <span class="n">paramName</span><span class="o">=</span><span class="n">paramValue</span> <span class="p">[,</span><span class="n">paramName</span><span class="o">=</span><span class="n">paramValue</span><span class="p">]...]</span>
-<span class="n">tableColumn</span> <span class="o">=</span> <span class="n">columnName</span> <span class="n">columnType</span> <span class="p">[[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">NULL</span><span class="p">]</span> <span class="p">[</span><span class="k">DEFAULT</span> <span class="n">defaultValue</span><span class="p">]</span> <span class="p">[</span><span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">]</span></code></pre>
+<div class="paragraph diagram-container">
+<p>Diagram(
+NonTerminal('CREATE'),
+NonTerminal('TABLE'),
+Optional('IF NOT EXISTS'),
+NonTerminal('table_name'),
+NonTerminal('('),
+Choice(1,
+NonTerminal('constraint'),
+NonTerminal('column_definition'),
+NonTerminal(',')),
+NonTerminal(')'),
+End({type:'complex'})
+)</p>
 </div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+Start({type:'complex'}),
+Optional(
+Sequence(
+NonTerminal('COLOCATE'),
+Optional('BY'),
+NonTerminal('column_list')
+)
+),
+Optional(
+Sequence(
+NonTerminal('ENGINE'),
+NonTerminal('engine_name')
+)
+),
+Optional(
+Sequence(
+NonTerminal('WITH'),
+OneOrMore('param_name')
+)
+)
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -439,25 +539,22 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>tableName</code> - name of the table.</p>
+<p><code>table_name</code> - name of the table. Can be schema-qualified.</p>
 </li>
 <li>
-<p><code>tableColumn</code> - name and type of a column to be created in the new table.</p>
-</li>
-<li>
-<p><code>DEFAULT</code> - specifies a default value for the column. You can specify a constant value, or use a <a href="/docs/3.0.0-beta/sql-reference/ddl#system-functions">system function</a> to generate a value.</p>
+<p><code>table_column</code> - name and type of a column to be created in the new table.</p>
 </li>
 <li>
 <p><code>IF NOT EXISTS</code> - create the table only if a table with the same name does not exist.</p>
 </li>
 <li>
-<p><code>ENGINE</code> - selects the storage engine to use. Currently <code>pagememory</code> and <code>rocksdb</code> are available.</p>
+<p><code>ENGINE</code> - selects the storage engine to use. Currently <code>aipersist</code>, <code>aimem</code> and <code>rocksdb</code> are available.</p>
 </li>
 <li>
 <p><code>COLOCATED BY</code> - colocation key. The key can be composite. Primary key must include colocation key. Was <code>affinity_key</code> in Ignite 2.x.</p>
 </li>
 <li>
-<p><code>WITH</code> - accepts additional parameters not defined by ANSI-99 SQL:</p>
+<p><code>WITH</code> - accepts the following additional parameters:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -467,391 +564,18 @@
 <p><code>Partitions</code> - sets the number of table partitions.</p>
 </li>
 <li>
-<p><code>dataRegion</code> - sets the data region to work with.</p>
+<p>Other parameters, depending on the database engine.</p>
 </li>
 </ul>
 </div>
 </li>
 </ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="872" height="122" viewBox="0 0 872 122" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 51v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 61h10"></path>
-        <g>
-            <path d="M50 61h0"></path>
-            <path d="M822 61h0"></path>
-            <g class="terminal ">
-                <path d="M50 61h0"></path>
-                <path d="M118 61h0"></path>
-                <rect x="50" y="50" width="68" height="22" rx="10" ry="10"></rect>
-                <text x="84" y="65">CREATE</text>
-            </g>
-            <path d="M118 61h10"></path>
-            <path d="M128 61h10"></path>
-            <g class="terminal ">
-                <path d="M138 61h0"></path>
-                <path d="M198 61h0"></path>
-                <rect x="138" y="50" width="60" height="22" rx="10" ry="10"></rect>
-                <text x="168" y="65">TABLE</text>
-            </g>
-            <path d="M198 61h10"></path>
-            <g>
-                <path d="M208 61h0"></path>
-                <path d="M372 61h0"></path>
-                <path d="M208 61a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M228 41h124"></path>
-                </g>
-                <path d="M352 41a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M208 61h20"></path>
-                <g class="terminal ">
-                    <path d="M228 61h0"></path>
-                    <path d="M352 61h0"></path>
-                    <rect x="228" y="50" width="124" height="22" rx="10" ry="10"></rect>
-                    <text x="290" y="65">IF NOT EXISTS</text>
-                </g>
-                <path d="M352 61h20"></path>
-            </g>
-            <path d="M372 61h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M382 61h0"></path>
-                    <path d="M482 61h0"></path>
-                    <rect x="382" y="50" width="100" height="22"></rect>
-                    <text x="432" y="65" fill="blue">table&#95;name</text>
-                </g>
-            </a>
-            <path d="M482 61h10"></path>
-            <path d="M492 61h10"></path>
-            <g class="terminal ">
-                <path d="M502 61h0"></path>
-                <path d="M530 61h0"></path>
-                <rect x="502" y="50" width="28" height="22" rx="10" ry="10"></rect>
-                <text x="516" y="65">(</text>
-            </g>
-            <path d="M530 61h10"></path>
-            <path d="M540 61h10"></path>
-            <g>
-                <path d="M550 61h0"></path>
-                <path d="M774 61h0"></path>
-                <path d="M550 61h10"></path>
-                <g>
-                    <path d="M560 61h0"></path>
-                    <path d="M764 61h0"></path>
-                    <path d="M560 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path>
-                    <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#constraint">
-                        <g class="non-terminal ">
-                            <path d="M580 31h32"></path>
-                            <path d="M712 31h32"></path>
-                            <rect x="612" y="20" width="100" height="22"></rect>
-                            <text x="662" y="35" fill="blue">constraint</text>
-                        </g>
-                    </a>
-                    <path d="M744 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path>
-                    <path d="M560 61h20"></path>
-                    <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#column_definition">
-                        <g class="non-terminal ">
-                            <path d="M580 61h0"></path>
-                            <path d="M744 61h0"></path>
-                            <rect x="580" y="50" width="164" height="22"></rect>
-                            <text x="662" y="65" fill="blue">columns&#95;definition</text>
-                        </g>
-                    </a>
-                    <path d="M744 61h20"></path>
-                </g>
-                <path d="M764 61h10"></path>
-                <path d="M560 61a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M560 91h88"></path>
-                    <path d="M676 91h88"></path>
-                    <rect x="648" y="80" width="28" height="22" rx="10" ry="10"></rect>
-                    <text x="662" y="95">,</text>
-                </g>
-                <path d="M764 91a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
-            </g>
-            <path d="M774 61h10"></path>
-            <path d="M784 61h10"></path>
-            <g class="terminal ">
-                <path d="M794 61h0"></path>
-                <path d="M822 61h0"></path>
-                <rect x="794" y="50" width="28" height="22" rx="10" ry="10"></rect>
-                <text x="808" y="65">)</text>
-            </g>
-        </g>
-        <path d="M822 61h10"></path>
-
-
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M830 61 l30 0" />
-        </g>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="1072" height="109" viewBox="0 0 1072 109" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M10 48 l30 0" />
-        </g>
-        <path d="M40 48h10"></path>
-        <g>
-            <path d="M50 48h0"></path>
-            <path d="M1022 48h0"></path>
-            <g>
-                <path d="M50 48h0"></path>
-                <path d="M378 48h0"></path>
-                <path d="M50 48a10 10 0 0 0 10 -10v-8a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M70 20h288"></path>
-                </g>
-                <path d="M358 20a10 10 0 0 1 10 10v8a10 10 0 0 0 10 10"></path>
-                <path d="M50 48h20"></path>
-                <g>
-                    <path d="M70 48h0"></path>
-                    <path d="M358 48h0"></path>
-                    <g class="terminal ">
-                        <path d="M70 48h0"></path>
-                        <path d="M154 48h0"></path>
-                        <rect x="70" y="37" width="84" height="22" rx="10" ry="10"></rect>
-                        <text x="112" y="52">COLOCATE</text>
-                    </g>
-                    <path d="M154 48h10"></path>
-                    <g>
-                        <path d="M164 48h0"></path>
-                        <path d="M240 48h0"></path>
-                        <path d="M164 48a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                        <g>
-                            <path d="M184 28h36"></path>
-                        </g>
-                        <path d="M220 28a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                        <path d="M164 48h20"></path>
-                        <g class="terminal ">
-                            <path d="M184 48h0"></path>
-                            <path d="M220 48h0"></path>
-                            <rect x="184" y="37" width="36" height="22" rx="10" ry="10"></rect>
-                            <text x="202" y="52">BY</text>
-                        </g>
-                        <path d="M220 48h20"></path>
-                    </g>
-                    <path d="M240 48h10"></path>
-                    <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#column_list">
-                        <g class="non-terminal ">
-                            <path d="M250 48h0"></path>
-                            <path d="M358 48h0"></path>
-                            <rect x="250" y="37" width="108" height="22"></rect>
-                            <text x="304" y="52" fill="blue">column_list</text>
-                        </g>
-                    </a>
-                </g>
-                <path d="M358 48h20"></path>
-            </g>
-            <g>
-                <path d="M378 48h0"></path>
-                <path d="M614 48h0"></path>
-                <path d="M378 48a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M398 28h196"></path>
-                </g>
-                <path d="M594 28a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M378 48h20"></path>
-                <g>
-                    <path d="M398 48h0"></path>
-                    <path d="M594 48h0"></path>
-                    <g class="terminal ">
-                        <path d="M398 48h0"></path>
-                        <path d="M466 48h0"></path>
-                        <rect x="398" y="37" width="68" height="22" rx="10" ry="10"></rect>
-                        <text x="432" y="52">ENGINE</text>
-                    </g>
-                    <path d="M466 48h10"></path>
-                    <path d="M476 48h10"></path>
-                    <g class="non-terminal ">
-                        <path d="M486 48h0"></path>
-                        <path d="M594 48h0"></path>
-                        <rect x="486" y="37" width="108" height="22"></rect>
-                        <text x="540" y="52">engine&#95;name</text>
-                    </g>
-                </g>
-                <path d="M594 48h20"></path>
-            </g>
-            <g>
-                <path d="M614 48h0"></path>
-                <path d="M1022 48h0"></path>
-                <path d="M614 48a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M634 28h368"></path>
-                </g>
-                <path d="M1002 28a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M614 48h20"></path>
-                <g>
-                    <path d="M634 48h0"></path>
-                    <path d="M1002 48h0"></path>
-                    <g class="terminal ">
-                        <path d="M634 48h0"></path>
-                        <path d="M686 48h0"></path>
-                        <rect x="634" y="37" width="52" height="22" rx="10" ry="10"></rect>
-                        <text x="660" y="52">WITH</text>
-                    </g>
-                    <path d="M686 48h10"></path>
-                    <path d="M696 48h10"></path>
-                    <g>
-                        <path d="M706 48h0"></path>
-                        <path d="M1002 48h0"></path>
-                        <path d="M706 48h10"></path>
-                        <g>
-                            <path d="M716 48h0"></path>
-                            <path d="M992 48h0"></path>
-                            <g class="non-terminal ">
-                                <path d="M716 48h0"></path>
-                                <path d="M816 48h0"></path>
-                                <rect x="716" y="37" width="100" height="22"></rect>
-                                <text x="766" y="52">param&#95;name</text>
-                            </g>
-                            <path d="M816 48h10"></path>
-                            <path d="M826 48h10"></path>
-                            <g class="terminal ">
-                                <path d="M836 48h0"></path>
-                                <path d="M864 48h0"></path>
-                                <rect x="836" y="37" width="28" height="22" rx="10" ry="10"></rect>
-                                <text x="850" y="52">=</text>
-                            </g>
-                            <path d="M864 48h10"></path>
-                            <path d="M874 48h10"></path>
-                            <g class="non-terminal ">
-                                <path d="M884 48h0"></path>
-                                <path d="M992 48h0"></path>
-                                <rect x="884" y="37" width="108" height="22"></rect>
-                                <text x="938" y="52">param&#95;value</text>
-                            </g>
-                        </g>
-                        <path d="M992 48h10"></path>
-                        <path d="M716 48a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
-                        <g class="terminal ">
-                            <path d="M716 78h124"></path>
-                            <path d="M868 78h124"></path>
-                            <rect x="840" y="67" width="28" height="22" rx="10" ry="10"></rect>
-                            <text x="854" y="82">,</text>
-                        </g>
-                        <path d="M992 78a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
-                    </g>
-                </g>
-                <path d="M1002 48h20"></path>
-            </g>
-        </g>
-        <path d="M1022 48h10"></path>
-        <path d="M 1032 48 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
 </div>
 <div class="paragraph">
 <p>Examples:</p>
 </div>
 <div class="paragraph">
-<p>Create Person table:</p>
+<p>Creates a Person table:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -872,32 +596,24 @@
 <div class="paragraph">
 <p>Modifies the structure of an existing table.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<h3 id="scope-of-alter-table" class="discrete">Scope of ALTER TABLE</h3>
-<div class="paragraph">
-<p>Presently, Apache Ignite only supports addition and removal of columns.</p>
+<div class="sect3">
+<h4 id="alter-table-if-exists-table-add-column-if-not-exists-column1-int-column2-int">ALTER TABLE IF EXISTS table ADD COLUMN IF NOT EXISTS (column1 int, column2 int)</h4>
+<div class="paragraph diagram-container">
+<p>Diagram(
+  NonTerminal('ALTER TABLE'),
+  Optional('IF EXISTS'),
+  NonTerminal('qualified_table_name'),
+  NonTerminal('ADD'),
+  Optional('COLUMN'),
+End({type:'complex'})
+)</p>
 </div>
-</td>
-</tr>
-</table>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>ALTER TABLE IF EXISTS table LOGGING</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">tableName</span> <span class="err">{</span><span class="n">LOGGING</span><span class="err">}</span></code></pre>
-</div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+  Start({type:'complex'}),
+  Optional('IF NOT EXISTS'),
+  NonTerminal('column_definition_or_list')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -911,313 +627,7 @@
 <p><code>qualified_table_name</code> - the name of the table.</p>
 </li>
 <li>
-<p><code>LOGGING</code> - enables write-ahead logging for the table. The command is relevant only if Ignite <a href="https://ignite.apache.org/docs/3.0.0-alpha/persistence" target="_blank" rel="noopener">persistence</a> is used.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="738" height="91" viewBox="0 0 738 91" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 30v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 40h10"></path>
-        <g>
-            <path d="M50 40h0"></path>
-            <path d="M688 40h0"></path>
-            <g class="terminal ">
-                <path d="M50 40h0"></path>
-                <path d="M163.5 40h0"></path>
-                <rect x="50" y="29" width="113.5" height="22" rx="10" ry="10"></rect>
-                <text x="106.75" y="44">ALTER TABLE</text>
-            </g>
-            <path d="M163.5 40h10"></path>
-            <g>
-                <path d="M173.5 40h0"></path>
-                <path d="M310 40h0"></path>
-                <path d="M173.5 40h20"></path>
-                <g>
-                    <path d="M193.5 40h96.5"></path>
-                </g>
-                <path d="M290 40h20"></path>
-                <path d="M173.5 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M193.5 60h0"></path>
-                    <path d="M290 60h0"></path>
-                    <rect x="193.5" y="49" width="96.5" height="22" rx="10" ry="10"></rect>
-                    <text x="241.75" y="64">IF EXISTS</text>
-                </g>
-                <path d="M290 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-            </g>
-            <path d="M310 40h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M320 40h0"></path>
-                    <path d="M510 40h0"></path>
-                    <rect x="320" y="29" width="190" height="22"></rect>
-                    <text x="415" y="44" fill="blue">qualified&#95;table&#95;name</text>
-                </g>
-            </a>
-            <path d="M510 40h10"></path>
-            <path d="M520 40h10"></path>
-            <g class="terminal ">
-                <path d="M530 40h0"></path>
-                <path d="M609.5 40h0"></path>
-                <rect x="530" y="29" width="79.5" height="22" rx="10" ry="10"></rect>
-                <text x="569.75" y="44">LOGGING</text>
-            </g>
-            <path d="M609.5 40h10"></path>
-            <g>
-                <path d="M619.5 40h0"></path>
-                <path d="M688 40h0"></path>
-                <path d="M619.5 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M639.5 20h28.5"></path>
-                </g>
-                <path d="M668 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M619.5 40h20"></path>
-                <g class="terminal ">
-                    <path d="M639.5 40h0"></path>
-                    <path d="M668 40h0"></path>
-                    <rect x="639.5" y="29" width="28.5" height="22" rx="10" ry="10"></rect>
-                    <text x="653.75" y="44">;</text>
-                </g>
-                <path d="M668 40h20"></path>
-            </g>
-        </g>
-        <path d="M688 40h10"></path>
-        <path d="M 698 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>ALTER TABLE IF EXISTS table NOLOGGING</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">tableName</span> <span class="err">{</span><span class="n">NOLOGGING</span><span class="err">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table.</p>
-</li>
-<li>
-<p><code>NOLOGGING</code> - disables write-ahead logging for the table. The command is relevant only if Ignite <a href="https://ignite.apache.org/docs/3.0.0-alpha/persistence" target="_blank" rel="noopener">persistence</a> is used.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="755" height="91" viewBox="0 0 755 91" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 30v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 40h10"></path>
-        <g>
-            <path d="M50 40h0"></path>
-            <path d="M705 40h0"></path>
-            <g class="terminal ">
-                <path d="M50 40h0"></path>
-                <path d="M163.5 40h0"></path>
-                <rect x="50" y="29" width="113.5" height="22" rx="10" ry="10"></rect>
-                <text x="106.75" y="44">ALTER TABLE</text>
-            </g>
-            <path d="M163.5 40h10"></path>
-            <g>
-                <path d="M173.5 40h0"></path>
-                <path d="M310 40h0"></path>
-                <path d="M173.5 40h20"></path>
-                <g>
-                    <path d="M193.5 40h96.5"></path>
-                </g>
-                <path d="M290 40h20"></path>
-                <path d="M173.5 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M193.5 60h0"></path>
-                    <path d="M290 60h0"></path>
-                    <rect x="193.5" y="49" width="96.5" height="22" rx="10" ry="10"></rect>
-                    <text x="241.75" y="64">IF EXISTS</text>
-                </g>
-                <path d="M290 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-            </g>
-            <path d="M310 40h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M320 40h0"></path>
-                    <path d="M510 40h0"></path>
-                    <rect x="320" y="29" width="190" height="22"></rect>
-                    <text x="415" y="44" fill="blue">qualified&#95;table&#95;name</text>
-                </g>
-            </a>
-            <path d="M510 40h10"></path>
-            <path d="M520 40h10"></path>
-            <g class="terminal ">
-                <path d="M530 40h0"></path>
-                <path d="M626.5 40h0"></path>
-                <rect x="530" y="29" width="96.5" height="22" rx="10" ry="10"></rect>
-                <text x="578.25" y="44">NOLOGGING</text>
-            </g>
-            <path d="M626.5 40h10"></path>
-            <g>
-                <path d="M636.5 40h0"></path>
-                <path d="M705 40h0"></path>
-                <path d="M636.5 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M656.5 20h28.5"></path>
-                </g>
-                <path d="M685 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M636.5 40h20"></path>
-                <g class="terminal ">
-                    <path d="M656.5 40h0"></path>
-                    <path d="M685 40h0"></path>
-                    <rect x="656.5" y="29" width="28.5" height="22" rx="10" ry="10"></rect>
-                    <text x="670.75" y="44">;</text>
-                </g>
-                <path d="M685 40h20"></path>
-            </g>
-        </g>
-        <path d="M705 40h10"></path>
-        <path d="M 715 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>ALTER TABLE IF EXISTS table ADD COLUMN IF NOT EXISTS (column1 int, column2 int)</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">tableName</span> <span class="err">{</span><span class="k">ADD</span> <span class="p">[</span><span class="k">COLUMN</span><span class="p">]</span> <span class="err">{</span><span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">(</span><span class="n">tableColumn</span> <span class="p">[</span><span class="n">column1</span> <span class="nb">int</span><span class="p">,</span> <span class="n">column2</span> <span class="nb">int</span><span class="p">])</span><span class="err">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table.</p>
-</li>
-<li>
-<p><code>ADD</code> - adds a new column or several columns to a previously created table. Once a column is added, it can be accessed using <a href="/docs/3.0.0-beta/sql-reference/dml" target="_blank" rel="noopener">DML commands</a> and indexed with the CREATE INDEX statement (currently not supported).</p>
+<p><code>ADD</code> - adds a new column or several columns to a previously created table. Once a column is added, it can be accessed using <a href="/docs/3.0.0-beta/sql-reference/dml" target="_blank" rel="noopener">DML commands</a> and indexed with the CREATE INDEX statement.</p>
 </li>
 <li>
 <p><code>COLUMN</code> - name of the defined column.</p>
@@ -1226,264 +636,29 @@
 <p><code>IF NOT EXISTS</code> - do not throw an error if a column with the same name already exists.</p>
 </li>
 <li>
-<p><code>column_definition_or_list</code> - the name of the column or the list of columns to be added.</p>
+<p><code>column_definition_or_list</code> - definition of the column to add to the table.</p>
 </li>
 </ul>
 </div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="625.5" height="82" viewBox="0 0 625.5 82" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 21v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 31h10"></path>
-        <g>
-            <path d="M50 31h0"></path>
-            <path d="M575.5 31h0"></path>
-            <g class="terminal ">
-                <path d="M50 31h0"></path>
-                <path d="M163.5 31h0"></path>
-                <rect x="50" y="20" width="113.5" height="22" rx="10" ry="10"></rect>
-                <text x="106.75" y="35">ALTER TABLE</text>
-            </g>
-            <path d="M163.5 31h10"></path>
-            <g>
-                <path d="M173.5 31h0"></path>
-                <path d="M310 31h0"></path>
-                <path d="M173.5 31h20"></path>
-                <g>
-                    <path d="M193.5 31h96.5"></path>
-                </g>
-                <path d="M290 31h20"></path>
-                <path d="M173.5 31a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M193.5 51h0"></path>
-                    <path d="M290 51h0"></path>
-                    <rect x="193.5" y="40" width="96.5" height="22" rx="10" ry="10"></rect>
-                    <text x="241.75" y="55">IF EXISTS</text>
-                </g>
-                <path d="M290 51a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-            </g>
-            <path d="M310 31h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M320 40h0"></path>
-                    <path d="M510 40h0"></path>
-                    <rect x="320" y="29" width="190" height="22"></rect>
-                    <text x="415" y="44" fill="blue">qualified&#95;table&#95;name</text>
-                </g>
-            </a>
-            <path d="M510 31h10"></path>
-            <path d="M520 31h10"></path>
-            <g>
-                <path d="M530 31h0"></path>
-                <path d="M575.5 31h0"></path>
-                <g class="terminal ">
-                    <path d="M530 31h0"></path>
-                    <path d="M575.5 31h0"></path>
-                    <rect x="530" y="20" width="45.5" height="22" rx="10" ry="10"></rect>
-                    <text x="552.75" y="35">ADD</text>
-                </g>
-            </g>
-        </g>
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M581 32 l30 0" />
-        </g>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
 </div>
+<div class="sect3">
+<h4 id="alter-table-if-exists-table-drop-column-if-exists-column1-column2-int">ALTER TABLE IF EXISTS table DROP COLUMN IF EXISTS (column1, column2 int)</h4>
+<div class="paragraph diagram-container">
+<p>Diagram(
+NonTerminal('ALTER TABLE'),
+Optional('IF EXISTS'),
+NonTerminal('qualified_table_name'),
+NonTerminal('DROP'),
+Optional('COLUMN'),
+End({type:'complex'})
+)</p>
 </div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="702.5" height="91" viewBox="0 0 702.5 91" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M11 40 l30 0" />
-        </g>
-        <path d="M40 40h10"></path>
-        <g>
-            <path d="M50 40h0"></path>
-            <path d="M652.5 40h0"></path>
-            <g>
-                <path d="M50 40h0"></path>
-                <path d="M574 40h0"></path>
-                <g>
-                    <path d="M50 40h0"></path>
-                    <path d="M161 40h0"></path>
-                    <path d="M50 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M70 20h71"></path>
-                    </g>
-                    <path d="M141 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M50 40h20"></path>
-                    <g class="terminal ">
-                        <path d="M70 40h0"></path>
-                        <path d="M141 40h0"></path>
-                        <rect x="70" y="29" width="71" height="22" rx="10" ry="10"></rect>
-                        <text x="105.5" y="44">COLUMN</text>
-                    </g>
-                    <path d="M141 40h20"></path>
-                </g>
-                <g>
-                    <path d="M161 40h0"></path>
-                    <path d="M331.5 40h0"></path>
-                    <path d="M161 40h20"></path>
-                    <g>
-                        <path d="M181 40h130.5"></path>
-                    </g>
-                    <path d="M311.5 40h20"></path>
-                    <path d="M161 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <g class="terminal ">
-                        <path d="M181 60h0"></path>
-                        <path d="M311.5 60h0"></path>
-                        <rect x="181" y="49" width="130.5" height="22" rx="10" ry="10"></rect>
-                        <text x="246.25" y="64">IF NOT EXISTS</text>
-                    </g>
-                    <path d="M311.5 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                </g>
-                <path d="M331.5 40h10"></path>
-                <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#column_definition_or_list">
-                    <g class="non-terminal ">
-                        <path d="M341.5 40h0"></path>
-                        <path d="M574 40h0"></path>
-                        <rect x="341.5" y="29" width="232.5" height="22"></rect>
-                        <text x="457.75" y="44" fill="blue">column&#95;definition&#95;or&#95;list</text>
-                    </g>
-                </a>
-            </g>
-            <path d="M574 40h10"></path>
-            <g>
-                <path d="M584 40h0"></path>
-                <path d="M652.5 40h0"></path>
-                <path d="M584 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M604 20h28.5"></path>
-                </g>
-                <path d="M632.5 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M584 40h20"></path>
-                <g class="terminal ">
-                    <path d="M604 40h0"></path>
-                    <path d="M632.5 40h0"></path>
-                    <rect x="604" y="29" width="28.5" height="22" rx="10" ry="10"></rect>
-                    <text x="618.25" y="44">;</text>
-                </g>
-                <path d="M632.5 40h20"></path>
-            </g>
-        </g>
-        <path d="M652.5 40h10"></path>
-        <path d="M 662.5 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: ;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>ALTER TABLE IF EXISTS table ADD COLUMN IF EXISTS (column1, column2 int)</strong></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">tableName</span> <span class="k">DROP</span> <span class="p">[</span><span class="k">COLUMN</span><span class="p">]</span> <span class="err">{</span><span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">(</span><span class="n">columnName</span> <span class="p">[</span><span class="n">column1</span><span class="p">,</span> <span class="n">column2</span> <span class="nb">int</span><span class="p">])</span><span class="err">}</span></code></pre>
-</div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+Start({type:'complex'}),
+Optional('IF EXISTS'),
+NonTerminal('column_list')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -1491,7 +666,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p><code>IF EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
+<p><code>IF NOT EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
 </li>
 <li>
 <p><code>qualified_table_name</code> - the name of the table.</p>
@@ -1500,266 +675,10 @@
 <p><code>DROP</code> - removes an existing column or multiple columns from a table. Once a column is removed, it cannot be accessed within queries. Consider the following notes and limitations:</p>
 </li>
 <li>
-<p><code>COLUMN</code> - name of the defined column.</p>
-</li>
-<li>
 <p><code>column_list</code> - the name of the list of columns to be removed.</p>
 </li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="634" height="82" viewBox="0 0 634 82" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 21v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 31h10"></path>
-        <g>
-            <path d="M50 31h0"></path>
-            <path d="M584 31h0"></path>
-            <g class="terminal ">
-                <path d="M50 31h0"></path>
-                <path d="M163.5 31h0"></path>
-                <rect x="50" y="20" width="113.5" height="22" rx="10" ry="10"></rect>
-                <text x="106.75" y="35">ALTER TABLE</text>
-            </g>
-            <path d="M163.5 31h10"></path>
-            <g>
-                <path d="M173.5 31h0"></path>
-                <path d="M310 31h0"></path>
-                <path d="M173.5 31h20"></path>
-                <g>
-                    <path d="M193.5 31h96.5"></path>
-                </g>
-                <path d="M290 31h20"></path>
-                <path d="M173.5 31a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M193.5 51h0"></path>
-                    <path d="M290 51h0"></path>
-                    <rect x="193.5" y="40" width="96.5" height="22" rx="10" ry="10"></rect>
-                    <text x="241.75" y="55">IF EXISTS</text>
-                </g>
-                <path d="M290 51a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-            </g>
-            <path d="M310 31h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M320 40h0"></path>
-                    <path d="M510 40h0"></path>
-                    <rect x="320" y="29" width="190" height="22"></rect>
-                    <text x="415" y="44" fill="blue">qualified&#95;table&#95;name</text>
-                </g>
-            </a>
-            <path d="M510 31h10"></path>
-            <path d="M520 31h10"></path>
-            <g>
-                <path d="M530 31h0"></path>
-                <path d="M584 31h0"></path>
-                <g class="terminal ">
-                    <path d="M530 31h0"></path>
-                    <path d="M584 31h0"></path>
-                    <rect x="530" y="20" width="54" height="22" rx="10" ry="10"></rect>
-                    <text x="557" y="35">DROP</text>
-                </g>
-            </g>
-        </g>
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M588 32 l30 0" />
-        </g>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="549.5" height="91" viewBox="0 0 549.5 91" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g fill="none" stroke="black" stroke-width="2">
-            <path stroke-dasharray="5,5" d="M10 40 l30 0" />
-        </g>
-        <path d="M40 40h10"></path>
-        <g>
-            <path d="M50 40h0"></path>
-            <path d="M499.5 40h0"></path>
-            <g>
-                <path d="M50 40h0"></path>
-                <path d="M421 40h0"></path>
-                <g>
-                    <path d="M50 40h0"></path>
-                    <path d="M161 40h0"></path>
-                    <path d="M50 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M70 20h71"></path>
-                    </g>
-                    <path d="M141 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M50 40h20"></path>
-                    <g class="terminal ">
-                        <path d="M70 40h0"></path>
-                        <path d="M141 40h0"></path>
-                        <rect x="70" y="29" width="71" height="22" rx="10" ry="10"></rect>
-                        <text x="105.5" y="44">COLUMN</text>
-                    </g>
-                    <path d="M141 40h20"></path>
-                </g>
-                <g>
-                    <path d="M161 40h0"></path>
-                    <path d="M297.5 40h0"></path>
-                    <path d="M161 40h20"></path>
-                    <g>
-                        <path d="M181 40h96.5"></path>
-                    </g>
-                    <path d="M277.5 40h20"></path>
-                    <path d="M161 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <g class="terminal ">
-                        <path d="M181 60h0"></path>
-                        <path d="M277.5 60h0"></path>
-                        <rect x="181" y="49" width="96.5" height="22" rx="10" ry="10"></rect>
-                        <text x="229.25" y="64">IF EXISTS</text>
-                    </g>
-                    <path d="M277.5 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                </g>
-                <path d="M297.5 40h10"></path>
-                <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#column_list">
-                    <g class="non-terminal ">
-                        <path d="M307.5 40h0"></path>
-                        <path d="M421 40h0"></path>
-                        <rect x="307.5" y="29" width="113.5" height="22"></rect>
-                        <text x="364.25" y="44" fill="blue">column&#95;list</text>
-                    </g>
-                </a>
-            </g>
-            <path d="M421 40h10"></path>
-            <g>
-                <path d="M431 40h0"></path>
-                <path d="M499.5 40h0"></path>
-                <path d="M431 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M451 20h28.5"></path>
-                </g>
-                <path d="M479.5 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M431 40h20"></path>
-                <g class="terminal ">
-                    <path d="M451 40h0"></path>
-                    <path d="M479.5 40h0"></path>
-                    <rect x="451" y="29" width="28.5" height="22" rx="10" ry="10"></rect>
-                    <text x="465.25" y="44">;</text>
-                </g>
-                <path d="M479.5 40h20"></path>
-            </g>
-        </g>
-        <path d="M499.5 40h10"></path>
-        <path d="M 509.5 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>The command does not remove actual data from the cluster which means that if the column 'name' is dropped, the value of the 'name' is still stored in the cluster. This limitation is to be addressed in the next releases.</p>
-</li>
-<li>
-<p>If the column was indexed, the index has to be dropped manually using the 'DROP INDEX' command.</p>
-</li>
-<li>
-<p>It is not possible to remove a column that is a primary key or a part of such a key.</p>
+<p>If the column was indexed, the index has to be dropped manually in advance by using the 'DROP INDEX' command.</p>
 </li>
 <li>
 <p>It is not possible to remove a column if it represents the whole value stored in the cluster. The limitation is relevant for primitive values.
@@ -1768,10 +687,7 @@ Ignite stores data in the form of key-value pairs and all the new columns will b
 </ul>
 </div>
 <div class="paragraph">
-<p>Both DDL and DML commands targeting the same table are blocked for a short time until <code>ALTER TABLE</code> is in progress.</p>
-</div>
-<div class="paragraph">
-<p>Schema changes applied by this command are persisted on disk if <a href="https://ignite.apache.org/docs/3.0.0-alpha/persistence" target="_blank" rel="noopener">persistence</a> is enabled. Thus, the changes can survive full cluster restarts.</p>
+<p>Schema changes applied by this command are persisted on disk. Thus, the changes can survive full cluster restarts.</p>
 </div>
 <div class="paragraph">
 <p>Examples:</p>
@@ -1797,7 +713,7 @@ Ignite stores data in the form of key-value pairs and all the new columns will b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">Missing</span> <span class="k">ADD</span> <span class="n">number</span> <span class="n">long</span><span class="p">;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">Missing</span> <span class="k">ADD</span> <span class="n">number</span> <span class="nb">bigint</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1840,13 +756,6 @@ Ignite stores data in the form of key-value pairs and all the new columns will b
 <pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Person</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">gdp</span><span class="p">);</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Disable write-ahead logging:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Person</span> <span class="n">NOLOGGING</span></code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -1854,13 +763,14 @@ Ignite stores data in the form of key-value pairs and all the new columns will b
 <h2 id="drop-table">DROP TABLE</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The <code>DROP TABLE</code> command drops an existing table.
-The underlying cache with all the data in it is destroyed, too.</p>
+<p>The <code>DROP TABLE</code> command drops an existing table.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">tableName</span></code></pre>
-</div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+NonTerminal('DROP TABLE'),
+Optional('IF EXISTS'),
+NonTerminal('qualified_table_name')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -1868,136 +778,15 @@ The underlying cache with all the data in it is destroyed, too.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>tableName</code> - the name of the table.</p>
+<p><code>IF EXISTS</code> - do not throw an error if a table with the same name does not exist.</p>
 </li>
 <li>
-<p><code>IF NOT EXISTS</code> - do not throw an error if a table with the same name does not exist.</p>
+<p><code>qualified_table_name</code> - the name of the table. Can be schema-qualified.</p>
 </li>
 </ul>
 </div>
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="630" height="91" viewBox="0 0 630 91" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 30v20m10 -20v20m-10 -10h20"></path>
-        </g>
-        <path d="M40 40h10"></path>
-        <g>
-            <path d="M50 40h0"></path>
-            <path d="M580 40h0"></path>
-            <g class="terminal ">
-                <path d="M50 40h0"></path>
-                <path d="M155 40h0"></path>
-                <rect x="50" y="29" width="105" height="22" rx="10" ry="10"></rect>
-                <text x="102.5" y="44">DROP TABLE</text>
-            </g>
-            <path d="M155 40h10"></path>
-            <g>
-                <path d="M165 40h0"></path>
-                <path d="M301.5 40h0"></path>
-                <path d="M165 40h20"></path>
-                <g>
-                    <path d="M185 40h96.5"></path>
-                </g>
-                <path d="M281.5 40h20"></path>
-                <path d="M165 40a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <g class="terminal ">
-                    <path d="M185 60h0"></path>
-                    <path d="M281.5 60h0"></path>
-                    <rect x="185" y="49" width="96.5" height="22" rx="10" ry="10"></rect>
-                    <text x="233.25" y="64">IF EXISTS</text>
-                </g>
-                <path d="M281.5 60a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-            </g>
-            <path d="M301.5 40h10"></path>
-            <a xlink:href="https://ignite.apache.org/docs/3.0.0-alpha/sql-reference/ddl#qualified_table_name">
-                <g class="non-terminal ">
-                    <path d="M311.5 40h0"></path>
-                    <path d="M501.5 40h0"></path>
-                    <rect x="311.5" y="29" width="190" height="22"></rect>
-                    <text x="406.5" y="44" fill="blue">qualified&#95;table&#95;name</text>
-                </g>
-            </a>
-            <path d="M501.5 40h10"></path>
-            <g>
-                <path d="M511.5 40h0"></path>
-                <path d="M580 40h0"></path>
-                <path d="M511.5 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                <g>
-                    <path d="M531.5 20h28.5"></path>
-                </g>
-                <path d="M560 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                <path d="M511.5 40h20"></path>
-                <g class="terminal ">
-                    <path d="M531.5 40h0"></path>
-                    <path d="M560 40h0"></path>
-                    <rect x="531.5" y="29" width="28.5" height="22" rx="10" ry="10"></rect>
-                    <text x="545.75" y="44">;</text>
-                </g>
-                <path d="M560 40h20"></path>
-            </g>
-        </g>
-        <path d="M580 40h10"></path>
-        <path d="M 590 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
 <div class="paragraph">
-<p>Both DDL and DML commands targeting the same table are blocked while the <code>DROP TABLE</code> is in progress.
-Once the table is dropped, all pending commands will fail with appropriate errors.</p>
-</div>
-<div class="paragraph">
-<p>Schema changes applied by this command are persisted on disk if <a href="https://ignite.apache.org/docs/3.0.0-alpha/persistence" target="_blank" rel="noopener">persistence</a> is enabled. Thus, the changes can survive full cluster restarts.</p>
+<p>Schema changes applied by this command are persisted on disk. Thus, the changes can survive full cluster restarts.</p>
 </div>
 <div class="paragraph">
 <p>Examples:</p>
@@ -2018,12 +807,27 @@ Once the table is dropped, all pending commands will fail with appropriate error
 <div class="paragraph">
 <p>Creates a new index.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">name</span> <span class="k">ON</span> <span class="n">tableName</span>
-<span class="p">[</span><span class="k">USING</span> <span class="err">{</span> <span class="n">HASH</span> <span class="o">|</span> <span class="n">TREE</span> <span class="err">}</span><span class="p">]</span>
-<span class="p">(</span><span class="n">column_definition</span> <span class="p">[,</span> <span class="n">column_definition</span><span class="p">]...);</span></code></pre>
+<div class="paragraph diagram-container">
+<p>Diagram(
+  NonTerminal('CREATE INDEX'),
+  Optional('IF NOT EXISTS'),
+  NonTerminal('name'),
+  NonTerminal('ON'),
+  NonTerminal('qualified_table_name'),
+  End({type:'complex'})
+)</p>
 </div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+  Start({type:'complex'}),
+  Optional(
+   Sequence(
+    NonTerminal('USING'),
+    Choice (0,'HASH','TREE')
+   )
+  ),
+  Optional('column_definition')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -2034,13 +838,13 @@ Once the table is dropped, all pending commands will fail with appropriate error
 <p><code>name</code> - name of the index.</p>
 </li>
 <li>
-<p><code>tableName</code> - name of the table to create the index on.</p>
+<p><code>qualified_table_name</code> - name of the table to create the index on. Can be schema-qualified.</p>
 </li>
 <li>
 <p><code>IF NOT EXISTS</code> - create the index only if an index with the same name does not exist.</p>
 </li>
 <li>
-<p><code>USING</code> - specifies whether the command creates a sorted index or a hash index. Possible values: <code>HASH</code>, <code>TREE</code>.</p>
+<p><code>USING</code> - specifies whether the command creates a sorted index or a hash index. Possible values: <code>HASH</code>, <code>TREE</code>. Default is <code>TREE</code>.</p>
 </li>
 </ul>
 </div>
@@ -2060,10 +864,12 @@ Once the table is dropped, all pending commands will fail with appropriate error
 <div class="sect1">
 <h2 id="drop-index">DROP INDEX</h2>
 <div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">DROP</span> <span class="k">INDEX</span> <span class="p">[</span><span class="n">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">indexName</span><span class="p">;</span></code></pre>
-</div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+NonTerminal('DROP INDEX'),
+Optional('IF EXISTS'),
+NonTerminal('index_name')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -2071,7 +877,7 @@ Once the table is dropped, all pending commands will fail with appropriate error
 <div class="ulist">
 <ul>
 <li>
-<p>indexName - the name of the index.</p>
+<p><code>index_name</code> - the name of the index.</p>
 </li>
 <li>
 <p><code>IF EXISTS</code> - do not throw an error if an index with the specified name does not exist.</p>
@@ -2091,153 +897,23 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </div>
 </div>
 </div>
-<h1 id="grammar-reference" class="sect0">Grammar Reference</h1>
 <div class="sect1">
-<h2 id="column_definition_or_list">column_definition_or_list</h2>
+<h2 id="grammar-reference">Grammar Reference</h2>
 <div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="527" height="133" viewBox="0 0 527 133" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 54v20m0 -10h20"></path>
-        </g>
-        <path d="M40 64h10"></path>
-        <g>
-            <path d="M50 64h0"></path>
-            <path d="M477 64h0"></path>
-            <rect x="50" y="36" width="427" height="77" rx="10" ry="10" class="group-box"></rect>
-            <g>
-                <path d="M50 64h10"></path>
-                <path d="M467 64h10"></path>
-                <g>
-                    <path d="M60 64h0"></path>
-                    <path d="M128.5 64h0"></path>
-                    <path d="M60 64a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M80 44h28.5"></path>
-                    </g>
-                    <path d="M108.5 44a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M60 64h20"></path>
-                    <g class="terminal ">
-                        <path d="M80 64h0"></path>
-                        <path d="M108.5 64h0"></path>
-                        <rect x="80" y="53" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="94.25" y="68">(</text>
-                    </g>
-                    <path d="M108.5 64h20"></path>
-                </g>
-                <path d="M128.5 64h10"></path>
-                <g>
-                    <path d="M138.5 64h0"></path>
-                    <path d="M388.5 64h0"></path>
-                    <path d="M138.5 64h10"></path>
-                    <g>
-                        <path d="M148.5 64h0"></path>
-                        <path d="M378.5 64h0"></path>
-                        <g class="non-terminal ">
-                            <path d="M148.5 64h0"></path>
-                            <path d="M262 64h0"></path>
-                            <rect x="148.5" y="53" width="113.5" height="22"></rect>
-                            <text x="205.25" y="68">column&#95;name</text>
-                        </g>
-                        <path d="M262 64h10"></path>
-                        <path d="M272 64h10"></path>
-                        <g class="non-terminal ">
-                            <path d="M282 64h0"></path>
-                            <path d="M378.5 64h0"></path>
-                            <rect x="282" y="53" width="96.5" height="22"></rect>
-                            <text x="330.25" y="68">data&#95;type</text>
-                        </g>
-                    </g>
-                    <path d="M378.5 64h10"></path>
-                    <path d="M148.5 64a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
-                    <g class="terminal ">
-                        <path d="M148.5 94h100.75"></path>
-                        <path d="M277.75 94h100.75"></path>
-                        <rect x="249.25" y="83" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="263.5" y="98">,</text>
-                    </g>
-                    <path d="M378.5 94a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
-                </g>
-                <path d="M388.5 64h10"></path>
-                <g>
-                    <path d="M398.5 64h0"></path>
-                    <path d="M467 64h0"></path>
-                    <path d="M398.5 64a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M418.5 44h28.5"></path>
-                    </g>
-                    <path d="M447 44a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M398.5 64h20"></path>
-                    <g class="terminal ">
-                        <path d="M418.5 64h0"></path>
-                        <path d="M447 64h0"></path>
-                        <rect x="418.5" y="53" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="432.75" y="68">)</text>
-                    </g>
-                    <path d="M447 64h20"></path>
-                </g>
-            </g>
-            <g class="comment ">
-                <path d="M50 28h0"></path>
-                <path d="M235 28h0"></path>
-                <text x="142.5" y="25" class="comment">column&#95;definition&#95;or&#95;list</text>
-            </g>
-        </g>
-        <path d="M477 64h10"></path>
-        <path d="M 487 64 h 20 m 0 -10 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
+<div class="sect2">
+<h3 id="column_definition_or_list">column_definition_or_list</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(
+Group(Sequence(
+Optional('('),
+Choice(0,Sequence(
+NonTerminal('column_name'),
+NonTerminal('data_type')),
+NonTerminal(',')
+),
+Optional(')')
+), 'column_definition_or_list')
+)</p>
 </div>
 <div class="paragraph">
 <p>Referenced by:</p>
@@ -2249,333 +925,16 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </li>
 </ul>
 </div>
+<hr>
 </div>
-</div>
-<div class="sect1">
-<h2 id="column_definition">column_definition</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="912" height="111" viewBox="0 0 912 111" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 62v20m0 -10h20"></path>
-        </g>
-        <path d="M40 72h10"></path>
-        <g>
-            <path d="M50 72h0"></path>
-            <path d="M862 72h0"></path>
-            <rect x="50" y="36" width="812" height="55" rx="10" ry="10" class="group-box"></rect>
-            <g>
-                <path d="M50 72h10"></path>
-                <path d="M852 72h10"></path>
-                <g class="non-terminal ">
-                    <path d="M60 72h0"></path>
-                    <path d="M168 72h0"></path>
-                    <rect x="60" y="61" width="108" height="22"></rect>
-                    <text x="114" y="76">column&#95;name</text>
-                </g>
-                <path d="M168 72h10"></path>
-                <path d="M178 72h10"></path>
-                <g class="terminal ">
-                    <path d="M188 72h0"></path>
-                    <path d="M280 72h0"></path>
-                    <rect x="188" y="61" width="92" height="22" rx="10" ry="10"></rect>
-                    <text x="234" y="76">DATA TYPE</text>
-                </g>
-                <path d="M280 72h10"></path>
-                <g>
-                    <path d="M290 72h0"></path>
-                    <path d="M476 72h0"></path>
-                    <path d="M290 72a10 10 0 0 0 10 -10v-8a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M310 44h146"></path>
-                    </g>
-                    <path d="M456 44a10 10 0 0 1 10 10v8a10 10 0 0 0 10 10"></path>
-                    <path d="M290 72h20"></path>
-                    <g>
-                        <path d="M310 72h0"></path>
-                        <path d="M456 72h0"></path>
-                        <g>
-                            <path d="M310 72h0"></path>
-                            <path d="M394 72h0"></path>
-                            <path d="M310 72a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                            <g>
-                                <path d="M330 52h44"></path>
-                            </g>
-                            <path d="M374 52a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                            <path d="M310 72h20"></path>
-                            <g class="terminal ">
-                                <path d="M330 72h0"></path>
-                                <path d="M374 72h0"></path>
-                                <rect x="330" y="61" width="44" height="22" rx="10" ry="10"></rect>
-                                <text x="352" y="76">NOT</text>
-                            </g>
-                            <path d="M374 72h20"></path>
-                        </g>
-                        <path d="M394 72h10"></path>
-                        <g class="terminal ">
-                            <path d="M404 72h0"></path>
-                            <path d="M456 72h0"></path>
-                            <rect x="404" y="61" width="52" height="22" rx="10" ry="10"></rect>
-                            <text x="430" y="76">NULL</text>
-                        </g>
-                    </g>
-                    <path d="M456 72h20"></path>
-                </g>
-                <g>
-                    <path d="M476 72h0"></path>
-                    <path d="M736 72h0"></path>
-                    <path d="M476 72a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M496 52h220"></path>
-                    </g>
-                    <path d="M716 52a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M476 72h20"></path>
-                    <g>
-                        <path d="M496 72h0"></path>
-                        <path d="M716 72h0"></path>
-                        <g class="terminal ">
-                            <path d="M496 72h0"></path>
-                            <path d="M572 72h0"></path>
-                            <rect x="496" y="61" width="76" height="22" rx="10" ry="10"></rect>
-                            <text x="534" y="76">DEFAULT</text>
-                        </g>
-                        <path d="M572 72h10"></path>
-                        <path d="M582 72h10"></path>
-                        <g class="non-terminal ">
-                            <path d="M592 72h0"></path>
-                            <path d="M716 72h0"></path>
-                            <rect x="592" y="61" width="124" height="22"></rect>
-                            <text x="654" y="76">literal&#95;value</text>
-                        </g>
-                    </g>
-                    <path d="M716 72h20"></path>
-                </g>
-                <g>
-                    <path d="M736 72h0"></path>
-                    <path d="M852 72h0"></path>
-                    <path d="M736 72a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M756 52h76"></path>
-                    </g>
-                    <path d="M832 52a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M736 72h20"></path>
-                    <g class="terminal ">
-                        <path d="M756 72h0"></path>
-                        <path d="M832 72h0"></path>
-                        <rect x="756" y="61" width="76" height="22" rx="10" ry="10"></rect>
-                        <text x="794" y="76">PRIMARY</text>
-                    </g>
-                    <path d="M832 72h20"></path>
-                </g>
-            </g>
-            <g class="comment ">
-                <path d="M50 28h0"></path>
-                <path d="M179 28h0"></path>
-                <text x="114.5" y="25" class="comment">column&#95;definition</text>
-            </g>
-        </g>
-        <path d="M862 72h10"></path>
-        <path d="M 872 72 h 20 m 0 -10 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#create-table">CREATE TABLE</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="column_list">column_list</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="410.5" height="133" viewBox="0 0 410.5 133" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 54v20m0 -10h20"></path>
-        </g>
-        <path d="M40 64h10"></path>
-        <g>
-            <path d="M50 64h0"></path>
-            <path d="M360.5 64h0"></path>
-            <rect x="50" y="36" width="310.5" height="77" rx="10" ry="10" class="group-box"></rect>
-            <g>
-                <path d="M50 64h10"></path>
-                <path d="M350.5 64h10"></path>
-                <g>
-                    <path d="M60 64h0"></path>
-                    <path d="M128.5 64h0"></path>
-                    <path d="M60 64a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M80 44h28.5"></path>
-                    </g>
-                    <path d="M108.5 44a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M60 64h20"></path>
-                    <g class="terminal ">
-                        <path d="M80 64h0"></path>
-                        <path d="M108.5 64h0"></path>
-                        <rect x="80" y="53" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="94.25" y="68">(</text>
-                    </g>
-                    <path d="M108.5 64h20"></path>
-                </g>
-                <path d="M128.5 64h10"></path>
-                <g>
-                    <path d="M138.5 64h0"></path>
-                    <path d="M272 64h0"></path>
-                    <path d="M138.5 64h10"></path>
-                    <g class="non-terminal ">
-                        <path d="M148.5 64h0"></path>
-                        <path d="M262 64h0"></path>
-                        <rect x="148.5" y="53" width="113.5" height="22"></rect>
-                        <text x="205.25" y="68">column&#95;name</text>
-                    </g>
-                    <path d="M262 64h10"></path>
-                    <path d="M148.5 64a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
-                    <g class="terminal ">
-                        <path d="M148.5 94h42.5"></path>
-                        <path d="M219.5 94h42.5"></path>
-                        <rect x="191" y="83" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="205.25" y="98">,</text>
-                    </g>
-                    <path d="M262 94a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
-                </g>
-                <path d="M272 64h10"></path>
-                <g>
-                    <path d="M282 64h0"></path>
-                    <path d="M350.5 64h0"></path>
-                    <path d="M282 64a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M302 44h28.5"></path>
-                    </g>
-                    <path d="M330.5 44a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M282 64h20"></path>
-                    <g class="terminal ">
-                        <path d="M302 64h0"></path>
-                        <path d="M330.5 64h0"></path>
-                        <rect x="302" y="53" width="28.5" height="22" rx="10" ry="10"></rect>
-                        <text x="316.25" y="68">)</text>
-                    </g>
-                    <path d="M330.5 64h20"></path>
-                </g>
-            </g>
-            <g class="comment ">
-                <path d="M50 28h0"></path>
-                <path d="M137 28h0"></path>
-                <text x="93.5" y="25" class="comment">column&#95;list</text>
-            </g>
-        </g>
-        <path d="M360.5 64h10"></path>
-        <path d="M 370.5 64 h 20 m 0 -10 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
+<div class="sect2">
+<h3 id="column_list">column_list</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(Group(Sequence(
+Optional('('),
+OneOrMore('column_name', ','),
+Optional(')')))
+)</p>
 </div>
 <div class="paragraph">
 <p>Referenced by:</p>
@@ -2587,160 +946,20 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </li>
 </ul>
 </div>
+<hr>
 </div>
-</div>
-<div class="sect1">
-<h2 id="constraint">constraint</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="782" height="133" viewBox="0 0 782 133" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 54v20m0 -10h20"></path>
-        </g>
-        <path d="M40 64h10"></path>
-        <g>
-            <path d="M50 64h0"></path>
-            <path d="M732 64h0"></path>
-            <rect x="50" y="36" width="682" height="77" rx="10" ry="10" class="group-box"></rect>
-            <g>
-                <path d="M50 64h10"></path>
-                <path d="M722 64h10"></path>
-                <g>
-                    <path d="M60 64h0"></path>
-                    <path d="M360 64h0"></path>
-                    <path d="M60 64a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                    <g>
-                        <path d="M80 44h260"></path>
-                    </g>
-                    <path d="M340 44a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <path d="M60 64h20"></path>
-                    <g>
-                        <path d="M80 64h0"></path>
-                        <path d="M340 64h0"></path>
-                        <g class="terminal ">
-                            <path d="M80 64h0"></path>
-                            <path d="M180 64h0"></path>
-                            <rect x="80" y="53" width="100" height="22" rx="10" ry="10"></rect>
-                            <text x="130" y="68">CONSTRAINT</text>
-                        </g>
-                        <path d="M180 64h10"></path>
-                        <path d="M190 64h10"></path>
-                        <g class="non-terminal ">
-                            <path d="M200 64h0"></path>
-                            <path d="M340 64h0"></path>
-                            <rect x="200" y="53" width="140" height="22"></rect>
-                            <text x="270" y="68">constraint&#95;name</text>
-                        </g>
-                    </g>
-                    <path d="M340 64h20"></path>
-                </g>
-                <path d="M360 64h10"></path>
-                <g class="terminal ">
-                    <path d="M370 64h0"></path>
-                    <path d="M478 64h0"></path>
-                    <rect x="370" y="53" width="108" height="22" rx="10" ry="10"></rect>
-                    <text x="424" y="68">PRIMARY KEY</text>
-                </g>
-                <path d="M478 64h10"></path>
-                <path d="M488 64h10"></path>
-                <g class="terminal ">
-                    <path d="M498 64h0"></path>
-                    <path d="M526 64h0"></path>
-                    <rect x="498" y="53" width="28" height="22" rx="10" ry="10"></rect>
-                    <text x="512" y="68">(</text>
-                </g>
-                <path d="M526 64h10"></path>
-                <path d="M536 64h10"></path>
-                <g>
-                    <path d="M546 64h0"></path>
-                    <path d="M674 64h0"></path>
-                    <path d="M546 64h10"></path>
-                    <g class="non-terminal ">
-                        <path d="M556 64h0"></path>
-                        <path d="M664 64h0"></path>
-                        <rect x="556" y="53" width="108" height="22"></rect>
-                        <text x="610" y="68">column&#95;name</text>
-                    </g>
-                    <path d="M664 64h10"></path>
-                    <path d="M556 64a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
-                    <g class="terminal ">
-                        <path d="M556 94h40"></path>
-                        <path d="M624 94h40"></path>
-                        <rect x="596" y="83" width="28" height="22" rx="10" ry="10"></rect>
-                        <text x="610" y="98">,</text>
-                    </g>
-                    <path d="M664 94a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
-                </g>
-                <path d="M674 64h10"></path>
-                <path d="M684 64h10"></path>
-                <g class="terminal ">
-                    <path d="M694 64h0"></path>
-                    <path d="M722 64h0"></path>
-                    <rect x="694" y="53" width="28" height="22" rx="10" ry="10"></rect>
-                    <text x="708" y="68">)</text>
-                </g>
-            </g>
-            <g class="comment ">
-                <path d="M50 28h0"></path>
-                <path d="M130 28h0"></path>
-                <text x="90" y="25" class="comment">constraint</text>
-            </g>
-        </g>
-        <path d="M732 64h10"></path>
-        <path d="M 742 64 h 20 m 0 -10 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #eee;
-        }</style>
-</svg>
-</div>
+<div class="sect2">
+<h3 id="constraint">constraint</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(Group(Sequence(
+Optional(Sequence(NonTerminal('Constraint'),NonTerminal('constraint_name')
+)),
+NonTerminal('PRIMARY KEY'),
+NonTerminal('('),
+OneOrMore('column_name', ','),
+NonTerminal(')')
+),'constraint')
+)</p>
 </div>
 <div class="paragraph">
 <p>Referenced by:</p>
@@ -2752,122 +971,17 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </li>
 </ul>
 </div>
+<hr>
 </div>
-</div>
-<div class="sect1">
-<h2 id="qualified_table_name">qualified_table_name</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<svg class="railroad-diagram" width="394.5" height="114" viewBox="0 0 394.5 114" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g transform="translate(.5 .5)">
-        <g>
-            <path d="M20 45v20m0 -10h20"></path>
-        </g>
-        <path d="M40 55h10"></path>
-        <g>
-            <path d="M50 55h0"></path>
-            <path d="M344.5 55h0"></path>
-            <rect x="50" y="36" width="294.5" height="58" rx="10" ry="10" class="group-box"></rect>
-            <g>
-                <path d="M50 55h10"></path>
-                <path d="M334.5 55h10"></path>
-                <g>
-                    <path d="M60 55h0"></path>
-                    <path d="M219.5 55h0"></path>
-                    <path d="M60 55h20"></path>
-                    <g>
-                        <path d="M80 55h119.5"></path>
-                    </g>
-                    <path d="M199.5 55h20"></path>
-                    <path d="M60 55a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path>
-                    <g>
-                        <path d="M80 75h0"></path>
-                        <path d="M199.5 75h0"></path>
-                        <g class="non-terminal ">
-                            <path d="M80 75h0"></path>
-                            <path d="M151 75h0"></path>
-                            <rect x="80" y="64" width="71" height="22"></rect>
-                            <text x="115.5" y="79">schema</text>
-                        </g>
-                        <path d="M151 75h10"></path>
-                        <path d="M161 75h10"></path>
-                        <g class="terminal ">
-                            <path d="M171 75h0"></path>
-                            <path d="M199.5 75h0"></path>
-                            <rect x="171" y="64" width="28.5" height="22" rx="10" ry="10"></rect>
-                            <text x="185.25" y="79">.</text>
-                        </g>
-                    </g>
-                    <path d="M199.5 75a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path>
-                </g>
-                <path d="M219.5 55h10"></path>
-                <g class="non-terminal ">
-                    <path d="M229.5 55h0"></path>
-                    <path d="M334.5 55h0"></path>
-                    <rect x="229.5" y="44" width="105" height="22"></rect>
-                    <text x="282" y="59">table&#95;name</text>
-                </g>
-            </g>
-            <g class="comment ">
-                <path d="M50 28h0"></path>
-                <path d="M200 28h0"></path>
-                <text x="125" y="25" class="comment">qualified&#95;table&#95;name</text>
-            </g>
-        </g>
-        <path d="M344.5 55h10"></path>
-        <path d="M 354.5 55 h 20 m 0 -10 v 20"></path>
-    </g>
-    <style>
-        svg {
-        background-color: hsl(0,0%,100%);
-        }
-        path {
-        stroke-width: 2;
-        stroke: black;
-        fill: rgba(0,0,0,0);
-        }
-        text {
-        font: bold 14px monospace;
-        text-anchor: middle;
-        white-space: pre;
-        }
-        text.diagram-text {
-        font-size: 12px;
-        }
-        text.diagram-arrow {
-        font-size: 16px;
-        }
-        text.label {
-        text-anchor: start;
-        }
-        text.comment {
-        font: italic 12px monospace;
-        }
-        g.non-terminal text {
-        /&#42;font-style: italic;&#42;/
-        }
-        rect {
-        stroke-width: 2;
-        stroke: black;
-        fill: hsl(0,0%,100%);
-        }
-        rect.group-box {
-        stroke: gray;
-        stroke-dasharray: 10 5;
-        fill: none;
-        }
-        path.diagram-text {
-        stroke-width: 2;
-        stroke: black;
-        fill: white;
-        cursor: help;
-        }
-        g.diagram-text:hover path.diagram-text {
-        fill: #ffa500;
-        }</style>
-</svg>
-</div>
+<div class="sect2">
+<h3 id="qualified_table_name">qualified_table_name</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(Group(Sequence(
+Optional(Sequence(NonTerminal('schema'),NonTerminal('.')
+),),
+NonTerminal('table_name')
+),'qualified_table_name')
+)</p>
 </div>
 <div class="paragraph">
 <p>Referenced by:</p>
@@ -2885,15 +999,28 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </li>
 </ul>
 </div>
+<hr>
 </div>
+<div class="sect2">
+<h3 id="column_definition">column_definition</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(
+Group(Sequence(
+NonTerminal('column_name'),
+NonTerminal('DATA TYPE'),
+Optional(Sequence(Optional('NOT'),NonTerminal('NULL')))
+), 'column_definition'),
+End({type:'complex'})
+)</p>
 </div>
-<div class="sect1">
-<h2 id="column_definition-2">column_definition</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>column_name [ASC | DESC] [NULLS {FIRST | LAST}]</code></pre>
-</div>
+<div class="paragraph diagram-container">
+<p>Diagram(
+Start({type:'complex'}),
+Group(Sequence(
+Optional(Sequence(NonTerminal('DEFAULT'), NonTerminal('literal_value'))),
+NonTerminal('PRIMARY KEY')
+), 'column_definition')
+)</p>
 </div>
 <div class="paragraph">
 <p>Parameters:</p>
@@ -2918,12 +1045,42 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </li>
 </ul>
 </div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="tablecolumn">tableColumn</h3>
+<div class="paragraph diagram-container">
+<p>Diagram(Group(Sequence(
+NonTerminal('columnName'),
+NonTerminal('columnType'),
+Optional(Sequence(Optional('NOT'),NonTerminal('NULL')
+),),
+Optional('DEFAULT')
+),'tableColumn')
+)</p>
+</div>
+<div class="paragraph">
+<p>Parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>[NOT] NULL</code> - specifies that values in the column always contain null or not null values.</p>
+</li>
+<li>
+<p><code>DEFAULT</code> - specifies a default value for the column. You can specify a constant value, or use a <a href="/docs/3.0.0-beta/sql-reference/ddl#system-functions">system function</a> to generate a value.</p>
+</li>
+</ul>
+</div>
+<hr>
 </div>
 </div>
-<h1 id="system-functions" class="sect0">System Functions</h1>
+</div>
 <div class="sect1">
-<h2 id="gen_random_uuid">gen_random_uuid</h2>
+<h2 id="system-functions">System Functions</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="gen_random_uuid">gen_random_uuid</h3>
 <div class="paragraph">
 <p>This function generates a random UUID value each time it is called.</p>
 </div>
@@ -2947,6 +1104,7 @@ Once the table is dropped, all pending commands will fail with appropriate error
 </div>
 </div>
 </div>
+</div>
         <div class="copyright">
  © 2022 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -2958,22 +1116,27 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#create-table">CREATE TABLE</a></li>
-<li><a href="#alter-table">ALTER TABLE</a></li>
+<li><a href="#alter-table">ALTER TABLE</a>
+<ul class="sectlevel3">
+<li><a href="#alter-table-if-exists-table-add-column-if-not-exists-column1-int-column2-int">ALTER TABLE IF EXISTS table ADD COLUMN IF NOT EXISTS (column1 int, column2 int)</a></li>
+<li><a href="#alter-table-if-exists-table-drop-column-if-exists-column1-column2-int">ALTER TABLE IF EXISTS table DROP COLUMN IF EXISTS (column1, column2 int)</a></li>
+</ul>
+</li>
 <li><a href="#drop-table">DROP TABLE</a></li>
 <li><a href="#create-index">CREATE INDEX</a></li>
 <li><a href="#drop-index">DROP INDEX</a></li>
 <li><a href="#grammar-reference">Grammar Reference</a>
-<ul class="sectlevel1">
+<ul class="sectlevel2">
 <li><a href="#column_definition_or_list">column_definition_or_list</a></li>
-<li><a href="#column_definition">column_definition</a></li>
 <li><a href="#column_list">column_list</a></li>
 <li><a href="#constraint">constraint</a></li>
 <li><a href="#qualified_table_name">qualified_table_name</a></li>
-<li><a href="#column_definition-2">column_definition</a></li>
+<li><a href="#column_definition">column_definition</a></li>
+<li><a href="#tablecolumn">tableColumn</a></li>
 </ul>
 </li>
 <li><a href="#system-functions">System Functions</a>
-<ul class="sectlevel1">
+<ul class="sectlevel2">
 <li><a href="#gen_random_uuid">gen_random_uuid</a></li>
 </ul>
 </li>
@@ -3016,12 +1179,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1668627604' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1668627604' async></script>
+<script type='module' src='/assets/js/index.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1668632066' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1668632066' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1668627604" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668627604"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1668632066" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1668632066"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
