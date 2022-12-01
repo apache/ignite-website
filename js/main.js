@@ -308,6 +308,13 @@ function submenuScroller(){
         e.preventDefault();
         scrollToBlock(e, link.getAttribute('href'), (menuEl.scrollHeight + hdr.scrollHeight));
     });
+
+    let emailEl = document.querySelector('.email__scroll');
+    if(!emailEl) return;
+    emailEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToBlock(e, emailEl.getAttribute('href'), (emailEl.scrollHeight + hdr.scrollHeight + 30));
+    });
 }
 submenuScroller();
 
