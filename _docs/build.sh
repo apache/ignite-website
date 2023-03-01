@@ -7,7 +7,7 @@ export action=build
 export versions_filename="../docs/available-versions.txt"
 
 # Usage example
-# ./build.sh --repo='https://github.com/apache/ignite-3.git' --version=3.0-beta --github-branch=IGNITE-16942 --ignite3
+# ./build.sh --repo='https://github.com/apache/ignite-3.git' --version=3.0.0-beta --github-branch=IGNITE-16942 --ignite3
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
