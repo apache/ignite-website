@@ -6,6 +6,9 @@ export action=build
 
 export versions_filename="../docs/available-versions.txt"
 
+# Usage example
+# ./build.sh --repo='https://github.com/apache/ignite-3.git' --version=3.0-beta --github-branch=IGNITE-16942 --ignite3
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --version=*)
@@ -19,6 +22,12 @@ while [ "$#" -gt 0 ]; do
         ;;
     --serve)
       action=serve
+      ;;
+    --ignite3)
+      target=ignite3
+      ;;
+    --repo=*)
+      repo="${1#*=}"
       ;;
     *)
       printf "***********************************************************\n"
@@ -34,10 +43,14 @@ if [ -z "$version" ]; then
   exit 1
 fi
 
-# there are different repos for version 2 and 3.
+# There are different repos for version 2 and 3.
 export repo_url="https://github.com/apache/ignite.git"
-if [[ "${version:0:1}" == "3" ]] ; then
-  repo_url="https://github.com/apache/ignite-3.git"
+if [[ "${target}" == "ignite3" ]] ; then
+  if [[ -z "${repo}" ]] ; then
+    repo_url="https://github.com/apache/ignite-3.git"
+  else
+    repo_url="${repo}"
+  fi
 fi
 
 # clone Ignite repo locally to copy only the content for docs. 
