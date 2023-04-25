@@ -1,0 +1,83 @@
+---
+title: "Apache Ignite 2.11.1: Emergency Log4j2 Update"
+author: "Maxim Muzafarov"
+date: 2021-12-21
+tags:
+    - database
+    - ignite
+    - in-memory
+    - log4j2
+    - open-source
+    - release
+---
+
+p
+  | The new 
+  a(href='https://ignite.apache.org/') Apache Ignite
+  |  2.11.1 is an emergency release that fixes 
+  a(href='https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228') CVE-2021-44228
+  | , 
+  a(href='https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45046') CVE-2021-45046
+  | ,
+  a(href='https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45105') CVE-2021-45105
+  |  related to the ignite-log4j2 module usage.
+h3#apache-ignite-with-log4j-vulnerability Apache Ignite with Log4j Vulnerability
+p All the following conditions must be met:
+ul
+  li
+    | The Apache Ignite version lower than 2.11.0 is used (since these vulnerabilities are already fixed in 2.11.1, 2.12, and upper versions);
+  li
+    | The 
+    code ignite-logj42
+    |  is used by Apache Ignite and located in the 
+    code libs
+    |  directory (by default it is located in the 
+    code libs/optional
+    | directory, so these deployments are not affected);
+  li
+    | The Java version in use is older than the following versions: 
+    code 8u191
+    | , 
+    code 11.0.1
+    | . This is due to the fact that later versions 
+    | set the JVM property 
+    code com.sun.jndi.ldap.object.trustURLCodebase
+    |  to 
+    code false
+    |  by default, which disables JNDI loading of classes
+    | from arbitrary URL code bases.
+p
+  | NOTE: Relying only on the Java version as a protection against these vulnerabilities is very risky and has not been tested.
+h3#risk-mitigation-without-upgrading Risk Mitigation Without Upgrading
+p
+  | Please note that all of these cases require a cluster downtime, but we still recommend to upgrade the Apache Ignite.
+h4#method-1-removing-the-vulnerable-classes Method 1: Removing the Vulnerable Classes
+p
+  | When using an older Apache Ignite version, it is possible to remove the JndiLookup class from any Java application by
+  | executing this command:
+
+code find $IGNITE_HOME/ -type f -name "*log4j-core-*.jar" -exec zip -q -d "{}" org/apache/logging/log4j/core/lookup/JndiLookup.class \;
+  
+p
+  | This will recursively find all log4j-core JAR files, starting from the 
+  code IGNITE_HOME
+  |  directory, and remove the vulnerable
+  | JndiLookup class from them.
+h4#method-2-disabling-message-lookups Method 2: Disabling Message Lookups
+p
+  | This method can be used as an additional protection layer in case you suspect not all log4j dependencies have been 
+  | properly updated. If you are using the Apache Ignite of an older version, we recommend to disable message lookups globally
+  | by setting the environment variable 
+  code LOG4J_FORMAT_MSG_NO_LOOKUPS
+  |  to 
+  code true
+  |  or, alternatively, run the Apache Ignite with 
+  | the 
+  code &dash;Dlog4j2.formatMsgNoLookups=true
+  |  command-line option.
+h4#method-3-replace-log4j2-dependency-manually Method 3: Replace log4j2 Dependency Manually
+p
+  | It is still possible to manually replace the Log4j of 2.x version in the Apache Ignite binary distribution to the 2.17.0 Log4j
+  | version if your log configuration does not imply to use the RoutingAppender. In case the RoutingAppender is used it may produce
+  | some error messages in a log file at the startup or empty lines during the execution, which are considered as a minor flow,
+  | however, we do not recommend this mitigation method in this case.

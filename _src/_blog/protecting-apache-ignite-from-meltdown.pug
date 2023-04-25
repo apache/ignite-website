@@ -1,0 +1,94 @@
+---
+title: "Protecting Apache Ignite from 'Meltdown' and 'Spectre' vulnerabilities"
+author: "Denis Magda"
+date: 2018-01-08
+tags:
+    - apache
+    - ignite
+    - meltdown
+    - security
+    - spectre
+---
+
+p
+  | The world was rocked after the recent disclosure of the 
+  a(href='https://www.vox.com/business-and-finance/2018/1/4/16850004/meltdown-spectre-intel-security-flaw-update' target='_blank') Meltdown and Spectre
+  |  vulnerabilities that literally affect almost all software ever developed. Both issues are related to the way all modern CPUs are designed and this is why they have opened&nbsp;unprecedented security breaches -- making the software, including Apache Ignite, vulnerable to hacker&nbsp;attacks.
+p
+p
+p
+  | The vulnerabilities are registered in the National Vulnerability Database under the following CVEs:
+p
+p
+ul
+  br
+  li
+    a(href='https://nvd.nist.gov/vuln/detail/CVE-2017-5753' target='_blank') CVE-2017-5753
+    |  &mdash; Spectre variant 1
+  br
+  li
+    a(href='https://nvd.nist.gov/vuln/detail/CVE-2017-5715' target='_blank') CVE-2017-5715
+    |  &mdash; Spectre variant 2
+  br
+  li
+    a(href='https://nvd.nist.gov/vuln/detail/CVE-2017-5754' target='_blank') CVE-2017-5754
+    |  &mdash; Meltdown
+  br
+p
+p
+h2 How to protect Apache Ignite deployments?
+p
+p
+p
+  | First, the vulnerabilities can be fixed only on the operating system (OS) or hardware levels. All OS and hardware vendors are working on and releasing patches to fill-in the security breaches. Depending on the type of your Apache Ignite deployment, make sure to do the following:
+p
+p
+ul
+  br
+  li
+    strong On-premise deployments
+    |  - apply the patches prepared by your OS and hardware vendors. Consult with them to find out additional steps to act on. 
+    a(href='https://www.us-cert.gov/ncas/alerts/TA18-004A' target='_blank') This page
+    |  is a good place to start with.
+  br
+  li
+    strong Cloud deployments
+    |  - major cloud providers such as Amazon and Microsoft are in a process of patching their cloud computing services. Consider a cloud provider&apos;s security announcements and recommendations or follow up with a representative for suggestions.
+  br
+p
+p
+p
+  | Second, an Apache Ignite cluster becomes vulnerable to the attacks only if someone gets unauthorized access to cluster machines (both on-premise or cloud deployments) and executes a malicious shell script or connects to the cluster directly and executes a Java, .NET or C++ computation there.
+p
+p
+p Do the following to prevent this from happening:
+p
+p
+ul
+  br
+  li
+    | Make sure the cluster machines are secured with a hard-to-guess or hard-to-calculate password.
+  br
+  li
+    | Consider using 3rd party security components provided by enterprise vendors (such as 
+    a(href='https://docs.gridgain.com/docs/security-and-audit' target='_blank') this one
+    | ) to strengthen a security shield of your deployments.
+  br
+p
+p
+p
+  | Finally, researchers who discovered Meltdown and Spectre have said that the first issue can be fixed with software patches while the second can be fully addressed only with hardware upgrades/replacement. Luckily, it&apos;s&nbsp;much more difficult for hackers to exploit Spectre. Thus, if the two recommendations given above are taken seriously, the chances that you will be impacted from Spectre are low.
+p
+p
+h2 What is the performance impact of security patches?
+p
+p
+p
+  | Many security patches are rolled out with a precaution that some of the applications can see up to a 30% performance degradation. Apache Ignite community is planning to measure the impact of general usage scenarios and will follow up with the results in a consequent post.
+p
+p
+p
+  | This general performance testing might not cover your use case. Therefore, it&apos;s highly recommended that you assess and test a possible performance drop of your Apache Ignite deployments before applying the patches in production. If the drop is significant, then contact us on the 
+  a(href='https://ignite.apache.org/community/resources.html#mail-lists' target='_blank') dev list
+  | .
+p

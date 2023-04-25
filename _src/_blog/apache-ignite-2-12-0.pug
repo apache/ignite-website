@@ -1,0 +1,157 @@
+---
+title: "Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes"
+author: "Nikita Amelchev"
+date: 2022-01-14
+tags:
+    - database
+    - ignite
+    - in-memory
+    - open-source
+    - release
+---
+
+p
+  | As of January 14, 2022, 
+  a(href='https://ignite.apache.org/') Apache Ignite
+  |  2.12 has been released. You can directly check the full list of resolved 
+  a(href='https://s.apache.org/0zyi2') Important JIRA tasks
+  |  but here let&rsquo;s briefly overview some valuable improvements.
+h3#vulnerability-updates Vulnerability Updates
+p
+  | The Apache Ignite versions lower than 2.11.1 are vulnerable to 
+  a(href='https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44832') CVE-2021-44832
+  |  which is related to the 
+  code ignite-log4j2
+  |  module usage.
+p
+  | The release also fixes 10+ CVE&rsquo;s of various modules. See 
+  a(href='https://ignite.apache.org/releases/2.12.0/release_notes.html') release notes
+  |  for more details.
+h3#change-data-capture Change Data Capture
+p
+  | Change Data Capture (
+  a(href='https://en.wikipedia.org/wiki/Change_data_capture') CDC
+  | ) is a data processing pattern used to asynchronously receive entries that have been changed on the local node so that action can be taken using the changed entry.
+p Below are some of the CDC use cases:
+ul
+  li Streaming changes in Warehouse;
+  li Updating search index;
+  li Calculating statistics (streaming queries);
+  li Auditing logs;
+  li
+    | Async interaction with external systems: Moderation, business process invocation, etc.
+p
+  | Ignite implements CDC with the 
+  code ignite-cdc.sh
+  |  application and 
+  a(href='https://github.com/apache/ignite/blob/master/modules/core/src/main/java/org/apache/ignite/cdc/CdcConsumer.java#L56') Java API
+  | .
+p
+  | Below are the CDC application and the Ignite node integrated via 
+  a(href='https://ignite.apache.org/docs/2.12.0/persistence/native-persistence#write-ahead-log') WAL archive segments
+  | :
+p
+  img(src='https://blogs.apache.org/ignite/mediaresource/c5574c7d-2a24-4def-b1c4-b2343ed98397' alt='Apache Ignite CDC design' style='display:block;margin-left:auto;margin-right:auto;width:30%;')
+p
+  | When CDC is enabled, the Ignite server node creates a hard link to each WAL archive segment in the special 
+  code db/cdc/{consistency_id}
+  |  directory. The 
+  code ignite-cdc.sh
+  |  application can be runruns on a different JVM and processes newly archived WAL segments. When the segment is fully processed by 
+  code ignite-cdc.sh
+  | , it is removed. The actual disk space is free when both links (archive and CDC) are removed.
+p
+  | State of consumption is a pointer to the last processed event. A consumer can tell 
+  code ignite-cdc.sh
+  |  to save the consumption state. On startup event processing will be continued from the last saved state.
+p
+  | See implementation details 
+  a(href='https://ignite.apache.org/docs/2.12.0/persistence/change-data-capture') here
+  | .
+h3#index-query-api Index Query API
+p
+  | The Apache Ignite now provides Index Query API for existing indexes. Index queries work over distributed indexes and retrieve cache entries that match the specified query.
+p It will help in some cases, where:
+ul
+  li SQL is not applicable by the design of user application;
+  li
+    code IndexScan
+    |  is preferable to 
+    code ScanQuery
+    |  for performance reasons.
+p Example of query:
+
+code.lang-java 
+    pre // Find the persons who work in Organization 1 and have salary more than 1,000.
+    pre QueryCursor<Cache.Entry<Integer, Person>> cursor = cache.query(
+    pre   new IndexQuery<Integer, Person>(Person.class, "ORG_SALARY_IDX")
+    pre   .setCriteria(eq("orgId", 1), gt("salary", 1000))
+    pre );
+  
+p
+  | See more details 
+  a(href='https://ignite.apache.org/docs/latest/key-value-api/using-cache-queries#executing-index-queries') here
+  | .
+h3#snapshots Snapshots
+p
+  | Previous versions can perform snapshot restore in the same cluster topology only. The new version provides the ability to restore snapshots on different cluster topologies. Moreover, added support of encrypted caches.
+h3#distributed-environment-tests Distributed Environment Tests
+p
+  | The 
+  a(href='https://cwiki.apache.org/confluence/display/IGNITE/IEP-56%3A+Distributed+environment+tests') new testing framework
+  |  was implemented. The main goal is to have a large enough set of integration tests that cover most of the typical cluster usage scenarios.
+p Features:
+ul
+  li
+    | Ignite nodes can be started/stopped on a Docker or a real cluster with any custom configuration;
+  li Any Apache Ignite version is supported (released or compiled from sources);
+  li  Apache Ignite forks are also supported &laquo;out of the box&raquo;;
+  li
+    | Any other application execution is also possible, e.g. we implemented starters for Spark and Zookeeper;
+  li
+    | The cluster can be managed using the 
+    code control.sh
+    | , we made this a part of the test API;
+  li
+    | Custom Java applications can be executed remotely with/without a built-in Ignite node or a Thin client;
+  li
+    | Any ssh command can be executed remotely, and the result will be available locally (at the python test);
+  li
+    | A network can be broken by editing 
+    code iptables
+    |  to check communication issues;
+  li
+    | Tests can be executed in parallel when the cluster size is bigger than tests requirements.
+p
+  | Framework based on 
+  a(href='https://ducktape-docs.readthedocs.io/en/latest/index.html') Ducktape
+  |  library from Kafka team, that&apos;s why we called it Ducktests.
+h3#migration-modules-to-the-apache-ignite-extensions Migration modules to the Apache Ignite Extensions
+p There is activity on the migration of frameworks to extensions:
+ul
+  li
+    | GCE, AWS, Azure modules were migrated to 
+    code gce
+    | , 
+    code aws
+    | , 
+    code azure
+    |  extensions.
+  li
+    | CacheSpringStoreSessionListener was migrated to the 
+    code spring-tx
+    |  extension.
+  li
+    | TcpDiscoveryZookeeperIpFinder was migrated to the 
+    code zookeeper-ip-finder
+    |  extension.
+p The binaries archive now weighs 10 percent less.
+h3#anything-else- Anything else?
+p
+  | See the 
+  a(href='https://ignite.apache.org/releases/2.12.0/release_notes.html') release notes
+  |  to learn about all of the new features and bug fixes.
+p
+  | Reach out to us on the community user list for more questions, details, and feedback.
+p Sincerely yours,
+p Ignite contributors and committers

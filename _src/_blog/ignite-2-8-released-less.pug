@@ -1,0 +1,82 @@
+---
+title: "Ignite 2.8 Released: Less Stress in Production and Advances in Machine Learning"
+author: "Denis Magda"
+date: 2020-03-11
+tags:
+    - database
+    - ignite
+    - in-memory
+    - learning
+    - machine
+---
+
+p
+  | With thousands of changes contributed to Apache Ignite 2.8 that enhanced almost all the components of the platform, it&rsquo;s possible to overlook some of the improvements that can convince you to upgrade to this version sooner than later.  While a quick check of the 
+  a(href='https://ignite.apache.org/releases/2.8.0/release_notes.html' target='_blank') release notes
+  |  will help to discover anticipated bug fixes, this article aims to guide through enhancements every Ignite developer should be aware of.
+h3 New Subsystem for Production Monitoring and Tracing
+p
+  | Several months of constant work on 
+  a(href='https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=112820392' target='_blank') IEP-35: Monitoring &amp; Profiling
+  |  has resulted in the creation of a robust and elastic subsystem for production monitoring and diagnostic (aka. profiling). This was influenced by the needs of many developers who deployed Ignite in critical environments and were asking for a foundation that can be integrated with many external monitoring tools and be expanded easily.
+p
+  | The 
+  a(href='https://apacheignite.readme.io/docs/new-metrics#section-exporters' target='_blank') new subsystem
+  |  consists of several registries that group individual metrics related to a specific Ignite component. For instance, you will find registries for cache, compute, or service grid APIs. Since the registries are designed to be generic, specific exporters can observe the state of Ignite via a myriad of tools supporting various protocols. By default, Ignite 2.8 introduces exporters for monitoring interfaces such as log files, JMX and SQL views, and contemporary ones such as OpenCensus.
+p
+  | Presently, this new subsystem is released in an experimental mode only to give Ignite users some time to check the new API and suggest any improvements. Since the developer community is already impatient to remove the experimental flag, don&rsquo;t delay!
+h3 Advances in Ignite Machine Learning
+p
+  | Machine Learning (ML) capabilities of Ignite 2.8 are so drastically different from previous versions that if you&rsquo;ve been waiting for the best moment to use the API, then the time has come. Let&rsquo;s scratch the surface here and learn more details from the updated documentation pages.
+p
+  | A model training is usually a multi-step process that goes with preprocessing, training, and evaluation/valuation phases. A new 
+  a(href='https://apacheignite.readme.io/docs/evaluation' target='_blank') pipelining API
+  |  puts things in order by combining all the phases in a single workflow.
+p
+  | In addition to the pipelining APIs, Ignite 2.8 introduced 
+  a(href='https://apacheignite.readme.io/docs/ensemble-methods' target='_blank') ensemble methods
+  | , which allow combining several machine learning techniques into one predictive model to decrease variance (bagging) and bias (boosting), or improve predictions (stacking).
+p
+  | Furthermore, now you can import 
+  a(href='https://apacheignite.readme.io/docs/model-importing' target='_blank') Apache Spark or XGBoost models
+  |  to Ignite for further inference, pipelining other tasks. Feel free to keep training a model with your favorite framework and convert it to Ignite representation once the model needs to be deployed in production and executed at scale.
+h3 Beyond Java: Partition-Awareness and Other Changes
+p
+  | Even though Ignite is a Java middleware, it functions as a cross-platform database and compute platform that is used for applications developed in C#, C++, Python, and other programming languages.
+p
+  | Thin client protocol is a real enabler for other programming languages support, and with Ignite 2.8, it got a significant performance optimization by supporting 
+  a(href='https://apacheignite-net.readme.io/docs/thin-client#section-partition-awareness' target='_blank') partition-awareness
+  | . The latter allows thin clients to send query requests directly to nodes that own the queried data. Without partition awareness, an application that is connected to the cluster via a thin client executes all queries and operations via a single server node that acts as a proxy for the incoming requests.
+p
+  | Check the 
+  a(href='https://ptupitsyn.github.io/Whats-New-In-Ignite-Net-2.8/' target='_blank') detailed blog
+  |  post by Pavel Tupitsyn, Ignite committer and PMC, who elaborates on the partition-awareness feature and introduces other .NET-specific enhancements.
+h3 Less Stress in Production
+p
+  | This section lists top improvements that might not have striking or catchy names but can bring relief by automating and optimizing things, and by avoiding data inconsistencies when you are already in production.
+p
+  | The stop-the-world pauses triggered by Java garbage collectors impact performance, responsiveness, and throughput of our Java applications. Apache Ignite has a partition-map-exchange (PME) process that, as Java garbage collectors, has some phases that put on hold all running operations for the sake of cluster-wide consistency. For most of the Ignite usage scenarios, these phases complete promptly and are unnoticed. However, some low-latency or high-throughput use cases can detect a decline that might impact some business operations for a moment in time. 
+  a(href='https://cwiki.apache.org/confluence/display/IGNITE/%28Partition+Map%29+Exchange+-+under+the+hood' target='_blank') This wiki page
+  |  lists all the conditions that can trigger a distributed PME, and with Ignite 2.8, some of them were taken off the list -- the blocking PME no longer happens if a node belonging to the current baseline topology leaves the cluster or a thick client connects to it.
+p
+  | Next, we all know that things break, and what really matters is how a system handles failures. With Ignite 2.8, we revisited the way the cluster handles crash recoveries on restarts while replaying write-ahead-logs (check 
+  a(href='https://issues.apache.org/jira/browse/IGNITE-7196' target='_blank') IGNITE-7196
+  |  and 
+  a(href='https://issues.apache.org/jira/browse/IGNITE-9420' target='_blank') IGNITE-9420
+  | ). Also, the 
+  a(href='https://apacheignite.readme.io/docs/read-repair' target='_blank') read-repair feature
+  |  was added to manage data inconsistencies between primary and backups copies of the cluster on-the-fly.
+p
+  | Furthermore, it&rsquo;s worth mentioning that Ignite 2.8 became more prudent about disk space consumption by supporting the compaction of data files and write-ahead-logs of the native persistence. By sacrificing a bit more CPU cycles for the needs of 
+  a(href='https://ignite.apache.org/releases/2.8.0/javadoc/org/apache/ignite/configuration/DiskPageCompression.html' target='_blank') compaction algorithms
+  | , you can save a lot on the storage end.
+p
+  | Last but not least, is an 
+  a(href='https://apacheignite.readme.io/docs/baseline-topology#section-baseline-topology-autoadjustment' target='_blank') auto-baseline
+  |  feature that changes a cluster topology for deployments with Ignite native persistence without the need for your intervention in many scenarios. Check this documentation page for more details.
+p
+  | Reach out to us on the community user list for more questions, details, and feedback.
+p
+  | Sincerely yours, 
+  br
+  | Ignite contributors and committers
