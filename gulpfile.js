@@ -7,7 +7,7 @@ import prettier from 'gulp-prettier';
 import gulpSitemap from 'gulp-sitemap';
 import File from 'vinyl';
 import collection from 'gulp-collection';
-import matter from 'gulp-gray-matter';
+import matter from '@rojo2/gulp-gray-matter';
 import sort from 'gulp-sort';
 import fs from 'fs';
 import rename from 'gulp-rename';
@@ -38,12 +38,15 @@ function buffer() {
     });
 }
 
-const blog = () => {
+const build_blog = () => {
     var blogTemplate = loadTemplate('./_src/_components/templates/blog.pug');
     var postTemplate = loadTemplate('./_src/_components/templates/post.pug');
 
     return gulp.src('./_src/_blog/*.pug')
-        .pipe(matter())
+        .pipe(matter({
+            excerpt: true, 
+            excerpt_separator: '<!-- end -->'
+        }))
         // sort by published date
         .pipe(sort({
             comparator: function(file1, file2) {
@@ -79,6 +82,14 @@ const blog = () => {
             }
             else {
                 file.data.post = engine.compile(file.contents.toString())()
+                if (file.data.excerpt != undefined) {
+                    file.data.more = true
+                    file.data.excerpt = engine.compile(file.data.excerpt)()
+                }
+                else {
+                    file.data.more = false
+                    file.data.excerpt = file.data.post
+                }
                 file.contents = postTemplate.contents
                 file.data.context = contextTags
                 file.data.format_date = new Date(file.data.date).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})
@@ -120,7 +131,7 @@ const html = () => {
             console.log('▒ PUG→HTML: ' + file.path.replace(file.cwd, '') );
         })
         .pipe(gulp.dest('./')).on('end', (e) => {
-            blog()
+            build_blog()
         });
 }
 
@@ -199,7 +210,7 @@ export const sitemap = () => {
 
 
 
-
+export const blog = gulp.series(build_blog);
 export const build = gulp.series(html);
 export const watch = gulp.series(watchpug);
 export default gulp.series(html, watchpug);

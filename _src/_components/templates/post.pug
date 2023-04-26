@@ -12,7 +12,8 @@ block main
     div.container.blog
         section.blog__header
             h1= title
-            p= `${format_date} by ${author}: `
+            p= `${format_date} by `
+                strong= `${author}: `
                 a(href=`http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/${basename}`) Facebook
                 span , 
                 a(href=`http://twitter.com/home?status=${title}%20https://ignite.apache.org/blog/${basename}`) Twitter
@@ -23,6 +24,12 @@ block main
                 section.blog__posts
                     article.post
                         div!= post
+
+                    section.blog__footer
+                        ul.pagination.post_page
+                            each tag in tags 
+                                li
+                                    a(href=`/blog/${tag}`)= tag
 
             aside.blog__sidebar
                 include ./../../_src/_components/templates/tags.pug
