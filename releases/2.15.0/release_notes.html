@@ -1,0 +1,212 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.13.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.15.0</h1>
+			<div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>Removed deprecated daemon mode for Ignite nodes.</li>
+        <li>Removed deprecated ignitevisorcmd tool.</li>
+        <li>Removed legacy JMX metric beans (ThreadPoolMXBean, CacheGroupMetricsMXBean, CacheMetricsMXBean, PersistenceMetricsMXBean, DataStorageMetricsMXBean,  DataRegionMetricsMXBean).</li>
+        <li>Removed redundant ignite-spring to ignite-indexing module dependency. If you use SQL in Ignite and get Ignite dependency via maven, check that you have explicit dependency to the one of the SQL engines (ignite-indexing or ignite-calcite).</li>
+        <li>Moved ignite-ssh module to the ignite-extensions.</li>
+        <li>Deprecated lazy flag of SqlFieldsQuery. Default value for this flag is changed to 'true'.</li>
+        <li>Operations on atomic caches within transactions are forbidden by default now. To allow such operations set system property IGNITE_ALLOW_ATOMIC_OPS_IN_TX to 'true'.</li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added new feature: Incremental snapshots.</li>
+        <li>Added cache objects transformation feature (this can be used to encrypt, compress or filter the data).</li>
+        <li>Added support of caches with disk page compression for snapshots.</li>
+        <li>Added ability to copy only primary partitions to snapshot.</li>
+        <li>Added an option to skip snapshot check during restore.</li>
+        <li>Added a snapshot exception if a data streamer is loading data with no consistency guarantee.</li>
+        <li>Added storing of snapshot operation warnings to a meta.</li>
+        <li>Added snapshot delta pages sorting.</li>
+        <li>Added partition size and counter check on snapshot create.</li>
+        <li>Added system view for Ignite configuration.</li>
+        <li>Added "Page free space" column to pages lists system views.</li>
+        <li>Added API to kill client (THIN, ODBJ, JDBC) connections.</li>
+        <li>Added metrics for page read time and page replace time.</li>
+        <li>Added thin client affinity hits/misses metric (for partition awareness requests).</li>
+        <li>Added distributed property to disable CDC.</li>
+        <li>Added maximum CDC directory size configuration parameter.</li>
+        <li>Added expiry policy support for CDC.</li>
+        <li>Added ability to provide expireTime during CDC conflict resolution.</li>
+        <li>Added LOB and BLOB fields support to CacheJdbcPojoStore.</li>
+        <li>Added missing "--add-opens" for Java 15+ runtime.</li>
+        <li>Added default constructor to PlatformDotNetSessionLockResult to avoid issues with ReflectionFactory on some application servers.</li>
+        <li>Added ability to use configured FailureHandler for segmentation handling.</li>
+        <li>Added authorization of .NET and C++ compute tasks.</li>
+        <li>Added authorization of Ignite Cluster Node stop/start/restart operations.</li>
+        <li>Added authorization of SQL user management operations.</li>
+        <li>Added 'ADMIN_CLUSTER_STATE' security permission (now it's the only required permission to change cluster state).</li>
+        <li>Granting permissions to system compute tasks by their FQN has been replaced with predefined system permissions.</li>
+        <li>Improved rebalance and PME logging (partition ranges disabled).</li>
+        <li>Default metrics exporter is now the JMX exporter.</li>
+        <li>Optimized index rebuilding (disable writing of WAL records for indexes during rebuilding).</li>
+        <li>Optimized deactivation of large memory regions with persistence.</li>
+        <li>Optimized zeroing of memory pages.</li>
+        <li>Fixed lambdas serialization on Java 17.</li>
+        <li>Fixed PDS defragmentation on Windows.</li>
+        <li>Fixed JDBC connection leak with cache.invoke() over write-behind enabled cache.</li>
+        <li>Fixed an issue that could lead to data corruption of atomic cache when a new updated entry is greater than WAL buffer size.</li>
+        <li>Fixed snapshot create operation started from a non baseline node.</li>
+        <li>Fixed snapshot inconsistency if it was taken under cache workload.</li>
+        <li>Fixed snapshot cancel if one path is configured for several nodes.</li>
+        <li>Fixed snapshot restore hanging if the prepare stage fails.</li>
+        <li>Fixed ignite-cdc stopping on client node crush.</li>
+        <li>Fixed ignite-cdc.sh start failure with non-defailt work directory.</li>
+        <li>Fixed CdcMain state committing during index rebuild.</li>
+        <li>Fixed CdcConsumer stopping on ignite-cdc.sh stop.</li>
+        <li>Fixed the metric for the number of active client sessions.</li>
+        <li>Fixed calculation of cache group storage size related metrics (PagesFillFactor, TotalUsedPages, TotalAllocatedPages).</li>
+        <li>Fixed assertion on histogram update if currentTimeMillis decreases.</li>
+        <li>Fixed REST status code in case of failed request.</li>
+        <li>Fixed an issue that could lead to skipping 3rd party cache store while executing the REST API GET command.</li>
+        <li>Fixed execution options propagation for compute methods.</li>
+        <li>Fixed possible assertion in Communication SPI when the paired connections are set.</li>
+        <li>Fixed potential data loss on historical rebalance.</li>
+        <li>Fixed WAL timeout rollover.</li>
+        <li>Fixed incorrect assertion on CRC calculation when disk page compression is enabled.</li>
+        <li>Fixed node start failure if cpMapSnapshot.bin file is corrupted.</li>
+        <li>Fixed PDS corruption on checkpoint after deactivation.</li>
+        <li>Fixed PDS corruption on deactivation during entries expire.</li>
+        <li>Fixed node failure on rebalancing during caches stop.</li>
+        <li>Fixed NPE in case of simultaneous cache destroy and transaction rollback.</li>
+        <li>Fixed incorrect id check in ClusterGroup.forNodeId.</li>
+        <li>Fixed broken affinity after thick client reconnection.</li>
+        <li>Fixed near cache creation on non-affinity nodes.</li>
+        <li>Fixed possible memory corruption because of insufficient size of compression buffer.</li>
+        <li>Fixed skipping verification of index and metastorage partitions in the snapshot verification process.</li>
+        <li>Fixed criteria skipping after first IN clause for IndexQuery.</li>
+        <li>Fixed WalWritingRate metric for LOG_ONLY and BACKGROUND modes.</li>
+        <li>Updated log4j2 dependency to version 2.20.0.</li>
+        <li>Updated Jetty dependency to 9.4.49.v20220914.</li>
+        <li>Updated Jackson Databind dependency to 2.14.0.</li>
+        <li>Updated postgresql dependency to 42.5.0.</li>
+        <li>Updated Netty dependency to 4.1.89.Final.</li>
+        <li>Updated Ant dependency to 1.10.13.</li>
+        <li>Updated Apache Calcite dependency to 1.32.0.</li>
+    </ul>
+
+    <h2>Control utility</h2>
+    <ul>
+        <li>Added cache clear command.</li>
+        <li>Added cache scan command.</li>
+        <li>Added multiple partitions support to consistency repair command.</li>
+        <li>Added broken partitions list printing to idle-verify command.</li>
+        <li>Added result saving into log file to idle_verify command.</li>
+        <li>Improved entries versions checking by idle_verify command.</li>
+        <li>Added a command to configure Histogram and Hitrate metrics.</li>
+        <li>Added a command to forcefully resend CDC cache data.</li>
+        <li>Added a command to delete segment CDC links before last gap.</li>
+        <li>Added unified syntax for starting and canceling snapshot operations using control script.</li>
+        <li>Added the ability to get a view from multiple nodes.</li>
+        <li>Logging mechanism moved to IgniteLogger.</li>
+    </ul>
+
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added endpoints discovery feature.</li>
+        <li>Added ClientConfiguration.clusterDiscoveryEnabled configuration property.</li>
+        <li>Added events listening.</li>
+        <li>Added connections balancing (use random open connection for requests instead of default).</li>
+        <li>Added configurable logging.</li>
+        <li>Fixed the pending requests race on close.</li>
+    </ul>
+
+    <h2>Ignite .NET</h2>
+    <ul>
+        <li>Added support for default interface methods to Services.</li>
+        <li>Added support for Native AOT.</li>
+        <li>Added IgniteClientConfiguration.EnableClusterDiscovery thin client configuration property that can be used to enable or disable discovery.</li>
+        <li>Fixed marshalling of nested binarizable structures with different schemas.</li>
+        <li>Fixed startup on Java 15+.</li>
+        <li>Fixed platform cache invalidation on client nodes with near cache.</li>
+        <li>Fixed missing DLLs in release package.</li>
+    </ul>
+
+    <h2>Ignite C++</h2>
+    <ul>
+        <li>Added ability to use java-based continuous query remote filters to C++ thick clients.</li>
+        <li>Fixed SIGSEGV on thin client connection close.</li>
+    </ul>
+
+    <h2>ODBC</h2>
+    <ul>
+        <li>Fixed handling of single quotes.</li>
+    </ul>
+
+    <h2>SQL</h2>
+    <ul>
+        <li>Fixed redundant query results for commented lines.</li>
+        <li>Fixed incorrect type conversion for index scans (for example, when indexed field has string data type and search row has numeric data type).</li>
+        <li>Fixed potential deadlock in discovery thread while updating SQL statistics.</li>
+    </ul>
+
+    <h2>Calcite-based SQL engine</h2>
+    <ul>
+        <li>Added ability to set up global heap memory quota and per-query hep memory quota.</li>
+        <li>Added ability to scan inlined keys of indexes without additional requests to data pages.</li>
+        <li>Added native support for SEARCH/SARG operator (this makes possible index scans for IN and some other conditions).</li>
+        <li>Added support for LocalDate/LocalTime types.</li>
+        <li>Added support of index scans on boolean fields.</li>
+        <li>Added EVERY/SOME aggregate functions.</li>
+        <li>Added details to Calcite parser exception.</li>
+        <li>Added new distribution type (optimization to make some joins colocated).</li>
+        <li>Added optimization for COUNT(column) if column is indexed.</li>
+        <li>Added optimization: merge index conditions for the same field.</li>
+        <li>Added optimization: use index first/last value for min()/max() aggregates.</li>
+        <li>Added optimization: push not correlated filter part to the table scan.</li>
+        <li>implemented query metadata, required for ODBC and JDBC.</li>
+        <li>Optimized index scans with conditions containing NULLs.</li>
+        <li>Fixed scans to exclude expired entries.</li>
+        <li>Fixed row count estimate by limit with offset.</li>
+        <li>Fixed CAST error from numbers to boolean.</li>
+        <li>Fixed NPE on DML on non-existed table.</li>
+    </ul>
+</body>
