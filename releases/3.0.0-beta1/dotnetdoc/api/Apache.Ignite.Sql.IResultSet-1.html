@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Interface IResultSet&lt;T&gt;
+ | Apache Ignite.NET API Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Interface IResultSet&lt;T&gt;
+ | Apache Ignite.NET API Documentation ">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.min.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/apache/ignite-3/new/main/apiSpec/new?filename=Apache_Ignite_Sql_IResultSet_1.md&amp;value=---%0Auid%3A%20Apache.Ignite.Sql.IResultSet%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+
+      <script>
+        MathJax = {
+          options: {
+            processHtmlClass: ['tex2jax_process', 'math']
+          }
+        };
+      </script>
+
+      <script type="text/javascript" src="../styles/docfx.min.js"></script>
+      <script type="text/javascript" src="../styles/main.js"></script>
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Apache.Ignite.Sql.IResultSet`1">
+
+
+
+  <h1 id="Apache_Ignite_Sql_IResultSet_1" data-uid="Apache.Ignite.Sql.IResultSet`1" class="text-break">
+    Interface IResultSet&lt;T&gt;
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Apache.html">Apache</a>.<a class="xref" href="Apache.Ignite.html">Ignite</a>.<a class="xref" href="Apache.Ignite.Sql.html">Sql</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Apache.Ignite.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Query result set.</p>
+<p></p>
+Implements <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1">IAsyncEnumerable&lt;T&gt;</a>: use <code>await foreach (var row in resultSet)</code> to consume,
+or call <a class="xref" href="Apache.Ignite.Sql.IResultSet-1.html#Apache_Ignite_Sql_IResultSet_1_ToListAsync">ToListAsync()</a> to get all rows as a list.
+<p></p>
+Can not be enumerated more than once. The implementation is lazy and retrieves data pages on demand
+(while iterating with <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1">IAsyncEnumerable&lt;T&gt;</a> or when <a class="xref" href="Apache.Ignite.Sql.IResultSet-1.html#Apache_Ignite_Sql_IResultSet_1_ToListAsync">ToListAsync()</a> is called).
+Page size is defined in <a class="xref" href="Apache.Ignite.Sql.SqlStatement.html#Apache_Ignite_Sql_SqlStatement_PageSize">PageSize</a>.
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IResultSet&lt;T&gt; : IAsyncEnumerable&lt;T&gt;, IAsyncDisposable, IDisposable</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>Row type.</p>
+</dd>
+  </dl>
+
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1.getasyncenumerator">IAsyncEnumerable&lt;T&gt;.GetAsyncEnumerator(CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iasyncdisposable.disposeasync">IAsyncDisposable.DisposeAsync()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable.dispose">IDisposable.Dispose()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_AffectedRows_" data-uid="Apache.Ignite.Sql.IResultSet`1.AffectedRows*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_AffectedRows" data-uid="Apache.Ignite.Sql.IResultSet`1.AffectedRows">
+  AffectedRows
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the number of rows affected by the DML statement execution (such as &quot;INSERT&quot;, &quot;UPDATE&quot;, etc.),
+or 0 if the statement returns nothing (such as &quot;ALTER TABLE&quot;, etc), or -1 if not applicable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">long AffectedRows { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_HasRowSet_" data-uid="Apache.Ignite.Sql.IResultSet`1.HasRowSet*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_HasRowSet" data-uid="Apache.Ignite.Sql.IResultSet`1.HasRowSet">
+  HasRowSet
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this result set contains a collection of rows.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool HasRowSet { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_Metadata_" data-uid="Apache.Ignite.Sql.IResultSet`1.Metadata*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_Metadata" data-uid="Apache.Ignite.Sql.IResultSet`1.Metadata">
+  Metadata
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L41"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets result set metadata when <a class="xref" href="Apache.Ignite.Sql.IResultSet-1.html#Apache_Ignite_Sql_IResultSet_1_HasRowSet">HasRowSet</a> is <code>true</code>, otherwise <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IResultSetMetadata? Metadata { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Apache.Ignite.Sql.IResultSetMetadata.html">IResultSetMetadata</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_WasApplied_" data-uid="Apache.Ignite.Sql.IResultSet`1.WasApplied*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_WasApplied" data-uid="Apache.Ignite.Sql.IResultSet`1.WasApplied">
+  WasApplied
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether a conditional query (such as &quot;CREATE TABLE IF NOT EXISTS&quot;) was applied successfully.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool WasApplied { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_CollectAsync_" data-uid="Apache.Ignite.Sql.IResultSet`1.CollectAsync*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_CollectAsync__1_System_Func_System_Int32___0__System_Action___0__0__" data-uid="Apache.Ignite.Sql.IResultSet`1.CollectAsync``1(System.Func{System.Int32,``0},System.Action{``0,`0})">
+  CollectAsync&lt;TResult&gt;(Func&lt;int, TResult&gt;, Action&lt;TResult, T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Collects all result set rows into a container of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ValueTask&lt;TResult&gt; CollectAsync&lt;TResult&gt;(Func&lt;int, TResult&gt; constructor, Action&lt;TResult, T&gt; accumulator)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>constructor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, TResult&gt;</dt>
+    <dd><p>Container constructor, accepts estimated capacity.
+Actual result set size may exceed specified capacity.</p>
+</dd>
+    <dt><code>accumulator</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-2">Action</a>&lt;TResult, T&gt;</dt>
+    <dd><p>Accumulator, adds rows to the container.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1">ValueTask</a>&lt;TResult&gt;</dt>
+    <dd><p>resulting container.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TResult</code></dt>
+    <dd><p>Resulting container type.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_ToDictionaryAsync_" data-uid="Apache.Ignite.Sql.IResultSet`1.ToDictionaryAsync*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_ToDictionaryAsync__2_System_Func__0___0__System_Func__0___1__System_Collections_Generic_IEqualityComparer___0__" data-uid="Apache.Ignite.Sql.IResultSet`1.ToDictionaryAsync``2(System.Func{`0,``0},System.Func{`0,``1},System.Collections.Generic.IEqualityComparer{``0})">
+  ToDictionaryAsync&lt;TK, TV&gt;(Func&lt;T, TK&gt;, Func&lt;T, TV&gt;, IEqualityComparer&lt;TK&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets all result set rows as dictionary.</p>
+<p></p>
+Can not be called multiple times - the underlying server-side result set is closed as soon
+as the last page of data is retrieved, and client-side buffer is also released to reduce memory usage.
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ValueTask&lt;Dictionary&lt;TK, TV&gt;&gt; ToDictionaryAsync&lt;TK, TV&gt;(Func&lt;T, TK&gt; keySelector, Func&lt;T, TV&gt; valSelector, IEqualityComparer&lt;TK&gt;? comparer = null) where TK : notnull</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>keySelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, TK&gt;</dt>
+    <dd><p>Key selector.</p>
+</dd>
+    <dt><code>valSelector</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, TV&gt;</dt>
+    <dd><p>Value selector.</p>
+</dd>
+    <dt><code>comparer</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1">IEqualityComparer</a>&lt;TK&gt;</dt>
+    <dd><p>Optional comparer.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1">ValueTask</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;TK, TV&gt;&gt;</dt>
+    <dd><p>All result set rows as list.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TK</code></dt>
+    <dd><p>Dictionary key type.</p>
+</dd>
+    <dt><code>TV</code></dt>
+    <dd><p>Dictionary value type.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="Apache_Ignite_Sql_IResultSet_1_ToListAsync_" data-uid="Apache.Ignite.Sql.IResultSet`1.ToListAsync*"></a>
+
+  <h3 id="Apache_Ignite_Sql_IResultSet_1_ToListAsync" data-uid="Apache.Ignite.Sql.IResultSet`1.ToListAsync">
+  ToListAsync()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/apache/ignite-3/blob/ignite-19328/modules/platforms/dotnet/Apache.Ignite/Sql/IResultSet.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets all result set rows as list.</p>
+<p></p>
+Can not be called multiple times - the underlying server-side result set is closed as soon
+as the last page of data is retrieved, and client-side buffer is also released to reduce memory usage.
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ValueTask&lt;List&lt;T&gt;&gt; ToListAsync()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1">ValueTask</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;T&gt;&gt;</dt>
+    <dd><p>All result set rows as list.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/apache/ignite-3/new/main/apiSpec/new?filename=Apache_Ignite_Sql_IResultSet_1.md&amp;value=---%0Auid%3A%20Apache.Ignite.Sql.IResultSet%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="edit-link">Edit this page</a>
+        </div>
+
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright 2022 The Apache Software Foundation
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
