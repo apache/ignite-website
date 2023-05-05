@@ -96,7 +96,18 @@ const build_blog = () => {
             }
             next(null, file);
         }))
-        .pipe(pug())
+        .pipe(pug({
+            pretty: false,
+        }))
+        .pipe(replace('"../img', '"/img'))
+        .pipe(prettier({
+            singleQuote: true,
+            parser:"html",
+            tabWidth: 2,
+            useTabs: false,
+            htmlWhitespaceSensitivity:"css",
+            printWidth:240,
+        }))
         .pipe(rename(function(path) {
             // configure blog folders' structure
             path.dirname = path.dirname.replace('tags/', '');
