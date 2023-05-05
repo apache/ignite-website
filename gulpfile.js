@@ -96,7 +96,20 @@ const build_blog = () => {
             }
             next(null, file);
         }))
-        .pipe(pug())
+        .pipe(pug({
+            pretty: false,
+        }))
+        .pipe(prettier({
+            singleQuote: true,
+            parser:"html",
+            tabWidth: 2,
+            useTabs: false,
+            htmlWhitespaceSensitivity:"css",
+            printWidth:240,
+        }))
+        .on('data', function(file){
+            console.log('▒ PUG→HTML: ' + file.path.replace(file.cwd, '') );
+        })
         .pipe(rename(function(path) {
             // configure blog folders' structure
             path.dirname = path.dirname.replace('tags/', '');
@@ -131,7 +144,9 @@ const html = () => {
             console.log('▒ PUG→HTML: ' + file.path.replace(file.cwd, '') );
         })
         .pipe(gulp.dest('./')).on('end', (e) => {
-            build_blog()
+            if(!pugPath || pugPath.includes("_blog") || pugPath.includes("_components")){
+                build_blog()
+            }
         });
 }
 
@@ -146,7 +161,7 @@ export const watchpug = () => {
     });
     gulp.watch(['_src/**/*.pug', '_src/**/*.html'], {}).on('change', function(pathPug, stats){
         pugPath = null;
-        console.log("Изм.: " + pathPug);
+        console.log("Modified file: " + pathPug);
         if(!pathPug.includes("_components")){
             let pathArray = pathPug.split("\\");
             let filename = pathArray[pathArray.length - 1];
