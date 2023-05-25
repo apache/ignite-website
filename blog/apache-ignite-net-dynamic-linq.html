@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite 2.11.1: Emergency Log4j2 Update</title>
+    <title>Dynamic LINQ performance and usability with Ignite.NET and System.Linq.Dynamic</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
@@ -410,10 +410,10 @@
     <div class="container blog">
       <section class="blog__header post_page__header">
         <a href="/blog/">← Apache Ignite Blog</a>
-        <h1>Apache Ignite 2.11.1: Emergency Log4j2 Update</h1>
+        <h1>Dynamic LINQ performance and usability with Ignite.NET and System.Linq.Dynamic</h1>
         <p>
-          December 21, 2021 by <strong>Maxim Muzafarov: </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
-          ><a href="http://twitter.com/home?status=Apache Ignite 2.11.1: Emergency Log4j2 Update%20https://ignite.apache.org/blog/undefined">Twitter</a>
+          May 22, 2023 by <strong>Pavel Tupitsyn: </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Dynamic LINQ performance and usability with Ignite.NET and System.Linq.Dynamic%20https://ignite.apache.org/blog/undefined">Twitter</a>
         </p>
       </section>
       <div class="blog__content">
@@ -421,51 +421,19 @@
           <section class="blog__posts">
             <article class="post">
               <div>
-                <p>
-                  The new <a href="https://ignite.apache.org/">Apache Ignite</a> 2.11.1 is an emergency release that fixes <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228">CVE-2021-44228</a>,
-                  <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45046">CVE-2021-45046</a>,<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45105">CVE-2021-45105</a> related to the ignite-log4j2 module
-                  usage.
-                </p>
-                <h3 id="apache-ignite-with-log4j-vulnerability">Apache Ignite with Log4j Vulnerability</h3>
-                <p>All the following conditions must be met:</p>
-                <ul>
-                  <li>The Apache Ignite version lower than 2.11.0 is used (since these vulnerabilities are already fixed in 2.11.1, 2.12, and upper versions);</li>
-                  <li>The <code>ignite-logj42</code> is used by Apache Ignite and located in the <code>libs</code> directory (by default it is located in the <code>libs/optional</code>directory, so these deployments are not affected);</li>
-                  <li>
-                    The Java version in use is older than the following versions: <code>8u191</code>, <code>11.0.1</code>. This is due to the fact that later versions set the JVM property
-                    <code>com.sun.jndi.ldap.object.trustURLCodebase</code> to <code>false</code> by default, which disables JNDI loading of classes from arbitrary URL code bases.
-                  </li>
-                </ul>
-                <p>NOTE: Relying only on the Java version as a protection against these vulnerabilities is very risky and has not been tested.</p>
-                <!-- end -->
-                <h3 id="risk-mitigation-without-upgrading">Risk Mitigation Without Upgrading</h3>
-                <p>Please note that all of these cases require a cluster downtime, but we still recommend to upgrade the Apache Ignite.</p>
-                <h4 id="method-1-removing-the-vulnerable-classes">Method 1: Removing the Vulnerable Classes</h4>
-                <p>When using an older Apache Ignite version, it is possible to remove the JndiLookup class from any Java application by executing this command:</p>
-                <code>find $IGNITE_HOME/ -type f -name "*log4j-core-*.jar" -exec zip -q -d "{}" org/apache/logging/log4j/core/lookup/JndiLookup.class \;</code>
-                <p>This will recursively find all log4j-core JAR files, starting from the <code>IGNITE_HOME</code> directory, and remove the vulnerable JndiLookup class from them.</p>
-                <h4 id="method-2-disabling-message-lookups">Method 2: Disabling Message Lookups</h4>
-                <p>
-                  This method can be used as an additional protection layer in case you suspect not all log4j dependencies have been properly updated. If you are using the Apache Ignite of an older version, we recommend to disable message
-                  lookups globally by setting the environment variable <code>LOG4J_FORMAT_MSG_NO_LOOKUPS</code> to <code>true</code> or, alternatively, run the Apache Ignite with the
-                  <code>&dash;Dlog4j2.formatMsgNoLookups=true</code> command-line option.
-                </p>
-                <h4 id="method-3-replace-log4j2-dependency-manually">Method 3: Replace log4j2 Dependency Manually</h4>
-                <p>
-                  It is still possible to manually replace the Log4j of 2.x version in the Apache Ignite binary distribution to the 2.17.0 Log4j version if your log configuration does not imply to use the RoutingAppender. In case the
-                  RoutingAppender is used it may produce some error messages in a log file at the startup or empty lines during the execution, which are considered as a minor flow, however, we do not recommend this mitigation method in this
-                  case.
-                </p>
+                <p>Dynamically building database queries can be necessary for some use cases, such as UI-defined filtering. This can get challenging with LINQ frameworks like EF Core and Ignite.NET.</p>
+                <p><a href="https://ptupitsyn.github.io/Dynamic-LINQ-With-Ignite/">Read More...</a></p>
               </div>
             </article>
             <section class="blog__footer">
               <ul class="pagination post_page">
                 <li><a href="/blog/database">database</a></li>
                 <li><a href="/blog/ignite">ignite</a></li>
-                <li><a href="/blog/in-memory">in-memory</a></li>
-                <li><a href="/blog/log4j2">log4j2</a></li>
-                <li><a href="/blog/open-source">open-source</a></li>
-                <li><a href="/blog/release">release</a></li>
+                <li><a href="/blog/linq">linq</a></li>
+                <li><a href="/blog/.NET">.NET</a></li>
+                <li><a href="/blog/SQL">SQL</a></li>
+                <li><a href="/blog/performance">performance</a></li>
+                <li><a href="/blog/csharp">csharp</a></li>
               </ul>
             </section>
           </section>
