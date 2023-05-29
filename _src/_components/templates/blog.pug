@@ -1,10 +1,15 @@
 extend ./../../../_src/_components/base.pug
 
 block pagetitle
-    title Blogging in Action
+    if tag == 'blog'
+        title Apache Ignite Blog
+        meta(property="og:title", content="Apache Ignite Blog")
+    else 
+        title= `Entries tagged [${tag}]`
+        meta(property="og:title", content=`Entries tagged [${tag}]`)
     link(rel="canonical", href="https://ignite.apache.org/blog")
 
-    meta(property="og:title", content="Blogging in Action")
+   
     meta(property="og:type", content="article")
     meta(property="og:url", content="https://ignite.apache.org/blog")
     meta(property="og:image", content="/img/og-pic.png")
@@ -35,7 +40,7 @@ block main
                             .post__header
                                 h2 
                                     a(href=`/blog/${post.basename}`)= post.data.title
-                                div= `${post.data.format_date} by ${post.data.author}: `
+                                div= `${post.data.format_date} by ${post.data.author}. Share in `
                                     a(href=`http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/${post.basename}`) Facebook
                                     span , 
                                     a(href=`http://twitter.com/home?status=${post.data.title}%20https://ignite.apache.org/blog/${post.basename}`) Twitter
