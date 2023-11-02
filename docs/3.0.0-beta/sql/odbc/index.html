@@ -47,12 +47,14 @@
 #header #promotion-bar p a { color: #FCB903; } </style>
 
     
+    <META NAME="ROBOTS" CONTENT="NOINDEX">
+    
 
     
     <meta name="ignite-version" content="3.0.0-beta" />
-    <title>Data Definition Language (DDL) | Ignite Documentation</title>
+    <title>ODBC Driver | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/3.0.0-beta/sql-reference/ddl" />
+    <link rel="canonical" href="/docs/3.0.0-beta/sql/odbc/index" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -331,8 +333,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -343,7 +345,7 @@
                     <li> 
                         
                             <a href="/docs/3.0.0-beta/sql-reference/ddl"
-                                class='active'
+                                class=''
                             >Data Definition Language (DDL)</a>
                         
                     </li>
@@ -603,694 +605,44 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/sql-reference/ddl.adoc" target="_blank">Edit</a>
         
-            <h1>Data Definition Language (DDL)</h1>
+            <h1>ODBC Driver</h1>
         
-        <div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>This section walks you through all data definition language (DDL) commands supported by Apache Ignite 3.0.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="create-table">CREATE TABLE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Creates a new table.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-NonTerminal('CREATE'),
-NonTerminal('TABLE'),
-Optional('IF NOT EXISTS'),
-NonTerminal('table_name'),
-NonTerminal('('),
-Choice(1,
-NonTerminal('constraint'),
-NonTerminal('column_definition'),
-NonTerminal(',')),
-NonTerminal(')'),
-End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Start({type:'complex'}),
-Optional(
-Sequence(
-NonTerminal('COLOCATE'),
-Optional('BY'),
-NonTerminal('column_list')
-)
-),
-Optional(
-Sequence(
-NonTerminal('ENGINE'),
-NonTerminal('engine_name')
-)
-),
-Optional(
-Sequence(
-NonTerminal('WITH'),
-OneOrMore('param_name')
-)
-)
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>table_name</code> - name of the table. Can be schema-qualified.</p>
-</li>
-<li>
-<p><code>table_column</code> - name and type of a column to be created in the new table.</p>
-</li>
-<li>
-<p><code>IF NOT EXISTS</code> - create the table only if a table with the same name does not exist.</p>
-</li>
-<li>
-<p><code>ENGINE</code> - selects the storage engine to use. Currently <code>aipersist</code>, <code>aimem</code> and <code>rocksdb</code> are available.</p>
-</li>
-<li>
-<p><code>COLOCATED BY</code> - colocation key. The key can be composite. Primary key must include colocation key. Was <code>affinity_key</code> in Ignite 2.x.</p>
-</li>
-<li>
-<p><code>WITH</code> - accepts the following additional parameters:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>Replicas</code> - sets the number of partition copies, including the master copy.</p>
-</li>
-<li>
-<p><code>Partitions</code> - sets the number of table partitions.</p>
-</li>
-<li>
-<p><code>PRIMARY_ZONE</code> - sets the <a href="/docs/3.0.0-beta/distribution-zones">Distriburion Zone</a>.</p>
-</li>
-<li>
-<p>Other parameters, depending on the database engine.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Creates a Person table:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="p">(</span>
-  <span class="n">id</span> <span class="nb">int</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
-  <span class="n">city_id</span> <span class="nb">int</span><span class="p">,</span>
-  <span class="n">name</span> <span class="nb">varchar</span><span class="p">,</span>
-  <span class="n">age</span> <span class="nb">int</span><span class="p">,</span>
-  <span class="n">company</span> <span class="nb">varchar</span><span class="p">,</span>
-<span class="p">)</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="alter-table">ALTER TABLE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Modifies the structure of an existing table.</p>
-</div>
-<div class="sect3">
-<h4 id="alter-table-if-exists-table-add-column-column1-int-column2-int">ALTER TABLE IF EXISTS table ADD COLUMN (column1 int, column2 int)</h4>
-<div class="paragraph diagram-container">
-<p>Diagram(
-  NonTerminal('ALTER TABLE'),
-  Optional('IF EXISTS'),
-  NonTerminal('qualified_table_name'),
-  NonTerminal('ADD'),
-  Optional('COLUMN'),
-End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-  Start({type:'complex'}),
-  NonTerminal('column_definition_or_list')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table.</p>
-</li>
-<li>
-<p><code>ADD</code> - adds a new column or several columns to a previously created table. Once a column is added, it can be accessed using <a href="/docs/3.0.0-beta/sql-reference/dml" target="_blank" rel="noopener">DML commands</a> and indexed with the CREATE INDEX statement.</p>
-</li>
-<li>
-<p><code>COLUMN</code> - name of the defined column.</p>
-</li>
-<li>
-<p><code>column_definition_or_list</code> - definition of the column to add to the table.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="alter-table-if-exists-table-drop-column-column1-column2-int">ALTER TABLE IF EXISTS table DROP COLUMN (column1, column2 int)</h4>
-<div class="paragraph diagram-container">
-<p>Diagram(
-NonTerminal('ALTER TABLE'),
-Optional('IF EXISTS'),
-NonTerminal('qualified_table_name'),
-NonTerminal('DROP'),
-Optional('COLUMN'),
-End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Start({type:'complex'}),
-NonTerminal('column_list')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - if applied to <code>TABLE</code>, do not throw an error if a table with the specified table name does not exist. If applied to <code>COLUMN</code>, do not throw an error if a column with the specified name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table.</p>
-</li>
-<li>
-<p><code>DROP</code> - removes an existing column or multiple columns from a table. Once a column is removed, it cannot be accessed within queries. Consider the following notes and limitations:</p>
-</li>
-<li>
-<p><code>column_list</code> - the name of the list of columns to be removed.</p>
-</li>
-<li>
-<p>If the column was indexed, the index has to be dropped manually in advance by using the 'DROP INDEX' command.</p>
-</li>
-<li>
-<p>It is not possible to remove a column if it represents the whole value stored in the cluster. The limitation is relevant for primitive values.
-Ignite stores data in the form of key-value pairs and all the new columns will belong to the value. It&#8217;s not possible to change a set of columns of the key (<code>PRIMARY KEY</code>).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Schema changes applied by this command are persisted on disk. Thus, the changes can survive full cluster restarts.</p>
-</div>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Add a column to the table:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Person</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">city</span> <span class="nb">varchar</span><span class="p">;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Add a column​ only if the table exists:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">Missing</span> <span class="k">ADD</span> <span class="n">number</span> <span class="nb">bigint</span><span class="p">;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Add several columns to the table at once:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Region</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="p">(</span><span class="n">code</span> <span class="nb">varchar</span><span class="p">,</span> <span class="n">gdp</span> <span class="nb">double</span><span class="p">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Drop a column from the table:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Person</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="n">city</span><span class="p">;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Drop a column only if the table exists:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="n">number</span><span class="p">;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Drop several columns from the table at once:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">Person</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">gdp</span><span class="p">);</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="drop-table">DROP TABLE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The <code>DROP TABLE</code> command drops an existing table.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-NonTerminal('DROP TABLE'),
-Optional('IF EXISTS'),
-NonTerminal('qualified_table_name')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - do not throw an error if a table with the same name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table. Can be schema-qualified.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Schema changes applied by this command are persisted on disk. Thus, the changes can survive full cluster restarts.</p>
-</div>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Drop Person table if the one exists:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="nv">"Person"</span><span class="p">;</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="describe-table">DESCRIBE TABLE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Returns information about the distribution zones of the table.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-NonTerminal('DESCRIBE TABLE'),
-Optional('IF NOT EXISTS'),
-NonTerminal('qualified_table_name'),
-End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>IF EXISTS</code> - do not throw an error if a table with the same name does not exist.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - the name of the table. Can be schema-qualified.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="create-index">CREATE INDEX</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Creates a new index.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The index cannot include the same column more than once.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-  NonTerminal('CREATE INDEX'),
-  Optional('IF NOT EXISTS'),
-  NonTerminal('name'),
-  NonTerminal('ON'),
-  NonTerminal('qualified_table_name'),
-  End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-  Start({type:'complex'}),
-  Optional(
-   Sequence(
-    NonTerminal('USING'),
-    Choice (0,'HASH','TREE')
-   )
-  ),
-  Optional('column_definition')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>name</code> - name of the index.</p>
-</li>
-<li>
-<p><code>qualified_table_name</code> - name of the table to create the index on. Can be schema-qualified.</p>
-</li>
-<li>
-<p><code>IF NOT EXISTS</code> - create the index only if an index with the same name does not exist.</p>
-</li>
-<li>
-<p><code>USING</code> - specifies whether the command creates a sorted index or a hash index. Possible values: <code>HASH</code>, <code>TREE</code>. Default is <code>TREE</code>.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Create index Persons for Person table:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Persons</span> <span class="k">ON</span> <span class="n">Person</span> <span class="p">(</span><span class="n">column1</span><span class="p">)</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="drop-index">DROP INDEX</h2>
-<div class="sectionbody">
-<div class="paragraph diagram-container">
-<p>Diagram(
-NonTerminal('DROP INDEX'),
-Optional('IF EXISTS'),
-NonTerminal('index_name')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>index_name</code> - the name of the index.</p>
-</li>
-<li>
-<p><code>IF EXISTS</code> - do not throw an error if an index with the specified name does not exist.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Examples:</p>
-</div>
-<div class="paragraph">
-<p>Drop index if the one exists:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">DROP</span> <span class="k">INDEX</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">Persons</span><span class="p">;</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="grammar-reference">Grammar Reference</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="column_definition_or_list">column_definition_or_list</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Group(Sequence(
-Optional('('),
-Choice(0,Sequence(
-NonTerminal('column_name'),
-NonTerminal('data_type')),
-NonTerminal(',')
-),
-Optional(')')
-), 'column_definition_or_list')
-)</p>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#alter-table">ALTER TABLE</a></p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-<div class="sect2">
-<h3 id="column_list">column_list</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(Group(Sequence(
-Optional('('),
-OneOrMore('column_name', ','),
-Optional(')')))
-)</p>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#alter-table">ALTER TABLE</a></p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-<div class="sect2">
-<h3 id="constraint">constraint</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(Group(Sequence(
-Optional(Sequence(NonTerminal('Constraint'),NonTerminal('constraint_name')
-)),
-NonTerminal('PRIMARY KEY'),
-NonTerminal('('),
-OneOrMore('column_name', ','),
-NonTerminal(')')
-),'constraint')
-)</p>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#create-table">CREATE TABLE</a></p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-<div class="sect2">
-<h3 id="qualified_table_name">qualified_table_name</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(Group(Sequence(
-Optional(Sequence(NonTerminal('schema'),NonTerminal('.')
-),),
-NonTerminal('table_name')
-),'qualified_table_name')
-)</p>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#сreate-table">CREATE TABLE</a></p>
-</li>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#alter-table">ALTER TABLE</a></p>
-</li>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#drop-table">DROP TABLE</a></p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-<div class="sect2">
-<h3 id="column_definition">column_definition</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Group(Sequence(
-NonTerminal('column_name'),
-NonTerminal('DATA TYPE'),
-Optional(Sequence(Optional('NOT'),NonTerminal('NULL')))
-), 'column_definition'),
-End({type:'complex'})
-)</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Start({type:'complex'}),
-Group(Sequence(
-Optional(Sequence(NonTerminal('DEFAULT'), NonTerminal('literal_value'))),
-NonTerminal('PRIMARY KEY')
-), 'column_definition')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>ASC</code> or <code>DESC</code> - specifies that the column should be sorted in an ascending or descending order respectively.</p>
-</li>
-<li>
-<p><code>NULLS</code> - specifies whether null values will be at the start or at the end of the index. Possible values: <code>FIRST</code>, <code>LAST</code>.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#сreate-index">CREATE INDEX</a></p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-<div class="sect2">
-<h3 id="tablecolumn">tableColumn</h3>
-<div class="paragraph diagram-container">
-<p>Diagram(Group(Sequence(
-NonTerminal('columnName'),
-NonTerminal('columnType'),
-Optional(Sequence(Optional('NOT'),NonTerminal('NULL')
-),),
-Optional('DEFAULT')
-),'tableColumn')
-)</p>
-</div>
-<div class="paragraph">
-<p>Parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>[NOT] NULL</code> - specifies that values in the column always contain null or not null values.</p>
-</li>
-<li>
-<p><code>DEFAULT</code> - specifies a default value for the column. You can specify a constant value, or use a <a href="/docs/3.0.0-beta/sql-reference/ddl#system-functions">system function</a> to generate a value.</p>
-</li>
-</ul>
-</div>
-<hr>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="system-functions">System Functions</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="gen_random_uuid">gen_random_uuid</h3>
-<div class="paragraph">
-<p>This function generates a random UUID value each time it is called.</p>
-</div>
-<div class="paragraph">
-<p>Example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="p">(</span><span class="n">id</span> <span class="nb">varchar</span> <span class="k">default</span> <span class="n">gen_random_uuid</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span> <span class="n">val</span> <span class="nb">int</span><span class="p">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Referenced by:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="/docs/3.0.0-beta/sql-reference/ddl#create-table">CREATE TABLE</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-        <div class="copyright">
- © 2023 The Apache Software Foundation.<br/>
-Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
+        
+		<div class="toc">
+
+
+
+
+
+
+
+
+     
+
+
+     
+
+
+    
+       
+       
+
+       
+
+
+
+
+
+   
+    
 
 </div>
 
     </article>
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
-    <ul class="sectlevel1">
-<li><a href="#create-table">CREATE TABLE</a></li>
-<li><a href="#alter-table">ALTER TABLE</a>
-<ul class="sectlevel3">
-<li><a href="#alter-table-if-exists-table-add-column-column1-int-column2-int">ALTER TABLE IF EXISTS table ADD COLUMN (column1 int, column2 int)</a></li>
-<li><a href="#alter-table-if-exists-table-drop-column-column1-column2-int">ALTER TABLE IF EXISTS table DROP COLUMN (column1, column2 int)</a></li>
-</ul>
-</li>
-<li><a href="#drop-table">DROP TABLE</a></li>
-<li><a href="#describe-table">DESCRIBE TABLE</a></li>
-<li><a href="#create-index">CREATE INDEX</a></li>
-<li><a href="#drop-index">DROP INDEX</a></li>
-<li><a href="#grammar-reference">Grammar Reference</a>
-<ul class="sectlevel2">
-<li><a href="#column_definition_or_list">column_definition_or_list</a></li>
-<li><a href="#column_list">column_list</a></li>
-<li><a href="#constraint">constraint</a></li>
-<li><a href="#qualified_table_name">qualified_table_name</a></li>
-<li><a href="#column_definition">column_definition</a></li>
-<li><a href="#tablecolumn">tableColumn</a></li>
-</ul>
-</li>
-<li><a href="#system-functions">System Functions</a>
-<ul class="sectlevel2">
-<li><a href="#gen_random_uuid">gen_random_uuid</a></li>
-</ul>
-</li>
-</ul>
+    
     </div>
           
       
