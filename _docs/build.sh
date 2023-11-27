@@ -70,6 +70,13 @@ if [ "$latest" = "yes" ]; then
 else 
   sed  "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g"  _config.template  > _config.yml
 fi
+
+# replace docs repo URL in case Ignite 3 docs build in progress
+# used for 'Edit' button on every page
+if [[ "${target}" == "ignite3" ]] ; then
+  sed -i "s#ignite/tree/IGNITE-7595#ignite-3/tree/main#g" _config.yml
+fi
+
 # build/serve
 bundle install
 bundle exec jekyll $action  

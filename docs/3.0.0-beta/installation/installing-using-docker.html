@@ -278,6 +278,40 @@
 
                     <li> 
                         
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>ODBC Driver<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/odbc-driver" class=''>ODBC Driver</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/connection-string" class=''>Connection String</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/querying-modifying-data" class=''>Querying and Modifying Data</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/3.0.0-beta/sql/java"
                                 class=''
                             >Java API</a>
@@ -334,6 +368,19 @@
 
                     <li> 
                         
+                            <a href="/docs/3.0.0-beta/sql-reference/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/3.0.0-beta/sql-reference/operators-and-functions"
                                 class=''
                             >Supported Operators and Functions</a>
@@ -348,15 +395,87 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>REST<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/3.0.0-beta/rest/rest-api" class='' >REST API</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/rest/rest-api"
+                                class=''
+                            >Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/rest/reference"
+                                class=''
+                            >Reference</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Clients & Drivers<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/3.0.0-beta/thin-clients/index" class='' >Thin Clients</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/thin-clients/index"
+                                class=''
+                            >Ignite Clients</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/thin-clients/linq"
+                                class=''
+                            >.NET LINQ Queries</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -440,6 +559,13 @@
         <li>
             
                 
+                <a href="/docs/3.0.0-beta/ssl-tls" class='' >SSL/TLS</a>
+            
+        </li>
+    
+        <li>
+            
+                
                 <a href="/docs/3.0.0-beta/rebalance" class='' >Data Rebalancing</a>
             
         </li>
@@ -477,7 +603,7 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/installation/installing-using-docker.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/installation/installing-using-docker.adoc" target="_blank">Edit</a>
         
             <h1>Installing Using Docker</h1>
         
@@ -547,7 +673,23 @@
 <p>This command will launch a single Ignite node.</p>
 </div>
 <div class="paragraph">
-<p>To run multiple nodes, instead use a docker-compose file:</p>
+<p>To run multiple nodes, instead use a docker-compose file with cluster config file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="err">network:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="err">port:</span><span class="w"> </span><span class="mi">3344</span><span class="p">,</span><span class="w">
+    </span><span class="err">nodeFinder:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">netClusterNodes:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"node1:3344"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"node2:3344"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"node3:3344"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -558,23 +700,25 @@ name: ignite3
 x-ignite-def:
   &amp;ignite-def
   image: apacheignite/ignite3:${IGNITE3_VERSION:-latest}
+  volumes:
+    - ./cluster.conf:/opt/ignite/etc/ignite-config.conf
 
 services:
   node1:
     &lt;&lt; : *ignite-def
-    command: --join node1:3344,node2:3344,node3:3344 --node-name node1
+    command: --node-name node1
     ports:
       - 10300:10300
       - 3344:3344
   node2:
     &lt;&lt; : *ignite-def
-    command: --join node1:3344,node2:3344,node3:3344 --node-name node2
+    command: --node-name node2
     ports:
       - 10301:10300
       - 3345:3344
   node3:
     &lt;&lt; : *ignite-def
-    command: --join node1:3344,node2:3344,node3:3344 --node-name node3
+    command: --node-name node3
     ports:
       - 10302:10300
       - 3346:3344</pre>
@@ -634,12 +778,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1670849503' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1670849503' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1670849503' async></script>
+<script type='module' src='/assets/js/index.js?1698926997' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1698926997' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1698926997' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1670849503" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1670849503"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1698926997" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1698926997"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

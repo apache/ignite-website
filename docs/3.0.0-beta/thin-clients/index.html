@@ -50,7 +50,7 @@
 
     
     <meta name="ignite-version" content="3.0.0-beta" />
-    <title>Client Configurations | Ignite Documentation</title>
+    <title>Ignite Clients | Ignite Documentation</title>
     
     <link rel="canonical" href="/docs/3.0.0-beta/thin-clients/index" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
@@ -278,6 +278,40 @@
 
                     <li> 
                         
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>ODBC Driver<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/odbc-driver" class=''>ODBC Driver</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/connection-string" class=''>Connection String</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/3.0.0-beta/sql/odbc/querying-modifying-data" class=''>Querying and Modifying Data</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/3.0.0-beta/sql/java"
                                 class=''
                             >Java API</a>
@@ -334,6 +368,19 @@
 
                     <li> 
                         
+                            <a href="/docs/3.0.0-beta/sql-reference/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
                             <a href="/docs/3.0.0-beta/sql-reference/operators-and-functions"
                                 class=''
                             >Supported Operators and Functions</a>
@@ -348,15 +395,87 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>REST<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/3.0.0-beta/rest/rest-api" class='' >REST API</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/rest/rest-api"
+                                class=''
+                            >Overview</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/rest/reference"
+                                class=''
+                            >Reference</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle expanded '>Clients & Drivers<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
+            
                 
-                <a href="/docs/3.0.0-beta/thin-clients/index" class='active' >Thin Clients</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/thin-clients/index"
+                                class='active'
+                            >Ignite Clients</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/3.0.0-beta/thin-clients/linq"
+                                class=''
+                            >.NET LINQ Queries</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -440,6 +559,13 @@
         <li>
             
                 
+                <a href="/docs/3.0.0-beta/ssl-tls" class='' >SSL/TLS</a>
+            
+        </li>
+    
+        <li>
+            
+                
                 <a href="/docs/3.0.0-beta/rebalance" class='' >Data Rebalancing</a>
             
         </li>
@@ -477,22 +603,57 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/thin-clients/index.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/thin-clients/index.adoc" target="_blank">Edit</a>
         
-            <h1>Client Configurations</h1>
+            <h1>Ignite Clients</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Apache Ignite 3 clients are lightweight clients that connect to the cluster via a standard socket connection. It does not become a part of the cluster topology, never holds any data, and is not used as a destination for compute calculations.</p>
+<p>Apache Ignite 3 clients connect to the cluster via a standard socket connection. Unlike Ignite 2.x, there is no separate Thin and Thick clients in Apache Ignite 3. All clients are 'thin'.</p>
+</div>
+<div class="paragraph">
+<p>Clients do not become a part of the cluster topology, never hold any data, and are not used as a destination for compute calculations.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="installation">Installation</h2>
+<h2 id="getting-started">Getting Started</h2>
 <div class="sectionbody">
 <div class="sect2">
+<h3 id="java-client">Java Client</h3>
+<div class="sect3">
+<h4 id="prerequisites">Prerequisites</h4>
+<div class="paragraph">
+<p>To use Java thin client, Java 11 or newer is required.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="installation">Installation</h4>
+<div class="paragraph">
+<p>Java client can be added to your project by using maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>ignite-client<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0.0-beta1<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="c-client">C# Client</h3>
+<div class="sect3">
+<h4 id="prerequisites-2">Prerequisites</h4>
+<div class="paragraph">
+<p>To use C# thin client, .NET 6.0 or newer is required.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="installation-2">Installation</h4>
 <div class="paragraph">
 <p>C# client is available via NuGet. To add it, use the <code>add package</code> command:</p>
 </div>
@@ -502,8 +663,33 @@
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="c-client-2">C++ Client</h3>
+<div class="sect3">
+<h4 id="prerequisites-3">Prerequisites</h4>
+<div class="paragraph">
+<p>To run C++ client, you need a C++ build environment to run the <code>cmake</code> command:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>C++ compiler supporting C++ 17;</p>
+</li>
+<li>
+<p>CMake 3.10+;</p>
+</li>
+<li>
+<p>One of build systems: make, ninja, MS Visual Studio, or other;</p>
+</li>
+<li>
+<p>Conan C/C++ package manager 1.X (optional).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="installation-3">Installation</h4>
 <div class="paragraph">
 <p>The source code of the C++ client comes with the Apache Ignite 3 distribution. To build it, use the following commands:</p>
 </div>
@@ -512,7 +698,7 @@
 <pre class="rouge highlight"><code data-lang="bat"><span class="nb">mkdir</span> <span class="kd">cmake</span><span class="na">-build-release
 </span><span class="nb">cd</span> <span class="kd">cmake</span><span class="na">-build-release
 </span><span class="kd">conan</span> <span class="kd">install</span> .. <span class="na">--build</span><span class="o">=</span><span class="kd">missing</span> <span class="na">-s </span><span class="kd">build_type</span><span class="o">=</span><span class="kd">Release</span>
-<span class="kd">cmake</span> .. <span class="na">-DENABLE</span>_TESTS<span class="o">=</span><span class="kd">OFF</span>
+<span class="kd">cmake</span> ..
 <span class="kd">cmake</span> <span class="na">--build </span>. <span class="na">-j</span><span class="m">8</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Linux'><div class="listingblock">
@@ -520,7 +706,7 @@
 <pre class="rouge highlight"><code data-lang="bash"><span class="nb">mkdir </span>cmake-build-release
 <span class="nb">cd </span>cmake-build-release
 conan <span class="nb">install</span> .. <span class="nt">--build</span><span class="o">=</span>missing <span class="nt">-s</span> <span class="nv">build_type</span><span class="o">=</span>Release <span class="nt">-s</span> compiler.libcxx<span class="o">=</span>libstdc++11
-cmake .. <span class="nt">-DENABLE_TESTS</span><span class="o">=</span>ON <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release
+cmake .. <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release
 cmake <span class="nt">--build</span> <span class="nb">.</span> <span class="nt">-j8</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='MacOS'><div class="listingblock">
@@ -528,45 +714,10 @@ cmake <span class="nt">--build</span> <span class="nb">.</span> <span class="nt"
 <pre class="rouge highlight"><code data-lang="bash"><span class="nb">mkdir </span>cmake-build-release
 <span class="nb">cd </span>cmake-build-release
 conan <span class="nb">install</span> .. <span class="nt">--build</span><span class="o">=</span>missing <span class="nt">-s</span> <span class="nv">build_type</span><span class="o">=</span>Release <span class="nt">-s</span> compiler.libcxx<span class="o">=</span>libc++
-cmake .. <span class="nt">-DENABLE_TESTS</span><span class="o">=</span>ON <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release
+cmake .. <span class="nt">-DCMAKE_BUILD_TYPE</span><span class="o">=</span>Release
 cmake <span class="nt">--build</span> <span class="nb">.</span> <span class="nt">-j8</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="partition-awareness">Partition Awareness</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In Apache Ignite 3, partition awareness is enabled automatically for all clients.</p>
-</div>
-<div class="paragraph">
-<p>Data in the cluster is distributed between the nodes in a balanced manner for scalability and performance reasons. Each cluster node maintains a subset of the data, and the partition distribution map, which is used to determine the node that keeps the primary/backup copy of requested entries.</p>
-</div>
-<div class="paragraph">
-<p>Partition awareness allows the client to send query requests directly to the node that owns the queried data.</p>
-</div>
-<div class="paragraph">
-<p>Without partition awareness, an application that is connected to the cluster via a client would execute all queries and operations via a single server node that acts as a proxy for the incoming requests.
-These operations would then be re-routed to the node that stores the data that is being requested.
-This would result in a bottleneck that could prevent the application from scaling linearly.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/docs/3.0.0-beta/images/partitionawareness01.png" alt="Without Partition Awareness">
-</div>
-</div>
-<div class="paragraph">
-<p>Notice how queries must pass through the proxy server node, where they are routed to the correct node.</p>
-</div>
-<div class="paragraph">
-<p>With partition awareness in place, the client can directly route queries and operations to the primary nodes that own the data required for the queries.
-This eliminates the bottleneck, allowing the application to scale more easily.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="/docs/3.0.0-beta/images/partitionawareness02.png" alt="With Partition Awareness">
 </div>
 </div>
 </div>
@@ -605,15 +756,228 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 </div>
 <div class="sect1">
+<h2 id="user-object-serialization">User Object Serialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Apache Ignite 3 supports mapping user objects to table tuples. This ensures that objects created in any programming language can be used for key-value operations directly.</p>
+</div>
+<div class="sect2">
+<h3 id="limitations">Limitations</h3>
+<div class="paragraph">
+<p>There are limitations to user types that can be used for such a mapping. Some limitations are common, and others are platform-specific due to the programming language used.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Only flat field structure is supported, meaning no nesting user objects. This is because Ignite tables, and therefore tuples have flat structure themselves;</p>
+</li>
+<li>
+<p>Fields should be mapped to Ignite types;</p>
+</li>
+<li>
+<p>All fields in user type should either be mapped to Table column or explicitly excluded;</p>
+</li>
+<li>
+<p>All columns from Table should be mapped to some field in the user type;</p>
+</li>
+<li>
+<p><strong>Java only</strong>: Users should implement Mapper classes for user types for more flexibility;</p>
+</li>
+<li>
+<p><strong>.NET only</strong>: Any type (class, struct, record) is supported as long as all fields can be mapped to Ignite types;</p>
+</li>
+<li>
+<p><strong>C++ only</strong>: User has to provide marshaling functions explicitly as there is no reflection to generate them based on user type structure.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="usage-examples">Usage Examples</h3>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">public</span> <span class="kt">long</span> <span class="n">balance</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">Account</span><span class="o">()</span> <span class="o">{}</span>
+
+  <span class="kd">public</span> <span class="nf">Account</span><span class="o">(</span><span class="kt">long</span> <span class="n">balance</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">Account</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="kt">long</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">public</span> <span class="kt">long</span> <span class="n">Balance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="p">[</span><span class="n">NotMapped</span><span class="p">]</span>
+  <span class="k">public</span> <span class="n">Guid</span> <span class="n">UnmappedId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="cpp"><span class="k">struct</span> <span class="nc">account</span> <span class="p">{</span>
+  <span class="n">account</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+  <span class="n">account</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span> <span class="n">id</span><span class="p">)</span> <span class="o">:</span> <span class="n">id</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="p">{}</span>
+  <span class="n">account</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span> <span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span> <span class="n">balance</span><span class="p">)</span> <span class="o">:</span> <span class="n">id</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">balance</span><span class="p">(</span><span class="n">balance</span><span class="p">)</span> <span class="p">{}</span>
+
+  <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span> <span class="n">id</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+  <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span> <span class="n">balance</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="k">namespace</span> <span class="n">ignite</span> <span class="p">{</span>
+
+  <span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
+  <span class="n">ignite_tuple</span> <span class="n">convert_to_tuple</span><span class="p">(</span><span class="n">account</span> <span class="o">&amp;&amp;</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ignite_tuple</span> <span class="n">tuple</span><span class="p">;</span>
+
+    <span class="n">tuple</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">"id"</span><span class="p">,</span> <span class="n">value</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+    <span class="n">tuple</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="s">"balance"</span><span class="p">,</span> <span class="n">value</span><span class="p">.</span><span class="n">balance</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">tuple</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">template</span><span class="o">&lt;</span><span class="p">&gt;</span>
+  <span class="n">account</span> <span class="nf">convert_from_tuple</span><span class="p">(</span><span class="n">ignite_tuple</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">account</span> <span class="n">res</span><span class="p">;</span>
+
+    <span class="n">res</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"id"</span><span class="p">);</span>
+
+    <span class="c1">// Sometimes only key columns are returned, i.e. "id",</span>
+    <span class="c1">// so we have to check whether there are any other columns.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">column_count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="n">res</span><span class="p">.</span><span class="n">balance</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"balance"</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="p">}</span> <span class="c1">// namespace ignite</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sql-api">SQL API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Apache Ignite 3 is focused on SQL, and SQL API is the primary way to work with the data. You can read more about supported SQL statements in the <a href="/docs/3.0.0-beta/sql-reference/ddl">SQL Reference</a> section. Here is how you can send SQL requests:</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">createSession</span><span class="o">())</span> <span class="o">{</span>
+  <span class="nc">ResultSet</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT name from POJO where id = 42"</span><span class="o">);</span>
+
+  <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+  <span class="k">assert</span> <span class="n">row</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IResultSet</span><span class="p">&lt;</span><span class="n">IIgniteTuple</span><span class="p">&gt;</span> <span class="n">resultSet</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Sql</span><span class="p">.</span><span class="nf">ExecuteAsync</span><span class="p">(</span><span class="n">transaction</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span> <span class="s">"select name from tbl where id = ?"</span><span class="p">,</span> <span class="m">42</span><span class="p">);</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">IIgniteTuple</span><span class="p">&gt;</span> <span class="n">rows</span> <span class="p">=</span> <span class="k">await</span> <span class="n">resultSet</span><span class="p">.</span><span class="nf">ToListAsync</span><span class="p">();</span>
+<span class="n">IIgniteTuple</span> <span class="n">row</span> <span class="p">=</span> <span class="n">rows</span><span class="p">.</span><span class="nf">Single</span><span class="p">();</span>
+<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">"name"</span><span class="p">]</span> <span class="k">as</span> <span class="kt">string</span> <span class="p">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">result_set</span> <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_sql</span><span class="p">().</span><span class="n">execute</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="s">"select name from tbl where id = ?"</span><span class="p">},</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="p">{</span><span class="mi">42</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">page</span> <span class="o">=</span> <span class="n">result_set</span><span class="p">.</span><span class="n">current_page</span><span class="p">();</span>
+<span class="n">ignite_tuple</span><span class="o">&amp;</span> <span class="n">row</span> <span class="o">=</span> <span class="n">page</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">row</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">42</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">row</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span> <span class="o">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transactions">Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All table operations in Apache Ignite 3 are transactional. You can provide an explicit transaction as a first argument of any Table and SQL API call. If you do not provide an explicit transaction, an implicit one will be created for every call.</p>
+</div>
+<div class="paragraph">
+<p>Here is how you  can provide a transaction explicitly:</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Account</span><span class="o">&gt;</span> <span class="n">accounts</span> <span class="o">=</span>
+  <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Account</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+
+<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Account</span><span class="o">(</span><span class="mi">16_000</span><span class="o">));</span>
+
+<span class="kt">var</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">();</span>
+
+<span class="nc">Account</span> <span class="n">account</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
+<span class="n">account</span><span class="o">.</span><span class="na">balance</span> <span class="o">+=</span> <span class="mi">500</span><span class="o">;</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="n">account</span><span class="o">);</span>
+
+<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_500</span><span class="o">;</span>
+
+<span class="n">tx</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+
+<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_000</span><span class="o">;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">accounts</span> <span class="p">=</span> <span class="n">table</span><span class="p">.</span><span class="n">GetKeyValueView</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">,</span> <span class="n">Account</span><span class="p">&gt;();</span>
+<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">transaction</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Account</span><span class="p">(</span><span class="m">16_000</span><span class="p">));</span>
+
+<span class="k">await</span> <span class="k">using</span> <span class="nn">ITransaction</span> <span class="n">tx</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Transactions</span><span class="p">.</span><span class="nf">BeginAsync</span><span class="p">();</span>
+
+<span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hasValue</span><span class="p">)</span> <span class="p">=</span> <span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">);</span>
+<span class="n">account</span> <span class="p">=</span> <span class="n">account</span> <span class="k">with</span> <span class="p">{</span> <span class="n">Balance</span> <span class="p">=</span> <span class="n">account</span><span class="p">.</span><span class="n">Balance</span> <span class="p">+</span> <span class="m">500</span> <span class="p">};</span>
+
+<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="n">account</span><span class="p">);</span>
+
+<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16_500</span><span class="p">);</span>
+
+<span class="k">await</span> <span class="n">tx</span><span class="p">.</span><span class="nf">RollbackAsync</span><span class="p">();</span>
+
+<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16_000</span><span class="p">);</span>
+
+<span class="k">public</span> <span class="k">record</span> <span class="nc">Account</span><span class="p">(</span><span class="kt">decimal</span> <span class="n">Balance</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="cpp"><span class="k">auto</span> <span class="n">accounts</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_key_value_view</span><span class="o">&lt;</span><span class="n">account</span><span class="p">,</span> <span class="n">account</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">account</span> <span class="nf">init_value</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="mi">16'000</span><span class="p">);</span>
+<span class="n">accounts</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">},</span> <span class="n">init_value</span><span class="p">);</span>
+
+<span class="k">auto</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_transactions</span><span class="p">().</span><span class="n">begin</span><span class="p">();</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">account</span><span class="o">&gt;</span> <span class="n">res_account</span> <span class="o">=</span> <span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">});</span>
+<span class="n">res_account</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">+=</span> <span class="mi">500</span><span class="p">;</span>
+<span class="n">accounts</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">},</span> <span class="n">res_account</span><span class="p">);</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">})</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">16'500</span><span class="p">);</span>
+
+<span class="n">tx</span><span class="p">.</span><span class="n">rollback</span><span class="p">();</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">})</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">16'000</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
 <h2 id="table-api">Table API</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To execute table operations on a specific table, you need to get a specific view of the table and use one of its methods. Currently, there are 4 kind of views that can be used to operate table in different ways:</p>
+<p>To execute table operations on a specific table, you need to get a specific view of the table and use one of its methods. You can only create new tables by using SQL API.</p>
+</div>
+<div class="paragraph">
+<p>When working with tables, you can use built-in Tuple type, which is a set of key-value pairs underneath, or map the data to your own types for a strongly-typed access. Here is how you can work with tables:</p>
 </div>
 <div class="sect2">
 <h3 id="getting-a-table-instance">Getting a Table Instance</h3>
 <div class="paragraph">
-<p>First, get an instance of the table. To obtain an instance of table, use the <code>IgniteTables.table(String)</code> method. This method assumes a table with the specified name exists. You can also use <code>IgniteTables.tables()</code> method to list all existing tables.</p>
+<p>First, get an instance of the table. To obtain an instance of table, use the <code>IgniteTables.table(String)</code> method. You can also use <code>IgniteTables.tables()</code> method to list all existing tables.</p>
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
@@ -692,15 +1056,15 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 </div></code-tab><code-tab data-tab='C++'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="n">record_view</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">record_binary_view</span><span class="p">();</span>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">record_view</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_record_binary_view</span><span class="p">();</span>
 
-<span class="n">ignite_tuple</span> <span class="n">full_record</span><span class="p">{</span>
+<span class="n">ignite_tuple</span> <span class="n">record</span><span class="p">{</span>
   <span class="p">{</span><span class="s">"id"</span><span class="p">,</span> <span class="mi">42</span><span class="p">},</span>
   <span class="p">{</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"John Doe"</span><span class="p">}</span>
 <span class="p">};</span>
 
 <span class="n">view</span><span class="p">.</span><span class="n">upsert</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="n">record</span><span class="p">);</span>
-<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">res_record</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">null</span><span class="p">,</span> <span class="p">{</span><span class="s">"id"</span><span class="p">,</span> <span class="mi">42</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">res_record</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="s">"id"</span><span class="p">,</span> <span class="mi">42</span><span class="p">});</span>
 
 <span class="n">assert</span><span class="p">(</span><span class="n">res_record</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
 <span class="n">assert</span><span class="p">(</span><span class="n">res_record</span><span class="o">-&gt;</span><span class="n">column_count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
@@ -716,23 +1080,7 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">public</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">()</span> <span class="o">{}</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">(</span><span class="kt">long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">(</span><span class="kt">long</span> <span class="n">id</span><span class="o">,</span> <span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
 
 <span class="n">pojoView</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="mi">42</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">));</span>
 <span class="nc">Pojo</span> <span class="n">resRecord</span> <span class="o">=</span> <span class="n">pojoView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="mi">42</span><span class="o">));</span>
@@ -750,11 +1098,20 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">hasValue</span><span class="p">);</span>
 <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"John Doe"</span><span class="p">);</span>
 
-<span class="k">public</span> <span class="n">record</span> <span class="nf">Poco</span><span class="p">(</span><span class="kt">long</span> <span class="n">Id</span><span class="p">,</span> <span class="kt">string</span><span class="p">?</span> <span class="n">Name</span> <span class="p">=</span> <span class="k">null</span><span class="p">);</span></code></pre>
+<span class="k">public</span> <span class="k">record</span> <span class="nc">Poco</span><span class="p">(</span><span class="kt">long</span> <span class="n">Id</span><span class="p">,</span> <span class="kt">string</span><span class="p">?</span> <span class="n">Name</span> <span class="p">=</span> <span class="k">null</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='C++'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// Record view is not yet supported in C++</span></code></pre>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">record_view</span><span class="o">&lt;</span><span class="n">person</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_record_view</span><span class="o">&lt;</span><span class="n">person</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">person</span> <span class="nf">record</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s">"John Doe"</span><span class="p">);</span>
+
+<span class="n">view</span><span class="p">.</span><span class="n">upsert</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="n">record</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">person</span><span class="o">&gt;</span> <span class="n">res_record</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="n">person</span><span class="p">{</span><span class="mi">42</span><span class="p">});</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">==</span> <span class="mi">42</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 </div>
@@ -792,7 +1149,18 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 </div></code-tab><code-tab data-tab='C++'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// Key-value binary view is not yet supported in C++</span></code></pre>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">key_value_view</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="p">,</span> <span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">kv_view</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_key_value_binary_view</span><span class="p">();</span>
+
+<span class="n">ignite_tuple</span> <span class="n">key_tuple</span><span class="p">{{</span><span class="s">"id"</span><span class="p">,</span> <span class="mi">42</span><span class="p">}};</span>
+<span class="n">ignite_tuple</span> <span class="n">val_tuple</span><span class="p">{{</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"John Doe"</span><span class="p">}};</span>
+
+<span class="n">kv_view</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="n">key_tuple</span><span class="p">,</span> <span class="n">val_tuple</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">ignite_tuple</span><span class="o">&gt;</span> <span class="n">res_tuple</span> <span class="o">=</span> <span class="n">kv_view</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="n">key_tuple</span><span class="p">);</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">res_tuple</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res_tuple</span><span class="o">-&gt;</span><span class="n">column_count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res_tuple</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">42</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res_tuple</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span> <span class="o">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 </div>
@@ -803,22 +1171,7 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">public</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">()</span> <span class="o">{}</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">(</span><span class="kt">long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="nf">Pojo</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span>
   <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
 
 <span class="n">pojoView</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">));</span>
@@ -836,107 +1189,22 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">hasValue</span><span class="p">);</span>
 <span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"John Doe"</span><span class="p">);</span>
 
-<span class="k">public</span> <span class="n">record</span> <span class="nf">Poco</span><span class="p">(</span><span class="kt">long</span> <span class="n">Id</span><span class="p">,</span> <span class="kt">string</span><span class="p">?</span> <span class="n">Name</span> <span class="p">=</span> <span class="k">null</span><span class="p">);</span></code></pre>
+<span class="k">public</span> <span class="k">record</span> <span class="nc">Poco</span><span class="p">(</span><span class="kt">long</span> <span class="n">Id</span><span class="p">,</span> <span class="kt">string</span><span class="p">?</span> <span class="n">Name</span> <span class="p">=</span> <span class="k">null</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='C++'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// Key-value view is not yet supported in C++</span></code></pre>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">key_value_view</span><span class="o">&lt;</span><span class="n">person</span><span class="p">,</span> <span class="n">person</span><span class="o">&gt;</span> <span class="n">kv_view</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_key_value_view</span><span class="o">&lt;</span><span class="n">person</span><span class="p">,</span> <span class="n">person</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">kv_view</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">},</span> <span class="p">{</span><span class="s">"John Doe"</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">person</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kv_view</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">});</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">==</span> <span class="mi">42</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">res</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="sql-api">SQL API</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You Apache Ignite Clients provide a SQL API to execute SQL statements. You can read more about supported SQL statements in the <a href="/docs/3.0.0-beta/sql-reference/ddl">SQL Reference</a> section.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">Session</span> <span class="n">session</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">createSession</span><span class="o">())</span> <span class="o">{</span>
-  <span class="nc">ResultSet</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT name from POJO where id = 42"</span><span class="o">);</span>
-
-  <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-  <span class="k">assert</span> <span class="n">row</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IResultSet</span><span class="p">&lt;</span><span class="n">IIgniteTuple</span><span class="p">&gt;</span> <span class="n">resultSet</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Sql</span><span class="p">.</span><span class="nf">ExecuteAsync</span><span class="p">(</span><span class="n">transaction</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span> <span class="s">"select name from tbl where id = ?"</span><span class="p">,</span> <span class="m">42</span><span class="p">);</span>
-<span class="n">List</span><span class="p">&lt;</span><span class="n">IIgniteTuple</span><span class="p">&gt;</span> <span class="n">rows</span> <span class="p">=</span> <span class="k">await</span> <span class="n">resultSet</span><span class="p">.</span><span class="nf">ToListAsync</span><span class="p">();</span>
-<span class="n">IIgniteTuple</span> <span class="n">row</span> <span class="p">=</span> <span class="n">rows</span><span class="p">.</span><span class="nf">Single</span><span class="p">();</span>
-<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">"name"</span><span class="p">]</span> <span class="k">as</span> <span class="kt">string</span> <span class="p">==</span> <span class="s">"John Doe"</span><span class="p">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// SQL API is not yet supported in C++</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-<div class="sect1">
-<h2 id="transactions">Transactions</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can use Apache Ignite 3 clients to perform distributed transactions when working with SQL and tables.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Account</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
-  <span class="kd">public</span> <span class="kt">long</span> <span class="n">balance</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="nf">Account</span><span class="o">()</span> <span class="o">{}</span>
-
-  <span class="kd">public</span> <span class="nf">Account</span><span class="o">(</span><span class="kt">long</span> <span class="n">balance</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Account</span><span class="o">&gt;</span> <span class="n">accounts</span> <span class="o">=</span>
-  <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Account</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
-
-<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Account</span><span class="o">(</span><span class="mi">16_000</span><span class="o">));</span>
-
-<span class="kt">var</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">();</span>
-
-<span class="nc">Account</span> <span class="n">account</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
-<span class="n">account</span><span class="o">.</span><span class="na">balance</span> <span class="o">+=</span> <span class="mi">500</span><span class="o">;</span>
-<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="n">account</span><span class="o">);</span>
-
-<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_500</span><span class="o">;</span>
-
-<span class="n">tx</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
-
-<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_000</span><span class="o">;</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">accounts</span> <span class="p">=</span> <span class="n">table</span><span class="p">.</span><span class="n">GetKeyValueView</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">,</span> <span class="n">Account</span><span class="p">&gt;();</span>
-<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">transaction</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Account</span><span class="p">(</span><span class="m">16</span><span class="n">_000</span><span class="p">));</span>
-
-<span class="k">await</span> <span class="k">using</span> <span class="nn">ITransaction</span> <span class="n">tx</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Transactions</span><span class="p">.</span><span class="nf">BeginAsync</span><span class="p">();</span>
-
-<span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hasValue</span><span class="p">)</span> <span class="p">=</span> <span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">);</span>
-<span class="n">account</span> <span class="p">=</span> <span class="n">account</span> <span class="n">with</span> <span class="p">{</span> <span class="n">Balance</span> <span class="p">=</span> <span class="n">account</span><span class="p">.</span><span class="n">Balance</span> <span class="p">+</span> <span class="m">500</span> <span class="p">};</span>
-
-<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="n">account</span><span class="p">);</span>
-
-<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16</span><span class="n">_500</span><span class="p">);</span>
-
-<span class="k">await</span> <span class="n">tx</span><span class="p">.</span><span class="nf">RollbackAsync</span><span class="p">();</span>
-
-<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16</span><span class="n">_000</span><span class="p">);</span>
-
-<span class="k">public</span> <span class="n">record</span> <span class="nf">Account</span><span class="p">(</span><span class="kt">decimal</span> <span class="n">Balance</span><span class="p">);</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// Transactions are not yet supported in C++</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
 </div>
 </div>
 <div class="sect1">
@@ -963,9 +1231,47 @@ This eliminates the bottleneck, allowing the application to scale more easily.</
 </div>
 </div></code-tab><code-tab data-tab='C++'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="c1">// Compute is not yet supported in C++</span></code></pre>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cluster_node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_cluster_nodes</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">primitive</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">().</span><span class="n">execute</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s">"org.foo.bar.MyTask"</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">})</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">res</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="partition-awareness">Partition Awareness</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Apache Ignite 3, partition awareness is enabled automatically for all clients.</p>
+</div>
+<div class="paragraph">
+<p>Data in the cluster is distributed between the nodes in a balanced manner for scalability and performance reasons. Each cluster node maintains a subset of the data, and the partition distribution map, which is used to determine the node that keeps the primary/backup copy of requested entries.</p>
+</div>
+<div class="paragraph">
+<p>Partition awareness allows the client to send query requests directly to the node that owns the queried data.</p>
+</div>
+<div class="paragraph">
+<p>Without partition awareness, an application that is connected to the cluster via a client would execute all queries and operations via a single server node that acts as a proxy for the incoming requests.
+These operations would then be re-routed to the node that stores the data that is being requested.
+This would result in a bottleneck that could prevent the application from scaling linearly.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0-beta/images/partitionawareness01.png" alt="Without Partition Awareness">
+</div>
+</div>
+<div class="paragraph">
+<p>Notice how queries must pass through the proxy server node, where they are routed to the correct node.</p>
+</div>
+<div class="paragraph">
+<p>With partition awareness in place, the client can directly route queries and operations to the primary nodes that own the data required for the queries.
+This eliminates the bottleneck, allowing the application to scale more easily.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0-beta/images/partitionawareness02.png" alt="With Partition Awareness">
+</div>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -978,14 +1284,37 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#installation">Installation</a>
+<li><a href="#getting-started">Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#c-client">C# Client</a></li>
-<li><a href="#c-client-2">C++ Client</a></li>
+<li><a href="#java-client">Java Client</a>
+<ul class="sectlevel3">
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
 </ul>
 </li>
-<li><a href="#partition-awareness">Partition Awareness</a></li>
+<li><a href="#c-client">C# Client</a>
+<ul class="sectlevel3">
+<li><a href="#prerequisites-2">Prerequisites</a></li>
+<li><a href="#installation-2">Installation</a></li>
+</ul>
+</li>
+<li><a href="#c-client-2">C++ Client</a>
+<ul class="sectlevel3">
+<li><a href="#prerequisites-3">Prerequisites</a></li>
+<li><a href="#installation-3">Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#connecting-to-cluster">Connecting to Cluster</a></li>
+<li><a href="#user-object-serialization">User Object Serialization</a>
+<ul class="sectlevel2">
+<li><a href="#limitations">Limitations</a></li>
+<li><a href="#usage-examples">Usage Examples</a></li>
+</ul>
+</li>
+<li><a href="#sql-api">SQL API</a></li>
+<li><a href="#transactions">Transactions</a></li>
 <li><a href="#table-api">Table API</a>
 <ul class="sectlevel2">
 <li><a href="#getting-a-table-instance">Getting a Table Instance</a></li>
@@ -999,9 +1328,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 </li>
 </ul>
 </li>
-<li><a href="#sql-api">SQL API</a></li>
-<li><a href="#transactions">Transactions</a></li>
 <li><a href="#executing-compute-tasks">Executing Compute Tasks</a></li>
+<li><a href="#partition-awareness">Partition Awareness</a></li>
 </ul>
     </div>
           
@@ -1041,12 +1369,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1670849503' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1670849503' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1670849503' async></script>
+<script type='module' src='/assets/js/index.js?1698926998' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1698926998' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1698926998' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1670849503" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1670849503"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1698926998" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1698926998"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
