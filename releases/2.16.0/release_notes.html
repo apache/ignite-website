@@ -1,0 +1,186 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.13.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.16.0</h1>
+			<div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>Operations on atomic caches within transactions are finally forbidden. The system property IGNITE_ALLOW_ATOMIC_OPS_IN_TX has been removed.</li>
+        <li>Removed CacheAtomicityMode#TRANSACTIONAL_SNAPSHOT cache mode.</li>
+        <li>Mixed mode cache groups are now forbidden, but IGNITE_ALLOW_MIXED_CACHE_GROUPS system option may temporarily allow them.</li>
+        <li>The ignite-ml and cassandra modules have been migrated to the Ignite extensions.</li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added ARM64 Docker images.</li>
+        <li>Added CLIENT_CONNECTION_ATTRIBUTES system view.</li>
+        <li>Added ability to configure metric exporter filter from Spring XML.</li>
+        <li>Added cache dumps.</li>
+        <li>Added extended debug logging of client connections.</li>
+        <li>Added limit support to IndexQuery.</li>
+        <li>Added logging of snapshot check procedure.</li>
+        <li>Added metrics for operations on secondary indexes.</li>
+        <li>Added performance statistics for IndexQuery.</li>
+        <li>Added performance statistics info about query properties and processed rows count by query.</li>
+        <li>Added size limit of the client session outbound message queue.</li>
+        <li>Added topology snapshot info to services system view.</li>
+        <li>Deprecated legacy authorization approach via Security Context.</li>
+        <li>Deprecated rebalance related methods in the ClientCacheConfiguration.</li>
+        <li>Fixed JavaNioAccess handling in JDK 14 and later.</li>
+        <li>Fixed MappedFile.map for JDK 14 and newer.</li>
+        <li>Fixed NPE during defragmentation OOM exception handling.</li>
+        <li>Fixed NPE during transaction recovery.</li>
+        <li>Fixed NPE on snapshot create operation for in-memory cluster.</li>
+        <li>Fixed StoredCacheData removing when a node filter is set.</li>
+        <li>Fixed WAL logging to an archived segment after node restart.</li>
+        <li>Fixed an issue when IgniteLock cannot be acquired after release on JDK 17.</li>
+        <li>Fixed an issue when TTL is not set for entries inserted with "insert from select" query.</li>
+        <li>Fixed an issue when a transaction never finishes on timeout when deadlock detection is disabled.</li>
+        <li>Fixed an issue where continuous queries caused excessive memory usage.</li>
+        <li>Fixed assertion error in case of empty SQL query.</li>
+        <li>Fixed assertion error on defragmentation.</li>
+        <li>Fixed broken serialization of communication messages due to incorrect GridCacheQueryRequest class marshalling.</li>
+        <li>Fixed continuous queries backup ack message sending for expired entries.</li>
+        <li>Fixed deprecation of PartitionLossPolicy (READ_ONLY_ALL, READ_WRITE_ALL).</li>
+        <li>Fixed doubled serialization of CQ event oldValue field for REMOVE/EXPIRY events.</li>
+        <li>Fixed duplicate index error after CREATE INDEX IF NOT EXISTS on different tables.</li>
+        <li>Fixed erroneous logging of failed index rebuild.</li>
+        <li>Fixed exception message for transaction timeout before data lock acquired.</li>
+        <li>Fixed failure on sqlOnHeapCache=enabled and more than one index used.</li>
+        <li>Fixed histogram metric configuration restore on node restart.</li>
+        <li>Fixed in-memory server node crashing by TcpIgniteClient.putAllConflict() if cache objects transformation applied.</li>
+        <li>Fixed log message about sending and receiving partition file during snapshot restore.</li>
+        <li>Fixed log message of snapshot create operation with the warning result.</li>
+        <li>Fixed negative duration in the SQL query system view.</li>
+        <li>Fixed node crash due to SecurityContext not found during discovery message processing.</li>
+        <li>Fixed opencensus-exporter-trace-zipkin dependency scope.</li>
+        <li>Fixed possibility to create two caches with the same schemas and index names.</li>
+        <li>Fixed possible failures of cache operations when performed through a thin client with Partition Awareness enabled.</li>
+        <li>Fixed server nodes crashing if the cache directory contains illegal chars.</li>
+        <li>Fixed snapshot creation failing when check throws an exception.</li>
+        <li>Fixed snapshot restore metrics is case of an error on prepare.</li>
+        <li>Fixed snapshot restore rollback if start cache stage failed.</li>
+        <li>Fixed startup on Java 21.</li>
+        <li>Fixed the defragmentation can't be configured to use one thread issue.</li>
+        <li>Fixed usage of sandbox to create CacheStore.</li>
+        <li>Fixed usage of vulnerable init setting in H2 connection.</li>
+        <li>Fixed writing post-handshake message in NIO server.</li>
+        <li>Removed deprecated "ssl.key.algorithm" Ignite system property - "ssl.KeyManagerFactory.algorithm" is used instead.</li>
+        <li>Removed the GridSslContextFactory from public API.</li>
+        <li>Updated Snappy-java dependency version to 1.1.10.4.</li>
+        <li>Updated Spring dependency version to 5.2.25.RELEASE.</li>
+        <li>Updated guava dependency version to 32.1.2.</li>
+        <li>Updated jetty dependency version to 9.4.53.v20231009.</li>
+        <li>Updated postgresql dependency version to 42.6.0.</li>
+        <li>Updated snappy dependency version to 1.1.10.4.</li>
+        <li>Updated zookeeper dependency version to 3.8.3.</li>
+        <li>Updated zstd dependency version to 1.5.5.</li>
+    </ul>
+
+    <h2>SQL Calcite</h2>
+    <ul>
+        <li>Added ENFORCE_JOIN_ORDER hint.</li>
+        <li>Added FORCE_INDEX/NO_INDEX hints.</li>
+        <li>Added events on query execution (EVT_CACHE_QUERY_OBJECT_READ, EVT_SQL_QUERY_EXECUTION).</li>
+        <li>Added explicit commons-codec dependency.</li>
+        <li>Added local flag support.</li>
+        <li>Added long-runing queries and big result-set queries warnings.</li>
+        <li>Added metrics for CalciteQueryExecutor thread pool.</li>
+        <li>Added partition pruning.</li>
+        <li>Added queries timeout support.</li>
+        <li>Added sensitive information hiding when IGNITE_TO_STRING_INCLUDE_SENSITIVE property is set to false.</li>
+        <li>Added support of setting partitions in SqlFieldsQuery.</li>
+        <li>Fixed CREATE TABLE ... WITH affinity_key option validation.</li>
+        <li>Fixed NPE on write query plan to performance statistics.</li>
+        <li>Fixed SQL metrics (added parsing metrics for the Calcite-based engine, fixed execution metrics).</li>
+        <li>Fixed failure on planning when cache size exceeds Integer.MAX_VALUE.</li>
+        <li>Fixed list of reserved keywords.</li>
+        <li>Fixed memory leak in MailboxRegistryImpl#remotes.</li>
+        <li>Fixed performance statistics collection.</li>
+        <li>Fixed placeholder values from ModifyNode.</li>
+        <li>Fixed primary key inline size calculation.</li>
+        <li>Fixed query leak on remote fragment initialization phase failure.</li>
+        <li>Fixed the query freezes when partitions are set issue.</li>
+        <li>Updated calcite dependency version to 1.34.0.</li>
+    </ul>
+
+    <h2>Control utility</h2>
+    <ul>
+        <li>Added JMX commands invoker.</li>
+        <li>Added compact footer usage statistics to the idle_verify command.</li>
+        <li>Added descriptions and values to the properties list command.</li>
+        <li>Added node Consistent ID to the index validate command output.</li>
+        <li>Added number of partitions processed by the index worker to the output of the index commands.</li>
+        <li>Added support of SslContextFactory to CommandHandler (instead of GridSslBasicContextFactory).</li>
+        <li>Added support of custom SSL factory.</li>
+        <li>Added the cache create command.</li>
+        <li>Added the multiple nodes argument to the 'indexes_force_rebuild' and 'schedule_indexes_rebuild' commands.</li>
+        <li>Fixed connectable nodes list.</li>
+        <li>Fixed control utility module location for slim and LGPL assemblies.</li>
+        <li>Fixed idle_verify hash conflicts for expiring entries.</li>
+        <li>Fixed result printing of performance statistics subcommands.</li>
+        <li>Fixed the page size of cache scan command to meet the limit argument.</li>
+    </ul>
+
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added Service Awareness feature.</li>
+        <li>Fixed Java thin client socket#open timeout to ClientConfiguration#timeout property.</li>
+        <li>Fixed cache objects transformation in Java thin client.</li>
+        <li>Fixed potential SocketChannel leak on failed connection.</li>
+        <li>Removed artificial port range upper limit of 49151.</li>
+    </ul>
+
+    <h2>Ignite .NET</h2>
+    <ul>
+        <li>Fixed node crash due to OverflowException in Callbacks.ConsoleWrite.</li>
+    </ul>
+
+    <h2>Ignite .NET thin client</h2>
+    <ul>
+        <li>Added partition awareness support for types with affinity key.</li>
+    </ul>
+</body>
