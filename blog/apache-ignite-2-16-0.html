@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite 2.9 Released: Cluster snapshots and tracing</title>
+    <title>Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
@@ -350,10 +350,10 @@
     <div class="container blog">
       <section class="blog__header post_page__header">
         <a href="/blog/">← Apache Ignite Blog</a>
-        <h1>Apache Ignite 2.9 Released: Cluster snapshots and tracing</h1>
+        <h1>Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes</h1>
         <p>
-          November 5, 2020 by <strong>Denis Magda. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
-          ><a href="http://twitter.com/home?status=Apache Ignite 2.9 Released: Cluster snapshots and tracing%20https://ignite.apache.org/blog/undefined">Twitter</a>
+          December 25, 2023 by <strong>Nikita Amelchev. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes%20https://ignite.apache.org/blog/undefined">Twitter</a>
         </p>
       </section>
       <div class="blog__content">
@@ -361,50 +361,100 @@
           <section class="blog__posts">
             <article class="post">
               <div>
-                <p>As of October 23, 2020, Apache Ignite 2.9 is available. Like every other Ignite release, release 2.9 includes many changes. Let&apos;s take a look at the major features of release 2.9.</p>
-                <p></p>
-                <h3>Cluster Snapshots</h3>
-                <p></p>
                 <p>
-                  Ignite 2.9 provides the ability to create full cluster snapshots for deployments that use Ignite Persistence. Snapshots can be taken online, when the cluster is active and accessible to users. An Ignite snapshot includes a
-                  cluster-wide copy of all data records that exist at the moment the snapshot is started. All snapshots are consistent &mdash; in terms of concurrent, cluster-wide operations as well as in terms of ongoing changes in Ignite
-                  Persistence data, index, schema, binary metadata, marshaller, and other files on nodes. See <a href="https://ignite.apache.org/docs/latest/persistence/snapshots">Ignite documentation</a> to learn about this feature.
+                  As of December 25, 2023, <a href="https://ignite.apache.org/">Apache Ignite </a>2.16 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/j3brc">Important JIRA tasks </a>but
+                  let&apos;s briefly overview some valuable improvements.
                 </p>
+                <h3 id="cache-dumps">Cache dumps</h3>
+                <p>
+                  Ignite has persistent cache <a href="https://ignite.apache.org/docs/latest/snapshots/snapshots">snapshots </a>and this feature is highly appreciated by Ignite users. This release introduces another way to make a copy of
+                  user data - a cache dump.
+                </p>
+                <p>
+                  The cache dump is essentially a file that contains all entries of a cache group at the time of dump creation. Dump is consistent like a snapshot, which means all entries that existed in the cluster at the moment of dump
+                  creation will be included in the dump file. Meta information of dumped caches and binary meta are also included in the dump.
+                </p>
+                <p>Main differences from cache snapshots:</p>
+                <ul>
+                  <li>Supports in-memory caches that a snapshot feature does not support.</li>
+                  <li>Takes up less disk space. The dump contains only the cache entries as-is.</li>
+                  <li>Can be used for offline data processing.</li>
+                </ul>
                 <!-- end -->
-                <h3>Tracing</h3>
+                <p>The <a href="https://github.com/apache/ignite/blob/ignite-2.16/modules/core/src/main/java/org/apache/ignite/IgniteSnapshot.java#L75">IgniteSnapshot </a>interface provides a method to create a dump:</p>
+                <code class="lang-java"><pre>ignite.snapshot().createDump("dump-name", Arrays.asList("cacheGrp1", "cacheGrp2")).get();</pre></code>
+                <p>You can read a dump using the <a href="https://github.com/apache/ignite/blob/ignite-2.16/modules/core/src/main/java/org/apache/ignite/dump/DumpReader.java">Dump Reader </a>application:</p>
+                <code class="lang-java">
+                  <pre>
+// Consumer should be implemented to receive all data stored in cache dump.
+DumpConsumer cnsmr = new DumpConsumerImpl(..);
+
+DumpReaderConfiguration cfg = new DumpReaderConfiguration(new File("path-to-dump"), cnsmr);
+
+new DumpReader(cfg, log).run();</pre
+                  >
+                </code>
+                <h3 id="calcite-engine-updates">Calcite engine: added hints and diagnostic tools, became more stable</h3>
                 <p>
-                  The Ignite monitoring system continues to improve. In Ignite 2.9, a new tracing subsystem became available. Tracing provides information that is useful for debugging &mdash; that helps with both regular, daily, basic
-                  system monitoring and with incident analysis. You can collect distributed traces of tasks that are executed in your cluster and use this information to diagnose latency problems. In the 2.9 release, the following Ignite
-                  components are instrumented for tracing:
+                  The <a href="https://ignite.apache.org/docs/2.16.0/SQL/sql-calcite">Calcite engine </a>is now fully equipped with metrics, events and the performance statistics tool. Moreover, query plans and other useful properties have
+                  been added to the <a href="https://ignite.apache.org/docs/2.16.0/extensions-and-integrations/performance-statistics">performance statistics report</a>.
                 </p>
+                <p>The following hints have been introduced to help the optimizer make optimizations more rational or build an execution plan faster:</p>
                 <ul>
-                  <li>Discovery</li>
-                  <li>Communication</li>
-                  <li>Exchange</li>
-                  <li>Transactions</li>
+                  <li><a href="https://ignite.apache.org/docs/2.16.0/SQL/sql-calcite#force_index-no_index">FORCE_INDEX / NO_INDEX </a>- Forces or disables index scan.</li>
+                  <li><a href="https://ignite.apache.org/docs/2.16.0/SQL/sql-calcite#enforce_join_order">ENFORCE_JOIN_ORDER </a>- Forces join order as appears in a query. Fastens building of joins plan.</li>
                 </ul>
-                <p></p>
-                <p>See <a href="https://ignite.apache.org/docs/latest/monitoring-metrics/tracing">the documentation</a> for more information.</p>
-                <p></p>
-                <h3>Other Changes</h3>
-                <p></p>
-                <p>In addition to snapshots and tracing, Ignite 2.9 provides the following new features:</p>
+                <p>There are 10+ bugs and performance fixes in the release.</p>
+                <h3 id="service-awareness-feature">Java thin client: Service Awareness feature</h3>
+                <p>
+                  In previous versions of Ignite, the thin client invoked the service grid on a random server node. A service may not be deployed on each node. If a node misses the invoked service, the invocation request is redirected to a
+                  proper node. This additional network hop adds overhead and can now be avoided.
+                </p>
+                <p>With Service Awareness, the thin client knows where service instances are deployed and sends the request to the correct node.</p>
+                <p>Note that the service topology is updated asynchronously starting with the first service invocation. Thus, some invocation redirects are still possible.</p>
+                <p>The feature is activated if:</p>
                 <ul>
-                  <li>Cluster discovery, cluster API, compute API, and service invocation support for thin clients (Java and .Net)</li>
-                  <li>Cluster-wide, read-only mode</li>
-                  <li>Ability to run user-defined code inside the Ignite sandbox</li>
-                  <li>Transparent data encryption: master key rotation</li>
-                  <li>Management tools to cancel user tasks and queries</li>
-                  <li>Platform cache (.Net)</li>
+                  <li>
+                    The <a href="https://github.com/apache/ignite/blob/ignite-2.16/modules/core/src/main/java/org/apache/ignite/configuration/ClientConfiguration.java#L577">Partition Awareness </a>property is enabled in a client
+                    configuration (it is enabled by default).
+                  </li>
+                  <li>Cluster and thin client versions are 2.16.0 and higher.</li>
                 </ul>
-                <p></p>
-                <p>See the <a href="https://ignite.apache.org/releases/2.9.0/release_notes.html">release notes</a> to learn about all of the new features.</p>
+                <h3 id="cdc-realtime-mode">CDC: Realtime mode</h3>
+                <p>
+                  Since version 2.12 Ignite supports the <a href="https://ignite.apache.org/docs/2.16.0/persistence/change-data-capture">CDC functionality</a>. It's implemented with a background process that processes archived WAL segments.
+                  The delay between the creation of an event and it's processing by this process contains the time WAL segments were archived. Some users are intolerant of this lag. For such users, Ignite now provides functionality that
+                  makes it possible to process events almost instantly after they are created. Please refer to the
+                  <a href="https://github.com/apache/ignite/blob/ignite-2.16/modules/core/src/main/java/org/apache/ignite/internal/cdc/CdcManager.java">CdcManager </a>interface javadocs for more details.
+                </p>
+                <h3 id="other-improvements-and-changes">Other improvements and changes</h3>
+                <ul>
+                  <li>Fixed JDK 14-21 support issues.</li>
+                  <li>
+                    <a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-81+Cluster+Management+API">Cluster Management API </a>has been implemented to unify management command invokers via various protocols - CLI, JMX, REST. The
+                    Ignite now provides JMX command invoker.
+                  </li>
+                  <li>Operations on atomic caches within transactions are finally forbidden. The system property <code>IGNITE_ALLOW_ATOMIC_OPS_IN_TX </code>has been removed.</li>
+                  <li>The community agreed to remove MVCC. The <code>CacheAtomicityMode#TRANSACTIONAL_SNAPSHOT </code>cache mode has been removed.</li>
+                  <li>Mixed mode cache groups are now forbidden, but <code>IGNITE_ALLOW_MIXED_CACHE_GROUPS </code>system option may temporarily allow them.</li>
+                  <li>The ignite-ml and cassandra modules have been migrated to the <a href="https://github.com/apache/ignite-extensions">Ignite extensions.</a></li>
+                  <li>100+ small improvements and bug fixes.</li>
+                </ul>
+                <h3 id="anything-else">Anything else?</h3>
+                <p>See the <a href="https://ignite.apache.org/releases/2.16.0/release_notes.html">release notes </a>to learn about all of the new features and improvements.</p>
+                <p>Reach out to us on the community user list for more questions, details, and feedback.</p>
                 <p>Sincerely yours, Ignite contributors and committers</p>
               </div>
             </article>
             <section class="blog__footer">
               <ul class="pagination post_page">
-                <li><a href="/blog/two">two</a></li>
+                <li><a href="/blog/database">database</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+                <li><a href="/blog/in">in</a></li>
+                <li><a href="/blog/memory">memory</a></li>
+                <li><a href="/blog/open">open</a></li>
+                <li><a href="/blog/source">source</a></li>
+                <li><a href="/blog/release">release</a></li>
               </ul>
             </section>
           </section>
