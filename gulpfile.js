@@ -195,7 +195,14 @@ export const sitemap = () => {
         '!./docs/2.9.0/**',
         '!./docs/2.9.1/**',
         '!./docs/2.10.0/**',
-        '!./docs/3.0.0-alpha/**',
+        '!./docs/2.11.0/**',
+        '!./docs/2.11.1/**',
+        '!./docs/2.12.0/**',
+        '!./docs/2.13.0/**',
+        '!./docs/2.14.0/**',
+        '!./docs/2.15.0/**',
+        '!./docs/3.0.0-beta/**',
+        '!./docs/extensions/**',
         '!./node_modules/**'
     ];
     return gulp.src(srcForSitemap, {
@@ -213,7 +220,7 @@ export const sitemap = () => {
                     //Remove .html for all docs files
                     let newloc = loc.replace(/.html$/, "")
                     //Change version folders into "latest"
-                    newloc = newloc.replace("2.11.0", "latest");
+                    newloc = newloc.replace("2.16.0", "latest");
                     //console.log(newloc);
                     return newloc;
                 }
