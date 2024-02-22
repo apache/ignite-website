@@ -85,11 +85,11 @@
                 <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" height="36" >
             </a>
         </div>
-        
-        
+
         <select id="version-selector">
             <option value="2.12.0">2.12.0</option>
         </select>
+
 
         <nav id="api-docs"><ul>
             <li><a href="#">APIs</a>
@@ -100,8 +100,6 @@
                     <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">C#/.NET</a></li>
 
                     <li class="dropdown-item"><a href="/releases/latest/cppdoc/index.html">C++</a></li>
-
-                    <li class="dropdown-item"><a href="/releases/latest/scaladoc/scalar/index.html#org.apache.ignite.scalar.scalar$">Scala</a></li>
                     </ul>
                 </nav>
             </li>
@@ -124,7 +122,8 @@
                 </nav>
                 </li></ul>
         </nav>
-        
+
+
         <form class='search'>
             <button class="search-close" type='button'><img src='/assets/images/cancel.svg' alt="close" width="10" height="10" /></button>
             <input type="search" placeholder="Search…" id="search-input">
@@ -146,7 +145,6 @@
         
     </div>
 </header>
-
 
     	 <link rel="stylesheet" href="/assets/css/docs.css">
 <section class='page-docs'>
@@ -3462,13 +3460,32 @@ You can use any supported SQL tool to view the metrics:</p>
 </div>
 <code-tabs><code-tab data-tab='XML'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"metricExporterSpi"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;list&gt;</span>
-            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.metric.sql.SqlViewMetricExporterSpi"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/list&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="c">&lt;!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span> <span class="na">xmlns:util=</span><span class="s">"http://www.springframework.org/schema/util"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans.xsd         http://www.springframework.org/schema/util         http://www.springframework.org/schema/util/spring-util.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"metricExporterSpi"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.metric.sql.SqlViewMetricExporterSpi"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
@@ -3494,13 +3511,32 @@ You can use any supported SQL tool to view the metrics:</p>
 </div>
 <code-tabs><code-tab data-tab='XML'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"metricExporterSpi"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;list&gt;</span>
-            <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.metric.log.LogExporterSpi"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/list&gt;</span>
-    <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/bean&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="c">&lt;!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span> <span class="na">xmlns:util=</span><span class="s">"http://www.springframework.org/schema/util"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans.xsd         http://www.springframework.org/schema/util         http://www.springframework.org/schema/util/spring-util.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"metricExporterSpi"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.spi.metric.log.LogExporterSpi"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="paragraph">
 <p>If you use programmatic configuration, you can change the print frequency as follows:</p>
@@ -3663,7 +3699,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
       docsearch({
         // Your apiKey and indexName will be given to you once
         // we create your config
-        apiKey: '3eee686c0ebe39eff3baeb18c56fa5f8', 
+        apiKey: '9ee37627b9bdf4b39d6b3aa20452a779',
+        appId: 'DAYEVYFD60',
         indexName: 'apache_ignite',
         // Replace inputSelector with a CSS selector
         // matching your search input
@@ -3674,11 +3711,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1651093196' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1651093196' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1708515678' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1708515678' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1708515678' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1651093196" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1651093196"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1708515678" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1708515678"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

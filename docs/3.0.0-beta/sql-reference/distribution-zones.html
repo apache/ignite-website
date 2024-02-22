@@ -610,7 +610,7 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section describes Apache Ignite 3 distribution zones.</p>
+<p>This section describes Apache Ignite distribution zones. In Ignite 3, you can fine tune distribution of your partitions on nodes for better performance and stability.</p>
 </div>
 </div>
 </div>
@@ -622,7 +622,16 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">qualified_zone_name</span> <span class="p">[;]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">qualified_zone_name</span> <span class="p">[</span><span class="n">ENGINE</span> <span class="n">engine_name</span><span class="p">]</span>
+<span class="p">[</span><span class="k">WITH</span>
+    <span class="p">[</span><span class="n">PARTITIONS</span> <span class="o">=</span> <span class="n">partitionNumber</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">REPLICAS</span> <span class="o">=</span> <span class="n">replicaNumber</span><span class="p">],</span>
+    <span class="p">{[</span><span class="n">DATA_NODES_AUTO_ADJUST_SCALE_UP</span> <span class="o">=</span> <span class="n">scale_up_value</span> <span class="o">|</span>
+    <span class="n">DATA_NODES_AUTO_ADJUST_SCALE_DOWN</span> <span class="o">=</span> <span class="n">scale_down_value</span> <span class="o">|</span>
+    <span class="p">(</span><span class="n">DATA_NODES_AUTO_ADJUST_SCALE_UP</span> <span class="o">=</span> <span class="n">scale_up_value</span> <span class="o">&amp;</span> <span class="n">DATA_NODES_AUTO_ADJUST_SCALE_DOWN</span> <span class="o">=</span> <span class="n">scale_down_value</span><span class="p">)]},</span>
+    <span class="p">[</span><span class="n">DATA_NODES_FILTER</span> <span class="o">=</span> <span class="n">jsonPathFilter</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="p">[;]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -635,6 +644,31 @@
 </li>
 <li>
 <p><code>IF NOT EXISTS</code> - create a zone only if a different zone with the same name does not exist.</p>
+</li>
+<li>
+<p><code>ENGINE</code> - selects the storage engine to use. Currently <code>aipersist</code>, <code>aimem</code> and <code>rocksdb</code> are available.</p>
+</li>
+<li>
+<p><code>WITH</code> - accepts the following additional parameters:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PARTITIONS</code> - the number of parts data is divinded into. Partitions are then split between nodes for storage.</p>
+</li>
+<li>
+<p><code>REPLICAS</code> - the number of copies of each partition.</p>
+</li>
+<li>
+<p><code>DATA_NODES_AUTO_ADJUST_SCALE_UP</code> - the delay in seconds between the new node joining and the start of data zone adjustment.</p>
+</li>
+<li>
+<p><code>DATA_NODES_AUTO_ADJUST_SCALE_DOWN</code> - the delay in seconds between the node leaving the cluster and the start of data zone adjustment.</p>
+</li>
+<li>
+<p><code>DATA_NODES_FILTER</code> - specifies the nodes that can be used to store data in the distribution zone based on node attributes. You can configure node attributes by using cli.  Filter uses JSONPath rules. If the attribute is not found, all negative comparisons will be valid. For example, <code>$[?(@.storage != 'SSD']}</code> will also include nodes without the <code>storage</code> attribute specified.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -649,6 +683,14 @@
 <pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Creates an <code>exampleZone</code> distribution zone that will only use nodes with SSD attribute and adjust 300 seconds after cluster topology changes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="k">WITH</span> <span class="n">DATA_NODES_FILTER</span><span class="o">=</span><span class="nv">"$[?(@.storage == 'SSD')]"</span><span class="p">,</span> <span class="n">DATA_NODES_AUTO_ADJUST</span><span class="o">=</span><span class="mi">300</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -659,7 +701,16 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="p">{</span> <span class="s1">'qualified_zone_name'</span> <span class="p">}</span> <span class="p">[</span><span class="k">RENAME</span> <span class="k">TO</span> <span class="p">{</span><span class="n">new_qualified_zone_name</span><span class="p">}]</span> <span class="p">[;]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="p">{</span> <span class="s1">'qualified_zone_name'</span> <span class="p">}</span> <span class="p">[</span><span class="k">RENAME</span> <span class="k">TO</span> <span class="p">{</span><span class="n">new_qualified_zone_name</span><span class="p">}]</span>
+<span class="p">[</span><span class="k">WITH</span>
+    <span class="p">[</span><span class="n">PARTITIONS</span> <span class="o">=</span> <span class="n">partitionNumber</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">REPLICAS</span> <span class="o">=</span> <span class="n">replicaNumber</span><span class="p">],</span>
+    <span class="p">{[</span><span class="n">DATA_NODES_AUTO_ADJUST_SCALE_UP</span> <span class="o">=</span> <span class="n">scale_up_value</span> <span class="o">|</span>
+    <span class="n">DATA_NODES_AUTO_ADJUST_SCALE_DOWN</span> <span class="o">=</span> <span class="n">scale_down_value</span> <span class="o">|</span>
+    <span class="p">(</span><span class="n">DATA_NODES_AUTO_ADJUST_SCALE_UP</span> <span class="o">=</span> <span class="n">scale_up_value</span> <span class="o">&amp;</span> <span class="n">DATA_NODES_AUTO_ADJUST_SCALE_DOWN</span> <span class="o">=</span> <span class="n">scale_down_value</span><span class="p">)]},</span>
+    <span class="p">[</span><span class="n">DATA_NODES_FILTER</span> <span class="o">=</span> <span class="n">jsonPathFilter</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="p">[;]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -672,6 +723,28 @@
 </li>
 <li>
 <p><code>IF EXISTS</code> - do not throw an error if a zone with the specified name does not exist.</p>
+</li>
+<li>
+<p><code>WITH</code> - accepts the following additional parameters:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>PARTITIONS</code> - the number of parts data is divinded into. Partitions are then split between nodes for storage.</p>
+</li>
+<li>
+<p><code>REPLICAS</code> - the number of copies of each partition.</p>
+</li>
+<li>
+<p><code>DATA_NODES_AUTO_ADJUST_SCALE_UP</code> - the delay in seconds between the new node joining and the start of data zone adjustment.</p>
+</li>
+<li>
+<p><code>DATA_NODES_AUTO_ADJUST_SCALE_DOWN</code> - the delay in seconds between the node leaving the cluster and the start of data zone adjustment.</p>
+</li>
+<li>
+<p><code>DATA_NODES_FILTER</code> - specifies the nodes that can be used to store data in the distribution zone based on node attributes.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -755,7 +828,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
       docsearch({
         // Your apiKey and indexName will be given to you once
         // we create your config
-        apiKey: '3eee686c0ebe39eff3baeb18c56fa5f8', 
+        apiKey: '9ee37627b9bdf4b39d6b3aa20452a779',
+        appId: 'DAYEVYFD60',
         indexName: 'apache_ignite',
         // Replace inputSelector with a CSS selector
         // matching your search input
@@ -766,12 +840,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1698926997' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1698926997' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1698926997' async></script>
+<script type='module' src='/assets/js/index.js?1708608103' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1708608103' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1708608103' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1698926997" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1698926997"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1708608103" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1708608103"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
