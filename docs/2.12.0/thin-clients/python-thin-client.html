@@ -85,11 +85,11 @@
                 <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" height="36" >
             </a>
         </div>
-        
-        
+
         <select id="version-selector">
             <option value="2.12.0">2.12.0</option>
         </select>
+
 
         <nav id="api-docs"><ul>
             <li><a href="#">APIs</a>
@@ -100,8 +100,6 @@
                     <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">C#/.NET</a></li>
 
                     <li class="dropdown-item"><a href="/releases/latest/cppdoc/index.html">C++</a></li>
-
-                    <li class="dropdown-item"><a href="/releases/latest/scaladoc/scalar/index.html#org.apache.ignite.scalar.scalar$">Scala</a></li>
                     </ul>
                 </nav>
             </li>
@@ -124,7 +122,8 @@
                 </nav>
                 </li></ul>
         </nav>
-        
+
+
         <form class='search'>
             <button class="search-close" type='button'><img src='/assets/images/cancel.svg' alt="close" width="10" height="10" /></button>
             <input type="search" placeholder="Search…" id="search-input">
@@ -146,7 +145,6 @@
         
     </div>
 </header>
-
 
     	 <link rel="stylesheet" href="/assets/css/docs.css">
 <section class='page-docs'>
@@ -3408,11 +3406,11 @@ The examples are located in the <code>{client_dir}/examples</code> directory.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="c1">## Open a connection
-</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
+</span><span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
 </div>
 </div>
 </div>
@@ -3432,39 +3430,39 @@ When the client fails to reconnect, it throws a special <code>ReconnectError</co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
-<span class="kn">from</span> <span class="nn">pyignite.datatypes.cache_config</span> <span class="kn">import</span> <span class="n">CacheMode</span>
-<span class="kn">from</span> <span class="nn">pyignite.datatypes.prop_codes</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pyignite.exceptions</span> <span class="kn">import</span> <span class="n">SocketError</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="n">pyignite.datatypes.cache_config</span> <span class="kn">import</span> <span class="n">CacheMode</span>
+<span class="kn">from</span> <span class="n">pyignite.datatypes.prop_codes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">pyignite.exceptions</span> <span class="kn">import</span> <span class="n">SocketError</span>
 
 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">'217.29.2.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">'200.10.33.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">217.29.2.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">200.10.33.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
 <span class="p">]</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s">'Connected to {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">client</span><span class="p">))</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">40.0</span><span class="p">)</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Connected to {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">client</span><span class="p">))</span>
 
-<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_or_create_cache</span><span class="p">({</span>
-    <span class="n">PROP_NAME</span><span class="p">:</span> <span class="s">'my_cache'</span><span class="p">,</span>
+<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">get_or_create_cache</span><span class="p">({</span>
+    <span class="n">PROP_NAME</span><span class="p">:</span> <span class="sh">'</span><span class="s">my_cache</span><span class="sh">'</span><span class="p">,</span>
     <span class="n">PROP_CACHE_MODE</span><span class="p">:</span> <span class="n">CacheMode</span><span class="p">.</span><span class="n">REPLICATED</span><span class="p">,</span>
 <span class="p">})</span>
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'test_key'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">test_key</span><span class="sh">'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># Abstract main loop
 </span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># Do the work
-</span>        <span class="n">test_value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'test_key'</span><span class="p">)</span>
-        <span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'test_key'</span><span class="p">,</span> <span class="n">test_value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="nb">OSError</span><span class="p">,</span> <span class="n">SocketError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span>        <span class="n">test_value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">test_key</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">test_key</span><span class="sh">'</span><span class="p">,</span> <span class="n">test_value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nf">except </span><span class="p">(</span><span class="nb">OSError</span><span class="p">,</span> <span class="n">SocketError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="c1"># Recover from error (repeat last command, check data
 </span>        <span class="c1"># consistency or just continue − depends on the task)
-</span>        <span class="k">print</span><span class="p">(</span><span class="s">'Error: {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">'Last value: {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'test_key'</span><span class="p">)))</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">'Reconnected to {}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">client</span><span class="p">))</span></code></pre>
+</span>        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Error: {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Last value: {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">test_key</span><span class="sh">'</span><span class="p">)))</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Reconnected to {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">client</span><span class="p">))</span></code></pre>
 </div>
 </div>
 </div>
@@ -3503,14 +3501,14 @@ addresses of all the server nodes in the connection string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">partition_aware</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">(</span><span class="n">partition_aware</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">'217.29.2.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">'200.10.33.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">217.29.2.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">200.10.33.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">),</span>
 <span class="p">]</span>
 
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span></code></pre>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span></code></pre>
 </div>
 </div>
 </div>
@@ -3539,14 +3537,14 @@ addresses of all the server nodes in the connection string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
 <span class="c1"># Open a connection
-</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+</span><span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
 <span class="c1"># Create a cache
-</span><span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">create_cache</span><span class="p">(</span><span class="s">'myCache'</span><span class="p">)</span></code></pre>
+</span><span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_cache</span><span class="p">(</span><span class="sh">'</span><span class="s">myCache</span><span class="sh">'</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3554,41 +3552,41 @@ addresses of all the server nodes in the connection string.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
-<span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">GenericObjectMeta</span>
-<span class="kn">from</span> <span class="nn">pyignite.datatypes</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pyignite.datatypes.prop_codes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">GenericObjectMeta</span>
+<span class="kn">from</span> <span class="n">pyignite.datatypes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="n">pyignite.datatypes.prop_codes</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># Open a connection
-</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+</span><span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
 <span class="n">cache_config</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">PROP_NAME</span><span class="p">:</span> <span class="s">'my_cache'</span><span class="p">,</span>
+    <span class="n">PROP_NAME</span><span class="p">:</span> <span class="sh">'</span><span class="s">my_cache</span><span class="sh">'</span><span class="p">,</span>
     <span class="n">PROP_BACKUPS_NUMBER</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="n">PROP_CACHE_KEY_CONFIGURATION</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s">'type_name'</span><span class="p">:</span> <span class="s">'PersonKey'</span><span class="p">,</span>
-            <span class="s">'affinity_key_field_name'</span><span class="p">:</span> <span class="s">'companyId'</span>
+            <span class="sh">'</span><span class="s">type_name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">PersonKey</span><span class="sh">'</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">affinity_key_field_name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">companyId</span><span class="sh">'</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 
-<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">create_cache</span><span class="p">(</span><span class="n">cache_config</span><span class="p">)</span>
+<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_cache</span><span class="p">(</span><span class="n">cache_config</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">PersonKey</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">GenericObjectMeta</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="s">'PersonKey'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">OrderedDict</span><span class="p">([</span>
-    <span class="p">(</span><span class="s">'personId'</span><span class="p">,</span> <span class="n">IntObject</span><span class="p">),</span>
-    <span class="p">(</span><span class="s">'companyId'</span><span class="p">,</span> <span class="n">IntObject</span><span class="p">),</span>
+<span class="k">class</span> <span class="nc">PersonKey</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">GenericObjectMeta</span><span class="p">,</span> <span class="n">type_name</span><span class="o">=</span><span class="sh">'</span><span class="s">PersonKey</span><span class="sh">'</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="nc">OrderedDict</span><span class="p">([</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">personId</span><span class="sh">'</span><span class="p">,</span> <span class="n">IntObject</span><span class="p">),</span>
+    <span class="p">(</span><span class="sh">'</span><span class="s">companyId</span><span class="sh">'</span><span class="p">,</span> <span class="n">IntObject</span><span class="p">),</span>
 <span class="p">])):</span>
     <span class="k">pass</span>
 
 
-<span class="n">personKey</span> <span class="o">=</span> <span class="n">PersonKey</span><span class="p">(</span><span class="n">personId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">companyId</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">personKey</span><span class="p">,</span> <span class="s">'test'</span><span class="p">)</span>
+<span class="n">personKey</span> <span class="o">=</span> <span class="nc">PersonKey</span><span class="p">(</span><span class="n">personId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">companyId</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="n">personKey</span><span class="p">,</span> <span class="sh">'</span><span class="s">test</span><span class="sh">'</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">personKey</span><span class="p">))</span></code></pre>
+<span class="nf">print</span><span class="p">(</span><span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">personKey</span><span class="p">))</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3982,31 +3980,31 @@ The following example shows how to do that:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
 <span class="c1"># Create cache
-</span><span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">create_cache</span><span class="p">(</span><span class="s">'my cache'</span><span class="p">)</span>
+</span><span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_cache</span><span class="p">(</span><span class="sh">'</span><span class="s">my cache</span><span class="sh">'</span><span class="p">)</span>
 
 <span class="c1"># Put value in cache
-</span><span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'my key'</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+</span><span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">my key</span><span class="sh">'</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># Get value from cache
-</span><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'my key'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># 42
+</span><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">my key</span><span class="sh">'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># 42
 </span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'non-existent key'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># None
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">non-existent key</span><span class="sh">'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># None
 </span>
 <span class="c1"># Get multiple values from cache
-</span><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get_all</span><span class="p">([</span>
-    <span class="s">'my key'</span><span class="p">,</span>
-    <span class="s">'non-existent key'</span><span class="p">,</span>
-    <span class="s">'other-key'</span><span class="p">,</span>
+</span><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get_all</span><span class="p">([</span>
+    <span class="sh">'</span><span class="s">my key</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">non-existent key</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">other-key</span><span class="sh">'</span><span class="p">,</span>
 <span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># {'my key': 42}</span></code></pre>
+<span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># {'my key': 42}</span></code></pre>
 </div>
 </div>
 <div class="sect2">
@@ -4017,36 +4015,36 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
-<span class="kn">from</span> <span class="nn">pyignite.datatypes</span> <span class="kn">import</span> <span class="n">CharObject</span><span class="p">,</span> <span class="n">ShortObject</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="n">pyignite.datatypes</span> <span class="kn">import</span> <span class="n">CharObject</span><span class="p">,</span> <span class="n">ShortObject</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
-<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_or_create_cache</span><span class="p">(</span><span class="s">'my cache'</span><span class="p">)</span>
+<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">get_or_create_cache</span><span class="p">(</span><span class="sh">'</span><span class="s">my cache</span><span class="sh">'</span><span class="p">)</span>
 
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'my key'</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">my key</span><span class="sh">'</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
 <span class="c1"># Value ‘42’ takes 9 bytes of memory as a LongObject
 </span>
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'my key'</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="n">value_hint</span><span class="o">=</span><span class="n">ShortObject</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">my key</span><span class="sh">'</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="n">value_hint</span><span class="o">=</span><span class="n">ShortObject</span><span class="p">)</span>
 <span class="c1"># Value ‘42’ takes only 3 bytes as a ShortObject
 </span>
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="c1"># ‘a’ is a key of type String
 </span>
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">key_hint</span><span class="o">=</span><span class="n">CharObject</span><span class="p">)</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put</span><span class="p">(</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">key_hint</span><span class="o">=</span><span class="n">CharObject</span><span class="p">)</span>
 <span class="c1"># Another key ‘a’ of type CharObject is created
 </span>
-<span class="n">value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'a'</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 1
+<span class="n">value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 1
 </span>
-<span class="n">value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="n">key_hint</span><span class="o">=</span><span class="n">CharObject</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 2
+<span class="n">value</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="n">key_hint</span><span class="o">=</span><span class="n">CharObject</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 2
 </span>
 <span class="c1"># Now let us delete both keys at once
-</span><span class="n">my_cache</span><span class="p">.</span><span class="n">remove_keys</span><span class="p">([</span>
-    <span class="s">'a'</span><span class="p">,</span>  <span class="c1"># a default type key
-</span>    <span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="n">CharObject</span><span class="p">),</span>  <span class="c1"># a key of type CharObject
+</span><span class="n">my_cache</span><span class="p">.</span><span class="nf">remove_keys</span><span class="p">([</span>
+    <span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span>  <span class="c1"># a default type key
+</span>    <span class="p">(</span><span class="sh">'</span><span class="s">a</span><span class="sh">'</span><span class="p">,</span> <span class="n">CharObject</span><span class="p">),</span>  <span class="c1"># a key of type CharObject
 </span><span class="p">])</span></code></pre>
 </div>
 </div>
@@ -4066,14 +4064,14 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
-<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">create_cache</span><span class="p">(</span><span class="s">'myCache'</span><span class="p">)</span>
+<span class="n">my_cache</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_cache</span><span class="p">(</span><span class="sh">'</span><span class="s">myCache</span><span class="sh">'</span><span class="p">)</span>
 
-<span class="n">my_cache</span><span class="p">.</span><span class="n">put_all</span><span class="p">({</span><span class="s">'key_{}'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)})</span>
+<span class="n">my_cache</span><span class="p">.</span><span class="nf">put_all</span><span class="p">({</span><span class="sh">'</span><span class="s">key_{}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)})</span>
 <span class="c1"># {
 #     'key_0': 0,
 #     'key_1': 1,
@@ -4083,10 +4081,10 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 #     'key_19': 19
 # }
 </span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">scan</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">scan</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 <span class="c1"># 'key_17' 17
 # 'key_10' 10
 # 'key_6' 6,
@@ -4095,8 +4093,8 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 # 'key_12' 12
 </span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">scan</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">scan</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
 <span class="c1"># {
 #     'key_17': 17,
 #     'key_10': 10,
@@ -4113,8 +4111,8 @@ Nearly any structure element (inside dict or list) can be replaced with a 2-tupl
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="n">scan</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="n">result</span> <span class="o">=</span> <span class="n">my_cache</span><span class="p">.</span><span class="nf">scan</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">dict</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
 <span class="c1"># {
 #     'key_17': 17,
 #     'key_10': 10,
@@ -4167,49 +4165,49 @@ The <code>sql()</code> method returns a generator that yields the resulting rows
 # See the License for the specific language governing permissions and
 # limitations under the License.
 </span>
-<span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'127.0.0.1'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">127.0.0.1</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span>
 
-<span class="n">CITY_CREATE_TABLE_QUERY</span> <span class="o">=</span> <span class="s">'''CREATE TABLE City (
+<span class="n">CITY_CREATE_TABLE_QUERY</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">CREATE TABLE City (
     ID INT(11),
     Name CHAR(35),
     CountryCode CHAR(3),
     District CHAR(20),
     Population INT(11),
     PRIMARY KEY (ID, CountryCode)
-) WITH "affinityKey=CountryCode"'''</span>
+) WITH </span><span class="sh">"</span><span class="s">affinityKey=CountryCode</span><span class="sh">"'''</span>
 
-<span class="n">client</span><span class="p">.</span><span class="n">sql</span><span class="p">(</span><span class="n">CITY_CREATE_TABLE_QUERY</span><span class="p">)</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">sql</span><span class="p">(</span><span class="n">CITY_CREATE_TABLE_QUERY</span><span class="p">)</span>
 
-<span class="n">CITY_CREATE_INDEX</span> <span class="o">=</span> <span class="s">'''CREATE INDEX idx_country_code ON city (CountryCode)'''</span>
+<span class="n">CITY_CREATE_INDEX</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">CREATE INDEX idx_country_code ON city (CountryCode)</span><span class="sh">'''</span>
 
-<span class="n">client</span><span class="p">.</span><span class="n">sql</span><span class="p">(</span><span class="n">CITY_CREATE_INDEX</span><span class="p">)</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">sql</span><span class="p">(</span><span class="n">CITY_CREATE_INDEX</span><span class="p">)</span>
 
-<span class="n">CITY_INSERT_QUERY</span> <span class="o">=</span> <span class="s">'''INSERT INTO City(
+<span class="n">CITY_INSERT_QUERY</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">INSERT INTO City(
     ID, Name, CountryCode, District, Population
-) VALUES (?, ?, ?, ?, ?)'''</span>
+) VALUES (?, ?, ?, ?, ?)</span><span class="sh">'''</span>
 
 <span class="n">CITY_DATA</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="mi">3793</span><span class="p">,</span> <span class="s">'New York'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'New York'</span><span class="p">,</span> <span class="mi">8008278</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3794</span><span class="p">,</span> <span class="s">'Los Angeles'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'California'</span><span class="p">,</span> <span class="mi">3694820</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3795</span><span class="p">,</span> <span class="s">'Chicago'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'Illinois'</span><span class="p">,</span> <span class="mi">2896016</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3796</span><span class="p">,</span> <span class="s">'Houston'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'Texas'</span><span class="p">,</span> <span class="mi">1953631</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3797</span><span class="p">,</span> <span class="s">'Philadelphia'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'Pennsylvania'</span><span class="p">,</span> <span class="mi">1517550</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3798</span><span class="p">,</span> <span class="s">'Phoenix'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'Arizona'</span><span class="p">,</span> <span class="mi">1321045</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3799</span><span class="p">,</span> <span class="s">'San Diego'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'California'</span><span class="p">,</span> <span class="mi">1223400</span><span class="p">],</span>
-    <span class="p">[</span><span class="mi">3800</span><span class="p">,</span> <span class="s">'Dallas'</span><span class="p">,</span> <span class="s">'USA'</span><span class="p">,</span> <span class="s">'Texas'</span><span class="p">,</span> <span class="mi">1188580</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3793</span><span class="p">,</span> <span class="sh">'</span><span class="s">New York</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">New York</span><span class="sh">'</span><span class="p">,</span> <span class="mi">8008278</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3794</span><span class="p">,</span> <span class="sh">'</span><span class="s">Los Angeles</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">California</span><span class="sh">'</span><span class="p">,</span> <span class="mi">3694820</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3795</span><span class="p">,</span> <span class="sh">'</span><span class="s">Chicago</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Illinois</span><span class="sh">'</span><span class="p">,</span> <span class="mi">2896016</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3796</span><span class="p">,</span> <span class="sh">'</span><span class="s">Houston</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Texas</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1953631</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3797</span><span class="p">,</span> <span class="sh">'</span><span class="s">Philadelphia</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Pennsylvania</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1517550</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3798</span><span class="p">,</span> <span class="sh">'</span><span class="s">Phoenix</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Arizona</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1321045</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3799</span><span class="p">,</span> <span class="sh">'</span><span class="s">San Diego</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">California</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1223400</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3800</span><span class="p">,</span> <span class="sh">'</span><span class="s">Dallas</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">USA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Texas</span><span class="sh">'</span><span class="p">,</span> <span class="mi">1188580</span><span class="p">],</span>
 <span class="p">]</span>
 
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">CITY_DATA</span><span class="p">:</span>
-    <span class="n">client</span><span class="p">.</span><span class="n">sql</span><span class="p">(</span><span class="n">CITY_INSERT_QUERY</span><span class="p">,</span> <span class="n">query_args</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="nf">sql</span><span class="p">(</span><span class="n">CITY_INSERT_QUERY</span><span class="p">,</span> <span class="n">query_args</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
 
-<span class="n">CITY_SELECT_QUERY</span> <span class="o">=</span> <span class="s">"SELECT * FROM City"</span>
+<span class="n">CITY_SELECT_QUERY</span> <span class="o">=</span> <span class="sh">"</span><span class="s">SELECT * FROM City</span><span class="sh">"</span>
 
-<span class="n">cities</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">sql</span><span class="p">(</span><span class="n">CITY_SELECT_QUERY</span><span class="p">)</span>
+<span class="n">cities</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">sql</span><span class="p">(</span><span class="n">CITY_SELECT_QUERY</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">city</span> <span class="ow">in</span> <span class="n">cities</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="o">*</span><span class="n">city</span><span class="p">)</span></code></pre>
+    <span class="nf">print</span><span class="p">(</span><span class="o">*</span><span class="n">city</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4220,8 +4218,8 @@ The <code>sql()</code> method returns a generator that yields the resulting rows
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="n">field_names</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">sql</span><span class="p">(</span><span class="n">CITY_SELECT_QUERY</span><span class="p">,</span> <span class="n">include_field_names</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="n">__next__</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span></code></pre>
+<pre class="rouge highlight"><code data-lang="python"><span class="n">field_names</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">sql</span><span class="p">(</span><span class="n">CITY_SELECT_QUERY</span><span class="p">,</span> <span class="n">include_field_names</span><span class="o">=</span><span class="bp">True</span><span class="p">).</span><span class="nf">__next__</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">field_names</span><span class="p">)</span></code></pre>
 </div>
 </div>
 </div>
@@ -4240,18 +4238,18 @@ Refer to the <a href="/docs/2.12.0/thin-clients/getting-started-with-thin-client
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
-<span class="kn">import</span> <span class="nn">ssl</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">import</span> <span class="n">ssl</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">(</span>
                 <span class="n">use_ssl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">ssl_cert_reqs</span><span class="o">=</span><span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span>
-                <span class="n">ssl_keyfile</span><span class="o">=</span><span class="s">'/path/to/key/file'</span><span class="p">,</span>
-                <span class="n">ssl_certfile</span><span class="o">=</span><span class="s">'/path/to/client/cert'</span><span class="p">,</span>
-                <span class="n">ssl_ca_certfile</span><span class="o">=</span><span class="s">'/path/to/trusted/cert/or/chain'</span><span class="p">,</span>
+                <span class="n">ssl_keyfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/key/file</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">ssl_certfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/client/cert</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">ssl_ca_certfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/trusted/cert/or/chain</span><span class="sh">'</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'localhost'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">localhost</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4335,19 +4333,19 @@ if provided,</p>
 # See the License for the specific language governing permissions and
 # limitations under the License.
 </span>
-<span class="kn">from</span> <span class="nn">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
-<span class="kn">import</span> <span class="nn">ssl</span>
+<span class="kn">from</span> <span class="n">pyignite</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">import</span> <span class="n">ssl</span>
 
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span>
+<span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">(</span>
                 <span class="n">ssl_cert_reqs</span><span class="o">=</span><span class="n">ssl</span><span class="p">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span>
-                <span class="n">ssl_keyfile</span><span class="o">=</span><span class="s">'/path/to/key/file'</span><span class="p">,</span>
-                <span class="n">ssl_certfile</span><span class="o">=</span><span class="s">'/path/to/client/cert'</span><span class="p">,</span>
-                <span class="n">ssl_ca_certfile</span><span class="o">=</span><span class="s">'/path/to/trusted/cert/or/chain'</span><span class="p">,</span>
-                <span class="n">username</span><span class="o">=</span><span class="s">'ignite'</span><span class="p">,</span>
-                <span class="n">password</span><span class="o">=</span><span class="s">'ignite'</span><span class="p">,)</span>
+                <span class="n">ssl_keyfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/key/file</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">ssl_certfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/client/cert</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">ssl_ca_certfile</span><span class="o">=</span><span class="sh">'</span><span class="s">/path/to/trusted/cert/or/chain</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">username</span><span class="o">=</span><span class="sh">'</span><span class="s">ignite</span><span class="sh">'</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="sh">'</span><span class="s">ignite</span><span class="sh">'</span><span class="p">,)</span>
 
-<span class="n">client</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'localhost'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
+<span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="sh">'</span><span class="s">localhost</span><span class="sh">'</span><span class="p">,</span> <span class="mi">10800</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4357,7 +4355,7 @@ If you still want to use authentication without securing the connection, simply 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">'ignite'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">'ignite'</span><span class="p">,</span> <span class="n">use_ssl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre>
+<pre class="rouge highlight"><code data-lang="python"><span class="n">client</span> <span class="o">=</span> <span class="nc">Client</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="sh">'</span><span class="s">ignite</span><span class="sh">'</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="sh">'</span><span class="s">ignite</span><span class="sh">'</span><span class="p">,</span> <span class="n">use_ssl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre>
 </div>
 </div>
 </div>
@@ -4442,7 +4440,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
       docsearch({
         // Your apiKey and indexName will be given to you once
         // we create your config
-        apiKey: '3eee686c0ebe39eff3baeb18c56fa5f8', 
+        apiKey: '9ee37627b9bdf4b39d6b3aa20452a779',
+        appId: 'DAYEVYFD60',
         indexName: 'apache_ignite',
         // Replace inputSelector with a CSS selector
         // matching your search input
@@ -4453,11 +4452,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1651093198' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1651093198' async crossorigin></script>
+<script type='module' src='/assets/js/index.js?1708515681' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1708515681' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1708515681' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1651093198" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1651093198"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1708515681" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1708515681"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
