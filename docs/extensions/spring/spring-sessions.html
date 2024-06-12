@@ -38,7 +38,7 @@
     <link rel="canonical" href="/docs/spring/spring-sessions" />
     
 	
-	<link rel="stylesheet" href="/assets/css/styles.css?1658382976">
+	<link rel="stylesheet" href="/assets/css/styles.css?1661847614">
     <link rel="stylesheet" href="/assets/css/asciidoc-pygments.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
@@ -47,8 +47,8 @@
 	  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/assets/js/jquery.swiftype.autocomplete.js?1658382976"></script>
-    <script type="text/javascript" src="/assets/js/anchor.min.js?1658382976"></script>
+    <script type="text/javascript" src="/assets/js/jquery.swiftype.autocomplete.js?1661847614"></script>
+    <script type="text/javascript" src="/assets/js/anchor.min.js?1661847614"></script>
     
 
 </head>
@@ -88,8 +88,6 @@
             <button type='button' class='top-nav-toggle'>⋮</button>
         </div>
     </header>
-
-
 
     <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -347,7 +345,33 @@
 </ul>
 </div>
 <div class="paragraph">
-<p>After you add these annotations, Spring Session will use Ignite as data storage for sessions.  For example, here is how you can create a simple controller:</p>
+<p>Here is how you can add these annotations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@EnableIgniteHttpSession</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SessionConfiguration</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="nd">@SpringSessionIgnite</span>
+    <span class="kd">public</span> <span class="nc">Ignite</span> <span class="nf">ignite</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+        <span class="nc">TcpDiscoverySpi</span> <span class="n">tcpDiscoverySpi</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TcpDiscoverySpi</span><span class="o">();</span>
+
+        <span class="n">tcpDiscoverySpi</span><span class="o">.</span><span class="na">setLocalAddress</span><span class="o">(</span><span class="s">"127.0.0.1"</span><span class="o">)</span>
+                       <span class="o">.</span><span class="na">setLocalPort</span><span class="o">(</span><span class="mi">47500</span><span class="o">)</span>
+                       <span class="o">.</span><span class="na">setLocalPortRange</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+
+        <span class="n">cfg</span><span class="o">.</span><span class="na">setDiscoverySpi</span><span class="o">();</span>
+
+        <span class="k">return</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After you add these annotations, Spring Session will use Ignite as a data storage for sessions. For example, here is how you can create a simple controller:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -364,10 +388,38 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="extended-example">Extended Example</h2>
+<h2 id="configuration">Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can find an extended example in the <a href="https://github.com/antkr/ignite-spring-session-demo">example repository</a>. In it, an Ignite node is started with a Spring Session controller.</p>
+<p><code>@EnableIgniteHttpSession</code> annotation provides arguments to configure the session storage:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>maxInactiveIntervalInSeconds</code> – session timeout in seconds. By default, it is set to 1800 seconds (30 minutes).</p>
+</li>
+<li>
+<p><code>sessionMapName</code> – the name of the distributed map that will be used in Ignite to store the session data.
+By default, it is set to <code>"spring:session:sessions"</code>.</p>
+</li>
+<li>
+<p><code>flushMode</code> – flush mode for the Ignite sessions.
+The default is <code>FlushMode#ON_SAVE</code> which only updates the backing distributed storage when <code>SessionRepository#save(Session)</code> is invoked.
+In a web environment this happens just before the HTTP response is committed.</p>
+</li>
+<li>
+<p><code>saveMode</code> – save mode for the session. The default is <code>SaveMode#ON_SET_ATTRIBUTE</code>, which
+only saves changes made to session.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="example">Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can find an example in the <a href="https://github.com/antkr/ignite-spring-session-demo">example repository</a>. In it, an Ignite node is started with a Spring Session controller.</p>
 </div>
 </div>
 </div>
@@ -420,7 +472,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#set-ignite-up-programmatically">Set Ignite Up Programmatically</a></li>
 </ul>
 </li>
-<li><a href="#extended-example">Extended Example</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#example">Example</a></li>
 </ul>
     <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -457,5 +510,5 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 </body>
-<script type='module' src='/assets/js/index.js?1658382976' async></script>
+<script type='module' src='/assets/js/index.js?1661847614' async></script>
 </html>
