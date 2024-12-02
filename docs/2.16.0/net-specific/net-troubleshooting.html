@@ -3542,6 +3542,42 @@ Alternatively, use Services API to call Java service from .NET.</p>
 </div></code-tab></code-tabs>
 </div>
 </div>
+<div class="sect2">
+<h3 id="net-9-process-exited-with-code-1073740791-0xc0000409">.NET 9: Process exited with code -1073740791 (0xc0000409)</h3>
+<div class="paragraph">
+<p>Caused by Intel CET (Control-flow Enforcement Technology) being <a href="https://learn.microsoft.com/en-us/dotnet/core/compatibility/interop/9.0/cet-support">enabled by default for .NET 9 assemblies</a>.
+Ignite starts a JVM in-process, which is incompatible with CET.</p>
+</div>
+<div class="paragraph">
+<p>More details:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://learn.microsoft.com/en-us/dotnet/core/compatibility/9.0">Breaking changes in .NET 9</a></p>
+</li>
+<li>
+<p><a href="https://windows-internals.com/cet-on-windows/">CET Internals in Windows</a></p>
+</li>
+<li>
+<p><a href="https://ptupitsyn.github.io/Ignite-on-NET-9/">Blog: Ignite on .NET 9</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="workaround-3">Workaround</h4>
+<div class="paragraph">
+<p>Disable CET for the application by adding the following to the main project file (csproj, vsproj, fsproj):</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;PropertyGroup&gt;</span>
+  <span class="nt">&lt;CETCompat&gt;</span>false<span class="nt">&lt;/CETCompat&gt;</span>
+<span class="nt">&lt;/PropertyGroup&gt;</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -3573,6 +3609,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#dllnotfoundexception-unable-to-load-shared-library-libcoreclr-so-or-one-of-its-dependencies"> DllNotFoundException: Unable to load shared library 'libcoreclr.so' or one of its dependencies</a>
 <ul class="sectlevel3">
 <li><a href="#workaround-2">Workaround</a></li>
+</ul>
+</li>
+<li><a href="#net-9-process-exited-with-code-1073740791-0xc0000409">.NET 9: Process exited with code -1073740791 (0xc0000409)</a>
+<ul class="sectlevel3">
+<li><a href="#workaround-3">Workaround</a></li>
 </ul>
 </li>
 </ul>
@@ -3617,12 +3658,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1724769755' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1724769755' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1724769755' async></script>
+<script type='module' src='/assets/js/index.js?1733158706' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1733158706' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1733158706' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1724769755" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1724769755"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1733158706" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1733158706"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
