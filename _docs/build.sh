@@ -5,6 +5,7 @@ export branch=master
 export action=build
 
 export versions_filename="../docs/available-versions.txt"
+export ignite3_versions_filename="../docs/ignite3/available-versions.txt"
 
 # Usage example
 # ./build.sh --repo='https://github.com/apache/ignite-3.git' --version=3.0.0-beta --github-branch=IGNITE-16942 --ignite3
@@ -65,11 +66,20 @@ cp -R $tmp_dir/docs_$version/docs/_data/ _data
 cp -R $tmp_dir/docs_$version/docs/_plugins/ _plugins
 
 # update contents for the jekyll config file
-if [ "$latest" = "yes" ]; then
- sed  "s/{version}/$version/g;s/{base_url}/\/docs\/latest/g"  _config.template  > _config.yml
-else 
-  sed  "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g"  _config.template  > _config.yml
+if [ "$target" = "ignite3" ]; then
+  if [ "$latest" = "yes" ]; then
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/latest/g" _config.template > _config.yml
+  else
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/$version/g" _config.template > _config.yml
+  fi
+else
+  if [ "$latest" = "yes" ]; then
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/latest/g" _config.template > _config.yml
+  else
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g" _config.template > _config.yml
+  fi
 fi
+
 
 # replace docs repo URL in case Ignite 3 docs build in progress
 # used for 'Edit' button on every page
@@ -83,29 +93,55 @@ bundle exec jekyll $action
 
 # move built files to /docs/ dir under website root dir.
 if [ "$action" = "build" ]; then
+  if [[ "${target}" == "ignite3" ]] ; then
+    rm -rf ../docs/ignite3/$version
+    cp -R _site/docs/$version ../docs/ignite3/$version
+    cp -R _site/assets ../
 
-  rm -rf ../docs/$version
-  cp -R _site/docs/$version ../docs/$version
-  cp -R _site/assets ../
+    # if [ "$latest" = "yes" ]; then
+      # rm ../docs/latest
+      # ln -s ../docs/$version ../docs/latest
+    # fi
 
-  # if [ "$latest" = "yes" ]; then
-    # rm ../docs/latest
-    # ln -s ../docs/$version ../docs/latest
-  # fi
+    # add the version number to the .txt file used by the version selector dropdown on the UI
+    if ! grep -Fxq "$version" "$ignite3_versions_filename"; then
+      # adds the version to the top of the list if 'latest', otherwise to the bottom
+      if [ "$latest" = "yes" ]; then
+        cat <(echo "$version") "$ignite3_versions_filename" > ../docs/ignite3/available-versions.new
+        mv ../docs/available-versions.new "$ignite3_versions_filename"
+      else
+        #just in case the file doesn't end with an EOL already
+        if [ -z "$tail -c 1 <"$ignite3_versions_filename")" ]; then
+          echo "" >> "$ignite3_versions_filename"
+        fi
 
-  # add the version number to the .txt file used by the version selector dropdown on the UI
-  if ! grep -Fxq "$version" "$versions_filename"; then
-    # adds the version to the top of the list if 'latest', otherwise to the bottom
-    if [ "$latest" = "yes" ]; then
-      cat <(echo "$version") "$versions_filename" > ../docs/available-versions.new
-      mv ../docs/available-versions.new "$versions_filename"
-    else
-      #just in case the file doesn't end with an EOL already
-      if [ -z "$tail -c 1 <"$versions_filename")" ]; then  
-        echo "" >> "$versions_filename"
+        echo "$version" >> "$ignite3_versions_filename"
       fi
-     
-      echo "$version" >> "$versions_filename"
+    fi
+  else
+    rm -rf ../docs/$version
+    cp -R _site/docs/$version ../docs/$version
+    cp -R _site/assets ../
+
+    # if [ "$latest" = "yes" ]; then
+      # rm ../docs/latest
+      # ln -s ../docs/$version ../docs/latest
+    # fi
+
+    # add the version number to the .txt file used by the version selector dropdown on the UI
+    if ! grep -Fxq "$version" "$versions_filename"; then
+      # adds the version to the top of the list if 'latest', otherwise to the bottom
+      if [ "$latest" = "yes" ]; then
+        cat <(echo "$version") "$versions_filename" > ../docs/available-versions.new
+        mv ../docs/available-versions.new "$versions_filename"
+      else
+        #just in case the file doesn't end with an EOL already
+        if [ -z "$tail -c 1 <"$versions_filename")" ]; then
+          echo "" >> "$versions_filename"
+        fi
+
+        echo "$version" >> "$versions_filename"
+      fi
     fi
   fi
 fi
