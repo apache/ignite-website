@@ -1,53 +1,74 @@
-function initVersioning()
-{
-    let dropdown = document.getElementById("version-selector");
-    let current_base_url = dropdown.value;
-    const url = '/docs/available-versions.txt';
-    const currentDocVersion = document.querySelector('meta[name="ignite-version"]').getAttribute("content");
+function initVersioning() {
+    const dropdown = document.getElementById("version-selector");
+    if (!dropdown) return;
+
     const currentPath = document.location.pathname;
-    const isLatest = currentPath.includes("/latest/");
+    const isIgnite3 = currentPath.indexOf("/docs/ignite3/") !== -1;
+    const versionsFile = isIgnite3
+      ? '/docs/ignite3/available-versions.txt'
+      : '/docs/available-versions.txt';
 
-    fetch(url)
-        .then(
-            function(response)
-            {
-                if(response.status !== 200){
-                    console.warn("Problem fetching other versions. " + response.status);
-                    return;
-                }
+    const parts = currentPath.split('/');
+    let currentDocVersion = "";
+    if (isIgnite3) {
+        currentDocVersion = parts[3];
+    } else {
+        currentDocVersion = parts[2];
+    }
 
-                response.text().then(function(data){
-                    
-                    let lines = data.split("\n");
-                    
-                    let new_option;
-                    
-                    dropdown.length = 0;
+    function replaceVersion(newVersion) {
+        const p = currentPath.split('/');
+        if (isIgnite3) {
+            p[3] = newVersion;
+        } else {
+            p[2] = newVersion;
+        }
+        return p.join('/');
+    }
 
-                    for(let i = 0; i < lines.length; i++){
-                        if(String(lines[i]).trim().length > 0){
-                            new_option = document.createElement('option');
-                            new_option.text = lines[i];
-                            let r = isLatest?"latest":currentDocVersion;
-                            new_option.value = currentPath.replace(r, lines[i]);
-                            dropdown.add(new_option);
-                            if(lines[i] == currentDocVersion) 
-                                dropdown.selectedIndex = i;
-                        }
-                        
-                    }
+    fetch(versionsFile)
+      .then(function(response) {
+          if (response.status !== 200) {
+              console.warn("Problem fetching versions: " + response.status);
+              return;
+          }
+          return response.text();
+      })
+      .then(function(data) {
+          if (typeof data !== 'string') return;
+          const lines = data.split('\n');
+          dropdown.innerHTML = "";
 
-                    dropdown.addEventListener('change', function(){
-                        window.location.href = this.value;
-                    });
-                });
-                
-            }
-        )
-        .catch(function(err){
-            console.error('Error fetching versions', err);
-        });
+          lines.forEach(function(version) {
+              version = version.trim();
+              if (version.length > 0) {
+                  const option = document.createElement('option');
+                  option.text = version;
+                  option.value = replaceVersion(version);
+                  if (version === currentDocVersion) {
+                      option.selected = true;
+                  }
+                  dropdown.add(option);
+              }
+          });
 
+          dropdown.addEventListener('change', function() {
+              window.location.href = this.value;
+          });
+      })
+      .catch(function(err) {
+          console.error("Error fetching versions", err);
+      });
 }
 
-window.addEventListener('load', initVersioning)
+function initProductSelector() {
+    const productSelector = document.getElementById("product-selector");
+    if (!productSelector) return;
+
+    productSelector.addEventListener('change', function() {
+        window.location.href = this.value;
+    });
+}
+
+window.addEventListener('load', initVersioning);
+window.addEventListener('load', initProductSelector);
