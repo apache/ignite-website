@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['cancel_22',['cancel',['../classignite_1_1job__execution.html#afc2a76a96a4d9e3dd2b1ff23936a3e81',1,'ignite::job_execution']]],
+  ['cancel_5fasync_23',['cancel_async',['../classignite_1_1job__execution.html#a64cc8ffec3ee41893f838a1355c1663d',1,'ignite::job_execution']]],
+  ['change_5fpriority_24',['change_priority',['../classignite_1_1job__execution.html#a7d6b5299c58df286297bdbd169dea3ef',1,'ignite::job_execution']]],
+  ['change_5fpriority_5fasync_25',['change_priority_async',['../classignite_1_1job__execution.html#a2f0cbbe621c76a4d40c82856b52efe1b',1,'ignite::job_execution']]],
+  ['close_26',['close',['../classignite_1_1result__set.html#a09b8da3f98a1958acca9f1548323c9d3',1,'ignite::result_set']]],
+  ['close_5fasync_27',['close_async',['../classignite_1_1result__set.html#acddd5548a1f171a9059451c39e1c6f8f',1,'ignite::result_set']]],
+  ['cluster_5fnode_28',['cluster_node',['../classignite_1_1cluster__node.html#ae2b965ae34f167f1760c3b6cd8fd67cc',1,'ignite::cluster_node::cluster_node()'],['../classignite_1_1cluster__node.html',1,'ignite::cluster_node']]],
+  ['colocated_29',['colocated',['../classignite_1_1job__target.html#abaa68a2166a7965b5b5c71fe5f48629c',1,'ignite::job_target']]],
+  ['column_5fcount_30',['column_count',['../classignite_1_1ignite__tuple.html#a1e566073f16b3c1897e6e0e677e3e28b',1,'ignite::ignite_tuple']]],
+  ['column_5fmetadata_31',['column_metadata',['../classignite_1_1column__metadata.html#a08983f2a419b17755ff79b482e2d9105',1,'ignite::column_metadata::column_metadata()'],['../classignite_1_1column__metadata.html',1,'ignite::column_metadata']]],
+  ['column_5fname_32',['column_name',['../classignite_1_1column__origin.html#add70aae0af9e5f534cfb7eb375b60111',1,'ignite::column_origin::column_name()'],['../classignite_1_1ignite__tuple.html#ab468ecbb5d51983847d3e952ea41a784',1,'ignite::ignite_tuple::column_name(uint32_t idx) const']]],
+  ['column_5fordinal_33',['column_ordinal',['../classignite_1_1ignite__tuple.html#a826d77f56fb4da228e0d21a61aa770a6',1,'ignite::ignite_tuple']]],
+  ['column_5forigin_34',['column_origin',['../classignite_1_1column__origin.html#a0165c097029ca24e4a4fcf6d2156f2c8',1,'ignite::column_origin::column_origin()'],['../classignite_1_1column__origin.html',1,'ignite::column_origin']]],
+  ['columns_35',['columns',['../classignite_1_1result__set__metadata.html#af2ccbdc5254b72f49623128f3ff3a7ba',1,'ignite::result_set_metadata']]],
+  ['commit_36',['commit',['../classignite_1_1transaction.html#aa4b8c1551c517e43d70b2b72d2c78ff8',1,'ignite::transaction']]],
+  ['commit_5fasync_37',['commit_async',['../classignite_1_1transaction.html#a2ec414e53a4f21ed39de21ba77cb0130',1,'ignite::transaction']]],
+  ['compare_38',['compare',['../classignite_1_1cluster__node.html#a523ff7547b5c0283f5642ebf1559aba3',1,'ignite::cluster_node::compare()'],['../classignite_1_1uuid.html#a1b897d7f2e8205c1d41daaec94622b5b',1,'ignite::uuid::compare()'],['../classignite_1_1ignite__timestamp.html#a787d1c7af62ec1afb3f66ac93639cf09',1,'ignite::ignite_timestamp::compare()'],['../classignite_1_1ignite__time.html#ad604dbccee57b6389d59a4ac99d9d14e',1,'ignite::ignite_time::compare()'],['../classignite_1_1ignite__period.html#a907adfe66e480c0382c93b6c2ec877a9',1,'ignite::ignite_period::compare()'],['../classignite_1_1ignite__duration.html#a62d1cf9d0ccaa2c56516cd346f94e835',1,'ignite::ignite_duration::compare()'],['../classignite_1_1ignite__date__time.html#a0e5d8f544a176cb5ee71af21552cc1cf',1,'ignite::ignite_date_time::compare()'],['../classignite_1_1ignite__date.html#aef8ad77d190b2f7b402bf746870bc754',1,'ignite::ignite_date::compare()'],['../structignite_1_1end__point.html#a686be667517a1c116b9dfb253e6266e2',1,'ignite::end_point::compare()'],['../classignite_1_1big__integer.html#af215e55e62403fa683053594aa60885a',1,'ignite::big_integer::compare()'],['../classignite_1_1big__decimal.html#ad98191a0ca885361184942ba0bd2dd80',1,'ignite::big_decimal::compare()']]],
+  ['compute_39',['compute',['../classignite_1_1compute.html',1,'ignite']]],
+  ['configuration_40',['configuration',['../classignite_1_1ignite__client.html#aa5479303897d1c21381a54dccba55e2e',1,'ignite::ignite_client']]],
+  ['contains_41',['contains',['../classignite_1_1key__value__view_3_01ignite__tuple_00_01ignite__tuple_01_4.html#a5db99680f485f702bf30005d236931fe',1,'ignite::key_value_view&lt; ignite_tuple, ignite_tuple &gt;::contains()'],['../classignite_1_1key__value__view.html#a438aa22c2abc2b685fe46cebcf625382',1,'ignite::key_value_view::contains()']]],
+  ['contains_5fasync_42',['contains_async',['../classignite_1_1key__value__view_3_01ignite__tuple_00_01ignite__tuple_01_4.html#a072d42d3a5bc17153ecca001ceae462a',1,'ignite::key_value_view&lt; ignite_tuple, ignite_tuple &gt;::contains_async()'],['../classignite_1_1key__value__view.html#acce102f9ba020aedd1adca8582ab82bb',1,'ignite::key_value_view::contains_async()']]],
+  ['create_5ftime_43',['create_time',['../structignite_1_1job__state.html#a4628861dcfcb133610a319cc4f35a32e',1,'ignite::job_state']]],
+  ['current_5fpage_44',['current_page',['../classignite_1_1result__set.html#a275022db2eafb274ee256a761ea68cec',1,'ignite::result_set::current_page() &amp;&amp;'],['../classignite_1_1result__set.html#a088738e6c2302513a630f0fedf3fe4e9',1,'ignite::result_set::current_page() const &amp;']]]
+];

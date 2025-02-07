@@ -1,0 +1,11 @@
+var searchData=
+[
+  ['add_343',['add',['../classignite_1_1big__decimal.html#a1c34181410835ec68e91905dff36dd57',1,'ignite::big_decimal::add()'],['../classignite_1_1big__integer.html#a2988e558ecca8aa9219566522b387560',1,'ignite::big_integer::add(const big_integer &amp;other, big_integer &amp;res) const'],['../classignite_1_1big__integer.html#a895beec231fa5178547be1e1e395c6f6',1,'ignite::big_integer::add(std::uint64_t x)']]],
+  ['add_5fextra_344',['add_extra',['../classignite_1_1ignite__error.html#ab680cbaa98e75f1d60c797b371b49bbe',1,'ignite::ignite_error']]],
+  ['affected_5frows_345',['affected_rows',['../classignite_1_1result__set.html#a4940e1b868d1a126adf45186c977a19c',1,'ignite::result_set']]],
+  ['any_5fnode_346',['any_node',['../classignite_1_1job__target.html#acbdc1b9118352b5c34678b29d37b13bd',1,'ignite::job_target::any_node(std::set&lt; cluster_node &gt; nodes)'],['../classignite_1_1job__target.html#aed491ec2ffbd104d1daca45d64fda52a',1,'ignite::job_target::any_node(const std::vector&lt; cluster_node &gt; &amp;nodes)']]],
+  ['assign_5fdouble_347',['assign_double',['../classignite_1_1big__decimal.html#a26add0de33d449f313e5ae01918448bc',1,'ignite::big_decimal']]],
+  ['assign_5fint64_348',['assign_int64',['../classignite_1_1big__decimal.html#a73d8bbc03df189deaca52c7c384cf2ed',1,'ignite::big_decimal::assign_int64()'],['../classignite_1_1big__integer.html#a10d0b076715ee62ece296a290684450e',1,'ignite::big_integer::assign_int64()']]],
+  ['assign_5fstring_349',['assign_string',['../classignite_1_1big__decimal.html#aade10679c77d6a26344df420c488f212',1,'ignite::big_decimal::assign_string(const std::string &amp;val)'],['../classignite_1_1big__decimal.html#af336f45037d41a54fe914fa76f5f2daa',1,'ignite::big_decimal::assign_string(const char *val, int32_t len)'],['../classignite_1_1big__integer.html#a03e296c23cafa65b4ea600aa905f6c92',1,'ignite::big_integer::assign_string(const std::string &amp;val)'],['../classignite_1_1big__integer.html#a833a33fde49d918cca002a9d0e852168',1,'ignite::big_integer::assign_string(const char *val, std::size_t len)']]],
+  ['assign_5fuint64_350',['assign_uint64',['../classignite_1_1big__decimal.html#aa313e534475cf4f4eb360ae0def8278f',1,'ignite::big_decimal::assign_uint64()'],['../classignite_1_1big__integer.html#ad8f4edc492a74f1ce208d10b9abfb93c',1,'ignite::big_integer::assign_uint64()']]]
+];

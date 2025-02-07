@@ -1,0 +1,13 @@
+var searchData=
+[
+  ['operation_5fresult_195',['operation_result',['../classignite_1_1job__execution.html#affdf452e2574840c5387faa122749415',1,'ignite::job_execution']]],
+  ['operator_20bool_196',['operator bool',['../classignite_1_1ignite__result.html#ac72fb6b5c516f892249cc1c636e82b78',1,'ignite::ignite_result::operator bool()'],['../classignite_1_1ignite__result_3_01void_01_4.html#a4d11225618070405a8b86af982a0ac64',1,'ignite::ignite_result&lt; void &gt;::operator bool()']]],
+  ['operator_20double_197',['operator double',['../classignite_1_1big__decimal.html#ad96655ac3e6b174219f3cd3a0739bc6f',1,'ignite::big_decimal']]],
+  ['operator_20int64_5ft_198',['operator int64_t',['../classignite_1_1big__decimal.html#a39160abd8f3b9855ee5b14031e5e7185',1,'ignite::big_decimal']]],
+  ['operator_21_3d_199',['operator!=',['../classignite_1_1bit__array.html#a49b1895f083aec1d8c9619134641628c',1,'ignite::bit_array::operator!=()'],['../classignite_1_1primitive.html#aeb1a670d615340f1d564ce3e96050041',1,'ignite::primitive::operator!=()']]],
+  ['operator_3c_3c_200',['operator&lt;&lt;',['../classignite_1_1big__decimal.html#a13099398bba63181839e1ab108a9853b',1,'ignite::big_decimal::operator&lt;&lt;()'],['../classignite_1_1big__integer.html#abe64e7e3489c4c93a566f94afbfc40aa',1,'ignite::big_integer::operator&lt;&lt;()']]],
+  ['operator_3d_201',['operator=',['../classignite_1_1big__integer.html#aef123d17cfacf42a1b4776d7f7468384',1,'ignite::big_integer::operator=(const big_integer &amp;other)=default'],['../classignite_1_1big__integer.html#ac7360d209ed53d196a40b4a5a975b253',1,'ignite::big_integer::operator=(mpi_t &amp;&amp;other) noexcept'],['../classignite_1_1big__integer.html#aaf3f9c6d5dec0c9d15ad9a4d3a1c65d7',1,'ignite::big_integer::operator=(const mpi_t &amp;other)'],['../classignite_1_1big__integer.html#ac42e0a239887a203b00a409e61145ed8',1,'ignite::big_integer::operator=(big_integer &amp;&amp;other) noexcept=default']]],
+  ['operator_3d_3d_202',['operator==',['../classignite_1_1bit__array.html#a1cacce3674eda92ca8cc8824026f7372',1,'ignite::bit_array::operator==()'],['../classignite_1_1primitive.html#a9ddb1f2cb511638dcea32c7bcf177125',1,'ignite::primitive::operator==()']]],
+  ['operator_3e_3e_203',['operator&gt;&gt;',['../classignite_1_1big__decimal.html#a9c66af7cec759fd801b188631f9a0f14',1,'ignite::big_decimal::operator&gt;&gt;()'],['../classignite_1_1big__integer.html#ac00087c57f32a08f6c255e0adfdf872c',1,'ignite::big_integer::operator&gt;&gt;()']]],
+  ['origin_204',['origin',['../classignite_1_1column__metadata.html#a0a8a693001414db76ef789dc2019c077',1,'ignite::column_metadata']]]
+];
