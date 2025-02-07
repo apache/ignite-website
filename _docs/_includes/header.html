@@ -14,7 +14,7 @@
 
         <select id="product-selector">
             <option value="/docs/latest" {% if major_version == '2' %}selected{% endif %}>Ignite 2</option>
-            <option value="/docs/ignite3/3.0.0"{% if major_version == '3' %}selected{% endif %}>Ignite 3</option>
+            <option value="/docs/ignite3/latest"{% if major_version == '3' %}selected{% endif %}>Ignite 3</option>
         </select>
 
         <select id="version-selector">
@@ -26,11 +26,15 @@
             <li><a href="#">APIs</a>
                 <nav class='dropdown'>
                     <ul>
+                    {% if major_version == '3' %}
+                    <li class="dropdown-item"><a href="/releases/{{site.attrs.version}}/javadoc/index.html">Java</a></li>
+                    <li class="dropdown-item"><a href="/releases/{{site.attrs.version}}/dotnetdoc/">C#/.NET</a></li>
+                    <li class="dropdown-item"><a href="/releases/{{site.attrs.version}}/cppdoc/index.html">C++</a></li>
+                    {% else %}
                     <li class="dropdown-item"><a href="/releases/latest/javadoc/index.html">Java</a></li>
-
                     <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">C#/.NET</a></li>
-
                     <li class="dropdown-item"><a href="/releases/latest/cppdoc/index.html">C++</a></li>
+                    {% endif %}
                     </ul>
                 </nav>
             </li>
