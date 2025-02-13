@@ -3356,8 +3356,20 @@ The script is located under the <code>/bin/</code> folder of the installation di
 <div class="sect1">
 <h2 id="connecting-to-cluster">Connecting to Cluster</h2>
 <div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Starting from Apache Ignite version 2.17, the utility by default uses a connection through the thin client protocol (configured on a node via <code>org.apache.ignite.configuration.ClientConnectorConfiguration</code>). See <a href="#migration-to-the-thin-client-protocol">Migration Notes</a> for more information.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>When executed without connection parameters, the control script tries to connect to a node running on localhost (<code>localhost:11211</code>).
+<p>When executed without connection parameters, the control script tries to connect to a node running on localhost (<code>localhost:10800</code>).
 If you want to connect to a node that is running on a remove machine, specify the connection parameters.</p>
 </div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
@@ -3382,7 +3394,7 @@ If you want to connect to a node that is running on a remove machine, specify th
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">--port PORT</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The port to connect to.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>11211</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10800</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">--user USER</p></td>
@@ -3456,6 +3468,95 @@ If you want to connect to a node that is running on a remove machine, specify th
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="migration-to-the-thin-client-protocol">Migration to the thin client protocol</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With the default configuration of Ignite, no migration actions will be required. Additional configuration of the connector is no longer necessary.</p>
+</div>
+<div class="paragraph">
+<p>If you connect to the wrong connector, you will receive an error and may see the message:</p>
+</div>
+<div class="paragraph">
+<p><code>Make sure you are connecting to the client connector (configured on a node via 'org.apache.ignite.configuration.ClientConnectorConfiguration'). Connection to the REST connector was deprecated and will be removed for the control utility in future releases. Set up the 'IGNITE_CONTROL_UTILITY_USE_CONNECTOR_CONNECTION' system property to 'true' to forcefully connect to the REST connector (configured on a node via 'org.apache.ignite.configuration.ConnectorConfiguration').</code></p>
+</div>
+<div class="paragraph">
+<p>To ensure backward compatibility, a system property has been added to provide the old behavior (note: it will be removed in version 2.18):</p>
+</div>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">export </span><span class="nv">IGNITE_CONTROL_UTILITY_USE_CONNECTOR_CONNECTION</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+control.sh <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 11212</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">SET <span class="nv">IGNITE_CONTROL_UTILITY_USE_CONNECTOR_CONNECTION</span><span class="o">=</span><span class="nb">true
+</span>control.bat <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 11212</code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>In some cases, the following actions may be required to migrate user scripts using the utility:</p>
+</div>
+<div class="sect2">
+<h3 id="1-a-custom-port-is-specified">1. A custom port is specified:</h3>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 11212</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 11212</code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>To migrate, specify the port for the thin client connector:</p>
+</div>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x
+control.sh <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 10801</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x
+control.bat <span class="nt">--state</span> <span class="nt">--host</span> x.x.x.x <span class="nt">--port</span> 10801</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="2-a-custom-ssl-factory-for-the-binary-rest-connector-is-specified-different-from-the-ssl-factory-for-the-thin-client-connector">2. A custom SSL factory for the binary REST connector is specified, different from the SSL factory for the thin client connector:</h3>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--state</span> <span class="nt">--ssl-factory</span> connector-ssl-factory.xml</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--state</span> <span class="nt">--ssl-factory</span> connector-ssl-factory.xml</code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>To migrate, specify the SSL factory for the thin client connector:</p>
+</div>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.sh <span class="nt">--state</span> <span class="nt">--ssl-factory</span> ignite-ssl-factory.xml
+control.sh <span class="nt">--state</span> <span class="nt">--ssl-factory</span> client-connector-ssl-factory.xml</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">control.bat <span class="nt">--state</span> <span class="nt">--ssl-factory</span> ignite-ssl-factory.xml
+control.bat <span class="nt">--state</span> <span class="nt">--ssl-factory</span> client-connector-ssl-factory.xml</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+<div class="sect2">
+<h3 id="3-the-client-connector-is-disabled">3. The client connector is disabled.</h3>
+<div class="paragraph">
+<p>Enable it in the configuration (<code>IgniteConfiguration#setClientConnectorConfiguration</code>).</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -5054,6 +5155,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#connecting-to-cluster">Connecting to Cluster</a></li>
+<li><a href="#migration-to-the-thin-client-protocol">Migration to the thin client protocol</a>
+<ul class="sectlevel2">
+<li><a href="#1-a-custom-port-is-specified">1. A custom port is specified:</a></li>
+<li><a href="#2-a-custom-ssl-factory-for-the-binary-rest-connector-is-specified-different-from-the-ssl-factory-for-the-thin-client-connector">2. A custom SSL factory for the binary REST connector is specified, different from the SSL factory for the thin client connector:</a></li>
+<li><a href="#3-the-client-connector-is-disabled">3. The client connector is disabled.</a></li>
+</ul>
+</li>
 <li><a href="#activation-deactivation-and-topology-management">Activation, Deactivation and Topology Management</a>
 <ul class="sectlevel2">
 <li><a href="#getting-cluster-state">Getting Cluster State</a></li>
@@ -5135,12 +5243,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1739448443' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1739448443' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1739448443' async></script>
+<script type='module' src='/assets/js/index.js?1739457755' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1739457755' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1739457755' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1739448443" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1739448443"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1739457755" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1739457755"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
