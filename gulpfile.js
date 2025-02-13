@@ -201,6 +201,7 @@ export const sitemap = () => {
         '!./docs/2.13.0/**',
         '!./docs/2.14.0/**',
         '!./docs/2.15.0/**',
+        '!./docs/2.16.0/**',
         '!./docs/3.0.0-beta/**',
         '!./docs/extensions/**',
         '!./node_modules/**'
@@ -220,7 +221,7 @@ export const sitemap = () => {
                     //Remove .html for all docs files
                     let newloc = loc.replace(/.html$/, "")
                     //Change version folders into "latest"
-                    newloc = newloc.replace("2.16.0", "latest");
+                    newloc = newloc.replace("2.17.0", "latest");
                     //console.log(newloc);
                     return newloc;
                 }
