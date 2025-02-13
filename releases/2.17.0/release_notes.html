@@ -1,0 +1,232 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/2.13.0/release_notes.html" />
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    
+      ym(72949126, "init", {
+           clickmap:true,
+           trackLinks:true,
+           accurateTrackBounce:true,
+           webvisor:true
+      });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+    
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+      </script>
+
+
+
+	<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61232409-1', 'auto');
+  ga('send', 'pageview');
+
+	</script></head>
+<body>
+	<h1>Apache Ignite 2.17.0</h1>
+			<div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>Control utility now uses thin client protocol by default (configured on a node via `ClientConnectorConfiguration`). Connection via Binary-REST protocol (`ConnectorConfiguration`) was deprecated for removal in future releases.</li>
+        <li>Ignite sources were moved to Java 11.</li>
+        <li>Removed deprecated authorization methods from Security Context.</li>
+        <li>Removed deprecated `TcpCommunicationSpi` shared memory port configuration.</li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added 'keepRaw' parameter to `DumpReaderConfiguration`.</li>
+        <li>Added TLSv1_3 to `o.a.i.client.SslProtocol`.</li>
+        <li>Added `IndexQuery` events.</li>
+        <li>Added address information to `ClientConnectionException`.</li>
+        <li>Added check for SSL errors on TcpDiscovery writing failures.</li>
+        <li>Added configuration for distributed properties default values.</li>
+        <li>Added expiry policy information to the caches system view.</li>
+        <li>Added libs to the OpenCensus module to make Prometheus metrics work from the box without building any extra libs.</li>
+        <li>Added logging for CDC mode switching.</li>
+        <li>Added operation time metrics for `putAllConflict` and `removeAllConflict` operations.</li>
+        <li>Added proper logging of default page size.</li>
+        <li>Added query thread pool metrics to the log file.</li>
+        <li>Added snapshot creation time into the snapshot view.</li>
+        <li>Fixed CDC error with Ignite to Ignite streamer in case `BinaryConfiguration` is specified in the configuration.</li>
+        <li>Fixed NPE on the 'TransactionsHoldingLockNumber' metric if transaction is not initialized.</li>
+        <li>Fixed OOM crash on unstable topology.</li>
+        <li>Fixed `ClusterPartitionsCountByState` metric failure if topology is not initialized.</li>
+        <li>Fixed `IgniteCache.removeAsync(key,val)` failure inside an optimistic transaction.</li>
+        <li>Fixed an assertion error on `IgniteCache#get`.</li>
+        <li>Fixed assertion during `RotatedIdPartRecord` read from WAL.</li>
+        <li>Fixed backward connection check with loopback address.</li>
+        <li>Fixed cache dump check on a cache with a node filter.</li>
+        <li>Fixed cluster failure on topology change when DNS service is unavailable.</li>
+        <li>Fixed deserializing cache entries for `IndexQuery` on server.</li>
+        <li>Fixed duplicated keys written to dump.</li>
+        <li>Fixed entries cleaning on node shutdown/deactivation for in-memory mode.</li>
+        <li>Fixed entry and checkpoint locks orders in `DataStreamer` and update TTL.</li>
+        <li>Fixed excessive and useless warnings of `IpFinderCleaner`.</li>
+        <li>Fixed expire time setting for thin client replication.</li>
+        <li>Fixed fields count serialization in `TcpCommunication` messages.</li>
+        <li>Fixed incremental snapshot restore fail if consistent ID is not a string.</li>
+        <li>Fixed integer overflow in page eviction trackers.</li>
+        <li>Fixed iterator for local `IndexQuery`.</li>
+        <li>Fixed lambda serialization issues in code deployment for Java 21.</li>
+        <li>Fixed local class deployments cache cleanup on reconnect.</li>
+        <li>Fixed log message when Ignite Statistics usage state changes.</li>
+        <li>Fixed logging of reduced cache entries for distributed long running operations.</li>
+        <li>Fixed long JVM pause detector.</li>
+        <li>Fixed node crashing if a snapshot restore was canceled due to network issues.</li>
+        <li>Fixed node failure on timeout object intersection.</li>
+        <li>Fixed node failure when a runtime exception occurs on a snapshot start stage.</li>
+        <li>Fixed node failure while checking security permission for activation during a join.</li>
+        <li>Fixed node join failure when index creation is in progress and caches have the same `deploymentId`.</li>
+        <li>Fixed pending tree redundant cleanup on entries expire.</li>
+        <li>Fixed redundant lambda object allocation in `ClockPageReplacementFlags`.</li>
+        <li>Fixed removal of required affinity assignment instance from affinity cache.</li>
+        <li>Fixed security context propagation for async transactional operations.</li>
+        <li>Fixed sending a stack trace to a thin client if a task fails in the map phase.</li>
+        <li>Fixed server node fail when node service filter class is unknown.</li>
+        <li>Fixed service descriptor when deployment failed.</li>
+        <li>Fixed starting square bracket in default log4j2 pattern.</li>
+        <li>Fixed warnings about a closed socket.</li>
+        <li>Fixed wrong old index size in the defragmentation procedure.</li>
+        <li>Forbade a non-transactional `IgniteCache#clear()` inside a transaction.</li>
+        <li>Implemented custom user defined metrics.</li>
+        <li>Implemented transaction aware SQL and Scan queries.</li>
+        <li>Improved check of previous node on a new incoming server connection.</li>
+        <li>Moved Ignite sources to Java 11.</li>
+        <li>Optimized UUID serialization for communication messages.</li>
+        <li>Optimized entries expiration for persistent caches.</li>
+        <li>Removed deprecated `TcpCommunicationSpi` shared memory port configuration.</li>
+        <li>Removed deprecated authorization methods from Security Context.</li>
+        <li>Updated JTidy dependency version to 1.0.5.</li>
+        <li>Updated Janino dependency version to 3.1.12.</li>
+        <li>Updated Jetty dependency version to 9.4.55.</li>
+        <li>Updated Jetty dependency version to 9.4.56.v20240826.</li>
+        <li>Updated Log4j2 dependency version to 2.22.0.</li>
+        <li>Updated Netty dependency version to 4.1.101.Final.</li>
+        <li>Updated OpenCensus dependency version to 0.31.1.</li>
+        <li>Updated PostgreSQL JDBC dependency version to 42.7.3.</li>
+        <li>Updated Snappy dependency version to 1.1.10.7.</li>
+        <li>Updated Spring dependency version to 5.3.39.</li>
+        <li>Updated ZooKeeper dependency version to 3.8.4.</li>
+        <li>Updated commons-io dependency version to 2.17.0.</li>
+        <li>Updated grpc-context version to 1.62.2.</li>
+        <li>Updated json-path dependency version to 2.9.0.</li>
+    </ul>
+
+    <h2>SQL</h2>
+    <ul>
+        <li>Added ability to create user defined SQL views.</li>
+        <li>Added long queries tracking for DML operations.</li>
+        <li>Fixed `AssertionError` due to cache size overflow.</li>
+        <li>Fixed absence of warnings for long running queries with a lazy flag.</li>
+        <li>Fixed assertion error on extra column in H2 `ResultInterface#currentRow`.</li>
+        <li>Fixed nested subquery optimization.</li>
+        <li>Fixed table statistics periodical update.</li>
+    </ul>
+
+    <h2>SQL Calcite</h2>
+    <ul>
+        <li>Added ability to extend SQL engine with new system functions/operators.</li>
+        <li>Added arithmetic overflow handling.</li>
+        <li>Added date formatting/parsing functions with custom format.</li>
+        <li>Added a hint for join type.</li>
+        <li>Added memory quota control for `Cursor.getAll()` method.</li>
+        <li>Added operations authorization.</li>
+        <li>Added support for SQL hints at tables.</li>
+        <li>Added support for bitwise aggregates (`BIT_AND`, `BIT_OR`, `BIT_XOR`).</li>
+        <li>Added support for bitwise operations (`BITAND`, `BITOR`, `BITXOR`).</li>
+        <li>Added support of OR operator with dynamic parameters for index scans.</li>
+        <li>Allowed grouping by alias and ordinal value.</li>
+        <li>Fixed 'typeof' function behavior when operand throws an error (it fails now).</li>
+        <li>Fixed NVL/DECODE failure when it is used with parameters of different data types.</li>
+        <li>Fixed assertion error for multiline statements in thin client.</li>
+        <li>Fixed binary object dynamic parameter processing.</li>
+        <li>Fixed column nullability check for data types with precision or scale.</li>
+        <li>Fixed compiled expression cache key for correlated variable (to avoid cache collisions for correlated variables with different data types).</li>
+        <li>Fixed complex key index scans (binary objects comparison).</li>
+        <li>Fixed correlated nested loop `LEFT` join failure.</li>
+        <li>Fixed default `TIMESTAMP` precision.</li>
+        <li>Fixed error message for unsupported `FORMAT` in `CAST`.</li>
+        <li>Fixed expand star for system fields.</li>
+        <li>Fixed failure in `COUNT`(`DISTINCT`) operation.</li>
+        <li>Fixed failure on `CREATE TABLE` DDL with Calcite engine when `DEFAULT` column value is NULL`.</li>
+        <li>Fixed failure on sensitive information hiding for DDL statements.</li>
+        <li>Fixed implicit conversion to `DECIMAL` for some functions.</li>
+        <li>Fixed incorrect error for `TIMEWITH TIME ZONE` types.</li>
+        <li>Fixed incorrect numeric results with operator 'IS [NOT] DISTINCT FROM'.</li>
+        <li>Fixed incorrect result in unions in case of different types of numeric results.</li>
+        <li>Fixed least restrictive type priority (for `DOUBLE` and `FLOAT`).</li>
+        <li>Fixed lost limit/offset on planning.</li>
+        <li>Fixed lost precisions of dynamic query parameters.</li>
+        <li>Fixed not-null count calculation if index rebuild is in progress.</li>
+        <li>Fixed numeric to interval cast.</li>
+        <li>Fixed parsing of incorrect date literals.</li>
+        <li>Fixed partition reservation for `index-count-scan`.</li>
+        <li>Fixed rehashing of inputs containing null values.</li>
+        <li>Fixed rounding of numerics (now rounds all types of floating point numerics to the nearest integer).</li>
+        <li>Fixed sensitive information removal failure for JOINs and other SQL nodes.</li>
+        <li>Updated Calcite version to 1.37.</li>
+    </ul>
+
+    <h2>Control utility</h2>
+    <ul>
+        <li>Added a flag to ignore existed caches to the cache create command.</li>
+        <li>Added ability to view cache data in JSON format.</li>
+        <li>Added histogram bounds to the metric command output.</li>
+        <li>Added logging of the `IdleVerify` command.</li>
+        <li>Added support for the thin client connection to the control utility and deprecate legacy Binary-REST connection.</li>
+        <li>Fixed CDC resend of replicated entries.</li>
+        <li>Fixed Idle Verify hanging when invoked on an inactive cluster.</li>
+        <li>Fixed Idle verify check failing when debug logging level is set.</li>
+        <li>Fixed NPE in the cache distribution command.</li>
+        <li>Fixed errors output.</li>
+        <li>Fixed partition column output of the cache distribution command.</li>
+        <li>Fixed permissions required by the consistency repair command.</li>
+        <li>Removed `ADMIN_OPS` permissions check for cache operations.</li>
+    </ul>
+
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added `ClientClusterGroup` support for Service Awareness.</li>
+        <li>Added events for client start and stop.</li>
+        <li>Added `invoke`/`invokeAll` operations.</li>
+        <li>Fixed partition awareness after a cluster restart with the same topology version.</li>
+        <li>Fixed client init hanging when cluster discovery is enabled but returned addresses are unreachable (in another subnet).</li>
+        <li>Fixed client-connector threads blocking by transactional operations.</li>
+        <li>Fixed orphaned handles after binary object detach operation.</li>
+        <li>Fixed partition awareness with node filter.</li>
+        <li>Fixed stale client cluster group data after a cluster restart.</li>
+    </ul>
+
+    <h2>Ignite .NET</h2>
+    <ul>
+        <li>Added compute task sessions support.</li>
+        <li>Fixed platform cache update for negative cache ID.</li>
+        <li>Improved thin client service invocation performance by sending requests directly to the nodes where the service is deployed.</li>
+    </ul>
+
+    <h2>JDBC</h2>
+    <ul>
+        Added BLOB and stream APIs support.
+    </ul>
+</body>
