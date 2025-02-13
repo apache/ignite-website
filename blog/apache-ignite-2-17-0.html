@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Entries tagged [store]</title>
-    <meta property="og:title" content="Entries tagged [store]" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>Apache Ignite 2.17 Release: What’s New</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -354,34 +349,125 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Entries tagged [store]</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite 2.17 Release: What’s New</h1>
+        <p>
+          February 13, 2025 by <strong>Nikita Amelchev. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite 2.17 Release: What’s New%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-3-more.html">Apache Ignite 2.3 - More SQL and Persistence Capabilities</a></h2>
-                <div>
-                  November 1, 2017 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-3-more.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.3 - More SQL and Persistence Capabilities%20https://ignite.apache.org/blog/apache-ignite-2-3-more.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Putting aside the regular bug fixes and performance optimizations, the Apache Ignite 2.3 release brings new SQL capabilities and Ignite persistence improvements that are worth mentioning.</p>
-                <p></p>
-                <h3>SQL</h3>
-                <p></p>
-                <p>Let&apos;s start with SQL first.</p>
-                <p>Apache Ignite users have consistently told us that despite all of Ignite&rsquo;s SQL capabilities, it&rsquo;s been at times challenging trying to figure out how to start using Ignite as an SQL database.</p>
+              <div>
                 <p>
-                  This was mostly caused by scattered documentation pages, lack of &ldquo;getting started&rdquo; guides and tutorials. We&rsquo;ve remedied this oversight! All related SQL knowledge has been curated in a
-                  <a href="https://apacheignite-sql.readme.io/docs" target="_blank">single documentation domain</a>.
+                  We are happy to announce the release of <a href="https://ignite.apache.org/">Apache Ignite </a>2.17.0! In this latest version, the Ignite community has introduced a range of new features and improvements to deliver a more
+                  efficient, flexible, and future-proof platform. Below, we’ll cover the key highlights that you can look forward to when upgrading to the new release.
                 </p>
+                <!-- end -->
+                <h3 id="migrate-to-java-11">Migrating to Java 11</h3>
+                <p>
+                  Ignite 2.17 has officially moved its codebase to Java 11. With Java 8 approaching end-of-life (for public updates) and many organizations already moving to newer Java versions, this change enables Ignite to take advantage
+                  of modern language features, improved performance, and security enhancements. By upgrading Ignite to this latest release, you can ensure your cluster runs on a more up-to-date and secure Java environment.
+                </p>
+                <h3 id="transaction-aware-sql">Transaction-Aware SQL and Scan Queries</h3>
+                <p>Apache Ignite provides multiple interfaces to query data, including:</p>
+                <ul>
+                  <li>Key-Value API.</li>
+                  <li>SQL.</li>
+                  <li>Scan query.</li>
+                  <li>Index scan query.</li>
+                </ul>
+                <p>
+                  While Ignite has long supported ACID transactions for the Key-Value API, there has been a known limitation when it comes to data queries: changes made within an ongoing transaction were not visible to SQL or Scan queries.
+                  This could lead to inconsistencies when querying data inside a transaction.
+                </p>
+                <p>With the release of Apache Ignite 2.17, we are excited to introduce transaction-aware SQL and Scan queries, a significant enhancement that improves consistency and isolation when querying data within transactions.</p>
+                <p><b>NOTE: </b>This feature is currently supported only for the Calcite SQL engine and at the `READ_COMMITTED` isolation level.</p>
+                <p>To enable this feature, set the `txAwareQueriesEnabled` property in the `TransactionConfiguration`. Once enabled, your SQL and Scan queries will reflect transaction-related changes in real-time.</p>
+                <p>Here’s an example of how it works:</p>
+                <code class="lang-java">
+                  <pre>
+try (Transaction tx = srv.transactions().txStart(PESSIMISTIC, READ_COMMITTED)) {
+    cache.put(1, 2);
+ 
+    List&lt;List&lt;?&gt;&gt; sqlData = executeSql(srv, &quot;SELECT COUNT(*) FROM TBL.TBL&quot;);
+    List&lt;Entry&lt;Integer, Integer&gt;&gt; scanData = cache.query(new ScanQuery&lt;Integer, Integer&gt;()).getAll();
+ 
+    assertEquals(&quot;Must see transaction related data&quot;, 1L, sqlData.get(0).get(0));
+    assertEquals(&quot;Must see transaction related data&quot;, 1, scanData.size());
+ 
+    tx.commit();
+}</pre
+                  >
+                </code>
+                <h3 id="control-utility-migrates-to-thin-client">Control Utility Switches to Thin Client Protocol</h3>
+                <p>Starting from Apache Ignite version 2.17, the utility by default uses a connection through the thin client protocol (configured on a node via `ClientConnectorConfiguration`).</p>
+                <p>With the default configuration of Ignite, no migration actions will be required. Additional configuration of the connector is no longer necessary.</p>
+                <p>
+                  In some cases, a few actions may be required to migrate user scripts using the utility. See more in
+                  <a href="https://ignite.apache.org/docs/latest/tools/control-script#migration-to-the-thin-client-protocol">documentation</a>. It’s important to note that connection via Binary-REST protocol (configured via
+                  `ConnectorConfiguration`) has been deprecated and is planned to be removed in future releases.
+                </p>
+                <h3 id="custom-user-defined-metrics">Custom User-Defined Metrics</h3>
+                <p>
+                  You can now create custom user-defined metrics in Ignite 2.17. This feature allows you to gather and expose metric data specific to the needs of your application. You can perform in-depth monitoring and troubleshooting by
+                  tracking those metrics that matter most to you. Here is example of usage:
+                </p>
+                <code class="lang-java">
+                  <pre>
+Ignite ignite = Ignition.ignite();
+
+ignite.metrics()
+    .getOrCreate(&quot;app-metric-registry&quot;)
+    .register(&quot;Status&quot;, () -&gt; appStatus.get(), &quot;Application status.&quot;);</pre
+                  >
+                </code>
+                <h3 id="calcite-sql-engine">Calcite SQL Engine</h3>
+                <p>
+                  The Apache Ignite community continues to enhance the SQL experience, and the latest updates to the <a href="https://ignite.apache.org/docs/latest/SQL/sql-calcite">Calcite SQL engine </a>bring several powerful features and
+                  improvements!
+                </p>
+                <p>
+                  Updates include support for bitwise operations and aggregates (e.g., `BIT_AND`, `BIT_OR`, `BIT_XOR`), arithmetic overflow handling, date formatting/parsing with custom formats, and join type hints for better query
+                  optimization. Additionally, the Calcite engine now supports grouping by aliases and ordinal values, providing more flexibility in query design.
+                </p>
+                <p>Looking ahead, the Ignite community has big plans for Calcite. The goal is to make Calcite the default SQL engine in future releases, deprecating the legacy H2-based engine.</p>
+                <h3 id="java-thin-client-enhancements">Java Thin Client Enhancements: `invoke()` and `invokeAll()`</h3>
+                <p>In this release, the Java thin client adds entry processor methods that will simplify how you interact with Ignite clusters: `invoke()` and `invokeAll()`.</p>
+                <p>
+                  An entry processor is used to process cache entries on the nodes where they are stored. An entry processor does not require the entry to be transferred to the client in order to perform an operation on it. The operation is
+                  performed remotely, and only the results are transmitted to the client.
+                </p>
+                <p>Here is example of an operation:</p>
+                <code class="lang-java">
+                  <pre>
+ClientCache&lt;Integer, Integer&gt; cache = client.getOrCreateCache(&quot;myCache&quot;);
+
+cache.invoke(0, new IncrementProcessor());</pre
+                  >
+                </code>
+                <p><b>NOTE: </b>The classes of the entry processors must be available on the server nodes of the cluster.</p>
+                <h3 id="anything-else">Anything else?</h3>
+                <p>See the <a href="https://ignite.apache.org/releases/2.17.0/release_notes.html">release notes </a>to learn about all of the new features and improvements.</p>
+                <p>Reach out to us on the community user list for more questions, details, and feedback.</p>
+                <p>Sincerely yours, Ignite contributors and committers</p>
               </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-3-more.html">↓ Read all</a></div>
             </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/database">database</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+                <li><a href="/blog/in">in</a></li>
+                <li><a href="/blog/memory">memory</a></li>
+                <li><a href="/blog/open">open</a></li>
+                <li><a href="/blog/source">source</a></li>
+                <li><a href="/blog/release">release</a></li>
+              </ul>
+            </section>
           </section>
-          <section class="blog__footer"><ul class="pagination"></ul></section>
         </main>
         <aside class="blog__sidebar">
           <ul>
