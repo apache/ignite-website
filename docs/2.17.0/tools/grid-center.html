@@ -54,9 +54,9 @@
 
     
     <meta name="ignite-version" content="2.17.0" />
-    <title>Application Deployment Options | Ignite Documentation</title>
+    <title>Manage Apache Ignite with Platform V Grid Center | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/net-specific/net-deployment-options" />
+    <link rel="canonical" href="/docs/latest/tools/grid-center" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -2248,8 +2248,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>.NET Specific<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>.NET Specific<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -2273,7 +2273,7 @@
                     <li> 
                         
                             <a href="/docs/latest/net-specific/net-deployment-options"
-                                class='active'
+                                class=''
                             >Deployment Options</a>
                         
                     </li>
@@ -2714,8 +2714,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Tools<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Tools<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -2752,7 +2752,7 @@
                     <li> 
                         
                             <a href="/docs/latest/tools/grid-center"
-                                class=''
+                                class='active'
                             >Platform V Grid Center</a>
                         
                     </li>
@@ -3342,224 +3342,94 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/net-specific/net-deployment-options.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/tools/grid-center.adoc" target="_blank">Edit</a>
         
-            <h1>Application Deployment Options</h1>
+            <h1>Manage Apache Ignite with Platform V Grid Center</h1>
         
         <div class="sect1">
 <h2 id="overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Apache Ignite.NET consists of .NET assemblies and Java jar files. The .NET assemblies are referenced by your project and
-are copied to an output folder during the build automatically. The JAR files can be handled automatically or manually, depending on the approach.
-Ignite.NET discovers them via the <code>IgniteHome</code> or <code>JvmClasspath</code> settings.</p>
-</div>
-<div class="paragraph">
-<p>This page introduces several most-commonly used deployment options of Ignite.NET nodes.</p>
+<p><a href="https://platformv.sbertech.ru/products/rabota-s-dannymi/grid-center" target="_blank" rel="noopener">Platform V Grid Center</a> is a functional web product designed for Apache Ignite cluster administration.
+The key product features have been developed based on many years of experience in cluster management.
+Using the Platform V Grid Center as a ready-made solution means that you can simply start working with production clusters administration.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="nuget-deployment">NuGet Deployment</h2>
+<h2 id="key-advantages">Key advantages</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><code>Apache.Ignite</code> NuGet package includes a <code>lib</code> folder with all the required jar files. This folder has
-the <code>&lt;CopyToOutputDirectory&gt;PreserveNewest&lt;/CopyToOutputDirectory&gt;</code> build action, and is copied automatically to the output directory
-during the build or publish process.</p>
-</div>
-<div class="paragraph">
-<p>Make sure <code>IGNITE_HOME</code> is not set globally. Normally you don&#8217;t need to set <code>IGNITE_HOME</code> with NuGet, except for
-ASP.NET deployments (see below).</p>
-</div>
-<div class="paragraph">
-<p>To disable this default build action, add the <code>&lt;ExcludeAssets&gt;build&lt;/ExcludeAssets&gt;</code> <a href="https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets">property</a> to the corresponding <code>&lt;PackageReference&gt;</code> in your <code>.csproj</code> file.
-This can be useful for thin client use cases and custom deployments.</p>
-</div>
-<code-tabs><code-tab data-tab='MyApp.csproj'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;Project</span> <span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
-    ...
-
-    <span class="nt">&lt;ItemGroup&gt;</span>
-      <span class="nt">&lt;PackageReference</span> <span class="na">Include=</span><span class="s">"Apache.Ignite"</span> <span class="na">Version=</span><span class="s">"2.9.1"</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;ExcludeAssets&gt;</span>build<span class="nt">&lt;/ExcludeAssets&gt;</span>
-      <span class="nt">&lt;/PackageReference&gt;</span>
-    <span class="nt">&lt;/ItemGroup&gt;</span>
-
-<span class="nt">&lt;/Project&gt;</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-<div class="sect1">
-<h2 id="single-file-deployment">Single File Deployment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite.NET supports <a href="https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file">single file deployment</a> that is available in .NET Core 3 / .NET 5+.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Use the <code>IncludeAllContentForSelfExtract</code> MSBuild property to include jar files into the single-file bundle, or ship them separately.</p>
-</li>
-<li>
-<p>See <a href="net-troubleshooting.html#libcoreclr-not-found">Troubleshooting: DllNotFoundException</a> for a workaround that is required
-on .NET 5 with some Ignite versions.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Publish command example:</p>
-</div>
-<div class="paragraph">
-<p><code>dotnet publish --self-contained true -r linux-x64 -p:PublishSingleFile=true -p:IncludeAllContentForSelfExtract=true</code></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="full-binary-package-deployment">Full Binary Package Deployment</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Copy the <a href="https://ignite.apache.org/download.cgi#binaries" target="_blank" rel="noopener">whole Ignite distribution package</a> along with your application</p>
-</li>
-<li>
-<p>Set the <code>IGNITE_HOME</code> environment variable or <code>IgniteConfiguration.IgniteHome</code> setting to point to that folder</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="custom-deployment">Custom Deployment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The JAR files are located in the <code>libs</code> folder of the binary distribution and NuGet package.
-The minimum set of jars for Ignite.NET is:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>ignite-core-{VER}.jar</code></p>
-</li>
-<li>
-<p><code>cache-api-1.0.0.jar</code></p>
-</li>
-<li>
-<p><code>ignite-indexing</code> folder (if SQL queries are used)</p>
-</li>
-<li>
-<p><code>ignite-spring</code> folder (if a Spring XML configuration is used)</p>
-</li>
-</ul>
+<p>Expand the key advantages of using Platform V Grid Center to create snapshots on time, analyze the results of Idle verify process, and many other options.</p>
 </div>
 <div class="sect2">
-<h3 id="deploying-jars-to-a-default-location">Deploying JARs to a default location:</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Copy the JAR files to the <code>libs</code> folder next to Apache.Ignite.Core.dll</p>
-</li>
-<li>
-<p>Do not set the <code>IgniteConfiguration.JvmClasspath</code>, <code>IgniteConfiguration.IgniteHome</code> properties and <code>IGNITE_HOME</code> environment variable</p>
-</li>
-</ul>
+<h3 id="available-interface">Available interface</h3>
+<div class="paragraph">
+<p>Forget about the cluster control using the console — Platform V Grid Center has an intuitive design, and cluster administrators can easily manage Apache Ignite.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/2.17.0/images/tools/grid-center.png" alt="Platform V Grid Center">
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="deploying-jar-files-to-an-arbitrary-location">Deploying jar files to an arbitrary location:</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Copy the JAR files somewhere</p>
-</li>
-<li>
-<p>Set the <code>IgniteConfiguration.JvmClasspath</code> property to a semicolon-separated string of paths for each jar file</p>
-</li>
-<li>
-<p>Do not set the <code>IGNITE_HOME</code> environment variable and <code>IgniteConfiguration.IgniteHome</code> property</p>
-</li>
-</ul>
+<h3 id="reducing-costs">Reducing costs</h3>
+<div class="paragraph">
+<p>This web app optimizes the cluster support processes which reduces the operating costs — there is no need to attract system engineers to configure the cluster.</p>
 </div>
-<code-tabs><code-tab data-tab='IgniteConfiguration.JvmClasspath Example'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">c:<span class="se">\i</span>gnite-jars<span class="se">\i</span>gnite-core-1.5.0.final.jar<span class="p">;</span>c:<span class="se">\i</span>gnite-jars<span class="se">\c</span>ache-api-1.0.0.jar</code></pre>
 </div>
-</div></code-tab></code-tabs>
+<div class="sect2">
+<h3 id="fast-monitoring">Fast monitoring</h3>
+<div class="paragraph">
+<p>Platform V Grid Center visualizes the “health” of the cluster using numerous metrics, which shortens the response time to possible incidents.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="simple-management">Simple management</h3>
+<div class="paragraph">
+<p>The Platform V Grid Center interface allows you to monitor the cluster online in real time which helps to minimize operation errors caused by the human factor.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="asp-net-deployment">ASP.NET Deployment</h2>
+<h2 id="main-functions">Main functions</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="baseline-topology-editing">Baseline topology editing</h3>
 <div class="paragraph">
-<p><code>JvmClasspath</code> or <code>IgniteHome</code> have to be explicitly set when using Ignite in a web environment (IIS and IIS Express),
-because DDL files are copied to temporary folders, and Ignite can not locate JAR files automatically.</p>
+<p>Administrate the list of nodes and client connections with ease — just use the switches of the Platform V Grid Center interface.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="cache-processing">Cache processing</h3>
 <div class="paragraph">
-<p>You can set <code>IgniteHome</code> like this in ASP.NET environment:</p>
+<p>Create and delete cluster caches, analyze the cache configuration and data distribution on cache partitions, and check the status of primary and backup partitions.</p>
 </div>
-<code-tabs><code-tab data-tab='C#'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">Ignition</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="k">new</span> <span class="n">IgniteConfiguration</span>
-<span class="p">{</span>
-    <span class="n">IgniteHome</span> <span class="p">=</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~\bin\"</span><span class="p">)</span>
-<span class="p">});</span></code></pre>
 </div>
-</div></code-tab></code-tabs>
+<div class="sect2">
+<h3 id="sql-console">SQL console</h3>
 <div class="paragraph">
-<p>Alternatively, <code>IGNITE_HOME</code> can be set globally. Add this line at the top of the <code>Application_Start</code> method in <code>Global.asax.cs</code>:</p>
+<p>Using a console, interact with a cluster through SQL queries.</p>
 </div>
-<code-tabs><code-tab data-tab='C#'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">Environment</span><span class="p">.</span><span class="nf">SetEnvironmentVariable</span><span class="p">(</span><span class="s">"IGNITE_HOME"</span><span class="p">,</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~\bin\"</span><span class="p">));</span></code></pre>
 </div>
-</div></code-tab></code-tabs>
+<div class="sect2">
+<h3 id="control-the-transactions-queries-tasks-and-services">Control the transactions, queries, tasks, and services</h3>
 <div class="paragraph">
-<p>Finally, you can use the following method to populate <code>JvmClasspath</code>:</p>
-</div>
-<code-tabs><code-tab data-tab='C#'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="k">static</span> <span class="kt">string</span> <span class="nf">GetDefaultWebClasspath</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">var</span> <span class="n">dir</span> <span class="p">=</span> <span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~\bin\libs"</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">";"</span><span class="p">,</span> <span class="n">Directory</span><span class="p">.</span><span class="nf">GetFiles</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="s">"*.jar"</span><span class="p">));</span>
-<span class="p">}</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
+<p>Manage the state of services, transactions, queries and tasks (including the duration of the operations) via Platform V Grid Center interface.
+If necessary, stop already active processes.</p>
 </div>
 </div>
-<div class="sect1">
-<h2 id="iis-application-pool-lifecycle-appdomains-and-ignite-net">IIS Application Pool Lifecycle, AppDomains, and Ignite.NET</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="create-and-restore-the-snapshots">Create and restore the snapshots</h3>
 <div class="paragraph">
-<p>There is a known problem with IIS. When a web application is restarted due to code changes or a manual restart,
-the application pool process remains alive, while AppDomain gets recycled.</p>
+<p>Work with a schedule for full and incremental snapshots on time.
+Progress-bar helps to analyze the speed of creating snapshot — you can visualize the process duration and configure the speed to reduce the system load.</p>
 </div>
 <div class="paragraph">
-<p>Ignite.NET automatically stops when AppDomain is unloaded. However, a new domain may be started when old one is still
-unloading. So the node from the old domain can have an <code>IgniteConfiguration.IgniteInstanceName</code> conflict with a node from the new domain.</p>
+<p>And much more. Please see other functions of the Platform V Grid Center on the <a href="https://platformv.sbertech.ru/products/rabota-s-dannymi/grid-center" target="_blank" rel="noopener">official website</a>.</p>
 </div>
-<div class="paragraph">
-<p>To fix this issue make sure to either assign a unique <code>IgniteInstanceName</code>, or set
-<code>IgniteConfiguration.AutoGenerateIgniteInstanceName</code> property to <code>true</code>.</p>
-</div>
-<code-tabs><code-tab data-tab='Use in C#'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IgniteConfiguration</span> <span class="p">{</span> <span class="n">AutoGenerateIgniteInstanceName</span> <span class="p">=</span> <span class="k">true</span> <span class="p">};</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='web.config'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;igniteConfiguration</span> <span class="na">autoGenerateIgniteInstanceName=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-  ...
-<span class="nt">&lt;/igniteConfiguration&gt;</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Refer to the <a href="http://stackoverflow.com/questions/42961879/how-do-i-retrieve-a-started-ignite-instance-when-a-website-restart-occurs-in-iis/" target="_blank" rel="noopener">following StackOverflow discussion</a>
-for more details.</p>
 </div>
 </div>
 </div>
@@ -3574,17 +3444,23 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#nuget-deployment">NuGet Deployment</a></li>
-<li><a href="#single-file-deployment">Single File Deployment</a></li>
-<li><a href="#full-binary-package-deployment">Full Binary Package Deployment</a></li>
-<li><a href="#custom-deployment">Custom Deployment</a>
+<li><a href="#key-advantages">Key advantages</a>
 <ul class="sectlevel2">
-<li><a href="#deploying-jars-to-a-default-location">Deploying JARs to a default location:</a></li>
-<li><a href="#deploying-jar-files-to-an-arbitrary-location">Deploying jar files to an arbitrary location:</a></li>
+<li><a href="#available-interface">Available interface</a></li>
+<li><a href="#reducing-costs">Reducing costs</a></li>
+<li><a href="#fast-monitoring">Fast monitoring</a></li>
+<li><a href="#simple-management">Simple management</a></li>
 </ul>
 </li>
-<li><a href="#asp-net-deployment">ASP.NET Deployment</a></li>
-<li><a href="#iis-application-pool-lifecycle-appdomains-and-ignite-net">IIS Application Pool Lifecycle, AppDomains, and Ignite.NET</a></li>
+<li><a href="#main-functions">Main functions</a>
+<ul class="sectlevel2">
+<li><a href="#baseline-topology-editing">Baseline topology editing</a></li>
+<li><a href="#cache-processing">Cache processing</a></li>
+<li><a href="#sql-console">SQL console</a></li>
+<li><a href="#control-the-transactions-queries-tasks-and-services">Control the transactions, queries, tasks, and services</a></li>
+<li><a href="#create-and-restore-the-snapshots">Create and restore the snapshots</a></li>
+</ul>
+</li>
 </ul>
     </div>
           
@@ -3625,12 +3501,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1739534917' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1739534917' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1739534917' async></script>
+<script type='module' src='/assets/js/index.js?1739534918' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1739534918' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1739534918' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1739534917" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1739534917"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1739534918" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1739534918"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
