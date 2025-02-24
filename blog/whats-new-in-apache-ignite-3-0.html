@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes</title>
+    <title>What's New in Apache Ignite 3.0</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
@@ -351,10 +351,10 @@
     <div class="container blog">
       <section class="blog__header post_page__header">
         <a href="/blog/">← Apache Ignite Blog</a>
-        <h1>Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes</h1>
+        <h1>What's New in Apache Ignite 3.0</h1>
         <p>
-          January 14, 2022 by <strong>Nikita Amelchev. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
-          ><a href="http://twitter.com/home?status=Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes%20https://ignite.apache.org/blog/undefined">Twitter</a>
+          February 24, 2025 by <strong>Stanislav Lukyanov. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=What's New in Apache Ignite 3.0%20https://ignite.apache.org/blog/undefined">Twitter</a>
         </p>
       </section>
       <div class="blog__content">
@@ -363,94 +363,94 @@
             <article class="post">
               <div>
                 <p>
-                  As of January 14, 2022, <a href="https://ignite.apache.org/">Apache Ignite</a> 2.12 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/0zyi2">Important JIRA tasks</a> but here
-                  let&rsquo;s briefly overview some valuable improvements.
-                </p>
-                <h3 id="vulnerability-updates">Vulnerability Updates</h3>
-                <p>
-                  The Apache Ignite versions lower than 2.11.1 are vulnerable to <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44832">CVE-2021-44832</a> which is related to the <code>ignite-log4j2</code> module usage.
-                </p>
-                <p>The release also fixes 10+ CVE&rsquo;s of various modules. See <a href="https://ignite.apache.org/releases/2.12.0/release_notes.html">release notes</a> for more details.</p>
-                <h3 id="change-data-capture">Change Data Capture</h3>
-                <p>
-                  Change Data Capture (<a href="https://en.wikipedia.org/wiki/Change_data_capture">CDC</a>) is a data processing pattern used to asynchronously receive entries that have been changed on the local node so that action can be
-                  taken using the changed entry.
+                  Apache Ignite 3.0 is the latest milestone in Apache Ignite evolution that enhances developer experience, platform resilience, and efficiency. In this article, we’ll explore the key new features and improvements in Apache
+                  Ignite 3.0.
                 </p>
                 <!-- end -->
-                <p>Below are some of the CDC use cases:</p>
+                <h2 style="margin-top: 30px; margin-bottom: 20px"><strong>Installation and Management of Ignite 3</strong></h2>
+                <p>Apache Ignite 3.0 simplifies the installation and management process, making it more accessible for developers and administrators.</p>
+                <h3><strong>New Ignite 3 Installation Packages</strong></h3>
+                <p>Apache Ignite 3.0 introduces modern Linux installation options:</p>
                 <ul>
-                  <li>Streaming changes in Warehouse;</li>
-                  <li>Updating search index;</li>
-                  <li>Calculating statistics (streaming queries);</li>
-                  <li>Auditing logs;</li>
-                  <li>Async interaction with external systems: Moderation, business process invocation, etc.</li>
+                  <li><strong>Native Linux Packages</strong>: Ignite now offers native RPM and DEB installation packages for Linux distributions, making it easier to install, upgrade, and manage through standard package managers.</li>
                 </ul>
-                <p>Ignite implements CDC with the <code>ignite-cdc.sh</code> application and <a href="https://github.com/apache/ignite/blob/master/modules/core/src/main/java/org/apache/ignite/cdc/CdcConsumer.java#L56">Java API</a>.</p>
-                <p>Below are the CDC application and the Ignite node integrated via <a href="https://ignite.apache.org/docs/2.12.0/persistence/native-persistence#write-ahead-log">WAL archive segments</a>:</p>
-                <p><img src="/img/blog/c5574c7d-2a24-4def-b1c4-b2343ed98397.svg" alt="Apache Ignite CDC design" style="display: block; margin-left: auto; margin-right: auto; width: 30%" /></p>
-                <p>
-                  When CDC is enabled, the Ignite server node creates a hard link to each WAL archive segment in the special <code>db/cdc/{consistency_id}</code> directory. The <code>ignite-cdc.sh</code> application can be runruns on a
-                  different JVM and processes newly archived WAL segments. When the segment is fully processed by <code>ignite-cdc.sh</code>, it is removed. The actual disk space is free when both links (archive and CDC) are removed.
-                </p>
-                <p>State of consumption is a pointer to the last processed event. A consumer can tell <code>ignite-cdc.sh</code> to save the consumption state. On startup event processing will be continued from the last saved state.</p>
-                <p>See implementation details <a href="https://ignite.apache.org/docs/2.12.0/persistence/change-data-capture">here</a>.</p>
-                <h3 id="index-query-api">Index Query API</h3>
-                <p>The Apache Ignite now provides Index Query API for existing indexes. Index queries work over distributed indexes and retrieve cache entries that match the specified query.</p>
-                <p>It will help in some cases, where:</p>
+                <h3><strong>Interactive Unified Ignite CLI</strong></h3>
+                <p>The new Ignite 3.0 Command Line Interface (CLI) provides a streamlined experience for managing and interacting with the cluster.</p>
                 <ul>
-                  <li>SQL is not applicable by the design of user application;</li>
-                  <li><code>IndexScan</code> is preferable to <code>ScanQuery</code> for performance reasons.</li>
+                  <li><strong>Single CLI Tool</strong>: The new CLI unifies cluster configuration, management, and SQL access in one tool, reducing complexity.</li>
+                  <li><strong>Scripting and Interactive Mode</strong>: Users can execute scripts for automation or use an interactive shell (REPL) for direct interaction with the cluster.</li>
+                  <li>
+                    <strong>Syntax Highlighting and Autocomplete</strong>: The interactive mode includes enhanced usability features such as syntax highlighting and command autocompletion, making cluster management and troubleshooting
+                    easier.
+                  </li>
                 </ul>
-                <p>Example of query:</p>
-                <code class="lang-java">
-                  <pre>// Find the persons who work in Organization 1 and have salary more than 1,000.</pre>
-                  <pre>QueryCursor&lt;Cache.Entry&lt;Integer, Person&gt;&gt; cursor = cache.query(</pre>
-                  <pre>  new IndexQuery&lt;Integer, Person&gt;(Person.class, &quot;ORG_SALARY_IDX&quot;)</pre>
-                  <pre>  .setCriteria(eq("orgId", 1), gt("salary", 1000))</pre>
-                  <pre>);</pre>
-                </code>
-                <p>See more details <a href="https://ignite.apache.org/docs/latest/key-value-api/using-cache-queries#executing-index-queries">here</a>.</p>
-                <h3 id="snapshots">Snapshots</h3>
-                <p>Previous versions can perform snapshot restore in the same cluster topology only. The new version provides the ability to restore snapshots on different cluster topologies. Moreover, added support of encrypted caches.</p>
-                <h3 id="distributed-environment-tests">Distributed Environment Tests</h3>
-                <p>
-                  The <a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-56%3A+Distributed+environment+tests">new testing framework</a> was implemented. The main goal is to have a large enough set of integration tests that
-                  cover most of the typical cluster usage scenarios.
-                </p>
-                <p>Features:</p>
+                <h3><strong>Dynamic Configuration Framework</strong></h3>
+                <p>Apache Ignite 3.0 replaces the legacy Spring XML-based configuration with a modern dynamic configuration system:</p>
                 <ul>
-                  <li>Ignite nodes can be started/stopped on a Docker or a real cluster with any custom configuration;</li>
-                  <li>Any Apache Ignite version is supported (released or compiled from sources);</li>
-                  <li>Apache Ignite forks are also supported &laquo;out of the box&raquo;;</li>
-                  <li>Any other application execution is also possible, e.g. we implemented starters for Spark and Zookeeper;</li>
-                  <li>The cluster can be managed using the <code>control.sh</code>, we made this a part of the test API;</li>
-                  <li>Custom Java applications can be executed remotely with/without a built-in Ignite node or a Thin client;</li>
-                  <li>Any ssh command can be executed remotely, and the result will be available locally (at the python test);</li>
-                  <li>A network can be broken by editing <code>iptables</code> to check communication issues;</li>
-                  <li>Tests can be executed in parallel when the cluster size is bigger than tests requirements.</li>
+                  <li><strong>HOCON-based Configuration</strong>: Human-Optimized Config Object Notation (HOCON) is now the standard configuration language, offering a more readable and flexible alternative to XML.</li>
+                  <li><strong>Dynamic Changes</strong>: Configuration parameters can now be modified dynamically via the CLI or REST API without requiring a node restart, improving operational flexibility.</li>
                 </ul>
-                <p>Framework based on <a href="https://ducktape-docs.readthedocs.io/en/latest/index.html">Ducktape</a> library from Kafka team, that&apos;s why we called it Ducktests.</p>
-                <h3 id="migration-modules-to-the-apache-ignite-extensions">Migration modules to the Apache Ignite Extensions</h3>
-                <p>There is activity on the migration of frameworks to extensions:</p>
+                <h2 style="margin-top: 30px; margin-bottom: 20px"><strong>Clients and APIs for Ignite 3</strong></h2>
+                <p>Apache Ignite 3.0 streamlines application development by unifying access across different clients and data models while ensuring flexibility and improving developer experience.</p>
+                <h3><strong>Unified Ignite Clients</strong></h3>
+                <p>Previously, Ignite had a distinction between thin and thick clients, requiring developers to choose between lightweight connections or full-featured clients. In Ignite 3.0:</p>
                 <ul>
-                  <li>GCE, AWS, Azure modules were migrated to <code>gce</code>, <code>aws</code>, <code>azure</code> extensions.</li>
-                  <li>CacheSpringStoreSessionListener was migrated to the <code>spring-tx</code> extension.</li>
-                  <li>TcpDiscoveryZookeeperIpFinder was migrated to the <code>zookeeper-ip-finder</code> extension.</li>
+                  <li><strong>Lightweight Yet Fully Featured Ignite Clients</strong>: New clients now support the full range of API features without the need to choose between thin or thick clients.</li>
+                  <li><strong>Consistent Experience Across Languages</strong>: The new client model ensures consistency in API behavior across different programming languages, reducing learning curves and integration complexities.</li>
                 </ul>
-                <p>The binaries archive now weighs 10 percent less.</p>
-                <h3 id="anything-else-">Anything else?</h3>
-                <p>See the <a href="https://ignite.apache.org/releases/2.12.0/release_notes.html">release notes</a> to learn about all of the new features and bug fixes.</p>
-                <p>Reach out to us on the community user list for more questions, details, and feedback.</p>
-                <p>Sincerely yours,</p>
-                <p>Ignite contributors and committers</p>
+                <h3><strong>Table API and Unified Schema for Ignite 3</strong></h3>
+                <p>Ignite 3.0 enhances the way the data schema is managed and accessed across SQL and NoSQL interfaces.</p>
+                <ul>
+                  <li>
+                    <strong>Consistent Data Schema</strong>: All data representations—SQL schema, key-value data types, and internal data storage—are now unified, eliminating the need for error-prone mappings between different models.
+                  </li>
+                  <li><strong>Table Views</strong>: Table Views is a new API that allows applications to independently define how they access the database tables, increasing flexibility in choosing the client-side data model.</li>
+                  <li>
+                    <strong>Record API</strong>: Record API is a new alternative to Key-Value API that allows you to use a single data object without separating it into keys and values, which further increases flexibility of development.
+                  </li>
+                </ul>
+                <h3><strong>Asynchronous and Reactive Programming for Ignite 3</strong></h3>
+                <p>Ignite 3.0 enhances support for concurrent programming paradigms:</p>
+                <ul>
+                  <li>
+                    <strong>Language Features Support</strong>: Client APIs support asynchronous and reactive programming with standard language constructs such as CompletableFuture and Flow API in Java or Task and IAsyncEnumerable in .NET.
+                  </li>
+                </ul>
+                <h3><strong>SQL Transactions in Ignite 3</strong></h3>
+                <p>Ignite 3.0 includes full transaction support in SQL:</p>
+                <ul>
+                  <li><strong>Transactional SQL Support</strong>: Full support for transactions allows you to bring more SQL applications to Ignite without compromising on consistency.</li>
+                  <li><strong>Combining SQL and NoSQL</strong>: Both SQL and NoSQL-style APIs can be used together in a single transaction, enabling developers to choose the API they want to use at any given time.</li>
+                </ul>
+                <h2 style="margin-top: 30px; margin-bottom: 20px"><strong>Architecture and Performance in Ignite 3</strong></h2>
+                <p>Apache Ignite 3.0 includes major architectural upgrades to improve cluster reliability and efficiency.</p>
+                <h3><strong>Raft-based Consensus</strong></h3>
+                <p>Apache Ignite 3.0 now utilizes a Raft-based consensus mechanism for enhanced resiliency:</p>
+                <ul>
+                  <li><strong>Improved Fault Tolerance</strong>: Distributed consensus ensures stronger cluster stability and prevents split-brain scenarios.</li>
+                  <li><strong>Simplified Cluster Changes</strong>: The new protocol reduces impact of node restarts and topology changes on the overall cluster, minimizing downtime and simplifying maintenance.</li>
+                </ul>
+                <h2 style="margin-top: 30px; margin-bottom: 20px"><strong>Apache Ignite 3.0</strong></h2>
+                <p>Apache Ignite 3.0 is a major step forward, simplifying installation, improving configuration management, enhancing API usability, and significantly boosting performance.</p>
+                <ul>
+                  <li><strong>For New Ignite Users</strong>: Apache Ignite 3.0 provides an easier learning curve, streamlining first-time installation and configuration.</li>
+                  <li><strong>For Experienced Ignite Users</strong>: Enhanced developer experience simplifies continuous improvement and maintenance.</li>
+                </ul>
+                <p>To learn more:</p>
+                <ul>
+                  <li>Register for and attend&nbsp;<a href="https://events.ringcentral.com/events/ignite-summit-2025" target="_blank">Ignite Summit 2025</a> on Feb 25 online!</li>
+                  <li>Don’t miss the session, “<a href="https://ignite-summit.org/2025/sessions/844189" target="_blank">What’s New and Cool in Ignite 3</a>” by Pavel Tupitsyn, a core Ignite committer.</li>
+                </ul>
+                <p>To try the new Apache Ignite 3.0 capabilities yourself:</p>
+                <ul>
+                  <li><a href="https://ignite.apache.org/download.cgi" target="_blank">Download Apache Ignite 3.0</a> from the official website.</li>
+                </ul>
               </div>
             </article>
             <section class="blog__footer">
               <ul class="pagination post_page">
-                <li><a href="/blog/database">database</a></li>
+                <li><a href="/blog/apache">apache</a></li>
                 <li><a href="/blog/ignite">ignite</a></li>
-                <li><a href="/blog/in-memory">in-memory</a></li>
-                <li><a href="/blog/open-source">open-source</a></li>
                 <li><a href="/blog/release">release</a></li>
               </ul>
             </section>
