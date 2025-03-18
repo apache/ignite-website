@@ -29,9 +29,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Persistent Storage | Ignite Documentation</title>
+    <title>Cluster Security | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/administrators-guide/config/storage/persistent" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/security" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -469,8 +469,8 @@
                             
                             <button
                                 type='button'
-                                class='expanded parent '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages expanded parent">
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
 
                             
                                 
@@ -486,7 +486,7 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class='active'>Storage Configuration</a></li>
+								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
                             </nav>
                         
@@ -565,7 +565,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/administrators-guide/security"
-                                class=''
+                                class='active'
                             >Cluster Security</a>
                         
                     </li>
@@ -781,79 +781,59 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/config/storage/persistent.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/security.adoc" target="_blank">Edit</a>
         
-            <h1>Persistent Storage</h1>
+            <h1>Cluster Security</h1>
         
         <div class="sect1">
-<h2 id="overview">Overview</h2>
+<h2 id="user-security">User Security</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite Persistence is designed to provide a quick and responsive persistent storage.
-When using the persistent storage, Ignite stores all the data on disk, and loads as much data as it can into RAM for processing.</p>
-</div>
-<div class="paragraph">
-<p>When persistence is enabled, Ignite stores each partition in a separate file on disk. In addition to data partitions, Ignite stores indexes and metadata.</p>
+<p>By default, all users can perform any updates on the cluster, or <a href="/docs/ignite3/latest/developers-guide/code-deployment/code-deployment">upload arbitrary code to the cluster</a> and perform remote code execution with <a href="/docs/ignite3/latest/developers-guide/compute/compute">distributed computing</a>. To improve security, we recommend configuring <a href="/docs/ignite3/latest/administrators-guide/security/permissions#user-permissions-and-roles">user roles</a> and <a href="/docs/ignite3/latest/administrators-guide/security/authentication#user-authorization">enabling authorization</a> on the cluster.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="profile-configuration">Profile Configuration</h2>
+<h2 id="communication">Communication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Each Ignite storage engine can have several storage profiles.</p>
+<p>By default, nodes use plain-text communication that is vulnerable to malicious actions. Ignite 3 separates communications between cluster nodes and communication with clients.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="checkpointing">Checkpointing</h2>
+<h2 id="node-to-node-communication">Node to Node Communication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><em>Checkpointing</em> is the process of copying dirty pages from RAM to partition files on disk. A dirty page is a page that was updated in RAM but was not written to the respective partition file.</p>
+<p>Communication between nodes usually happens within the same data center. We recommend the following to improve the security of your cluster:</p>
 </div>
-<div class="paragraph">
-<p>After a checkpoint is created, all changes are persisted to disk and will be available if the node crashes and is restarted.</p>
-</div>
-<div class="paragraph">
-<p>Checkpointing is designed to ensure durability of data and recovery in case of a node failure.</p>
-</div>
-<div class="paragraph">
-<p>This process helps you utilize disk space frugally by keeping pages in the most up-to-date state on disk.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enable SSL for cluster communication with the <code>ignite.network.ssl</code> <a href="/docs/ignite3/latest/administrators-guide/config/node-config#network-configuration">node configuration</a>.</p>
+</li>
+<li>
+<p>Run the cluster in a trusted and isolated network.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="storage-configuration">Storage Configuration</h2>
+<h2 id="node-to-client-communication">Node to Client Communication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In Ignite 3, you can create and maintain configuration in either HOCON or JSON. The configuration file has a single root "node," called <code>ignite</code>. All configuration sections are children, grandchildren, etc., of that node. The example below shows sample Ignite cluster configuration with persistence and checkpoints:</p>
+<p>Client to server communication may be over internet or otherwise untrusted network. Only the client port (10800 by default) is typically exposed outside of the cluster. To securely interact with your clients:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"storage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"engines"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"aipersist"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"checkpoint"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"checkpointDelayMillis"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"profiles:"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"clock_aipersist"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"engine"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"replacementMode"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"CLOCK"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can then use the profile (in this case, <code>clock_aipersist</code>) in your distribution zone configuration.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enable SSL for client communication with the <code>ignite.clientConnector.ssl</code> <a href="">node configuration</a>.</p>
+</li>
+<li>
+<p>Enable <a href="/docs/ignite3/latest/administrators-guide/security/authentication">authentication</a> on the cluster.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -867,10 +847,10 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#profile-configuration">Profile Configuration</a></li>
-<li><a href="#checkpointing">Checkpointing</a></li>
-<li><a href="#storage-configuration">Storage Configuration</a></li>
+<li><a href="#user-security">User Security</a></li>
+<li><a href="#communication">Communication</a></li>
+<li><a href="#node-to-node-communication">Node to Node Communication</a></li>
+<li><a href="#node-to-client-communication">Node to Client Communication</a></li>
 </ul>
     </div>
           
