@@ -5,31 +5,6 @@
 <html lang="en">
 <head>
    <meta charset="UTF-8">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-61232409-1');
-    </script>
-
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-      ym(72949126, "init", {
-          clickmap:true,
-          trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
-      });
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-
     <!-- 6Sense tag -->
     <script id="6senseWebTag" src="https://j.6sc.co/j/08e448d9-40c0-4f34-92c9-acac59bc9e18.js"></script>
     <!-- 6Sense tag -->
@@ -356,6 +331,11 @@
                                 
                                   
 
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+                            
+                                
+                                  
+
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
                             
                                 
@@ -474,8 +454,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -509,6 +489,84 @@
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class='active'
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -764,7 +822,7 @@
 <p>When the <code>cluster init</code> command is received by any node in the cluster, it starts the initialization process.</p>
 </div>
 <div class="paragraph">
-<p>First, the nodes specified in the <code>--cluster-management-group</code> argument form a RAFT group and take the role of <strong>cluster management group</strong> (CMG) - a group of nodes that handles cluster operation. If <code>--cluster-management-group</code> is not specified, the nodes listed in the <code>--metastorage-group</code> are used.</p>
+<p>First, the nodes specified in the <code>--cluster-management-group</code> argument form a RAFT group and take on the role of the <strong>cluster management group</strong> (CMG)&#8201;&#8212;&#8201;a group responsible for managing cluster operations.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -772,7 +830,23 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Then, the nodes specified in the <code>--metastorage-group</code> argument form a RAFT group and take the role of <strong>metastorage group</strong>. These nodes will hold the authoritative copy of cluster meta information.</p>
+<p>Next, the nodes specified in the <code>--metastorage-group</code> argument form a RAFT group and assume the role of the <strong>metastorage group</strong>. These nodes store the authoritative copy of the cluster&#8217;s metadata.</p>
+</div>
+<div class="paragraph">
+<p>If only one of <code>--cluster-management-group</code> or <code>--metastorage-group</code> is specified, the specified value is used for both. If neither is specified, a set of nodes is automatically selected for both CMG and the metastorage group in alphabetical order. The number of selected nodes is determined as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the cluster size is 3 or fewer, all nodes are used for the metastorage group (CMG and metastorage).</p>
+</li>
+<li>
+<p>If the cluster size is 4, three nodes are used to maintain an odd number, improving consensus efficiency.</p>
+</li>
+<li>
+<p>If the cluster size is 5 or more, five nodes are used to balance fault tolerance and overhead.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Once the 2 raft groups are started and elect their leaders, all other nodes in the topology are notified that the cluster is started, and they can join it. At this point, the cluster is considered <strong>initialized</strong> and can start receiving requests.</p>
@@ -958,12 +1032,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1740485434' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1740485434' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1740485434' async></script>
+<script type='module' src='/assets/js/index.js?1742296411' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1742296411' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1742296411' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1740485434" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1740485434"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1742296411" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1742296411"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>

@@ -5,31 +5,6 @@
 <html lang="en">
 <head>
    <meta charset="UTF-8">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-61232409-1');
-    </script>
-
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-      ym(72949126, "init", {
-          clickmap:true,
-          trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
-      });
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-
     <!-- 6Sense tag -->
     <script id="6senseWebTag" src="https://j.6sc.co/j/08e448d9-40c0-4f34-92c9-acac59bc9e18.js"></script>
     <!-- 6Sense tag -->
@@ -356,6 +331,11 @@
                                 
                                   
 
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+                            
+                                
+                                  
+
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
                             
                                 
@@ -509,6 +489,84 @@
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -785,20 +843,11 @@
 </div>
 </li>
 <li>
-<p>Place your license content in the <code>license.conf</code> file.</p>
-</li>
-<li>
 <p>Create the ConfigMap object for Ignite configuration:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">kubectl create configmap ignite-config <span class="nt">-n</span> &lt;namespace&gt; <span class="nt">--from-file</span><span class="o">=</span>ignite-config.conf</code></pre>
 </div>
-</div>
-</li>
-<li>
-<p>Create the ConfigMap object for the Ignite license:</p>
-<div class="paragraph">
-<p>Replace <code>&lt;namespace&gt;</code> with the name of the namespace where you want to deploy Ignite.</p>
 </div>
 </li>
 </ol>
@@ -921,10 +970,6 @@
         <span class="pi">-</span> <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/opt/ignite/etc/ignite-config.conf</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">config-vol</span>
           <span class="na">subPath</span><span class="pi">:</span> <span class="s">ignite-config.conf</span>
-        <span class="c1"># The license will be placed at this path in the container.</span>
-        <span class="pi">-</span> <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/opt/ignite/etc/license.conf</span>
-          <span class="na">name</span><span class="pi">:</span> <span class="s">license-vol</span>
-          <span class="na">subPath</span><span class="pi">:</span> <span class="s">license.conf</span>
         <span class="c1"># Ignite 3 working directory.</span>
         <span class="pi">-</span> <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/gg9-work</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">persistence</span>
@@ -999,9 +1044,7 @@
       <span class="pi">-</span> <span class="na">args</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s">-ec</span>
         <span class="pi">-</span> <span class="pi">|</span>
-          <span class="s">apt update &amp;&amp; apt-get install -y bind9-host</span>
-          <span class="s">GG_NODES=$(host -tsrv _cluster._tcp.ignite-svc-headless | grep 'SRV record' | awk '{print $8}' | awk -F. '{print $1}' | paste -sd ',')</span>
-          <span class="s">/opt/ignite3cli/bin/ignite3 cluster init --name=ignite --metastorage-group $GG_NODES --url=http://ignite-svc-headless:10300 --config-files=/opt/ignite/etc/license.conf</span>
+          <span class="s">/opt/ignite3cli/bin/ignite3 cluster init --name=ignite --url=http://ignite-svc-headless:10300</span>
         <span class="na">command</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="s">/bin/sh</span>
         <span class="c1"># Specify the Docker image with the Ignite 3 CLI and its version.</span>
@@ -1009,17 +1052,8 @@
         <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">IfNotPresent</span>
         <span class="na">name</span><span class="pi">:</span> <span class="s">cluster-init</span>
         <span class="na">resources</span><span class="pi">:</span> <span class="pi">{}</span>
-        <span class="na">volumeMounts</span><span class="pi">:</span>
-        <span class="c1"># The license required to be mounted to cluster-init job.</span>
-        <span class="pi">-</span> <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/opt/ignite/etc/license.conf</span>
-          <span class="na">name</span><span class="pi">:</span> <span class="s">license-vol</span>
-          <span class="na">subPath</span><span class="pi">:</span> <span class="s">license.conf</span>
       <span class="na">restartPolicy</span><span class="pi">:</span> <span class="s">Never</span>
-      <span class="na">terminationGracePeriodSeconds</span><span class="pi">:</span> <span class="m">120</span>
-      <span class="na">volumes</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">license-vol</span>
-        <span class="na">configMap</span><span class="pi">:</span>
-          <span class="na">name</span><span class="pi">:</span> <span class="s">ignite-license</span></code></pre>
+      <span class="na">terminationGracePeriodSeconds</span><span class="pi">:</span> <span class="m">120</span></code></pre>
 </div>
 </div>
 </li>
@@ -1158,12 +1192,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1740485434' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1740485434' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1740485434' async></script>
+<script type='module' src='/assets/js/index.js?1742296411' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1742296411' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1742296411' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1740485434" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1740485434"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1742296411" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1742296411"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
