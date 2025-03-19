@@ -5,30 +5,9 @@
 <html lang="en">
 <head>
    <meta charset="UTF-8">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61232409-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-61232409-1');
-    </script>
-
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-      ym(72949126, "init", {
-          clickmap:true,
-          trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
-      });
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/72949126" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
+    <!-- 6Sense tag -->
+    <script id="6senseWebTag" src="https://j.6sc.co/j/08e448d9-40c0-4f34-92c9-acac59bc9e18.js"></script>
+    <!-- 6Sense tag -->
 
 <!-- Bugyard widget embed -->
 <script type="text/javascript">!function(){if("function"!=typeof window.bugyard){var a=function(){a.c(arguments)};a.q=[],a.c=function(b){a.q.push(b)},window.bugyard=a;var b=document.createElement("script");b.setAttribute("data-bugyard","610961912c35ff001493163a"),b.setAttribute("async","async"),b.setAttribute("defer","defer"),b.setAttribute("src","https://widget.bugyard.io/bugyard.min.js"),document.getElementsByTagName("head")[0].appendChild(b)}}(); window.bugyard("hideButton"); </script>
@@ -86,6 +65,13 @@
             </a>
         </div>
 
+        
+
+        <select id="product-selector">
+            <option value="/docs/latest" selected>Ignite 2</option>
+            <option value="/docs/ignite3/latest">Ignite 3</option>
+        </select>
+
         <select id="version-selector">
             <option value="2.9.0">2.9.0</option>
         </select>
@@ -95,11 +81,11 @@
             <li><a href="#">APIs</a>
                 <nav class='dropdown'>
                     <ul>
+                    
                     <li class="dropdown-item"><a href="/releases/latest/javadoc/index.html">Java</a></li>
-
                     <li class="dropdown-item"><a href="/releases/latest/dotnetdoc/api/">C#/.NET</a></li>
-
                     <li class="dropdown-item"><a href="/releases/latest/cppdoc/index.html">C++</a></li>
+                    
                     </ul>
                 </nav>
             </li>
@@ -124,10 +110,10 @@
         </nav>
 
 
-        <form class='search'>
+        <!--form class='search'>
             <button class="search-close" type='button'><img src='/assets/images/cancel.svg' alt="close" width="10" height="10" /></button>
             <input type="search" placeholder="Search…" id="search-input">
-        </form>
+        </form-->
         
 
         <nav id="lang-selector"><ul>
@@ -3287,6 +3273,23 @@
 <p>The following table describes some most important properties of <code>TcpDiscoverySpi</code>.
 You can find the complete list of properties in the <a href="https://ignite.apache.org/releases/2.9.0/javadoc/org/apache/ignite/spi/discovery/tcp/TcpDiscoverySpi.html" target="_blank" rel="noopener">TcpDiscoverySpi</a> javadoc.</p>
 </div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You should initialize the <code>IgniteConfiguration.localHost</code> or <code>TcpDiscoverySpi.localAddress</code> parameter with the network
+interface that will be used for inter-node communication. By default, a node binds to and listens on all available IP
+addresses of an environment it&#8217;s running on. It can prolong node failures detection if some of the node&#8217;s addresses are
+not reachable from other cluster nodes.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3303,8 +3306,8 @@ You can find the complete list of properties in the <a href="https://ignite.apac
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">By default, the node uses the first non-loopback address it finds. If there is no non-loopback address available, then <code>java.net.InetAddress.getLocalHost()</code> is used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local host IP address used for discovery. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By default, a node binds to all available network addresses. If there is a non-loopback address available, then java.net.InetAddress.getLocalHost() is used.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localPort</code></p></td>
@@ -3315,6 +3318,15 @@ You can find the complete list of properties in the <a href="https://ignite.apac
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localPortRange</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">If the <code>localPort</code> is busy, the node attempts to bind to the next port (incremented by 1) and continues this process until it finds a free port. The <code>localPortRange</code> property defines the number of ports the node will try (starting from <code>localPort</code>).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>100</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>soLinger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a linger-on-close timeout of TCP sockets used by Discovery SPI. See Java <code>Socket.setSoLinger</code> API
+for details on how to adjust this setting. In Ignite, the timeout defaults to a non-negative value to prevent
+<a href="https://bugs.openjdk.java.net/browse/JDK-8219658" target="_blank" rel="noopener">potential deadlocks with SSL connections</a> but,
+as a side effect, this can prolong the detection of cluster node failures. Alternatively, update your JRE version to the
+one with the SSL issue fixed and adjust this setting accordingly.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reconnectCount</code></p></td>
@@ -3448,7 +3460,7 @@ You can find the list of all properties in the <a href="https://ignite.apache.or
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>localAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The local address for the communication SPI to bind to. If set, overrides the <code>IgniteConfiguration.localHost</code> setting.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -3584,7 +3596,7 @@ However, in stable low-latency networks, you can set the parameter to ~200 milli
 </div>
 </div>
         <div class="copyright">
- © 2024 The Apache Software Foundation.<br/>
+ © 2025 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
 
 </div>
@@ -3603,7 +3615,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
       
       <nav class="promo-nav">
             <!--#include virtual="/includes/docs_rightnav_promotion.html" -->
-            <a href="#" data-trigger-bugyard-feedback="true" id="doc-feedback-btn">Docs Feedback</a>
+            <!--a href="#" data-trigger-bugyard-feedback="true" id="doc-feedback-btn">Docs Feedback</a-->
         </nav>
         
 </nav>
@@ -3637,12 +3649,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
         debug: false,
       });
     </script>
-<script type='module' src='/assets/js/index.js?1708516144' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1708516144' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1708516144' async></script>
+<script type='module' src='/assets/js/index.js?1742393575' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1742393575' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1742393575' async></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1708516144" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1708516144"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1742393575" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1742393575"></noscript>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"></noscript>
