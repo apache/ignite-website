@@ -9,11 +9,19 @@ rm -rf $tmp_dir
 mkdir $tmp_dir
 git -C $tmp_dir clone --depth 1 --single-branch --branch $branch $repo_url extensions
 
-sed -i 's/url: /url: \/extensions\//g' $tmp_dir/extensions/docs/_data/toc.yaml
+rm -rf _docs _data _plugins _site _config.yml
+cp -R $tmp_dir/extensions/docs/_docs _docs
+cp -R $tmp_dir/extensions/docs/_data/ _data
+cp -R $tmp_dir/extensions/docs/_plugins/ _plugins
+cp $tmp_dir/extensions/docs/_config.yml _config.yml
 
-(cd $tmp_dir/extensions/docs; bundle install; bundle exec jekyll $action)
+sed -i '/^attrs: &asciidoc_attributes$/a\  section: extensions' _config.yml
+sed -i 's/url: /url: \/extensions\//g' _data/toc.yaml
 
-cp -R $tmp_dir/extensions/docs/_site/docs/. ../docs/extensions
+bundle install
+bundle exec jekyll $action
+
+cp -R _site/docs/. ../docs/extensions
 
 # cleanup after the build
-rm -rf  $tmp_dir
+rm -rf  $tmp_dir _docs _data _plugins _site
