@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="1.0" />
-    <title>Apache Ignite With Spring Boot | Ignite Documentation</title>
+    <title>Using Spark with Apache Ignite | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/spring/spring-boot" />
+    <link rel="canonical" href="/docs/spark/spark" />
     <META NAME="ROBOTS" CONTENT="NOINDEX" />
     
 	
@@ -272,215 +272,141 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="/_docs/spring/spring-boot.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="/_docs/spark/spark.adoc" target="_blank">Edit</a>
         
-            <h1>Apache Ignite With Spring Boot</h1>
+            <h1>Using Spark with Apache Ignite</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a> is a widely used Java framework that makes it easy
-to create stand-alone Spring-based applications.</p>
-</div>
-<div class="paragraph">
-<p>Apache Ignite provides two extensions that automate Ignite configuration withing the Spring Boot environment:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>ignite-spring-boot-autoconfigure-ext</code> - autoconfigures ignite server and client nodes within Spring Boot.</p>
-</li>
-<li>
-<p><code>ignite-spring-boot-thin-client-autoconfigure-ext</code> - autoconfigures <a href="/docs/thin-clients/java-thin-client">Ignite Thin Client</a> with Spring Boot.</p>
-</li>
-</ul>
+<p>This module provides an implementation of Spark RDD abstraction, providing access to Ignite caches from your Spark project.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="autoconfiguration-of-apache-ignite-servers-and-clients">Autoconfiguration of Apache Ignite Servers and Clients</h2>
+<h2 id="using-spark-integration">Using Spark Integration</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>You need to use <code>ignite-spring-boot-autoconfigure-ext</code> extension to autoconfigure Ignite servers or clients (aka. thick clients) with Spring Boot.</p>
-</div>
-<div class="paragraph">
-<p>The extension can be added with Maven as follows:</p>
-</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Import the extension to your Maven project. If you are using Maven to manage dependencies of your project, you can add an Ignite
+Spark module dependency in the following way (replace <code>${ignite-spark-ext.version}</code> with actual Ignite Spark Extension version you are interested in):</p>
 <code-tabs><code-tab data-tab='pom.xml'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-  <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-  <span class="nt">&lt;artifactId&gt;</span>ignite-spring-boot-autoconfigure-ext<span class="nt">&lt;/artifactId&gt;</span>
-   <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0
+                        http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    ...
+    <span class="nt">&lt;dependencies&gt;</span>
+        ...
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>ignite-spark-ext<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${ignite-spark-ext.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        ...
+    <span class="nt">&lt;/dependencies&gt;</span>
+    ...
+<span class="nt">&lt;/project&gt;</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Once added, Spring will create an Ignite instance on start-up automatically.</p>
+</li>
+<li>
+<p>Make sure that all required libraries are present in the classpath
+if you run the application by using the spark-submit command, or add them to your POM file:</p>
+</li>
+</ol>
 </div>
-<div class="sect2">
-<h3 id="set-ignite-up-via-spring-boot-configuration">Set Ignite Up Via Spring Boot Configuration</h3>
-<div class="paragraph">
-<p>You can use a regular Spring Boot configuration to set Ignite-specific settings. Use <code>ignite</code> as a prefix:</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+We support any minor version of Scala 2.12, Spark 3.2 and all versions of Apache Ignite.
+</td>
+</tr>
+</table>
 </div>
-<code-tabs><code-tab data-tab='application.yml'><div class="listingblock">
+<div class="paragraph">
+<p>tab:pom.xml[]</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="na">ignite</span><span class="pi">:</span>
-  <span class="na">igniteInstanceName</span><span class="pi">:</span> <span class="s">properties-instance-name</span>
-  <span class="na">communicationSpi</span><span class="pi">:</span>
-    <span class="na">localPort</span><span class="pi">:</span> <span class="m">5555</span>
-  <span class="na">dataStorageConfiguration</span><span class="pi">:</span>
-    <span class="na">defaultDataRegionConfiguration</span><span class="pi">:</span>
-      <span class="na">initialSize</span><span class="pi">:</span> <span class="m">10485760</span> <span class="c1">#10MB</span>
-    <span class="na">dataRegionConfigurations</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">my-dataregion</span>
-        <span class="na">initialSize</span><span class="pi">:</span> <span class="m">104857600</span> <span class="c1">#100MB</span>
-  <span class="na">cacheConfiguration</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">accounts</span>
-      <span class="na">queryEntities</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">tableName</span><span class="pi">:</span> <span class="s">ACCOUNTS</span>
-        <span class="na">keyFieldName</span><span class="pi">:</span> <span class="s">ID</span>
-        <span class="na">keyType</span><span class="pi">:</span> <span class="s">java.lang.Long</span>
-        <span class="na">valueType</span><span class="pi">:</span> <span class="s">java.lang.Object</span>
-        <span class="na">fields</span><span class="pi">:</span>
-          <span class="na">ID</span><span class="pi">:</span> <span class="s">java.lang.Long</span>
-          <span class="na">amount</span><span class="pi">:</span> <span class="s">java.lang.Double</span>
-          <span class="na">updateDate</span><span class="pi">:</span> <span class="s">java.util.Date</span>
-    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">my-cache2</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml">    ...
+    <span class="nt">&lt;dependencies&gt;</span>
+        ...
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.scala-lang<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>scala-library<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{scala-version}<span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.scala-lang<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>scala-reflect<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{scala-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>ignite-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{ignite-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>ignite-indexing<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{ignite-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>ignite-spring<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{ignite-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-core_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-catalyst_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-sql_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-network-common_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-network-shuffle_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.spark<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spark-tags_2.12<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>{spark-version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        ...
+    <span class="nt">&lt;/dependencies&gt;</span>
+    ...
+<span class="nt">&lt;/project&gt;</span></code></pre>
 </div>
-</div></code-tab></code-tabs>
-</div>
-<div class="sect2">
-<h3 id="set-ignite-up-programmatically">Set Ignite Up Programmatically</h3>
-<div class="paragraph">
-<p>There are two ways to configure Ignite programmatically.</p>
-</div>
-<div class="paragraph">
-<p><strong>1. Create IgniteConfiguration Bean</strong></p>
-</div>
-<div class="paragraph">
-<p>Just create a method that returns <code>IgniteConfiguration</code> bean that will be used to initialize an Ignite node with the settings you set:</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Bean</span>
-  <span class="kd">public</span> <span class="nc">IgniteConfiguration</span> <span class="nf">igniteConfiguration</span><span class="o">()</span> <span class="o">{</span>
-     <span class="c1">// If you provide a whole ClientConfiguration bean then configuration properties will not be used.</span>
-    <span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
-    <span class="n">cfg</span><span class="o">.</span><span class="na">setIgniteInstanceName</span><span class="o">(</span><span class="s">"my-ignite"</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">cfg</span><span class="o">;</span>
-  <span class="o">}</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p><strong>2. Customize IgniteConfiguration Created With Spring Boot Configuration</strong></p>
-</div>
-<div class="paragraph">
-<p>If you want to customize <code>IgniteConfiguration</code> that was initially created with Spring Boot configuration file, then
-provide an implementation of <code>IgniteConfigurer</code> interface for your application context.</p>
-</div>
-<div class="paragraph">
-<p>First, <code>IgniteConfiguration</code> will be loaded from the Spring Boot configuration and then that instance will be passed to the configurer for extra settings.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Bean</span>
-  <span class="kd">public</span> <span class="nc">IgniteConfigurer</span> <span class="nf">nodeConfigurer</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">cfg</span> <span class="o">-&gt;</span> <span class="o">{</span>
-      <span class="c1">//Setting some property.</span>
-      <span class="c1">//Other will come from `application.yml`</span>
-      <span class="n">cfg</span><span class="o">.</span><span class="na">setIgniteInstanceName</span><span class="o">(</span><span class="s">"my-ignite"</span><span class="o">);</span>
-    <span class="o">};</span>
-  <span class="o">}</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="autoconfiguration-of-apache-ignite-thin-client">Autoconfiguration of Apache Ignite Thin Client</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You need to use <code>ignite-spring-boot-thin-client-autoconfigure-ext</code> extension to autoconfigure Ignite Thin Client with Spring Boot.</p>
-</div>
-<code-tabs><code-tab data-tab='pom.xml'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-  <span class="nt">&lt;artifactId&gt;</span>ignite-spring-boot-thin-client-autoconfigure-ext<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Once added, Spring will create an instance of Ignite Thin client connection on start-up automatically.</p>
-</div>
-<div class="sect2">
-<h3 id="set-thin-client-up-via-spring-boot-configuration">Set Thin Client Up Via Spring Boot Configuration</h3>
-<div class="paragraph">
-<p>You can use a regular Spring Boot configuration to configure <code>IgniteClient</code> object. Use <code>ignite-client</code> for Ignite-specific settings:</p>
-</div>
-<code-tabs><code-tab data-tab='application.yml'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="na">ignite-client</span><span class="pi">:</span>
-  <span class="na">addresses</span><span class="pi">:</span> <span class="s">127.0.0.1:10800</span> <span class="c1"># this is mandatory property!</span>
-  <span class="na">timeout</span><span class="pi">:</span> <span class="m">10000</span>
-  <span class="na">tcpNoDelay</span><span class="pi">:</span> <span class="kc">false</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-<div class="sect2">
-<h3 id="set-thin-client-up-programmatically">Set Thin Client Up Programmatically</h3>
-<div class="paragraph">
-<p>You can use two ways to configure <code>IgniteClient</code> object programmatically.</p>
-</div>
-<div class="paragraph">
-<p><strong>1. Create ClientConfiguration bean</strong></p>
-</div>
-<div class="paragraph">
-<p>Just create a method that returns <code>ClientConfiguration</code> bean. <code>IgniteClient</code> object will use that bean upon startup:</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Bean</span>
-  <span class="kd">public</span> <span class="nc">ClientConfiguration</span> <span class="nf">clientConfiguration</span><span class="o">()</span> <span class="o">{</span>
-    <span class="c1">// If you provide a whole ClientConfiguration bean then configuration properties will not be used.</span>
-    <span class="nc">ClientConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClientConfiguration</span><span class="o">();</span>
-    <span class="n">cfg</span><span class="o">.</span><span class="na">setAddresses</span><span class="o">(</span><span class="s">"127.0.0.1:10800"</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">cfg</span><span class="o">;</span>
-  <span class="o">}</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p><strong>2. Customize ClientConfiguration Created With Spring Boot Configuration</strong></p>
-</div>
-<div class="paragraph">
-<p>If you want to customize <code>ClientConfiguration</code> bean created from the Spring Boot configuration file, then provide an
-implementation of <code>IgniteClientConfigurer</code> interface in your application context.</p>
-</div>
-<div class="paragraph">
-<p>First, <code>ClientConfiguration</code> will be loaded from the Spring Boot configuration and then an instance will be passed to the configurer.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Bean</span>
-    <span class="nc">IgniteClientConfigurer</span> <span class="nf">configurer</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">//Setting some property.</span>
-        <span class="c1">//Other will come from `application.yml`</span>
-        <span class="k">return</span> <span class="n">cfg</span> <span class="o">-&gt;</span> <span class="n">cfg</span><span class="o">.</span><span class="na">setSendBufferSize</span><span class="o">(</span><span class="mi">64</span><span class="o">*</span><span class="mi">1024</span><span class="o">);</span>
-    <span class="o">}</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="examples">Examples</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Refer to several available <a href="https://github.com/apache/ignite-extensions/tree/master/modules/spring-boot-autoconfigure-ext/examples/main">examples</a>
-for more details.</p>
 </div>
 </div>
 </div>
@@ -494,20 +420,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#autoconfiguration-of-apache-ignite-servers-and-clients">Autoconfiguration of Apache Ignite Servers and Clients</a>
-<ul class="sectlevel2">
-<li><a href="#set-ignite-up-via-spring-boot-configuration">Set Ignite Up Via Spring Boot Configuration</a></li>
-<li><a href="#set-ignite-up-programmatically">Set Ignite Up Programmatically</a></li>
-</ul>
-</li>
-<li><a href="#autoconfiguration-of-apache-ignite-thin-client">Autoconfiguration of Apache Ignite Thin Client</a>
-<ul class="sectlevel2">
-<li><a href="#set-thin-client-up-via-spring-boot-configuration">Set Thin Client Up Via Spring Boot Configuration</a></li>
-<li><a href="#set-thin-client-up-programmatically">Set Thin Client Up Programmatically</a></li>
-</ul>
-</li>
-<li><a href="#examples">Examples</a></li>
+<li><a href="#using-spark-integration">Using Spark Integration</a></li>
 </ul>
     </div>
           
