@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,7 +559,7 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
                             <nav class="sub_pages collapsed">
 
                             
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class=''>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -940,6 +1008,31 @@ The query cannot have both <code>FORCE_INDEX</code> and <code>NO_INDEX</code> hi
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="using-the-explain-plan-for-statement">Using the EXPLAIN PLAN FOR Statement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite supports the <code>EXPLAIN PLAN FOR</code> statement that can be used to read the execution plan of a query.</p>
+</div>
+<div class="paragraph">
+<p>Use this command to analyse your queries for possible optimization, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">EXPLAIN</span> <span class="n">PLAN</span> <span class="k">FOR</span> <span class="k">SELECT</span> <span class="n">name</span> <span class="k">FROM</span> <span class="n">Person</span> <span class="k">WHERE</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">26</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is how the results of the explanation may look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Exchange(distribution=[single]): rowcount = 1500.0, cumulative cost = IgniteCost [rowCount=11500.0, cpu=41500.0, memory=0.0, io=40000.0, network=6000.0], id = 47
+    TableScan(table=[[PUBLIC, PERSON]], tableId=[9], filters=[=($t1, 26)], projects=[[$t0]], requiredColumns=[{2, 3}]): rowcount = 1500.0, cumulative cost = IgniteCost [rowCount=10000.0, cpu=40000.0, memory=0.0, io=40000.0, network=0.0], id = 46</pre>
+</div>
+</div>
+</div>
+</div>
         <div class="copyright">
  © 2025 The Apache Software Foundation.<br/>
 Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
@@ -970,6 +1063,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 </li>
 </ul>
 </li>
+<li><a href="#using-the-explain-plan-for-statement">Using the EXPLAIN PLAN FOR Statement</a></li>
 </ul>
     </div>
           
@@ -993,13 +1087,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
+<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

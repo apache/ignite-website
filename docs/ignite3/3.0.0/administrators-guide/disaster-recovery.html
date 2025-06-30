@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>Disaster Recovery for Data Partitions | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/disaster-recovery" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -871,95 +871,133 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/disaster-recovery.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>Disaster Recovery for Data Partitions</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
+<p>You perform <em>disaster recovery</em> operations to recover from situation when data operations on your Ignite cluster nodes become unfeasible because Ignite cannot guarantee data consistency. In such cases, you need to either return data to a consistent state or declare the current state consistent.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Disaster recovery for system groups - <a href="/docs/ignite3/latest/administrators-guide/system-groups-recovery#cluster-management-group">Cluster Management Group</a> and <a href="/docs/ignite3/latest/administrators-guide/system-groups-recovery#metastorage-group">Metastorage Group</a> - is described in a separate page.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="disaster-scenarios-and-recovery-instructions">Disaster Scenarios and Recovery Instructions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="minority-offline">Minority Offline</h3>
+<div class="paragraph">
+<p><em>Minority</em> refers to less than half of the number of <em>replicas</em> configured for a distribution zone (DZ). For example, of DZ1 is configured with 2 replicas and DZ2 - with 3 replicas, losing a single Ignite node is a majority loss for DZ1 and a minority loss for DZ2.</p>
 </div>
 <div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
+<p>You may discover that one or more of your cluster nodes are offline in a number of ways, including the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command with the <code>--global</code> option, which would show <code>Read-only partition</code>, <code>Degraded partition</code>, or <code>Unavailable partition</code> for offline nodes.</p>
+</div>
+<div class="paragraph">
+<p>Once a minority offline status has been discovered:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Command the system to bring the offline node(s) online.</p>
+<div class="paragraph">
+<p>The system attempts to bring the indicated nodes online. Possible outcomes are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>CREATE ZONE</p>
+<p>Nodes return online in time (before scale-down timeout) with valid data. The system replicates the missing data (if any)using either log replication or the full state transfer procedure.</p>
 </li>
 <li>
-<p>CREATE TABLE</p>
+<p>Nodes return online in time but without data. The system replicates the data using the full state transfer procedure.</p>
 </li>
 <li>
-<p>CREATE INDEX</p>
+<p>A node does not return online before scale-down timeout. The system distributes a replica to a new node and starts the rebalance procedure.</p>
 </li>
 <li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
+<p>Node return online with inconsistent data - see steps 4 and 5.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Full state transfer and rebalancing might take a long time (tens of minutes). We suggest that you recover nodes as soon as you discover they are offline.
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
+</li>
+<li>
+<p>Run the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command on the relevant zones/nodes/partitions to verify <a href="#partition-states">Partition States</a>.</p>
+</li>
+<li>
+<p>If the state is <code>Healthy</code> or <code>Available partition</code>, consider the recovery completed.</p>
+</li>
+<li>
+<p>If the state is <code>Broken</code>:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Restart your GrigGain node or the relevant partitions using the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery restart-partitions</a> CLI command.</p>
+</li>
+<li>
+<p>Rerun the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If the the partition state is <code>Read-only partition</code>, <code>Degraded partition</code>, or <code>Unavailable partition</code>, reset the relevant partitions using the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery reset-partitions</a> CLI command.</p>
+</li>
+</ol>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="examples">Examples</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
+<h3 id="majority-offline">Majority Offline</h3>
 <div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
+<p><em>Majority</em> refers to half (or more) of the number of <em>replicas</em> configured for a distribution zone (DZ). For example, of DZ1 is configured with 2 replicas and DZ2 - with 3 replicas, losing a single Ignite node is a majority loss for DZ1 and a minority loss for DZ2.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
+<div class="paragraph">
+<p>You may discover that one or more of your cluster nodes are offline in a number of ways, including the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command with the <code>--global</code> option, which would show <code>Read-only partition</code>, <code>Degraded partition</code>, or <code>Unavailable partition</code> for offline nodes.</p>
 </div>
+<div class="paragraph">
+<p>If the node(s) that remain(s) online include the primary replica, the partition becomes <code>Read-only partition</code> (see <a href="#global-partition-states">Global Partition States</a>); all the data is available for reading until lease expires.
+If the node(s) that remain(s) online do <em>not</em> include the primary replica, the partition becomes <code>Unavailable partition</code> (see <a href="#global-partition-states">Global Partition States</a>).</p>
 </div>
+<div class="paragraph">
+<p>Once a majority offline status has been discovered:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Command the system to bring the offline nodes online.</p>
+<div class="paragraph">
+<p>The system attempts to bring the indicated nodes online. Possible outcomes are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Nodes return online in time (before scale-down timeout) with valid data. A leader is elected, the system replicates the missing data (if any)using either log replication or the full state transfer procedure, and a leaseholder is elected</p>
+</li>
+<li>
+<p>Nodes return online with inconsistent data - see steps 4 and 5.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -967,134 +1005,116 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
+Full state transfer and rebalancing might take a long time (tens of minutes). We suggest that you recover nodes as soon as you discover they are offline.
 </td>
 </tr>
 </table>
 </div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Run the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command on the relevant zones/nodes/partitions to verify <a href="#partition-states">Partition States</a>.</p>
+</li>
+<li>
+<p>If the state is <code>Healthy</code> or <code>Available partition</code>, consider the recovery completed.</p>
+</li>
+<li>
+<p>If the state is <code>Broken</code>:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Restart your GrigGain nodes or the relevant partitions using the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery restart-partitions</a> CLI command.</p>
+</li>
+<li>
+<p>Rerun the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery partition-states</a> CLI command.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If the the partition state is <code>Read-only partition</code>, <code>Degraded partition</code>, or <code>Unavailable partition</code>, reset the relevant partitions using the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery reset-partitions</a> CLI command.</p>
+</li>
+</ol>
+</div>
 <div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
+<p>In the Majority Offline scenario, you would typically lose part of the data. For example, if you reset partition A while partition B was in the <code>Available partition</code> state, you would lose:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The latest data from A that has been restored using <code>reset-partitions</code></p>
+</li>
+<li>
+<p>Some of the latest data from B, which had been inserted into it in a transaction that had also inserted data into A</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
+<h3 id="partition-loss">Partition Loss</h3>
 <div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
+<p>In this scenario, in addition to having <a href="#majority-offline">Majority Offline</a>, you lose all replicas of a partition, e.g., partition A. This causes a loss of <em>all</em> the data from partition A once you run the <a href="/docs/ignite3/latest/ignite-cli-tool#disaster-recovery-commands">ignite recovery reset-partitions</a> CLI command, as well possibly a loss of some of the recent updates in other partitions.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
 <div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
-</div>
+<p>Try bringing the nodes back online as described in the <a href="#majority-offline">Majority Offline</a> scenario.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="partition-states">Partition States</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>This section describes the data partition states that define the partition availability and readiness for utilization.</p>
+</div>
+<div class="sect2">
+<h3 id="local-partition-states">Local Partition States</h3>
+<div class="paragraph">
+<p><em>Local partition state</em> is a local property of a replica, storage, state machine, etc., associated with the partition.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Healthy</code> - a state machine is running with no issues.</p>
+</li>
+<li>
+<p><code>Initializing</code> - a node is online, but the corresponding RAFT group has not completed its initialization yet.</p>
+</li>
+<li>
+<p><code>Snapshot installation</code> - a full state transfer is taking place. Once it has finished, the partition will become <code>healthy</code> or <code>catching-up</code>. Before that, data cannot be read, and log replication is on pause.</p>
+</li>
+<li>
+<p><code>Catching-up</code> - a node is in the process of replicating data from the leader, and its data is slightly in the past. More specifically, node has not replicated the tail of the log that corresponds to 100 log entries.</p>
+</li>
+<li>
+<p><code>Broken</code> - the state machine experiences issues (likely as a result of an exception). Some data might be unavailable for reading, and the log cannot be replicated. This state will not be changed automatically - it requires intervention.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="global-partition-states">Global Partition States</h3>
+<div class="paragraph">
+<p><em>Global partition state</em> is a global property of a partition that specifies its apparent functionality from user&#8217;s point of view.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Available partition</code> - a healthy partition that can process read and write requests. Implies that all peers are healthy at the moment.</p>
+</li>
+<li>
+<p><code>Read-only partition</code> - a partition that can process read requests but not the write requests. There is no healthy majority. However, there is at least one alive (healthy/catch-up) peer that can process historical read-only queries.</p>
+</li>
+<li>
+<p><code>Unavailable partition</code> - a partition that cannot process any requests.</p>
+</li>
+<li>
+<p><code>Degraded partition</code> - a partition that is available to the user, but is at a higher risk of having issues than other partitions. For example, one of the group&#8217;s peers is offline. There is still a majority, but the backup factor is low.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -1108,15 +1128,19 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
+<li><a href="#disaster-scenarios-and-recovery-instructions">Disaster Scenarios and Recovery Instructions</a>
 <ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
+<li><a href="#minority-offline">Minority Offline</a></li>
+<li><a href="#majority-offline">Majority Offline</a></li>
+<li><a href="#partition-loss">Partition Loss</a></li>
 </ul>
 </li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#partition-states">Partition States</a>
+<ul class="sectlevel2">
+<li><a href="#local-partition-states">Local Partition States</a></li>
+<li><a href="#global-partition-states">Global Partition States</a></li>
+</ul>
+</li>
 </ul>
     </div>
           

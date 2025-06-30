@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,7 +559,7 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
                             <nav class="sub_pages collapsed">
 
                             
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class=''>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -818,6 +886,29 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="table-views-in-ignite-3">Table Views in Ignite 3</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="binary-and-non-binary-views">Binary and Non-Binary Views</h3>
+<div class="paragraph">
+<p>When working with tables, Ignite offers two approaches: directly handling the data or mapping the data to classes. The direct data handling approach is is referred to as the <code>binary</code> view. Alternatively, when mapping data to classes, the data is converted to and from these classes as needed for database interactions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="record-and-key-value-views">Record and Key-Value Views</h3>
+<div class="paragraph">
+<p>When creating views, you can create a <code>RecordView</code> or <code>KeyValueView</code>. The primary difference between these view types is the API used.</p>
+</div>
+<div class="paragraph">
+<p>In a RecordView, you create a single “record” that includes all the information about a row to be updated or retrieved from the table, and send this record to the server. This record should contain all the fields, including the primary key.</p>
+</div>
+<div class="paragraph">
+<p>In a KeyValueView, you work with key-value mappings. Think of it as a dictionary where the key object contains the primary key field or fields, and the value object contains the data fields. This approach is useful when primary key is not directly related to the domain object thus you prefer not to add the primary key to it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="getting-a-table-instance">Getting a Table Instance</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -860,25 +951,26 @@
 <div class="sect2">
 <h3 id="binary-record-view">Binary Record View</h3>
 <div class="paragraph">
-<p>A binary record view. It can be used to operate table tuples directly.</p>
+<p>A binary record view. It can be used to operate table tuples directly. When retrieving data from binary views, you can use a wide variety of methods to retrieve type-specific data stored in tuples. A full list of methods is available in the Tuple object javadoc.</p>
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">recordView</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">myTable</span><span class="o">.</span><span class="na">recordView</span><span class="o">();</span>
 
+<span class="c1">//create a new person record</span>
 <span class="nc">Tuple</span> <span class="n">fullRecord</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
-  <span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">);</span>
+        <span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">);</span>
 
 <span class="n">view</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">fullRecord</span><span class="o">);</span>
 
+<span class="c1">//create a key to find record with id = 42</span>
 <span class="nc">Tuple</span> <span class="n">keyRecord</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
 
-<span class="nc">Tuple</span> <span class="n">resRecord</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">keyRecord</span><span class="o">);</span>
+<span class="nc">Tuple</span> <span class="n">resultRecord</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">keyRecord</span><span class="o">);</span>
 
-<span class="k">assert</span> <span class="n">resRecord</span><span class="o">.</span><span class="na">columnCount</span><span class="o">()</span> <span class="o">==</span> <span class="mi">2</span><span class="o">;</span>
-<span class="k">assert</span> <span class="n">resRecord</span><span class="o">.</span><span class="na">intValue</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="o">==</span> <span class="mi">42</span><span class="o">;</span>
-<span class="k">assert</span> <span class="n">resRecord</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span></code></pre>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"id: "</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">intValue</span><span class="o">(</span><span class="s">"id"</span><span class="o">));</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name: "</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
 <div class="content">
@@ -926,13 +1018,16 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;</span> <span class="n">personView</span> <span class="o">=</span> <span class="n">myTable</span><span class="o">.</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Person</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
 
-<span class="n">pojoView</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="mi">42</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">));</span>
-<span class="nc">Pojo</span> <span class="n">resRecord</span> <span class="o">=</span> <span class="n">pojoView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="mi">42</span><span class="o">));</span>
+<span class="c1">//insert a new Person object</span>
+<span class="n">personView</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="mi">42</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">,</span> <span class="mi">30</span><span class="o">));</span>
 
-<span class="k">assert</span> <span class="n">resRecord</span><span class="o">.</span><span class="na">id</span> <span class="o">==</span> <span class="mi">42</span><span class="o">;</span>
-<span class="k">assert</span> <span class="n">resRecord</span><span class="o">.</span><span class="na">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span></code></pre>
+<span class="c1">//retrieve the Person object with id = 42</span>
+<span class="nc">Person</span> <span class="n">resultRecord</span> <span class="o">=</span> <span class="n">personView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="mi">42</span><span class="o">,</span> <span class="s">"Jane Doe"</span><span class="o">,</span> <span class="mi">32</span><span class="o">));</span>
+
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"id: "</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">id</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name:"</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">name</span><span class="o">);</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
 <div class="content">
@@ -964,20 +1059,20 @@
 <div class="sect2">
 <h3 id="key-value-binary-view">Key-Value Binary View</h3>
 <div class="paragraph">
-<p>A binary key-value view. It can be used to operate table using key and value tuples separately.</p>
+<p>A binary key-value view. It can be used to operate table using key and value tuples separately. When retrieving data from binary views, you can use a wide variety of methods to retrieve type-specific data stored in tuples. A full list of methods is available in the Tuple object javadoc.</p>
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">kvView</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">kvView</span> <span class="o">=</span> <span class="n">myTable</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">();</span>
 
-<span class="nc">Tuple</span> <span class="n">key</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">42</span><span class="o">)</span>
-<span class="nc">Tuple</span> <span class="n">val</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">);</span>
+<span class="nc">Tuple</span> <span class="n">key</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
+<span class="nc">Tuple</span> <span class="n">val</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"John Doe"</span><span class="o">).</span><span class="na">set</span><span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="mi">30</span><span class="o">);</span>
 
 <span class="n">kvView</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">val</span><span class="o">);</span>
-<span class="nc">Tuple</span> <span class="n">res</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
 
-<span class="k">assert</span> <span class="n">res</span><span class="o">.</span><span class="na">columnCount</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
-<span class="k">assert</span> <span class="n">res</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span></code></pre>
+<span class="nc">Tuple</span> <span class="n">resultRecord</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"age: "</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">intValue</span><span class="o">(</span><span class="s">"age"</span><span class="o">));</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name: "</span> <span class="o">+</span> <span class="n">resultRecord</span><span class="o">.</span><span class="na">stringValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
 <div class="content">
@@ -1017,13 +1112,13 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Pojo</span><span class="o">&gt;</span> <span class="n">pojoView</span> <span class="o">=</span>
-  <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">PersonKV</span><span class="o">&gt;</span> <span class="n">personView</span> <span class="o">=</span>
+        <span class="n">myTable</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">PersonKV</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
 
-<span class="n">pojoView</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Pojo</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">));</span>
-<span class="nc">Pojo</span> <span class="n">val</span> <span class="o">=</span> <span class="n">pojoView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
+<span class="n">personView</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">PersonKV</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">,</span> <span class="mi">30</span><span class="o">));</span>
+<span class="nc">PersonKV</span> <span class="n">val</span> <span class="o">=</span> <span class="n">personView</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
 
-<span class="k">assert</span> <span class="n">val</span><span class="o">.</span><span class="na">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">);</span></code></pre>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name: "</span> <span class="o">+</span> <span class="n">val</span><span class="o">.</span><span class="na">name</span><span class="o">);</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
 <div class="content">
@@ -1063,9 +1158,9 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">Cursor</span><span class="o">&lt;</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;&gt;</span> <span class="n">cursor</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">Cursor</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;&gt;</span> <span class="n">cursor</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
         <span class="kc">null</span><span class="o">,</span>
-        <span class="n">and</span><span class="o">(</span><span class="n">columnValue</span><span class="o">(</span><span class="s">"City"</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"New York"</span><span class="o">)),</span> <span class="n">columnValue</span><span class="o">(</span><span class="s">"Salary"</span><span class="o">,</span> <span class="n">greaterThan</span><span class="o">(</span><span class="mi">10000</span><span class="o">)))</span>
+        <span class="n">and</span><span class="o">(</span><span class="n">columnValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">)),</span> <span class="n">columnValue</span><span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="n">greaterThan</span><span class="o">(</span><span class="mi">20</span><span class="o">)))</span>
 <span class="o">))</span> <span class="o">{</span>
     <span class="c1">// ...</span>
 <span class="o">}</span></code></pre>
@@ -1079,16 +1174,17 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kt">var</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">client</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">api</span><span class="o">();</span>
+<span class="nc">Transaction</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">();</span>
 
-<span class="k">try</span> <span class="o">(</span><span class="nc">Cursor</span><span class="o">&lt;</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;&gt;</span> <span class="n">cursor</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">Cursor</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">&gt;&gt;</span> <span class="n">cursor</span> <span class="o">=</span> <span class="n">kvView</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
         <span class="n">tx</span><span class="o">,</span>
-        <span class="n">and</span><span class="o">(</span><span class="n">columnValue</span><span class="o">(</span><span class="s">"City"</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"New York"</span><span class="o">)),</span> <span class="n">columnValue</span><span class="o">(</span><span class="s">"Salary"</span><span class="o">,</span> <span class="n">greaterThan</span><span class="o">(</span><span class="mi">10000</span><span class="o">)))</span>
+        <span class="n">and</span><span class="o">(</span><span class="n">columnValue</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"John Doe"</span><span class="o">)),</span> <span class="n">columnValue</span><span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="n">greaterThan</span><span class="o">(</span><span class="mi">20</span><span class="o">)))</span>
 <span class="o">))</span> <span class="o">{</span>
     <span class="c1">// ...</span>
 <span class="o">}</span>
 
-<span class="n">tx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span></code></pre>
+<span class="n">tx</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="sect2">
@@ -1098,9 +1194,9 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre>view.queryAsync(null, and(columnValue("City", equalTo("New York")), columnValue("Salary", greaterThan(10000)))
-    .thenCompose(this::fetchAllRowsInto)
-    .join();</pre>
+<pre>kvView.queryAsync(null, and(columnValue("name", equalTo("John Doe")), columnValue("age", greaterThan(20))))
+        .thenCompose(this::fetchAllRowsInto)
+        .join();</pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="paragraph">
@@ -1108,14 +1204,14 @@
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre>private static CompletionStage&lt;Void&gt; fetchAllRowsInto(AsyncCursor&lt;Entry&lt;Tuple, Tuple&gt;&gt; cursor) {
+<pre>public CompletionStage&lt;Void&gt; fetchAllRowsInto(AsyncCursor&lt;Map.Entry&lt;Tuple, Tuple&gt;&gt; cursor) {
     // Process the current page.
     for (var row : cursor.currentPage()) {
-       // ...
+        // ...
     }
     // Finish processing if no more data is currently available.
     if (!cursor.hasMorePages()) {
-        return nullCompletedFuture();
+        return CompletableFuture.completedFuture(null);
     }
     // Request for the next page, then subscribe to the response.
     return cursor.fetchNextPage().thenCompose(this::fetchAllRowsInto);
@@ -1244,6 +1340,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
+<li><a href="#table-views-in-ignite-3">Table Views in Ignite 3</a>
+<ul class="sectlevel2">
+<li><a href="#binary-and-non-binary-views">Binary and Non-Binary Views</a></li>
+<li><a href="#record-and-key-value-views">Record and Key-Value Views</a></li>
+</ul>
+</li>
 <li><a href="#getting-a-table-instance">Getting a Table Instance</a></li>
 <li><a href="#basic-table-operations">Basic Table Operations</a>
 <ul class="sectlevel2">
@@ -1283,13 +1385,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
+<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

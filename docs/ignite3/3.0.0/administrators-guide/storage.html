@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>Storage Profiles and Engines | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/storage" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -544,8 +544,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -616,7 +616,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/administrators-guide/storage"
-                                class=''
+                                class='active'
                             >Storage Profiles and Engines</a>
                         
                     </li>
@@ -871,230 +871,148 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/storage.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>Storage Profiles and Engines</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
+<p>Ignite 3 features a modern and highly configurable storage. With it, you can easily choose where and how your data will be stored. This topic covers the storage engines and profiles. <a href="/docs/ignite3/latest/administrators-guide/distribution-zones">Distribution zones</a> determine how data is organized and are covered in the separate topic.</p>
 </div>
 <div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
+<p>The diagram below depicts the relationship between tables, distribution zones, storage profiles and storage engines:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0/images/storage.png" alt="storage">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="what-is-a-storage-engine">What is a Storage Engine?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Storage engine is a Ignite node entity responsible for storing data on disk or in volatile memory in a particular format. It defines:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>CREATE ZONE</p>
+<p>The binary format of stored data;</p>
 </li>
 <li>
-<p>CREATE TABLE</p>
-</li>
-<li>
-<p>CREATE INDEX</p>
-</li>
-<li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
+<p>Configuration properties for specific data formats.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
+<p>Ignite is developed with the option to support different storage engines that can be used interchangeably, depending on the type of load you expect for your database. Currently, Ignite supports:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Persistent Apache Ignite page memory (B+ tree);</p>
+</li>
+<li>
+<p>Persistent RocksDb (LSM tree);</p>
+</li>
+<li>
+<p>Volatile (in-memory) Apache Ignite page memory (B+ tree).</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Examples</h2>
+<h2 id="what-is-a-storage-profile">What is a Storage Profile?</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
 <div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
+<p>Storage profile is the Ignite node entity that defines a Storage Engine and its configuration parameters. A <a href="/docs/ignite3/latest/administrators-guide/distribution-zones">Distribution Zone</a> must be configured to use a set of declared Storage Profiles, which can be used to parameterize tables created in this Zone with different Storage Engines. A table can only have a single storage profile defined.</p>
+</div>
+<div class="paragraph">
+<p>Storage profiles define:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What storage engine is used to store data;</p>
+</li>
+<li>
+<p>Configuration values for a particular Storage Engine&#8217;s configuration properties.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can declare any number of storage profiles on a node.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="default-storage-profile">Default Storage Profile</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite creates a <code>default</code> storage profile that uses the persistent Apache Ignite storage engine (<code>aipersist</code>) to store data. Unless otherwise specified, distribution zones will use this storage profile to store data. To check the currently available profiles on the node, use the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
-<div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
-<div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
-</div>
+<pre>node config show ignite.storage.profiles</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="configuring-storage-engines">Configuring Storage Engines</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>Storage engine configuration on the node is applied to all storage profiles, and all storage engines start with their respective default configuration. For more information about default configuration of storage engines, see the <a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent">Storage Configuration</a> section.</p>
+</div>
+<div class="paragraph">
+<p>To change storage engine configuration, use the CLI tool. You can use the <code>node config show storage.engines</code> command to check the current storage engine configuration. You can change configuration by specifying the new parameters in the <code>node config update</code> command, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>node config show ignite.storage.engines
+node config update ignite.storage.engines.aipersist.checkpoint.frequency = 16000</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the configuration is updated, make sure to restart the node.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-and-using-storage-profiles">Creating and Using Storage Profiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, only the <code>default</code> storage profile is created, however a node can have any number of storage profiles on it. To create a new profile, pass the profile configuration to the <code>storage.profiles</code> parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>node config update "ignite.storage.profiles:{rocksProfile{engine:rocksdb,size:10000}}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the configuration is updated, make sure to restart the node. The created storage profile will be available for use by a distribution zone after the restart.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="defining-tables-with-storage-profiles">Defining Tables With Storage Profiles</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After you have defined your storage profiles and <a href="/docs/ignite3/latest/administrators-guide/distribution-zones">distribution zones</a>, you can create tables in it by using SQL or <a href="/docs/ignite3/latest/developers-guide/java-to-tables">from code</a>. Both zone and storage profile cannot be changed after the table has been created.</p>
+</div>
+<div class="paragraph">
+<p>For example, here is how you create a simple table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE TABLE exampleTable (key INT PRIMARY KEY, value VARCHAR) WITH PRIMARY_ZONE='ExampleZone', STORAGE_PROFILE='profile1'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, the <code>exampleTable</code> table will be using the storage engine with the parameters specified in the <code>profile1</code> storage profile. If the node does not have the <code>profile1</code>, the table will not be stored on it. Each node may have different configuration for <code>profile1</code>, and data will be stored according to local configuration.</p>
 </div>
 </div>
 </div>
@@ -1108,15 +1026,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
-<ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
-</ul>
-</li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#what-is-a-storage-engine">What is a Storage Engine?</a></li>
+<li><a href="#what-is-a-storage-profile">What is a Storage Profile?</a></li>
+<li><a href="#default-storage-profile">Default Storage Profile</a></li>
+<li><a href="#configuring-storage-engines">Configuring Storage Engines</a></li>
+<li><a href="#creating-and-using-storage-profiles">Creating and Using Storage Profiles</a></li>
+<li><a href="#defining-tables-with-storage-profiles">Defining Tables With Storage Profiles</a></li>
 </ul>
     </div>
           

@@ -38,7 +38,7 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Distributed Computing | Ignite Documentation</title>
+    <title>Performing Transactions | Ignite Documentation</title>
     
     <link rel="canonical" href="/docs/latest/developers-guide/compute/compute" />
     
@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,7 +559,7 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
                             <nav class="sub_pages collapsed">
 
                             
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class=''>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -805,32 +873,163 @@
     <article data-swiftype-index='true'>
       <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/compute/compute.adoc" target="_blank">Edit</a>
         
-            <h1>Distributed Computing</h1>
+            <h1>Performing Transactions</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite 3 provides an API for distributing computations across cluster nodes in a balanced and fault-tolerant manner. You can submit individual tasks for execution from Java and .NET clients.</p>
+<p>All queries in Ignite 3 are transactional. You can provide an explicit transaction as a first argument of any Table and SQL API call. If you do not provide an explicit transaction, an implicit one will be created for every call.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-lifecycle">Transaction Lifecycle</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When the transaction is created, the node that the transaction was started from is chosen as <strong>transaction coordinator</strong>. The coordinator finds the required <a href="/docs/ignite3/latest/administrators-guide/data-partitions">partitions</a> and sends the read or write requests to the nodes holding primary partitions. For correct transaction operation, all nodes in cluster must have similar time, that can be different by no more than <code>schemaSync.maxClockSkewMillis</code>.</p>
 </div>
 <div class="paragraph">
-<p>You can use Java or .NET client to execute compute jobs. Make sure the required classes are deployed to the cluster before executing code.</p>
+<p>If the key is not locked by a different transaction, the node gets the locks on the involved keys, and attempts to apply the changes in the transaction. When the operation finishes, the lock is removed. This way, several transactions can work on the same partition, while changing separate keys. Additionally, some operations may perform <strong>short-term</strong> locks on the keys in advance, to ensure operations proceed correctly.</p>
 </div>
 <div class="paragraph">
-<p>The example below assumes that the <code>NodeNameJob</code> class has been deployed to the node by using <a href="/docs/ignite3/latest/developers-guide/code-deployment">code deployment</a>.</p>
+<p>If the node with primary replica of the partition involved in the transaction fail, the transaction is eventually automatically rolled back. Ignite will return <code>TransactionException</code> on commit attempt.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-isolation-and-concurrency">Transaction Isolation and Concurrency</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All read-write transactions in Ignite acquire locks during the first read or write access, and hold the lock until the transaction is committed or rolled back. All read-write transactions are <code>SERIALIZABLE</code>, so as long as the lock persists, no other transaction can make changes to locked data, however data can still be read by <a href="#read-only-transactions">Read-Only Transactions</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="deadlock-prevention">Deadlock Prevention</h3>
+<div class="paragraph">
+<p>Ignite 3 uses the <code>WAIT_DIE</code> deadlock prevention algorithm. When a newer transaction requests data that is already locked by a different transaction, it is cancelled and the transaction operation is retried with the same timestamp. If the transaction is older, it is not cancelled and is allowed to wait for the lock to be freed.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="executing-transactions">Executing Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here is how you  can provide a transaction explicitly:</p>
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">();</span>
-    <span class="nc">IgniteCompute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">compute</span><span class="o">();</span>
-    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">ClusterNode</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">client</span><span class="o">.</span><span class="na">clusterNodes</span><span class="o">());</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">KeyValueView</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Account</span><span class="o">&gt;</span> <span class="n">accounts</span> <span class="o">=</span>
+  <span class="n">table</span><span class="o">.</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="nc">Mapper</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Account</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
 
-    <span class="c1">//Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">DeploymentUnit</span><span class="o">&gt;</span> <span class="n">units</span> <span class="o">=</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"unitName"</span><span class="o">,</span> <span class="nc">Version</span><span class="o">.</span><span class="na">parseVersion</span><span class="o">(</span><span class="s">"1.1.1"</span><span class="o">));</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Account</span><span class="o">(</span><span class="mi">16_000</span><span class="o">));</span>
 
-    <span class="nc">JobExecution</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">compute</span><span class="o">.</span><span class="na">executeAsync</span><span class="o">(</span><span class="n">nodes</span><span class="o">,</span> <span class="n">units</span><span class="o">,</span> <span class="nc">NodeNameJob</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">);</span>
-    <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="na">resultAsync</span><span class="o">()</span>
-<span class="o">}</span></code></pre>
+<span class="kt">var</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">();</span>
+
+<span class="nc">Account</span> <span class="n">account</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">);</span>
+<span class="n">account</span><span class="o">.</span><span class="na">balance</span> <span class="o">+=</span> <span class="mi">500</span><span class="o">;</span>
+<span class="n">accounts</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">,</span> <span class="n">account</span><span class="o">);</span>
+
+<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_500</span><span class="o">;</span>
+
+<span class="n">tx</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+
+<span class="k">assert</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span> <span class="o">==</span> <span class="mi">16_000</span><span class="o">;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">accounts</span> <span class="p">=</span> <span class="n">table</span><span class="p">.</span><span class="n">GetKeyValueView</span><span class="p">&lt;</span><span class="kt">long</span><span class="p">,</span> <span class="n">Account</span><span class="p">&gt;();</span>
+<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">transaction</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Account</span><span class="p">(</span><span class="m">16_000</span><span class="p">));</span>
+
+<span class="k">await</span> <span class="k">using</span> <span class="nn">ITransaction</span> <span class="n">tx</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">Transactions</span><span class="p">.</span><span class="nf">BeginAsync</span><span class="p">();</span>
+
+<span class="p">(</span><span class="n">Account</span> <span class="n">account</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hasValue</span><span class="p">)</span> <span class="p">=</span> <span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">);</span>
+<span class="n">account</span> <span class="p">=</span> <span class="n">account</span> <span class="k">with</span> <span class="p">{</span> <span class="n">Balance</span> <span class="p">=</span> <span class="n">account</span><span class="p">.</span><span class="n">Balance</span> <span class="p">+</span> <span class="m">500</span> <span class="p">};</span>
+
+<span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">PutAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">,</span> <span class="n">account</span><span class="p">);</span>
+
+<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16_500</span><span class="p">);</span>
+
+<span class="k">await</span> <span class="n">tx</span><span class="p">.</span><span class="nf">RollbackAsync</span><span class="p">();</span>
+
+<span class="n">Debug</span><span class="p">.</span><span class="nf">Assert</span><span class="p">((</span><span class="k">await</span> <span class="n">accounts</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="m">42</span><span class="p">)).</span><span class="n">Value</span><span class="p">.</span><span class="n">Balance</span> <span class="p">==</span> <span class="m">16_000</span><span class="p">);</span>
+
+<span class="k">public</span> <span class="k">record</span> <span class="nc">Account</span><span class="p">(</span><span class="kt">decimal</span> <span class="n">Balance</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="cpp"><span class="k">auto</span> <span class="n">accounts</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">get_key_value_view</span><span class="o">&lt;</span><span class="n">account</span><span class="p">,</span> <span class="n">account</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">account</span> <span class="nf">init_value</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="mi">16'000</span><span class="p">);</span>
+<span class="n">accounts</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="nb">nullptr</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">},</span> <span class="n">init_value</span><span class="p">);</span>
+
+<span class="k">auto</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_transactions</span><span class="p">().</span><span class="n">begin</span><span class="p">();</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">account</span><span class="o">&gt;</span> <span class="n">res_account</span> <span class="o">=</span> <span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">});</span>
+<span class="n">res_account</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">+=</span> <span class="mi">500</span><span class="p">;</span>
+<span class="n">accounts</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">},</span> <span class="n">res_account</span><span class="p">);</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">})</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">16'500</span><span class="p">);</span>
+
+<span class="n">tx</span><span class="p">.</span><span class="n">rollback</span><span class="p">();</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">accounts</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tx</span><span class="p">,</span> <span class="p">{</span><span class="mi">42</span><span class="p">})</span><span class="o">-&gt;</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">16'000</span><span class="p">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-management">Transaction Management</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can also manage transactions by using the <code>runInTransaction</code> class. When using it, the following will be done automatically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The transaction is started and substituted to the closure.</p>
+</li>
+<li>
+<p>The transaction is committed if no exceptions were thrown during the closure.</p>
+</li>
+<li>
+<p>The transaction will be retried in case of recoverable error. Closure must be purely functional - not causing side effects.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is the example of a transaction that transfers money from one account to another, and handles a possible overdraft:</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="n">igniteTransactions</span><span class="o">.</span><span class="na">runInTransaction</span><span class="o">(</span><span class="n">tx</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">fut1</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"accountId"</span><span class="o">,</span> <span class="mi">1</span><span class="o">));</span>
+    <span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">fut2</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">getAsync</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"accountId"</span><span class="o">,</span> <span class="mi">2</span><span class="o">));</span> <span class="c1">// Read second balance concurrently</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">fut1</span><span class="o">.</span><span class="na">join</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">tx</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">view</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"accountId"</span><span class="o">,</span> <span class="mi">1</span><span class="o">).</span><span class="na">set</span><span class="o">(</span><span class="s">"balance"</span><span class="o">,</span> <span class="n">fut1</span><span class="o">.</span><span class="na">join</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">-</span> <span class="n">amount</span><span class="o">));</span>
+    <span class="n">view</span><span class="o">.</span><span class="na">upsert</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"accountId"</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="na">set</span><span class="o">(</span><span class="s">"balance"</span><span class="o">,</span> <span class="n">fut2</span><span class="o">.</span><span class="na">join</span><span class="o">().</span><span class="na">doubleValue</span><span class="o">(</span><span class="s">"balance"</span><span class="o">)</span> <span class="o">+</span> <span class="n">amount</span><span class="o">);</span>
+<span class="o">});</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
+<h2 id="read-only-transactions">Read-Only Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When starting a transaction, you can configure the transaction as a <strong>read-only</strong> transaction. In these transactions, no data modification can be performed, but they also do not secure locks and can be performed on non-primary <a href="/docs/ignite3/latest/administrators-guide/data-partitions">partitions</a>, further improving their performance. Read-only transactions always check the data for the moment they were started, even if new data was written to the database.</p>
+</div>
+<div class="paragraph">
+<p>Here is how you can make a read-only transaction:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kt">var</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">transactions</span><span class="o">().</span><span class="na">begin</span><span class="o">(</span><span class="k">new</span> <span class="nc">TransactionOptions</span><span class="o">().</span><span class="na">readOnly</span><span class="o">(</span><span class="kc">true</span><span class="o">));</span>
+<span class="kt">int</span> <span class="n">balance</span> <span class="o">=</span> <span class="n">accounts</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">tx</span><span class="o">,</span> <span class="mi">42</span><span class="o">).</span><span class="na">balance</span><span class="o">;</span>
+<span class="n">tx</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -840,365 +1039,11 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-Unlike in Ignite 2, jobs are not serialized. Only the class name and arguments are sent to the node.
+Read-only transactions read data at a specific time. If new data was written since, old data will still be stored in <a href="/docs/ignite3/latest/administrators-guide/data-partitions#version-storage">Version Storage</a> and will be available until low watermark. If low watermark is reached during the transaction, data will be kept available until it is over.
 </td>
 </tr>
 </table>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Client</span><span class="p">;</span>
-<span class="n">ICompute</span> <span class="n">compute</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Compute</span><span class="p">;</span>
-<span class="n">IList</span><span class="p">&lt;</span><span class="n">IClusterNode</span><span class="p">&gt;</span> <span class="n">nodes</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Client</span><span class="p">.</span><span class="nf">GetClusterNodesAsync</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="kt">var</span> <span class="n">units</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DeploymentUnit</span><span class="p">&gt;</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">DeploymentUnit</span><span class="p">(</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">)</span> <span class="p">};</span>
-
-<span class="n">IJobExecution</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">execution</span> <span class="p">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">.</span><span class="n">SubmitAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NodeNameJob</span><span class="p">,</span> <span class="n">JobExecutionOptions</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
-<span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetResultAsync</span><span class="p">();</span></code></pre>
 </div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-
-<span class="n">compute</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">();</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cluster_node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_nodes</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">deployment_unit</span><span class="o">&gt;</span> <span class="n">units</span><span class="p">{</span><span class="n">deployment_unit</span><span class="p">{</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">}};</span>
-
-<span class="n">job_execution</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">comp</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NODE_NAME_JOB</span><span class="p">,</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)},</span> <span class="p">{});</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-<div class="sect1">
-<h2 id="job-ownership">Job Ownership</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If the cluster has <a href="/docs/ignite3/latest/security/authentication">Authentication</a> enabled, compute jobs are executed by a specific user. If user permissions are configured on the cluster, the user needs the appropriate <a href="/docs/ignite3/latest/security/permissions#distributed-computing">distributed computing permissions</a> to work with distributed computing jobs. Only users with <code>JOBS_ADMIN</code> action can interact with jobs of other users.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="job-execution-states">Job Execution States</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can keep track of the status of the job on the server and react to status changes. For example:</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">();</span>
-    <span class="nc">IgniteCompute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">compute</span><span class="o">();</span>
-    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">ClusterNode</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">client</span><span class="o">.</span><span class="na">clusterNodes</span><span class="o">());</span>
-
-    <span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">DeploymentUnit</span><span class="o">&gt;</span> <span class="n">units</span> <span class="o">=</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"unitName"</span><span class="o">,</span> <span class="nc">Version</span><span class="o">.</span><span class="na">parseVersion</span><span class="o">(</span><span class="s">"1.1.1"</span><span class="o">));</span>
-
-    <span class="nc">JobExecution</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">compute</span><span class="o">.</span><span class="na">executeAsync</span><span class="o">(</span><span class="n">nodes</span><span class="o">,</span> <span class="n">units</span><span class="o">,</span> <span class="nc">NodeNameJob</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">);</span>
-
-    <span class="n">execution</span><span class="o">.</span><span class="na">statusAsync</span><span class="o">().</span><span class="na">thenApply</span><span class="o">(</span><span class="n">status</span> <span class="o">-&gt;</span> <span class="o">{</span>
-       <span class="k">if</span> <span class="o">(</span><span class="n">status</span> <span class="o">==</span> <span class="s">"Failed"</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// Handle failure</span>
-       <span class="o">}</span>
-    <span class="o">});</span>
-
-    <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="na">resultAsync</span><span class="o">()</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Client</span><span class="p">;</span>
-<span class="n">ICompute</span> <span class="n">compute</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Compute</span><span class="p">;</span>
-<span class="n">IList</span><span class="p">&lt;</span><span class="n">IClusterNode</span><span class="p">&gt;</span> <span class="n">nodes</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Client</span><span class="p">.</span><span class="nf">GetClusterNodesAsync</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="kt">var</span> <span class="n">units</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DeploymentUnit</span><span class="p">&gt;</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">DeploymentUnit</span><span class="p">(</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">)</span> <span class="p">};</span>
-
-<span class="n">IJobExecution</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">execution</span> <span class="p">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">.</span><span class="n">SubmitAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NodeNameJob</span><span class="p">,</span> <span class="n">JobExecutionOptions</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
-
-<span class="n">JobStatus</span><span class="p">?</span> <span class="n">status</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetStatusAsync</span><span class="p">();</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">status</span><span class="p">?.</span><span class="n">State</span> <span class="p">==</span> <span class="n">JobState</span><span class="p">.</span><span class="n">Failed</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// Handle failure</span>
-<span class="p">}</span>
-
-<span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetResultAsync</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-
-<span class="n">compute</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">();</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cluster_node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_nodes</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">deployment_unit</span><span class="o">&gt;</span> <span class="n">units</span><span class="p">{</span><span class="n">deployment_unit</span><span class="p">{</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">}};</span>
-
-<span class="n">job_execution</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">comp</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NODE_NAME_JOB</span><span class="p">,</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)},</span> <span class="p">{});</span>
-
-<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">job_status</span><span class="o">&gt;</span> <span class="n">status</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_status</span><span class="p">();</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">&amp;&amp;</span> <span class="n">status</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">job_state</span><span class="o">::</span><span class="n">FAILED</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">// Handle failure</span>
-<span class="p">}</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="paragraph">
-<p>The table below lists the possible job statuses:</p>
-</div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 60%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Status</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Transitions to</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Submitted</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The job was created and sent to the cluster, but not yet processed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Queued</code>, <code>Canceled</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Queued</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The job was added to the queue and waiting queue for execution.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Executing</code>, <code>Canceled</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Executing</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The job is being executed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Canceling</code>, <code>Completed</code>, <code>Queued</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Completed</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The job was executed successfully and the execution result was returned.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Failed</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The job was unexpectedly terminated during execution.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Queued</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Canceling</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Job has received the cancel command, but is still running.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Completed</code>, <code>Canceled</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Canceled</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Job was successfully cancelled.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>If all job execution threads are busy, new jobs received by the node are put into job queue according to their <a href="#job-priority">Job Priority</a>. Ignite sorts all incoming jobs first by priority, then by the time, executing jobs queued earlier first.</p>
-</div>
-<div class="sect2">
-<h3 id="cancelling-executing-jobs">Cancelling Executing Jobs</h3>
-<div class="paragraph">
-<p>When the node receives the command to cancel the job in the <code>Executing</code> status, it will immediately send an interrupt to the thread that is responsible for the job. In most cases, this will lead to the job being immediately canceled, however there are cases in which the job will continue. If this happens, the job will be in the <code>Canceling</code> state. Depending on specific code being executed, the job may complete successfully, be canceled once the uninterruptible operation is finished, or remain in unfinished state (for example, if code is stuck in a loop). You can use the <code>JobExecution.statusAsync()</code> method to keep track of what status the job is in, and react to status change.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="job-configuration">Job Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="job-priority">Job Priority</h3>
-<div class="paragraph">
-<p>You can specify a job priority by setting the <code>JobExecutionOptions.priority</code> property. Jobs with a higher priority will be queued before jobs with lower priority (for exammple, a job with priority 4 will be executed before the job with priority 2).</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">();</span>
-    <span class="nc">IgniteCompute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">compute</span><span class="o">();</span>
-    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">ClusterNode</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">client</span><span class="o">.</span><span class="na">clusterNodes</span><span class="o">());</span>
-
-    <span class="c1">//Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">DeploymentUnit</span><span class="o">&gt;</span> <span class="n">units</span> <span class="o">=</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"unitName"</span><span class="o">,</span> <span class="nc">Version</span><span class="o">.</span><span class="na">parseVersion</span><span class="o">(</span><span class="s">"1.1.1"</span><span class="o">));</span>
-
-    <span class="c1">// Create job execution options</span>
-    <span class="nc">JobExecutionOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="nc">JobExecutionOptions</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">priority</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
-
-    <span class="nc">JobExecution</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">compute</span><span class="o">.</span><span class="na">executeAsync</span><span class="o">(</span><span class="n">nodes</span><span class="o">,</span> <span class="n">units</span><span class="o">,</span> <span class="nc">NodeNameJob</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">);</span>
-    <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="na">resultAsync</span><span class="o">()</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Client</span><span class="p">;</span>
-<span class="n">ICompute</span> <span class="n">compute</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Compute</span><span class="p">;</span>
-<span class="n">IList</span><span class="p">&lt;</span><span class="n">IClusterNode</span><span class="p">&gt;</span> <span class="n">nodes</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Client</span><span class="p">.</span><span class="nf">GetClusterNodesAsync</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="kt">var</span> <span class="n">units</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DeploymentUnit</span><span class="p">&gt;</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">DeploymentUnit</span><span class="p">(</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">)</span> <span class="p">};</span>
-
-<span class="c1">// Create job execution options</span>
-<span class="kt">var</span> <span class="n">options</span> <span class="p">=</span> <span class="n">JobExecutionOptions</span><span class="p">.</span><span class="n">Default</span> <span class="k">with</span> <span class="p">{</span> <span class="n">Priority</span> <span class="p">=</span> <span class="m">1</span> <span class="p">};</span>
-
-<span class="n">IJobExecution</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">execution</span> <span class="p">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">.</span><span class="n">SubmitAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NodeNameJob</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
-<span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetResultAsync</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-
-<span class="n">compute</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">();</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cluster_node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_nodes</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">deployment_unit</span><span class="o">&gt;</span> <span class="n">units</span><span class="p">{</span><span class="n">deployment_unit</span><span class="p">{</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">}};</span>
-
-<span class="n">job_execution_options</span> <span class="n">options</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
-<span class="n">job_execution</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">comp</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NODE_NAME_JOB</span><span class="p">,</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)},</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">options</span><span class="p">));</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-<div class="sect2">
-<h3 id="job-retries">Job Retries</h3>
-<div class="paragraph">
-<p>You can set the number the job will be retried on failure by setting the <code>JobExecutionOptions.maxRetries</code> property. If set, the failed job will be retried the specified number of times before movbing to <code>Failed</code> state.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">();</span>
-    <span class="nc">IgniteCompute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">compute</span><span class="o">();</span>
-    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">ClusterNode</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;(</span><span class="n">client</span><span class="o">.</span><span class="na">clusterNodes</span><span class="o">());</span>
-
-    <span class="c1">//Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">DeploymentUnit</span><span class="o">&gt;</span> <span class="n">units</span> <span class="o">=</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"unitName"</span><span class="o">,</span> <span class="nc">Version</span><span class="o">.</span><span class="na">parseVersion</span><span class="o">(</span><span class="s">"1.1.1"</span><span class="o">));</span>
-
-    <span class="c1">// Create job execution options</span>
-    <span class="nc">JobExecutionOptions</span> <span class="n">options</span> <span class="o">=</span> <span class="nc">JobExecutionOptions</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">maxRetries</span><span class="o">(</span><span class="mi">5</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
-
-    <span class="nc">JobExecution</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">compute</span><span class="o">.</span><span class="na">executeAsync</span><span class="o">(</span><span class="n">nodes</span><span class="o">,</span> <span class="n">units</span><span class="o">,</span> <span class="nc">NodeNameJob</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">options</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">);</span>
-    <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="na">resultAsync</span><span class="o">()</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Client</span><span class="p">;</span>
-<span class="n">ICompute</span> <span class="n">compute</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Compute</span><span class="p">;</span>
-<span class="n">IList</span><span class="p">&lt;</span><span class="n">IClusterNode</span><span class="p">&gt;</span> <span class="n">nodes</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Client</span><span class="p">.</span><span class="nf">GetClusterNodesAsync</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="kt">var</span> <span class="n">units</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DeploymentUnit</span><span class="p">&gt;</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">DeploymentUnit</span><span class="p">(</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">)</span> <span class="p">};</span>
-
-<span class="c1">// Create job execution options</span>
-<span class="kt">var</span> <span class="n">options</span> <span class="p">=</span> <span class="n">JobExecutionOptions</span><span class="p">.</span><span class="n">Default</span> <span class="k">with</span> <span class="p">{</span> <span class="n">MaxRetries</span> <span class="p">=</span> <span class="m">5</span> <span class="p">};</span>
-
-<span class="n">IJobExecution</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">execution</span> <span class="p">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">.</span><span class="n">SubmitAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NodeNameJob</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
-<span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetResultAsync</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-
-<span class="n">compute</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">();</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">cluster_node</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_nodes</span><span class="p">();</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">deployment_unit</span><span class="o">&gt;</span> <span class="n">units</span><span class="p">{</span><span class="n">deployment_unit</span><span class="p">{</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">}};</span>
-
-<span class="n">job_execution_options</span> <span class="n">options</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
-<span class="n">job_execution</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">comp</span><span class="p">.</span><span class="n">submit</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NODE_NAME_JOB</span><span class="p">,</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)},</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">options</span><span class="p">));</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="job-failover">Job Failover</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Ignite 3 implements mechanics to handle issues that happen during job execution. The following situations are handled:</p>
-</div>
-<div class="sect2">
-<h3 id="worker-node-shutdown">Worker Node Shutdown</h3>
-<div class="paragraph">
-<p>If the <span class="tooltip">worker node</span> is shut down, the <span class="tooltip">coordinator node</span> will redistribute all jobs assigned to worker to other viable nodes. If no nodes are found, the job will fail and an exception will be sent to the client.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="coordinator-node-shutdown">Coordinator Node Shutdown</h3>
-<div class="paragraph">
-<p>If the coordinator node shuts down, all jobs will be cancelled as soon as the node detects that the coordinator is shut down. Note that <a href="/docs/ignite3/latest/compute/compute#cancelling-executing-jobs">some jobs</a> may take a long time to cancel.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="client-disconnect">Client Disconnect</h3>
-<div class="paragraph">
-<p>If the client disconnects, all jobs will be cancelled as soon as the coordinator node detects the disconnect. Note that <a href="/docs/ignite3/latest/compute/compute#cancelling-executing-jobs">some jobs</a> may take a long time to cancel.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="colocated-computations">Colocated Computations</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In Ignite 3 you can execute colocated computation with <code>executeColocated</code> method. When you do it, the compute task is guaranteed to be executed on the nodes that hold the specified key. This can significantly reduce execution time if your tasks require data.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">example</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="n">client</span><span class="o">();</span>
-    <span class="nc">IgniteCompute</span> <span class="n">compute</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">compute</span><span class="o">();</span>
-    <span class="nc">String</span> <span class="n">table</span> <span class="o">=</span> <span class="s">"Person"</span><span class="o">;</span>
-    <span class="nc">String</span> <span class="n">key</span> <span class="o">=</span> <span class="s">"John"</span><span class="o">;</span>
-
-
-    <span class="c1">//Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">DeploymentUnit</span><span class="o">&gt;</span> <span class="n">units</span> <span class="o">=</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"unitName"</span><span class="o">,</span> <span class="nc">Version</span><span class="o">.</span><span class="na">parseVersion</span><span class="o">(</span><span class="s">"1.1.1"</span><span class="o">));</span>
-
-    <span class="nc">JobExecution</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">compute</span><span class="o">.</span><span class="na">executeColocatedAsync</span><span class="o">(</span><span class="n">table</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">units</span><span class="o">,</span> <span class="nc">NodeNameJob</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">);</span>
-    <span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="na">resultAsync</span><span class="o">().</span><span class="na">join</span><span class="o">()</span>
-<span class="o">}</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csharp"><span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="n">Client</span><span class="p">;</span>
-<span class="n">ICompute</span> <span class="n">compute</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Compute</span><span class="p">;</span>
-<span class="kt">string</span> <span class="n">table</span> <span class="p">=</span> <span class="s">"Person"</span><span class="p">;</span>
-<span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="s">"John"</span><span class="p">;</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="kt">var</span> <span class="n">units</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DeploymentUnit</span><span class="p">&gt;</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">DeploymentUnit</span><span class="p">(</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">)</span> <span class="p">};</span>
-
-<span class="n">IJobExecution</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">execution</span> <span class="p">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">.</span><span class="n">SubmitColocatedAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;(</span><span class="n">table</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NodeNameJob</span><span class="p">,</span> <span class="s">"Hello"</span><span class="p">);</span>
-<span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">execution</span><span class="p">.</span><span class="nf">GetResultAsync</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab><code-tab data-tab='C++'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="cpp"><span class="k">using</span> <span class="k">namespace</span> <span class="n">ignite</span><span class="p">;</span>
-
-<span class="n">compute</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_compute</span><span class="p">();</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">table</span><span class="p">{</span><span class="s">"Person"</span><span class="p">};</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">key</span><span class="p">{</span><span class="s">"John"</span><span class="p">};</span>
-
-<span class="c1">// Unit `unitName:1.1.1` contains NodeNameJob class.</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">deployment_unit</span><span class="o">&gt;</span> <span class="n">units</span><span class="p">{</span><span class="n">deployment_unit</span><span class="p">{</span><span class="s">"unitName"</span><span class="p">,</span> <span class="s">"1.1.1"</span><span class="p">}};</span>
-
-<span class="n">job_execution</span> <span class="n">execution</span> <span class="o">=</span> <span class="n">comp</span><span class="p">.</span><span class="n">submit_colocated</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">NODE_NAME_JOB</span><span class="p">,</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)},</span> <span class="p">{});</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span> <span class="o">=</span> <span class="n">execution</span><span class="p">.</span><span class="n">get_result</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
 </div>
 </div>
         <div class="copyright">
@@ -1211,26 +1056,15 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#job-ownership">Job Ownership</a></li>
-<li><a href="#job-execution-states">Job Execution States</a>
+<li><a href="#transaction-lifecycle">Transaction Lifecycle</a></li>
+<li><a href="#transaction-isolation-and-concurrency">Transaction Isolation and Concurrency</a>
 <ul class="sectlevel2">
-<li><a href="#cancelling-executing-jobs">Cancelling Executing Jobs</a></li>
+<li><a href="#deadlock-prevention">Deadlock Prevention</a></li>
 </ul>
 </li>
-<li><a href="#job-configuration">Job Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#job-priority">Job Priority</a></li>
-<li><a href="#job-retries">Job Retries</a></li>
-</ul>
-</li>
-<li><a href="#job-failover">Job Failover</a>
-<ul class="sectlevel2">
-<li><a href="#worker-node-shutdown">Worker Node Shutdown</a></li>
-<li><a href="#coordinator-node-shutdown">Coordinator Node Shutdown</a></li>
-<li><a href="#client-disconnect">Client Disconnect</a></li>
-</ul>
-</li>
-<li><a href="#colocated-computations">Colocated Computations</a></li>
+<li><a href="#executing-transactions">Executing Transactions</a></li>
+<li><a href="#transaction-management">Transaction Management</a></li>
+<li><a href="#read-only-transactions">Read-Only Transactions</a></li>
 </ul>
     </div>
           
@@ -1254,13 +1088,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
+<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

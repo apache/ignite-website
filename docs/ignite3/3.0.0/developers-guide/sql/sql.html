@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>Java SQL API | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/developers-guide/sql/sql" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -871,93 +871,26 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/sql/sql.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>Java SQL API</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
-</div>
-<div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>CREATE ZONE</p>
-</li>
-<li>
-<p>CREATE TABLE</p>
-</li>
-<li>
-<p>CREATE INDEX</p>
-</li>
-<li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
+<p>In your Java projects, you can use the Java SQL API to execute SQL statements and getting results.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Examples</h2>
+<h2 id="creating-tables">Creating Tables</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
 <div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
+<p>Here is an example of how you can create a new table on a cluster:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int);"</span><span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -967,80 +900,104 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
+ResultSet is closable, but it is safe to skip <code>close()</code> method for DDL and DML queries, as they do not keep server cursor open.
 </td>
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="using-sequences">Using Sequences</h3>
 <div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
+<p>When creating a table, you can designate the primary key column to be filled automatically from the sequence the values for your primary key by using sql sequences:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE SEQUENCE IF NOT EXISTS defaultSequence;"</span><span class="o">);</span>
 
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
+<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id bigint default NEXTVAL('defaultSequence') primary key, city_id bigint, name varchar, age int, company varchar);"</span><span class="o">);</span></code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="filling-tables">Filling Tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With Ignite 3, you can fill the table by adding rows one by one, or in a batch. In both cases, you create an <code>INSERT</code> statement, and then exeсute it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kt">long</span> <span class="n">rowsAdded</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeBatch</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span>
+    <span class="s">"INSERT INTO Person (id, name, age) values (?, ?, ?)"</span><span class="o">,</span>
+    <span class="nc">BatchedArguments</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"John"</span><span class="o">,</span> <span class="mi">46</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="mi">28</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"Mary"</span><span class="o">,</span> <span class="mi">51</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="s">"Richard"</span><span class="o">,</span> <span class="mi">33</span><span class="o">)))</span>
+    <span class="o">.</span><span class="na">sum</span><span class="o">();</span></code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
+<h3 id="using-sequences-2">Using Sequences</h3>
 <div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
+<p>When filling a table, you can generate the values for your primary key by using sql sequences:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE SEQUENCE IF NOT EXISTS defaultSequence;"</span><span class="o">);</span>
+
+<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id bigint default NEXTVAL('defaultSequence') primary key, city_id bigint, name varchar, age int, company varchar);"</span><span class="o">);</span>
+
+<span class="kt">long</span> <span class="n">rowsAdded</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeBatch</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span>
+    <span class="s">"INSERT INTO Person (city_id, name, age, company) values (?, ?, ?, ?)"</span><span class="o">,</span>
+    <span class="nc">BatchedArguments</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"John"</span><span class="o">,</span> <span class="mi">46</span><span class="o">,</span> <span class="s">"oldCorp"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="mi">28</span><span class="o">,</span> <span class="s">"newCorp"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"Mary"</span><span class="o">,</span> <span class="mi">51</span><span class="o">,</span> <span class="s">"newCorp"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="s">"Richard"</span><span class="o">,</span> <span class="mi">33</span><span class="o">,</span> <span class="s">"oldCorp"</span><span class="o">)))</span>
+    <span class="o">.</span><span class="na">sum</span><span class="o">();</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="partition-specific-selects">Partition-Specific SELECTs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When executing a SELECT operation, you can use the system <code>__part</code> column to only <code>SELECT</code> data in a specific partition. To find out partition information, use the SELECT request that explicitly includes the <code>__part</code> column as its part:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">city_id</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="nv">"__part"</span>  <span class="k">FROM</span> <span class="n">Person</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you know the partition, you can use it in the <code>WHERE</code> clause:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">city_id</span><span class="p">,</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">Person</span> <span class="k">WHERE</span> <span class="nv">"__part"</span><span class="o">=</span><span class="mi">23</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="getting-data-from-tables">Getting Data From Tables</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To get data from a table, execute the <code>SELECT</code> statement to get a set of results. SqlRow can provide access to column values by column name or column index. You can then iterate through results to get data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span><span class="o">&lt;</span><span class="nc">SqlRow</span><span class="o">&gt;</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT id, name, age FROM Person"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"    "</span>
+            <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span>
+            <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">2</span><span class="o">));</span>
     <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
+<span class="o">}</span></code></pre>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
-<div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1049,52 +1006,37 @@ You need to create a storage profile in node configuration by using the CLI tool
 <div class="title">Note</div>
 </td>
 <td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
+ResultSet may hold server-side cursor open due to lazy query execution. It must be closed manually, or by using the <code>try-with-resources</code> statement.
 </td>
 </tr>
 </table>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="sql-scripts">SQL Scripts</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>The default API executes SQL statements one at a time. For large SQL statements, pass them to the <code>executeScript()</code> method. The statements will be batched together similar to using <code>SET STREAMING</code> command in Ignite 8, significantly improving performance when executing a large number of queries at once. These statements will be executed in order.</p>
+</div>
+<code-tabs><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">String</span> <span class="n">script</span> <span class="o">=</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int default 0);"</span>
+              <span class="o">+</span> <span class="s">"INSERT INTO Person (id, name, age) VALUES ('1', 'John', '46');"</span><span class="o">;</span>
+<span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeScript</span><span class="o">(</span><span class="n">script</span><span class="o">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Execution of each statement is considered complete when the first page is ready to be returned. As a result, when working with large data sets, SELECT statement may be affected by later statements in the same script.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1108,15 +1050,19 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
+<li><a href="#creating-tables">Creating Tables</a>
 <ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
+<li><a href="#using-sequences">Using Sequences</a></li>
 </ul>
 </li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#filling-tables">Filling Tables</a>
+<ul class="sectlevel2">
+<li><a href="#using-sequences-2">Using Sequences</a></li>
+</ul>
+</li>
+<li><a href="#partition-specific-selects">Partition-Specific SELECTs</a></li>
+<li><a href="#getting-data-from-tables">Getting Data From Tables</a></li>
+<li><a href="#sql-scripts">SQL Scripts</a></li>
 </ul>
     </div>
           

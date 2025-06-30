@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>Data Partitioning | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/data-partitions" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -544,8 +544,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -629,7 +629,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
-                                class=''
+                                class='active'
                             >Data Partitioning</a>
                         
                     </li>
@@ -871,94 +871,100 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/data-partitions.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>Data Partitioning</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
-</div>
-<div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>CREATE ZONE</p>
-</li>
-<li>
-<p>CREATE TABLE</p>
-</li>
-<li>
-<p>CREATE INDEX</p>
-</li>
-<li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
+<p>Data partitioning is a method of subdividing large sets of data into smaller chunks and distributing them between all server nodes in a balanced manner.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Examples</h2>
+<h2 id="how-data-is-partitioned">How Data is Partitioned</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
 <div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
+<p>When the table is created, it is always assigned to a <a href="/docs/ignite3/latest/administrators-guide/distribution-zones">distribution zone</a>. Based on the distribution zone parameters, data is separated into <code>PARTITIONS</code> parts, called <strong>partitions</strong>, stored <code>REPLICAS</code> times across the cluster. Each partition is identified by a number from a limited set (0 to 24 by default). Each individual copy of a partition is called a <strong>replica</strong>, and is stored on separate nodes, if possible. Ignite uses the <strong>Fair</strong> partition distribution algorithm. It means that it stores information on partition distribution and uses this information for assigning new partitions. This information is preserved in cluster metastorage, and is recalculated only when necessary.</p>
+</div>
+<div class="paragraph">
+<p>Once partitions and all replicas are created, they are distributed across the available cluster nodes that are included in the distribution zone following the <code>DATA_NODES_FILTER</code> parameter and according to the <strong>partition distribution algorithm</strong>. Thus, each key is mapped to a list of nodes owning the corresponding partition and is stored on those nodes. When data is added, it is distributed evenly between partitions.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0/images/partitioning.png" alt="Ignite Partitions">
+</div>
+</div>
+<div class="paragraph">
+<p>The nodes store partitions in the folder specified in the <code>ignite.system.partitionsBasePath</code>, or in the <code>work/partitions</code> folder. The nodes also store partition-specific RAFT logs in the <code>ignite.system.partitionsLogPath</code> with the information on RAFT elections and consensus.</p>
+</div>
+<div class="sect2">
+<h3 id="default-partition-number">Default Partition Number</h3>
+<div class="paragraph">
+<p>When creating a distribution zone, you have an option to manually set the number of partitions with the <code>PARTITIONS</code> parameter, for example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="k">WITH</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">,</span><span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">10</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Otherwise, Ignite will automatically calculate the recommended number of partitions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dataNodesCount * coresOnNode * 2 / replicas</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="primary-replicas-and-leases">Primary Replicas and Leases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once the partitions are distributed on the nodes, Ignite forms <strong>replication groups</strong> for all partitions of the table, and each group elects its leader. To linearize writes to partitions, Ignite designates one replica of each partition as a <strong>primary replica</strong>.</p>
+</div>
+<div class="paragraph">
+<p>To designate a primary replica, Ignite uses a process of granting a <strong>lease</strong>. Leases are granted by the <strong>lease placement driver</strong>, and signify the node that houses the primary replica, called a <strong>lease holder</strong>. Once the lease is granted, information about it is written to the <a href="/docs/ignite3/latest/administrators-guide/lifecycle#cluster-metastorage-group">metastorage</a>, and provided to all nodes in the cluster. Usually, the primary replica will be the same as replication group leader.</p>
+</div>
+<div class="paragraph">
+<p>Granted leases are valid for a short period of time and are extended every couple of seconds, preserving the continuity of each lease. A lease cannot be revoked until it expires. In exceptional situations (for example, when primary replica is unable to serve as primary anymore, leaseholder node goes offline, replication group is inoperable, etc.) the placement driver waits for the lease to expire and then initiates the negotiation of the new one.</p>
+</div>
+<div class="paragraph">
+<p>Only the primary replica can handle operations of read-write transactions. Other replicas of the partition can be read from by using read-only transactions.</p>
+</div>
+<div class="paragraph">
+<p>If a new replica is chosen to receive the lease, it first makes sure it is up-to-date with its replication group by stored data. In scenarios where replication group is no longer operable (for example, a node unexpectedly leaves the cluster and the group loses majority), it follows the <a href="/docs/ignite3/latest/administrators-guide/disaster-recovery">disaster recovery</a> procedure, and you may need to reset the partitions manually.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="version-storage">Version Storage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As new data is written to the partition, Ignite does not immediately delete old one. Instead, Ignite stores old keys in a <strong>version chain</strong> within the same partition.</p>
+</div>
+<div class="paragraph">
+<p>Older key versions can only be accessed by <a href="/docs/ignite3/latest/developers-guide/transactions#read-only-transactions">read-only transactions</a>, while up-to-date version can be accessed by any transactions.</p>
+</div>
+<div class="paragraph">
+<p>Older key versions are kept until the <strong>low watermark</strong> point is reached. By default, low watermark is 600000 ms, and it can be changed in <a href="/docs/ignite3/latest/administrators-guide/config/cluster-config#garbage-collection-configuration">cluster configuration</a>. Increasing data availability time will mean that old key versions are stored and available for longer, however storing them may require extra storage, depending on cluster load.</p>
+</div>
+<div class="paragraph">
+<p>In a similar manner, <a href="/docs/ignite3/latest/sql-reference/ddl#drop-table">dropped tables</a> are also not removed from disk until the low watermark point, however you can no longer write to these tables. Read-only transactions that try to get data from these tables will succeed if they read data at timestamp before the table was dropped, and will delay the low watermark point if it is necessary to complete the transaction.</p>
+</div>
+<div class="paragraph">
+<p>Once the low watermark is reached, old versions of data are considered garbage and will be cleaned up by garbage collector during the next cleanup. This data may or may not be available, as garbage collection is not an immediate process. If a transaction was already started before the low watermark was reached, the required data will be kept available until the end of transaction even if the garbage collection happens. Additionally, Ignite checks that old data is not required anywhere on the cluster before cleaning up the data.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="distribution-reset">Distribution Reset</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The SQL query performance can deteriorate in a cluster where tables had been created over a long period, alongside topology changes, due to sub-optimum data colocation. To resolve this issue, you can reset (recalculate) partition distribution using <a href="/docs/ignite3/latest/ignite-cli-tool#distribution-commands">CLI</a> or <a href="/docs/ignite3/latest/developers-guide/rest/rest-api">REST API</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -967,134 +973,18 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
+Reset is likely to result in <a href="#partition-rebalance">Partition Rebalance</a> that may take a long time.
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
-<div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
-<div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="partition-rebalance">Partition Rebalance</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>When the cluster size changes, Ignite waits for the timeout specified in the <code>DATA_NODES_AUTO_ADJUST_SCALE_UP</code> or <code>DATA_NODES_AUTO_ADJUST_SCALE_DOWN</code> distribution zone properties, and then redistributes partitions according to partition distribution algorithm and transfers data to make it up-to-date with the replication group. This process is called <strong>data rebalance</strong>.</p>
 </div>
 </div>
 </div>
@@ -1108,15 +998,15 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
+<li><a href="#how-data-is-partitioned">How Data is Partitioned</a>
 <ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
+<li><a href="#default-partition-number">Default Partition Number</a></li>
 </ul>
 </li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#primary-replicas-and-leases">Primary Replicas and Leases</a></li>
+<li><a href="#version-storage">Version Storage</a></li>
+<li><a href="#distribution-reset">Distribution Reset</a></li>
+<li><a href="#partition-rebalance">Partition Rebalance</a></li>
 </ul>
     </div>
           

@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>Cluster Lifecycle | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/lifecycle" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -544,8 +544,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -590,7 +590,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
-                                class=''
+                                class='active'
                             >Cluster Lifecycle</a>
                         
                     </li>
@@ -871,230 +871,187 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/lifecycle.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>Cluster Lifecycle</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
+<p>This topic covers the information covering Ignite 3 cluster initialization and lifecycle.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="node-start-without-a-running-cluster">Node Start Without a Running Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When nodes start, they check all addresses listed in the node finder configuration (<code>network.nodeFinder</code>).</p>
 </div>
 <div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
+<p>All nodes found are added to the <strong>physical topology</strong> - the nodes that know each other. All nodes also share information about other nodes, so the topology will include all nodes whose address is listed in at least one other node. If there are nodes that are completely separated (for example, nodes A and B only know about each other, same with C and D), they will form separate physical topologies (in this example, you would have cluster with A and B, and another cluster with C and D).</p>
+</div>
+<div class="paragraph">
+<p>If there is no running cluster, the nodes exchange information about the network, but do not start any processes until the cluster initialization command is received, nor do they form a <strong>logical topology</strong> - the nodes that are verified and form a cluster.</p>
+</div>
+<div class="sect2">
+<h3 id="node-requirements">Node Requirements</h3>
+<div class="paragraph">
+<p>All nodes in cluster must have similar time, that can be different by no more than <code>schemaSync.maxClockSkewMillis</code>. This is necessary for correct transaction operation.</p>
+</div>
+<div class="paragraph">
+<p>As network latency can be unpredictable, some requests may take so long to arrive that the time will be different on the receiving node by the time request arrives. To account for the delay, set the <code>schemaSync.delayDurationMillis</code> property to the time that is long enough for the schema updates to be delivered to all nodes in the cluster. However, this delay also affects how long it takes for DDL to be executed, as all nodes need to wait for the delay to pass before applying the update.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cluster-initialization">Cluster Initialization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When the <code>cluster init</code> command is received by any node in the cluster, it starts the initialization process.</p>
+</div>
+<div class="paragraph">
+<p>First, the nodes specified in the <code>--cluster-management-group</code> argument form a RAFT group and take on the role of the <strong>cluster management group</strong> (CMG)&#8201;&#8212;&#8201;a group responsible for managing cluster operations.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0/images/lifecycle1.png" alt="Cluster initialization">
+</div>
+</div>
+<div class="paragraph">
+<p>Next, the nodes specified in the <code>--metastorage-group</code> argument form a RAFT group and assume the role of the <strong>metastorage group</strong>. These nodes store the authoritative copy of the cluster&#8217;s metadata.</p>
+</div>
+<div class="paragraph">
+<p>If only one of <code>--cluster-management-group</code> or <code>--metastorage-group</code> is specified, the specified value is used for both. If neither is specified, a set of nodes is automatically selected for both CMG and the metastorage group in alphabetical order. The number of selected nodes is determined as follows:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>CREATE ZONE</p>
+<p>If the cluster size is 3 or fewer, all nodes are used for the metastorage group (CMG and metastorage).</p>
 </li>
 <li>
-<p>CREATE TABLE</p>
+<p>If the cluster size is 4, three nodes are used to maintain an odd number, improving consensus efficiency.</p>
 </li>
 <li>
-<p>CREATE INDEX</p>
-</li>
-<li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
+<p>If the cluster size is 5 or more, five nodes are used to balance fault tolerance and overhead.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="examples">Examples</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
-<div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
-</td>
-</tr>
-</table>
+<p>Once the 2 raft groups are started and elect their leaders, all other nodes in the topology are notified that the cluster is started, and they can join it. At this point, the cluster is considered <strong>initialized</strong> and can start receiving requests.</p>
 </div>
 <div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
+<p>Each non-leader node receives the invitation from the CMG to join the cluster and forms a validation request. Then, the request is sent to the CMG, and, after validation, the node receives cluster meta information from the metastorage group and joins the cluster.</p>
 </div>
-<div class="listingblock">
+<div class="paragraph">
+<p>The nodes are also added to the cluster <strong>logical topology</strong> - the nodes that are verified and accepted by CMG as part of the cluster. When nodes shut down or leave the physical topology for any other reason, the cluster logical topology is immediately adjusted.</p>
+</div>
+<div class="imageblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
-</div>
+<img src="/docs/3.0.0/images/lifecycle2.png" alt="Cluster initialized">
 </div>
 </div>
 <div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
+<h3 id="cluster-management-group">Cluster Management Group</h3>
 <div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
+<p>Cluster management group stores information about the cluster, the list of nodes that are in the cluster, and handles all cluster logical topology changes. Due to using RAFT consensus algorithm, the CMG improves the protection from split-brain (as any cluster group losing the CMG majority will no longer be fully functional).</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
+<div class="paragraph">
+<p>It is recommended to have the CMG of 3, 5 or 7 nodes. Larger management group improves stability, as it reduces the odds of losing the majority of CMG nodes, but may cause a minor performance hit.</p>
 </div>
+<div class="paragraph">
+<p>Losing the majority of CMG nodes leaves the cluster mostly functional. The cluster without the CMG majority can  still handle transactions and user requests, but cannot:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add new nodes to logical topology.</p>
+</li>
+<li>
+<p>Re-add nodes that left the cluster to logical topology.</p>
+</li>
+<li>
+<p>Create new table indexes. In this scenario, <code>CREATE INDEX</code> DDL operation will never be fully resolved and will hang the application.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To restore full cluster functionality, bring the offline members of CMG back online.</p>
+</div>
+<div class="paragraph">
+<p>The CMG stores the following information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Current cluster state, including what nodes are in CMG and metastorage groups, what Ignite version is used and cluster tag.</p>
+</li>
+<li>
+<p>Consistent IDs of all nodes in the logical topology.</p>
+</li>
+<li>
+<p>Node validation status.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default, the information is stored in the <code>work</code> folder, but it can be configured on each CMG node by setting the <code>igite.system.cmgPath</code> property.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
+<h3 id="cluster-metastorage-group">Cluster Metastorage Group</h3>
 <div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
+<p>Cluster metastorage group stores information about the data stored in the cluster, and handles data distribution.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>It is recommended to have the metastorage of 3, 5 or 7 nodes. Larger metastorage group improves stability, as it reduces the odds of losing the majority of metastorage nodes, but may cause a minor performance hit.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
+<div class="paragraph">
+<p>Losing the majority of metastorage nodes will turn the cluster inoperable and may lead to data loss.</p>
 </div>
+<div class="paragraph">
+<p>The metastorage contains the following information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cluster catalog - the single storage of all meta information about the cluster - table schemas, indexes, views, distribution zone information, etc.</p>
+</li>
+<li>
+<p>Logical topology history.</p>
+</li>
+<li>
+<p>Other data required for cluster operation.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default, the information is stored in the <code>work</code> folder, but it can be configured on each node by setting the <code>igite.system.metastoragePath</code> property.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="node-join-scenarios">Node Join Scenarios</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="new-nodes-joining-the-cluster">New Nodes Joining the Cluster</h3>
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>When a new node is started, it adds itself to the physical topology. Then, the CMG receives the event that a new node has joined the topology, and sends it an invitation to join the cluster. Once the node receives it, it sends the validation request with node information, which the CMG verifies and adds the node to the logical topology.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="node-rejoins-the-cluster">Node Rejoins the Cluster</h3>
+<div class="paragraph">
+<p>If the node leaves the physical topology (for example, because the machine with the node is unreachable), the cluster logical topology is immediately adjusted, and the node is excluded from it. It can no longer rejoin the cluster with the same node ID.</p>
+</div>
+<div class="paragraph">
+<p>To rejoin the cluster, the node must be restarted. During the restart, a new ID will be generated and the node will be able to join the physical and logical topology.</p>
+</div>
+<div class="paragraph">
+<p>When a node reappears in the physical topology, the CMG sends it an invitation to join. The node then asks the CMG to validate itself, and, if this is successful, it starts its components (doing local recovery on the way), after which it tells the CMG that it&#8217;s ready to join. The CMG then adds it to the logical topology. This is the same process as the first join of a blank node.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1108,15 +1065,23 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
+<li><a href="#node-start-without-a-running-cluster">Node Start Without a Running Cluster</a>
 <ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
+<li><a href="#node-requirements">Node Requirements</a></li>
 </ul>
 </li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#cluster-initialization">Cluster Initialization</a>
+<ul class="sectlevel2">
+<li><a href="#cluster-management-group">Cluster Management Group</a></li>
+<li><a href="#cluster-metastorage-group">Cluster Metastorage Group</a></li>
+</ul>
+</li>
+<li><a href="#node-join-scenarios">Node Join Scenarios</a>
+<ul class="sectlevel2">
+<li><a href="#new-nodes-joining-the-cluster">New Nodes Joining the Cluster</a></li>
+<li><a href="#node-rejoins-the-cluster">Node Rejoins the Cluster</a></li>
+</ul>
+</li>
 </ul>
     </div>
           

@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,7 +559,7 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
                             <nav class="sub_pages collapsed">
 
                             
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class=''>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -810,19 +878,87 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section walks you through all data manipulation language (DML) commands supported by Ignite 3.</p>
+<p>This section walks you through all data manipulation language (DML) commands supported by Ignite 3.0.</p>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Warning</div>
-</td>
-<td class="content">
-Currently, <code>WITH</code> and <code>MERGE</code> commands are not supported.
-</td>
-</tr>
-</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="delete">DELETE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Deletes data from a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">tablePrimary</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="insert">INSERT</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Inserts data into a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="p">{</span> <span class="k">INSERT</span> <span class="p">}</span> <span class="k">INTO</span> <span class="n">tablePrimary</span>
+<span class="p">[</span> <span class="s1">'('</span> <span class="k">column</span> <span class="p">[,</span> <span class="k">column</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span>
+<span class="n">query</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="joins">JOINs</h3>
+<div class="paragraph">
+<p>Ignite supports colocated and non-colocated distributed SQL joins. Furthermore, if the data resides in different tables, Ignite allows for cross-table joins as well.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="merge">MERGE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Merge data into a table.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="n">MERGE</span> <span class="k">INTO</span> <span class="n">tablePrimary</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">]</span>
+<span class="k">USING</span> <span class="n">tablePrimary</span>
+<span class="k">ON</span> <span class="n">booleanExpression</span>
+<span class="p">[</span> <span class="k">WHEN</span> <span class="n">MATCHED</span> <span class="k">THEN</span> <span class="k">UPDATE</span> <span class="k">SET</span> <span class="n">assign</span> <span class="p">[,</span> <span class="n">assign</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+<span class="p">[</span> <span class="k">WHEN</span> <span class="k">NOT</span> <span class="n">MATCHED</span> <span class="k">THEN</span> <span class="k">INSERT</span> <span class="k">VALUES</span> <span class="s1">'('</span> <span class="n">value</span> <span class="p">[</span> <span class="p">,</span> <span class="n">value</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="parameters">Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tableName</code> - the name of the table to be updated.</p>
+</li>
+<li>
+<p><code>columnName</code> - the name of a column to be initialized with a value from a <code>VALUES</code> clause.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="description">Description</h3>
+<div class="paragraph">
+<p><code>MERGE</code> updates existing entries and inserts new entries.</p>
+</div>
+<h3 id="examples" class="discrete">Examples</h3>
+<div class="paragraph">
+<p>Merge some <code>NewPersons</code> into the <code>Person</code> table:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="n">MERGE</span> <span class="k">INTO</span> <span class="n">Person</span> <span class="k">USING</span> <span class="n">NewPersons</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -840,29 +976,6 @@ Currently, <code>WITH</code> and <code>MERGE</code> commands are not supported.
 <span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span>
 <span class="p">[</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="p">{</span> <span class="n">groupItem</span> <span class="p">[,</span> <span class="n">groupItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">}</span> <span class="p">]</span>
 <span class="p">[</span> <span class="k">HAVING</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="joins">JOINs</h3>
-<div class="paragraph">
-<p>Ignite supports colocated and non-colocated distributed SQL joins. Furthermore, if the data resides in different tables, Ignite allows for cross-table joins as well.
-Joins between partitioned and replicated data sets always work without any limitations.
-However, if you join partitioned data sets, then you have to make sure that the keys you are joining on are either colocated or make sure you switched on the non-colocated joins parameter for a query.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="insert">INSERT</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Inserts data into a table.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="p">{</span> <span class="k">INSERT</span> <span class="p">}</span> <span class="k">INTO</span> <span class="n">tablePrimary</span>
-<span class="p">[</span> <span class="s1">'('</span> <span class="k">column</span> <span class="p">[,</span> <span class="k">column</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span>
-<span class="n">query</span></code></pre>
 </div>
 </div>
 </div>
@@ -883,15 +996,41 @@ However, if you join partitioned data sets, then you have to make sure that the 
 </div>
 </div>
 <div class="sect1">
-<h2 id="delete">DELETE</h2>
+<h2 id="with">WITH</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Deletes data from a table.</p>
+<p>Used to name a sub-query, can be referenced in other parts of the SQL statement.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">tablePrimary</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">]</span>
-<span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">WITH</span>  <span class="p">{</span> <span class="n">query_name</span> <span class="p">[(</span> <span class="n">columnName</span> <span class="p">[,...]</span> <span class="p">)]</span> <span class="k">AS</span> <span class="p">(</span> <span class="n">query</span> <span class="p">)</span> <span class="p">[,...]</span> <span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="parameters-2">Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>query_name</code> - the name of the sub-query to be created. The name assigned to the sub-query is treated as though it was an inline view or table.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="description-2">Description</h3>
+<div class="paragraph">
+<p><code>WITH</code> creates a sub-query. One or more common table entries can be referred to by name. Column name declarations are optional - the column names will be inferred from the named select queries. The final action in a WITH statement can be a <code>select</code>, <code>insert</code>, <code>update</code>, <code>merge</code>, <code>delete</code>, or <code>create table</code>.</p>
+</div>
+<h3 id="example" class="discrete">Example</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">WITH</span> <span class="n">cte1</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="mi">1</span> <span class="k">AS</span> <span class="n">FIRST_COLUMN</span>
+<span class="p">),</span> <span class="n">cte2</span> <span class="k">AS</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">FIRST_COLUMN</span><span class="o">+</span><span class="mi">1</span> <span class="k">AS</span> <span class="n">FIRST_COLUMN</span> <span class="k">FROM</span> <span class="n">cte1</span>
+<span class="p">)</span>
+<span class="k">SELECT</span> <span class="k">sum</span><span class="p">(</span><span class="n">FIRST_COLUMN</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">cte2</span><span class="p">;</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -906,14 +1045,26 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#select">SELECT</a>
+<li><a href="#delete">DELETE</a></li>
+<li><a href="#insert">INSERT</a>
 <ul class="sectlevel2">
 <li><a href="#joins">JOINs</a></li>
 </ul>
 </li>
-<li><a href="#insert">INSERT</a></li>
+<li><a href="#merge">MERGE</a>
+<ul class="sectlevel2">
+<li><a href="#parameters">Parameters</a></li>
+<li><a href="#description">Description</a></li>
+</ul>
+</li>
+<li><a href="#select">SELECT</a></li>
 <li><a href="#update">UPDATE</a></li>
-<li><a href="#delete">DELETE</a></li>
+<li><a href="#with">WITH</a>
+<ul class="sectlevel2">
+<li><a href="#parameters-2">Parameters</a></li>
+<li><a href="#description-2">Description</a></li>
+</ul>
+</li>
 </ul>
     </div>
           
@@ -937,13 +1088,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
+<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

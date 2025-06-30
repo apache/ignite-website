@@ -38,7 +38,7 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Getting Started With Ignite 3 | Ignite Documentation</title>
+    <title>Getting Started With Apache Ignite 3 | Ignite Documentation</title>
     
     <link rel="canonical" href="/docs/latest/quick-start/getting-started-guide" />
     
@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,7 +559,7 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
                             <nav class="sub_pages collapsed">
 
                             
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class=''>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -805,21 +873,24 @@
     <article data-swiftype-index='true'>
       <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/quick-start/getting-started-guide.adoc" target="_blank">Edit</a>
         
-            <h1>Getting Started With Ignite 3</h1>
+            <h1>Getting Started With Apache Ignite 3</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide shows you how to start working with Ignite 3 using the Ignite CLI.</p>
+<p>This guide shows you how to start working with Ignite. In it, we will download Ignite from the website, install it, start the database and perform some simple SQL queries by using the provided CLI tool.</p>
+</div>
+<div class="paragraph">
+<p>We will be using the <a href="/docs/ignite3/latest/installation/installing-using-zip">zip archive</a> to demonstrate how to use Ignite. When using <a href="/docs/ignite3/latest/installation/deb-rpm">deb or rpm packages</a>, or when running Ignite in Docker, some steps may be different.</p>
+</div>
+<div class="paragraph">
+<p>If you are more comfortable with running the database from Java code, you can try <a href="/docs/ignite3/latest/quick-start/embedded-mode">starting Ignite from code</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="prerequisites">Prerequisites</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Ignite 3 was tested on:</p>
-</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -841,20 +912,34 @@
 <div class="sect1">
 <h2 id="install-ignite">Install Ignite</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>To start working with Ignite, you need to install it as described in the <a href="/docs/ignite3/latest/installation/installing-using-zip">Installation</a> section.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://ignite.apache.org/download.cgi">Download</a> Ignite from the website. This archive contains everything related to the Ignite database itself.</p>
+</li>
+<li>
+<p>Also from the same page, download the <a href="/docs/ignite3/latest/ignite-cli-tool">Ignite command line interface</a>. This tool is the main way of interacting with Ignite database and will be used in the tutorial</p>
+</li>
+<li>
+<p>Unpack the downloaded archives:</p>
+<code-tabs><code-tab data-tab='Unix'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">unzip ignite3-3.0.0.zip</code></pre>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The Unzip operation creates two side-by-side directories: <code>ignite-db-3.0.0-beta2</code> and <code>ignite-cli-3.0.0-beta2</code>.
-</td>
-</tr>
-</table>
+</div></code-tab><code-tab data-tab='Windows (PowerShell)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">Expand-Archive ignite3-3.0.0.zip <span class="nt">-DestinationPath</span> .</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Windows (CMD)'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">unzip <span class="nt">-xf</span> ignite3-3.0.0.zip</code></pre>
+</div>
+</div></code-tab></code-tabs>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Now you should have the <code>ignite3-db-3.0.0</code> and <code>ignite3-cli-3.0.0</code> directories that we will be using in this tutorial, and the license file provided via e-mail.</p>
 </div>
 </div>
 </div>
@@ -862,18 +947,21 @@ The Unzip operation creates two side-by-side directories: <code>ignite-db-3.0.0-
 <h2 id="start-ignite-node">Start Ignite Node</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When starting to work with Ignite, first we need to start a Ignite node that will be handling the API calls.</p>
+<p>Ignite is a distributed database, that runs on a collection of <strong>nodes</strong> - Ignite database instances that contain data. When running Ignite, you would typically run multiple nodes - a <strong>cluster</strong>, that shares information and evenly distributes data across its nodes. In this part of the tutorial, we will only run one node, but a later part shows how you can start multiple.</p>
+</div>
+<div class="paragraph">
+<p>To start a locally running node:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to the <code>ignite-db-3.0.0-beta2</code> directory.</p>
+<p>Navigate to the <code>ignite3-db-3.0.0</code> directory.</p>
 </li>
 <li>
-<p>Run the <code>start</code> command:</p>
+<p>Run the <code>ignite3db</code> script:</p>
 <code-tabs><code-tab data-tab='Linux'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">bin/ignite3db start</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">bin/ignite3db</code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Windows'><div class="admonitionblock note">
 <table>
@@ -889,64 +977,27 @@ You need to install Java in the Bash environment to run Ignite on Windows.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">bash bin<span class="se">\i</span>gnite3db start</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">bash bin<span class="se">\i</span>gnite3db</code></pre>
 </div>
 </div></code-tab></code-tabs>
-<div class="paragraph">
-<p>Successful start produces the following output:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>Starting Ignite 3...
-Node named defaultNode started successfully. REST addresses are [http://127.0.0.1:10300]”</pre>
-</div>
-</div>
 </li>
 </ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="optional-start-multiple-ignite-nodes-in-docker">Optional: Start Multiple Ignite Nodes in Docker</h2>
+<h2 id="start-the-ignite-cli">Start the Ignite CLI</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite 3 is designed to work in a cluster of 3 or more nodes at once. While a single node can be used in some scenarios and can be used for the tutorial, having multiple nodes in a cluster is the most common use case.</p>
+<p>The primary means of interacting with your nodes and cluster is the <a href="/docs/ignite3/latest/ignite-cli-tool">Ignite CLI</a>. It can connect to a node running on a local or remote machine, and is the main tool that is used to manually configure and manage the database. In this example, we will be connecting to a local node.</p>
 </div>
 <div class="paragraph">
-<p>To run multiple instances of Ignite, you would normally install it on multiple machines before starting a cluster. If you want to emulate a Ignite cluster for this tutorial, use the docker-compose file provided to start them instead.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="optional-set-custom-jvm-options">Optional: Set Custom JVM Options</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can set custom JVM options when starting the Ignite node by using the <code>IGNITE3_EXTRA_JVM_ARGS</code> parameter in the <code>${IGNITE_HOME}/etc/vars.env</code> file.</p>
-</div>
-<div class="paragraph">
-<p>You add the options to the <code>IGNITE3_EXTRA_JVM_ARGS</code> parameter using the <code>-XX</code> notation. For example:</p>
-</div>
-<div class="paragraph">
-<p><code>IGNITE3_EXTRA_JVM_ARGS  = -XX:+PrintFlagsFinal</code></p>
-</div>
-<div class="paragraph">
-<p>For additional information, see <a href="https://opensource.com/article/22/4/jvm-parameters-java-developers">this article</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="activate-the-ignite-cli">Activate the Ignite CLI</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You initialize your cluster, and perform operations on that cluster, using the <a href="/docs/ignite3/latest/ignite-cli-tool">Ignite CLI</a>.</p>
-</div>
-<div class="paragraph">
-<p>To activate the Ignite CLI:</p>
+<p>To start the Ignite CLI:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to the <code>ignite-cli-3.0.0-2</code> directory.</p>
+<p>Navigate to the <code>ignite3-cli-3.0.0</code> directory.</p>
 </li>
 <li>
 <p>Run the following command:</p>
@@ -972,6 +1023,21 @@ You need to install Java in the Bash environment to run Ignite on Windows.
 </div>
 </div></code-tab></code-tabs>
 </li>
+<li>
+<p>Confirm the connection the CLI tool attempts to establish with the node running on the default URI.</p>
+</li>
+<li>
+<p>If your node is running at a different address, use the <code>connect</code> command to connect to the node. For example:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre>connect http://127.0.0.1:10300</pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Connected to http://127.0.0.1:10300</pre>
+</div>
+</div></code-tab></code-tabs>
+</li>
 </ol>
 </div>
 </div>
@@ -980,19 +1046,41 @@ You need to install Java in the Bash environment to run Ignite on Windows.
 <h2 id="initialize-your-cluster">Initialize Your Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To initialize the cluster that includes the nodes you have started:</p>
+<p>Ignite database functions as a cluster. Even if we are currently only running a single node, theoretically you could start another node and have it join the already running cluster. When the nodes are started, they find each other and wait for the user to start the cluster. The process of starting a cluster is called <em>initialization</em>.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Run the following command:</p>
-<div class="listingblock">
+<div class="paragraph">
+<p>To initialize the cluster, you select the <em>metastorage group</em> nodes - the group of nodes that will be responsible for managing the cluster, and provide a Ignite license.</p>
+</div>
+<div class="paragraph">
+<p>To initialize the cluster with the node you have started (see <a href="#start-ignite-node">Start Ignite Node</a>), run the following command:</p>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>cluster init -n=sampleCluster -m=defaultNode</pre>
+<pre>cluster init --name=sampleCluster</pre>
 </div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Cluster was initialized successfully</pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>--metastorage-group</code> parameter specifies the nodes that will be used to store cluster meta information. In most scenarios, you want to have 3, 5 or 7 metastorage group nodes.  For more information on what they are and cluster lifecycle, see <a href="/docs/ignite3/latest/administrators-guide/lifecycle">Cluster Lifecycle</a>.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Cluster and node configurations in Ignite are separated and cannot be used interchangeably. When initializing a cluster, make sure to provide the <strong>cluster</strong> configuration file.
+</td>
+</tr>
+</table>
 </div>
 </li>
-</ol>
+</ul>
 </div>
 </div>
 </div>
@@ -1000,34 +1088,74 @@ You need to install Java in the Bash environment to run Ignite on Windows.
 <h2 id="run-sql-statements-against-the-cluster">Run SQL Statements Against the Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once your cluster has been initialized, you can manage it with SQL commands:</p>
+<p>Once your cluster has been initialized, you can start working with it. In this tutorial, we will be using the CLI tool to create a table, insert some rows and retrieve data. In most real scenarios you would have a <a href="/docs/ignite3/latest/developers-guide/clients/overview">client</a> writing data to a cluster and retrieving it, but the CLI tool can still be used for debugging or minor adjustments.</p>
+</div>
+<div class="paragraph">
+<p>To work with the SQL in CLI:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Use the <code>CREATE TABLE</code> statement to create a new table:</p>
-<div class="listingblock">
+<p>Enter the SQL REPL mode. In this mode, you will have access to SQL hints and command completion:</p>
+</li>
+</ol>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>sql "CREATE TABLE IF NOT EXISTS Person (id int primary key,  city varchar,  name varchar,  age int,  company varchar)"</pre>
+<pre>sql</pre>
 </div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>sql-cli&gt;</pre>
 </div>
+</div></code-tab></code-tabs>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Use the <code>CREATE TABLE</code> statement to create a new table:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre>CREATE TABLE IF NOT EXISTS Person (id int primary key,  city varchar,  name varchar,  age int,  company varchar)</pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Updated 0 rows.</pre>
+</div>
+</div></code-tab></code-tabs>
 </li>
 <li>
 <p>Fill the table with data using the <code>INSERT</code> statement:</p>
-<div class="listingblock">
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>sql "INSERT INTO Person (id, city, name, age, company) VALUES ('1', 'London', 'John Doe', '42', 'Apache')"
-sql "INSERT INTO Person (id, city, name, age, company) VALUES ('2', 'New York', 'Jane Doe', '36', 'Apache')"</pre>
+<pre>INSERT INTO Person (id, city, name, age, company) VALUES (1, 'London', 'John Doe', 42, 'Apache')
+INSERT INTO Person (id, city, name, age, company) VALUES (2, 'New York', 'Jane Doe', 36, 'Apache')</pre>
 </div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Updated 1 rows.</pre>
 </div>
+</div></code-tab></code-tabs>
 </li>
 <li>
-<p>Get all data you inserted in the previous step:</p>
-<div class="listingblock">
+<p>Get all the data you inserted in the previous step:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>sql "SELECT * FROM Person"</pre>
+<pre>SELECT * FROM Person</pre>
 </div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>╔════╤══════════╤══════════╤═════╤═════════╗
+║ ID │ CITY     │ NAME     │ AGE │ COMPANY ║
+╠════╪══════════╪══════════╪═════╪═════════╣
+║ 2  │ New York │ Jane Doe │ 36  │ Apache  ║
+╟────┼──────────┼──────────┼─────┼─────────╢
+║ 1  │ London   │ John Doe │ 42  │ Apache  ║
+╚════╧══════════╧══════════╧═════╧═════════╝</pre>
 </div>
+</div></code-tab></code-tabs>
+</li>
+<li>
+<p>If needed, exit the REPL mode with the <code>exit</code> command.</p>
 </li>
 </ol>
 </div>
@@ -1046,72 +1174,222 @@ For more information about available SQL statements, see the <a href="/docs/igni
 </div>
 </div>
 <div class="sect1">
-<h2 id="manage-cluster-configuration">Manage Cluster Configuration</h2>
+<h2 id="stop-the-node">Stop the Node</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can change your cluster or node configuration by using the Ignite CLI.</p>
+<p>After you are done working with your cluster, you need to stop the node by stopping the <code>ignite3db</code> process:</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
-<p>To see the current configuration, run the following command:</p>
-<div class="listingblock">
-<div class="content">
-<pre>node config show --url http://localhost:10300</pre>
-</div>
+<p>Unix: <code>Control + C</code></p>
+</li>
+<li>
+<p>Windows: <code>Ctrl+C</code></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>This command prints the configuration file in the HOCON format. Note the <code>maxSize</code> value under <code>aimen.regions</code>.</p>
-</div>
-</li>
-<li>
-<p>Request an increase of the <code>maxSize</code> value:</p>
-<div class="listingblock">
-<div class="content">
-<pre>node config update --url http://localhost:10300 {aimem.regions:[{name:btree_volatile_region,maxSize:412000000}]}</pre>
-</div>
-</div>
-</li>
-<li>
-<p>To verify the result, run the <code>show</code> command again:</p>
-<div class="listingblock">
-<div class="content">
-<pre>node config show --url http://localhost:10300</pre>
-</div>
+<p>You can also exit the CLI tool with the <code>exit</code> command.</p>
 </div>
 <div class="paragraph">
-<p>Note that <code>maxSize</code> has increased to the value you had requested.</p>
-</div>
-</li>
-</ol>
+<p>The cluster will remain initialized, and ready once again when you restart the node.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="stop-the-cluster">Stop the Cluster</h2>
+<h2 id="extended-cluster-startup-tutorial">Extended Cluster Startup Tutorial</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After you are done working with your cluster, you need to stop it:</p>
+<p>Ignite 3 is designed to work in a cluster of 3 or more nodes at once. While a single node can be used in some scenarios and can be used for the tutorial, having multiple nodes in a cluster is the most common use case. The steps below provide optional alternatives to starting your cluster, in case you want to run the tutorial on multiple nodes in a cluster that is closer to what would be encountered in real scenarios.</p>
+</div>
+<div class="sect2">
+<h3 id="optional-starting-multiple-ignite-nodes-in-docker">Optional: Starting Multiple Ignite Nodes in Docker</h3>
+<div class="paragraph">
+<p>To run multiple instances of Ignite, you would normally install it on multiple machines before starting a cluster. If you want to run a Ignite cluster on local VMs for this tutorial, we recommend using a Docker image:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to the <code>ignite-db-3.0.0-beta2</code> folder.</p>
+<p>Download the <a href="/docs/ignite3/latest/quick-start/docker-compose.yml">docker-compose</a> and <a href="/docs/ignite3/latest/quick-start/node-docker-config.conf">node configuration</a> that will be used by docker compose to start the cluster. The node configuration should be in the same folder as docker compose file</p>
 </li>
 <li>
-<p>Run the <code>stop</code> command:</p>
+<p>Download the Docker image:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">docker pull apacheignite/ignite:3.0.0</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>latest: Pulling from ignite/ignite3
+3713021b0277: Pull complete
+fea31cb87980: Pull complete
+07f7cfe80ff6: Pull complete
+ab1fd3f4849e: Pull complete
+34896af28f87: Pull complete
+Digest: sha256:43ab9cfb8f58b66e4a5027d4ed529216963d0bcab3fa3fc6d5e2042fa3dd5a74
+Status: Downloaded newer image for ignite/ignite3:latest
+docker.io/ignite/ignite3:latest</pre>
+</div>
+</div></code-tab></code-tabs>
+</li>
+<li>
+<p>Run the Docker compose command, providing the previously downloaded compose file:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">docker compose <span class="nt">-f</span> docker-compose.yml up <span class="nt">-d</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>[+] Running 4/4
+ ✔ Network ignite3_default    Created                                                                            0.8s
+ ✔ Container ignite3-node1-1  Started                                                                            3.2s
+ ✔ Container ignite3-node2-1  Started                                                                            1.7s
+ ✔ Container ignite3-node3-1  Started                                                                            3.4s</pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>3 nodes start in Docker and become available through the CLI tool that can be run locally.</p>
+</div>
+</li>
+<li>
+<p>Make sure you initialize your cluster before attempting to work with it:</p>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre>cluster init --name=sampleCluster</pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Cluster was initialized successfully</pre>
+</div>
+</div></code-tab></code-tabs>
 </li>
 </ol>
 </div>
-<code-tabs><code-tab data-tab='Linux'><div class="listingblock">
-<div class="content">
-<pre>bin/ignite3db stop</pre>
 </div>
-</div></code-tab><code-tab data-tab='Windows'><div class="listingblock">
+<div class="sect2">
+<h3 id="optional-start-multiple-ignite-nodes-on-different-hosts">Optional: Start Multiple Ignite Nodes on Different Hosts</h3>
+<div class="paragraph">
+<p>In the examples above, we were running a single node, or a small cluster that used predefined configuration. Creating a Ignite cluster on several hosts involves adjustments to its configuration.</p>
+</div>
+<div class="sect3">
+<h4 id="list-all-nodes-in-nodefinder">List all Nodes in NodeFinder</h4>
+<div class="paragraph">
+<p>When nodes are running, they use the node finder configuration. When the node starts, it loads the configuration file from <code>/etc/ignite-config.conf</code>. Add the addresses to the <code>network.nodeFinder</code> configuration, for example for the 3-node cluster:</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<pre>bash bin\ignite3db stop</pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"nodeFinder"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"netClusterNodes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"localhost:3344"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"otherhost:3344"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"thirdhost:3344"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, when the node starts, it automatically tries to find nodes at the listed addresses. You can see the current configuration of a running node at any point by running the following command from the CLI tool:</p>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre>node config show ignite.network.nodeFinder</pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>{
+  "netClusterNodes" : [ "localhost:3344", "otherhost:3344", "thirdhost:3344" ],
+  "type" : "STATIC"
+}</pre>
 </div>
 </div></code-tab></code-tabs>
+<div class="paragraph">
+<p>If the node is already running, you can also use the CLI tool to change node configuration, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>node config update ignite.network.nodeFinder.netClusterNodes=["localhost:3344", "otherHost:3344"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This change requires the node restart to take effect.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="change-node-names">Change Node Names</h4>
+<div class="paragraph">
+<p>You need to make sure that all nodes in the cluster have different names. Node name is defined in the <code>/etc/vars.env</code> file. Change the <code>NODE_NAME</code> variable to have unique name for each node in cluster, otherwise it will be impossible for the nodes with conflicting names to enter the same cluster.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="start-all-nodes">Start all Nodes</h4>
+<div class="paragraph">
+<p>Start each node as described in <a href="#start-ignite-node">Start Ignite Node</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="initialize-your-cluster-2">Initialize Your Cluster</h4>
+<div class="paragraph">
+<p>Before initializing the cluster, it is important to check that all nodes found each other and can connect into a cluster. Nodes visible to each other, but not necessarily connected into a cluster form <a href="/docs/ignite3/latest/administrators-guide/lifecycle">physical topology</a>. You can check it by connecting to any node using the CLI tool and executing the following command:</p>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cluster topology physical</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>╔═══════╤════════════╤══════╤═══════════════╤══════════════════════════════════════╗
+║ name  │ host       │ port │ consistent id │ id                                   ║
+╠═══════╪════════════╪══════╪═══════════════╪══════════════════════════════════════╣
+║ node1 │ 172.19.0.4 │ 3344 │ node1         │ 0c61dad3-bc4c-4c60-8772-1a903632dcb4 ║
+╟───────┼────────────┼──────┼───────────────┼──────────────────────────────────────╢
+║ node2 │ 172.19.0.2 │ 3344 │ node2         │ 21f516bd-0774-4c53-bbfb-ad21bc21c500 ║
+╟───────┼────────────┼──────┼───────────────┼──────────────────────────────────────╢
+║ node3 │ 172.19.0.3 │ 3344 │ node3         │ b2bbfbff-eb08-4252-b154-681c49164708 ║
+╚═══════╧════════════╧══════╧═══════════════╧══════════════════════════════════════╝</pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>The command lists the nodes visible to the node you are connecting to, their addresses, names, and IDs. Once you are certain all nodes are running and visible, initialize your cluster:</p>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cluster init <span class="nt">--name</span><span class="o">=</span>sampleCluster</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>Cluster was initialized successfully</pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>Once the cluster starts, the nodes in it will form the <em>logical topology</em>. You can check if all nodes have entered the cluster by using the following command:</p>
+</div>
+<code-tabs><code-tab data-tab='Command'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cluster topology logical</code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Output'><div class="listingblock">
+<div class="content">
+<pre>╔═══════╤════════════╤══════╤═══════════════╤══════════════════════════════════════╗
+║ name  │ host       │ port │ consistent id │ id                                   ║
+╠═══════╪════════════╪══════╪═══════════════╪══════════════════════════════════════╣
+║ node1 │ 172.19.0.4 │ 3344 │ node1         │ 0c61dad3-bc4c-4c60-8772-1a903632dcb4 ║
+╟───────┼────────────┼──────┼───────────────┼──────────────────────────────────────╢
+║ node2 │ 172.19.0.2 │ 3344 │ node2         │ 21f516bd-0774-4c53-bbfb-ad21bc21c500 ║
+╟───────┼────────────┼──────┼───────────────┼──────────────────────────────────────╢
+║ node3 │ 172.19.0.3 │ 3344 │ node3         │ b2bbfbff-eb08-4252-b154-681c49164708 ║
+╚═══════╧════════════╧══════╧═══════════════╧══════════════════════════════════════╝</pre>
+</div>
+</div></code-tab></code-tabs>
+<div class="paragraph">
+<p>If all nodes are in the command output, the cluster is now started and can be worked with.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1145,13 +1423,23 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#install-ignite">Install Ignite</a></li>
 <li><a href="#start-ignite-node">Start Ignite Node</a></li>
-<li><a href="#optional-start-multiple-ignite-nodes-in-docker">Optional: Start Multiple Ignite Nodes in Docker</a></li>
-<li><a href="#optional-set-custom-jvm-options">Optional: Set Custom JVM Options</a></li>
-<li><a href="#activate-the-ignite-cli">Activate the Ignite CLI</a></li>
+<li><a href="#start-the-ignite-cli">Start the Ignite CLI</a></li>
 <li><a href="#initialize-your-cluster">Initialize Your Cluster</a></li>
 <li><a href="#run-sql-statements-against-the-cluster">Run SQL Statements Against the Cluster</a></li>
-<li><a href="#manage-cluster-configuration">Manage Cluster Configuration</a></li>
-<li><a href="#stop-the-cluster">Stop the Cluster</a></li>
+<li><a href="#stop-the-node">Stop the Node</a></li>
+<li><a href="#extended-cluster-startup-tutorial">Extended Cluster Startup Tutorial</a>
+<ul class="sectlevel2">
+<li><a href="#optional-starting-multiple-ignite-nodes-in-docker">Optional: Starting Multiple Ignite Nodes in Docker</a></li>
+<li><a href="#optional-start-multiple-ignite-nodes-on-different-hosts">Optional: Start Multiple Ignite Nodes on Different Hosts</a>
+<ul class="sectlevel3">
+<li><a href="#list-all-nodes-in-nodefinder">List all Nodes in NodeFinder</a></li>
+<li><a href="#change-node-names">Change Node Names</a></li>
+<li><a href="#start-all-nodes">Start all Nodes</a></li>
+<li><a href="#initialize-your-cluster-2">Initialize Your Cluster</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#next-steps">Next Steps</a></li>
 </ul>
     </div>
@@ -1176,13 +1464,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
+<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Memory Quotas Configuration | Ignite Documentation</title>
+    <title>Data Colocation | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/administrators-guide/config/memory-quotas" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/colocation" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -326,7 +326,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >GridGain CLI Tool</a>
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
             
         </li>
     
@@ -417,6 +417,11 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
@@ -554,8 +559,8 @@
                             
                             <button
                                 type='button'
-                                class='expanded parent '>GridGain Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages expanded parent">
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
 
                             
                                 
@@ -573,12 +578,85 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
                             
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/config/memory-quotas" class='active'>Memory Quotas Configuration</a></li>
-                            
                             </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class='active'
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
                         
                     </li>
                 
@@ -606,16 +684,6 @@
                                   
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/jwt" class=''>JWT Authentication</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/permissions" class=''>User Permissions and Roles</a></li>
                             
                             </nav>
                         
@@ -803,68 +871,81 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/config/memory-quotas.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/colocation.adoc" target="_blank">Edit</a>
         
-            <h1>Memory Quotas Configuration</h1>
+            <h1>Data Colocation</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Memory quotas can be used to prevent Ignite nodes from running out of memory when executing SQL queries that return large result sets. A query loads objects from caches into memory. If there are too many objects, the objects are too large, or multiple large queries are executed on the node at the same time, the JVM can run out of memory. When memory quotas are configured, the SQL engine imposes a limit on the heap memory available to queries.</p>
+<p>In many cases you may want to store related data on the same node. This way multi-entry queries do not need to pull data from other nodes and are thus executed faster.</p>
 </div>
 <div class="paragraph">
-<p>Quotas are configured for each node individually. You can have different limits on different nodes, depending on the amount of RAM available to the nodes. Additionally, you can set a cluster-wide limit to how much of the memory quota can be used up by a single SQL query.</p>
+<p>When the table is created, you can choose the key that will be used to colocate data.</p>
 </div>
 <div class="paragraph">
-<p>Memory quota size can be configured in:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Kilobytes - append 'K' or 'k', for example: 10k, 400K;</p>
-</li>
-<li>
-<p>Megabytes - append 'M' or 'm', for example: 60m, 420M;</p>
-</li>
-<li>
-<p>Gigabytes - append 'G' or 'g', for example: 7g, 2G;</p>
-</li>
-<li>
-<p>Percent of heap - append the '%' sign, for example: 45%, 80%.</p>
-</li>
-</ul>
+<p>For example, if you have <code>Person</code> and <code>Company</code> objects, and each person has the companyId field that indicates the company the person works for. By specifying the <code>Person.companyId</code> and <code>Company.ID</code> as colocation keys, you ensure that all the persons working for the same company are stored on the same node, where the company object is stored as well. Queries that request persons working for a specific company are processed on a single node.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="node-wide-memory-quota">Node-Wide Memory Quota</h2>
+<h2 id="configuring-colocation-key">Configuring Colocation Key</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default, a quota for SQL queries is set to 60% of the heap memory available to the node. You can change this limit by setting the <code>sql.nodeMemoryQuota</code> node configuration property. To disable the memory quota, set it to 0. You can use the CLI tool to set it:</p>
+<p>Data colocation is configured during table creation by using the <code>COLOCATE BY</code> clause. The colummns used to colocate data must be in the primary key and must be specified in the same order as the <code>PRIMARY KEY</code> of the main table.</p>
+</div>
+<div class="paragraph">
+<p>For example, the table below will colocate data for people based on the <code>city_id</code> column:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">node config update <span class="nt">--url</span> http://localhost:10300 <span class="o">{</span>sql.nodeMemoryQuota:<span class="s2">"1000M"</span><span class="o">}</span></code></pre>
+<pre>CREATE TABLE IF NOT EXISTS Person (
+  id int,
+  city_id int primary key,
+  name varchar,
+  age int,
+  company varchar
+) COLOCATE BY (city_id)</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the node memory quota is exceeded, the query is interrupted and the <code>SQL query ran out of memory: Node quota was exceeded</code> error is returned.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="query-wide-memory-quota">Query-Wide Memory Quota</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>By default, each individual query can use the entire memory quota. This may be undesirable in environments that run multiple large queries in parallel. You can use the <code>sql.statementMemoryQuota</code> cluster configuration property to limit the amount of memory that can be allocated to a single query.</p>
+<p>When using composite primary keys, you can specify multiple columns to colocate data by:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">cluster config update <span class="nt">--url</span> http://localhost:10300 <span class="o">{</span>sql.statementMemoryQuota:<span class="s2">"10M"</span><span class="o">}</span></code></pre>
+<pre>CREATE TABLE Company (
+  company_id int,
+  department_id int,
+  city_id int,
+  company_name timestamp,
+  PRIMARY KEY (company_id, city_id)
+)
+
+CREATE TABLE IF NOT EXISTS Person (
+  id int,
+  city_id int,
+  name varchar,
+  age int,
+  company_id int,
+  PRIMARY KEY (id, company_id, city_id)
+)
+COLOCATE BY (company_id, city_id)</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If the statement memory quota is exceeded, the query is interrupted and the <code>SQL query ran out of memory: Statement quota was exceeded</code> error is returned.</p>
+<p>In this case, Ignite will try to colocate these tables together for storage.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The <code>COLOCATE BY</code> clause of colocated table (<code>Person</code> table in the example above) must contain the same set of columns and in the same order as the <code>PRIMARY KEY</code> clause of the main table (Company table in the example above) to colocate the data.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -878,8 +959,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#node-wide-memory-quota">Node-Wide Memory Quota</a></li>
-<li><a href="#query-wide-memory-quota">Query-Wide Memory Quota</a></li>
+<li><a href="#configuring-colocation-key">Configuring Colocation Key</a></li>
 </ul>
     </div>
           
@@ -903,13 +983,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751291817' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751291817' async></script>
-<script type='module' src='/assets/js/search.js?1751291817' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751294878' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751294878' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751294878' async></script>
+<script type='module' src='/assets/js/search.js?1751294878' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751291817" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751291817"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751294878" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294878"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

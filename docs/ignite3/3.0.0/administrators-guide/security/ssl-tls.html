@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Creating Tables from Java Classes | Ignite Documentation</title>
+    <title>SSL/TLS | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/java-to-tables" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/security/ssl-tls" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -337,8 +337,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -450,7 +450,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
-                                class='active'
+                                class=''
                             >Tables from Java Classes</a>
                         
                     </li>
@@ -544,8 +544,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -671,14 +671,14 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>Security and Authentication<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages collapsed">
+                                class='expanded parent active'>Security and Authentication<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages expanded parent">
 
                             
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/administrators-guide/security/ssl-tls" class=''>SSL/TLS</a></li>
+								  <li><a href="/docs/ignite3/latest/administrators-guide/security/ssl-tls" class='active'>SSL/TLS</a></li>
                             
                                 
                                   
@@ -871,94 +871,52 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/java-to-tables.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/security/ssl-tls.adoc" target="_blank">Edit</a>
         
-            <h1>Creating Tables from Java Classes</h1>
+            <h1>SSL/TLS</h1>
         
-        <div class="sect1">
-<h2 id="overview">Overview</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>While <a href="/docs/ignite3/latest/sql-reference/ddl">SQL DDL</a> supports a comprehensive set of table manipulation commands, you can also create tables and build indexes directly from POJO using a simple Java API. This API supports custom annotations and simple builders; it works seamlessly with the Mapper interface, thus facilitating <a href="/docs/ignite3/latest/developers-guide/table-api">keyValueView and recordView</a>.</p>
+<p>This page explains how to configure SSL/TLS encryption between the cluster nodes (server and client) and the clients that connect to your cluster.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="considerations">Considerations</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>The Java API lets you perform the following operations:</p>
+<p>All internal connections in the cluster context, as well as cluster&#8217;s user interaction interfaces, are SSL-enabled. The communication categories are as follows:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>CREATE ZONE</p>
+<p>Between the user and the cluster (node): REST</p>
 </li>
 <li>
-<p>CREATE TABLE</p>
+<p>Between the user and the platform clients</p>
 </li>
 <li>
-<p>CREATE INDEX</p>
-</li>
-<li>
-<p>DROP ZONE</p>
-</li>
-<li>
-<p>DROP TABLE</p>
-</li>
-<li>
-<p>DROP INDEX</p>
+<p>Between nodes: Network (Messaging, Scalecube)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>You use the <code>@Table</code> and other annotations that are located in the <code>org.apache.ignite.catalog.annotations</code> package.</p>
+<p>All SSL configurations activities are performed at the node level.</p>
+</div>
+<div class="paragraph">
+<p>Ignite does not support direct paths to SSL certificates. Instead, it utilizes PKCS12 and JKS keystore.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Examples</h2>
+<h2 id="rest">REST</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</h3>
 <div class="paragraph">
-<p>The example below created a table called <code>kv_pojo</code> from java code:</p>
+<p>The standard implementation of SSL for REST involves configuring a secure connection on a separate port. Ignite supports HTTP and HTTPS, arch on its own port.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">ZoneTest</span> <span class="o">{}</span>
-
-<span class="kd">class</span> <span class="nc">PojoKey</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"kv_pojo"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                    <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)</span> <span class="o">})</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">PojoValue</span> <span class="o">{</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">keyValueView</span><span class="o">(</span><span class="nc">PojoKey</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">PojoValue</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre>
-</div>
+<div class="paragraph">
+<p>The Ignite 3 REST security configuration in the JSON format is provided below.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -967,80 +925,45 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-You need to create a storage profile in node configuration by using the CLI tool.
+In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
 </td>
 </tr>
 </table>
 </div>
-<div class="paragraph">
-<p>The result is equivalent to the following SQL multi-statement:</p>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">zone_test</span> <span class="k">WITH</span> <span class="n">PARTITIONS</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">STORAGE_PROFILES</span><span class="o">=</span><span class="s1">'default'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">kv_pojo</span> <span class="p">(</span>
-	<span class="n">id</span> <span class="nb">int</span><span class="p">,</span>
-	<span class="n">id_str</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-	<span class="n">f_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">l_name</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="n">str</span> <span class="nb">varchar</span><span class="p">,</span>
-	<span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="n">PRIMARY_ZONE</span><span class="o">=</span><span class="s1">'ZONE'</span><span class="p">;</span>
-
-<span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">ix</span> <span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">l_name</span> <span class="k">desc</span> <span class="n">nulls</span> <span class="k">last</span><span class="p">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"rest"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"dualProtocol"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"httpToHttpsRedirection"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"ssl"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"port"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10400</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"portRange"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"keyStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PKCS12"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"may be empty"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="clients-and-jdbc">Clients and JDBC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite 3 Client implementation is based on the Netty framework, which supports configuration for security connections via <code>SSLContextBuilder</code>.</p>
 </div>
 <div class="sect2">
-<h3 id="single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</h3>
+<h3 id="server-side-configuration">Server-side Configuration</h3>
 <div class="paragraph">
-<p>The example below creates the <code>pojo_sample</code> table by using the pojo compatible with recordView:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@Table</span><span class="o">(</span>
-    <span class="n">value</span> <span class="o">=</span> <span class="s">"pojo_sample"</span><span class="o">,</span>
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">zone</span> <span class="o">=</span> <span class="nd">@Zone</span><span class="o">(</span>
-		<span class="n">value</span> <span class="o">=</span> <span class="s">"zone_test"</span><span class="o">,</span>
-		<span class="n">replicas</span> <span class="o">=</span> <span class="mi">2</span><span class="o">,</span>
-		<span class="n">storageProfiles</span> <span class="o">=</span> <span class="s">"default"</span>
-   <span class="o">),</span>
-    <span class="n">colocateBy</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="nd">@ColumnRef</span><span class="o">(</span><span class="s">"id_str"</span><span class="o">)</span> <span class="o">},</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="o">{</span> <span class="nd">@Index</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"ix_sample"</span><span class="o">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="o">{</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"f_name"</span><span class="o">),</span>
-                      <span class="nd">@ColumnRef</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"l_name"</span><span class="o">)}</span>
-    <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">Table</span> <span class="n">myTable</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">().</span><span class="na">create</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="n">myTable</span><span class="o">).</span><span class="na">recordView</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</h3>
-<div class="paragraph">
-<p>The example below uses a builder to create a table:</p>
+<p>The default way to configure SSL on the server side is to update the configuration with SSL properties. The example below is in the JSON format.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1049,52 +972,217 @@ You need to create a storage profile in node configuration by using the CLI tool
 <div class="title">Note</div>
 </td>
 <td class="content">
-When using builders, only <code>@Id</code> and <code>@Column</code> annotations on fields are supported.
+In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
 </td>
 </tr>
 </table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">class</span> <span class="nc">Pojo</span> <span class="o">{</span>
-    <span class="nd">@Id</span>
-    <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="nd">@Id</span><span class="o">(</span><span class="n">sort</span> <span class="o">=</span> <span class="no">DESC</span><span class="o">)</span>
-    <span class="nd">@Column</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"id_str"</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">idStr</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"f_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">firstName</span><span class="o">;</span>
-
-    <span class="nd">@Column</span><span class="o">(</span><span class="s">"l_name"</span><span class="o">)</span>
-    <span class="nc">String</span> <span class="n">lastName</span><span class="o">;</span>
-
-    <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">ZoneDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">partitions</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span>
-  <span class="o">.</span><span class="na">execute</span><span class="o">();</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">catalog</span><span class="o">()</span>
-  <span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="nc">TableDefinition</span><span class="o">.</span><span class="na">builder</span><span class="o">(</span><span class="s">"pojo_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">ifNotExists</span><span class="o">()</span>
-  	<span class="o">.</span><span class="na">colocateBy</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"id_str"</span><span class="o">)</span>
-  	<span class="o">.</span><span class="na">zone</span><span class="o">(</span><span class="s">"zone_test"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">record</span><span class="o">(</span><span class="nc">Pojo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="c1">// .key(Key.class).value(Value.class)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">())</span></code></pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"clientConnector"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"ssl"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"clientAuth"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"require"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"keyStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PKCS12"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"may be empty"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"trustStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PKCS12"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"may be empty"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have enabled SSL for <code>clientConnector</code>, and want to use JDBC, set the corresponding properties in your code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kt">var</span> <span class="n">url</span> <span class="o">=</span>
+    <span class="s">"jdbc:ignite:thin://{address}:{port}"</span>
+        <span class="o">+</span> <span class="s">"?sslEnabled=true"</span>
+        <span class="o">+</span> <span class="s">"&amp;trustStorePath="</span> <span class="o">+</span> <span class="n">trustStorePath</span>
+        <span class="o">+</span> <span class="s">"&amp;trustStoreType=JKS"</span>
+        <span class="o">+</span> <span class="s">"&amp;trustStorePassword="</span> <span class="o">+</span> <span class="n">password</span>
+        <span class="o">+</span> <span class="s">"&amp;clientAuth=require"</span>
+        <span class="o">+</span> <span class="s">"&amp;keyStorePath="</span> <span class="o">+</span> <span class="n">keyStorePath</span>
+        <span class="o">+</span> <span class="s">"&amp;keyStoreType=PKCS12"</span>
+        <span class="o">+</span> <span class="s">"&amp;keyStorePassword="</span> <span class="o">+</span> <span class="n">password</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">(</span><span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// Other actions.</span>
+        <span class="o">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="client-configuration">Client Configuration</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="java">Java</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Once you have created a table using the Java API, you can manipulate it using the <a href="/docs/ignite3/latest/sql-reference/ddl">SQL commands</a>.</p>
+<p>To enable SSL in your Java clients, use the <code>IgniteClient</code> class and pass the ssl configuration to it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="Java">var sslConfiguration = SslConfiguration.builder()
+                        .enabled(true)
+                        .trustStoreType("JKS")
+                        .trustStorePath(trustStorePath)
+                        .trustStorePassword(password)
+                        .clientAuth(REQUIRE)
+                        .keyStorePath(keyStorePath)
+                        .keyStorePassword(password)
+                        .build();
+
+try (IgniteClient client = IgniteClient.builder()
+    .addresses("localhost:10800")
+    .ssl(sslConfiguration)
+    .build()
+)</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="net">.NET</h3>
+<div class="paragraph">
+<p>Add the <code>IgniteClientConfiguration.SslStreamFactory</code> property of type <code>ISslStreamFactory</code>.</p>
+</div>
+<div class="paragraph">
+<p>Provide a <a href="https://github.com/apache/ignite/blob/66f43a4bee163aadb3ad731f6eb9a6dfde9faa73/modules/platforms/dotnet/Apache.Ignite.Core/Client/SslStreamFactory.cs">predefined implementation</a>.</p>
+</div>
+<div class="paragraph">
+<p>Use the base class library <code>SslStream</code>.</p>
+</div>
+<div class="paragraph">
+<p>Basic usage without client authorization:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="csharp"><span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IgniteClientConfiguration</span> <span class="p">{</span> <span class="n">SslStreamFactory</span> <span class="p">=</span> <span class="k">new</span><span class="p">()</span> <span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cli">CLI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To SSL on the CLI side, use the <code>cli config set</code> command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cli config <span class="nb">set </span>cli.trust-store.type<span class="o">=</span>&lt;<span class="nb">type</span><span class="o">&gt;</span>
+cli config <span class="nb">set </span>cli.trust-store.path<span class="o">=</span>&lt;path&gt;
+cli config <span class="nb">set </span>cli.trust-store.password<span class="o">=</span>&lt;password&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Store the CLI security configuration in a separate file with permission settings that protect it from unauthorized read/write operations. This configuration file must match profiles from the common configuration file.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="network-configuration">Network Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The node network is based on the Netty framework. The configuration is the same as described for the Ignite Client part except for the part that addresses the Ignite 3 configuration.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"network"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"ssl"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"clientAuth"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"none"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"keyStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PKCS12"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"may be empty"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"trustStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"PKCS12"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"password"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"may be empty"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ssl-client-authentication-mtls-support">SSL Client Authentication (mTLS Support)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Optionally, the connections you utilize can support the client authentication feature. Configure it separately for each connection on the server side.</p>
+</div>
+<div class="paragraph">
+<p>Two-way authentication requires that both server and client have certificates they reciprocally trust. The client generates a private key, stores it in its keystore, and gets it signed by an entity the server&#8217;s truststore trusts.</p>
+</div>
+<div class="paragraph">
+<p>To support client authentication, a connection must include the <code>clientAuth</code>, <code>trustStore</code> and <code>keyStore</code> properties. Here is an example of a possible client configuration. The example below is in the JSON format.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"clientConnector.ssl"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"clientAuth"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"require"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"keyStore"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"must not be empty"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"password : "</span><span class="err">may</span><span class="w"> </span><span class="err">be</span><span class="w"> </span><span class="err">empty</span><span class="s2">"
+            },
+            "</span><span class="err">trustStore</span><span class="s2">" : {
+                "</span><span class="err">type</span><span class="s2">" : "</span><span class="err">JKS</span><span class="s2">",
+                "</span><span class="err">path</span><span class="s2">" : "</span><span class="err">must</span><span class="w"> </span><span class="err">not</span><span class="w"> </span><span class="err">be</span><span class="w"> </span><span class="err">empty</span><span class="s2">",
+                "</span><span class="err">password</span><span class="s2">" : "</span><span class="err">may</span><span class="w"> </span><span class="err">be</span><span class="w"> </span><span class="err">empty</span><span class="s2">"
+            }
+        }
+    }
+}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1108,15 +1196,22 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#overview">Overview</a></li>
-<li><a href="#examples">Examples</a>
+<li><a href="#considerations">Considerations</a></li>
+<li><a href="#rest">REST</a></li>
+<li><a href="#clients-and-jdbc">Clients and JDBC</a>
 <ul class="sectlevel2">
-<li><a href="#kv-pojo-compatible-with-keyvalueview">KV POJO Compatible with keyValueView</a></li>
-<li><a href="#single-pojo-compatible-with-recordview">Single POJO Compatible with recordView</a></li>
-<li><a href="#the-builder-alternative-to-the-table-annotation">The Builder Alternative to the @Table Annotation</a></li>
+<li><a href="#server-side-configuration">Server-side Configuration</a></li>
 </ul>
 </li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#client-configuration">Client Configuration</a></li>
+<li><a href="#java">Java</a>
+<ul class="sectlevel2">
+<li><a href="#net">.NET</a></li>
+</ul>
+</li>
+<li><a href="#cli">CLI</a></li>
+<li><a href="#network-configuration">Network Configuration</a></li>
+<li><a href="#ssl-client-authentication-mtls-support">SSL Client Authentication (mTLS Support)</a></li>
 </ul>
     </div>
           
