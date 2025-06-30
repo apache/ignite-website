@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Java SQL API | Ignite Documentation</title>
+    <title>System Views | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/sql/sql" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/metrics/system-views" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -431,11 +431,6 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
-                            
-                                
-                                  
-
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/odbc/odbc-driver" class=''>ODBC Driver</a></li>
                             
                             </nav>
@@ -714,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -871,28 +871,988 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/sql/sql.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/metrics/system-views.adoc" target="_blank">Edit</a>
         
-            <h1>Java SQL API</h1>
+            <h1>System Views</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>In your Java projects, you can use the Java SQL API to execute SQL statements and getting results.</p>
+<p>Ignite provides a number of built-in SQL views that provide information on the cluster&#8217;s state and provide real-time insight into the status of its components. These views are available in the SYSTEM schema.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="creating-tables">Creating Tables</h2>
+<h2 id="getting-data">Getting Data</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Here is an example of how you can create a new table on a cluster:</p>
+<p>You access system views in Ignite by using SQL and selecting data from the system view like you would from any other table. For example, you can get a list of all available system views in the following way:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int);"</span><span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">system_views</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can also use joins to combine data from multiple views. The example below returns all columns of a view that was found in the <code>SYSTEM_VIEWS</code> view:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">svc</span><span class="p">.</span><span class="o">*</span>
+  <span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">system_view_columns</span> <span class="n">svc</span>
+  <span class="k">JOIN</span> <span class="k">system</span><span class="p">.</span><span class="n">system_views</span> <span class="n">sv</span> <span class="k">ON</span> <span class="n">svc</span><span class="p">.</span><span class="n">view_id</span> <span class="o">=</span> <span class="n">sv</span><span class="p">.</span><span class="n">id</span>
+ <span class="k">WHERE</span> <span class="n">sv</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'SYSTEM_VIEWS'</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="available-views">Available Views</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="compute_jobs">COMPUTE_JOBS</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The compute job ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>COORDINATOR_NODE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The job&#8217;s coordinator node ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STATUS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The job status.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CREATE_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP WITH LOCAL TIME ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The job creation timestamp.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>START_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP WITH LOCAL TIME ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The job start timestamp.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>FINISH_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP WITH LOCAL TIME ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The job finish timestamp.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="global_partition_states">GLOBAL_PARTITION_STATES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ZONE_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the distribution zone the partition belongs to.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the table stored in the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the table stored in the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the schema the table belongs to.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PARTITION_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The unique identifier of the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STATE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Partition status. Possible values: <code>AVAILABLE</code>, <code>DEGRADED</code>, <code>READ_ONLY</code>, <code>UNAVAILABLE</code>. See <a href="/docs/ignite3/latest/administrators-guide/disaster-recovery">Disaster Recovery</a> documentation for more information.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="indexes">INDEXES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INDEX_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Unique index identifier.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INDEX_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the index.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Unique table identifier.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the table.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Unique schema identifier.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the schema.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The type of the index. Possible values: <code>HASH</code>, <code>SORTED</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>IS_UNIQUE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>BOOLEAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>If the index is unique.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>COLUMNS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The list of indexed columns.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STATUS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Current status of the index. Possible values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>REGISTERED</code> - Index has been registered and is awaiting the start of building,</p>
+</li>
+<li>
+<p><code>BUILDING</code> - Index is being built,</p>
+</li>
+<li>
+<p><code>AVAILABLE</code> - Index is built and is ready to use,</p>
+</li>
+<li>
+<p><code>STOPPING</code> - DROP INDEX command has been executed, index is waiting for running transactions to finish.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="locks">LOCKS</h3>
+<div class="paragraph">
+<p>A node system view that lists the currently active locks.</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>OWNING_NODE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the node that owns the lock.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TX_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the transaction that created the lock.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>OBJECT_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the locked object.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>MODE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=211885498#IEP91:Transactionprotocol-Lockingmodel">lock mode</a>. Possible values are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IS - intention shared lock</p>
+</li>
+<li>
+<p>S- shared lock</p>
+</li>
+<li>
+<p>IX - intention exclusive lock</p>
+</li>
+<li>
+<p>SIX - shared intention exclusive lock</p>
+</li>
+<li>
+<p>X - exclusive lock</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="local_partition_states">LOCAL_PARTITION_STATES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ZONE_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the distribution zone the partition belongs to.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the table stored in the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TABLE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the table stored in the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the schema the table belongs to.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PARTITION_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The unique identifier of the partition.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STATE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Partition status. Possible values: <code>AVAILABLE</code>, <code>DEGRADED</code>, <code>READ_ONLY</code>, <code>UNAVAILABLE</code>.  See <a href="/docs/ignite3/latest/administrators-guide/disaster-recovery">Disaster Recovery</a> documentation for more information.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ESTIMATED_ROWS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The estimated number of rows in a partition.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sequences">SEQUENCES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the sequence.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the sequence.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The id of the schema used by the sequence.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA_NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the schema used by the sequence.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The sequence data type.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INCREMENT</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>How much the sequence is incremented by each time.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>MINIMUM_VALUE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Minimum sequence value.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>MAXIMUM_VALUE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum sequence value.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>START_VALUE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The starting value of the sequence.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CACHE_VALUE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT64</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The amount of sequence numbers that are pre-allocated and stored in memory.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sql_queries">SQL_QUERIES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INITIATOR_NODE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the node that initiated the query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PHASE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The query phase:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>INITIALIZATION - query registration and parsing</p>
+</li>
+<li>
+<p>OPTIMIZATION - query validation and plan optimization</p>
+</li>
+<li>
+<p>EXECUTION - query plan execution</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The query type: DDL, DML, QUERY, or SCRIPT.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The query ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>USERNAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the user who started the query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PARENT_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID of the script that initiated the query (NULL if the query was not initiated by a script).</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SQL</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The SQL query&#8217;s expression.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>START_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The date/time the query started.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the default schema that was used to execute the query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TRANSACTION_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The ID of the transaction in which the query was executed.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="system_views">SYSTEM_VIEWS</h3>
+<div class="paragraph">
+<p>Describes available system views.</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Name of the schema used. Default is <code>SYSTEM</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view type. Possible values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NODE - The view provides node-specific information. Data will be collected from all nodes, and represented in the view.</p>
+</li>
+<li>
+<p>CLUSTER - The view provides cluster-wide information. Data will be collected from one node, chosen to represent the cluster.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="system_view_columns">SYSTEM_VIEW_COLUMNS</h3>
+<div class="paragraph">
+<p>Describes available system view columns.</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>VIEW_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Column name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Column type. Can by any of the <a href="/docs/ignite3/latest/sql-reference/data-types">supported types</a>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NULLABLE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>BOOLEAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines if the column can be empty.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PRECISION</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum number of digits.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCALE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum number of decimal places.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>LENGTH</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum length of the value. Symbols for string values or bytes for binary values.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="transactions">TRANSACTIONS</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -900,142 +1860,188 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-ResultSet is closable, but it is safe to skip <code>close()</code> method for DDL and DML queries, as they do not keep server cursor open.
+This view shows only the currently active transactions.
 </td>
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="using-sequences">Using Sequences</h3>
-<div class="paragraph">
-<p>When creating a table, you can designate the primary key column to be filled automatically from the sequence the values for your primary key by using sql sequences:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE SEQUENCE IF NOT EXISTS defaultSequence;"</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id bigint default NEXTVAL('defaultSequence') primary key, city_id bigint, name varchar, age int, company varchar);"</span><span class="o">);</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="filling-tables">Filling Tables</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>With Ignite 3, you can fill the table by adding rows one by one, or in a batch. In both cases, you create an <code>INSERT</code> statement, and then exeсute it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kt">long</span> <span class="n">rowsAdded</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeBatch</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span>
-    <span class="s">"INSERT INTO Person (id, name, age) values (?, ?, ?)"</span><span class="o">,</span>
-    <span class="nc">BatchedArguments</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"John"</span><span class="o">,</span> <span class="mi">46</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="mi">28</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"Mary"</span><span class="o">,</span> <span class="mi">51</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="s">"Richard"</span><span class="o">,</span> <span class="mi">33</span><span class="o">)))</span>
-    <span class="o">.</span><span class="na">sum</span><span class="o">();</span></code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="using-sequences-2">Using Sequences</h3>
-<div class="paragraph">
-<p>When filling a table, you can generate the values for your primary key by using sql sequences:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE SEQUENCE IF NOT EXISTS defaultSequence;"</span><span class="o">);</span>
-
-<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id bigint default NEXTVAL('defaultSequence') primary key, city_id bigint, name varchar, age int, company varchar);"</span><span class="o">);</span>
-
-<span class="kt">long</span> <span class="n">rowsAdded</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">stream</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeBatch</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span>
-    <span class="s">"INSERT INTO Person (city_id, name, age, company) values (?, ?, ?, ?)"</span><span class="o">,</span>
-    <span class="nc">BatchedArguments</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"John"</span><span class="o">,</span> <span class="mi">46</span><span class="o">,</span> <span class="s">"oldCorp"</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="mi">28</span><span class="o">,</span> <span class="s">"newCorp"</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"Mary"</span><span class="o">,</span> <span class="mi">51</span><span class="o">,</span> <span class="s">"newCorp"</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="s">"Richard"</span><span class="o">,</span> <span class="mi">33</span><span class="o">,</span> <span class="s">"oldCorp"</span><span class="o">)))</span>
-    <span class="o">.</span><span class="na">sum</span><span class="o">();</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="partition-specific-selects">Partition-Specific SELECTs</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>When executing a SELECT operation, you can use the system <code>__part</code> column to only <code>SELECT</code> data in a specific partition. To find out partition information, use the SELECT request that explicitly includes the <code>__part</code> column as its part:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">city_id</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="nv">"__part"</span>  <span class="k">FROM</span> <span class="n">Person</span><span class="p">;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once you know the partition, you can use it in the <code>WHERE</code> clause:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">city_id</span><span class="p">,</span> <span class="n">id</span> <span class="k">FROM</span> <span class="n">Person</span> <span class="k">WHERE</span> <span class="nv">"__part"</span><span class="o">=</span><span class="mi">23</span><span class="p">;</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="getting-data-from-tables">Getting Data From Tables</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To get data from a table, execute the <code>SELECT</code> statement to get a set of results. SqlRow can provide access to column values by column name or column index. You can then iterate through results to get data:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span><span class="o">&lt;</span><span class="nc">SqlRow</span><span class="o">&gt;</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT id, name, age FROM Person"</span><span class="o">))</span> <span class="o">{</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"    "</span>
-            <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span>
-            <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">2</span><span class="o">));</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
 <tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-ResultSet may hold server-side cursor open due to lazy query execution. It must be closed manually, or by using the <code>try-with-resources</code> statement.
-</td>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>COORDINATOR_NODE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the transaction&#8217;s coordinator node.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STATE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The transaction state. For read-only transactions, the value is always null (empty). For read-write transactions, the possible values are PENDING - the transaction is in progress - and FINISHING - the transaction is in the process of being finished.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The transaction ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>START_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The transaction&#8217;s start time.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The transaction type: READ_ONLY or READ_WRITE.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PRIORITY</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The transaction priority, which is used to resolve conflicts between transactions. Currently, this value cannot be explicitly set by the user. Possible values are LOW and NORMAL (default).</p>
+</div></div></td>
+</tr>
+</tbody>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="sql-scripts">SQL Scripts</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The default API executes SQL statements one at a time. For large SQL statements, pass them to the <code>executeScript()</code> method. The statements will be batched together similar to using <code>SET STREAMING</code> command in Ignite 8, significantly improving performance when executing a large number of queries at once. These statements will be executed in order.</p>
-</div>
-<code-tabs><code-tab data-tab='Java'><div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">String</span> <span class="n">script</span> <span class="o">=</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int default 0);"</span>
-              <span class="o">+</span> <span class="s">"INSERT INTO Person (id, name, age) VALUES ('1', 'John', '46');"</span><span class="o">;</span>
-<span class="n">client</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">executeScript</span><span class="o">(</span><span class="n">script</span><span class="o">);</span></code></pre>
-</div>
-</div></code-tab></code-tabs>
-<div class="admonitionblock note">
-<table>
+<div class="sect2">
+<h3 id="zones">ZONES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
 <tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Execution of each statement is considered complete when the first page is ready to be returned. As a result, when working with large data sets, SELECT statement may be affected by later statements in the same script.
-</td>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PARTITIONS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The number of partitions in the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>REPLICAS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The number of copies of each partition in the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_AUTO_ADJUST_SCALE_UP</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The delay in seconds between the new node joining and the start of data zone adjustment.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_AUTO_ADJUST_SCALE_DOWN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The delay in seconds between the node leaving the cluster and the start of data zone adjustment.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_FILTER</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The filter that specifies what nodes will be used by the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>IS_DEFAULT_ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>BOOLEAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines if the data zone is used by default.</p>
+</div></div></td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -1050,19 +2056,22 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#creating-tables">Creating Tables</a>
+<li><a href="#getting-data">Getting Data</a></li>
+<li><a href="#available-views">Available Views</a>
 <ul class="sectlevel2">
-<li><a href="#using-sequences">Using Sequences</a></li>
+<li><a href="#compute_jobs">COMPUTE_JOBS</a></li>
+<li><a href="#global_partition_states">GLOBAL_PARTITION_STATES</a></li>
+<li><a href="#indexes">INDEXES</a></li>
+<li><a href="#locks">LOCKS</a></li>
+<li><a href="#local_partition_states">LOCAL_PARTITION_STATES</a></li>
+<li><a href="#sequences">SEQUENCES</a></li>
+<li><a href="#sql_queries">SQL_QUERIES</a></li>
+<li><a href="#system_views">SYSTEM_VIEWS</a></li>
+<li><a href="#system_view_columns">SYSTEM_VIEW_COLUMNS</a></li>
+<li><a href="#transactions">TRANSACTIONS</a></li>
+<li><a href="#zones">ZONES</a></li>
 </ul>
 </li>
-<li><a href="#filling-tables">Filling Tables</a>
-<ul class="sectlevel2">
-<li><a href="#using-sequences-2">Using Sequences</a></li>
-</ul>
-</li>
-<li><a href="#partition-specific-selects">Partition-Specific SELECTs</a></li>
-<li><a href="#getting-data-from-tables">Getting Data From Tables</a></li>
-<li><a href="#sql-scripts">SQL Scripts</a></li>
 </ul>
     </div>
           
@@ -1086,13 +2095,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1751294879' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1751294879' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1751294879' async></script>
-<script type='module' src='/assets/js/search.js?1751294879' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751296044' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751296044' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751296044' async></script>
+<script type='module' src='/assets/js/search.js?1751296044' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1751294879" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751294879"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751296044" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751296044"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
