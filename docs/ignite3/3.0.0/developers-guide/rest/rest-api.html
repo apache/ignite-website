@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -808,35 +878,22 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Ignite 3 clusters provide an <a href="https://www.openapis.org/">OpenAPI</a> specification that can be used to work with Ignite 3 by standard REST methods.</p>
+<p>The Ignite 3, clusters provide an <a href="https://www.openapis.org/">OpenAPI</a> specification that can be used to work with Ignite 3 by standard REST methods.</p>
+</div>
+<div class="paragraph">
+<p>We recommend that you generate client code in your project language by using an <a href="https://github.com/OpenAPITools/openapi-generator" target="_blank" rel="noopener">OpenAPI code generator</a>. Below is the example of how you can do this for a Java project.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="rest-connector-configuration">REST Connector Configuration</h2>
+<h2 id="getting-started">Getting Started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default, rest connector starts on port 10300. THis port can be configured in the <code>ignite.rest</code> <a href="/docs/ignite3/latest/administrators-guide/config/node-config#rest-configuration">node configuration</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="using-http-tools">Using HTTP Tools</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Once the cluster is started, you can use external tools to monitor the cluster over http, or manage the cluster. In this example, we will use <a href="https://curl.se/">curl</a> to get cluster status:</p>
+<p>You do not need to explicitly configure REST on the cluster. The connector starts up automatically and listens on port 8080. You can check if it works with curl:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="bash">curl <span class="s1">'http://localhost:10300/management/v1/cluster/state'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You are not limited to only monitoring, as Ignite REST API provides endpoints that can be used to manage the cluster as well. For example, you can create a <a href="/docs/ignite3/latest/administrators-guide/snapshots/snapshots-and-recovery">snapshot</a> via REST:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-d</span> <span class="s1">'{"snapshotType": "FULL","tableNames": "table1,table2","startTimeEpochMilli": 0}'</span> http://localhost:10300/management/v1/snapshot/create</code></pre>
 </div>
 </div>
 </div>
@@ -844,9 +901,44 @@
 <div class="sect1">
 <h2 id="java-project-configuration">Java Project Configuration</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>If you want to integrate Ignite REST API closer into your application, we recommend using an <a href="https://github.com/OpenAPITools/openapi-generator">OpenAPI generator</a> to generate a Java client. Once the client is generated, you can use it to work with REST API from code, for example:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add an <a href="https://github.com/OpenAPITools/openapi-generator/tree/master/modules/openapi-generator-maven-plugin" target="_blank" rel="noopener">open api generator</a> maven plugin to your project&#8217;s pom.xml.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;plugin&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.openapitools<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>openapi-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>${maven.openapi.plugin.version}<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;executions&gt;</span>
+    <span class="nt">&lt;execution&gt;</span>
+      <span class="nt">&lt;goals&gt;</span>
+        <span class="nt">&lt;goal&gt;</span>generate<span class="nt">&lt;/goal&gt;</span>
+      <span class="nt">&lt;/goals&gt;</span>
+      <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;inputSpec&gt;</span>https://github.com/apache/ignite-3/tree/main/modules/rest-api/openapi/openapi.yaml<span class="nt">&lt;/inputSpec&gt;</span>
+        <span class="nt">&lt;generatorName&gt;</span>java<span class="nt">&lt;/generatorName&gt;</span>
+        <span class="nt">&lt;apiPackage&gt;</span>org.apache.ignite.rest.client.api<span class="nt">&lt;/apiPackage&gt;</span>
+        <span class="nt">&lt;invokerPackage&gt;</span>org.apache.ignite.rest.client.invoker<span class="nt">&lt;/invokerPackage&gt;</span>
+        <span class="nt">&lt;modelPackage&gt;</span>org.apache.ignite.rest.client.model<span class="nt">&lt;/modelPackage&gt;</span>
+        <span class="nt">&lt;generateModelTests&gt;</span>false<span class="nt">&lt;/generateModelTests&gt;</span>
+        <span class="nt">&lt;generateApiTests&gt;</span>false<span class="nt">&lt;/generateApiTests&gt;</span>
+        <span class="nt">&lt;languageSpecificPrimitives&gt;</span>true<span class="nt">&lt;/languageSpecificPrimitives&gt;</span>
+        <span class="nt">&lt;configOptions&gt;</span>
+          <span class="nt">&lt;openApiNullable&gt;</span>false<span class="nt">&lt;/openApiNullable&gt;</span>
+          <span class="nt">&lt;supportStreaming&gt;</span>false<span class="nt">&lt;/supportStreaming&gt;</span>
+        <span class="nt">&lt;/configOptions&gt;</span>
+        <span class="nt">&lt;library&gt;</span>okhttp-gson<span class="nt">&lt;/library&gt;</span>
+      <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;/execution&gt;</span>
+  <span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span></code></pre>
 </div>
+</div>
+</li>
+<li>
+<p>Get cluster configuration from your project.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">ApiClient</span> <span class="n">client</span> <span class="o">=</span> <span class="nc">Configuration</span><span class="o">.</span><span class="na">getDefaultApiClient</span><span class="o">();</span>
@@ -854,9 +946,12 @@
 <span class="n">client</span><span class="o">.</span><span class="na">setBasePath</span><span class="o">(</span><span class="s">"http://localhost:10300"</span><span class="o">);</span>
 
 <span class="c1">// Get cluster configuration.</span>
-<span class="nc">ClusterConfigurationApi</span> <span class="n">clusterConfigurationApi</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClusterConfigurationApi</span><span class="o">(</span><span class="n">client</span><span class="o">);</span>
+<span class="n">clusterConfigurationApi</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClusterConfigurationApi</span><span class="o">(</span><span class="n">client</span><span class="o">);</span>
 <span class="nc">String</span> <span class="n">configuration</span> <span class="o">=</span> <span class="n">clusterConfigurationApi</span><span class="o">.</span><span class="na">getClusterConfiguration</span><span class="o">();</span></code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -870,8 +965,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#rest-connector-configuration">REST Connector Configuration</a></li>
-<li><a href="#using-http-tools">Using HTTP Tools</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
 <li><a href="#java-project-configuration">Java Project Configuration</a></li>
 </ul>
     </div>
@@ -896,13 +990,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

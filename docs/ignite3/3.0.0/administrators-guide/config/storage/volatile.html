@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -817,11 +887,8 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="profile-configuration">Profile Configuration</h2>
+<h2 id="configuration-parameters">Configuration Parameters</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Each Ignite storage engine can have several storage profiles. Each profile has the following properties:</p>
-</div>
 <table class="tableblock frame-all grid-all stripes-none stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -836,11 +903,6 @@
 </tr>
 </thead>
 <tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">engine</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the storage engine.</p></td>
-</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -857,29 +919,9 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets the maximum space that can be allocated to the data region.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">evictionMode</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DISABLED</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the eviction algorithm to use. Possible values: <code>DISABLED</code>, <code>RANDOM_LRU</code>, <code>RANDOM_2_LRU</code>, <code>RANDOM</code>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">evictionThreshold</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.9</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Configures when the eviction process starts.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">emptyPagesPoolSize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of empty pages Ignite will try to keep.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">pageSize</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">16384</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The size of pages in the storage, in bytes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">memoryAllocator.type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">unsafe</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Memory allocator configuration. Uses <code>sun.misc.Unsafe</code> to improve performance. Currently, no other options are available.</p></td>
 </tr>
 </tbody>
 </table>
@@ -889,27 +931,18 @@
 <h2 id="configuration-example">Configuration Example</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In Ignite 3, you can create and maintain configuration in either HOCON or JSON. The configuration file has a single root "node," called <code>ignite</code>. All configuration sections are children, grandchildren, etc., of that node. The example below shows how to configure one data region that uses volatile storage.</p>
+<p>The example below shows how to configure one data region that uses volatile storage:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"storage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"profiles"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"aimemory"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"engine"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="err">aimem</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"replacementMode"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"CLOCK"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<pre>ignite config set --type cluster \
+"{
+    aimem.regions: [{
+        name: btree_volatile_region,
+        maxSize: 256000000
+    }]
+}"</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>You can then use the profile (in this case, <code>aimemory</code>) in your distribution zone configuration.</p>
 </div>
 </div>
 </div>
@@ -924,7 +957,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#profile-configuration">Profile Configuration</a></li>
+<li><a href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a href="#configuration-example">Configuration Example</a></li>
 </ul>
     </div>
@@ -949,13 +982,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197099' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197099' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197099' async></script>
-<script type='module' src='/assets/js/search.js?1744197099' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197099" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197099"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

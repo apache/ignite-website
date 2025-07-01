@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -809,19 +879,11 @@
 <h2 id="overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite Persistence is designed to provide a quick and responsive persistent storage.
+<p>Apache Ignite Persistence is designed to provide a quick and responsive persistent storage.
 When using the persistent storage, Ignite stores all the data on disk, and loads as much data as it can into RAM for processing.</p>
 </div>
 <div class="paragraph">
 <p>When persistence is enabled, Ignite stores each partition in a separate file on disk. In addition to data partitions, Ignite stores indexes and metadata.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="profile-configuration">Profile Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Each Ignite storage engine can have several storage profiles.</p>
 </div>
 </div>
 </div>
@@ -838,42 +900,129 @@ When using the persistent storage, Ignite stores all the data on disk, and loads
 <p>Checkpointing is designed to ensure durability of data and recovery in case of a node failure.</p>
 </div>
 <div class="paragraph">
-<p>This process helps you utilize disk space frugally by keeping pages in the most up-to-date state on disk.</p>
+<p>This process helps to utilize disk space frugally by keeping pages in the most up-to-date state on disk.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="storage-configuration">Storage Configuration</h2>
+<h2 id="configuration-properties">Configuration Properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In Ignite 3, you can create and maintain configuration in either HOCON or JSON. The configuration file has a single root "node," called <code>ignite</code>. All configuration sections are children, grandchildren, etc., of that node. The example below shows sample Ignite cluster configuration with persistence and checkpoints:</p>
+<p>The following table describes some properties of persistent data storage:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the data region.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>256 * 1024 * 1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the space allocated to the data region, in bytes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">replacementMode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CLOCK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the page replacement algorithm.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pageSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">16384</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The size of pages in the storage, in bytes.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The table below describes checkpoint configuration:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checkpointDelayMillis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delay before staring a checkpoint after receiving the command.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checkpointThreads</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of CPU threads dedicated to checkpointing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">compactionThreads</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of CPU threads dedicated to data compaction.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">180000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interval between checkpoints in milliseconds.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">intervalDeviation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allowed deviation in checkpoint interval, percent.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">logReadLockThresholdTimeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Threshold for logging long read locks, in milliseconds.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">readLockTimeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timeout for checkpoint read lock acquisition, in milliseconds.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">useAsyncFileIoFactory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If Ignite uses asynchronous file I/O operations provider.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-example">Configuration Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The example below shows how to configure one data region that uses Ignite persistence:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"storage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"engines"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"aipersist"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"checkpoint"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"checkpointDelayMillis"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"profiles:"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"clock_aipersist"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"engine"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"replacementMode"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"CLOCK"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<pre>ignite config set --type cluster \
+"{
+    aipersist.regions: [{
+        name: btree_persistent_region,
+        maxSize: 256000000
+    }]
+}"</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>You can then use the profile (in this case, <code>clock_aipersist</code>) in your distribution zone configuration.</p>
 </div>
 </div>
 </div>
@@ -888,9 +1037,9 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
-<li><a href="#profile-configuration">Profile Configuration</a></li>
 <li><a href="#checkpointing">Checkpointing</a></li>
-<li><a href="#storage-configuration">Storage Configuration</a></li>
+<li><a href="#configuration-properties">Configuration Properties</a></li>
+<li><a href="#configuration-example">Configuration Example</a></li>
 </ul>
     </div>
           
@@ -914,13 +1063,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197099' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197099' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197099' async></script>
-<script type='module' src='/assets/js/search.js?1744197099' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197099" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197099"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

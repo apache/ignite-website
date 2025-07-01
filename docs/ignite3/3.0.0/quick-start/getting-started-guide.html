@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle expanded parent'>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='active' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class='active'
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -821,9 +891,6 @@
 <div class="sect1">
 <h2 id="prerequisites">Prerequisites</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>This section describes the platform requirements for machines running Ignite. Ignite system requirements scale depending on the size of the cluster.</p>
-</div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -836,11 +903,7 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Debian and Red Hat flavours), Windows 10 or 11</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ISA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x86 or x64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Ubuntu 20.04), Windows (10 Home), macOS</p></td>
 </tr>
 </tbody>
 </table>
@@ -993,7 +1056,7 @@ You need to install Java in the Bash environment to run Ignite on Windows.
 </div>
 <code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>cluster init --name=sampleCluster</pre>
+<pre>cluster init --name=sampleCluster --metastorage-group=node1</pre>
 </div>
 </div></code-tab><code-tab data-tab='Output'><div class="listingblock">
 <div class="content">
@@ -1193,7 +1256,7 @@ docker.io/ignite/ignite3:latest</pre>
 <p>Make sure you initialize your cluster before attempting to work with it:</p>
 <code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre>cluster init --name=sampleCluster</pre>
+<pre>cluster init --name=sampleCluster --metastorage-group=node1,node2,node3</pre>
 </div>
 </div></code-tab><code-tab data-tab='Output'><div class="listingblock">
 <div class="content">
@@ -1295,7 +1358,7 @@ docker.io/ignite/ignite3:latest</pre>
 </div>
 <code-tabs><code-tab data-tab='Command'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">cluster init <span class="nt">--name</span><span class="o">=</span>sampleCluster</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">cluster init <span class="nt">--name</span><span class="o">=</span>sampleCluster <span class="nt">--metastorage-group</span><span class="o">=</span>node1,node2,node3</code></pre>
 </div>
 </div></code-tab><code-tab data-tab='Output'><div class="listingblock">
 <div class="content">
@@ -1401,13 +1464,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

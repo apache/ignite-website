@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Operational Commands | Ignite Documentation</title>
+    <title>Cli Config | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/sql-reference/operational-commands" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/config/cli-config" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -60,6 +60,16 @@
                 showSubResults: true,
                 showImages: false,
             });
+        });
+    </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
         });
     </script>
 
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -801,95 +871,117 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/sql-reference/operational-commands.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/config/cli-config.adoc" target="_blank">Edit</a>
         
-            <h1>Operational Commands</h1>
+            <h1>Cli Config</h1>
         
         <div class="sect1">
-<h2 id="kill-query">KILL QUERY</h2>
+<h2 id="config-parameters">Config Parameters</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Cancels a running query. When a query is canceled with the <code>KILL</code> command, all parts of the query running on all other nodes are canceled too.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('QUERY'),
-NonTerminal('query_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
-</div>
-<div class="sect2">
-<h3 id="parameters">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>query_id</code> - query identifier that can be retrieved via the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the query to be cancelled. You can monitor query status through the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre>ignite.jdbc.key-store.path=
+ignite.cluster-endpoint-url=http://127.0.1.1:10300
+ignite.jdbc.client-auth=
+ignite.rest.key-store.password=
+ignite.jdbc.key-store.password=
+ignite.rest.trust-store.path=
+ignite.jdbc.trust-store.password=
+ignite.auth.basic.username=
+ignite.jdbc-url=jdbc:ignite:thin://127.0.0.1:10800
+ignite.rest.key-store.path=
+ignite.rest.trust-store.password=
+ignite.jdbc.trust-store.path=
+ignite.auth.basic.password=</pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc.key-store.path</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the JDBC keystore file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.cluster-endpoint-url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://127.0.1.1:10300" class="bare">http://127.0.1.1:10300</a></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc.client-auth</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If JDBC client authorization is enabled in CLI.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.rest.key-store.password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc.key-store.password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.rest.trust-store.path</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc.trust-store.password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.auth.basic.username</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc-url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jdbc:ignite:thin://127.0.0.1:10800</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.rest.key-store.path</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.rest.trust-store.password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.jdbc.trust-store.path</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ignite.auth.basic.password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kill-transaction">KILL TRANSACTION</h2>
+<h2 id="configuration-profiles">Configuration Profiles</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Cancels an active transaction.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('TRANSACTION'),
-NonTerminal('transaction_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
-</div>
-<div class="sect2">
-<h3 id="parameters-2">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>transaction_id</code> - transaction identifier that can be retrieved via the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the query to be cancelled. You can monitor transaction status through the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kill-compute">KILL COMPUTE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Cancels a running query. When a query is canceled with the <code>KILL</code> command, all parts of the query running on all other nodes are canceled too.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('COMPUTE'),
-NonTerminal('job_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
-</div>
-<div class="sect2">
-<h3 id="parameters-3">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>job_id</code> - query identifier that can be retrieved via the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the query to be cancelled. You can monitor job status through the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
-</div>
-</div>
+
 </div>
 </div>
         <div class="copyright">
@@ -902,21 +994,8 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#kill-query">KILL QUERY</a>
-<ul class="sectlevel2">
-<li><a href="#parameters">Parameters</a></li>
-</ul>
-</li>
-<li><a href="#kill-transaction">KILL TRANSACTION</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-2">Parameters</a></li>
-</ul>
-</li>
-<li><a href="#kill-compute">KILL COMPUTE</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-3">Parameters</a></li>
-</ul>
-</li>
+<li><a href="#config-parameters">Config Parameters</a></li>
+<li><a href="#configuration-profiles">Configuration Profiles</a></li>
 </ul>
     </div>
           
@@ -940,13 +1019,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

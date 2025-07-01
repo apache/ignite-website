@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -808,7 +878,7 @@
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite 3 clients connect to the cluster via a standard socket connection. Unlike in Ignite 2.x, there is no separate Thin and Thick clients in Ignite 3. All clients are 'thin'.</p>
+<p>Ignite 3 clients connect to the cluster via a standard socket connection. Unlike Ignite 2.x, there is no separate Thin and Thick clients in Ignite 3. All clients are 'thin'.</p>
 </div>
 <div class="paragraph">
 <p>Clients do not become a part of the cluster topology, never hold any data, and are not used as a destination for compute calculations.</p>
@@ -822,7 +892,7 @@
 <p>Client connection parameters are controlled by the client connector configuration. By default, Ignite accepts client connections on port 10800. You can change the configuration for the node by using the <a href="/docs/ignite3/latest/ignite-cli-tool">CLI tool</a> at any time.</p>
 </div>
 <div class="paragraph">
-<p>In Ignite 3, you can create and maintain configuration in either HOCON or JSON. The configuration file has a single root "node," called <code>ignite</code>. All configuration sections are children, grandchildren, etc., of that node. Here is what the client connector configuration looks like:</p>
+<p>Here is how the client connector configuration looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -855,23 +925,20 @@
 </span><span class="p">}</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>The table below covers the configuration for client connector:</p>
+</div>
 <table class="tableblock frame-all grid-all stripes-none stretch">
 <colgroup>
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 50%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
-<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Property</th>
 <th class="tableblock halign-left valign-top">Default</th>
 <th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Changeable</th>
-<th class="tableblock halign-left valign-top">Requires Restart</th>
-<th class="tableblock halign-left valign-top">Acceptable Values</th>
 </tr>
 </thead>
 <tbody>
@@ -879,50 +946,30 @@
 <td class="tableblock halign-left valign-top"><p class="tableblock">connectTimeout</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5000</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Connection attempt timeout, in milliseconds.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0 - inf</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">idleTimeout</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">How long the client can be idle before the connection is dropped, in milliseconds. By default, there is no limit (0).</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0-2147483647</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">listenAddresses</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">""</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Address (IP or hostname) to listen on. Listens on all interfaces if empty.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Valid IP address or host name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">How long the client can be idle before the connection is dropped,in milliseconds. By default, there is no limit.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">metricsEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Defines if client metrics are collected.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">port</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">10800</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The port the client connector will be listening to.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1024-65535</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sendServerExceptionStackTraceToClient</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>By default, only the exception message and code are sent back to the client.</p>
 </div>
 <div class="paragraph">
-<p>Set this property to true to include the full stack trace, which will appear as part of the client-side exception.</p>
+<p>Set this property to <code>true</code> to include the full stack trace, which will appear as part of the client-side exception.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -936,81 +983,51 @@ Not recommended for production: stack trace disclosure is a <a href="https://owa
 </tr>
 </table>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.ciphers</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">""</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of ciphers to enable, comma-separated. Empty for automatic cipher selection.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TLS_AES_256_GCM_SHA384, etc. (standard cipher ids)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The cipher used for SSL communication.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.clientAuth</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">none</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the SSL client authentication is enabled and whether it is mandatory.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">none, optional, require</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of client authentication used by clients. For more information, see <a href="/docs/ignite3/latest/security/ssl-tls">SSL/TLS</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.enabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Defines if SSL is enabled.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.keyStore.password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><strong></strong></strong>**</p></td>
+<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">SSL keystore password.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A valid password</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.keyStore.path</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Path to the SSL keystore.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A valid path</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.keyStore.type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PKCS12</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Keystore type.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PKCS12, JKS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PKCS12</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of SSL keystore used.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.trustStore.password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong><strong></strong></strong>**</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Truststore password.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A valid password</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SSL keystore password.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.trustStore.path</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the truststore.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A valid path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to the SSL keystore.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ssl.trustStore.type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PKCS12</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Truststore type.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PKCS12, JKS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PKCS12</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of SSL keystore used.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1022,19 +1039,30 @@ Not recommended for production: stack trace disclosure is a <a href="https://owa
 <pre>node config update clientConnector.port=10469</pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="client-connection">Client Connection</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="limitations">Limitations</h3>
 <div class="paragraph">
-<p>When Ignite client is starting (when the <code>build()</code> or <code>buildAsync()</code> method is called), it tries to connect to all configured endpoints one by one in the specified order, and returns as soon as one connection is established. If the client fails to connect to any nodes, the initialization fails.</p>
+<p>There are limitations to user types that can be used for such a mapping. Some limitations are common, and others are platform-specific due to the programming language used.</p>
 </div>
-<div class="paragraph">
-<p>Once the client connects to the cluster, it keeps attempting to connect to all other specified nodes in the background, and uses them as failover in case the connection to the primary node is interrupted. Client does not directly connect to nodes not specified in its configuration, but is aware of them through cluster topology and can send indirect write or read requests.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Only flat field structure is supported, meaning no nesting user objects. This is because Ignite tables, and therefore tuples have flat structure themselves;</p>
+</li>
+<li>
+<p>Fields should be mapped to Ignite types;</p>
+</li>
+<li>
+<p>All fields in user type should either be mapped to Table column or explicitly excluded;</p>
+</li>
+<li>
+<p>All columns from Table should be mapped to some field in the user type;</p>
+</li>
+<li>
+<p><strong>Java only</strong>: Users should implement Mapper classes for user types for more flexibility;</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p>An inactive client sends periodic heartbeat messages to the cluster to confirm that it is still active and running. If no heartbeat messages are received for the duration specified in the <code>idleTimeout</code> configuration, the client will be disconnected. By default, the heartbeat interval is equal to half the idle timeout or 30 seconds, whichever is shorter.</p>
 </div>
 </div>
 </div>
@@ -1042,120 +1070,36 @@ Not recommended for production: stack trace disclosure is a <a href="https://owa
 <h2 id="partition-awareness">Partition Awareness</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As data in the cluster is distributed between the nodes, the client can improve throughput by immediately sending updates and read requests to target nodes holding the data.</p>
+<p>In Ignite 3, partition awareness is enabled automatically for all clients.</p>
+</div>
+<div class="paragraph">
+<p>Data in the cluster is distributed between the nodes in a balanced manner for scalability and performance reasons. Each cluster node maintains a subset of the data, and the partition distribution map, which is used to determine the node that keeps the primary/backup copy of requested entries.</p>
+</div>
+<div class="paragraph">
+<p>Partition awareness allows the client to send query requests directly to the node that owns the queried data.</p>
+</div>
+<div class="paragraph">
+<p>Without partition awareness, an application that is connected to the cluster via a client would execute all queries and operations via a single server node that acts as a proxy for the incoming requests.
+These operations would then be re-routed to the node that stores the data that is being requested.
+This would result in a bottleneck that could prevent the application from scaling linearly.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="/docs/3.0.0/images/partitionawareness02.png" alt="Partition Awareness">
+<img src="/docs/3.0.0/images/partitionawareness01.png" alt="Without Partition Awareness">
 </div>
 </div>
 <div class="paragraph">
-<p>For each key that needs updating, the client will get the name of the node holding its primary partition and then send an update directly to this node. If there is an active connection to this node, the update will be sent directly to it. Otherwise, the update will be sent to a random node on the list to be redirected to the target node. As such, it is recommended to list all cluster nodes in client configuration to reduce unnecessary network load.</p>
+<p>Notice how queries must pass through the proxy server node, where they are routed to the correct node.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Partition awareness assumes that the cluster is stable. Client receives information about cluster data assignments in the background, and it may be outdated by the time an update is sent. If it is, nodes will automatically redirect requests to correct nodes until data on the client is updated.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="client-features">Client Features</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The following table outlines features supported by each client.</p>
+<p>With partition awareness in place, the client can directly route queries and operations to the primary nodes that own the data required for the queries.
+This eliminates the bottleneck, allowing the application to scale more easily.</p>
 </div>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 40%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Feature</th>
-<th class="tableblock halign-left valign-top">Java</th>
-<th class="tableblock halign-left valign-top">.NET</th>
-<th class="tableblock halign-left valign-top">C++</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Record Binary View</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Key-Value Binary View</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Record View</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Key-Value View</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SQL API</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Partition Awareness</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transactions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Compute API</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Retry Policy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Heartbeats</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Data Streamer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="checkmark">yes</span></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
-</tr>
-</tbody>
-</table>
+<div class="imageblock">
+<div class="content">
+<img src="/docs/3.0.0/images/partitionawareness02.png" alt="With Partition Awareness">
+</div>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -1168,10 +1112,12 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#client-connector-configuration">Client Connector Configuration</a></li>
-<li><a href="#client-connection">Client Connection</a></li>
+<li><a href="#client-connector-configuration">Client Connector Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#limitations">Limitations</a></li>
+</ul>
+</li>
 <li><a href="#partition-awareness">Partition Awareness</a></li>
-<li><a href="#client-features">Client Features</a></li>
 </ul>
     </div>
           
@@ -1195,13 +1141,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

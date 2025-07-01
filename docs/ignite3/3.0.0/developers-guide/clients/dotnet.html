@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -821,7 +891,7 @@
 <div class="sect2">
 <h3 id="prerequisites">Prerequisites</h3>
 <div class="paragraph">
-<p>To use C# thin client, .NET 8.0 or newer is required.</p>
+<p>To use C# thin client, .NET 6.0 or newer is required.</p>
 </div>
 </div>
 <div class="sect2">
@@ -831,7 +901,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">dotnet add package Ignite.Ignite <span class="nt">--version</span> 3.0.0</code></pre>
+<pre>dotnet add package Apache.Ignite --version 3.0.0-beta2</pre>
 </div>
 </div>
 </div>
@@ -873,6 +943,31 @@
 <span class="n">IIgniteClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">await</span> <span class="n">IgniteClient</span><span class="p">.</span><span class="nf">StartAsync</span><span class="p">(</span><span class="n">cfg</span><span class="p">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
+<div class="sect2">
+<h3 id="limitations">Limitations</h3>
+<div class="paragraph">
+<p>There are limitations to user types that can be used for such a mapping. Some limitations are common, and others are platform-specific due to the programming language used.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Only flat field structure is supported, meaning no nesting user objects. This is because Ignite tables, and therefore tuples have flat structure themselves;</p>
+</li>
+<li>
+<p>Fields should be mapped to Ignite types;</p>
+</li>
+<li>
+<p>All fields in user type should either be mapped to Table column or explicitly excluded;</p>
+</li>
+<li>
+<p>All columns from Table should be mapped to some field in the user type;</p>
+</li>
+<li>
+<p><strong>.NET only</strong>: Any type (class, struct, record) is supported as long as all fields can be mapped to Ignite types;</p>
+</li>
+</ul>
+</div>
+</div>
 <div class="sect2">
 <h3 id="usage-examples">Usage Examples</h3>
 <code-tabs><code-tab data-tab='.NET'><div class="listingblock">
@@ -1248,6 +1343,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#connecting-to-cluster">Connecting to Cluster</a></li>
 <li><a href="#authentication">Authentication</a>
 <ul class="sectlevel2">
+<li><a href="#limitations">Limitations</a></li>
 <li><a href="#usage-examples">Usage Examples</a></li>
 </ul>
 </li>
@@ -1303,13 +1399,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>Working with Events | Ignite Documentation</title>
+    <title>Getting Started with Ignite 3 Persistent Storage | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/events/overview" />
+    <link rel="canonical" href="/docs/latest/quick-start/persist-data" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -60,6 +60,16 @@
                 showSubResults: true,
                 showImages: false,
             });
+        });
+    </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
         });
     </script>
 
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle expanded '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class='active'
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -801,239 +871,570 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/events/overview.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/quick-start/persist-data.adoc" target="_blank">Edit</a>
         
-            <h1>Working with Events</h1>
+            <h1>Getting Started with Ignite 3 Persistent Storage</h1>
         
-        <div id="preamble">
+        <div class="sect1">
+<h2 id="introduction">Introduction</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="about-this-guide">About this Guide</h3>
 <div class="paragraph">
-<p>Ignite can generate events for a variety of operations happening in the cluster and notify your application about those operations. There are many types of events, including cache events, node discovery events, distributed task execution events, and many more.</p>
+<p>This guide will walk you through the basics of setting up and using Ignite 3&#8217;s RocksDB-based persistent storage with the Chinook database in a Docker-based environment.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="enabling-events">Enabling Events</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In Ignite 3, events are configured cluster-wide, in <a href="/docs/ignite3/latest/administrators-guide/config/cluster-config">cluster configuration</a>. Events are organized in <strong>channels</strong>, each channel tracking one or more event types. You cannot enable or disable individual events, instead you need to disable event channels.</p>
-</div>
-<div class="paragraph">
-<p>To create an event channel:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">cluster config update ignite.eventlog.channels.exampleChannel.events<span class="o">=[</span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="o">]</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This channel will track the <code>USER_AUTHENTICATION_SUCCESS</code>, but not trigger yet. For the events to trigger, a <strong>sink</strong> must be configured. It sends the event information to the configured logger category at the configured level. Currently, only the <code>log</code> sink type is supported, and it writes output to Ignite log. Here is how you can enable log sink by using the CLI tool:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="shell">cluster config update ignite.eventlog.sinks.exampleSink <span class="o">=</span> <span class="o">{</span><span class="nb">type</span><span class="o">=</span><span class="s2">"log"</span>, <span class="nv">channel</span><span class="o">=</span><span class="s2">"exampleChannel"</span><span class="o">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now, the authorization events will be written to the log. Here is how the event may look like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>2024-06-04 16:19:29:840 +0300 [INFO][%defaultNode%sql-execution-pool-1][EventLog] {"type":"USER_AUTHORIZATION_SUCCESS","timestamp":1717507169840,"productVersion":"3.0.0","user":{"username":"ignite","authenticationProvider":"basic"},"fields":{"privileges":[{"action":"CREATE_TABLE","on":{"objectType":"TABLE","objectName":"TEST2","schema":"PUBLIC"}}],"roles":["system"]}}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Below is the cluster configuration config in JSON.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"eventlog"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"channels"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"events"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="w"> </span><span class="p">],</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="w">
-        </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
-        </span><span class="nl">"sinks"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"channel"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"criteria"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"EventLog"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"level"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleSink"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"log"</span><span class="w">
-        </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<div class="sect2">
+<h3 id="prerequisites">Prerequisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Up-to-date versions of Docker and Docker Compose;</p>
+</li>
+<li>
+<p>Terminal or command line access;</p>
+</li>
+<li>
+<p>Basic SQL knowledge;</p>
+</li>
+<li>
+<p>At least 8GB of free RAM for the Ignite cluster.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="sink-structure">Sink Structure</h2>
+<h2 id="understanding-persistence-in-ignite-3">Understanding Persistence in Ignite 3</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="persistence-architecture">Persistence Architecture</h3>
 <div class="paragraph">
-<p>Data sink configuration in Ignite 3 has the following structure:</p>
+<p>Ignite persistence is designed to provide quick and responsive persistent storage. When using persistent storage:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"channel"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"criteria"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"EventLog"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"level"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleSink"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"log"</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<div class="ulist">
+<ul>
+<li>
+<p>Ignite stores all data in it on disk;</p>
+</li>
+<li>
+<p>It loads as much data as possible into RAM for processing;</p>
+</li>
+<li>
+<p>Data is split into multiple partitions, with each partition stored in a separate file on disk;</p>
+</li>
+<li>
+<p>In addition to data partitions, Ignite stores indexes and metadata on disk.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This architecture combines the performance benefits of in-memory computing with the durability of disk-based storage.</p>
 </div>
 </div>
-<table class="tableblock frame-all grid-all stripes-none stretch">
-<colgroup>
-<col style="width: 40%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Field</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">channel</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the event channel the data sink logs data for.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">criteria</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Logging criteria. By default, only EventLog messages are logged.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">format</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Output format. Currently, only <code>JSON</code> messages are supported.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">level</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The level the messages are posted to the log at. Supported values: <code>ALL</code>, <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code>, <code>OFF</code>. Default value: <code>INFO</code>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Arbitrary sink name.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Type of event sink. Currently, only <code>log</code> sink is supported, and is used to write events to log.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="sect2">
+<h3 id="storage-engine-types">Storage Engine Types</h3>
+<div class="sect3">
+<h4 id="persistent-storage-options">Persistent Storage Options</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>AIPersist Engine</strong> - Default persistent storage engine with checkpointing;</p>
+</li>
+<li>
+<p><strong>RocksDB Engine</strong> - LSM-tree based persistent storage optimized for write-heavy workloads.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="volatile-storage-options">Volatile Storage Options</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>AIMem Engine</strong> - In-memory storage with no persistence.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="storage-profiles">Storage Profiles</h3>
+<div class="paragraph">
+<p>In Ignite 3, persistence is configured by using <strong>storage profiles</strong>. A storage profile defines how data is stored, cached, and managed by the storage engine.</p>
+</div>
+<div class="paragraph">
+<p>Each storage profile has specific properties depending on the engine type, but all profiles must specify the following properties:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>name</strong> - A unique identifier for the profile</p>
+</li>
+<li>
+<p><strong>engine</strong> - The storage engine to use</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="distribution-zones">Distribution Zones</h3>
+<div class="paragraph">
+<p>Distribution zones control how data is distributed across the cluster and which storage profiles to use. They allow you to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Control the number of data replicas;</p>
+</li>
+<li>
+<p>Specify which nodes can store data;</p>
+</li>
+<li>
+<p>Define how data is partitioned;</p>
+</li>
+<li>
+<p>Assign storage profiles to determine persistence type.</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="channel-structure">Channel Structure</h2>
+<h2 id="setting-up-a-persistent-cluster">Setting Up a Persistent Cluster</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="docker-environment-configuration">Docker Environment Configuration</h3>
 <div class="paragraph">
-<p>Event channel configuration in Ignite 3 has the following structure:</p>
+<p>We will use Docker Compose to create a multi-node Ignite cluster with persistent storage.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="creating-the-docker-compose-file">Creating the Docker Compose File</h3>
+<div class="paragraph">
+<p>Create a <code>docker-compose.yml</code> file in your working directory:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"events"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="w"> </span><span class="p">],</span><span class="w">
-  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">name</span><span class="pi">:</span> <span class="s">ignite3</span>
+
+<span class="na">x-ignite-def</span><span class="pi">:</span> <span class="nl">&amp;ignite-def</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">apacheignite/ignite:3.0.0</span>
+  <span class="na">environment</span><span class="pi">:</span>
+    <span class="na">JVM_MAX_MEM</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4g"</span>
+    <span class="na">JVM_MIN_MEM</span><span class="pi">:</span> <span class="s2">"</span><span class="s">4g"</span>
+  <span class="na">configs</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">source</span><span class="pi">:</span> <span class="s">node_config</span>
+      <span class="na">target</span><span class="pi">:</span> <span class="s">/opt/ignite/etc/ignite-config.conf</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">node1</span><span class="pi">:</span>
+    <span class="na">&lt;&lt;</span><span class="pi">:</span> <span class="nv">*ignite-def</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">--node-name node1</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10300:10300"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10800:10800"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./data/node1:/opt/ignite/work</span>
+
+  <span class="na">node2</span><span class="pi">:</span>
+    <span class="na">&lt;&lt;</span><span class="pi">:</span> <span class="nv">*ignite-def</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">--node-name node2</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10301:10300"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10801:10800"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./data/node2:/opt/ignite/work</span>
+
+  <span class="na">node3</span><span class="pi">:</span>
+    <span class="na">&lt;&lt;</span><span class="pi">:</span> <span class="nv">*ignite-def</span>
+    <span class="na">command</span><span class="pi">:</span> <span class="s">--node-name node3</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10302:10300"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">10802:10800"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./data/node3:/opt/ignite/work</span>
+
+<span class="na">configs</span><span class="pi">:</span>
+  <span class="na">node_config</span><span class="pi">:</span>
+    <span class="na">content</span><span class="pi">:</span> <span class="pi">|</span>
+      <span class="s">ignite {</span>
+        <span class="s">network {</span>
+          <span class="s">port: 3344</span>
+          <span class="s">nodeFinder.netClusterNodes = ["node1:3344", "node2:3344", "node3:3344"]</span>
+        <span class="s">}</span>
+        <span class="s">"storage": {</span>
+          <span class="s">"profiles": [</span>
+            <span class="s">{</span>
+              <span class="s">name: "rocksDbProfile"</span>
+              <span class="s">engine: "rocksdb"</span>
+            <span class="s">}</span>
+          <span class="s">]</span>
+        <span class="s">}</span>
+      <span class="s">}</span></code></pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all stripes-none stretch">
-<colgroup>
-<col style="width: 40%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Field</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this event channel is enabled.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">events</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The list of events tracked by the event channel. For the full list of event types, see <a href="/docs/ignite3/latest/developers-guide/events/events-list">Events List</a>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Arbitrary channel name.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>The <code>node_config</code> configuration in the Docker Compose file:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Adds a storage profile named <code>rocksDbProfile</code> that uses the RocksDB engine;</p>
+</li>
+<li>
+<p>Sets the storage size to 256MB (268435456 bytes) by default;</p>
+</li>
+<li>
+<p>Stores persistent data in the <code>data</code> directory where docker was run.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="starting-the-cluster">Starting the Cluster</h3>
+<div class="paragraph">
+<p>Run the following command to start your cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker-compose up <span class="nt">-d</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="verifying-cluster-deployment">Verifying Cluster Deployment</h3>
+<div class="paragraph">
+<p>Check that all nodes are running:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">docker compose ps</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see output similar to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME              IMAGE                       COMMAND                  SERVICE   CREATED          STATUS          PORTS
+ignite3-node1-1   apacheignite/ignite:3.0.0   "docker-entrypoint.s…"   node1     37 seconds ago   Up 33 seconds   0.0.0.0:10300-&gt;10300/tcp, 3344/tcp, 0.0.0.0:10800-&gt;10800/tcp
+ignite3-node2-1   apacheignite/ignite:3.0.0   "docker-entrypoint.s…"   node2     37 seconds ago   Up 33 seconds   3344/tcp, 0.0.0.0:10301-&gt;10300/tcp, 0.0.0.0:10801-&gt;10800/tcp
+ignite3-node3-1   apacheignite/ignite:3.0.0   "docker-entrypoint.s…"   node3     37 seconds ago   Up 33 seconds   3344/tcp, 0.0.0.0:10302-&gt;10300/tcp, 0.0.0.0:10802-&gt;10800/tcp</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify the Docker network:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">docker network <span class="nb">ls</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="event-structure">Event Structure</h2>
+<h2 id="configuring-persistent-storage">Configuring Persistent Storage</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="connecting-to-the-cluster">Connecting to the Cluster</h3>
 <div class="paragraph">
-<p>All events in Ignite 3 follow the same basic structure described below. Some events provide additional context in the <code>data</code> field.</p>
+<p>Connect to the Ignite CLI:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AUTHENTICATION"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w"> </span><span class="nl">"authenticationProvider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"basic"</span><span class="w"> </span><span class="p">},</span><span class="w">
-  </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1715169617</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"productVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.0.0"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-</span><span class="p">}</span></code></pre>
+<pre class="rouge highlight"><code data-lang="bash">docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">--network</span><span class="o">=</span>host <span class="nt">-e</span> <span class="nv">LANG</span><span class="o">=</span>C.UTF-8 <span class="nt">-e</span> <span class="nv">LC_ALL</span><span class="o">=</span>C.UTF-8 apacheignite/ignite:3.0.0 cli</code></pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all stripes-none stretch">
-<colgroup>
-<col style="width: 40%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Field</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the event. For the full list of event types, see <a href="/docs/ignite3/latest/developers-guide/events/events-list">Events List</a>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user, and the <a href="/docs/ignite3/latest/administrators-guide/security/authentication">authentication</a> provider used to authorize.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Even time in UNIX epoch time.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">productVersion</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite version used by the client.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fields</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Event-specific data.</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>When the CLI tool offers to connect to default node, confirm the connection. If you ever get disconnected, you can connect again by typing the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">connect http://localhost:10300</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="initializing-the-cluster">Initializing the Cluster</h3>
+<div class="paragraph">
+<p>Before using the cluster, initialize it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">cluster init <span class="nt">--name</span><span class="o">=</span>ignite3 <span class="nt">--metastorage-group</span><span class="o">=</span>node1,node2,node3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the message "Cluster was initialized successfully".</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="examining-storage-profiles">Examining Storage Profiles</h3>
+<div class="paragraph">
+<p>Verify the configured storage profiles:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">node config show ignite.storage</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see output showing the <code>rocksDbProfile</code> configuration along with the default profiles.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="creating-distribution-zones-for-persistence">Creating Distribution Zones for Persistence</h3>
+<div class="paragraph">
+<p>Enter the interactive SQL CLI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">sql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a distribution zone that uses our RocksDB storage profile:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span> <span class="k">WITH</span> <span class="n">replicas</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">storage_profiles</span><span class="o">=</span><span class="s1">'rocksDbProfile'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="building-the-chinook-database-with-persistence">Building the Chinook Database with Persistence</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="about-the-chinook-database">About the Chinook Database</h3>
+<div class="paragraph">
+<p>The Chinook database represents a digital media store with tables for artists, albums, tracks, and more. It&#8217;s commonly used as a sample database for demonstrating database features.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="creating-persistent-database-tables">Creating Persistent Database Tables</h3>
+<div class="paragraph">
+<p>Create the necessary tables for the Chinook database using our RocksDB persistent zone:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Create Artist table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Artist</span> <span class="p">(</span>
+    <span class="n">ArtistId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">ArtistId</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span><span class="p">;</span>
+
+<span class="c1">-- Create Album table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Album</span> <span class="p">(</span>
+    <span class="n">AlbumId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Title</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">160</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">ArtistId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">AlbumId</span><span class="p">,</span> <span class="n">ArtistId</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">ArtistId</span><span class="p">)</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span><span class="p">;</span>
+
+<span class="c1">-- Create Genre table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Genre</span> <span class="p">(</span>
+    <span class="n">GenreId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">GenreId</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span><span class="p">;</span>
+
+<span class="c1">-- Create MediaType table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MediaType</span> <span class="p">(</span>
+    <span class="n">MediaTypeId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">MediaTypeId</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span><span class="p">;</span>
+
+<span class="c1">-- Create Track table</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Track</span> <span class="p">(</span>
+    <span class="n">TrackId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">AlbumId</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">MediaTypeId</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">GenreId</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">Composer</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">220</span><span class="p">),</span>
+    <span class="n">Milliseconds</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">Bytes</span> <span class="nb">INT</span><span class="p">,</span>
+    <span class="n">UnitPrice</span> <span class="nb">NUMERIC</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">TrackId</span><span class="p">,</span> <span class="n">AlbumId</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">COLOCATE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">AlbumId</span><span class="p">)</span> <span class="k">ZONE</span> <span class="n">ChinookRocksDB</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="loading-sample-data">Loading Sample Data</h3>
+<div class="paragraph">
+<p>Insert sample data into the tables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Insert data into MediaType table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">MediaType</span> <span class="p">(</span><span class="n">MediaTypeId</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'MPEG audio file'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Protected AAC audio file'</span><span class="p">);</span>
+
+<span class="c1">-- Insert data into Artist table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">Artist</span> <span class="p">(</span><span class="n">ArtistId</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'AC/DC'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Accept'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'Aerosmith'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Alanis Morissette'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">'Alice In Chains'</span><span class="p">);</span>
+
+<span class="c1">-- Insert data into Album table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">Album</span> <span class="p">(</span><span class="n">AlbumId</span><span class="p">,</span> <span class="n">Title</span><span class="p">,</span> <span class="n">ArtistId</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'For Those About To Rock We Salute You'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Balls to the Wall'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'Restless and Wild'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Let There Be Rock'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">'Big Ones'</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+
+<span class="c1">-- Insert data into Genre table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">Genre</span> <span class="p">(</span><span class="n">GenreId</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'Rock'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Jazz'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'Metal'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Alternative &amp; Punk'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">'Rock And Roll'</span><span class="p">);</span>
+
+<span class="c1">-- Insert data into Track table</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">Track</span> <span class="p">(</span><span class="n">TrackId</span><span class="p">,</span> <span class="n">Name</span><span class="p">,</span> <span class="n">AlbumId</span><span class="p">,</span> <span class="n">MediaTypeId</span><span class="p">,</span> <span class="n">GenreId</span><span class="p">,</span> <span class="n">Composer</span><span class="p">,</span> <span class="n">Milliseconds</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">UnitPrice</span><span class="p">)</span> <span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'For Those About To Rock (We Salute You)'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'Angus Young, Malcolm Young, Brian Johnson'</span><span class="p">,</span> <span class="mi">343719</span><span class="p">,</span> <span class="mi">11170334</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">'Balls to the Wall'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann'</span><span class="p">,</span> <span class="mi">342562</span><span class="p">,</span> <span class="mi">5510424</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">'Fast As a Shark'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'F. Baltes, S. Kaufman, U. Dirkscneider &amp; W. Hoffman'</span><span class="p">,</span> <span class="mi">230619</span><span class="p">,</span> <span class="mi">3990994</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Restless and Wild'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider &amp; W. Hoffman'</span><span class="p">,</span> <span class="mi">252051</span><span class="p">,</span> <span class="mi">4331779</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">'Princess of the Dawn'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'Deaffy &amp; R.A. Smith-Diesel'</span><span class="p">,</span> <span class="mi">375418</span><span class="p">,</span> <span class="mi">6290521</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="querying-the-database">Querying the Database</h3>
+<div class="paragraph">
+<p>Test that your data was inserted correctly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Artist</span><span class="p">,</span> <span class="n">al</span><span class="p">.</span><span class="n">Title</span> <span class="k">AS</span> <span class="n">Album</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Track</span>
+<span class="k">FROM</span> <span class="n">Track</span> <span class="n">t</span>
+<span class="k">JOIN</span> <span class="n">Album</span> <span class="n">al</span> <span class="k">ON</span> <span class="n">t</span><span class="p">.</span><span class="n">AlbumId</span> <span class="o">=</span> <span class="n">al</span><span class="p">.</span><span class="n">AlbumId</span>
+<span class="k">JOIN</span> <span class="n">Artist</span> <span class="n">a</span> <span class="k">ON</span> <span class="n">al</span><span class="p">.</span><span class="n">ArtistId</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ArtistId</span>
+<span class="k">WHERE</span> <span class="n">t</span><span class="p">.</span><span class="n">AlbumId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-persistence-capabilities">Testing Persistence Capabilities</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="verifying-data-before-restart">Verifying Data Before Restart</h3>
+<div class="paragraph">
+<p>Perform additional queries to ensure your data is properly stored:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Count tracks by genre</span>
+<span class="k">SELECT</span> <span class="k">g</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Genre</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">TrackId</span><span class="p">)</span> <span class="k">AS</span> <span class="n">TrackCount</span>
+<span class="k">FROM</span> <span class="n">Track</span> <span class="n">t</span>
+<span class="k">JOIN</span> <span class="n">Genre</span> <span class="k">g</span> <span class="k">ON</span> <span class="n">t</span><span class="p">.</span><span class="n">GenreId</span> <span class="o">=</span> <span class="k">g</span><span class="p">.</span><span class="n">GenreId</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="k">g</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+
+<span class="c1">-- Check all albums by artist</span>
+<span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Artist</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">al</span><span class="p">.</span><span class="n">AlbumId</span><span class="p">)</span> <span class="k">AS</span> <span class="n">AlbumCount</span>
+<span class="k">FROM</span> <span class="n">Album</span> <span class="n">al</span>
+<span class="k">JOIN</span> <span class="n">Artist</span> <span class="n">a</span> <span class="k">ON</span> <span class="n">al</span><span class="p">.</span><span class="n">ArtistId</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ArtistId</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restarting-the-cluster">Restarting the Cluster</h3>
+<div class="paragraph">
+<p>To restart the cluster, you need to first exit the CLI tool.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Exit the SQL CLI with the <code>exit;</code> command,</p>
+</li>
+<li>
+<p>Then exit the main CLI with the <code>exit</code> command.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Restart the Docker containers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker-compose down
+docker-compose up <span class="nt">-d</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="verifying-data-persistence-after-restart">Verifying Data Persistence After Restart</h3>
+<div class="paragraph">
+<p>Reconnect to the CLI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker run <span class="nt">--rm</span> <span class="nt">-it</span> <span class="nt">--network</span><span class="o">=</span>host <span class="nt">-e</span> <span class="nv">LANG</span><span class="o">=</span>C.UTF-8 <span class="nt">-e</span> <span class="nv">LC_ALL</span><span class="o">=</span>C.UTF-8 apacheignite/ignite:3.0.0 cli</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The cluster is already initialized, so you can go directly to the SQL CLI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">sql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the same query to verify the data persisted through the restart:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">a</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Artist</span><span class="p">,</span> <span class="n">al</span><span class="p">.</span><span class="n">Title</span> <span class="k">AS</span> <span class="n">Album</span><span class="p">,</span> <span class="n">t</span><span class="p">.</span><span class="n">Name</span> <span class="k">AS</span> <span class="n">Track</span>
+<span class="k">FROM</span> <span class="n">Track</span> <span class="n">t</span>
+<span class="k">JOIN</span> <span class="n">Album</span> <span class="n">al</span> <span class="k">ON</span> <span class="n">t</span><span class="p">.</span><span class="n">AlbumId</span> <span class="o">=</span> <span class="n">al</span><span class="p">.</span><span class="n">AlbumId</span>
+<span class="k">JOIN</span> <span class="n">Artist</span> <span class="n">a</span> <span class="k">ON</span> <span class="n">al</span><span class="p">.</span><span class="n">ArtistId</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ArtistId</span>
+<span class="k">WHERE</span> <span class="n">t</span><span class="p">.</span><span class="n">AlbumId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wrap-up">Wrap Up</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="summary">Summary</h3>
+<div class="paragraph">
+<p>Ignite 3 with RocksDB persistent storage provides a powerful way to maintain data durability while leveraging in-memory computing performance. RocksDB is particularly well-suited for write-intensive workloads, making it an excellent choice for many production environments.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="additional-resources">Additional Resources</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://rocksdb.org/docs/">RocksDB Documentation</a></p>
+</li>
+<li>
+<p><a href="https://github.com/lerocha/chinook-database">Chinook Database Project</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
         <div class="copyright">
@@ -1046,10 +1447,62 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#enabling-events">Enabling Events</a></li>
-<li><a href="#sink-structure">Sink Structure</a></li>
-<li><a href="#channel-structure">Channel Structure</a></li>
-<li><a href="#event-structure">Event Structure</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#about-this-guide">About this Guide</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li><a href="#understanding-persistence-in-ignite-3">Understanding Persistence in Ignite 3</a>
+<ul class="sectlevel2">
+<li><a href="#persistence-architecture">Persistence Architecture</a></li>
+<li><a href="#storage-engine-types">Storage Engine Types</a>
+<ul class="sectlevel3">
+<li><a href="#persistent-storage-options">Persistent Storage Options</a></li>
+<li><a href="#volatile-storage-options">Volatile Storage Options</a></li>
+</ul>
+</li>
+<li><a href="#storage-profiles">Storage Profiles</a></li>
+<li><a href="#distribution-zones">Distribution Zones</a></li>
+</ul>
+</li>
+<li><a href="#setting-up-a-persistent-cluster">Setting Up a Persistent Cluster</a>
+<ul class="sectlevel2">
+<li><a href="#docker-environment-configuration">Docker Environment Configuration</a></li>
+<li><a href="#creating-the-docker-compose-file">Creating the Docker Compose File</a></li>
+<li><a href="#starting-the-cluster">Starting the Cluster</a></li>
+<li><a href="#verifying-cluster-deployment">Verifying Cluster Deployment</a></li>
+</ul>
+</li>
+<li><a href="#configuring-persistent-storage">Configuring Persistent Storage</a>
+<ul class="sectlevel2">
+<li><a href="#connecting-to-the-cluster">Connecting to the Cluster</a></li>
+<li><a href="#initializing-the-cluster">Initializing the Cluster</a></li>
+<li><a href="#examining-storage-profiles">Examining Storage Profiles</a></li>
+<li><a href="#creating-distribution-zones-for-persistence">Creating Distribution Zones for Persistence</a></li>
+</ul>
+</li>
+<li><a href="#building-the-chinook-database-with-persistence">Building the Chinook Database with Persistence</a>
+<ul class="sectlevel2">
+<li><a href="#about-the-chinook-database">About the Chinook Database</a></li>
+<li><a href="#creating-persistent-database-tables">Creating Persistent Database Tables</a></li>
+<li><a href="#loading-sample-data">Loading Sample Data</a></li>
+<li><a href="#querying-the-database">Querying the Database</a></li>
+</ul>
+</li>
+<li><a href="#testing-persistence-capabilities">Testing Persistence Capabilities</a>
+<ul class="sectlevel2">
+<li><a href="#verifying-data-before-restart">Verifying Data Before Restart</a></li>
+<li><a href="#restarting-the-cluster">Restarting the Cluster</a></li>
+<li><a href="#verifying-data-persistence-after-restart">Verifying Data Persistence After Restart</a></li>
+</ul>
+</li>
+<li><a href="#wrap-up">Wrap Up</a>
+<ul class="sectlevel2">
+<li><a href="#summary">Summary</a></li>
+<li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
 </ul>
     </div>
           
@@ -1073,13 +1526,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

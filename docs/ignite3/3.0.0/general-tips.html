@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -812,79 +882,58 @@
 <p>When cluster is created, the default distribution zone is used for storage configuration. While we recommend creating distribution zones for your clusters, you can still use the default zone and configure it to suit your needs.</p>
 </div>
 <div class="paragraph">
-<p>To get default storage configuration, use the <code>cluster config show ignite.zone</code> command. Below is an example of the default configuration in the JSON format.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
-</td>
-</tr>
-</table>
+<p>To get default storage configuration, use the <code>cluster config show zone command</code>. Here is an example of the default configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"zone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"defaultDataStorage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"defaultDistributionZone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"dataNodesAutoAdjust"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2147483647</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"dataNodesAutoAdjustScaleDown"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2147483647</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"dataNodesAutoAdjustScaleUp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"dataStorage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"dataRegion"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nl">"filter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"$..*"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"partitions"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"replicas"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"zoneId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+<pre class="rouge highlight"><code data-lang="json"><span class="nl">"zone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"defaultDataStorage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"defaultDistributionZone"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"dataNodesAutoAdjust"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2147483647</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dataNodesAutoAdjustScaleDown"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2147483647</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dataNodesAutoAdjustScaleUp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dataStorage"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"dataRegion"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"aipersist"</span><span class="w">
       </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"distributionZones"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">],</span><span class="w">
-      </span><span class="nl">"globalIdCounter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span></code></pre>
+      </span><span class="nl">"filter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"$..*"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"partitions"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"replicas"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"zoneId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"distributionZones"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"globalIdCounter"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To change type of storage used for new distribution zones, change the <code>zone.defaultDataStorage</code> value to <code>aimem</code> or <code>rocksDb</code>. You can also change the default data region used for new distribution zones by setting the <code>zone.defaultDistrubutionZone.dataStorage.dataRegion</code> parameter. You will need to restart the cluster after changing the data region parameters.</p>
+<p>To change type of storage used for new distribution zones, change the <code>zone.defaultDataStorage</code> value to <code>aimem</code> or <code>rocksdb</code>. You can also change the default data region used for new distribution zones by setting the <code>zone.defaultDistrubutionZone.dataStorage.dataRegion</code> parameter. You will need to restart the cluster after changing the data region parameters.</p>
 </div>
 <div class="paragraph">
 <p>You can also change these properties for <a href="/docs/ignite3/latest/sql-reference/distribution-zones">distribution zones</a> you have created for yourself.</p>
 </div>
 <div class="paragraph">
-<p>You can get information about the data region by using the <code>cluster config show ignite.aipersist</code> CLI command. Here is how the default data region may look like:</p>
+<p>You can get information about the data region by using the <code>cluster config show aipersist</code> CLI command. Here is how the default data region may look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"checkpoint"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"checkpointDelayMillis"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"checkpointThreads"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"compactionThreads"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"frequency"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">180000</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"frequencyDeviation"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"logReadLockThresholdTimeout"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"readLockTimeout"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"useAsyncFileIoFactory"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nl">"defaultRegion"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"memoryAllocator"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"unsafe"</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"replacementMode"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"CLOCK"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">268435456</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nl">"pageSize"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16384</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"regions"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+  </span><span class="nl">"checkpoint"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"checkpointDelayMillis"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"checkpointThreads"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"compactionThreads"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"interval"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">180000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"intervalDeviation"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"logReadLockThresholdTimeout"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"readLockTimeout"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"useAsyncFileIoFactory"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"defaultRegion"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"replacementMode"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"CLOCK"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">268435456</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"pageSize"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">16384</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"regions"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span></code></pre>
 </div>
 </div>
@@ -893,7 +942,7 @@ In Ignite 3, you can create and maintain the configuration in either JSON or HOC
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">cluster config update <span class="nt">--url</span> http://localhost:10300 ignite.aipersist.defaultRegion.size:9999999</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">cluster config update <span class="nt">--url</span> http://localhost:10300 <span class="o">{</span>aipersist.defaultRegion.size:9999999<span class="o">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -902,7 +951,7 @@ In Ignite 3, you can create and maintain the configuration in either JSON or HOC
 <h2 id="configuring-local-paths">Configuring Local Paths</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>By default, all files generated by Ignite are stored in the installation folder. However, depending on your environment, you may need to change the path to your files. You can use the <code>{IGNITE_HOME}\etc\vars.env</code> file to change the storage paths of your files. You can change paths to the following:</p>
+<p>By default, all files generated by Apache Ignite are stored in the installation folder. However, depending on your environment, you may need to change the path to your files. You can use the <code>{IGNITE_HOME}\etc\vars.env</code> file to change the storage paths of your files. You can change paths to the following:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -920,62 +969,43 @@ In Ignite 3, you can create and maintain the configuration in either JSON or HOC
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Additionally, in the node configuration you can set:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The location CMG information is stored to by setting the <code>ignite.system.cmgPath</code> property.</p>
-</li>
-<li>
-<p>The location metastorage information is stored to by setting the <code>ignite.system.metastoragePath</code> property.</p>
-</li>
-<li>
-<p>The location data partitions are stored in by setting the <code>ignite.system.partitionsBasePath</code> property.</p>
-</li>
-<li>
-<p>The location RAFT logs are stored in by setting the <code>ignite.system.partitionsLogPath</code> property. These logs are separate from node logs.</p>
-</li>
-</ul>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuring-heap-usage">Configuring Heap Usage</h2>
+<h2 id="configuring-client-logging">Configuring Client Logging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite stores data in off-heap memory, reserved individually for each <a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent">storage engine</a> as required. However, Java Heap memory is still used to handle intermediary objects generated by workloads. For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Cluster and node metadata. This includes information about what nodes are part of the cluster, internal logs, table <a href="/docs/ignite3/latest/administrators-guide/data-partitions#version-storage">version chain</a>, what keys are locked for transactions and all other information required for Ignite to operate normally.</p>
-</li>
-<li>
-<p>Intermediary query results. This may lead to needing more heap memory when executing queries on especially large data sets.</p>
-</li>
-<li>
-<p><a href="/docs/ignite3/latest/developers-guide/compute/compute">Compute</a> operations are likely to use heap memory to store data. Specific requirements for compute jobs vary depending on what job is being performed.</p>
-</li>
-</ul>
+<p>By default, Ignite 3 uses the <code>java.util.logging</code> (JUL) logging framework. Ignite uses the <code>etc/ignite.java.util.logging.properties</code> configuration, and outputs logs to the folder configured in the <code>LOG_DIR</code> variable that can be configured in the <code>etc/vars.env</code> file. By default, logs are stored in the <code>{IGNITE_HOME}/log</code> folder. You can provide a custom configuration file by using the <code>java.util.logging.config.file</code> property.</p>
 </div>
 <div class="paragraph">
-<p>By default, Ignite allocates 16GB to heap storage. Depending on your environment and workload, you may want to change this value. Smaller heap would mean faster garbage collection, and less resources allocated to Ignite. Larger heap allows to handle more objects, but garbage collection may take longer.</p>
-</div>
-<div class="paragraph">
-<p>To configure allocated heap, you can use the <code>JVM_MAX_MEM</code> and <code>JVM_MIN_MEM</code> variables stored in the <code>{IGNITE_HOME}\etc\vars.env</code> file. These variables are the equivalent of setting the <code>Xmx</code> and <code>Xms</code> variables in JVM.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="configuring-server-logging">Configuring Server Logging</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>By default, Ignite 3 uses the <code>java.util.logging</code> (JUL) logging framework. It utilizes the <code>etc/ignite.java.util.logging.properties</code> configuration and outputs logs to the folder the <code>LOG_DIR</code> variable points to (can be configured in the <code>etc/vars.env</code> file). By default, logs are stored in the <code>{IGNITE_HOME}/log</code> folder. You can provide a custom configuration file using the <code>java.util.logging.config.file</code> property.</p>
+<p>Some Ignite modules use libraries that rely on SLF4J logging. To gather logs from these libraries, add <code>org.slf4j:slf4j-jdk14:2.0.x</code> class to the classpath.</p>
 </div>
 <div class="paragraph">
 <p>For more information on configuring JUL logging, see the <a href="https://docs.oracle.com/en/java/javase/11/core/java-logging-overview.html">Java Logging Overview</a> in Oracle documentation.</p>
+</div>
+<div class="paragraph">
+<p>Ignite also supports other logging frameworks if you need to customize the logger.</p>
+</div>
+<div class="sect2">
+<h3 id="log4j-2">LOG4J 2</h3>
+<div class="paragraph">
+<p>To use log4j logging, include the required classes to the classpath:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.apache.logging.log4j:log4j-slf4j2-impl:2.x.x</code></p>
+</li>
+<li>
+<p><code>org.apache.logging.log4j:log4j-api:2.x.x</code></p>
+</li>
+<li>
+<p><code>org.apache.logging.log4j:log4j-core:2.x.x</code></p>
+</li>
+<li>
+<p><code>org.apache.logging.log4j:log4j-jpl:2.x.x</code></p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -984,10 +1014,14 @@ In Ignite 3, you can create and maintain the configuration in either JSON or HOC
 <div class="title">Note</div>
 </td>
 <td class="content">
-You can also configure client logging for the <a href="/docs/ignite3/latest/developers-guide/clients/java#logging">Java client</a>.
+We recommend using the latest version of log4j.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>You can use custom configuration by using the Log4j configuration file. For more information on configuring Log4j logging, see the <a href="https://logging.apache.org/log4j/2.x/manual/configuration.html">Log4j Configuration</a> in Apache Log4j documentation.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1003,8 +1037,11 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <ul class="sectlevel1">
 <li><a href="#configuring-default-cluster-storage">Configuring Default Cluster Storage</a></li>
 <li><a href="#configuring-local-paths">Configuring Local Paths</a></li>
-<li><a href="#configuring-heap-usage">Configuring Heap Usage</a></li>
-<li><a href="#configuring-server-logging">Configuring Server Logging</a></li>
+<li><a href="#configuring-client-logging">Configuring Client Logging</a>
+<ul class="sectlevel2">
+<li><a href="#log4j-2">LOG4J 2</a></li>
+</ul>
+</li>
 </ul>
     </div>
           
@@ -1028,13 +1065,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

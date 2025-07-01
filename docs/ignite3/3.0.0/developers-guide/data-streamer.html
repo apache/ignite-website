@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -826,23 +896,20 @@
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">defaultTable</span><span class="o">().</span><span class="na">recordView</span><span class="o">();</span>
+
 <span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;</span> <span class="n">streamerFut</span><span class="o">;</span>
 
+<span class="k">try</span> <span class="o">(</span><span class="kt">var</span> <span class="n">publisher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubmissionPublisher</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;())</span> <span class="o">{</span>
+    <span class="kt">var</span> <span class="n">options</span> <span class="o">=</span> <span class="nc">DataStreamerOptions</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">batchSize</span><span class="o">(</span><span class="n">batchSize</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+    <span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">streamData</span><span class="o">(</span><span class="n">publisher</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span>
 
-<span class="k">try</span> <span class="o">(</span><span class="kt">var</span> <span class="n">publisher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubmissionPublisher</span><span class="o">&lt;</span><span class="nc">CustomData</span><span class="o">&gt;())</span> <span class="o">{</span>
-   <span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.&lt;</span><span class="nc">CustomData</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Boolean</span><span class="o">&gt;</span><span class="n">streamData</span><span class="o">(</span>
-           <span class="n">publisher</span><span class="o">,</span>
-           <span class="kc">null</span><span class="o">,</span>
-           <span class="n">item</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="n">item</span><span class="o">.</span><span class="na">getId</span><span class="o">()),</span>
-           <span class="n">item</span> <span class="o">-&gt;</span> <span class="n">item</span><span class="o">.</span><span class="na">serializeToString</span><span class="o">(),</span>
-           <span class="kc">null</span><span class="o">,</span>
-           <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="k">new</span> <span class="nc">DeploymentUnit</span><span class="o">(</span><span class="s">"test"</span><span class="o">,</span> <span class="s">"1.0.0"</span><span class="o">)),</span>
-           <span class="s">"org.foo.bar.StreamReceiver"</span><span class="o">,</span>
-           <span class="s">"receiverArg1"</span><span class="o">);</span>
+    <span class="kt">var</span> <span class="n">tuple1</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">1L</span><span class="o">).</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"foo"</span><span class="o">);</span>
+    <span class="kt">var</span> <span class="n">tuple2</span> <span class="o">=</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">2L</span><span class="o">).</span><span class="na">set</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"bar"</span><span class="o">);</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">tuple1</span><span class="o">);</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">tuple2</span><span class="o">);</span>
+<span class="o">}</span>
 
-
-   <span class="n">publisher</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="nc">CustomData</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"x"</span><span class="o">));</span>
-<span class="o">}</span></code></pre>
+<span class="n">streamerFut</span><span class="o">.</span><span class="na">orTimeout</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">).</span><span class="na">join</span><span class="o">();</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET'><div class="listingblock">
 <div class="content">
@@ -858,46 +925,6 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="tracking-failed-entries">Tracking Failed Entries</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>If data streamer fails to submit data, it stores all failed items, and returns them in the <code>DataStreamerException#failedItems</code>. You can then catch the exception to keep track of the entries that were not sent to the cluster:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>RecordView&lt;Tuple&gt; view = defaultTable().recordView();
-CompletableFuture&lt;Void&gt; streamerFut;
-
-
-try (var publisher = new SubmissionPublisher&lt;CustomData&gt;()) {
-   streamerFut = view.&lt;CustomData, String, Boolean&gt;streamData(
-           publisher,
-           null,
-           item -&gt; Tuple.create().set("id", item.getId()),
-           item -&gt; item.serializeToString(),
-           null,
-           List.of(new DeploymentUnit("test", "1.0.0")),
-           "org.foo.bar.StreamReceiver",
-           "receiverArg1")
-   .exceptionally(e -&gt; {
-       // Handle entries that failed during background streaming
-       System.out.println(((DataStreamerException)e.getCause()).failedItems())
-   }
-);
-
-
-   publisher.submit(new CustomData(1, "x"));
-}
-catch (DataStreamerException e){
-  Set&lt;?&gt; failedItems = e.failedItems()
-  // Handle entries that failed during submission
-  System.out.println(failedItems)
-}</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
 <h2 id="configuring-data-streamer-properties">Configuring Data Streamer Properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -905,14 +932,14 @@ catch (DataStreamerException e){
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="s">"Person"</span><span class="o">).</span><span class="na">recordView</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">defaultTable</span><span class="o">().</span><span class="na">recordView</span><span class="o">();</span>
 <span class="kt">var</span> <span class="n">publisher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubmissionPublisher</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;();</span>
 
 <span class="kt">var</span> <span class="n">options</span> <span class="o">=</span> <span class="nc">DataStreamerOptions</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
 <span class="o">.</span><span class="na">retryLimit</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-<span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">streamData</span><span class="o">(</span><span class="n">publisher</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span></code></pre>
+<span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;</span> <span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">streamData</span><span class="o">(</span><span class="n">publisher</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="sect2">
@@ -928,7 +955,7 @@ catch (DataStreamerException e){
 </div>
 <code-tabs><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="s">"Person"</span><span class="o">).</span><span class="na">recordView</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">defaultTable</span><span class="o">().</span><span class="na">recordView</span><span class="o">();</span>
 <span class="kt">var</span> <span class="n">publisher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubmissionPublisher</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;();</span>
 
 <span class="kt">var</span> <span class="n">options</span> <span class="o">=</span> <span class="nc">DataStreamerOptions</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
@@ -936,7 +963,7 @@ catch (DataStreamerException e){
 <span class="o">.</span><span class="na">perNodeParallelOperations</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
 <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-<span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">streamData</span><span class="o">(</span><span class="n">publisher</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span></code></pre>
+<span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;</span> <span class="n">streamerFut</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">streamData</span><span class="o">(</span><span class="n">publisher</span><span class="o">,</span> <span class="n">options</span><span class="o">);</span></code></pre>
 </div>
 </div></code-tab></code-tabs>
 <div class="paragraph">
@@ -956,7 +983,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#using-data-streamer-api">Using Data Streamer API</a></li>
-<li><a href="#tracking-failed-entries">Tracking Failed Entries</a></li>
 <li><a href="#configuring-data-streamer-properties">Configuring Data Streamer Properties</a>
 <ul class="sectlevel2">
 <li><a href="#tuning-memory-usage">Tuning Memory Usage</a></li>
@@ -985,13 +1011,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

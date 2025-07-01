@@ -62,6 +62,16 @@
             });
         });
     </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
 
 	<script>
     // AnchorJS - v4.2.0 - 2019-01-01
@@ -85,7 +95,7 @@
         </div>
 
         
-
+        
         <select id="product-selector">
             <option value="/docs/latest" >Ignite 2</option>
             <option value="/docs/ignite3/latest"selected>Ignite 3</option>
@@ -143,8 +153,6 @@
         </nav>
 
         <button type='button' class='top-nav-toggle'>⋮</button>
-
-        
         
     </div>
     <div id="search-wrapper">
@@ -220,19 +228,6 @@
                         
                     </li>
                 
-
-                    
-                    
-                    
-
-                    <li> 
-                        
-                            <a href="/docs/ignite3/latest/installation/migration-from-ai2/overview"
-                                class=''
-                            >Migration From Ignite 2</a>
-                        
-                    </li>
-                
               
                      
              </nav>   
@@ -241,8 +236,83 @@
     
         <li>
             
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
                 
-                <a href="/docs/ignite3/latest/quick-start/getting-started-guide" class='' >Getting Started</a>
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
             
         </li>
     
@@ -351,17 +421,12 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/sql-api" class=''>SQL API</a></li>
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
                             
                                 
                                   
 
 								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
-                            
-                                
-                                  
-
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
                             
                                 
                                   
@@ -644,6 +709,11 @@
 
 								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
                             
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/system-views" class=''>System Views</a></li>
+                            
                             </nav>
                         
                     </li>
@@ -820,7 +890,7 @@
 <div class="title">Note</div>
 </td>
 <td class="content">
-Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server nodes. Nodes started from embedded mode will be used to store data by default.
+Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server nodes. Nodes started from embedded mode will be used to store data by default. To avoid this,
 </td>
 </tr>
 </table>
@@ -831,7 +901,7 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 <h2 id="prerequisites">Prerequisites</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section describes the platform requirements for machines running Ignite. Ignite system requirements scale depending on the size of the cluster.</p>
+<p>Ignite 3 was tested on:</p>
 </div>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
@@ -845,11 +915,7 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Debian and Red Hat flavours), Windows 10 or 11</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ISA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x86 or x64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Ubuntu 20.04), Windows (10 Home), macOS</p></td>
 </tr>
 </tbody>
 </table>
@@ -863,32 +929,21 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;build&gt;</span>
-    <span class="nt">&lt;plugins&gt;</span>
-        <span class="nt">&lt;plugin&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;configuration&gt;</span>
-                <span class="nt">&lt;source&gt;</span>11<span class="nt">&lt;/source&gt;</span>
-                <span class="nt">&lt;target&gt;</span>11<span class="nt">&lt;/target&gt;</span>
-            <span class="nt">&lt;/configuration&gt;</span>
-        <span class="nt">&lt;/plugin&gt;</span>
-    <span class="nt">&lt;/plugins&gt;</span>
-<span class="nt">&lt;/build&gt;</span>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>ignite-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0.0-beta2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>system<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;systemPath&gt;</span>{path_to_jar}<span class="nt">&lt;/systemPath&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
 
-<span class="nt">&lt;dependencies&gt;</span>
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>ignite-api<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>3.0.0<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>ignite-runner<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>3.0.0<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span></code></pre>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>ignite-runner<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>3.0.0-beta2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>system<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;systemPath&gt;</span>{path_to_jar}<span class="nt">&lt;/systemPath&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -897,31 +952,7 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 <h2 id="prepare-ignite-configuration">Prepare Ignite Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To start a Ignite node, you will need a Ignite configuration file that specifies all configuration properties of the node. For this tutorial, we recommend <a href="/docs/ignite3/latest/installation/installing-using-zip">installing</a> Ignite 3 and using a default configuration file from it. This file is stored in the <code>ignite3-db-3.0.0/etc/ignite-config.conf</code> file.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="pass-jvm-parameters">Pass JVM Parameters</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The following JVM parameters need to be passed to your application to make proprietary SDK APIs available:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>--add-opens java.base/java.lang=ALL-UNNAMED
---add-opens java.base/java.lang.invoke=ALL-UNNAMED
---add-opens java.base/java.lang.reflect=ALL-UNNAMED
---add-opens java.base/java.io=ALL-UNNAMED
---add-opens java.base/java.nio=ALL-UNNAMED
---add-opens java.base/java.math=ALL-UNNAMED
---add-opens java.base/java.util=ALL-UNNAMED
---add-opens java.base/java.time=ALL-UNNAMED
---add-opens java.base/jdk.internal.misc=ALL-UNNAMED
---add-opens java.base/jdk.internal.access=ALL-UNNAMED
---add-opens java.base/sun.nio.ch=ALL-UNNAMED
--Dio.netty.tryReflectionSetAccessible=true</pre>
-</div>
+<p>To start a Ignite node, you will need a Ignite configuration file that specifies all configuration properties of the node. For this tutorial, we recommend <a href="/docs/ignite3/latest/installation/installing-using-zip">installing</a> Ignite 3 and using a default configuration file from it. This file is stored in the <code>ignite-db-3.0.0/etc/ignite-config.conf</code> file.</p>
 </div>
 </div>
 </div>
@@ -933,11 +964,15 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteServer</span> <span class="n">node</span> <span class="o">=</span> <span class="nc">IgniteServer</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="s">"node"</span><span class="o">,</span> <span class="n">configFilePath</span><span class="o">,</span> <span class="n">workDir</span><span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">CompletableFuture</span><span class="o">&lt;</span><span class="nc">Ignite</span><span class="o">&gt;</span> <span class="n">igniteFuture</span> <span class="o">=</span> <span class="nc">IgnitionManager</span><span class="o">.</span><span class="na">start</span><span class="o">(</span>
+    <span class="s">"node1"</span><span class="o">,</span>
+    <span class="s">"{config_path}"</span><span class="o">,</span>
+    <span class="s">"{workdir_path}"</span>
+<span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This code snippet starts a Ignite node with the name <code>node1</code>, that uses the configuration from the file specified in the <code>configFilePath</code> path parameter and uses the folder specified in the <code>workDir</code> path parameter to store data. When the node is started, this method returns an instance of <code>IgniteServer</code> class that can be used to work with the node.</p>
+<p>This code snippet starts a Ignite node with the name <code>node1</code>, that uses the configuration from the file specified in the <code>{config_path}</code> path parameter and uses the folder specified in the <code>{workdir_path}</code> path parameter to store data. When the node is started, this method returns an instance of <code>Ignite</code> class that can be used to work with the node.</p>
 </div>
 </div>
 </div>
@@ -953,12 +988,12 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">InitParameters</span> <span class="n">initParameters</span> <span class="o">=</span> <span class="nc">InitParameters</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">metaStorageNodeNames</span><span class="o">(</span><span class="s">"node"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">destinationNodeName</span><span class="o">(</span><span class="s">"node1"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">metaStorageNodeNames</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"node1"</span><span class="o">))</span>
     <span class="o">.</span><span class="na">clusterName</span><span class="o">(</span><span class="s">"cluster"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">clusterConfiguration</span><span class="o">({</span><span class="n">configuration</span><span class="o">-</span><span class="n">file</span><span class="o">})</span>
     <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 
-<span class="n">node</span><span class="o">.</span><span class="na">initCluster</span><span class="o">(</span><span class="n">initParameters</span><span class="o">);</span></code></pre>
+<span class="nc">IgnitionManager</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">initParameters</span><span class="o">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -971,40 +1006,23 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">api</span><span class="o">();</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">igniteFuture</span><span class="o">.</span><span class="na">get</span><span class="o">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>This instance can be used to start working with the cluster. The future will be returned once the cluster is active.</p>
 </div>
 <div class="paragraph">
-<p>In the following example, you interact with the cluster using the SQL API:</p>
+<p>For example, here is how you can create a new table by using an SQL API:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int);"</span><span class="o">);</span>
-<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"insert into Person (id, name, age) values ('1', 'Person Man', '501'"</span><span class="o">);</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span><span class="o">&lt;</span><span class="nc">SqlRow</span><span class="o">&gt;</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT id, name, age from Person"</span><span class="o">))</span> <span class="o">{</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"    "</span>
-                <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span>
-                <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">2</span><span class="o">));</span>
-    <span class="o">}</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span>
+        <span class="s">"CREATE TABLE CREATE TABLE IF NOT EXISTS Person (id int primary key,city_id int,name varchar,age int,company varchar)"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// no-op</span>
 <span class="o">}</span></code></pre>
 </div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Session is closable, but it is safe to skip <code>close()</code> method for DDL and DML queries, as they do not keep cursor open.
-</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>More examples of working with Ignite can be found in the <a href="https://github.com/apache/ignite-3/tree/main/examples">examples</a> repository.</p>
@@ -1042,7 +1060,6 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#add-ignite-to-your-project">Add Ignite to Your Project</a></li>
 <li><a href="#prepare-ignite-configuration">Prepare Ignite Configuration</a></li>
-<li><a href="#pass-jvm-parameters">Pass JVM Parameters</a></li>
 <li><a href="#start-ignite-server-nodes">Start Ignite Server Nodes</a></li>
 <li><a href="#initiate-a-cluster">Initiate a Cluster</a></li>
 <li><a href="#get-an-ignite-instance">Get an Ignite Instance</a></li>
@@ -1070,13 +1087,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1744197100' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1744197100' async></script>
-<script type='module' src='/assets/js/search.js?1744197100' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1751356873' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1751356873' async></script>
+<script type='module' src='/assets/js/search.js?1751356873' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1744197100" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1744197100"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1751356873" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1751356873"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
