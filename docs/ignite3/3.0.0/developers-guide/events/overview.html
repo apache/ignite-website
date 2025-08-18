@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.0.0" />
-    <title>JDBC Driver | Ignite Documentation</title>
+    <title>Working with Events | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/developers-guide/sql/jdbc-driver" />
+    <link rel="canonical" href="/docs/latest/developers-guide/events/overview" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -409,8 +409,8 @@
                             
                             <button
                                 type='button'
-                                class='expanded parent '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages expanded parent">
+                                class='collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
 
                             
                                 
@@ -426,7 +426,7 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class='active'>JDBC Driver</a></li>
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
                             
                                 
                                   
@@ -461,14 +461,14 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages collapsed">
+                                class='expanded parent active'>Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages expanded parent">
 
                             
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/developers-guide/events/overview" class=''>Working with Events</a></li>
+								  <li><a href="/docs/ignite3/latest/developers-guide/events/overview" class='active'>Working with Events</a></li>
                             
                                 
                                   
@@ -900,158 +900,239 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/sql/jdbc-driver.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/events/overview.adoc" target="_blank">Edit</a>
         
-            <h1>JDBC Driver</h1>
+            <h1>Working with Events</h1>
         
         <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite is shipped with JDBC driver that allows processing of distributed data using standard SQL statements like <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> directly from the JDBC side.</p>
-</div>
-<div class="paragraph">
-<p>This implementation of JDBC driver does not support the following functionality:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>SSL/TLS connection;</p>
-</li>
-<li>
-<p>Multiple Endpoints;</p>
-</li>
-<li>
-<p>Multi-statement requests;</p>
-</li>
-<li>
-<p><code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>WITH</code>, and <code>MERGE</code> commands.</p>
-</li>
-</ul>
+<p>Ignite can generate events for a variety of operations happening in the cluster and notify your application about those operations. There are many types of events, including cache events, node discovery events, distributed task execution events, and many more.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="setting-up">Setting Up</h2>
+<h2 id="enabling-events">Enabling Events</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>JDBC driver uses the client connector to work with the cluster. For more information on configuring client connector, see <a href="/docs/ignite3/latest/clients/overview#client-connector-configuration">Client Connector Configuration</a>.</p>
+<p>In Ignite 3, events are configured cluster-wide, in <a href="/docs/ignite3/latest/administrators-guide/config/cluster-config">cluster configuration</a>. Events are organized in <strong>channels</strong>, each channel tracking one or more event types. You cannot enable or disable individual events, instead you need to disable event channels.</p>
 </div>
 <div class="paragraph">
-<p>Here is how you can open a JDBC connection to the cluster node listening on IP address <code>192.168.0.50</code>:</p>
+<p>To create an event channel:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:thin://192.168.0.50:10800"</span><span class="o">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">cluster config update ignite.eventlog.channels.exampleChannel.events<span class="o">=[</span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The driver connects to one of the cluster nodes and forwards all the queries to it for final execution. The node handles the query distribution and the result’s aggregations. Then the result is sent back to the client application.</p>
-</div>
-<div class="paragraph">
-<p>The JDBC connection string may be formatted with one of two patterns: <code>URL query</code> or <code>semicolon</code>:</p>
+<p>This channel will track the <code>USER_AUTHENTICATION_SUCCESS</code>, but not trigger yet. For the events to trigger, a <strong>sink</strong> must be configured. It sends the event information to the configured logger category at the configured level. Currently, only the <code>log</code> sink type is supported, and it writes output to Ignite log. Here is how you can enable log sink by using the CLI tool:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="c1">// URL query pattern</span>
-<span class="nl">jdbc:ignite:thin:</span><span class="c1">//&lt;hostAndPortRange0&gt;[,&lt;hostAndPortRange1&gt;]...[,&lt;hostAndPortRangeN&gt;][/schema][?&lt;params&gt;]</span>
-
-<span class="n">hostAndPortRange</span> <span class="o">:=</span> <span class="n">host</span><span class="o">[:</span><span class="n">port_from</span><span class="o">[..</span><span class="na">port_to</span><span class="o">]]</span>
-
-<span class="n">params</span> <span class="o">:=</span> <span class="n">param1</span><span class="o">=</span><span class="n">value1</span><span class="o">[&amp;</span><span class="n">param2</span><span class="o">=</span><span class="n">value2</span><span class="o">]...[&amp;</span><span class="n">paramN</span><span class="o">=</span><span class="n">valueN</span><span class="o">]</span>
-
-<span class="c1">// Semicolon pattern</span>
-<span class="nl">jdbc:ignite:thin:</span><span class="c1">//&lt;hostAndPortRange0&gt;[,&lt;hostAndPortRange1&gt;]...[,&lt;hostAndPortRangeN&gt;][;schema=&lt;schema_name&gt;][;param1=value1]...[;paramN=valueN]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">cluster config update ignite.eventlog.sinks.exampleSink <span class="o">=</span> <span class="o">{</span><span class="nb">type</span><span class="o">=</span><span class="s2">"log"</span>, <span class="nv">channel</span><span class="o">=</span><span class="s2">"exampleChannel"</span><span class="o">}</span></code></pre>
 </div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>host</code> is required and defines the host of the cluster node to connect to.</p>
-</li>
-<li>
-<p><code>port_from</code> is the beginning of the port range to use to open the connection. 10800 is used by default if this parameter is omitted.</p>
-</li>
-<li>
-<p><code>port_to</code> is optional. It is set to the <code>port_from</code> value by default if this parameter is omitted.</p>
-</li>
-<li>
-<p><code>schema</code> is the schema name to access. PUBLIC is used by default. This name should correspond to the SQL ANSI-99 standard. Non-quoted identifiers are not case sensitive. Quoted identifiers are case sensitive. When semicolon format is used, the schema may be defined as a parameter with name schema.</p>
-</li>
-<li>
-<p><code>&lt;params&gt;</code> are optional parameters. The following parameters are available:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>username</code> - user name for basic authentication to the cluster.</p>
-</li>
-<li>
-<p><code>password</code> - user password for basic authentication to the cluster.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="performing-transactions">Performing Transactions</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>With the JDBC driver, you can  perform <code>commit</code> and <code>rollback</code> transactions. For more information about transactions, see <a href="/docs/ignite3/latest/transactions/performing-transactions">Performing Transactions</a>.</p>
 </div>
 <div class="paragraph">
-<p>Here is how you can commit a transaction:</p>
+<p>Now, the authorization events will be written to the log. Here is how the event may look like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Open the JDBC connection.</span>
-<span class="nc">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="nc">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="s">"jdbc:ignite:thin://192.168.0.50:10800"</span><span class="o">);</span>
-
-<span class="c1">// Commit a transaction</span>
-<span class="n">conn</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span></code></pre>
+<pre>2024-06-04 16:19:29:840 +0300 [INFO][%defaultNode%sql-execution-pool-1][EventLog] {"type":"USER_AUTHORIZATION_SUCCESS","timestamp":1717507169840,"productVersion":"3.0.0","user":{"username":"ignite","authenticationProvider":"basic"},"fields":{"privileges":[{"action":"CREATE_TABLE","on":{"objectType":"TABLE","objectName":"TEST2","schema":"PUBLIC"}}],"roles":["system"]}}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also configure Ignite to automatically commit transactions by using the <code>setAutoCommit()</code> method.</p>
+<p>Below is the cluster configuration config in JSON.</p>
 </div>
-<div class="paragraph">
-<p>Here is how you can rollback a transaction:</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In Ignite 3, you can create and maintain the configuration in either JSON or HOCON format.
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">conn</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span></code></pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"ignite"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"eventlog"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"channels"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"events"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="w"> </span><span class="p">],</span><span class="w">
+          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="w">
+        </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"sinks"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"channel"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"criteria"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"EventLog"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"level"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleSink"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"log"</span><span class="w">
+        </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="running-an-example">Running an Example</h2>
+<h2 id="sink-structure">Sink Structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Examples are shipped as a separate Maven project, which is located in the <code>examples</code> folder. <code>SqlJdbcExample</code> demonstrates the usage of the Ignite JDBC driver.</p>
+<p>Data sink configuration in Ignite 3 has the following structure:</p>
 </div>
-<div class="paragraph">
-<p>To run <code>SqlJdbcExample</code>, perform the following steps:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Import the examples project into your IDE;</p>
-</li>
-<li>
-<p>Start a server node using the CLI tool:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="shell">ignite node start <span class="nt">--config</span><span class="o">=</span><span class="nv">$IGNITE_HOME</span>/examples/config/ignite-config.json my-first-node</code></pre>
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"channel"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"criteria"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"EventLog"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"level"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"INFO"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sampleSink"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"log"</span><span class="w">
+</span><span class="p">}</span></code></pre>
 </div>
 </div>
-</li>
-<li>
-<p>Run <code>SqlJdbcExample</code> in the IDE.</p>
-</li>
-</ol>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">channel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the event channel the data sink logs data for.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Logging criteria. By default, only EventLog messages are logged.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">format</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Output format. Currently, only <code>JSON</code> messages are supported.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The level the messages are posted to the log at. Supported values: <code>ALL</code>, <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code>, <code>ERROR</code>, <code>OFF</code>. Default value: <code>INFO</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arbitrary sink name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of event sink. Currently, only <code>log</code> sink is supported, and is used to write events to log.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+<div class="sect1">
+<h2 id="channel-structure">Channel Structure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Event channel configuration in Ignite 3 has the following structure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"enabled"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"events"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"USER_AUTHENTICATION_SUCCESS"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"exampleChannel"</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this event channel is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">events</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of events tracked by the event channel. For the full list of event types, see <a href="/docs/ignite3/latest/developers-guide/events/events-list">Events List</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arbitrary channel name.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="event-structure">Event Structure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All events in Ignite 3 follow the same basic structure described below. Some events provide additional context in the <code>data</code> field.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AUTHENTICATION"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w"> </span><span class="nl">"authenticationProvider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"basic"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1715169617</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"productVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of the event. For the full list of event types, see <a href="/docs/ignite3/latest/developers-guide/events/events-list">Events List</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user, and the <a href="/docs/ignite3/latest/administrators-guide/security/authentication">authentication</a> provider used to authorize.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Even time in UNIX epoch time.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">productVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignite version used by the client.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Event-specific data.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
         <div class="copyright">
@@ -1064,9 +1145,10 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#setting-up">Setting Up</a></li>
-<li><a href="#performing-transactions">Performing Transactions</a></li>
-<li><a href="#running-an-example">Running an Example</a></li>
+<li><a href="#enabling-events">Enabling Events</a></li>
+<li><a href="#sink-structure">Sink Structure</a></li>
+<li><a href="#channel-structure">Channel Structure</a></li>
+<li><a href="#event-structure">Event Structure</a></li>
 </ul>
     </div>
           
