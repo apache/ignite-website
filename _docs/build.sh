@@ -74,9 +74,9 @@ if [ "$target" = "ignite3" ]; then
   fi
 else
   if [ "$latest" = "yes" ]; then
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/latest/g" _config.template > _config.yml
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/latest/g" _config.template > _config.yml
   else
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/$version/g" _config.template > _config.yml
+    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/$version/g" _config.template > _config.yml
   fi
 fi
 
@@ -119,8 +119,8 @@ if [ "$action" = "build" ]; then
       fi
     fi
   else
-    rm -rf ../docs/$version
-    cp -R _site/docs/$version ../docs/$version
+    rm -rf ../docs/ignite2/$version
+    cp -R _site/docs/$version ../docs/ignite2/$version
     cp -R _site/assets ../
 
     # if [ "$latest" = "yes" ]; then

@@ -6,7 +6,7 @@ function initVersioning() {
     const isIgnite3 = currentPath.indexOf("/docs/ignite3/") !== -1;
     const versionsFile = isIgnite3
       ? '/docs/ignite3/available-versions.txt'
-      : '/docs/available-versions.txt';
+      : '/docs/ignite2/available-versions.txt';
 
     const parts = currentPath.split('/');
     let currentDocVersion = "";
