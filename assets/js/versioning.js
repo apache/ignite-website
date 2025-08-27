@@ -6,23 +6,14 @@ function initVersioning() {
     const isIgnite3 = currentPath.indexOf("/docs/ignite3/") !== -1;
     const versionsFile = isIgnite3
       ? '/docs/ignite3/available-versions.txt'
-      : '/docs/available-versions.txt';
+      : '/docs/ignite2/available-versions.txt';
 
     const parts = currentPath.split('/');
-    let currentDocVersion = "";
-    if (isIgnite3) {
-        currentDocVersion = parts[3];
-    } else {
-        currentDocVersion = parts[2];
-    }
+    let currentDocVersion = parts[3];
 
     function replaceVersion(newVersion) {
         const p = currentPath.split('/');
-        if (isIgnite3) {
-            p[3] = newVersion;
-        } else {
-            p[2] = newVersion;
-        }
+        p[3] = newVersion;
         return p.join('/');
     }
 
