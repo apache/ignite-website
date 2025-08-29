@@ -68,15 +68,15 @@ cp -R $tmp_dir/docs_$version/docs/_plugins/ _plugins
 # update contents for the jekyll config file
 if [ "$target" = "ignite3" ]; then
   if [ "$latest" = "yes" ]; then
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/latest/g" _config.template > _config.yml
+    sed "s/{major_version}/3/g;s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/latest/g" _config.template > _config.yml
   else
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/$version/g" _config.template > _config.yml
+    sed "s/{major_version}/3/g;s/{version}/$version/g;s/{base_url}/\/docs\/ignite3\/$version/g" _config.template > _config.yml
   fi
 else
   if [ "$latest" = "yes" ]; then
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/latest/g" _config.template > _config.yml
+    sed "s/{major_version}/2/g;s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/latest/g" _config.template > _config.yml
   else
-    sed "s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/$version/g" _config.template > _config.yml
+    sed "s/{major_version}/2/g;s/{version}/$version/g;s/{base_url}/\/docs\/ignite2\/$version/g" _config.template > _config.yml
   fi
 fi
 
