@@ -397,39 +397,6 @@ frontpageTabs();
 
 
 
-
-/**
- * Change Video Block into Iframe with Youtube Video
- */
-function youtube_parser(url){
-    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    var match = url.match(regExp);
-    return (match&&match[7].length==11)? match[7] : false;
-}
-document.addEventListener('click', function(e) {
-    let videoLink = e.target.closest('[data-youtube]');
-    if(!videoLink) return;
-    let href = videoLink.getAttribute('href');
-    console.log(href);
-    e.preventDefault();
-    let videoBlock = e.target.closest('.comvideo__box');
-    videoBlock.innerHTML = "";
-
-    let youtId = youtube_parser(href);
-    let iframeHTML = `<iframe 
-        title=${youtId}
-        src="https://www.youtube.com/embed/${youtId}?autoplay=1&showinfo=0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen>
-    </iframe>`;
-    videoBlock.insertAdjacentHTML('beforeend', iframeHTML);
-});
-
-
-
-
-
-
 /**
  * Download Table Save Popup
  */
