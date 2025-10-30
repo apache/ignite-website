@@ -2,6 +2,7 @@ import React from 'react';
 import {useLocation} from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+import ScrollToTop from '@site/src/components/ScrollToTop';
 
 // Matomo analytics integration
 export default function Root({children}) {
@@ -56,5 +57,10 @@ export default function Root({children}) {
     }
   }, [location, isDevelopment]);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <ScrollToTop />
+    </>
+  );
 }

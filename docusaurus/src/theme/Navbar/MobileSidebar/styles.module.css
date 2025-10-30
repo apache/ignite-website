@@ -1,0 +1,249 @@
+/**
+ * Mobile Menu Styles
+ *
+ * Slide-in mobile navigation with accordion-style dropdowns
+ * Ported from the original site's mobile menu implementation
+ */
+
+.mobmenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.mobmenuWrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.mobmenuWindow {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 375px;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobmenu[aria-hidden="false"] .mobmenuWindow {
+  transform: translateX(0);
+}
+
+.mobmenuClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 0;
+}
+
+.mobmenuClose::before,
+.mobmenuClose::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 2px;
+  background: #333;
+  transform-origin: center;
+}
+
+.mobmenuClose::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.mobmenuClose::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.mobmenuContent {
+  padding: 60px 30px 30px;
+}
+
+.mobmenuLogo {
+  display: block;
+  width: 120px;
+  margin-bottom: 40px;
+}
+
+.mobmenuLogo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mobmenuMenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobmenuMenu > ul > li {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mobmenuMenu > ul > li > a {
+  display: block;
+  padding: 15px 0;
+  color: #000;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.mobmenuParent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobmenuParent > a {
+  flex: 1;
+  display: block;
+  padding: 15px 0;
+  color: #000;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.mobmenuOpener {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.mobmenuOpener::before,
+.mobmenuOpener::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #666;
+  transition: transform 0.2s ease;
+}
+
+.mobmenuOpener::before {
+  width: 12px;
+  height: 2px;
+  transform: translate(-50%, -50%);
+}
+
+.mobmenuOpener::after {
+  width: 2px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+}
+
+.mobmenuOpener[aria-expanded="true"]::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.mobmenuMenu ul ul {
+  padding-left: 20px;
+  display: none;
+}
+
+.mobmenuMenu ul ul.isdefault {
+  display: block;
+}
+
+.mobmenuMenu ul ul li {
+  border: none;
+}
+
+.mobmenuMenu ul ul a {
+  display: block;
+  padding: 12px 0;
+  color: #666;
+  text-decoration: none;
+  font-size: 1.4rem;
+}
+
+.mobmenuMenu ul ul a:hover {
+  color: #000;
+}
+
+.mobmenuButton {
+  display: inline-block;
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+  padding: 15px 25px;
+  background: #ec1c24;
+  color: #fff;
+  border-radius: 3px;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.mobmenuButton:hover {
+  background: #d01820;
+  color: #fff;
+  text-decoration: none;
+}
+
+.mobmenuBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobmenuWindow {
+    max-width: 100%;
+  }
+
+  .mobmenuContent {
+    padding: 60px 20px 20px;
+  }
+}

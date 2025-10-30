@@ -1,21 +1,228 @@
 /**
  * Apache Ignite Website Custom Styles
  *
- * This file contains the base custom styling for the Docusaurus site.
- * Brand-specific styles are imported from brand.css
- * Page-specific styles are scoped to components.
+ * Main stylesheet that imports all custom styling layers.
+ * This layered approach provides maintainable, organized CSS
+ * that closely matches the legacy site while being Docusaurus-native.
+ *
+ * Import order is important:
+ * 1. Brand foundation (variables, colors)
+ * 2. Typography system
+ * 3. Layout utilities
+ * 4. Component patterns
+ * 5. Responsive overrides
  */
 
-:root {
-  /* Will be populated in WP3: Brand & Styling */
+/* === Brand Foundation === */
+@import './brand-variables.css';
+@import './typography.css';
+@import './layout.css';
+
+/* === Component Patterns === */
+@import './components.css';
+
+/* === Responsive Styles === */
+@import './responsive.css';
+
+/* === Global Resets === */
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-style: normal;
 }
 
-/* Preserve existing viewport behavior */
+*:focus {
+  outline: none;
+}
+
+/* === Link Styles === */
+
+a {
+  text-decoration: none;
+  color: var(--ai-link);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--ai-link-hover);
+}
+
+/* === Form Elements === */
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Remove default search input styling */
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* Remove spinner from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* === Body Styles === */
+
+body {
+  background: var(--ai-bg-primary);
+  position: relative;
+}
+
+/* === Scroll Behavior === */
+
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Docusaurus overrides */
+/* === Docusaurus Overrides === */
+
+/* Navbar styling */
 .navbar {
-  /* Will be styled in WP2: Navigation & Layout */
+  background-color: var(--ai-bg-primary);
+  border-bottom: 1px solid var(--ai-border-light);
+  height: 96px;
+}
+
+.navbar__logo {
+  height: auto;
+}
+
+/* Footer styling */
+.footer {
+  background: var(--ai-bg-tertiary);
+  padding: 0;
+}
+
+/* Main content wrapper */
+.main-wrapper {
+  min-height: calc(100vh - 96px);
+}
+
+/* === Utility Classes === */
+
+.flexi {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.button {
+  font-family: inherit;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  color: #fff;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  text-decoration: none;
+  height: 5rem;
+  font-size: 1.6rem;
+  background-color: var(--ai-blue);
+  border-radius: 1rem;
+  transition: background 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+.button:hover {
+  background: var(--ai-blue-dark);
+  color: #fff;
+  text-decoration: none;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.capstext {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pt-1 {
+  padding-top: 1rem;
+}
+
+.pt-2 {
+  padding-top: 2rem;
+}
+
+.pt-5 {
+  padding-top: 5rem;
+}
+
+/* === Scroll to Top Button === */
+
+.scrollTop {
+  display: flex;
+  pointer-events: none;
+  width: 50px;
+  height: 50px;
+  background-color: var(--ai-blue);
+  border-radius: 10px;
+  position: fixed;
+  opacity: 0.8;
+  right: 15px;
+  bottom: 15px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(10px);
+  opacity: 0;
+  z-index: 200;
+}
+
+.scrollTop.active {
+  pointer-events: auto;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.scrollTop svg {
+  stroke: #fff;
+  display: block;
+  margin: auto;
+  width: 50%;
+  transform: translateY(-1px);
+}
+
+/* === Modal Styles === */
+/* HystModal library z-index overrides */
+
+.hystmodal__shadow {
+  z-index: var(--ai-z-modal-shadow);
+}
+
+.hystmodal {
+  z-index: var(--ai-z-modal);
 }

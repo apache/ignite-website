@@ -7,7 +7,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Apache Ignite',
   tagline: 'Distributed Database For High-Performance Applications With In-Memory Speed',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -50,14 +50,18 @@ const config: Config = {
   themeConfig: {
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'light',
+      disableSwitch: true, // Current site doesn't have dark mode
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'Apache Ignite',
+      title: '',
       logo: {
-        alt: 'Apache Ignite Logo',
+        alt: 'Apache Ignite',
         src: 'img/logo.svg',
+        srcDark: 'img/logo-white.svg',
       },
+      style: 'primary',
       items: [
         // Navigation will be configured in WP2
       ],
