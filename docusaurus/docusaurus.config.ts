@@ -63,7 +63,54 @@ const config: Config = {
       },
       style: 'primary',
       items: [
-        // Navigation will be configured in WP2
+        {
+          label: 'Get Started',
+          position: 'left',
+          items: [
+            {label: 'Quick Start', to: 'https://ignite.apache.org/docs/latest/quick-start/java'},
+            {label: 'Learning resources', to: '/resources.html'},
+            {label: 'Training and Courses', to: '/resources.html#training'},
+            {label: 'FAQ', to: '/faq.html'},
+            {label: 'Use Cases', to: '/use-cases.html'},
+          ],
+        },
+        {
+          label: 'Features',
+          position: 'left',
+          items: [
+            {label: 'Multi-Tier Storage', to: '/arch/multi-tier-storage.html'},
+            {label: 'Native Persistence', to: '/arch/native-persistence.html'},
+            {label: 'Distributed SQL', to: '/use-cases/database/distributed-database.html'},
+            {label: 'ACID Transactions', to: '/features/transactions.html'},
+            {label: 'Compute APIs', to: '/features/compute-apis.html'},
+          ],
+        },
+        {
+          label: 'Community',
+          position: 'left',
+          items: [
+            {label: 'Project Info', to: '/community.html'},
+            {label: 'Events', to: '/events.html'},
+            {label: 'Powered by', to: '/powered-by-ignite.html'},
+          ],
+        },
+        {
+          label: 'Resources',
+          position: 'left',
+          items: [
+            {label: 'Blog', to: '/blogs.html'},
+            {label: 'Learning resources', to: '/resources.html'},
+            {label: 'Training', to: '/resources.html#training'},
+            {label: 'Apache Ignite Book', to: 'https://www.amazon.com/High-Performance-Memory-Computing-Apache-Ignite/dp/1789347521'},
+            {label: 'Mailing Lists', to: '/community.html#mailing-lists'},
+            {label: 'FAQ', to: '/faq.html'},
+          ],
+        },
+        {
+          label: 'Docs',
+          href: 'https://ignite.apache.org/docs/latest/',
+          position: 'left',
+        },
       ],
     },
     footer: {

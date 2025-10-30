@@ -17,15 +17,39 @@ export default function NavbarMobilePrimaryMenu(): ReactNode {
   const items = useNavbarItems();
 
   return (
-    <ul className="menu__list">
-      {items.map((item, i) => (
-        <NavbarItem
-          mobile
-          {...item}
-          onClick={() => mobileSidebar.toggle()}
-          key={i}
-        />
-      ))}
-    </ul>
+    <>
+      <ul className="menu__list">
+        {items.map((item, i) => (
+          <NavbarItem
+            mobile
+            {...item}
+            onClick={() => mobileSidebar.toggle()}
+            key={i}
+          />
+        ))}
+      </ul>
+      <div style={{padding: '2rem'}}>
+        <a
+          href="/download.cgi"
+          className="button"
+          style={{
+            width: '100%',
+            display: 'flex',
+            background: '#0070cc',
+            backgroundColor: '#0070cc',
+            color: '#fff',
+            borderRadius: '1rem',
+            border: 'none',
+            height: '5rem',
+            fontSize: '1.6rem',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textDecoration: 'none'
+          }}
+        >
+          Download Ignite
+        </a>
+      </div>
+    </>
   );
 }

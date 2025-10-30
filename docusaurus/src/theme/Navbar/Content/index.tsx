@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, type ReactNode } from 'react';
 import clsx from 'clsx';
 import { useLocation } from '@docusaurus/router';
-import { useNavbarMobileSidebar } from '@docusaurus/theme-common/internal';
 import TopBanner from '@site/src/components/TopBanner';
+import MobileModal from '@site/src/components/MobileModal';
 import { mainNavItems, getStartedMenu, featuresMenu, communityMenu, resourcesMenu } from '@site/src/config/navigation';
 import type { DropdownMenu } from '@site/src/config/navigation';
 import styles from '@site/src/css/navigation.module.css';
@@ -131,8 +131,8 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
 export default function NavbarContent(): ReactNode {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const mobileSidebar = useNavbarMobileSidebar();
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const baseDropmenuRef = useRef<HTMLDivElement | null>(null);
   const floatDropmenuRef = useRef<HTMLDivElement | null>(null);
@@ -252,7 +252,7 @@ export default function NavbarContent(): ReactNode {
           <div className={clsx(styles.hdrWrap, 'flexi')}>
             <button
               className={styles.hdrBurger}
-              onClick={mobileSidebar.toggle}
+              onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Toggle mobile menu"
             >
               <img src="/img/menu.svg" alt="" />
@@ -357,7 +357,7 @@ export default function NavbarContent(): ReactNode {
           <div className={clsx(styles.hdrWrap, 'flexi')}>
             <button
               className={styles.hdrBurger}
-              onClick={mobileSidebar.toggle}
+              onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Toggle mobile menu"
             >
               <img src="/img/menu.svg" alt="" />
@@ -440,6 +440,12 @@ export default function NavbarContent(): ReactNode {
           </div>
         </div>
       </header>
+
+      {/* Mobile Modal Navigation */}
+      <MobileModal
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
     </>
   );
 }
