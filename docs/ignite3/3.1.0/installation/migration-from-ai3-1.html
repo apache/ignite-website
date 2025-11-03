@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.1.0" />
-    <title>Starting With Embedded Mode | Ignite Documentation</title>
+    <title>Migrating from Apache Ignite 3.0 to 3.1 | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/quick-start/embedded-mode" />
+    <link rel="canonical" href="/docs/latest/installation/migration-from-ai3-1" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -185,8 +185,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -236,7 +236,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/installation/migration-from-ai3-1"
-                                class=''
+                                class='active'
                             >Migration From Ignite 3.1</a>
                         
                     </li>
@@ -366,7 +366,7 @@
         <li>
             
                 
-                <a href="/docs/ignite3/latest/quick-start/embedded-mode" class='active' >Embedded Mode</a>
+                <a href="/docs/ignite3/latest/quick-start/embedded-mode" class='' >Embedded Mode</a>
             
         </li>
     
@@ -1146,26 +1146,26 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/quick-start/embedded-mode.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/installation/migration-from-ai3-1.adoc" target="_blank">Edit</a>
         
-            <h1>Starting With Embedded Mode</h1>
+            <h1>Migrating from Apache Ignite 3.0 to 3.1</h1>
         
-        <div id="preamble">
+        <div class="sect1">
+<h2 id="overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In most scenarios, you would use Ignite CLI tool to start and manage your Ignite cluster. However, in some scenarios it is preferable to manage the cluster from a Java project. Starting and working with the cluster from code is called "embedded mode".</p>
+<p>This guide provides step-by-step instructions for migrating Apache Ignite clusters from version 3.0 to version 3.1. Due to architectural changes in 3.1, including the introduction of zone-based replication, migration requires creating a new 3.1 cluster and migrating data using the export/import process.</p>
 </div>
-<div class="paragraph">
-<p>This tutorial covers how you can start Ignite 3 from your Java project.</p>
-</div>
-<div class="admonitionblock note">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<div class="title">Important</div>
 </td>
 <td class="content">
-Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server nodes. Nodes started from embedded mode will be used to store data by default.
+<div class="paragraph">
+<p>This migration requires cluster downtime.</p>
+</div>
 </td>
 </tr>
 </table>
@@ -1173,169 +1173,266 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisites">Prerequisites</h2>
+<h2 id="zone-based-replication">Zone-Based Replication</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section describes the platform requirements for machines running Ignite. Ignite system requirements scale depending on the size of the cluster.</p>
+<p>Apache Ignite 3.1 introduces zone-based replication, replacing the table-based replication model from version 3.0. Table-based replication is still supported, however it will be dropped in a later release.</p>
 </div>
+<div class="sect2">
+<h3 id="table-based-vs-zone-based-replication">Table-Based vs Zone-Based Replication</h3>
 <table class="tableblock frame-all grid-all stripes-even stretch">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Aspect</th>
+<th class="tableblock halign-left valign-top">3.0 Table-Based</th>
+<th class="tableblock halign-left valign-top">3.1 Zone-Based</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JDK</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">11 and later</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RAFT Groups</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Each table creates separate RAFT groups</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tables in same zone share RAFT groups</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">OS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Linux (Debian and Red Hat flavours), Windows 10 or 11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Example (100 tables)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100 separate RAFT group sets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 shared RAFT group set</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ISA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x86 or x64</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Memory Footprint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Higher with more tables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Significantly reduced</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thread Overhead</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Higher (more RAFT groups)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lower (fewer RAFT groups)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="benefits-of-zone-based-replication">Benefits of Zone-Based Replication</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Reduced Memory Footprint:</strong> Fewer RAFT groups means lower memory consumption for clusters with many tables</p>
+</li>
+<li>
+<p><strong>Lower Thread Overhead:</strong> Decreased number of RAFT groups reduces thread management complexity</p>
+</li>
+<li>
+<p><strong>Improved Performance:</strong> Better resource utilization for multi-table workloads</p>
+</li>
+<li>
+<p><strong>Transparent Migration:</strong> No changes to user-facing APIs or query behavior</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Zone-based replication is an internal cluster optimization. Your applications will continue to work without code changes.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div class="sect1">
-<h2 id="add-ignite-to-your-project">Add Ignite to Your Project</h2>
+<h2 id="phase-1-document-current-environment">Phase 1: Document Current Environment</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="step-1-1-connect-to-3-0-cluster">Step 1.1: Connect to 3.0 Cluster</h3>
 <div class="paragraph">
-<p>First, you need to add Ignite to your project. The easiest way to do this is by using Maven:</p>
+<p>Connect to your Apache Ignite 3.0 cluster using the CLI tool:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;build&gt;</span>
-    <span class="nt">&lt;plugins&gt;</span>
-        <span class="nt">&lt;plugin&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;configuration&gt;</span>
-                <span class="nt">&lt;source&gt;</span>11<span class="nt">&lt;/source&gt;</span>
-                <span class="nt">&lt;target&gt;</span>11<span class="nt">&lt;/target&gt;</span>
-            <span class="nt">&lt;/configuration&gt;</span>
-        <span class="nt">&lt;/plugin&gt;</span>
-    <span class="nt">&lt;/plugins&gt;</span>
-<span class="nt">&lt;/build&gt;</span>
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cd </span>ignite3-cli-3.0.0/bin
+./ignite3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once connected, enter sql execution mode:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">sql</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-2-document-all-schemas">Step 1.2: Document All Schemas</h3>
+<div class="paragraph">
+<p>List all schemas in your cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- List all schemas</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">SCHEMAS</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the output to a file for reference during schema recreation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-3-document-all-tables">Step 1.3: Document All Tables</h3>
+<div class="paragraph">
+<p>List all tables across all schemas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- List all tables</span>
+<span class="k">SELECT</span> <span class="k">SCHEMA_NAME</span><span class="p">,</span> <span class="k">TABLE_NAME</span>
+<span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">TABLES</span>
+<span class="k">WHERE</span> <span class="n">TABLE_TYPE</span> <span class="o">=</span> <span class="s1">'TABLE'</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">SCHEMA_NAME</span><span class="p">,</span> <span class="k">TABLE_NAME</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the output to a file for reference during table recreation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-4-document-table-schemas">Step 1.4: Document Table Schemas</h3>
+<div class="paragraph">
+<p>For each table, capture its complete schema definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Get detailed schema for each table</span>
+<span class="k">SELECT</span>
+  <span class="k">SCHEMA_NAME</span><span class="p">,</span>
+  <span class="k">TABLE_NAME</span><span class="p">,</span>
+  <span class="k">COLUMN_NAME</span><span class="p">,</span>
+  <span class="k">TYPE</span><span class="p">,</span>
+  <span class="k">NULLABLE</span><span class="p">,</span>
+  <span class="n">COLUMN_DEFAULT</span>
+<span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">TABLE_COLUMNS</span>
+<span class="k">WHERE</span> <span class="k">SCHEMA_NAME</span> <span class="o">=</span> <span class="s1">'YOUR_SCHEMA'</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">TABLE_NAME</span><span class="p">,</span> <span class="n">ORDINAL_POSITION</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the output to a file for reference during schema recreation.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Document the exact CREATE TABLE statements for all tables. You&#8217;ll need these to recreate the schema in 3.1.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-5-document-distribution-zones">Step 1.5: Document Distribution Zones</h3>
+<div class="paragraph">
+<p>Capture current distribution zone configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Document distribution zones</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">ZONES</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the output to a file for reference during schema recreation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-6-calculate-data-volume">Step 1.6: Calculate Data Volume</h3>
+<div class="paragraph">
+<p>Estimate the size of data to be migrated:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Get row count for each table</span>
+<span class="k">SELECT</span>
+  <span class="k">TABLE_NAME</span><span class="p">,</span>
+  <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="k">ROW_COUNT</span>
+<span class="k">FROM</span> <span class="n">your_table</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="k">TABLE_NAME</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save row counts for each table. You&#8217;ll use these to verify data integrity after migration.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-1-7-create-schema-recreation-script">Step 1.7: Create Schema Recreation Script</h3>
+<div class="paragraph">
+<p>Create a SQL script file named <code>schema-recreation.sql</code> containing all CREATE TABLE statements:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Example for a table:</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">event_time</span> <span class="nb">TIMESTAMP</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="n">user_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+  <span class="n">event_type</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="n">payload</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">4000</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="c1">-- Document any table options here</span>
+<span class="p">);</span>
 
-<span class="nt">&lt;dependencies&gt;</span>
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>ignite-api<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-
-    <span class="nt">&lt;dependency&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.apache.ignite<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>ignite-runner<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
-    <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span></code></pre>
+<span class="c1">-- Repeat for all tables</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save the output to a file for reference during schema recreation.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Ensure your CREATE TABLE statements include all constraints, indexes, and table options. Missing configuration can lead to performance or data integrity issues.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="prepare-ignite-configuration">Prepare Ignite Configuration</h2>
+<h2 id="phase-2-export-data-from-3-0-cluster">Phase 2: Export Data from 3.0 Cluster</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="step-2-1-create-export-directory">Step 2.1: Create Export Directory</h3>
 <div class="paragraph">
-<p>To start an Ignite node, you will need an Ignite configuration file that specifies all configuration properties of the node. For this tutorial, we recommend <a href="/docs/ignite3/latest/installation/installing-using-zip">installing</a> Ignite 3 and using a default configuration file from it. This file is stored in the <code>ignite3-db-3.1.0/etc/ignite-config.conf</code> file.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="pass-jvm-parameters">Pass JVM Parameters</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The following JVM parameters need to be passed to your application to make proprietary SDK APIs available:</p>
+<p>Create a directory for export files on accessible storage:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>--add-opens java.base/java.lang=ALL-UNNAMED
---add-opens java.base/java.lang.invoke=ALL-UNNAMED
---add-opens java.base/java.lang.reflect=ALL-UNNAMED
---add-opens java.base/java.io=ALL-UNNAMED
---add-opens java.base/java.nio=ALL-UNNAMED
---add-opens java.base/java.math=ALL-UNNAMED
---add-opens java.base/java.util=ALL-UNNAMED
---add-opens java.base/java.time=ALL-UNNAMED
---add-opens java.base/jdk.internal.misc=ALL-UNNAMED
---add-opens java.base/jdk.internal.access=ALL-UNNAMED
---add-opens java.base/sun.nio.ch=ALL-UNNAMED
--Dio.netty.tryReflectionSetAccessible=true</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="start-ignite-server-nodes">Start Ignite Server Nodes</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To start an Ignite node, use the following code snippet:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteServer</span> <span class="n">node</span> <span class="o">=</span> <span class="nc">IgniteServer</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="s">"node"</span><span class="o">,</span> <span class="n">configFilePath</span><span class="o">,</span> <span class="n">workDir</span><span class="o">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This code snippet starts an Ignite node with the name <code>node1</code>, that uses the configuration from the file specified in the <code>configFilePath</code> path parameter and uses the folder specified in the <code>workDir</code> path parameter to store data. When the node is started, this method returns an instance of <code>IgniteServer</code> class that can be used to work with the node.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="initiate-a-cluster">Initiate a Cluster</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Started nodes find each other by default, but they do not form an operational cluster unless the cluster is initiated. You need to initiate the cluster to activate the node. If there are multiple nodes, once the cluster is activated, they will form a topology and automatically distribute workload between each other.</p>
-</div>
-<div class="paragraph">
-<p>Use the code snippet below to initiate a cluster:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">InitParameters</span> <span class="n">initParameters</span> <span class="o">=</span> <span class="nc">InitParameters</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">metaStorageNodeNames</span><span class="o">(</span><span class="s">"node"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">clusterName</span><span class="o">(</span><span class="s">"cluster"</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-
-<span class="n">node</span><span class="o">.</span><span class="na">initCluster</span><span class="o">(</span><span class="n">initParameters</span><span class="o">);</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="get-an-ignite-instance">Get an Ignite Instance</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Now that the cluster is started, you can get an instance of the <code>Ignite</code> class:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">api</span><span class="o">();</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This instance can be used to start working with the cluster. The future will be returned once the cluster is active.</p>
-</div>
-<div class="paragraph">
-<p>In the following example, you interact with the cluster using the SQL API:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"CREATE TABLE IF NOT EXISTS Person (id int primary key, name varchar, age int);"</span><span class="o">);</span>
-<span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"insert into Person (id, name, age) values ('1', 'Person Man', '501'"</span><span class="o">);</span>
-<span class="k">try</span> <span class="o">(</span><span class="nc">ResultSet</span><span class="o">&lt;</span><span class="nc">SqlRow</span><span class="o">&gt;</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">ignite</span><span class="o">.</span><span class="na">sql</span><span class="o">().</span><span class="na">execute</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s">"SELECT id, name, age from Person"</span><span class="o">))</span> <span class="o">{</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">SqlRow</span> <span class="n">row</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"    "</span>
-                <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span>
-                <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="na">value</span><span class="o">(</span><span class="mi">2</span><span class="o">));</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre>
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">mkdir</span> <span class="nt">-p</span> /backup/ignite-3.0-export
+<span class="nb">chmod </span>755 /backup/ignite-3.0-export</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1345,31 +1442,688 @@ Unlike in Ignite 2, nodes in Ignite 3 are not separated into client and server n
 <div class="title">Note</div>
 </td>
 <td class="content">
-Session is closable, but it is safe to skip <code>close()</code> method for DDL and DML queries, as they do not keep cursor open.
+<div class="paragraph">
+<p>If using shared network storage, ensure all nodes have write access to this location.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="step-2-2-choose-export-format">Step 2.2: Choose Export Format</h3>
 <div class="paragraph">
-<p>More examples of working with Ignite can be found in the <a href="https://github.com/apache/ignite-3/tree/main/examples">examples</a> repository.</p>
+<p>Apache Ignite supports two export formats:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Format</th>
+<th class="tableblock halign-left valign-top">Advantages</th>
+<th class="tableblock halign-left valign-top">Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>CSV</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human-readable, easy to debug, compatible with many tools</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Small to medium datasets, troubleshooting</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Parquet</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compressed, faster I/O, efficient for large datasets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Large datasets, production migrations</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="step-2-3-export-table-data">Step 2.3: Export Table Data</h3>
+<div class="paragraph">
+<p>Export each table using the <code>COPY INTO</code> command.</p>
+</div>
+<div class="sect3">
+<h4 id="csv-export">CSV Export</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Export with headers for easier import</span>
+<span class="k">COPY</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span><span class="p">)</span>
+<span class="k">INTO</span> <span class="s1">'/backup/ignite-3.0-export/analytics_events.csv'</span>
+<span class="n">FORMAT</span> <span class="n">CSV</span>
+<span class="k">WITH</span> <span class="s1">'header'</span><span class="o">=</span><span class="s1">'true'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For large tables, export in chunks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Export in chunks by partition</span>
+<span class="k">COPY</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="k">BETWEEN</span> <span class="mi">0</span> <span class="k">AND</span> <span class="mi">1000000</span><span class="p">)</span>
+<span class="k">INTO</span> <span class="s1">'/backup/ignite-3.0-export/analytics_events_part1.csv'</span>
+<span class="n">FORMAT</span> <span class="n">CSV</span>
+<span class="k">WITH</span> <span class="s1">'header'</span><span class="o">=</span><span class="s1">'true'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="parquet-export-recommended">Parquet Export (Recommended)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">event_time</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="k">INTO</span> <span class="s1">'/backup/ignite-3.0-export/analytics_events.parquet'</span>
+<span class="n">FORMAT</span> <span class="n">PARQUET</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-2-4-automate-exports-with-script">Step 2.4: Automate Exports with Script</h3>
+<div class="paragraph">
+<p>Create a shell script to export all tables automatically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># export-all-tables.sh</span>
+
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/backup/ignite-3.0-export"</span>
+
+<span class="c"># Array of tables to export (schema.table format)</span>
+<span class="nv">TABLES</span><span class="o">=(</span>
+  <span class="s2">"analytics.events"</span>
+  <span class="s2">"analytics.users"</span>
+  <span class="s2">"sales.orders"</span>
+  <span class="s2">"sales.products"</span>
+<span class="o">)</span>
+
+<span class="k">for </span>table <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">TABLES</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+  </span><span class="nv">schema</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f1</span><span class="si">)</span>
+  <span class="nv">tbl</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f2</span><span class="si">)</span>
+
+  <span class="nb">echo</span> <span class="s2">"Exporting </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">..."</span>
+
+  ignite sql <span class="s2">"COPY FROM (SELECT * FROM </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">) </span><span class="se">\</span><span class="s2">
+    INTO '</span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">schema</span><span class="k">}</span><span class="s2">_</span><span class="k">${</span><span class="nv">tbl</span><span class="k">}</span><span class="s2">.parquet' </span><span class="se">\</span><span class="s2">
+    FORMAT PARQUET"</span>
+
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"✓ </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2"> exported successfully"</span>
+
+    <span class="c"># Get row count for verification</span>
+    ignite sql <span class="s2">"SELECT COUNT(*) as row_count FROM </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">schema</span><span class="k">}</span><span class="s2">_</span><span class="k">${</span><span class="nv">tbl</span><span class="k">}</span><span class="s2">.count"</span>
+  <span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"✗ Failed to export </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">exit </span>1
+  <span class="k">fi
+done
+
+</span><span class="nb">echo</span> <span class="s2">"Export complete. Files in </span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">"</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make the script executable and run it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">chmod</span> +x export-all-tables.sh
+./export-all-tables.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-2-5-verify-exports">Step 2.5: Verify Exports</h3>
+<div class="paragraph">
+<p>Check that all export files were created successfully:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># List all export files</span>
+<span class="nb">ls</span> <span class="nt">-lh</span> /backup/ignite-3.0-export/
+
+<span class="c"># Verify file sizes are reasonable (not 0 bytes)</span>
+find /backup/ignite-3.0-export/ <span class="nt">-size</span> 0</code></pre>
+</div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Do not proceed to the next phase until all exports are verified. Missing or corrupted export files will result in data loss.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-2-6-stop-3-0-cluster">Step 2.6: Stop 3.0 Cluster</h3>
+<div class="paragraph">
+<p>Once all exports are verified, gracefully stop all cluster nodes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Stop all nodes gracefully</span>
+ignite node stop <span class="nt">--node</span> node1
+ignite node stop <span class="nt">--node</span> node2
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>After stopping the 3.0 cluster, do not delete any data until the migration is completely verified in the 3.1 cluster.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="next-steps">Next Steps</h2>
+<h2 id="phase-3-set-up-3-1-cluster">Phase 3: Set Up 3.1 Cluster</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="step-3-1-download-apache-ignite-3-1">Step 3.1: Download Apache Ignite 3.1</h3>
 <div class="paragraph">
-<p>From here, you may want to:</p>
+<p>Download the Apache Ignite 3.1 distribution from the <a href="https://ignite.apache.org/download.cgi">official website</a>.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Check out the <a href="/docs/ignite3/latest/developers-guide/table-api">Developers guide</a> page for more information on available APIs</p>
-</li>
-<li>
-<p>Try out our <a href="https://github.com/apache/ignite-3/tree/main/examples">examples</a></p>
-</li>
-</ul>
+</div>
+<div class="sect2">
+<h3 id="step-3-2-configure-cluster-nodes">Step 3.2: Configure Cluster Nodes</h3>
+<div class="paragraph">
+<p>Update your configuration files from 3.0 to 3.1 format:</p>
+</div>
+<div class="sect3">
+<h4 id="configuration-changes-in-3-1">Configuration Changes in 3.1</h4>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Change Type</th>
+<th class="tableblock halign-left valign-top">3.0 Format</th>
+<th class="tableblock halign-left valign-top">3.1 Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timeout Properties</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeout=5000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeoutMillis=5000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zone Creation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE ZONE myZone WITH STORAGE_PROFILES='default', REPLICAS=3;</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CREATE ZONE myZone (REPLICAS 3) STORAGE PROFILES['default'];</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Review the Apache Ignite 3.1 documentation for a complete list of configuration changes.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-3-start-cluster-nodes">Step 3.3: Start Cluster Nodes</h3>
+<div class="paragraph">
+<p>Start each node in your cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Start each node (repeat for all nodes)</span>
+./bin/ignite3 node start <span class="nt">--config</span> ignite-config.conf</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>By default, nodes load the configuration from <code>etc/ignite-config.conf</code>. You can specify a different configuration file with the <code>--config</code> parameter.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-4-initialize-the-cluster">Step 3.4: Initialize the Cluster</h3>
+<div class="paragraph">
+<p>Once all nodes are started, initialize the cluster from any node:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">ignite cluster init <span class="nt">--name</span><span class="o">=</span>ignite-cluster</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-5-verify-cluster-topology">Step 3.5: Verify Cluster Topology</h3>
+<div class="paragraph">
+<p>Confirm all nodes are part of the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">ignite cluster topology</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output should show all nodes in ACTIVE state:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[name=node1, address=192.168.1.10:10800, state=ACTIVE]
+[name=node2, address=192.168.1.11:10800, state=ACTIVE]
+...</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-6-recreate-schemas">Step 3.6: Recreate Schemas</h3>
+<div class="paragraph">
+<p>Connect to the cluster and recreate all schemas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Create schemas</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">analytics</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">sales</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-7-recreate-distribution-zones">Step 3.7: Recreate Distribution Zones</h3>
+<div class="paragraph">
+<p>If you have custom distribution zones, recreate them:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Create distribution zones (if customized)</span>
+<span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">analytics_zone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span><span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-3-8-recreate-tables">Step 3.8: Recreate Tables</h3>
+<div class="paragraph">
+<p>Execute your saved schema recreation script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">INT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">event_time</span> <span class="nb">TIMESTAMP</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="n">user_id</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+  <span class="n">event_type</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="n">payload</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">4000</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">-- Repeat for all tables</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify each table was created correctly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Verify table creation</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">TABLES</span> <span class="k">WHERE</span> <span class="k">TABLE_NAME</span> <span class="o">=</span> <span class="s1">'EVENTS'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Ensure table schemas in 3.1 exactly match the schemas from 3.0. Mismatches will cause import failures.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="phase-4-import-data-into-3-1-cluster">Phase 4: Import Data into 3.1 Cluster</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="step-4-1-import-individual-tables">Step 4.1: Import Individual Tables</h3>
+<div class="paragraph">
+<p>Import data for each table using the <code>COPY FROM</code> command.</p>
+</div>
+<div class="sect3">
+<h4 id="csv-import">CSV Import</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/backup/ignite-3.0-export/analytics_events.csv'</span>
+<span class="k">INTO</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">event_time</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">FORMAT</span> <span class="n">CSV</span>
+<span class="k">WITH</span> <span class="s1">'header'</span><span class="o">=</span><span class="s1">'true'</span><span class="p">,</span> <span class="s1">'batchSize'</span><span class="o">=</span><span class="s1">'2048'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="parquet-import-recommended">Parquet Import (Recommended)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/backup/ignite-3.0-export/analytics_events.parquet'</span>
+<span class="k">INTO</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">event_time</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+<span class="n">FORMAT</span> <span class="n">PARQUET</span>
+<span class="k">WITH</span> <span class="s1">'batchSize'</span><span class="o">=</span><span class="s1">'2048'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-4-2-automate-imports-with-script">Step 4.2: Automate Imports with Script</h3>
+<div class="paragraph">
+<p>Create a shell script to import all tables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># import-all-tables.sh</span>
+
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/backup/ignite-3.0-export"</span>
+
+<span class="c"># Array of tables to import</span>
+<span class="nv">TABLES</span><span class="o">=(</span>
+  <span class="s2">"analytics.events:id,event_time,user_id,event_type,payload"</span>
+  <span class="s2">"analytics.users:user_id,username,email,created_at"</span>
+  <span class="s2">"sales.orders:order_id,customer_id,order_date,total"</span>
+  <span class="s2">"sales.products:product_id,name,price,stock"</span>
+<span class="o">)</span>
+
+<span class="k">for </span>entry <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">TABLES</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+  </span><span class="nv">table</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$entry</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">':'</span> <span class="nt">-f1</span><span class="si">)</span>
+  <span class="nv">columns</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$entry</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">':'</span> <span class="nt">-f2</span><span class="si">)</span>
+  <span class="nv">schema</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f1</span><span class="si">)</span>
+  <span class="nv">tbl</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f2</span><span class="si">)</span>
+
+  <span class="nb">echo</span> <span class="s2">"Importing </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">..."</span>
+
+  ignite sql <span class="s2">"COPY FROM '</span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">schema</span><span class="k">}</span><span class="s2">_</span><span class="k">${</span><span class="nv">tbl</span><span class="k">}</span><span class="s2">.parquet' </span><span class="se">\</span><span class="s2">
+    INTO </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2"> (</span><span class="k">${</span><span class="nv">columns</span><span class="k">}</span><span class="s2">) </span><span class="se">\</span><span class="s2">
+    FORMAT PARQUET </span><span class="se">\</span><span class="s2">
+    WITH 'batchSize'='2048'"</span>
+
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"✓ </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2"> imported successfully"</span>
+
+    <span class="c"># Verify row count</span>
+    <span class="nv">actual_count</span><span class="o">=</span><span class="si">$(</span>ignite sql <span class="s2">"SELECT COUNT(*) FROM </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span> | <span class="nb">grep</span> <span class="nt">-oE</span> <span class="s1">'[0-9]+'</span><span class="si">)</span>
+    <span class="nv">expected_count</span><span class="o">=</span><span class="si">$(</span><span class="nb">cat</span> <span class="s2">"</span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">schema</span><span class="k">}</span><span class="s2">_</span><span class="k">${</span><span class="nv">tbl</span><span class="k">}</span><span class="s2">.count"</span> | <span class="nb">grep</span> <span class="nt">-oE</span> <span class="s1">'[0-9]+'</span><span class="si">)</span>
+
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$actual_count</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"</span><span class="nv">$expected_count</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+      </span><span class="nb">echo</span> <span class="s2">"✓ Row count verified: </span><span class="k">${</span><span class="nv">actual_count</span><span class="k">}</span><span class="s2">"</span>
+    <span class="k">else
+      </span><span class="nb">echo</span> <span class="s2">"✗ Row count mismatch: expected </span><span class="k">${</span><span class="nv">expected_count</span><span class="k">}</span><span class="s2">, got </span><span class="k">${</span><span class="nv">actual_count</span><span class="k">}</span><span class="s2">"</span>
+      <span class="nb">exit </span>1
+    <span class="k">fi
+  else
+    </span><span class="nb">echo</span> <span class="s2">"✗ Failed to import </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">exit </span>1
+  <span class="k">fi
+done
+
+</span><span class="nb">echo</span> <span class="s2">"Import complete."</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make the script executable and run it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">chmod</span> +x import-all-tables.sh
+./import-all-tables.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-4-3-verify-data-integrity">Step 4.3: Verify Data Integrity</h3>
+<div class="paragraph">
+<p>After imports complete, perform thorough verification:</p>
+</div>
+<div class="sect3">
+<h4 id="row-count-verification">Row Count Verification</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Compare row counts</span>
+<span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Compare with the saved row counts from your 3.0 cluster.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="data-sampling">Data Sampling</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Spot check data</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span> <span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="c1">-- Verify no NULL values in NOT NULL columns</span>
+<span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span>
+<span class="k">WHERE</span> <span class="n">event_time</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">;</span>
+
+<span class="c1">-- Check date ranges are preserved</span>
+<span class="k">SELECT</span> <span class="k">MIN</span><span class="p">(</span><span class="n">event_time</span><span class="p">),</span> <span class="k">MAX</span><span class="p">(</span><span class="n">event_time</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">analytics</span><span class="p">.</span><span class="n">events</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="create-verification-script">Create Verification Script</h4>
+<div class="paragraph">
+<p>Automate verification across all tables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c"># verify-migration.sh</span>
+
+<span class="nb">echo</span> <span class="s2">"=== Migration Verification Report ==="</span>
+<span class="nb">echo
+
+</span><span class="nv">TABLES</span><span class="o">=(</span>
+  <span class="s2">"analytics.events"</span>
+  <span class="s2">"analytics.users"</span>
+  <span class="s2">"sales.orders"</span>
+  <span class="s2">"sales.products"</span>
+<span class="o">)</span>
+
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/backup/ignite-3.0-export"</span>
+
+<span class="k">for </span>table <span class="k">in</span> <span class="s2">"</span><span class="k">${</span><span class="nv">TABLES</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">do
+  </span><span class="nv">schema</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f1</span><span class="si">)</span>
+  <span class="nv">tbl</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$table</span> | <span class="nb">cut</span> <span class="nt">-d</span><span class="s1">'.'</span> <span class="nt">-f2</span><span class="si">)</span>
+
+  <span class="nb">echo</span> <span class="s2">"Table: </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span>
+
+  <span class="c"># Get current count</span>
+  <span class="nv">current</span><span class="o">=</span><span class="si">$(</span>ignite sql <span class="s2">"SELECT COUNT(*) FROM </span><span class="k">${</span><span class="nv">table</span><span class="k">}</span><span class="s2">"</span> | <span class="nb">grep</span> <span class="nt">-oE</span> <span class="s1">'[0-9]+'</span><span class="si">)</span>
+  <span class="nb">echo</span> <span class="s2">"  Current row count: </span><span class="k">${</span><span class="nv">current</span><span class="k">}</span><span class="s2">"</span>
+
+  <span class="c"># Get expected count</span>
+  <span class="nv">expected</span><span class="o">=</span><span class="si">$(</span><span class="nb">cat</span> <span class="s2">"</span><span class="k">${</span><span class="nv">BACKUP_DIR</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">schema</span><span class="k">}</span><span class="s2">_</span><span class="k">${</span><span class="nv">tbl</span><span class="k">}</span><span class="s2">.count"</span> | <span class="nb">grep</span> <span class="nt">-oE</span> <span class="s1">'[0-9]+'</span><span class="si">)</span>
+  <span class="nb">echo</span> <span class="s2">"  Expected row count: </span><span class="k">${</span><span class="nv">expected</span><span class="k">}</span><span class="s2">"</span>
+
+  <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$current</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"</span><span class="nv">$expected</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"  Status: ✓ PASS"</span>
+  <span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"  Status: ✗ FAIL"</span>
+  <span class="k">fi
+  </span><span class="nb">echo
+</span><span class="k">done</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Caution</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Do not proceed with application cutover until all verification checks pass successfully.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="phase-5-update-client-applications">Phase 5: Update Client Applications</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="step-5-1-update-connection-configuration">Step 5.1: Update Connection Configuration</h3>
+<div class="paragraph">
+<p>Update application configuration to point to the 3.1 cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="properties"><span class="c"># Old 3.0 connection
+</span><span class="py">ignite.endpoints</span><span class="p">=</span><span class="s">old-node1:10800,old-node2:10800,old-node3:10800</span>
+
+<span class="c"># New 3.1 connection
+</span><span class="py">ignite.endpoints</span><span class="p">=</span><span class="s">new-node1:10800,new-node2:10800,new-node3:10800</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-5-2-review-api-changes">Step 5.2: Review API Changes</h3>
+<div class="paragraph">
+<p>Check for deprecated APIs in your client code:</p>
+</div>
+<div class="sect3">
+<h4 id="java-api-changes">Java API Changes</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Deprecated in 3.1</span>
+<span class="n">ignite</span><span class="o">.</span><span class="na">clusterNodes</span><span class="o">()</span>
+
+<span class="c1">// Replace with</span>
+<span class="n">ignite</span><span class="o">.</span><span class="na">cluster</span><span class="o">().</span><span class="na">nodes</span><span class="o">()</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Refer to the Apache Ignite 3.1 release notes for a complete list of API changes: <a href="https://ignite.apache.org/releases/3.1.0/release_notes.html" class="bare">https://ignite.apache.org/releases/3.1.0/release_notes.html</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="step-5-3-test-client-connectivity">Step 5.3: Test Client Connectivity</h3>
+<div class="paragraph">
+<p>Before switching production traffic, test connectivity:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Connection test</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">IgniteClient</span> <span class="n">client</span> <span class="o">=</span> <span class="nc">IgniteClient</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">addresses</span><span class="o">(</span><span class="s">"new-node1:10800"</span><span class="o">,</span> <span class="s">"new-node2:10800"</span><span class="o">,</span> <span class="s">"new-node3:10800"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">())</span> <span class="o">{</span>
+
+    <span class="c1">// Verify connectivity</span>
+    <span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">ClusterNode</span><span class="o">&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">cluster</span><span class="o">().</span><span class="na">nodes</span><span class="o">();</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connected to "</span> <span class="o">+</span> <span class="n">nodes</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="s">" nodes"</span><span class="o">);</span>
+
+    <span class="c1">// Test data access</span>
+    <span class="nc">Table</span> <span class="n">table</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">tables</span><span class="o">().</span><span class="na">table</span><span class="o">(</span><span class="s">"analytics.events"</span><span class="o">);</span>
+    <span class="nc">RecordView</span><span class="o">&lt;</span><span class="nc">Tuple</span><span class="o">&gt;</span> <span class="n">view</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="na">recordView</span><span class="o">();</span>
+
+    <span class="nc">Tuple</span> <span class="n">record</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="mi">1</span><span class="o">));</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Sample record retrieved: "</span> <span class="o">+</span> <span class="n">record</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the connection is confirmed, gradually migrate traffic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="phase-6-post-migration-verification">Phase 6: Post-Migration Verification</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="step-6-1-verify-zone-based-replication">Step 6.1: Verify Zone-Based Replication</h3>
+<div class="paragraph">
+<p>Confirm zone-based replication is active by checking cluster startup logs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="c"># Check node logs for confirmation</span>
+<span class="nb">grep</span> <span class="s2">"Zone based replication"</span> /path/to/node/logs/<span class="k">*</span>.log</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Zone based replication: true</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Verify zones are properly configured:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">SYSTEM</span><span class="p">.</span><span class="n">ZONES</span><span class="p">;</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1383,14 +2137,89 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#add-ignite-to-your-project">Add Ignite to Your Project</a></li>
-<li><a href="#prepare-ignite-configuration">Prepare Ignite Configuration</a></li>
-<li><a href="#pass-jvm-parameters">Pass JVM Parameters</a></li>
-<li><a href="#start-ignite-server-nodes">Start Ignite Server Nodes</a></li>
-<li><a href="#initiate-a-cluster">Initiate a Cluster</a></li>
-<li><a href="#get-an-ignite-instance">Get an Ignite Instance</a></li>
-<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#zone-based-replication">Zone-Based Replication</a>
+<ul class="sectlevel2">
+<li><a href="#table-based-vs-zone-based-replication">Table-Based vs Zone-Based Replication</a></li>
+<li><a href="#benefits-of-zone-based-replication">Benefits of Zone-Based Replication</a></li>
+</ul>
+</li>
+<li><a href="#phase-1-document-current-environment">Phase 1: Document Current Environment</a>
+<ul class="sectlevel2">
+<li><a href="#step-1-1-connect-to-3-0-cluster">Step 1.1: Connect to 3.0 Cluster</a></li>
+<li><a href="#step-1-2-document-all-schemas">Step 1.2: Document All Schemas</a></li>
+<li><a href="#step-1-3-document-all-tables">Step 1.3: Document All Tables</a></li>
+<li><a href="#step-1-4-document-table-schemas">Step 1.4: Document Table Schemas</a></li>
+<li><a href="#step-1-5-document-distribution-zones">Step 1.5: Document Distribution Zones</a></li>
+<li><a href="#step-1-6-calculate-data-volume">Step 1.6: Calculate Data Volume</a></li>
+<li><a href="#step-1-7-create-schema-recreation-script">Step 1.7: Create Schema Recreation Script</a></li>
+</ul>
+</li>
+<li><a href="#phase-2-export-data-from-3-0-cluster">Phase 2: Export Data from 3.0 Cluster</a>
+<ul class="sectlevel2">
+<li><a href="#step-2-1-create-export-directory">Step 2.1: Create Export Directory</a></li>
+<li><a href="#step-2-2-choose-export-format">Step 2.2: Choose Export Format</a></li>
+<li><a href="#step-2-3-export-table-data">Step 2.3: Export Table Data</a>
+<ul class="sectlevel3">
+<li><a href="#csv-export">CSV Export</a></li>
+<li><a href="#parquet-export-recommended">Parquet Export (Recommended)</a></li>
+</ul>
+</li>
+<li><a href="#step-2-4-automate-exports-with-script">Step 2.4: Automate Exports with Script</a></li>
+<li><a href="#step-2-5-verify-exports">Step 2.5: Verify Exports</a></li>
+<li><a href="#step-2-6-stop-3-0-cluster">Step 2.6: Stop 3.0 Cluster</a></li>
+</ul>
+</li>
+<li><a href="#phase-3-set-up-3-1-cluster">Phase 3: Set Up 3.1 Cluster</a>
+<ul class="sectlevel2">
+<li><a href="#step-3-1-download-apache-ignite-3-1">Step 3.1: Download Apache Ignite 3.1</a></li>
+<li><a href="#step-3-2-configure-cluster-nodes">Step 3.2: Configure Cluster Nodes</a>
+<ul class="sectlevel3">
+<li><a href="#configuration-changes-in-3-1">Configuration Changes in 3.1</a></li>
+</ul>
+</li>
+<li><a href="#step-3-3-start-cluster-nodes">Step 3.3: Start Cluster Nodes</a></li>
+<li><a href="#step-3-4-initialize-the-cluster">Step 3.4: Initialize the Cluster</a></li>
+<li><a href="#step-3-5-verify-cluster-topology">Step 3.5: Verify Cluster Topology</a></li>
+<li><a href="#step-3-6-recreate-schemas">Step 3.6: Recreate Schemas</a></li>
+<li><a href="#step-3-7-recreate-distribution-zones">Step 3.7: Recreate Distribution Zones</a></li>
+<li><a href="#step-3-8-recreate-tables">Step 3.8: Recreate Tables</a></li>
+</ul>
+</li>
+<li><a href="#phase-4-import-data-into-3-1-cluster">Phase 4: Import Data into 3.1 Cluster</a>
+<ul class="sectlevel2">
+<li><a href="#step-4-1-import-individual-tables">Step 4.1: Import Individual Tables</a>
+<ul class="sectlevel3">
+<li><a href="#csv-import">CSV Import</a></li>
+<li><a href="#parquet-import-recommended">Parquet Import (Recommended)</a></li>
+</ul>
+</li>
+<li><a href="#step-4-2-automate-imports-with-script">Step 4.2: Automate Imports with Script</a></li>
+<li><a href="#step-4-3-verify-data-integrity">Step 4.3: Verify Data Integrity</a>
+<ul class="sectlevel3">
+<li><a href="#row-count-verification">Row Count Verification</a></li>
+<li><a href="#data-sampling">Data Sampling</a></li>
+<li><a href="#create-verification-script">Create Verification Script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#phase-5-update-client-applications">Phase 5: Update Client Applications</a>
+<ul class="sectlevel2">
+<li><a href="#step-5-1-update-connection-configuration">Step 5.1: Update Connection Configuration</a></li>
+<li><a href="#step-5-2-review-api-changes">Step 5.2: Review API Changes</a>
+<ul class="sectlevel3">
+<li><a href="#java-api-changes">Java API Changes</a></li>
+</ul>
+</li>
+<li><a href="#step-5-3-test-client-connectivity">Step 5.3: Test Client Connectivity</a></li>
+</ul>
+</li>
+<li><a href="#phase-6-post-migration-verification">Phase 6: Post-Migration Verification</a>
+<ul class="sectlevel2">
+<li><a href="#step-6-1-verify-zone-based-replication">Step 6.1: Verify Zone-Based Replication</a></li>
+</ul>
+</li>
 </ul>
     </div>
           
