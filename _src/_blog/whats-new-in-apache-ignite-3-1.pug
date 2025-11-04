@@ -1,0 +1,423 @@
+---
+title: "Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening"
+author: "Evgeniy Stanilovskiy"
+date: 2025-11-03
+tags:
+    - apache
+    - ignite
+    - release
+---
+
+p Apache Ignite 3.1 improves the three areas that matter most when running distributed systems: performance at scale, language flexibility, and operational visibility. The release also fixes hundreds of bugs related to data corruption, race conditions, and edge cases discovered since 3.0.
+
+<!-- end -->
+
+p
+  strong Before you upgrade
+  | : This release introduces zone-based replication, which changes how RAFT groups are allocated. Persistent storage in upgraded 3.0 clusters will continue to use table-based replication. Read the
+  a(href="#zone-based-replication-migration") Zone-Based Replication Migration
+  |  section to understand your options.
+
+h3 What This Release Delivers
+
+ul
+  li
+    strong Improved replication performance and reliability
+    | : Zone-based replication improves data colocation, reduces required thread count and memory overhead while naturally improving SQL performance.
+  li
+    strong Extended clients support
+    | : Python DB API driver, .NET distributed computing with ADO.NET integration, and enhanced C++ client support expand your options for working with data.
+  li
+    strong Better cluster observability
+    | : 50+ new metrics covering checkpoints, SQL, transactions, and storage. New system views for cluster introspection.
+  li
+    strong Improved APIs
+    | : Multiple schema support, improved query planning controls, and streamlined Java APIs.
+
+h3 Performance: Built for Scale
+
+h4 Zone-Based Replication Reduces Overhead
+
+p.
+  Apache Ignite 3.1 replaces the table-based replication model from 3.0 with zone-based replication.
+
+
+p
+  strong Updated defaults
+  | : Zone-based replication is enabled by default for new 3.1 clusters.
+
+p
+  strong Existing clusters
+  | : Clusters with persistent storage upgraded from 3.0 will continue to use table-based replication. To adopt zone-based replication and gain the performance benefits, you must migrate to a new 3.1 cluster. Table-based replication support will be discontinued in Ignite 3.2 release.
+
+h4 DDL Operations Now Batch Automatically
+
+p Creating multiple tables no longer requires multiple round-trips. DDL operations batch automatically when possible, reducing setup time during schema initialization and testing.
+
+h4 Partition Pruning and Partition Awareness
+
+p Apache Ignite 3.1 introduces two orth major SQL optimizations that dramatically improve query performance:
+
+p
+  strong Partition Pruning
+  | : The query optimizer automatically eliminates unnecessary partition scans based on predicates. Queries with key-based filters only scan relevant partitions instead of the entire dataset.
+
+p
+  strong Partition Awareness
+  | : Client queries route directly to nodes owning the data, eliminating coordinator hops. The client determines the exact target node for single-partition queries.
+
+p Use the new #[code EXPLAIN MAPPING] statement to verify query routing:
+
+pre
+  code.language-sql.
+    EXPLAIN MAPPING FOR SELECT * FROM orders WHERE order_id = 12345;
+
+p Combined impact: Queries with partition key predicates can see 10x+ performance improvements.
+
+h3 Multi-Language Support
+
+h4 Python: PEP 249-Compliant Database Driver
+
+p Connect to Apache Ignite from Python with a standard DB API 2.0 compliant driver. SSL support and macOS compatibility are built in.
+
+p You can install the driver from pip:
+
+pre
+  code.language-shell.
+    pip install pyignite-dbapi
+
+p Then, you can import it into your application and initialize the connection:
+
+pre
+  code.language-py.
+    # Import and use the driver
+    import pyignite_dbapi
+
+    conn = pyignite_dbapi.connect(address='localhost:10800', use_ssl=True)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM orders WHERE customer_id = ?', (customer_id,))
+
+h4 .NET: Distributed Computing and ADO.NET
+
+p Write compute jobs in C#, F#, or any .NET language and distribute them across your cluster:
+
+pre: code.language-csharp
+  | public class HelloJob : IComputeJob&lt;string, string&gt;
+  | {
+  |     public ValueTask&lt;string&gt; ExecuteAsync(IJobExecutionContext context, string arg, CancellationToken cancellationToken) =&gt;
+  |         ValueTask.FromResult("Hello " + arg);
+  | }
+  |
+  | var jobDesc = new JobDescriptor&lt;string, string&gt;(
+  |     JobClassName: typeof(HelloJob).AssemblyQualifiedName!,
+  |     DeploymentUnits: [new DeploymentUnit("unit1")]);
+  | var jobTarget = JobTarget.AnyNode(await client.GetClusterNodesAsync());
+  | var jobExec = await client.Compute.SubmitAsync(jobTarget, jobDesc, "world");
+
+p ADO.NET integration brings familiar patterns to .NET developers:
+
+pre: code.language-csharp
+  | var connStr = "Endpoints=localhost:10800";
+  | await using var conn = new IgniteDbConnection(connStr);
+  | await conn.OpenAsync();
+  | DbCommand cmd = conn.CreateCommand();
+  | cmd.CommandText = "DROP TABLE IF EXISTS Person";
+  | await cmd.ExecuteNonQueryAsync();
+
+p Additional .NET features in 3.1:
+
+ul
+  li
+    strong Platform Streamer Receiver
+    | : Custom data processing during streaming operations
+  li
+    strong Batch SQL Execution
+    | : #[code ISql.ExecuteBatchAsync] for efficient multi-statement execution
+  li
+    strong RunInTransaction
+    | : Automatic transaction retry mechanism for transient failures
+  li
+    strong CancellationToken Support
+    | : Integrated cancellation for SQL and Compute APIs
+
+p
+  | See the #[a(href="https://ptupitsyn.github.io/NET-Compute-In-Apache-Ignite-3-1/") extended blog post about .NET compute in Ignite 3.1]
+  |  for a more in-depth explanation.
+
+h4 C++ Client
+
+p Use the improved C++ client to improve you application with several new production-ready features:
+
+ul
+  li
+    strong Heartbeat Support
+    | : Connection health monitoring prevents timeout disconnects
+  li
+    strong Transaction Timeouts
+    | : Configurable timeout settings for transaction operations
+  li
+    strong Query Cancellation
+    | : An option to cancel long-running queries
+
+h4 ODBC Driver SSL Support
+
+p Use the newly added support for #[strong SSL/TLS] to enable secure connections to the cluster from your ODBC applications.
+
+h3 SQL Capabilities
+
+h4 Multiple Schemas
+
+p Organize tables across multiple schemas instead of using only PUBLIC:
+
+pre
+  code.language-sql.
+    CREATE SCHEMA analytics;
+    CREATE TABLE analytics.events (id int primary key, timestamp timestamp, data varchar);
+
+h4 Query Plan Recalculation
+
+p Configure when query plans are recalculated based on data changes:
+
+pre
+  code.language-sql.
+    CREATE TABLE Person (
+      id INT PRIMARY KEY,
+      name VARCHAR,
+      age INT
+    ) WITH (MIN STALE ROWS 1000, STALE ROWS FRACTION 0.15);
+
+p Ignite will recalculate plans automatically when the application exceeds the thresholds.
+
+p Alternatively, manually invalidate plans to ensure they reflect current data:
+
+pre
+  code.language-shell.
+    sql planner invalidate-cache --tables=PUBLIC.Person
+
+h4 EXPLAIN Output Improvements
+
+p Use the improved EXPLAIN command to track which nodes execute queries and what data they access, making query execution plans clearer. The command now also supports the #[code EXPLAIN MAPPING FOR] option for tracking data distribution.
+
+h4 New Functions
+
+ul
+  li
+    code GROUPING
+    | : Aggregate function for advanced grouping operations
+  li
+    code CURRENT_USER
+    | : Access current user for auditing and access control
+
+h3 Code Deployment
+
+p Access deployment unit information directly from your compute jobs to better diagnose issues and validate your code:
+
+pre: code.language-java
+  | public class DiagnosticJob implements ComputeJob&lt;Void, String&gt; {
+  |     @Override
+  |     public CompletableFuture&lt;String&gt; executeAsync(JobExecutionContext context, Void input) {
+  |         String deploymentInfo = context.deploymentUnits().stream()
+  |             .map(unit -&gt; String.format("%s:%s at %s", unit.name(), unit.version(), unit.path()))
+  |             .collect(Collectors.joining(", "));
+  |         return CompletableFuture.completedFuture(deploymentInfo);
+  |     }
+  | }
+
+p Deployment improvements in 3.1:
+
+ul
+  li ZIP archive support preserves folder structure for complex applications
+  li Files over 10 MB now supported
+  li Automatic unit loading at node startup
+
+h3 Production Operations
+
+h4 Metrics and Observability
+
+p Apache Ignite 3.1 adds comprehensive metrics across all major subsystems:
+
+ul
+  li
+    strong Storage Metrics
+    | : Checkpoint operations, data regions, and storage I/O for aipersist storage engine
+  li
+    strong Table Metrics
+    | : Per-table operation statistics including read/write throughput
+  li
+    strong Rebalance Metrics
+    | : Track rebalancing progress and performance
+  li
+    strong SQL Query Metrics
+    | : Execution time, row counts, and query cache hit rates
+  li
+    strong Transaction Metrics
+    | : Transaction lifecycle and duration tracking
+  li
+    strong Topology Metrics
+    | : Node join/leave events and cluster state changes
+  li
+    strong Throttling Metrics
+    | : Backpressure and flow control statistics
+  li
+    strong Clock Drift Metrics
+    | : Monitor time synchronization across cluster nodes
+
+p
+  strong Metric Log Exporter
+  | : Exports metrics to files. The exporter is used by default for all new clusters, providing guaranteed access to basic cluster metrics.
+
+h4 System Views for Cluster Introspection
+
+p New views expose internal cluster state:
+
+ul
+  li
+    code SYSTEM.SQL_CACHED_QUERY_PLANS
+    | : View cached query plans
+  li
+    code SYSTEM.INDEX_COLUMNS
+    | : Access index column information
+  li
+    code SYSTEM.SCHEMAS
+    | : List all schemas in the cluster
+
+p All system views now use standardized column naming. Old column naming is still supported for compatibility purposes.
+
+h4 Compute Job Lifecycle Events
+
+p New lifecycle events help you track compute jobs through submission, execution, completion, and failure. MapReduce task events provide visibility into distributed computations.
+
+h3 Cluster Management
+
+h4 Automatic Metastorage Node Selection
+
+p Ignite now automatically selects metastorage and cluster management group nodes based on cluster size on cluster initialization:
+
+ul
+  li ≤3 nodes: all nodes participate
+  li 4 nodes: 3 nodes (maintains odd number for consensus)
+  li ≥5 nodes: 5 nodes (balances fault tolerance with overhead)
+
+h4 Multicast Discovery for Dynamic Environments
+
+p Nodes discover each other automatically using multicast, removing the need for static node lists in containerized deployments:
+
+pre
+  code.language-shell.
+    node config update ignite.network.nodeFinder.multicast.group=239.5.0.0
+    node config update ignite.network.nodeFinder.type=MULTICAST
+
+h4 Docker Enhancements
+
+The default docker environment comes with multiple improvements:
+
+ul
+  li #[code BOOTSTRAP_NODE_CONFIG] environment variable for configuration management
+  li ARM64 images for ARM-based systems
+  li Non-root default user improves security
+  li Java 17 and 21 images available
+
+h4 Distribution Zone Quorum Control
+
+p You can explicitly set quorum requirements in distribution zones:
+
+pre
+  code.language-sql.
+    CREATE ZONE exampleZone (REPLICAS 3, QUORUM SIZE 3) STORAGE PROFILES['default'];
+
+h3 Transaction Improvements
+
+h4 Automatic Transaction Retry
+
+p The new #[code runInTransaction] API automatically retries transactions that fail due to transient errors:
+
+pre: code.language-java
+  | ignite.transactions().runInTransaction(tx -&gt; {
+  |     // Transaction logic here
+  |     // Automatically retried on transient failures
+  | });
+
+p Configurable retry policies handle common failure scenarios like lock conflicts and temporary connectivity issues.
+
+h4 Separate Read-Only and Read-Write Timeouts
+
+p New transaction timeout options can set different timeouts for read-only and read-write transactions:
+
+ul
+  li
+    code readOnlyTimeoutMillis
+    | : Shorter timeout for read-only transactions
+  li
+    code readWriteTimeoutMillis
+    | : Longer timeout for complex write operations
+
+p This prevents read-only queries from timing out unnecessarily while protecting against long-running writes.
+
+h3 Java API Updates
+
+Multiple new Java methods simplify the work with your cluster and provide more direct access to data:
+
+ul
+  li
+    code deleteAll()
+    | : Bulk delete operations
+  li
+    code ignite.cluster().nodes()
+    | : Returns nodes in logical topology
+  li
+    code ignite.cluster().localNode()
+    | : Quick access to local node in embedded mode
+  li
+    code CancelHandle
+    |  API: Stop queries, transactions, and compute jobs
+  li Batched execution cancellation support
+
+h3 Disaster Recovery and Operational Tools
+
+p New CLI and REST APIs enable partition-level data cleanup and restart, letting you recover from corrupted partitions without restarting the whole cluster. The system properly destroys tables during node recovery and cleans abandoned transaction write intents during index builds.
+
+h3 Migration from Apache Ignite 2
+
+p Apache Ignite 3.1 includes a complete migration toolkit with DDL generator for automatic schema conversion, persistent data migration with progress tracking, and automatic type conversion for legacy Java time APIs. The toolkit supports authenticated operations and complex field mappings for key and value replication.
+
+h3 Breaking Changes and Deprecations
+
+p All breaking changes include backward compatibility support. Recreate your cluster, update your code and configuration before 3.2, when deprecated approaches will be removed.
+
+h4#zone-based-replication-migration Zone-Based Replication Migration
+
+p Zone-based replication changes how RAFT groups are allocated across tables. Clusters upgraded from 3.0 continue using table-based replication to preserve stability. To adopt zone-based replication and gain the performance benefits, create a new 3.1 cluster and migrate data using SQL #[code COPY INTO]/#[code COPY FROM] commands. See the #[a(href="https://ignite.apache.org/docs/ignite3/latest/installation/migration-from-ai3-1") 3.0 to 3.1 Migration Guide] for detailed workflow.
+
+h4 Configuration and API Changes
+
+p
+  strong Configuration
+  | : Property names now include units (i.e. #[code timeoutMillis] instead of #[code timeout]). System properties were consolidated under #[code ignite.system]. Old formats work temporarily.
+
+p
+  strong SQL Syntax
+  | : #[code CREATE ZONE] syntax modernized to align with SQL standards. Old #[code WITH] clause syntax is deprecated but functional.
+
+p
+  strong Java API
+  | : #[code ignite.clusterNodes()] deprecated in favor of #[code ignite.cluster().nodes()]. System view columns standardized with old names temporarily available.
+
+p
+  strong Data Types
+  | : #[code BINARY] and #[code CHAR] removed. Use #[code VARBINARY] and #[code VARCHAR] instead. Maximum precision for #[code VARCHAR]/#[code VARBINARY] increased to 2GB.
+
+h3 Get Started
+
+p
+  strong Download
+  | : #[a(href="https://ignite.apache.org/download.html") Apache Ignite 3.1]
+
+p
+  strong Migration Guide
+  | : #[a(href="https://ignite.apache.org/docs/ignite3/latest/installation/migration-from-ai3-1") Upgrading from 3.0]
+
+p
+  strong Community
+  | : Join the #[a(href="https://ignite.apache.org/community/resources.html") Apache Ignite mailing list] or #[a(href="https://ignite.apache.org/community/resources.html") Slack channel]
+
+p Questions about upgrading? Ask on the #[a(href="mailto:dev@ignite.apache.org") dev list] or #[a(href="mailto:user@ignite.apache.org") user list].
