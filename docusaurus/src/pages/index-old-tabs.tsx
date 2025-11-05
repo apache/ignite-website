@@ -4,6 +4,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Section from '@site/src/components/Section';
 import {userStories, storyCategories} from '@site/src/data/userStories';
@@ -78,15 +80,6 @@ function TopCards() {
 }
 
 function CoreCapabilities() {
-  // State for managing tab visibility - matches PUG's jsTabWrap pattern
-  const [activeTab, setActiveTab] = useState('frontcode-1');
-  const [activeCodeTab, setActiveCodeTab] = useState<{[key: string]: string}>({
-    'frontcode-1': 'xml',
-    'frontcode-3': 'java',
-    'frontcode-4': 'java',
-    'frontcode-6': 'java'
-  });
-
   const multiTierXML = `<bean class="org.apache.ignite.configuration.IgniteConfiguration">
     <property name="dataStorageConfiguration">
         <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
@@ -199,272 +192,111 @@ var query = new ContinuousQuery(
 // Deploy the query in the cluster.
 var handle = cache.QueryContinuous(query);`;
 
-  const handleCodeTabChange = (tabId: string, codeTab: string) => {
-    setActiveCodeTab(prev => ({...prev, [tabId]: codeTab}));
-  };
-
   return (
-    <div className={clsx('container', styles.forntcodes)}>
+    <div className="container">
       <h2 className={styles.h3}>Use Ignite Core Capabilities To Start Easily <br />And Scale Faster</h2>
 
-      <div className={clsx(styles.forntcodes__wrap, 'pt-4')}>
-        {/* Left side vertical menu - matches PUG layout */}
-        <div className={styles.forntcodes__menu}>
-          <ul className="fz20">
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-1' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-1'); }}
-              >
-                Multi-Tier Storage
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-2' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-2'); }}
-              >
-                Distributed SQL
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-3' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-3'); }}
-              >
-                ACID Transactions
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-4' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-4'); }}
-              >
-                Compute APIs
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-5' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-5'); }}
-              >
-                Machine Learning
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-6' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-6'); }}
-              >
-                Continuous Queries
-              </a>
-            </li>
-          </ul>
-          <Link className={clsx(styles.forntcodes__menumore, 'fz20')} to="/features/">View all features</Link>
-        </div>
+      <Tabs className={styles.forntcodes__wrap} groupId="core-features">
+        <TabItem value="multi-tier" label="Multi-Tier Storage" default>
+          <p className={styles.forntcodes__tabtitle}>Multi-Tier Storage</p>
+          <p>Ignite scales up and out across memory and disk. By default, Ignite operates in a pure in-memory mode. But, by toggling a single configuration setting, you can turn a cluster into a database that can grow beyond the cluster's memory capacity:</p>
 
-        {/* Right side content area */}
-        <div className={styles.forntcodes__tabwraps}>
-          {/* Multi-Tier Storage Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-1' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Multi-Tier Storage</p>
-            <p>Ignite scales up and out across memory and disk. By default, Ignite operates in a pure in-memory mode. But, by toggling a single configuration setting, you can turn a cluster into a database that can grow beyond the cluster's memory capacity:</p>
+          <Tabs groupId="programming-language">
+            <TabItem value="xml" label="XML" default>
+              <CodeBlock language="xml">{multiTierXML}</CodeBlock>
+            </TabItem>
+            <TabItem value="java" label="Java">
+              <CodeBlock language="java">{multiTierJava}</CodeBlock>
+            </TabItem>
+            <TabItem value="csharp" label="C#/.NET">
+              <CodeBlock language="csharp">{multiTierCSharp}</CodeBlock>
+            </TabItem>
+          </Tabs>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'xml' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'xml'); }}
-                >
-                  XML
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'xml' && 'active')}>
-                  <CodeBlock language="xml">{multiTierXML}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{multiTierJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{multiTierCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/arch/multi-tier-storage.html">Learn More About Multi-Tier Storage</Link>
-              </div>
-            </div>
+          <div className={styles.forntcodes__bottom}>
+            <Link className="button" to="/arch/multi-tier-storage.html">Learn More About Multi-Tier Storage</Link>
           </div>
+        </TabItem>
 
-          {/* Distributed SQL Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-2' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Distributed SQL</p>
-            <p>Use Ignite as a traditional SQL database by leveraging JDBC drivers, ODBC drivers, or the native SQL APIs that are available for Java, C#, C++, Python, and other programming languages. Seamlessly join, group, aggregate, and order your distributed in-memory and on-disk data:</p>
+        <TabItem value="sql" label="Distributed SQL">
+          <p className={styles.forntcodes__tabtitle}>Distributed SQL</p>
+          <p>Use Ignite as a traditional SQL database by leveraging JDBC drivers, ODBC drivers, or the native SQL APIs that are available for Java, C#, C++, Python, and other programming languages. Seamlessly join, group, aggregate, and order your distributed in-memory and on-disk data:</p>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a href="#" className={clsx(styles.nativecode__link, 'active')}>SQL</a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, 'active')}>
-                  <CodeBlock language="sql">{sqlCode}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/sql.html">Learn More About Distributed SQL</Link>
-              </div>
-            </div>
+          <CodeBlock language="sql">{sqlCode}</CodeBlock>
+
+          <div className={styles.forntcodes__bottom}>
+            <Link className="button" to="/features/sql.html">Learn More About Distributed SQL</Link>
           </div>
+        </TabItem>
 
-          {/* ACID Transactions Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-3' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>ACID Transactions</p>
-            <p>Ignite can operate in a strongly consistent mode that provides full support for distributed ACID transactions. Transact across multiple cluster nodes, caches, tables, and partitions:</p>
+        <TabItem value="acid" label="ACID Transactions">
+          <p className={styles.forntcodes__tabtitle}>ACID Transactions</p>
+          <p>Ignite can operate in a strongly consistent mode that provides full support for distributed ACID transactions. Transact across multiple cluster nodes, caches, tables, and partitions:</p>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-3'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-3', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-3'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-3', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-3'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{acidJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-3'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{acidCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/acid-transactions.html">Learn More About Transactions</Link>
-              </div>
-            </div>
+          <Tabs groupId="programming-language">
+            <TabItem value="java" label="Java" default>
+              <CodeBlock language="java">{acidJava}</CodeBlock>
+            </TabItem>
+            <TabItem value="csharp" label="C#/.NET">
+              <CodeBlock language="csharp">{acidCSharp}</CodeBlock>
+            </TabItem>
+          </Tabs>
+
+          <div className={styles.forntcodes__bottom}>
+            <Link className="button" to="/features/acid-transactions.html">Learn More About Transactions</Link>
           </div>
+        </TabItem>
 
-          {/* Compute APIs Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-4' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Compute APIs In Java, Scala, Kotlin, C#, C++</p>
-            <p>With traditional databases, for in-place calculations, you use stored procedures that are written in a language such as PL/SQL. With Ignite, you use modern JVM languages, C# or C++ to develop and execute custom tasks across your distributed database:</p>
+        <TabItem value="compute" label="Compute APIs">
+          <p className={styles.forntcodes__tabtitle}>Compute APIs In Java, Scala, Kotlin, C#, C++</p>
+          <p>With traditional databases, for in-place calculations, you use stored procedures that are written in a language such as PL/SQL. With Ignite, you use modern JVM languages, C# or C++ to develop and execute custom tasks across your distributed database:</p>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-4'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-4', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-4'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-4', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-4'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{computeJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-4'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{computeCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/compute-apis.html">Learn More About Compute APIs</Link>
-              </div>
-            </div>
+          <Tabs groupId="programming-language">
+            <TabItem value="java" label="Java" default>
+              <CodeBlock language="java">{computeJava}</CodeBlock>
+            </TabItem>
+            <TabItem value="csharp" label="C#/.NET">
+              <CodeBlock language="csharp">{computeCSharp}</CodeBlock>
+            </TabItem>
+          </Tabs>
+
+          <div className={styles.forntcodes__bottom}>
+            <Link className="button" to="/features/compute-apis.html">Learn More About Compute APIs</Link>
           </div>
+        </TabItem>
 
-          {/* Machine Learning Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-5' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Built-In Machine Learning</p>
-            <p>Ignite machine learning uses built-in algorithms and tools, as well as TensorFlow integration, to enable the building of scalable machine learning models and avoid costly data transfers. Train, deploy, evaluate, and update your ML and DL models continuously and at scale:</p>
+        <TabItem value="ml" label="Machine Learning">
+          <p className={styles.forntcodes__tabtitle}>Built-In Machine Learning</p>
+          <p>Ignite machine learning uses built-in algorithms and tools, as well as TensorFlow integration, to enable the building of scalable machine learning models and avoid costly data transfers. Train, deploy, evaluate, and update your ML and DL models continuously and at scale:</p>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a href="#" className={clsx(styles.nativecode__link, 'active')}>Java</a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, 'active')}>
-                  <CodeBlock language="java">{mlJava}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/machinelearning.html">Learn More About Machine Learning</Link>
-              </div>
-            </div>
+          <CodeBlock language="java">{mlJava}</CodeBlock>
+
+          <div className={styles.forntcodes__bottom}>
+            <Link className="button" to="/features/machinelearning.html">Learn More About Machine Learning</Link>
           </div>
+        </TabItem>
 
-          {/* Continuous Queries Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-6' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Continuous Queries</p>
-            <p>With relational databases, you use triggers to react to certain events. With Ignite, you deploy continuous queries that are written in a modern programming language such as Java or C# and process streams of changes on the database and application side:</p>
+        <TabItem value="continuous" label="Continuous Queries">
+          <p className={styles.forntcodes__tabtitle}>Continuous Queries</p>
+          <p>With relational databases, you use triggers to react to certain events. With Ignite, you deploy continuous queries that are written in a modern programming language such as Java or C# and process streams of changes on the database and application side:</p>
 
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-6'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-6', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-6'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-6', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-6'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{continuousJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-6'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{continuousCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <a className="button" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries" target="_blank" rel="noreferrer">Learn More About Continuous Queries</a>
-              </div>
-            </div>
+          <Tabs groupId="programming-language">
+            <TabItem value="java" label="Java" default>
+              <CodeBlock language="java">{continuousJava}</CodeBlock>
+            </TabItem>
+            <TabItem value="csharp" label="C#/.NET">
+              <CodeBlock language="csharp">{continuousCSharp}</CodeBlock>
+            </TabItem>
+          </Tabs>
+
+          <div className={styles.forntcodes__bottom}>
+            <a className="button" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries" target="_blank" rel="noreferrer">Learn More About Continuous Queries</a>
           </div>
-        </div>
+        </TabItem>
+      </Tabs>
+
+      <div className={styles.forntcodes__menumore}>
+        <Link to="/features/">View all features</Link>
       </div>
     </div>
   );

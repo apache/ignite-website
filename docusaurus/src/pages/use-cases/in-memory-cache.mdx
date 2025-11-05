@@ -1,0 +1,272 @@
+---
+title: Distributed In-Memory Cache - Apache Ignite
+description: Apache Ignite as a Distributed In-Memory Cache accelerates and scales your databases, services, and APIs. Learn more about the cache-aside deployment and the read-through/write-through caching strategies with Apache Ignite.
+---
+
+import BenefitsGrid from '@site/src/components/BenefitsGrid';
+import styles from './in-memory-cache.module.css';
+
+<section className={styles.innerhero}>
+  <div className="container">
+    <div className={styles.innerheroContent}>
+      <div className={styles.innerheroMain}>
+        <h1 className={styles.innerheroH1}>
+          Distributed<br />
+          In-Memory Cache<br />
+          <span className={styles.withApache}>With Apache Ignite</span>
+        </h1>
+        <div className={styles.innerheroDescr}>
+          Improve the performance and scalability of your applications,
+          databases, and microservices with Apache Ignite
+        </div>
+        <div className={styles.innerheroAction}>
+          <a href="https://ignite.apache.org/docs/latest/index" className={`button ${styles.innerheroButton}`}>
+            Start Coding
+          </a>
+        </div>
+      </div>
+      <img
+        className={styles.innerheroPic}
+        src="/img/usecases/in-memory-hero.svg"
+        alt="Distributed In-Memory Cache"
+      />
+    </div>
+  </div>
+</section>
+
+<section className={`${styles.section} container`}>
+  <header className={styles.blockheader}>
+    <h2 className={styles.capstext}>What Is In-Memory Cache?</h2>
+    <div className={styles.sectionText}>
+      <p>
+        In-memory cache is a storage layer placed between applications and databases.
+        The cache keeps your hot data in memory to offload existing databases and accelerate applications.
+      </p>
+    </div>
+  </header>
+</section>
+
+<section className={styles.section}>
+  <div className="container">
+    <header className={styles.blockheader}>
+      <h2 className={styles.sectionTitle}>Advantages of Distributed In-Memory Cache</h2>
+      <div className={styles.blockheaderRight}>
+        <p>
+          A distributed in-memory cache is <strong>the most straightforward and scalable</strong> way
+          to accelerate your existing applications and databases, thanks to:
+        </p>
+      </div>
+    </header>
+    <BenefitsGrid
+      benefits={[
+        {
+          title: "Speed",
+          description: "Memory as a storage layer provides the lowest latency and highest throughput. Laws of physics."
+        },
+        {
+          title: "Scale",
+          description: "Horizontal scalability lets you grow the cluster size to an unlimited extent to accommodate data size and throughput."
+        }
+      ]}
+      columns={2}
+    />
+  </div>
+</section>
+
+<section className={`${styles.section} container`}>
+  <header className={styles.blockheader}>
+    <h2 className={styles.sectionTitle}>
+      Unlike Standard In-Memory Caches, Apache Ignite<br />
+      Supports Essential Developers APIs
+    </h2>
+  </header>
+  <div className={styles.apiWrap}>
+    <div className={styles.apiItem}>
+      <img className={styles.apiIcon} src="/img/features/in-memory/01-ACID-Transactions.svg" alt="" />
+      <p className={styles.apiText}>
+        ACID transactions<br />
+        to ensure consistency<br />
+        of data
+      </p>
+    </div>
+    <div className={styles.apiItem}>
+      <img className={styles.apiIcon} src="/img/features/in-memory/02-sql.svg" alt="" />
+      <p className={styles.apiText}>SQL queries execution</p>
+    </div>
+    <div className={styles.apiItem}>
+      <img className={styles.apiIcon} src="/img/features/in-memory/03-user.svg" alt="" />
+      <p className={styles.apiText}>
+        Custom computations,<br />
+        e.g. on Java, available
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className={`${styles.section} container`}>
+  <h2 className={styles.sectionTitle}>Read-Through / Write-Through Caching</h2>
+  <p className={styles.subsectionTitle}><strong>How It Works</strong></p>
+  <div className={styles.flexContainer}>
+    <div className={styles.flexLeft}>
+      <p>
+        <em>
+          The read-through/write-through caching strategy can be classified
+          as an in-memory, data-grid type of deployment.
+        </em>
+      </p>
+    </div>
+    <div className={styles.flexRight}>
+      <p>
+        When Apache Ignite is deployed as a data grid, the application layer begins
+        to treat Ignite as the primary store.
+      </p>
+      <p>
+        As applications write to and read from the data grid, Ignite ensures that
+        all underlying external databases stay updated and are consistent with the in-memory data.
+      </p>
+    </div>
+  </div>
+  <div className={styles.picWrap}>
+    <picture>
+      <source media="(min-width: 1024px)" srcSet="/img/features/in-memory/write-through-caching.svg" />
+      <img src="/img/features/in-memory/write-through-caching-mob.svg" alt="Write-through caching diagram" />
+    </picture>
+  </div>
+  <p className={styles.subsectionTitle}><strong>How It Works</strong></p>
+  <div className={styles.flexContainer}>
+    <div className={`${styles.flexLeft} ${styles.iconContent}`}>
+      <p>This strategy is recommended for architectures that need to:</p>
+      <ul className={styles.dashList}>
+        <li>accelerate disk-based databases;</li>
+        <li>create a shared caching layer across various data sources.</li>
+      </ul>
+    </div>
+    <div className={styles.flexRight}>
+      <p>
+        Ignite integrates with many databases out-of-the-box and, in write-through
+        or write-behind mode, can synchronize all changes to the databases.
+      </p>
+      <p>
+        The strategy also applies to ACID transactions: Ignite will coordinate and
+        commit a transaction across its in-memory cluster as well as to a relational database.
+      </p>
+      <p>
+        Read-through capability implies that, if a record is missing from memory,
+        a cache can read the data from an external database. Ignite fully supports
+        this capability for key-value APIs.
+      </p>
+      <p>
+        When you use Ignite SQL, you must preload the dataset into memory because
+        Ignite SQL can query on-disk data only if the data is stored in native persistence.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section className={`${styles.section} container`}>
+  <h2 className={styles.sectionTitle}>Cache-Aside Deployment</h2>
+  <div className={styles.picWrap}>
+    <picture>
+      <source media="(min-width: 1024px)" srcSet="/img/features/in-memory/cache-aside-deployment.svg" />
+      <img src="/img/features/in-memory/cache-aside-deployment-mob.svg" alt="Cache-aside deployment diagram" />
+    </picture>
+  </div>
+  <p className={styles.subsectionTitle}><strong>When It Works</strong></p>
+  <div className={styles.flexContainer}>
+    <div className={styles.flexLeft}>
+      <p>This strategy works well in two cases:</p>
+      <ul className={styles.numberedList}>
+        <li>1. The cached data is relatively static, i.e. not updated frequently</li>
+        <li>2. A temporary data lag is allowed between the primary store and the cache</li>
+      </ul>
+    </div>
+    <div className={styles.flexRight}>
+      <p>
+        It's usually assumed that changes will be fully replicated eventually and,
+        thus, the cache and the primary store will become consistent.
+      </p>
+    </div>
+  </div>
+
+  <div className={styles.bottomSection}>
+    <h3 className={styles.subsectionTitle}>Cache-Aside Deployment And Native Persistence</h3>
+    <div className={styles.flexContainer}>
+      <div className={styles.flexLeft}>
+        <p>
+          When Apache Ignite is deployed in a cache-aside configuration, its native
+          persistence can be used as a disk store for Ignite datasets.{' '}
+          <a href="/arch/native-persistence">Native persistence</a> allows for the
+          elimination of the time-consuming cache warm-up step.
+        </p>
+        <p>
+          As native persistence maintains a full copy of data on disk, you can cache
+          a subset of records in memory. If a required data record is missing from memory,
+          then Ignite reads the record from the disk automatically, regardless of which
+          API you use—be it SQL, key-value, or scan queries.
+        </p>
+      </div>
+      <div className={styles.flexRight}>
+        <ul className={styles.checkList}>
+          <li>Seconds needed for recovery</li>
+          <li>Full copy of cached records is duplicated on disk</li>
+          <li>Use any API: SQL, key-value, or scan queries</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section className={`${styles.section} container`}>
+  <h2 className={styles.capstext}>IN-MEMORY CACHE USER STORIES</h2>
+  <div className={styles.videoSection}>
+    <div className={styles.videoItem}>
+      <div className={styles.videoThumb}>
+        <a href="https://www.youtube.com/watch?v=Mhtt2QL_qCQ" target="_blank" rel="noopener noreferrer">
+          <img src="/img/poweredby/videos/002.png" alt="Raiffeisen Bank video" />
+        </a>
+      </div>
+      <h4 className={styles.videoTitle}>Raiffeisen Bank</h4>
+      <div className={styles.videoDescr}>
+        <p>
+          As users transition to digital channels, the load on the bank's systems has increased.
+          Therefore, load reduction and system scaling are constant and top priorities.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section className={`${styles.bottomLinks} container`}>
+  <div className={styles.bottomGrid}>
+    <article className={styles.bottomBlock}>
+      <div className={styles.bottomTitle}>
+        <img src="/img/features/native-rocket.svg" alt="" className={styles.bottomIcon} />
+        <span>Ready to Start?</span>
+      </div>
+      <p className={styles.bottomText}>
+        Discover our quick start guide and build your first application in 5-10 minutes
+      </p>
+      <a
+        href="https://ignite.apache.org/docs/latest/#quick-start-guides"
+        className={styles.arrowLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Quick Start Guide
+      </a>
+    </article>
+    <article className={styles.bottomBlock}>
+      <div className={styles.bottomTitle}>
+        <img src="/img/features/native-docs.svg" alt="" className={styles.bottomIcon} />
+        <span>Want to View More Use-Cases?</span>
+      </div>
+      <p className={styles.bottomText}>Read In-Memory Data Grid article</p>
+      <a
+        href="/use-cases/in-memory-data-grid"
+        className={styles.arrowLink}
+      >
+        In-Memory Data Grid
+      </a>
+    </article>
+  </div>
+</section>
