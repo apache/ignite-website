@@ -323,11 +323,11 @@ export const resourcesMenu: DropdownMenu = {
  * Top-level navigation menu items
  */
 export const mainNavItems = [
-  { label: 'Get Started', key: 'getStarted', menu: getStartedMenu },
-  { label: 'Features', key: 'features', menu: featuresMenu },
-  { label: 'Community', key: 'community', menu: communityMenu },
+  { label: 'Get Started', key: 'getStarted', href: '/', menu: getStartedMenu },
+  { label: 'Features', key: 'features', href: '/features/', menu: featuresMenu },
+  { label: 'Community', key: 'community', href: '/community.html', menu: communityMenu },
   { label: 'Powered By', href: '/use-cases/provenusecases.html' },
-  { label: 'Resources', key: 'resources', menu: resourcesMenu },
+  { label: 'Resources', key: 'resources', href: '/resources.html', menu: resourcesMenu },
   { label: 'Docs', href: '//ignite.apache.org/docs/latest/', external: true },
 ] as const;
 

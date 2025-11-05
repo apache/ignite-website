@@ -235,10 +235,27 @@ export default function NavbarContent(): ReactNode {
     }
   };
 
-  const isCurrentPage = (href?: string) => {
+  const isCurrentPage = (href?: string, key?: string) => {
+    // Homepage matches "Get Started" (empty path)
+    if (location.pathname === '/' && key === 'getStarted') {
+      return true;
+    }
+
     if (!href) return false;
+
+    // Handle absolute URLs (external links)
+    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+      return false;
+    }
+
+    // Remove leading slash for comparison
     const path = href.replace(/^\//, '');
-    return location.pathname === `/${path}` || location.pathname === path;
+    const currentPath = location.pathname.replace(/^\//, '');
+
+    // Exact match or match with/without trailing slash
+    return currentPath === path ||
+           currentPath === path + '/' ||
+           currentPath + '/' === path;
   };
 
   return (
@@ -282,7 +299,7 @@ export default function NavbarContent(): ReactNode {
                   const itemHref = 'href' in item ? item.href : undefined;
                   const key = 'key' in item ? item.key : undefined;
                   const isActive = activeDropdown === key;
-                  const isCurrent = isCurrentPage(itemHref);
+                  const isCurrent = isCurrentPage(itemHref, key);
 
                   return (
                     <li
@@ -298,12 +315,6 @@ export default function NavbarContent(): ReactNode {
                           'active': isActive,
                         })}
                         data-panel={key}
-                        onClick={(e) => {
-                          if (hasMenu && key) {
-                            e.preventDefault();
-                            handleClick(key, true);
-                          }
-                        }}
                         target={'external' in item && item.external ? '_blank' : undefined}
                         rel={'external' in item && item.external ? 'noopener noreferrer' : undefined}
                       >
@@ -382,7 +393,7 @@ export default function NavbarContent(): ReactNode {
                   const itemHref = 'href' in item ? item.href : undefined;
                   const key = 'key' in item ? item.key : undefined;
                   const isActive = activeDropdown === key;
-                  const isCurrent = isCurrentPage(itemHref);
+                  const isCurrent = isCurrentPage(itemHref, key);
 
                   return (
                     <li
@@ -398,12 +409,6 @@ export default function NavbarContent(): ReactNode {
                           'active': isActive,
                         })}
                         data-panel={key}
-                        onClick={(e) => {
-                          if (hasMenu && key) {
-                            e.preventDefault();
-                            handleClick(key, true);
-                          }
-                        }}
                         target={'external' in item && item.external ? '_blank' : undefined}
                         rel={'external' in item && item.external ? 'noopener noreferrer' : undefined}
                       >

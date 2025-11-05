@@ -69,7 +69,7 @@ function TopCards() {
         <div className={styles.frontcard__network}>
           <img src="/img/frontpage/b1-planet.svg" alt="" />
         </div>
-        <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary)}>
+        <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary, 'pt-3')}>
           Leading companies around the world select Ignite to speed up and scale applications used by millions of people daily
         </div>
       </Link>
@@ -205,7 +205,7 @@ var handle = cache.QueryContinuous(query);`;
 
   return (
     <div className={clsx('container', styles.forntcodes)}>
-      <h2 className={styles.h3}>Use Ignite Core Capabilities To Start Easily <br />And Scale Faster</h2>
+      <h2 className={styles.h2}>Use Ignite Core Capabilities To Start Easily <br />And Scale Faster</h2>
 
       <div className={clsx(styles.forntcodes__wrap, 'pt-4')}>
         {/* Left side vertical menu - matches PUG layout */}
@@ -302,7 +302,7 @@ var handle = cache.QueryContinuous(query);`;
               </div>
               <div className={styles.nativecode__tabs}>
                 <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'xml' && 'active')}>
-                  <CodeBlock language="xml">{multiTierXML}</CodeBlock>
+                  <CodeBlock language="markup">{multiTierXML}</CodeBlock>
                 </div>
                 <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'java' && 'active')}>
                   <CodeBlock language="java">{multiTierJava}</CodeBlock>
@@ -473,23 +473,23 @@ var handle = cache.QueryContinuous(query);`;
 function UsageScenarios() {
   return (
     <Section className={styles.frontnewcards}>
-      <h2 className={styles.h3}>New To Ignite? <br />Three Primary Usage Scenarios</h2>
+      <h2 className={styles.h2}>New To Ignite? <br />Three Primary Usage Scenarios</h2>
       <div className={styles.frontnewcards__wrap}>
-        <article className={styles.frontsimplecard}>
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
           <h4 className={styles.cardsimple__title}>Application Acceleration <br />& Scale Out</h4>
           <div className={styles.cardsimple__text}>
             Accelerate your existing applications by 100x using Ignite as an in-memory cache or in-memory data grid that is deployed over one or more external databases.
           </div>
         </article>
 
-        <article className={styles.frontsimplecard}>
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
           <h4 className={styles.cardsimple__title}>Distributed Database For <br />HTAP Workloads</h4>
           <div className={styles.cardsimple__text}>
             Build applications that support transactional and analytical workloads by using Ignite as a database that scales beyond available memory capacity.
           </div>
         </article>
 
-        <article className={styles.frontsimplecard}>
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
           <h4 className={styles.cardsimple__title}>Digital Integration Hub</h4>
           <div className={styles.cardsimple__text}>
             Create an advanced platform architecture that aggregates multiple back-end systems and databases into a low-latency and shared data store.
@@ -506,12 +506,14 @@ function UsageScenarios() {
 function UserStories() {
   return (
     <Section className={styles.frontstories}>
-      <h2 className={styles.h3}>Ignite User Stories</h2>
-      <ul className={styles.frontstories__checkers}>
-        {storyCategories.map(category => (
-          <li key={category}>{category}</li>
-        ))}
-      </ul>
+      <h2 className={styles.h2}>Ignite User Stories</h2>
+      <div className={clsx(styles.frontstories__checkerswrap, styles.cardsimple)}>
+        <ul className={clsx(styles.frontstories__checkers, 'capstext')}>
+          {storyCategories.map(category => (
+            <li key={category}>{category}</li>
+          ))}
+        </ul>
+      </div>
 
       <div className={styles.frontstories__grid}>
         {userStories.map((story, idx) => (
@@ -526,7 +528,7 @@ function UserStories() {
         ))}
       </div>
 
-      <div className={styles.frontstories__bottom}>
+      <div className={clsx(styles.frontstories__bottom, 'pt-5')}>
         <Link to="/use-cases/provenusecases.html" className="button button--shadow">Watch Other Stories</Link>
       </div>
     </Section>
@@ -536,7 +538,7 @@ function UserStories() {
 function EventsSection() {
   return (
     <Section className={styles.frontconfs}>
-      <h2 className={styles.h3}>Join The Community At Events <br />And Meetups Worldwide</h2>
+      <h2 className={styles.h2}>Join The Community At Events <br />And Meetups Worldwide</h2>
       <div className={styles.frontconfs__wrap}>
         <a href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--red'])} rel="noreferrer">
           <div className={styles.frontconfs__iconwrap}>
@@ -576,7 +578,7 @@ function EventsSection() {
         </a>
       </div>
 
-      <div className={styles.frontconfs__bottom}>
+      <div className={clsx(styles.frontconfs__bottom, 'pt-5')}>
         <Link to="/events.html" className="button button--shadow">View All Events</Link>
       </div>
     </Section>
@@ -586,7 +588,7 @@ function EventsSection() {
 function ResourcesSection() {
   return (
     <Section className={styles.frontresourse}>
-      <h2 className={styles.h3}>Resources To Elevate Your <br />Ignite Experience</h2>
+      <h2 className={styles.h2}>Resources To Elevate Your <br />Ignite Experience</h2>
       <div className={styles.frontresourse__subtitle}>
         Get access to a variety of free technical <br />and learning resources
       </div>
@@ -641,7 +643,7 @@ function ResourcesSection() {
         </div>
       </div>
 
-      <div className={styles.frontconfs__bottom}>
+      <div className={clsx(styles.frontconfs__bottom, 'pt-5')}>
         <Link to="/resources.html" className="button button--shadow">View All Resources</Link>
       </div>
     </Section>
@@ -650,13 +652,13 @@ function ResourcesSection() {
 
 function ReadyToStart() {
   return (
-    <section className={styles.toolingend}>
-      <div className="container">
+    <section className={clsx(styles.toolingend, styles['toolingend--front'])}>
+      <div className={clsx('container', 'flexi')}>
         <div className={styles.toolingend__main}>
-          <p className={styles.toolingend__title}>
+          <p className={clsx(styles.toolingend__title, styles.h3)}>
             <strong>Ready To Start?</strong>
           </p>
-          <p className={styles.toolingend__subtitle}>
+          <p className={clsx(styles.h5, 'pt-2')}>
             Discover our quick start guides and build your first <br />application in 5-10 minutes
           </p>
         </div>
@@ -681,7 +683,8 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title="Distributed Database - Apache Ignite"
-      description="Apache Ignite is a leading distributed database management system for high-performance computing with in-memory speed. Learn how to use the Ignite decentralized database system and get started.">
+      description="Apache Ignite is a leading distributed database management system for high-performance computing with in-memory speed. Learn how to use the Ignite decentralized database system and get started."
+      wrapperClassName="homepage-wrapper">
       <Head>
         <meta property="og:title" content="Distributed Database - Apache Ignite®" />
         <meta property="og:type" content="article" />
@@ -691,6 +694,7 @@ export default function Home(): ReactNode {
         <link rel="canonical" href="https://ignite.apache.org/" />
       </Head>
 
+      {/* Header is rendered inside fronttop (in HomepageHero) to match PUG structure */}
       <HomepageHero />
 
       <section className={styles.frontblue}>
