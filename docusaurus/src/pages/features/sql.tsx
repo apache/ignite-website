@@ -3,6 +3,8 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
+import '../../css/native-persistence.css';
+import '../../css/compute-apis.css';
 import '../../css/sql.css';
 
 export default function SQL(): JSX.Element {
@@ -50,8 +52,8 @@ export default function SQL(): JSX.Element {
             <div className="dist__info">
               <h2 className="dist__h2 h4">Apache Ignite as a SQL Database</h2>
               <p className="dist__text">
-                The native support for SQL let's you work with Ignite as with a standard SQL database. You can use
-                simply SQL if your applications need nothing else:
+                The native support for SQL let's you work with Ignite as with a standard SQL database. You can use simply
+                SQL if your applications need nothing else:
               </p>
               <div className="dist__items flexi">
                 <div className="dist__item">
@@ -64,6 +66,7 @@ export default function SQL(): JSX.Element {
                     </div>
                   </div>
                 </div>
+
                 <div className="dist__item">
                   <h3 className="dist__item-title">DML commands</h3>
                   <div className="dist__item-grey dist__item-grey2 flexi">
@@ -117,20 +120,25 @@ export default function SQL(): JSX.Element {
           </div>
           <div className="dist1__title">What is a distributed join?</div>
           <p className="dist1__text h4">
-            A distributed join is a SQL statement with a join clause that combines two or more tables that have their
-            data distributed across many cluster nodes.
+            A distributed join is a SQL statement with a join clause that combines two or more tables that have their data
+            distributed across many cluster nodes.
           </p>
           <h3 className="dist1__h3 h4">Types of joins in Ignite</h3>
           <div className="dist1__blocks flexi">
             <div className="dist1__block">
               <h4 className="dist1__h4">Co-located joins</h4>
               <p className="dist1__texts">
-                These are the most performant types of joins that avoid data shuffling between nodes and minimize
-                network usage.
+                These are the most performant types of joins that avoid data shuffling between nodes and minimize network
+                usage.
               </p>
               <p className="dist1__texts pt-1">
                 This type of join is used if you join{' '}
-                <a className="dist1__link" href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation" target="_blank">
+                <a
+                  className="dist1__link"
+                  href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   partitioned and replicated tables
                 </a>{' '}
                 or partitioned tables that are co-located with each other.
@@ -139,8 +147,8 @@ export default function SQL(): JSX.Element {
             <div className="dist1__block">
               <h4 className="dist1__h4">Non-colocated joins</h4>
               <p className="dist1__texts">
-                A less performant type of join that joins data of non&#8209;colocated tables. Ignite needs to shuffle
-                data over the network to produce a correct result set.
+                A less performant type of join that joins data of non&#8209;colocated tables. Ignite needs to shuffle data
+                over the network to produce a correct result set.
               </p>
             </div>
             <div className="dist1__block">
@@ -170,16 +178,15 @@ export default function SQL(): JSX.Element {
                 </summary>
                 <div className="dist2__subtext">
                   <p>
-                    In this mode, Ignite SQL carries out tasks as&nbsp;quickly as possible, as long as all the data
-                    is&nbsp;served from memory, with no usage of the disk tier at all.
+                    In this mode, Ignite SQL carries out tasks as quickly as possible, as long as all the data is served
+                    from memory, with no usage of the disk tier at all.
                   </p>
                 </div>
               </details>
             </div>
             <div className="dist2__block">
               <h3 className="dist2__h3">
-                In-Memory
-                <br />+ Native Persistence Mode
+                In-Memory <br />+ Native Persistence Mode
               </h3>
               <p className="dist2__text">
                 Ignite scales beyond available
@@ -192,12 +199,11 @@ export default function SQL(): JSX.Element {
                 <div className="dist2__subtext">
                   <p>
                     Ignite persists 100% of data and indexes in the{' '}
-                    <Link to="/arch/native-persistence">native persistence</Link> while caching as much as possible in
+                    <a href="/arch/native-persistence.html">native persistence</a> while caching as much as possible in
                     memory.
                   </p>
                   <p className="pt-1">
-                    Ignite SQL engine does not require the caching of&nbsp;entire data set in memory to operate
-                    correctly.
+                    Ignite SQL engine does not require the caching of entire data set in memory to operate correctly.
                   </p>
                   <p className="pt-1">
                     If the engine finds that a record is not cached, then it will read the record from disk. Your
@@ -205,12 +211,13 @@ export default function SQL(): JSX.Element {
                     automatically.
                   </p>
                   <p className="pt-1">
-                    On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory
-                    warm-up, which significantly decreases downtime.
+                    On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up,
+                    which significantly decreases downtime.
                   </p>
                 </div>
               </details>
             </div>
+
             <div className="dist2__block">
               <h3 className="dist2__h3">
                 In-Memory
@@ -226,13 +233,12 @@ export default function SQL(): JSX.Element {
                 </summary>
                 <div className="dist2__subtext">
                   <p>
-                    In this mode, the Ignite SQL engine requires caching of all the data needed for distributed queries
-                    in memory, since the engine does not currently support federated queries.
+                    In this mode, the Ignite SQL engine requires caching of all the data needed for distributed queries in
+                    memory, since the engine does not currently support federated queries.
                   </p>
                   <p className="pt-1">
-                    If federated queries between Ignite and an&nbsp;external database are required, then you can
-                    consider Ignite integration for Spark, where the DataFrames API can combine the data stored
-                    in&nbsp;Ignite and other systems.
+                    If federated queries between Ignite and an external database are required, then you can consider Ignite
+                    integration for Spark, where the DataFrames API can combine the data stored in Ignite and other systems.
                   </p>
                 </div>
               </details>
@@ -256,6 +262,7 @@ export default function SQL(): JSX.Element {
               className="nativebotblock__link arrowlink"
               href="https://ignite.apache.org/docs/latest/persistence/native-persistence"
               target="_blank"
+              rel="noreferrer"
             >
               Memory Architecture
             </a>
@@ -273,6 +280,7 @@ export default function SQL(): JSX.Element {
               className="nativebotblock__link arrowlink"
               href="https://cwiki.apache.org/confluence/display/IGNITE/Apache+Calcite-powered+SQL+Engine+Roadmap"
               target="_blank"
+              rel="noreferrer"
             >
               New Calcite powered SQL engine
             </a>

@@ -5,7 +5,7 @@ import Head from '@docusaurus/Head';
 
 import '../../css/features.css';
 
-export default function Features(): JSX.Element {
+export default function FeaturesIndex(): JSX.Element {
   return (
     <Layout>
       <Head>
@@ -31,32 +31,25 @@ export default function Features(): JSX.Element {
             <div className="innerhero__pre pb-3">Apache Ignite</div>
             <h1 className="h1 innerhero__h1">Features</h1>
             <div className="innerhero__descr pt-2 h5">
-              Scale across memory and disk with no compromises.
-              <br />
+              Scale across memory and disk with no compromises. <br />
               Process your data with SQL, compute, real-time streaming and other APIs.
             </div>
           </div>
-          <img
-            className="innerhero__pic innerhero__pic--features"
-            src="/img/features/hero-bg.svg"
-            alt="Apache Ignite Features"
-          />
+          <img className="innerhero__pic innerhero__pic--features" src="/img/features/hero-bg.svg" alt="Apache Ignite Features" />
         </div>
       </section>
 
       <section className="features2" id="features2">
         <div className="container">
           <h2 className="h3 features2__title">
-            Apache Ignite comprises the following
-            <br />
+            Apache Ignite comprises the following <br />
             set of components
           </h2>
           <header className="blockheader blockheader--spl flexi">
             <h2 className="h4 blockheader__left">Distributed Multi-Tiered Storage</h2>
             <div className="blockheader__right fz20">
               <p>
-                State-of-the-art storage engine that performs at in-memory
-                <br />
+                State-of-the-art storage engine that performs at in-memory <br />
                 speed and stores data durably at unlimited scale
               </p>
             </div>
@@ -69,13 +62,13 @@ export default function Features(): JSX.Element {
               </div>
               <h3 className="cardsimple__title">Multi-Tier Storage</h3>
               <div className="cardsimple__text cardsimple__text--long">
-                Chose a storage mode for your performance and capacity needs: in-memory, in-memory +&nbsp;external
-                database, or in-memory + native persistence.
+                Chose a storage mode for your performance and capacity needs: in-memory, in-memory + external database, or
+                in-memory + native persistence.
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/arch/multi-tier-storage" className="cardsimple__button button button--shadow">
+                <a href="/arch/multi-tier-storage.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -84,13 +77,12 @@ export default function Features(): JSX.Element {
               </div>
               <h3 className="cardsimple__title">Native Persistence</h3>
               <div className="cardsimple__text">
-                Turn Ignite into a database with capacity and durability characteristics of traditional disk-based
-                databases.
+                Turn Ignite into a database with capacity and durability characteristics of traditional disk-based databases.
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/arch/native-persistence" className="cardsimple__button button button--shadow">
+                <a href="/arch/native-persistence.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -103,8 +95,7 @@ export default function Features(): JSX.Element {
             <h2 className="h4 blockheader__left">Essential Developer APIs</h2>
             <div className="blockheader__right fz20">
               <p>
-                Start with Ignite seamlessly using the APIs you are already
-                <br />
+                Start with Ignite seamlessly using the APIs you are already <br />
                 experienced with
               </p>
             </div>
@@ -119,9 +110,9 @@ export default function Features(): JSX.Element {
                 Interact with Ignite as with a regular SQL database using JDBC, ODBC drivers, or native SQL APIs.
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/features/sql" className="cardsimple__button button button--shadow">
+                <a href="/features/sql.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -133,9 +124,9 @@ export default function Features(): JSX.Element {
                 Operate in a strongly consistent mode with full support for distributed ACID transactions
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/features/acid-transactions" className="cardsimple__button button button--shadow">
+                <a href="/features/acid-transactions.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -145,9 +136,9 @@ export default function Features(): JSX.Element {
               <h3 className="cardsimple__title">Key Value APIs</h3>
               <div className="cardsimple__text">Use simple key-value requests for fast data look-ups and updates.</div>
               <div className="cardsimple__bottom">
-                <Link to="/features/key-value-apis" className="cardsimple__button button button--shadow">
+                <a href="/features/key-value-apis.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -172,9 +163,9 @@ export default function Features(): JSX.Element {
                 Execute data-intensive and compute-intensive logic over your distributed cluster.
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/features/compute-apis" className="cardsimple__button button button--shadow">
+                <a href="/features/compute-apis.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -186,9 +177,9 @@ export default function Features(): JSX.Element {
                 Use built-in algorithms to train and execute machine and deep learning models at scale.
               </div>
               <div className="cardsimple__bottom">
-                <Link to="/features/machinelearning" className="cardsimple__button button button--shadow">
+                <a href="/features/machinelearning.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -198,9 +189,9 @@ export default function Features(): JSX.Element {
               <h3 className="cardsimple__title">Services</h3>
               <div className="cardsimple__text">Create and deploy custom micro-service on your cluster nodes.</div>
               <div className="cardsimple__bottom">
-                <Link to="/features/service-apis" className="cardsimple__button button button--shadow">
+                <a href="/features/servicegrid.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -213,8 +204,7 @@ export default function Features(): JSX.Element {
             <h2 className="h4 blockheader__left">Real-Time Streaming APIs</h2>
             <div className="blockheader__right fz20">
               <p>
-                Implement event-driven architectures seamlessly
-                <br />
+                Implement event-driven architectures seamlessly <br />
                 with the following Ignite product features:
               </p>
             </div>
@@ -227,9 +217,9 @@ export default function Features(): JSX.Element {
               <h3 className="cardsimple__title">Streaming</h3>
               <div className="cardsimple__text">Stream and process your data in a scalable and fault-tolerant fashion.</div>
               <div className="cardsimple__bottom">
-                <Link to="/features/streaming" className="cardsimple__button button button--shadow">
+                <a href="/features/streaming.html" className="cardsimple__button button button--shadow">
                   Learn More
-                </Link>
+                </a>
               </div>
             </div>
             <div className="usecasecard cardsimple">
@@ -244,6 +234,8 @@ export default function Features(): JSX.Element {
                 <a
                   href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"
                   className="cardsimple__button button button--shadow"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   Learn More
                 </a>
@@ -256,7 +248,12 @@ export default function Features(): JSX.Element {
               <h3 className="cardsimple__title">Messaging</h3>
               <div className="cardsimple__text">Exchange messages across the publisher-subscriber pattern.</div>
               <div className="cardsimple__bottom">
-                <a href="https://ignite.apache.org/docs/latest/messaging" className="cardsimple__button button button--shadow">
+                <a
+                  href="https://ignite.apache.org/docs/latest/messaging"
+                  className="cardsimple__button button button--shadow"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Learn More
                 </a>
               </div>
@@ -269,15 +266,27 @@ export default function Features(): JSX.Element {
         <div className="container">
           <div className="featureslast__main">
             <div className="h4 featureslast__title pb-1">Looking For Something Else?</div>
-            <div className="featureslast__descr fz20">Explore our technical documentation to discover Ignite's other features</div>
+            <div className="featureslast__descr fz20">
+              Explore our technical documentation to discover Ignite's other features
+            </div>
             <ul className="featureslast__links pt-4">
               <li>
-                <a href="https://ignite.apache.org/docs/latest/data-structures/queue-and-set" className="arrowlink">
+                <a
+                  href="https://ignite.apache.org/docs/latest/data-structures/queue-and-set"
+                  className="arrowlink"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Data Structures
                 </a>
               </li>
               <li>
-                <a href="https://ignite.apache.org/docs/latest/clustering/clustering" className="arrowlink">
+                <a
+                  href="https://ignite.apache.org/docs/latest/clustering/clustering"
+                  className="arrowlink"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Clustering
                 </a>
               </li>
@@ -285,14 +294,16 @@ export default function Features(): JSX.Element {
                 <a
                   href="https://ignite.apache.org/docs/latest/extensions-and-integrations/spring/spring-boot"
                   className="arrowlink"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   Other Integrations
                 </a>
               </li>
               <li>
-                <Link to="/features/multilanguage" className="arrowlink">
+                <a href="/features/multilanguage.html" className="arrowlink">
                   Multi-Language Support
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
