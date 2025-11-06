@@ -56,7 +56,7 @@ p Creating multiple tables no longer requires multiple round-trips. DDL operatio
 
 h4 Partition Pruning and Partition Awareness
 
-p Apache Ignite 3.1 introduces two orth major SQL optimizations that dramatically improve query performance:
+p Apache Ignite 3.1 introduces two other major SQL optimizations that dramatically improve query performance:
 
 p
   strong Partition Pruning
@@ -133,9 +133,6 @@ ul
   li
     strong Batch SQL Execution
     | : #[code ISql.ExecuteBatchAsync] for efficient multi-statement execution
-  li
-    strong RunInTransaction
-    | : Automatic transaction retry mechanism for transient failures
   li
     strong CancellationToken Support
     | : Integrated cancellation for SQL and Compute APIs
@@ -326,20 +323,6 @@ pre
     CREATE ZONE exampleZone (REPLICAS 3, QUORUM SIZE 3) STORAGE PROFILES['default'];
 
 h3 Transaction Improvements
-
-h4 Automatic Transaction Retry
-
-p The new #[code runInTransaction] API automatically retries transactions that fail due to transient errors:
-
-pre: code.language-java
-  | ignite.transactions().runInTransaction(tx -&gt; {
-  |     // Transaction logic here
-  |     // Automatically retried on transient failures
-  | });
-
-p Configurable retry policies handle common failure scenarios like lock conflicts and temporary connectivity issues.
-
-h4 Separate Read-Only and Read-Write Timeouts
 
 p New transaction timeout options can set different timeouts for read-only and read-write transactions:
 
