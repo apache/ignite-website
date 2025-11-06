@@ -174,8 +174,8 @@ export default function NavbarContent(): ReactNode {
     [baseDropmenuRef, floatDropmenuRef].forEach(ref => {
       if (ref.current) {
         if (activeDropdown) {
-          const activePanel = ref.current.querySelector(`.${styles.dropmenuPanel}.active`);
-          if (activePanel) {
+          const activePanel = ref.current.querySelector(`.${styles.dropmenuPanel}.active`) as HTMLElement | null;
+          if (activePanel && activePanel.scrollHeight) {
             ref.current.style.height = `${activePanel.scrollHeight}px`;
           }
         } else {

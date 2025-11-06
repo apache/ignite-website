@@ -39,11 +39,95 @@ const config: Config = {
       'classic',
       {
         docs: false, // Disabled - will configure custom docs integration in WP10
-        blog: false, // Disabled - will configure custom blog in WP8
+        blog: {
+          path: 'blog',
+          routeBasePath: 'blog',
+          showReadingTime: true,
+          postsPerPage: 10,
+          blogTitle: 'Apache Ignite Blog',
+          blogDescription: 'News, updates, and technical articles about Apache Ignite',
+          blogSidebarCount: 5,
+          blogSidebarTitle: 'Recent Posts',
+          feedOptions: {
+            type: 'all',
+            title: 'Apache Ignite Blog',
+            description: 'News, updates, and technical articles about Apache Ignite',
+            copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation`,
+            createFeedItems: async (params) => {
+              const {blogPosts, defaultCreateFeedItems, ...rest} = params;
+              // Filter out archived posts (pre-2025)
+              const recentPosts = blogPosts.filter((post) => {
+                const postDate = new Date(post.metadata.date);
+                return postDate >= new Date('2025-01-01');
+              });
+              return defaultCreateFeedItems({
+                blogPosts: recentPosts,
+                ...rest,
+              });
+            },
+          },
+          editUrl: 'https://github.com/apache/ignite-website/tree/master/',
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          // Blog index pagination
+          { from: '/blog/', to: '/blog' },
+          { from: '/blog/1/', to: '/blog' },
+          { from: '/blog/2/', to: '/blog/page/2' },
+          { from: '/blog/3/', to: '/blog/page/3' },
+
+          // Individual blog posts (26 posts)
+          { from: '/blog/whats-new-in-apache-ignite-3-0', to: '/blog/2025/02/24/whats-new-in-apache-ignite-3-0' },
+          { from: '/blog/apache-ignite-2-17-0', to: '/blog/2025/02/13/apache-ignite-2-17-0' },
+          { from: '/blog/ignite-net-intel-cet-fix', to: '/blog/2024/11/22/ignite-net-intel-cet-fix' },
+          { from: '/blog/apache-ignite-2-16-0', to: '/blog/2023/12/25/apache-ignite-2-16-0' },
+          { from: '/blog/apache-ignite-net-dynamic-linq', to: '/blog/2023/05/22/apache-ignite-net-dynamic-linq' },
+          { from: '/blog/apache-ignite-2-13-0', to: '/blog/2022/04/28/apache-ignite-2-13-0' },
+          { from: '/blog/apache-ignite-2-12-0', to: '/blog/2022/01/14/apache-ignite-2-12-0' },
+          { from: '/blog/apache-ignite-2-11-1', to: '/blog/2021/12/21/apache-ignite-2-11-1' },
+          { from: '/blog/apache-ignite-2-11-stabilization', to: '/blog/2021/09/20/apache-ignite-2-11-stabilization' },
+          { from: '/blog/apache-ignite-momentum-highlights-from', to: '/blog/2021/09/14/apache-ignite-momentum-highlights-from' },
+          { from: '/blog/apache-ignite-2-10-thin', to: '/blog/2021/03/18/apache-ignite-2-10-thin' },
+          { from: '/blog/apache-ignite-2-9-released', to: '/blog/2020/11/05/apache-ignite-2-9-released' },
+          { from: '/blog/ignite-2-8-released-less', to: '/blog/2020/03/11/ignite-2-8-released-less' },
+          { from: '/blog/apache-ignite-2-7-deep', to: '/blog/2018/12/13/apache-ignite-2-7-deep' },
+          { from: '/blog/apache-ignite-2-5-scaling', to: '/blog/2018/05/31/apache-ignite-2-5-scaling' },
+          { from: '/blog/meltdown-and-spectre-patches-show', to: '/blog/2018/01/30/meltdown-and-spectre-patches-show' },
+          { from: '/blog/protecting-apache-ignite-from-meltdown', to: '/blog/2018/01/08/protecting-apache-ignite-from-meltdown' },
+          { from: '/blog/apache-ignite-2-4-brings', to: '/blog/2018/03/15/apache-ignite-2-4-brings' },
+          { from: '/blog/apache-ignite-essentials-series-for', to: '/blog/2017/11/17/apache-ignite-essentials-series-for' },
+          { from: '/blog/apache-ignite-2-3-more', to: '/blog/2017/11/01/apache-ignite-2-3-more' },
+          { from: '/blog/apache-ignite-community-news-september', to: '/blog/2017/09/15/apache-ignite-community-news-september' },
+          { from: '/blog/apache-ignite-community-update-august', to: '/blog/2017/08/30/apache-ignite-community-update-august' },
+          { from: '/blog/apache-ignite-2-1-a', to: '/blog/2017/07/27/apache-ignite-2-1-a' },
+          { from: '/blog/apache-ignite-2-0-redesigned', to: '/blog/2017/05/05/apache-ignite-2-0-redesigned' },
+          { from: '/blog/presenting-apache-ignite-sql-grid', to: '/blog/2017/03/13/presenting-apache-ignite-sql-grid' },
+          { from: '/blog/apache-ignite-1-9-released', to: '/blog/2017/03/07/apache-ignite-1-9-released' },
+
+          // Tag pages
+          { from: '/blog/apache/', to: '/blog/tags/apache' },
+          { from: '/blog/release/', to: '/blog/tags/release' },
+          { from: '/blog/database/', to: '/blog/tags/database' },
+          { from: '/blog/ignite/', to: '/blog/tags/ignite' },
+          { from: '/blog/bigdata/', to: '/blog/tags/bigdata' },
+          { from: '/blog/in/', to: '/blog/tags/in' },
+          { from: '/blog/memory/', to: '/blog/tags/memory' },
+          { from: '/blog/open/', to: '/blog/tags/open' },
+          { from: '/blog/source/', to: '/blog/tags/source' },
+          { from: '/blog/meetup/', to: '/blog/tags/meetup' },
+          { from: '/blog/archived/', to: '/blog/tags/archived' },
+        ],
+      },
     ],
   ],
 
@@ -98,7 +182,7 @@ const config: Config = {
           label: 'Resources',
           position: 'left',
           items: [
-            {label: 'Blog', to: '/blogs.html'},
+            {label: 'Blog', to: '/blog'},
             {label: 'Learning resources', to: '/resources.html'},
             {label: 'Training', to: '/resources.html#training'},
             {label: 'Apache Ignite Book', to: 'https://www.amazon.com/High-Performance-Memory-Computing-Apache-Ignite/dp/1789347521'},
@@ -121,8 +205,9 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation, Licensed under the Apache License, Version 2.0.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.vsDark,
+      darkTheme: prismThemes.vsDark,
+      additionalLanguages: ['java', 'csharp', 'sql'],
     },
   } satisfies Preset.ThemeConfig,
 };
