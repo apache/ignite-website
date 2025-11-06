@@ -46,8 +46,8 @@ const config: Config = {
           postsPerPage: 10,
           blogTitle: 'Apache Ignite Blog',
           blogDescription: 'News, updates, and technical articles about Apache Ignite',
-          blogSidebarCount: 5,
-          blogSidebarTitle: 'Recent Posts',
+          blogSidebarCount: 'ALL',
+          blogSidebarTitle: 'All Posts',
           feedOptions: {
             type: 'all',
             title: 'Apache Ignite Blog',

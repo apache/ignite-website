@@ -1,0 +1,99 @@
+---
+title: "Apache Ignite 2.17 Release: What's New"
+authors: [nikita]
+date: 2025-02-13
+tags: [database, ignite, release, archived]
+---
+
+We are happy to announce the release of [Apache Ignite](https://ignite.apache.org/) 2.17.0! In this latest version, the Ignite community has introduced a range of new features and improvements to deliver a more efficient, flexible, and future-proof platform. Below, we'll cover the key highlights that you can look forward to when upgrading to the new release.
+
+<!--truncate-->
+
+### Migrating to Java 11 {#migrate-to-java-11}
+
+Ignite 2.17 has officially moved its codebase to Java 11. With Java 8 approaching end-of-life (for public updates) and many organizations already moving to newer Java versions, this change enables Ignite to take advantage of modern language features, improved performance, and security enhancements. By upgrading Ignite to this latest release, you can ensure your cluster runs on a more up-to-date and secure Java environment.
+
+### Transaction-Aware SQL and Scan Queries {#transaction-aware-sql}
+
+Apache Ignite provides multiple interfaces to query data, including:
+
+- Key-Value API.
+- SQL.
+- Scan query.
+- Index scan query.
+
+While Ignite has long supported ACID transactions for the Key-Value API, there has been a known limitation when it comes to data queries: changes made within an ongoing transaction were not visible to SQL or Scan queries. This could lead to inconsistencies when querying data inside a transaction.
+
+With the release of Apache Ignite 2.17, we are excited to introduce transaction-aware SQL and Scan queries, a significant enhancement that improves consistency and isolation when querying data within transactions.
+
+**NOTE**: This feature is currently supported only for the Calcite SQL engine and at the `READ_COMMITTED` isolation level.
+
+To enable this feature, set the `txAwareQueriesEnabled` property in the `TransactionConfiguration`. Once enabled, your SQL and Scan queries will reflect transaction-related changes in real-time.
+
+Here's an example of how it works:
+
+```java
+try (Transaction tx = srv.transactions().txStart(PESSIMISTIC, READ_COMMITTED)) {
+    cache.put(1, 2);
+
+    List<List<?>> sqlData = executeSql(srv, "SELECT COUNT(*) FROM TBL.TBL");
+    List<Entry<Integer, Integer>> scanData = cache.query(new ScanQuery<Integer, Integer>()).getAll();
+
+    assertEquals("Must see transaction related data", 1L, sqlData.get(0).get(0));
+    assertEquals("Must see transaction related data", 1, scanData.size());
+
+    tx.commit();
+}
+```
+
+### Control Utility Switches to Thin Client Protocol {#control-utility-migrates-to-thin-client}
+
+Starting from Apache Ignite version 2.17, the utility by default uses a connection through the thin client protocol (configured on a node via `ClientConnectorConfiguration`).
+
+With the default configuration of Ignite, no migration actions will be required. Additional configuration of the connector is no longer necessary.
+
+In some cases, a few actions may be required to migrate user scripts using the utility. See more in [documentation](https://ignite.apache.org/docs/latest/tools/control-script#migration-to-the-thin-client-protocol). It's important to note that connection via Binary-REST protocol (configured via `ConnectorConfiguration`) has been deprecated and is planned to be removed in future releases.
+
+### Custom User-Defined Metrics {#custom-user-defined-metrics}
+
+You can now create custom user-defined metrics in Ignite 2.17. This feature allows you to gather and expose metric data specific to the needs of your application. You can perform in-depth monitoring and troubleshooting by tracking those metrics that matter most to you. Here is example of usage:
+
+```java
+Ignite ignite = Ignition.ignite();
+
+ignite.metrics()
+    .getOrCreate("app-metric-registry")
+    .register("Status", () -> appStatus.get(), "Application status.");
+```
+
+### Calcite SQL Engine {#calcite-sql-engine}
+
+The Apache Ignite community continues to enhance the SQL experience, and the latest updates to the [Calcite SQL engine](https://ignite.apache.org/docs/latest/SQL/sql-calcite) bring several powerful features and improvements!
+
+Updates include support for bitwise operations and aggregates (e.g., `BIT_AND`, `BIT_OR`, `BIT_XOR`), arithmetic overflow handling, date formatting/parsing with custom formats, and join type hints for better query optimization. Additionally, the Calcite engine now supports grouping by aliases and ordinal values, providing more flexibility in query design.
+
+Looking ahead, the Ignite community has big plans for Calcite. The goal is to make Calcite the default SQL engine in future releases, deprecating the legacy H2-based engine.
+
+### Java Thin Client Enhancements: `invoke()` and `invokeAll()` {#java-thin-client-enhancements}
+
+In this release, the Java thin client adds entry processor methods that will simplify how you interact with Ignite clusters: `invoke()` and `invokeAll()`.
+
+An entry processor is used to process cache entries on the nodes where they are stored. An entry processor does not require the entry to be transferred to the client in order to perform an operation on it. The operation is performed remotely, and only the results are transmitted to the client.
+
+Here is example of an operation:
+
+```java
+ClientCache<Integer, Integer> cache = client.getOrCreateCache("myCache");
+
+cache.invoke(0, new IncrementProcessor());
+```
+
+**NOTE**: The classes of the entry processors must be available on the server nodes of the cluster.
+
+### Anything else? {#anything-else}
+
+See the [release notes](https://ignite.apache.org/releases/ignite2/2.17.0/release_notes.html) to learn about all of the new features and improvements.
+
+Reach out to us on the community user list for more questions, details, and feedback.
+
+Sincerely yours, Ignite contributors and committers
