@@ -372,7 +372,7 @@
                 <h4>DDL Operations Now Batch Automatically</h4>
                 <p>Creating multiple tables no longer requires multiple round-trips. DDL operations batch automatically when possible, reducing setup time during schema initialization and testing.</p>
                 <h4>Partition Pruning and Partition Awareness</h4>
-                <p>Apache Ignite 3.1 introduces two orth major SQL optimizations that dramatically improve query performance:</p>
+                <p>Apache Ignite 3.1 introduces two other major SQL optimizations that dramatically improve query performance:</p>
                 <p>
                   <strong>Partition Pruning</strong>: The query optimizer automatically eliminates unnecessary partition scans based on predicates. Queries with key-based filters only scan relevant partitions instead of the entire dataset.
                 </p>
@@ -419,7 +419,6 @@ await cmd.ExecuteNonQueryAsync();</code></pre>
                 <ul>
                   <li><strong>Platform Streamer Receiver</strong>: Custom data processing during streaming operations</li>
                   <li><strong>Batch SQL Execution</strong>: <code>ISql.ExecuteBatchAsync</code> for efficient multi-statement execution</li>
-                  <li><strong>RunInTransaction</strong>: Automatic transaction retry mechanism for transient failures</li>
                   <li><strong>CancellationToken Support</strong>: Integrated cancellation for SQL and Compute APIs</li>
                 </ul>
                 <p>See the <a href="https://ptupitsyn.github.io/NET-Compute-In-Apache-Ignite-3-1/">extended blog post about .NET compute in Ignite 3.1</a> for a more in-depth explanation.</p>
@@ -527,14 +526,6 @@ node config update ignite.network.nodeFinder.type=MULTICAST
                 <pre><code class="language-sql">CREATE ZONE exampleZone (REPLICAS 3, QUORUM SIZE 3) STORAGE PROFILES['default'];
 </code></pre>
                 <h3>Transaction Improvements</h3>
-                <h4>Automatic Transaction Retry</h4>
-                <p>The new <code>runInTransaction</code> API automatically retries transactions that fail due to transient errors:</p>
-                <pre><code class="language-java">ignite.transactions().runInTransaction(tx -&gt; {
-    // Transaction logic here
-    // Automatically retried on transient failures
-});</code></pre>
-                <p>Configurable retry policies handle common failure scenarios like lock conflicts and temporary connectivity issues.</p>
-                <h4>Separate Read-Only and Read-Write Timeouts</h4>
                 <p>New transaction timeout options can set different timeouts for read-only and read-write transactions:</p>
                 <ul>
                   <li><code>readOnlyTimeoutMillis</code>: Shorter timeout for read-only transactions</li>
