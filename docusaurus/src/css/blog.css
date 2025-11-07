@@ -29,15 +29,58 @@
 
 /* === Blog List Page === */
 
-/* Blog container - only bottom padding, top padding handled by content area */
+/* Full viewport width layout */
+.blog-wrapper .container,
+.blogPostPage .container {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.blog-wrapper .row,
+.blogPostPage .row {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0;
+  padding-top: 10px;
+  width: 100%;
+}
+
+/* Left sidebar - fixed width */
+.blog-wrapper aside.col--3,
+.blogPostPage aside.col--3 {
+  flex: 0 0 300px;
+  max-width: 300px;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+/* Center content - flexible */
+.blog-wrapper main.col,
+.blogPostPage main.col {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Right TOC - fixed width */
+.blog-wrapper .col--2,
+.blogPostPage .col--2 {
+  flex: 0 0 250px;
+  max-width: 250px;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+/* Blog container padding */
 .blog-wrapper {
   padding-bottom: 80px;
 }
 
-/* Add top padding to main content area, not the wrapper */
-.blog-wrapper main,
-.blogPostPage main {
-  padding-top: 60px;
+/* Blog Tags */
+.blog-wrapper .tag {
+  
 }
 
 /* Main blog title */
@@ -126,6 +169,11 @@ article.blogPostItem:last-of-type {
   margin-bottom: 15px;
 }
 
+/* Article footer */
+.blogPostItem footer {
+  padding-top: 20px;
+}
+
 /* Read more link */
 .blogPostItem footer a {
   font-size: 1.6rem;
@@ -149,21 +197,35 @@ article.blogPostItem:last-of-type {
 }
 
 /* Tags */
-.blogPostItem .tags {
+.blog-wrapper .blogPostItem .tags,
+.blogPostPage .blogPostItem .tags {
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.blogPostItem .tags strong {
+.blog-wrapper .blogPostItem .tags li,
+.blogPostPage .blogPostItem .tags li {
+  padding: 0 0.4rem 0.5rem 0;
+}
+
+/* Target Docusaurus generated tag classes */
+.blog-wrapper li[class^="tag_"],
+.blogPostPage li[class^="tag_"] {
+  margin: 0 0.4rem 0.5rem 0 !important;
+}
+
+.blog-wrapper .blogPostItem .tags strong,
+.blogPostPage .blogPostItem .tags strong {
   font-size: 1.4rem;
   color: #666;
   font-weight: 600;
   margin-right: 5px;
 }
 
-.blogPostItem .tags a {
+.blog-wrapper .blogPostItem .tags a,
+.blogPostPage .blogPostItem .tags a {
   font-size: 1.3rem;
   color: var(--ai-blue);
   background: #f0f7ff;
@@ -171,9 +233,11 @@ article.blogPostItem:last-of-type {
   border-radius: 5px;
   text-decoration: none;
   transition: background 0.2s ease;
+  margin: 0 0.4rem 0.5rem 0;
 }
 
-.blogPostItem .tags a:hover {
+.blog-wrapper .blogPostItem .tags a:hover,
+.blogPostPage .blogPostItem .tags a:hover {
   background: #e0f0ff;
   text-decoration: none;
 }
@@ -346,12 +410,6 @@ article.blogPostItem:last-of-type {
 
 /* === Blog Sidebar === */
 
-.blog-sidebar {
-  position: sticky;
-  top: 120px;
-  align-self: flex-start;
-}
-
 .blog-sidebar h2 {
   font-size: 2rem;
   font-weight: 700;
@@ -378,6 +436,12 @@ article.blogPostItem:last-of-type {
 .blog-sidebar a:hover {
   color: var(--ai-blue);
   text-decoration: none;
+}
+
+/* === Table of Contents === */
+
+.table-of-contents__left-border {
+  padding-left: 10px;
 }
 
 /* === Pagination === */
