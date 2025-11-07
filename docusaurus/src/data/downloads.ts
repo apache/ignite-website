@@ -47,8 +47,16 @@ export interface Extension {
  */
 export const ignite3SourceReleases: DownloadRelease[] = [
   {
-    version: '3.0.0',
+    version: '3.1.0',
     latest: true,
+    date: '2025-10-29',
+    guide: '/docs/ignite3/3.1.0',
+    javadoc: 'https://ignite.apache.org/releases/ignite3/3.1.0/javadoc/',
+    releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.1.0/RELEASE_NOTES.txt',
+    sourceUrl: 'https://archive.apache.org/dist/ignite/3.1.0/apache-ignite-3.1.0-src.zip',
+  },
+  {
+    version: '3.0.0',
     date: '2025-02-05',
     guide: '/docs/ignite3/3.0.0',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.0.0/javadoc/',
@@ -184,8 +192,16 @@ export const ignite2SourceReleases: DownloadRelease[] = [
  */
 export const ignite3BinaryReleases: DownloadRelease[] = [
   {
-    version: '3.0.0',
+    version: '3.1.0',
     latest: true,
+    date: '2025-10-29',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0',
+    javadoc: 'https://ignite.apache.org/releases/ignite3/3.1.0/javadoc/',
+    releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.1.0/RELEASE_NOTES.txt',
+    binaryUrl: 'https://dlcdn.apache.org/ignite/3.1.0/ignite3-3.1.0.zip',
+  },
+  {
+    version: '3.0.0',
     date: '2025-02-05',
     guide: 'https://ignite.apache.org/docs/ignite3/3.0.0',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.0.0/javadoc/',
