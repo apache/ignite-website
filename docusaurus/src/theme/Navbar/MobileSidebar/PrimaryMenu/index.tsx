@@ -30,7 +30,7 @@ export default function NavbarMobilePrimaryMenu(): ReactNode {
       </ul>
       <div style={{padding: '2rem'}}>
         <a
-          href="/download.cgi"
+          href="/download"
           className="button"
           style={{
             width: '100%',

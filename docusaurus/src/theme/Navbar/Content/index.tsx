@@ -288,7 +288,7 @@ export default function NavbarContent(): ReactNode {
               />
             </a>
 
-            <a href="/download.cgi" className={clsx('button', styles.hdrButton)}>
+            <a href="/download" className={clsx('button', styles.hdrButton)}>
               Download Ignite
             </a>
 
@@ -382,7 +382,7 @@ export default function NavbarContent(): ReactNode {
               />
             </a>
 
-            <a href="/download.cgi" className={clsx('button', styles.hdrButton)}>
+            <a href="/download" className={clsx('button', styles.hdrButton)}>
               Download Ignite
             </a>
 

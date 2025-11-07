@@ -93,7 +93,7 @@ export default function NavbarMobileSidebar(): ReactNode {
                   );
                 })}
               </ul>
-              <a href="/download.cgi" className={`button ${styles.mobmenuButton}`}>
+              <a href="/download" className={`button ${styles.mobmenuButton}`}>
                 Download Ignite
               </a>
             </div>

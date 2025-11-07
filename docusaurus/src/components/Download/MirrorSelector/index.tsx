@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import styles from './styles.module.css';
+import styles from '@site/src/pages/download.module.css';
 
 interface Mirror {
   url: string;
@@ -7,64 +7,34 @@ interface Mirror {
 }
 
 interface MirrorSelectorProps {
-  onMirrorChange?: (mirror: string) => void;
+  onMirrorChange: (mirror: string) => void;
 }
 
 export default function MirrorSelector({onMirrorChange}: MirrorSelectorProps): JSX.Element {
-  const [mirrors, setMirrors] = useState<Mirror[]>([]);
-  const [selectedMirror, setSelectedMirror] = useState<string>('');
-  const [loading, setLoading] = useState(true);
+  const [mirrors] = useState<Mirror[]>([
+    {url: 'https://dlcdn.apache.org', isBackup: false},
+    {url: 'https://downloads.apache.org', isBackup: true},
+    {url: 'https://archive.apache.org/dist', isBackup: true},
+  ]);
 
-  useEffect(() => {
-    // Fetch available mirrors from Apache infrastructure
-    // This mimics the behavior of the old download.cgi system
-    const fetchMirrors = async () => {
-      try {
-        // The Apache mirror system provides a CGI script that returns mirror data
-        // For now, we'll use the preferred mirror CDN as default
-        const defaultMirrors: Mirror[] = [
-          {url: 'https://dlcdn.apache.org/ignite/', isBackup: false},
-          {url: 'https://downloads.apache.org/ignite/', isBackup: true},
-          {url: 'https://archive.apache.org/dist/ignite/', isBackup: true},
-        ];
+  const [selectedMirror, setSelectedMirror] = useState<string>(mirrors[0].url);
+  const [hasChanged, setHasChanged] = useState(false);
 
-        setMirrors(defaultMirrors);
-        setSelectedMirror(defaultMirrors[0].url);
-        setLoading(false);
-      } catch (error) {
-        console.error('Failed to fetch mirrors:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchMirrors();
-  }, []);
-
-  const handleMirrorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newMirror = event.target.value;
-    setSelectedMirror(newMirror);
-    if (onMirrorChange) {
-      onMirrorChange(newMirror);
-    }
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMirror(event.target.value);
+    setHasChanged(true);
   };
 
-  if (loading) {
-    return (
-      <div className={styles.mirrorSelector}>
-        <div className={styles.label}>Loading mirrors...</div>
-      </div>
-    );
-  }
+  const handleChangeClick = () => {
+    onMirrorChange(selectedMirror);
+    setHasChanged(false);
+  };
 
   return (
-    <form className={styles.mirrorSelector}>
-      <div className={styles.label}>Selected mirror:</div>
-      <div className={styles.selectWrapper}>
-        <select
-          className={styles.select}
-          value={selectedMirror}
-          onChange={handleMirrorChange}
-          aria-label="Select download mirror">
+    <div className={styles.downloadChoser}>
+      <div className={styles.downloadChoserLabel}>Selected mirror:</div>
+      <div className={styles.downloadChoserSelect}>
+        <select value={selectedMirror} onChange={handleSelectChange} aria-label="Select download mirror">
           {mirrors.map((mirror) => (
             <option key={mirror.url} value={mirror.url}>
               {mirror.url}
@@ -74,15 +44,12 @@ export default function MirrorSelector({onMirrorChange}: MirrorSelectorProps): J
         </select>
         <button
           type="button"
-          className={styles.changeButton}
-          onClick={() => {
-            if (onMirrorChange) {
-              onMirrorChange(selectedMirror);
-            }
-          }}>
+          className={`${styles.downloadChoserButton} ${hasChanged ? styles.downloadChoserButtonBlue : ''}`}
+          onClick={handleChangeClick}
+          disabled={!hasChanged}>
           Change
         </button>
       </div>
-    </form>
+    </div>
   );
 }

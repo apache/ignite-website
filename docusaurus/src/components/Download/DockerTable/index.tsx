@@ -1,25 +1,22 @@
 import React from 'react';
 import {DockerImage} from '@site/src/data/downloads';
-import styles from './styles.module.css';
+import {trackDownload} from '@site/src/components/Download/downloadUtils';
+import styles from '../DownloadTable/styles.module.css';
+import pageStyles from '@site/src/pages/download.module.css';
 
 interface DockerTableProps {
   images: DockerImage[];
 }
 
-function handleDockerClick(eventCategory: string) {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'download', {
-      event_category: eventCategory,
-      event_label: eventCategory,
-    });
-  }
+function handleDockerClick(trackingLabel: string) {
+  trackDownload('docker_repo_download', trackingLabel);
 }
 
 export default function DockerTable({images}: DockerTableProps): JSX.Element {
   return (
     <div className={styles.tableWrap}>
       <div className={styles.tableScroller}>
-        <table className={`${styles.downloadTable} ${styles.dockerTable}`}>
+        <table className={`${styles.downloadTable} ${pageStyles.downtableDocker}`}>
           <thead>
             <tr>
               <th className={styles.col2}>Name</th>
@@ -38,12 +35,12 @@ export default function DockerTable({images}: DockerTableProps): JSX.Element {
                       href={image.guide}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => handleDockerClick(image.links[0]?.eventCategory || 'docker_download')}>
+                      onClick={() => handleDockerClick(image.links[0]?.trackingLabel || 'docker_download')}>
                       guide
                     </a>
                   )}
                 </td>
-                <td>{image.releaseDate}</td>
+                <td>{image.date}</td>
                 <td>
                   {image.links.map((link, linkIndex) => (
                     <React.Fragment key={linkIndex}>
@@ -52,8 +49,8 @@ export default function DockerTable({images}: DockerTableProps): JSX.Element {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => handleDockerClick(link.eventCategory)}>
-                        {link.url}
+                        onClick={() => handleDockerClick(link.trackingLabel)}>
+                        {link.region ? `${link.url} (${link.region})` : link.url}
                       </a>
                       {linkIndex < image.links.length - 1 && <br />}
                     </React.Fragment>

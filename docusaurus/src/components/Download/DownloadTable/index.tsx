@@ -1,167 +1,166 @@
 import React, {useState} from 'react';
-import {DownloadVersion, ExtensionVersion} from '@site/src/data/downloads';
+import {DownloadRelease, Extension} from '@site/src/data/downloads';
+import {
+  resolveMirrorUrl,
+  getFileName,
+  trackDownload,
+  getTrackingCategory,
+  getTrackingLabel,
+} from '@site/src/components/Download/downloadUtils';
 import styles from './styles.module.css';
 
 interface DownloadTableProps {
-  versions: DownloadVersion[] | ExtensionVersion[];
-  type: 'source' | 'binary' | 'slim' | 'extension-source' | 'extension-binary';
-  showTabs?: boolean;
+  ignite3Releases?: DownloadRelease[];
+  ignite2Releases?: DownloadRelease[];
+  extensions?: Extension[];
+  type: 'source' | 'binary' | 'slim' | 'extension';
+  preferredMirror?: string;
 }
 
-function isDownloadVersion(version: DownloadVersion | ExtensionVersion): version is DownloadVersion {
-  return 'ignite3' in version;
+function isExtension(item: DownloadRelease | Extension): item is Extension {
+  return 'displayName' in item;
 }
 
-function isExtensionVersion(version: DownloadVersion | ExtensionVersion): version is ExtensionVersion {
-  return 'name' in version && !('ignite3' in version);
+function handleDownloadClick(url: string, type: string) {
+  const fileName = getFileName(url);
+  const category = getTrackingCategory(type);
+  const label = getTrackingLabel(fileName);
+  trackDownload(category, label);
 }
 
-function getFileName(url: string): string {
-  const parts = url.split('/');
-  return parts[parts.length - 1];
+interface DownloadRowProps {
+  release: DownloadRelease | Extension;
+  type: string;
+  preferredMirror?: string;
 }
 
-function handleDownloadClick(version: string, type: string, fileName: string) {
-  // Track download with gtag
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    const eventCategory =
-      type === 'source'
-        ? 'apache_ignite_source_download'
-        : type === 'docker'
-          ? 'docker_repo_download'
-          : 'apache_ignite_fabric_download';
-
-    (window as any).gtag('event', 'download', {
-      event_category: eventCategory,
-      event_label: fileName,
-    });
-  }
-}
-
-function DownloadRow({version, type}: {version: DownloadVersion | ExtensionVersion; type: string}) {
-  if (isExtensionVersion(version)) {
+function DownloadRow({release, type, preferredMirror}: DownloadRowProps) {
+  if (isExtension(release)) {
+    const sourceUrl = resolveMirrorUrl(release.sourceUrl, preferredMirror);
     return (
       <tr>
-        <td>{version.name}</td>
-        <td>{version.version}</td>
+        <td>{release.displayName}</td>
+        <td>{release.version}</td>
         <td>
-          {version.guide && (
-            <a href={version.guide} target="_blank" rel="noopener noreferrer">
+          {release.guide && (
+            <a href={release.guide} target="_blank" rel="noopener noreferrer">
               guide
             </a>
           )}
         </td>
         <td>
-          {version.notes && (
-            <a href={version.notes} target="_blank" rel="noopener noreferrer">
+          {release.releaseNotes && (
+            <a href={release.releaseNotes} target="_blank" rel="noopener noreferrer">
               release notes
             </a>
           )}
         </td>
-        <td>{version.releaseDate}</td>
+        <td>{release.date}</td>
         <td className={styles.linksInside}>
-          {version.sourceLink && (
-            <>
-              <a
-                className={styles.sourceLink}
-                href={version.sourceLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  handleDownloadClick(version.version, type, getFileName(version.sourceLink))
-                }>
-                {getFileName(version.sourceLink)}
-              </a>
-              {' ('}
-              <a href={`${version.sourceLink}.asc`} target="_blank" rel="noopener noreferrer">
-                pgp
-              </a>
-              <a href={`${version.sourceLink}.sha512`} target="_blank" rel="noopener noreferrer">
-                sha512
-              </a>
-              {')'}
-            </>
-          )}
+          <a
+            className={styles.sourceLink}
+            href={sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => handleDownloadClick(sourceUrl, 'extension')}>
+            {getFileName(sourceUrl)}
+          </a>
+          {' ('}
+          <a href={`${sourceUrl}.asc`} target="_blank" rel="noopener noreferrer">
+            pgp
+          </a>
+          <a href={`${sourceUrl}.sha512`} target="_blank" rel="noopener noreferrer">
+            sha512
+          </a>
+          {')'}
         </td>
       </tr>
     );
   }
 
-  const downloadVersion = version as DownloadVersion;
-  const downloadLink =
-    type === 'source' ? downloadVersion.sourceLink : downloadVersion.binaryLink || downloadVersion.sourceLink;
+  const downloadUrl =
+    type === 'source'
+      ? release.sourceUrl
+      : type === 'slim'
+        ? release.slimUrl
+        : release.binaryUrl || release.sourceUrl;
+
+  if (!downloadUrl) return null;
+
+  const resolvedUrl = resolveMirrorUrl(downloadUrl, preferredMirror);
 
   return (
     <tr>
       <td>
-        {downloadVersion.version}
-        {downloadVersion.isLatest ? ' (latest)' : ''}
+        {release.version}
+        {release.latest && ' (latest)'}
       </td>
       <td>
-        {downloadVersion.guide && (
-          <a href={downloadVersion.guide} target="_blank" rel="noopener noreferrer">
+        {release.guide && (
+          <a href={release.guide} target="_blank" rel="noopener noreferrer">
             guide
           </a>
         )}
-        {downloadVersion.javadoc && (
-          <a href={downloadVersion.javadoc} target="_blank" rel="noopener noreferrer">
+        {release.javadoc && (
+          <a href={release.javadoc} target="_blank" rel="noopener noreferrer">
             javadoc
           </a>
         )}
-        {downloadVersion.scaladoc && (
-          <a href={downloadVersion.scaladoc} target="_blank" rel="noopener noreferrer">
+        {release.scaladoc && (
+          <a href={release.scaladoc} target="_blank" rel="noopener noreferrer">
             scaladoc
           </a>
         )}
       </td>
       <td>
-        {downloadVersion.notes && (
-          <a href={downloadVersion.notes} target="_blank" rel="noopener noreferrer">
+        {release.releaseNotes && (
+          <a href={release.releaseNotes} target="_blank" rel="noopener noreferrer">
             release notes
           </a>
         )}
       </td>
-      <td>{downloadVersion.releaseDate}</td>
+      <td>{release.date}</td>
       <td className={styles.linksInside}>
-        {downloadLink && (
-          <>
-            <a
-              className={styles.sourceLink}
-              href={downloadLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() =>
-                handleDownloadClick(downloadVersion.version, type, getFileName(downloadLink))
-              }>
-              {getFileName(downloadLink)}
-            </a>
-            {' ('}
-            <a href={`${downloadLink}.asc`} target="_blank" rel="noopener noreferrer">
-              pgp
-            </a>
-            <a href={`${downloadLink}.sha512`} target="_blank" rel="noopener noreferrer">
-              sha512
-            </a>
-            {')'}
-          </>
-        )}
+        <a
+          className={styles.sourceLink}
+          href={resolvedUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => handleDownloadClick(resolvedUrl, type)}>
+          {getFileName(resolvedUrl)}
+        </a>
+        {' ('}
+        <a href={`${resolvedUrl}.asc`} target="_blank" rel="noopener noreferrer">
+          pgp
+        </a>
+        <a href={`${resolvedUrl}.sha512`} target="_blank" rel="noopener noreferrer">
+          sha512
+        </a>
+        {')'}
       </td>
     </tr>
   );
 }
 
-export default function DownloadTable({versions, type, showTabs = false}: DownloadTableProps): JSX.Element {
+export default function DownloadTable({
+  ignite3Releases,
+  ignite2Releases,
+  extensions,
+  type,
+  preferredMirror,
+}: DownloadTableProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<'ignite3' | 'ignite2'>('ignite3');
+  const isExtension = type === 'extension';
+  const hasMultipleVersions = ignite3Releases && ignite2Releases;
 
-  if (!showTabs) {
-    const isExtension = type.includes('extension');
+  if (isExtension && extensions) {
     return (
       <div className={styles.tableWrap}>
         <div className={styles.tableScroller}>
           <table className={styles.downloadTable}>
             <thead>
               <tr>
-                {isExtension && <th className={styles.col1}>Name</th>}
+                <th className={styles.col1}>Name</th>
                 <th className={styles.col1}>Version</th>
                 <th className={styles.col2}>Docs</th>
                 <th className={styles.col3}>Release Notes</th>
@@ -170,8 +169,13 @@ export default function DownloadTable({versions, type, showTabs = false}: Downlo
               </tr>
             </thead>
             <tbody>
-              {versions.map((version, index) => (
-                <DownloadRow key={index} version={version} type={type} />
+              {extensions.map((extension, index) => (
+                <DownloadRow
+                  key={index}
+                  release={extension}
+                  type={type}
+                  preferredMirror={preferredMirror}
+                />
               ))}
             </tbody>
           </table>
@@ -180,35 +184,58 @@ export default function DownloadTable({versions, type, showTabs = false}: Downlo
     );
   }
 
-  const ignite3Versions = versions.filter(
-    (v) => isDownloadVersion(v) && v.ignite3
-  ) as DownloadVersion[];
-  const ignite2Versions = versions.filter(
-    (v) => isDownloadVersion(v) && !v.ignite3
-  ) as DownloadVersion[];
+  if (!hasMultipleVersions) {
+    const releases = ignite3Releases || ignite2Releases || [];
+    return (
+      <div className={styles.tableWrap}>
+        <div className={styles.tableScroller}>
+          <table className={styles.downloadTable}>
+            <thead>
+              <tr>
+                <th className={styles.col1}>Version</th>
+                <th className={styles.col2}>Docs</th>
+                <th className={styles.col3}>Release Notes</th>
+                <th className={styles.col4}>Date</th>
+                <th className={styles.col5}>
+                  {type === 'source' ? 'Source' : type === 'slim' ? 'Slim Binary' : 'Binary'}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {releases.map((release, index) => (
+                <DownloadRow
+                  key={index}
+                  release={release}
+                  type={type}
+                  preferredMirror={preferredMirror}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  const currentReleases = activeTab === 'ignite3' ? ignite3Releases : ignite2Releases;
 
   return (
-    <div className={styles.tableWrap}>
-      <div className={styles.tableScroller}>
-        <div className={styles.tabLinks}>
-          <button
-            className={`${styles.tabLink} ${activeTab === 'ignite3' ? styles.active : ''}`}
-            onClick={() => setActiveTab('ignite3')}
-            data-tablink="ignite3">
-            Ignite 3
-          </button>
-          <button
-            className={`${styles.tabLink} ${activeTab === 'ignite2' ? styles.active : ''}`}
-            onClick={() => setActiveTab('ignite2')}
-            data-tablink="ignite2">
-            Ignite 2
-          </button>
-        </div>
-
-        <div className={styles.tabs}>
-          <div
-            className={`${styles.tabContent} ${activeTab === 'ignite3' ? styles.active : ''}`}
-            data-tab="ignite3">
+    <div className={styles.tabWrap}>
+      <div className={styles.tabLinks}>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'ignite3' ? styles.active : ''}`}
+          onClick={() => setActiveTab('ignite3')}>
+          Ignite 3
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'ignite2' ? styles.active : ''}`}
+          onClick={() => setActiveTab('ignite2')}>
+          Ignite 2
+        </button>
+      </div>
+      <div className={styles.tabContent}>
+        <div className={styles.tableWrap}>
+          <div className={styles.tableScroller}>
             <table className={styles.downloadTable}>
               <thead>
                 <tr>
@@ -216,33 +243,19 @@ export default function DownloadTable({versions, type, showTabs = false}: Downlo
                   <th className={styles.col2}>Docs</th>
                   <th className={styles.col3}>Release Notes</th>
                   <th className={styles.col4}>Date</th>
-                  <th className={styles.col5}>Source</th>
+                  <th className={styles.col5}>
+                    {type === 'source' ? 'Source' : type === 'slim' ? 'Slim Binary' : 'Binary'}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {ignite3Versions.map((version, index) => (
-                  <DownloadRow key={index} version={version} type={type} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div
-            className={`${styles.tabContent} ${activeTab === 'ignite2' ? styles.active : ''}`}
-            data-tab="ignite2">
-            <table className={styles.downloadTable}>
-              <thead>
-                <tr>
-                  <th className={styles.col1}>Version</th>
-                  <th className={styles.col2}>Docs</th>
-                  <th className={styles.col3}>Release Notes</th>
-                  <th className={styles.col4}>Date</th>
-                  <th className={styles.col5}>Source</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ignite2Versions.map((version, index) => (
-                  <DownloadRow key={index} version={version} type={type} />
+                {currentReleases?.map((release, index) => (
+                  <DownloadRow
+                    key={index}
+                    release={release}
+                    type={type}
+                    preferredMirror={preferredMirror}
+                  />
                 ))}
               </tbody>
             </table>

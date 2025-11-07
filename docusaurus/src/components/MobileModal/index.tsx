@@ -98,7 +98,7 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
                 })}
               </ul>
               <a
-                href="/download.cgi"
+                href="/download"
                 className={`button ${styles.mobmenuButton}`}
               >
                 Download Ignite
