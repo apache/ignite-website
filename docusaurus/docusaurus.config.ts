@@ -81,7 +81,6 @@ const config: Config = {
       {
         redirects: [
           // Blog index pagination
-          { from: '/blog/', to: '/blog' },
           { from: '/blog/1/', to: '/blog' },
           { from: '/blog/2/', to: '/blog/page/2' },
           { from: '/blog/3/', to: '/blog/page/3' },
@@ -89,7 +88,7 @@ const config: Config = {
           // Individual blog posts (26 posts)
           { from: '/blog/whats-new-in-apache-ignite-3-0', to: '/blog/2025/02/24/whats-new-in-apache-ignite-3-0' },
           { from: '/blog/apache-ignite-2-17-0', to: '/blog/2025/02/13/apache-ignite-2-17-0' },
-          { from: '/blog/ignite-net-intel-cet-fix', to: '/blog/2024/11/22/ignite-net-intel-cet-fix' },
+          { from: '/blog/ignite-net-intel-cet-fix', to: '/blog/2024/11/22/apache-ignite-net-intel-cet-fix' },
           { from: '/blog/apache-ignite-2-16-0', to: '/blog/2023/12/25/apache-ignite-2-16-0' },
           { from: '/blog/apache-ignite-net-dynamic-linq', to: '/blog/2023/05/22/apache-ignite-net-dynamic-linq' },
           { from: '/blog/apache-ignite-2-13-0', to: '/blog/2022/04/28/apache-ignite-2-13-0' },
