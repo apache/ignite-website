@@ -192,17 +192,17 @@ export const sitemap = () => {
         '!./_*/**',
         '!./jcache/**',
         '!./releases/**',
-        '!./docs/2.9.0/**',
-        '!./docs/2.9.1/**',
-        '!./docs/2.10.0/**',
-        '!./docs/2.11.0/**',
-        '!./docs/2.11.1/**',
-        '!./docs/2.12.0/**',
-        '!./docs/2.13.0/**',
-        '!./docs/2.14.0/**',
-        '!./docs/2.15.0/**',
-        '!./docs/2.16.0/**',
-        '!./docs/3.0.0-beta/**',
+        '!./docs/ignite2/2.9.0/**',
+        '!./docs/ignite2/2.9.1/**',
+        '!./docs/ignite2/2.10.0/**',
+        '!./docs/ignite2/2.11.0/**',
+        '!./docs/ignite2/2.11.1/**',
+        '!./docs/ignite2/2.12.0/**',
+        '!./docs/ignite2/2.13.0/**',
+        '!./docs/ignite2/2.14.0/**',
+        '!./docs/ignite2/2.15.0/**',
+        '!./docs/ignite2/2.16.0/**',
+        '!./docs/ignite3/3.0.0/**',
         '!./docs/extensions/**',
         '!./node_modules/**'
     ];
@@ -222,6 +222,7 @@ export const sitemap = () => {
                     let newloc = loc.replace(/.html$/, "")
                     //Change version folders into "latest"
                     newloc = newloc.replace("2.17.0", "latest");
+                    newloc = newloc.replace("3.1.0", "latest")
                     //console.log(newloc);
                     return newloc;
                 }
