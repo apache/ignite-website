@@ -129,7 +129,7 @@ function FAQCardsSection() {
           When Ignite native persistence is disabled, Ignite can function as a distributed in-memory cache with support distributed ACID transactions, SQL queries, high-performance computing APIs, and more.
         </p>
       ),
-      learnMoreLink: '/use-cases/in-memory-cache.html',
+      learnMoreLink: '/use-cases/in-memory-cache',
       learnMoreText: 'Learn More: In-Memory Cache',
     },
     {
@@ -145,7 +145,7 @@ function FAQCardsSection() {
           </p>
         </>
       ),
-      learnMoreLink: '/arch/multi-tier-storage.html',
+      learnMoreLink: '/arch/multi-tier-storage',
       learnMoreText: 'Learn More: Multi-Tier Storage',
     },
     {
@@ -156,7 +156,7 @@ function FAQCardsSection() {
           Ignite multi-tier storage supports both in-memory and disk tiers. You can always disable the native persistence and use Ignite as a distributed in-memory database, with support for SQL, transactions and other APIs.
         </p>
       ),
-      learnMoreLink: '/use-cases/in-memory-database.html',
+      learnMoreLink: '/use-cases/in-memory-database',
       learnMoreText: 'Learn More: In-Memory Database',
     },
     {
@@ -167,7 +167,7 @@ function FAQCardsSection() {
           Ignite is a full-featured distributed data grid. As a grid, Ignite can automatically integrate with and accelerate any 3rd party databases, including any RDBMS or NoSQL stores.
         </p>
       ),
-      learnMoreLink: '/use-cases/in-memory-data-grid.html',
+      learnMoreLink: '/use-cases/in-memory-data-grid',
       learnMoreText: 'Learn More: In-Memory Data Grid',
     },
     {
@@ -183,7 +183,7 @@ function FAQCardsSection() {
           </p>
         </>
       ),
-      learnMoreLink: '/use-cases/in-memory-database.html',
+      learnMoreLink: '/use-cases/in-memory-database',
       learnMoreText: 'Learn More: SQL Database',
     },
     {
@@ -199,7 +199,7 @@ function FAQCardsSection() {
           </p>
         </>
       ),
-      learnMoreLink: '/arch/native-persistence.html',
+      learnMoreLink: '/arch/native-persistence',
       learnMoreText: 'Learn More: Native Persistence',
     },
     {
@@ -233,7 +233,7 @@ function FAQCardsSection() {
           </p>
         </>
       ),
-      learnMoreLink: '/features/acid-transactions.html',
+      learnMoreLink: '/features/acid-transactions',
       learnMoreText: 'Learn More: ACID Transactions',
     },
     {
@@ -254,7 +254,7 @@ function FAQCardsSection() {
           Ignite provides a feature-rich key-value API that is JCache (JSR-107) compliant and supports Java, C++, .NET, and other programming languages.
         </p>
       ),
-      learnMoreLink: '/use-cases/key-value-store.html',
+      learnMoreLink: '/use-cases/key-value-store',
       learnMoreText: 'Learn More: Distributed Key-Value Store',
     },
   ];

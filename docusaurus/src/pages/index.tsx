@@ -65,7 +65,7 @@ function TopCards() {
         </div>
       </a>
 
-      <Link to="/use-cases/provenusecases.html" className={styles.frontcard}>
+      <Link to="/use-cases/provenusecases" className={styles.frontcard}>
         <div className={styles.frontcard__network}>
           <img src="/img/frontpage/b1-planet.svg" alt="" />
         </div>
@@ -312,7 +312,7 @@ var handle = cache.QueryContinuous(query);`;
                 </div>
               </div>
               <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/arch/multi-tier-storage.html">Learn More About Multi-Tier Storage</Link>
+                <Link className="button" to="/arch/multi-tier-storage">Learn More About Multi-Tier Storage</Link>
               </div>
             </div>
           </div>
@@ -332,7 +332,7 @@ var handle = cache.QueryContinuous(query);`;
                 </div>
               </div>
               <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/sql.html">Learn More About Distributed SQL</Link>
+                <Link className="button" to="/features/sql">Learn More About Distributed SQL</Link>
               </div>
             </div>
           </div>
@@ -368,7 +368,7 @@ var handle = cache.QueryContinuous(query);`;
                 </div>
               </div>
               <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/acid-transactions.html">Learn More About Transactions</Link>
+                <Link className="button" to="/features/acid-transactions">Learn More About Transactions</Link>
               </div>
             </div>
           </div>
@@ -404,7 +404,7 @@ var handle = cache.QueryContinuous(query);`;
                 </div>
               </div>
               <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/compute-apis.html">Learn More About Compute APIs</Link>
+                <Link className="button" to="/features/compute-apis">Learn More About Compute APIs</Link>
               </div>
             </div>
           </div>
@@ -424,7 +424,7 @@ var handle = cache.QueryContinuous(query);`;
                 </div>
               </div>
               <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/machinelearning.html">Learn More About Machine Learning</Link>
+                <Link className="button" to="/features/machine-learning">Learn More About Machine Learning</Link>
               </div>
             </div>
           </div>
@@ -495,7 +495,7 @@ function UsageScenarios() {
             Create an advanced platform architecture that aggregates multiple back-end systems and databases into a low-latency and shared data store.
           </div>
           <div className={styles.cardsimple__bottom}>
-            <Link to="/use-cases/digital-integration-hub.html" className="button button--shadow">Learn More</Link>
+            <Link to="/use-cases/digital-integration-hub" className="button button--shadow">Learn More</Link>
           </div>
         </article>
       </div>
@@ -529,7 +529,7 @@ function UserStories() {
       </div>
 
       <div className={clsx(styles.frontstories__bottom, 'pt-5')}>
-        <Link to="/use-cases/provenusecases.html" className="button button--shadow">Watch Other Stories</Link>
+        <Link to="/use-cases/provenusecases" className="button button--shadow">Watch Other Stories</Link>
       </div>
     </Section>
   );
@@ -565,7 +565,7 @@ function EventsSection() {
           </div>
         </a>
 
-        <a href="/events.html#upcoming" className={styles.frontconfcard}>
+        <a href="/events#upcoming" className={styles.frontconfcard}>
           <div className={styles.frontconfs__iconwrap}>
             <img src="/img/frontpage/events/003.svg" alt="" />
           </div>
@@ -579,7 +579,7 @@ function EventsSection() {
       </div>
 
       <div className={clsx(styles.frontconfs__bottom, 'pt-5')}>
-        <Link to="/events.html" className="button button--shadow">View All Events</Link>
+        <Link to="/events" className="button button--shadow">View All Events</Link>
       </div>
     </Section>
   );
@@ -596,7 +596,7 @@ function ResourcesSection() {
       <div className={styles.frontresourse__wrap}>
         <div className={styles.frontresourse__col}>
           <div className={styles.capstext}>Technical resources</div>
-          <Link to="/resources.html#technical" className={clsx(styles.frontresitem, styles['frontresitem--black'])}>
+          <Link to="/resources#technical" className={clsx(styles.frontresitem, styles['frontresitem--black'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-docs.svg" alt="" />
             </div>
@@ -610,7 +610,7 @@ function ResourcesSection() {
             <div className={styles.frontresitem__text}>Ignite Wiki with a collection of low-level design documents and instructions</div>
           </a>
 
-          <Link to="/resources.html#git" className={clsx(styles.frontresitem, styles['frontresitem--gray'])}>
+          <Link to="/resources#git" className={clsx(styles.frontresitem, styles['frontresitem--gray'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/icon-github.svg" alt="" />
             </div>
@@ -620,14 +620,14 @@ function ResourcesSection() {
 
         <div className={styles.frontresourse__col}>
           <div className={styles.capstext}>Learning resources</div>
-          <Link to="/resources.html#learning" className={clsx(styles.frontresitem, styles['frontresitem--red'])}>
+          <Link to="/resources#learning" className={clsx(styles.frontresitem, styles['frontresitem--red'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-videos.svg" alt="" />
             </div>
             <div className={styles.frontresitem__text}>Dozens of essential videos and webinar <br />recordings</div>
           </Link>
 
-          <Link to="/resources.html#training" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
+          <Link to="/resources#training" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-vebinar.svg" alt="" />
             </div>
@@ -644,7 +644,7 @@ function ResourcesSection() {
       </div>
 
       <div className={clsx(styles.frontconfs__bottom, 'pt-5')}>
-        <Link to="/resources.html" className="button button--shadow">View All Resources</Link>
+        <Link to="/resources" className="button button--shadow">View All Resources</Link>
       </div>
     </Section>
   );
