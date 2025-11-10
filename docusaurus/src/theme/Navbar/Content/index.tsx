@@ -112,7 +112,7 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
           [styles.panelmorelinkwrapEnd]: panelKey === 'getStarted'
         }, 'container')}>
           <a
-            href={panelKey === 'getStarted' ? '/use-cases.html' : '/features/'}
+            href={panelKey === 'getStarted' ? '/use-cases' : '/features/'}
             className={styles.panellink}
           >
             View all

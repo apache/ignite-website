@@ -46,40 +46,40 @@ export const getStartedMenu: DropdownMenu = {
       items: [
         {
           label: 'Learning resources',
-          href: '/resources.html#learning',
+          href: '/resources#learning',
         },
         {
           label: 'Training and Courses',
-          href: '/resources.html#training',
+          href: '/resources#training',
         },
         {
           label: 'FAQ',
-          href: '/faq.html',
+          href: '/faq',
         },
       ],
     },
     {
       title: 'USE CASES',
-      titleLink: '/use-cases.html',
+      titleLink: '/use-cases',
       items: [
         {
           label: 'In-Memory Cache',
-          href: '/use-cases/in-memory-cache.html',
+          href: '/use-cases/in-memory-cache',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'In-Memory Data Grid',
-          href: '/use-cases/in-memory-data-grid.html',
+          href: '/use-cases/in-memory-data-grid',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'In-Memory Database',
-          href: '/use-cases/in-memory-database.html',
+          href: '/use-cases/in-memory-database',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'Key-Value Store',
-          href: '/use-cases/key-value-store.html',
+          href: '/use-cases/key-value-store',
           icon: '/img/menu/icon-folder.svg',
         },
       ],
@@ -89,22 +89,22 @@ export const getStartedMenu: DropdownMenu = {
       items: [
         {
           label: 'High-Performance Computing',
-          href: '/use-cases/high-performance-computing.html',
+          href: '/use-cases/high-performance-computing',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'Digital Integration Hub',
-          href: '/use-cases/digital-integration-hub.html',
+          href: '/use-cases/digital-integration-hub',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'Spark Acceleration',
-          href: '/use-cases/spark-acceleration.html',
+          href: '/use-cases/spark-acceleration',
           icon: '/img/menu/icon-folder.svg',
         },
         {
           label: 'Hadoop Acceleration',
-          href: '/use-cases/hadoop-acceleration.html',
+          href: '/use-cases/hadoop-acceleration',
           icon: '/img/menu/icon-folder.svg',
         },
       ],
@@ -123,12 +123,12 @@ export const featuresMenu: DropdownMenu = {
       items: [
         {
           label: 'Multi-Tier Storage',
-          href: '/arch/multi-tier-storage.html',
+          href: '/arch/multi-tier-storage',
           icon: '/img/menu/icon-db.svg',
         },
         {
           label: 'Native Persistence',
-          href: '/arch/native-persistence.html',
+          href: '/arch/native-persistence',
           icon: '/img/menu/icon-db.svg',
         },
       ],
@@ -138,17 +138,17 @@ export const featuresMenu: DropdownMenu = {
       items: [
         {
           label: 'Distributed SQL',
-          href: '/features/sql.html',
+          href: '/features/sql',
           icon: '/img/menu/icon-cube.svg',
         },
         {
           label: 'Key-Value APIs',
-          href: '/features/key-value-apis.html',
+          href: '/features/key-value-apis',
           icon: '/img/menu/icon-cube.svg',
         },
         {
           label: 'ACID Transactions',
-          href: '/features/acid-transactions.html',
+          href: '/features/acid-transactions',
           icon: '/img/menu/icon-cube.svg',
         },
       ],
@@ -158,17 +158,17 @@ export const featuresMenu: DropdownMenu = {
       items: [
         {
           label: 'Compute APIs',
-          href: '/features/compute-apis.html',
+          href: '/features/compute-apis',
           icon: '/img/menu/icon-cube.svg',
         },
         {
           label: 'Services',
-          href: '/features/service-apis.html',
+          href: '/features/service-apis',
           icon: '/img/menu/icon-cube.svg',
         },
         {
           label: 'Machine Learning',
-          href: '/features/machinelearning.html',
+          href: '/features/machinelearning',
           icon: '/img/menu/icon-cube.svg',
         },
       ],
@@ -178,7 +178,7 @@ export const featuresMenu: DropdownMenu = {
       items: [
         {
           label: 'Real-Time Streaming APIs',
-          href: '/features/streaming.html',
+          href: '/features/streaming',
           icon: '/img/menu/icon-cube.svg',
         },
         {
@@ -206,16 +206,16 @@ export const communityMenu: DropdownMenu = {
   sections: [
     {
       title: 'Project Info',
-      titleLink: '/community.html',
+      titleLink: '/community',
       items: [
         {
           label: 'Apache Ignite Story',
-          href: '/community.html#story',
+          href: '/community#story',
           icon: '/img/menu/icon-clip.svg',
         },
         {
           label: 'Meet The Community',
-          href: '/community.html#community',
+          href: '/community#community',
           icon: '/img/menu/icon-comment.svg',
         },
       ],
@@ -225,28 +225,28 @@ export const communityMenu: DropdownMenu = {
       items: [
         {
           label: 'Start Contributing',
-          href: '/community.html#contributing',
+          href: '/community#contributing',
           icon: '/img/menu/icon-puzzle.svg',
         },
         {
           label: 'Ask Questions',
-          href: '/community.html#faq',
+          href: '/community#faq',
           icon: '/img/menu/icon-question.svg',
         },
       ],
     },
     {
       title: 'Events',
-      titleLink: '/events.html',
+      titleLink: '/events',
       items: [
         {
           label: 'Apache Ignite Summit',
-          href: '/events.html#summit',
+          href: '/events#summit',
           icon: '/img/menu/icon-calendar.svg',
         },
         {
           label: 'Meetups',
-          href: '/events.html#meetups',
+          href: '/events#meetups',
           icon: '/img/menu/icon-calendar.svg',
         },
       ],
@@ -256,12 +256,12 @@ export const communityMenu: DropdownMenu = {
       items: [
         {
           label: 'Upcoming Events',
-          href: '/events.html#upcoming',
+          href: '/events#upcoming',
           icon: '/img/menu/icon-calendar.svg',
         },
         {
           label: 'Past Events',
-          href: '/events.html#past',
+          href: '/events#past',
           icon: '/img/menu/icon-calendar.svg',
         },
       ],
@@ -286,11 +286,11 @@ export const resourcesMenu: DropdownMenu = {
       items: [
         {
           label: 'Technical resources',
-          href: '/resources.html#technical',
+          href: '/resources#technical',
         },
         {
           label: 'Learning resources',
-          href: '/resources.html#learning',
+          href: '/resources#learning',
         },
       ],
     },
@@ -299,19 +299,19 @@ export const resourcesMenu: DropdownMenu = {
       items: [
         {
           label: 'Training and Courses',
-          href: '/resources.html#training',
+          href: '/resources#training',
         },
         {
           label: 'Apache Ignite Book',
-          href: '/resources.html#book',
+          href: '/resources#book',
         },
         {
           label: 'Mailing Lists, Forums And Discussion Archives',
-          href: '/resources.html#mail',
+          href: '/resources#mail',
         },
         {
           label: 'FAQ',
-          href: '/faq.html',
+          href: '/faq',
         },
       ],
     },
@@ -325,9 +325,9 @@ export const resourcesMenu: DropdownMenu = {
 export const mainNavItems = [
   { label: 'Get Started', key: 'getStarted', href: '/', menu: getStartedMenu },
   { label: 'Features', key: 'features', href: '/features/', menu: featuresMenu },
-  { label: 'Community', key: 'community', href: '/community.html', menu: communityMenu },
-  { label: 'Powered By', href: '/use-cases/provenusecases.html' },
-  { label: 'Resources', key: 'resources', href: '/resources.html', menu: resourcesMenu },
+  { label: 'Community', key: 'community', href: '/community', menu: communityMenu },
+  { label: 'Powered By', href: '/use-cases/provenusecases' },
+  { label: 'Resources', key: 'resources', href: '/resources', menu: resourcesMenu },
   { label: 'Docs', href: '//ignite.apache.org/docs/latest/', external: true },
 ] as const;
 
@@ -337,53 +337,53 @@ export const mainNavItems = [
  */
 export const mobileMenuItems = [
   { label: 'Quick Start', href: '/docs/latest/' },
-  { label: 'Learning resources', href: '/resources.html#learning' },
-  { label: 'Training and Courses', href: '/resources.html#training' },
-  { label: 'FAQ', href: '/faq.html' },
+  { label: 'Learning resources', href: '/resources#learning' },
+  { label: 'Training and Courses', href: '/resources#training' },
+  { label: 'FAQ', href: '/faq' },
   {
     label: 'Use Cases',
-    href: '/use-cases.html',
+    href: '/use-cases',
     children: [
-      { label: 'In-Memory Cache', href: '/use-cases/in-memory-cache.html' },
-      { label: 'In-Memory Data Grid', href: '/use-cases/in-memory-data-grid.html' },
-      { label: 'In-Memory Database', href: '/use-cases/in-memory-database.html' },
-      { label: 'Key-Value Store', href: '/use-cases/key-value-store.html' },
-      { label: 'High Performance Computing', href: '/use-cases/high-performance-computing.html' },
-      { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub.html' },
-      { label: 'Spark Acceleration', href: '/use-cases/spark-acceleration.html' },
-      { label: 'Hadoop Acceleration', href: '/use-cases/hadoop-acceleration.html' },
-      { label: 'View All', href: '/use-cases.html' },
+      { label: 'In-Memory Cache', href: '/use-cases/in-memory-cache' },
+      { label: 'In-Memory Data Grid', href: '/use-cases/in-memory-data-grid' },
+      { label: 'In-Memory Database', href: '/use-cases/in-memory-database' },
+      { label: 'Key-Value Store', href: '/use-cases/key-value-store' },
+      { label: 'High Performance Computing', href: '/use-cases/high-performance-computing' },
+      { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
+      { label: 'Spark Acceleration', href: '/use-cases/spark-acceleration' },
+      { label: 'Hadoop Acceleration', href: '/use-cases/hadoop-acceleration' },
+      { label: 'View All', href: '/use-cases' },
     ],
   },
   {
     label: 'Features',
     href: '/features/',
     children: [
-      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage.html' },
-      { label: 'Native Persistence', href: '/arch/native-persistence.html' },
-      { label: 'Distributed SQL', href: '/features/sql.html' },
-      { label: 'Key-Value APIs', href: '/features/key-value-apis.html' },
-      { label: 'ACID Transactions', href: '/features/acid-transactions.html' },
-      { label: 'Compute APIs', href: '/features/compute-apis.html' },
-      { label: 'Services', href: '/features/service-apis.html' },
-      { label: 'Machine Learning', href: '/features/machinelearning.html' },
-      { label: 'Real-Time Streaming APIs', href: '/features/streaming.html' },
+      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage' },
+      { label: 'Native Persistence', href: '/arch/native-persistence' },
+      { label: 'Distributed SQL', href: '/features/sql' },
+      { label: 'Key-Value APIs', href: '/features/key-value-apis' },
+      { label: 'ACID Transactions', href: '/features/acid-transactions' },
+      { label: 'Compute APIs', href: '/features/compute-apis' },
+      { label: 'Services', href: '/features/service-apis' },
+      { label: 'Machine Learning', href: '/features/machinelearning' },
+      { label: 'Real-Time Streaming APIs', href: '/features/streaming' },
       { label: 'Messaging', href: '/docs/latest/messaging' },
       { label: 'Continuous Queries', href: '/docs/latest/key-value-api/continuous-queries' },
-      { label: 'View All', href: '/features/index.html' },
+      { label: 'View All', href: '/features/' },
     ],
   },
   {
     label: 'Community',
-    href: '/community.html',
+    href: '/community',
     children: [
-      { label: 'Project Info', href: '/community.html' },
-      { label: 'Events', href: '/events.html' },
+      { label: 'Project Info', href: '/community' },
+      { label: 'Events', href: '/events' },
     ],
     isDefault: true,
   },
-  { label: 'Powered by', href: '/use-cases/provenusecases.html' },
-  { label: 'Resources', href: '/resources.html' },
+  { label: 'Powered by', href: '/use-cases/provenusecases' },
+  { label: 'Resources', href: '/resources' },
   { label: 'Blog', href: '/blog/' },
   { label: 'Docs', href: '/docs/latest/' },
 ] as const;
@@ -397,15 +397,15 @@ export const footerSections = {
     title: 'Features',
     titleLink: '/features/',
     items: [
-      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage.html' },
-      { label: 'Native Persistence', href: '/arch/native-persistence.html' },
-      { label: 'Distributed SQL', href: '/features/sql.html' },
-      { label: 'ACID Transactions', href: '/features/acid-transactions.html' },
-      { label: 'Key Value APIs', href: '/features/key-value-apis.html' },
-      { label: 'Compute APIs', href: '/features/compute-apis.html' },
-      { label: 'Machine Learning', href: '/features/machinelearning.html' },
-      { label: 'Services', href: '/features/service-apis.html' },
-      { label: 'Real-Streaming APIs', href: '/features/streaming.html' },
+      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage' },
+      { label: 'Native Persistence', href: '/arch/native-persistence' },
+      { label: 'Distributed SQL', href: '/features/sql' },
+      { label: 'ACID Transactions', href: '/features/acid-transactions' },
+      { label: 'Key Value APIs', href: '/features/key-value-apis' },
+      { label: 'Compute APIs', href: '/features/compute-apis' },
+      { label: 'Machine Learning', href: '/features/machinelearning' },
+      { label: 'Services', href: '/features/service-apis' },
+      { label: 'Real-Streaming APIs', href: '/features/streaming' },
       { label: 'Continuous Queries', href: 'https://ignite.apache.org/docs/latest/key-value-api/continuous-queries', external: true },
       { label: 'Messaging', href: 'https://ignite.apache.org/docs/latest/messaging', external: true },
     ],
@@ -414,21 +414,21 @@ export const footerSections = {
     title: 'Use Cases',
     titleLink: '/use-cases/',
     items: [
-      { label: 'In-Memory Cache', href: '/use-cases/in-memory-cache.html' },
-      { label: 'In-Memory Data Grid', href: '/use-cases/in-memory-data-grid.html' },
-      { label: 'In-Memory Database', href: '/use-cases/in-memory-database.html' },
-      { label: 'High-Performance Computing', href: '/use-cases/high-performance-computing.html' },
-      { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub.html' },
-      { label: 'Key-Value Store', href: '/use-cases/key-value-store.html' },
-      { label: 'Apache Spark Acceleration', href: '/use-cases/spark-acceleration.html' },
-      { label: 'Apache Hadoop Acceleration', href: '/use-cases/hadoop-acceleration.html' },
+      { label: 'In-Memory Cache', href: '/use-cases/in-memory-cache' },
+      { label: 'In-Memory Data Grid', href: '/use-cases/in-memory-data-grid' },
+      { label: 'In-Memory Database', href: '/use-cases/in-memory-database' },
+      { label: 'High-Performance Computing', href: '/use-cases/high-performance-computing' },
+      { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
+      { label: 'Key-Value Store', href: '/use-cases/key-value-store' },
+      { label: 'Apache Spark Acceleration', href: '/use-cases/spark-acceleration' },
+      { label: 'Apache Hadoop Acceleration', href: '/use-cases/hadoop-acceleration' },
     ],
   },
   community: {
     links: [
-      { label: 'Community', href: '/our-community.html' },
-      { label: 'Resources', href: '/resources.html' },
-      { label: 'Events', href: '/events.html' },
+      { label: 'Community', href: '/our-community' },
+      { label: 'Resources', href: '/resources' },
+      { label: 'Events', href: '/events' },
     ],
   },
   contact: {
