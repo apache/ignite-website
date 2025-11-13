@@ -4,7 +4,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
-import CodeBlock from '@theme/CodeBlock';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Section from '@site/src/components/Section';
 import {userStories, storyCategories} from '@site/src/data/userStories';
 
@@ -19,14 +20,14 @@ function HomepageHero() {
         <div className="container">
           <div className={styles.innerhero__main}>
             <h1 className={styles.innerhero__h1}>
-              Distributed Database For <br />High-Performance Applications <br />With In-Memory Speed
+              Memory-First Distributed SQL Database <br />For High-Velocity Data Workloads
             </h1>
             <div className={styles.innerhero__h2}>
-              Scale Across Memory And Disk Without Compromise
+              Distributed Scale Without Distributed Query Penalties
             </div>
             <div className={styles.innerhero__action}>
               <Link className={clsx('button', styles.fronthero__button)} to="https://ignite.apache.org/docs/latest/index">
-                Start Coding
+                Get Started
               </Link>
             </div>
           </div>
@@ -78,389 +79,273 @@ function TopCards() {
 }
 
 function CoreCapabilities() {
-  // State for managing tab visibility - matches PUG's jsTabWrap pattern
-  const [activeTab, setActiveTab] = useState('frontcode-1');
-  const [activeCodeTab, setActiveCodeTab] = useState<{[key: string]: string}>({
-    'frontcode-1': 'xml',
-    'frontcode-3': 'java',
-    'frontcode-4': 'java',
-    'frontcode-6': 'java'
-  });
+  const [selectedLanguage, setSelectedLanguage] = useState<'java' | 'dotnet' | 'cpp' | 'python'>('java');
+  const [copied, setCopied] = useState(false);
 
-  const multiTierXML = `<bean class="org.apache.ignite.configuration.IgniteConfiguration">
-    <property name="dataStorageConfiguration">
-        <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
-            <property name="defaultDataRegionConfiguration">
-                <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
-                    <property name="persistenceEnabled" value="true"/>
-                </bean>
-            </property>
-        </bean>
-    </property>
-</bean>`;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeExamples[selectedLanguage].code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-  const multiTierJava = `IgniteConfiguration cfg = new IgniteConfiguration();
+  const codeExamples = {
+    java: {
+      language: "java",
+      code: `// Connect to the cluster
+IgniteClient client = IgniteClient.builder()
+    .addresses("127.0.0.1:10800")
+    .build();
 
-DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+// Create a table
+String createTableSql = "CREATE TABLE IF NOT EXISTS Person ("
+    + "id INT PRIMARY KEY,"
+    + "name VARCHAR,"
+    + "age INT"
+    + ")";
+client.sql().execute(null, createTableSql);
 
-// Enable Ignite Persistence
-storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+// Insert data
+String insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
+client.sql().execute(null, insertSql, 1, "John Doe", 30);
+client.sql().execute(null, insertSql, 2, "Jane Smith", 28);
 
-// Using the new storage configuration
-cfg.setDataStorageConfiguration(storageCfg);`;
+// Query data
+client.sql().execute(null, "SELECT * FROM Person WHERE age > ?", 25)
+    .forEachRemaining(row -> {
+        System.out.println("ID: " + row.intValue("id") +
+                          ", Name: " + row.stringValue("name") +
+                          ", Age: " + row.intValue("age"));
+    });
 
-  const multiTierCSharp = `var cfg = new IgniteConfiguration
+// Close the client
+client.close();`
+    },
+    dotnet: {
+      language: "csharp",
+      code: `// Connect to the cluster
+var config = new IgniteClientConfiguration("127.0.0.1:10800");
+using var client = await IgniteClient.StartAsync(config);
+
+// Create a table
+var createTableSql = "CREATE TABLE IF NOT EXISTS Person (" +
+    "id INT PRIMARY KEY," +
+    "name VARCHAR," +
+    "age INT" +
+    ")";
+await client.Sql.ExecuteAsync(null, createTableSql);
+
+// Insert data
+var insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
+await client.Sql.ExecuteAsync(null, insertSql, 1, "John Doe", 30);
+await client.Sql.ExecuteAsync(null, insertSql, 2, "Jane Smith", 28);
+
+// Query data
+await using var resultSet = await client.Sql.ExecuteAsync(null,
+    "SELECT * FROM Person WHERE age > ?", 25);
+await foreach (var row in resultSet)
 {
-    DataStorageConfiguration = new DataStorageConfiguration
-    {
-        DefaultDataRegionConfiguration = new DataRegionConfiguration
-        {
-            Name = "Default_Region",
-            PersistenceEnabled = true
-        }
+    Console.WriteLine($"ID: {row["id"]}, Name: {row["name"]}, Age: {row["age"]}");
+}`
+    },
+    cpp: {
+      language: "cpp",
+      code: `// Connect to the cluster
+ignite_client_configuration cfg{"127.0.0.1:10800"};
+auto client = ignite_client::start(cfg, std::chrono::seconds{30});
+
+// Create a table
+std::string createTableSql = "CREATE TABLE IF NOT EXISTS Person ("
+    "id INT PRIMARY KEY,"
+    "name VARCHAR,"
+    "age INT"
+    ")";
+client.get_sql().execute(nullptr, nullptr, {createTableSql}, {});
+
+// Insert data
+std::string insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
+client.get_sql().execute(nullptr, nullptr, {insertSql}, {1, "John Doe", 30});
+client.get_sql().execute(nullptr, nullptr, {insertSql}, {2, "Jane Smith", 28});
+
+// Query data
+auto result = client.get_sql().execute(nullptr, nullptr,
+    {"SELECT * FROM Person WHERE age > ?"}, {25});
+while (result->has_row_set() && result->next()) {
+    std::cout << "ID: " << result->get_value<int32_t>("id")
+              << ", Name: " << result->get_value<std::string>("name")
+              << ", Age: " << result->get_value<int32_t>("age") << std::endl;
+}`
+    },
+    python: {
+      language: "python",
+      code: `# Connect to the cluster
+import pyignite_dbapi
+
+conn = pyignite_dbapi.connect(address="127.0.0.1:10800")
+cursor = conn.cursor()
+
+# Create a table
+create_table_sql = """CREATE TABLE IF NOT EXISTS Person (
+    id INT PRIMARY KEY,
+    name VARCHAR,
+    age INT
+)"""
+cursor.execute(create_table_sql)
+
+# Insert data
+insert_sql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)"
+cursor.execute(insert_sql, (1, "John Doe", 30))
+cursor.execute(insert_sql, (2, "Jane Smith", 28))
+
+# Query data
+cursor.execute("SELECT * FROM Person WHERE age > ?", (25,))
+for row in cursor.fetchall():
+    print(f"ID: {row[0]}, Name: {row[1]}, Age: {row[2]}")
+
+# Close the connection
+cursor.close()
+conn.close()`
     }
-};`;
-
-  const sqlCode = `SELECT country.name, city.name, MAX(city.population) as max_pop
-FROM country JOIN city ON city.countrycode = country.code
-WHERE country.code IN ('USA','BRA','ESP','JPN')
-GROUP BY country.name, city.name
-ORDER BY max_pop DESC LIMIT 3;`;
-
-  const acidJava = `IgniteTransactions transactions = ignite.transactions();
-
-try (Transaction tx = transactions.txStart()) {
-    Integer hello = cache.get("Hello");
-
-    if (hello == 1)
-        cache.put("Hello", 11);
-
-    cache.put("World", 22);
-
-    tx.commit();
-}`;
-
-  const acidCSharp = `var transactions = ignite.GetTransactions();
-
-using (var tx = transactions.TxStart()) {
-    int hello = cache.Get("Hello");
-
-    if (hello == 1) {
-        cache.Put("Hello", 11);
-    }
-
-    cache.Put("World", 22);
-
-    tx.Commit();
-}`;
-
-  const computeJava = `// Broadcast the task to server nodes only.
-IgniteCompute compute = ignite.compute(ignite.cluster().forServers());
-
-// Each remote server node will execute the logic of the task/lambda below.
-compute.broadcast(() -> System.out.println(
-    "Hello Node: " + ignite.cluster().localNode().id()));`;
-
-  const computeCSharp = `// Broadcast the task to server nodes only.
-var compute = ignite.GetCluster().ForServers().GetCompute();
-
-// Each remote server node will execute the custom PrintNodeIdAction task.
-compute.Broadcast(new PrintNodeIdAction());`;
-
-  const mlJava = `// Create the trainer
-KNNClassificationTrainer trainer = new KNNClassificationTrainer()
-.withK(3).withIdxType(SpatialIndexType.BALL_TREE)
-.withDistanceMeasure(new EuclideanDistance())
-.withWeighted(true);
-
-// Train the model
-KNNClassificationModel knnMdl = trainer.fit(ignite, dataCache, vectorizer);
-
-// Make a prediction
-double prediction = knnMdl.predict(observation);`;
-
-  const continuousJava = `ContinuousQuery qry = new ContinuousQuery<>();
-
-// The callback that will be triggered on the application side.
-qry.setLocalListener(new MyLocalListener());
-
-// The callback that will be executed on the server side.
-qry.setRemoteFilterFactory(new MyRemoteFilterFactory());
-
-// Deploy the query in the cluster.
-cache.query(query);`;
-
-  const continuousCSharp = `var cache = ignite.GetOrCreateCache("myCache");
-
-var query = new ContinuousQuery(
-    new MyLocalListener(), // Will be triggered on the application side.
-    new MyRemoteFilter()); // Will be executed on the server side.
-
-// Deploy the query in the cluster.
-var handle = cache.QueryContinuous(query);`;
-
-  const handleCodeTabChange = (tabId: string, codeTab: string) => {
-    setActiveCodeTab(prev => ({...prev, [tabId]: codeTab}));
   };
 
   return (
     <div className={clsx('container', styles.forntcodes)}>
-      <h2 className={styles.h2}>Use Ignite Core Capabilities To Start Easily <br />And Scale Faster</h2>
+      <h2 className={styles.h2}>Start Building With Apache Ignite 3</h2>
 
-      <div className={clsx(styles.forntcodes__wrap, 'pt-4')}>
-        {/* Left side vertical menu - matches PUG layout */}
-        <div className={styles.forntcodes__menu}>
-          <ul className="fz20">
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-1' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-1'); }}
-              >
-                Multi-Tier Storage
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-2' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-2'); }}
-              >
-                Distributed SQL
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-3' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-3'); }}
-              >
-                ACID Transactions
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-4' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-4'); }}
-              >
-                Compute APIs
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-5' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-5'); }}
-              >
-                Machine Learning
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className={activeTab === 'frontcode-6' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); setActiveTab('frontcode-6'); }}
-              >
-                Continuous Queries
-              </a>
-            </li>
-          </ul>
-          <Link className={clsx(styles.forntcodes__menumore, 'fz20')} to="/features/">View all features</Link>
+      <div className={clsx(styles.forntcodes__wrap)} style={{display: 'flex', gap: '4rem', alignItems: 'flex-start'}}>
+        {/* Left Column - 1/3 width */}
+        <div style={{flex: '0 0 33%', minWidth: '280px'}}>
+          <p className="pt-3 pb-2" style={{fontSize: '16px', lineHeight: '1.6', color: '#333'}}>
+            Get up and running in minutes. Apache Ignite 3 provides a memory-first distributed SQL database
+            that eliminates the scale/speed trade-off for high-velocity workloads.
+          </p>
+
+          <div style={{marginTop: '2rem'}}>
+            <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
+              <span className={styles.checklistIcon}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span>Configure a cluster in under 5 minutes</span>
+            </a>
+
+            <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/explore-sql" className={styles.checklistItem} target="_blank" rel="noreferrer">
+              <span className={styles.checklistIcon}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span>Run SQL queries on your distributed data</span>
+            </a>
+
+            <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/java-api" className={styles.checklistItem} target="_blank" rel="noreferrer">
+              <span className={styles.checklistIcon}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span>Store and retrieve data with the Java API</span>
+            </a>
+
+            <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/persist-data" className={styles.checklistItem} target="_blank" rel="noreferrer">
+              <span className={styles.checklistIcon}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </span>
+              <span>Persist your in-memory data</span>
+            </a>
+          </div>
+
+          <div style={{marginTop: '4rem'}}>
+            <a className="button" href="https://ignite.apache.org/docs/latest/" target="_blank" rel="noreferrer" style={{fontSize: '16px'}}>View Client Documentation</a>
+          </div>
         </div>
 
-        {/* Right side content area */}
-        <div className={styles.forntcodes__tabwraps}>
-          {/* Multi-Tier Storage Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-1' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Multi-Tier Storage</p>
-            <p>Ignite scales up and out across memory and disk. By default, Ignite operates in a pure in-memory mode. But, by toggling a single configuration setting, you can turn a cluster into a database that can grow beyond the cluster's memory capacity:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'xml' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'xml'); }}
-                >
-                  XML
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-1'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-1', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'xml' && 'active')}>
-                  <CodeBlock language="markup">{multiTierXML}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{multiTierJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-1'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{multiTierCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/arch/multi-tier-storage">Learn More About Multi-Tier Storage</Link>
-              </div>
+        {/* Right Column - 2/3 width */}
+        <div style={{flex: '1', minWidth: '0', position: 'relative'}}>
+          <div className={styles.forntcodes__innertabs}>
+            <div className={styles.nativecode__tabctrls}>
+              <a
+                href="#"
+                className={clsx(styles.nativecode__link, selectedLanguage === 'java' && 'active')}
+                onClick={(e) => { e.preventDefault(); setSelectedLanguage('java'); }}
+              >
+                Java
+              </a>
+              <a
+                href="#"
+                className={clsx(styles.nativecode__link, selectedLanguage === 'dotnet' && 'active')}
+                onClick={(e) => { e.preventDefault(); setSelectedLanguage('dotnet'); }}
+              >
+                .NET
+              </a>
+              <a
+                href="#"
+                className={clsx(styles.nativecode__link, selectedLanguage === 'cpp' && 'active')}
+                onClick={(e) => { e.preventDefault(); setSelectedLanguage('cpp'); }}
+              >
+                C++
+              </a>
+              <a
+                href="#"
+                className={clsx(styles.nativecode__link, selectedLanguage === 'python' && 'active')}
+                onClick={(e) => { e.preventDefault(); setSelectedLanguage('python'); }}
+              >
+                Python
+              </a>
             </div>
-          </div>
-
-          {/* Distributed SQL Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-2' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Distributed SQL</p>
-            <p>Use Ignite as a traditional SQL database by leveraging JDBC drivers, ODBC drivers, or the native SQL APIs that are available for Java, C#, C++, Python, and other programming languages. Seamlessly join, group, aggregate, and order your distributed in-memory and on-disk data:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a href="#" className={clsx(styles.nativecode__link, 'active')}>SQL</a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, 'active')}>
-                  <CodeBlock language="sql">{sqlCode}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/sql">Learn More About Distributed SQL</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* ACID Transactions Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-3' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>ACID Transactions</p>
-            <p>Ignite can operate in a strongly consistent mode that provides full support for distributed ACID transactions. Transact across multiple cluster nodes, caches, tables, and partitions:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-3'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-3', 'java'); }}
+            <div className={styles.nativecode__tabs} style={{position: 'relative'}}>
+              <button
+                onClick={handleCopy}
+                className={styles.copyButton}
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  zIndex: 10,
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '4px',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  color: '#fff',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+              >
+                {copied ? (
+                  <>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path fillRule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z" />
+                    </svg>
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" />
+                      <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" />
+                    </svg>
+                    Copy
+                  </>
+                )}
+              </button>
+              <div className={clsx(styles.nativecode__tab, 'active')} style={{background: '#2d3748', borderRadius: '8px', overflow: 'hidden'}}>
+                <SyntaxHighlighter
+                  language={codeExamples[selectedLanguage].language}
+                  style={tomorrow}
+                  customStyle={{ margin: 0, background: '#2d3748', padding: '20px' }}
+                  showLineNumbers={true}
+                  wrapLongLines={false}
                 >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-3'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-3', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-3'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{acidJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-3'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{acidCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/acid-transactions">Learn More About Transactions</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Compute APIs Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-4' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Compute APIs In Java, Scala, Kotlin, C#, C++</p>
-            <p>With traditional databases, for in-place calculations, you use stored procedures that are written in a language such as PL/SQL. With Ignite, you use modern JVM languages, C# or C++ to develop and execute custom tasks across your distributed database:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-4'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-4', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-4'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-4', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-4'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{computeJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-4'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{computeCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/compute-apis">Learn More About Compute APIs</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Machine Learning Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-5' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Built-In Machine Learning</p>
-            <p>Ignite machine learning uses built-in algorithms and tools, as well as TensorFlow integration, to enable the building of scalable machine learning models and avoid costly data transfers. Train, deploy, evaluate, and update your ML and DL models continuously and at scale:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a href="#" className={clsx(styles.nativecode__link, 'active')}>Java</a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, 'active')}>
-                  <CodeBlock language="java">{mlJava}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <Link className="button" to="/features/machine-learning">Learn More About Machine Learning</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Continuous Queries Tab */}
-          <div className={clsx(styles.forntcodes__tab, activeTab === 'frontcode-6' && 'active')}>
-            <p className={clsx(styles.forntcodes__tabtitle, 'fz20', 'pb-1')}>Continuous Queries</p>
-            <p>With relational databases, you use triggers to react to certain events. With Ignite, you deploy continuous queries that are written in a modern programming language such as Java or C# and process streams of changes on the database and application side:</p>
-
-            <div className={styles.forntcodes__innertabs}>
-              <div className={styles.nativecode__tabctrls}>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-6'] === 'java' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-6', 'java'); }}
-                >
-                  Java
-                </a>
-                <a
-                  href="#"
-                  className={clsx(styles.nativecode__link, activeCodeTab['frontcode-6'] === 'csharp' && 'active')}
-                  onClick={(e) => { e.preventDefault(); handleCodeTabChange('frontcode-6', 'csharp'); }}
-                >
-                  C#/.NET
-                </a>
-              </div>
-              <div className={styles.nativecode__tabs}>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-6'] === 'java' && 'active')}>
-                  <CodeBlock language="java">{continuousJava}</CodeBlock>
-                </div>
-                <div className={clsx(styles.nativecode__tab, activeCodeTab['frontcode-6'] === 'csharp' && 'active')}>
-                  <CodeBlock language="csharp">{continuousCSharp}</CodeBlock>
-                </div>
-              </div>
-              <div className={styles.forntcodes__bottom}>
-                <a className="button" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries" target="_blank" rel="noreferrer">Learn More About Continuous Queries</a>
+                  {codeExamples[selectedLanguage].code}
+                </SyntaxHighlighter>
               </div>
             </div>
           </div>
@@ -473,29 +358,26 @@ var handle = cache.QueryContinuous(query);`;
 function UsageScenarios() {
   return (
     <Section className={styles.frontnewcards}>
-      <h2 className={styles.h2}>New To Ignite? <br />Three Primary Usage Scenarios</h2>
+      <h2 className={styles.h2}>Apache Ignite 3 Use Cases</h2>
       <div className={styles.frontnewcards__wrap}>
         <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Application Acceleration <br />& Scale Out</h4>
+          <h4 className={styles.cardsimple__title}>Event Stream Processing <br />And Enrichment</h4>
           <div className={styles.cardsimple__text}>
-            Accelerate your existing applications by 100x using Ignite as an in-memory cache or in-memory data grid that is deployed over one or more external databases.
+            Enrich streaming events with reference data lookups without latency penalties. Handle high-throughput streams while maintaining data consistency and eliminating cache complexity.
           </div>
         </article>
 
         <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Distributed Database For <br />HTAP Workloads</h4>
+          <h4 className={styles.cardsimple__title}>Session Management <br />And Caching At Scale</h4>
           <div className={styles.cardsimple__text}>
-            Build applications that support transactional and analytical workloads by using Ignite as a database that scales beyond available memory capacity.
+            Handle millions of concurrent sessions with automatic failover and any-node access. Eliminate sticky sessions while maintaining strong consistency and fast response times.
           </div>
         </article>
 
         <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Digital Integration Hub</h4>
+          <h4 className={styles.cardsimple__title}>Microservices <br />State Management</h4>
           <div className={styles.cardsimple__text}>
-            Create an advanced platform architecture that aggregates multiple back-end systems and databases into a low-latency and shared data store.
-          </div>
-          <div className={styles.cardsimple__bottom}>
-            <Link to="/use-cases/digital-integration-hub" className="button button--shadow">Learn More</Link>
+            Coordinate state across microservices with distributed transactions. Eliminate manual compensation logic while maintaining service autonomy and linear scalability.
           </div>
         </article>
       </div>
