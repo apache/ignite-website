@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.1.0" />
-    <title>Operational Commands | Ignite Documentation</title>
+    <title>System Views | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/sql-reference/operational-commands" />
+    <link rel="canonical" href="/docs/latest/developers-guide/sql/system-views" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -920,8 +920,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -1010,7 +1010,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/sql-reference/operational-commands"
-                                class='active'
+                                class=''
                             >Operational Commands</a>
                         
                     </li>
@@ -1151,442 +1151,421 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/sql-reference/operational-commands.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/sql/system-views.adoc" target="_blank">Edit</a>
         
-            <h1>Operational Commands</h1>
+            <h1>System Views</h1>
         
-        <div class="sect1">
-<h2 id="select">SELECT</h2>
+        <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Retrieves data from a table or multiple tables.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('SELECT'),
-Optional(NonTerminal('hint_comment')),
-Optional(Sequence(
-Choice(1,
-Terminal('ALL'),
-Terminal('DISTINCT')
-))),
-Sequence(
-OneOrMore(Sequence(Terminal('project_item', {href:'./grammar-reference/#project_item'})
-),
-Terminal(',')
-),
-),
-Terminal('FROM'),
-NonTerminal('table_expression', {href:'./grammar-reference/#table_expression'}),
-Optional(
-Sequence(
-NonTerminal('WHERE'),
-Terminal('where_boolean_expression')
-)
-),
-End({type:'complex'}))</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Start({type:'complex'}),
-Optional(
-Sequence(
-NonTerminal('GROUP BY'),
-Optional(Choice(1,
-Terminal('ALL'),
-Terminal('DISTINCT')
-)),
-OneOrMore(Sequence(Terminal('group_item', {href:'./grammar-reference/#group_item'})
-),
-Terminal(',')
-),
-)
-),
-Optional(
-Sequence(
-NonTerminal('HAVING'),
-Terminal('having_boolean_expression')
-)))</p>
-</div>
-<div class="sect2">
-<h3 id="parameters">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>hint_comment</code> - an sql <a href="/docs/ignite3/latest/sql-tuning#optimizer-hints">optimizer hint</a>.</p>
-</li>
-<li>
-<p><code>where_boolean_expression</code> - an SQL expression that is run against table records and returns a boolean value. Only the records for which <code>TRUE</code> was returned will be returned. If not specified, all matching records are returned.</p>
-</li>
-<li>
-<p><code>having_boolean_expression</code> - an SQL expression that is run against groups and returns a boolean value. Can use <a href="/docs/ignite3/latest/sql-reference/operators-and-functions#aggregate-functions">aggregate functions</a>. Only the groups for which <code>TRUE</code> was returned will be returned. If not specified, all matching groups are returned.</p>
-</li>
-</ul>
+<p>Ignite provides a number of built-in SQL views that provide information on the cluster&#8217;s state and provide real-time insight into the status of its components. These views are available in the SYSTEM schema.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="joins">JOINs</h3>
+</div>
+<div class="sect1">
+<h2 id="getting-data">Getting Data</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Apache Ignite supports colocated and non-colocated distributed SQL joins. Furthermore, if the data resides in different tables, Apache Ignite allows for cross-table joins as well.</p>
+<p>You access system views in Ignite by using SQL and selecting data from the system view like you would from any other table. For example, you can get a list of all available system views in the following way:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="k">schema</span><span class="p">,</span> <span class="n">name</span> <span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">system_views</span> <span class="k">WHERE</span> <span class="k">type</span> <span class="o">=</span> <span class="s1">'NODE'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use joins to combine data from multiple views. The example below returns all columns of a view that was found in the <code>SYSTEM_VIEWS</code> view:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="n">svc</span><span class="p">.</span><span class="o">*</span>
+  <span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">system_view_columns</span> <span class="n">svc</span>
+  <span class="k">JOIN</span> <span class="k">system</span><span class="p">.</span><span class="n">system_views</span> <span class="n">sv</span> <span class="k">ON</span> <span class="n">svc</span><span class="p">.</span><span class="n">view_id</span> <span class="o">=</span> <span class="n">sv</span><span class="p">.</span><span class="n">id</span>
+ <span class="k">WHERE</span> <span class="n">sv</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'SYSTEM_VIEWS'</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="copy-into">COPY INTO</h2>
+<h2 id="available-views">Available Views</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="description">Description</h3>
+<h3 id="system_views">SYSTEM_VIEWS</h3>
 <div class="paragraph">
-<p>Imports data from an external source into a table or exports data to a file from the table. The table the data is imported into must exist.</p>
+<p>Describes available system views.</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('COPY'),
-Terminal('FROM'),
-NonTerminal('source'),
-Terminal('INTO'),
-NonTerminal('target'),
-Terminal('FORMAT'),
-NonTerminal('formatType'),
-Optional(
-Sequence(
-Terminal('WITH'),
-OneOrMore (NonTerminal('parameter', {href:'./grammar-reference/#parameter'}), Terminal(','))
-)
-)
-)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="parameters-2">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>source</code> - the full path to the file to import the data from (if <code>target</code> is a table). Then name of the table and the list of columns to export the data from (if <code>target</code> is a file). If the source is a table, you can further narrow down the selection by using a query.</p>
-</li>
-<li>
-<p><code>target</code> - the table and table columns when importing data to the table. The path to the file when exporting data.</p>
-</li>
-<li>
-<p><code>formatType</code> - the format of the file to work with:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>CSV</code></p>
-</li>
-<li>
-<p><code>PARQUET</code></p>
-</li>
-<li>
-<p><code>ICEBERG</code></p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><code>WITH</code> - accepts additional parameters. All properties are case-sensitive:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>delimiter</code> -  for CSV files only; default delimiter is <code>,</code>. Delimiter syntax is <code>'char'</code>. Any alphanumeric character can be a delimiter.</p>
-</li>
-<li>
-<p><code>pattern</code> - the file pattern used when importing partitioned Parquet tables in the regular expression format. The regular expression must be enclosed in <code>'</code> signs. For example, <code>'.*'</code> imports all files. Partitioned column will not be imported.</p>
-</li>
-<li>
-<p><code>header</code> - for CSV files only; if set to <code>true</code>, specifies that the created file should contain a header line with column names. Column names of the table are used to create the header line.</p>
-</li>
-<li>
-<p><code>quoteChar</code> - for CSV files only; the character to use for quoted elements. Default quote character is <code>"</code>.</p>
-</li>
-<li>
-<p><code>escapeChar</code> - for CSV files only; the character to use for escaping a separator or quote. Default escape character is <code>\</code>.</p>
-</li>
-<li>
-<p><code>ignoreLeadingWhiteSpace</code> - for CSV files only; if <code>true</code>, ignore leading whitespace, keep them otherwise. Default value is <code>true</code>.</p>
-</li>
-<li>
-<p><code>ignoreQuotations</code> - for CSV files only; if <code>true</code>, quoted elements are ignored, otherwise they are kept. Default value is <code>false</code>.</p>
-</li>
-<li>
-<p><code>strictQuotes</code> - for CSV files only; if <code>true</code>, characters outside the quoted elements are ignored, otherwise they are kept. Default value is <code>false</code>.</p>
-</li>
-<li>
-<p><code>batchSize</code> - the number of entries loaded in each batch. Default value is <code>1024</code>.</p>
-</li>
-<li>
-<p><code>null</code> - what value empty values are mapped to on import, and <code>null</code> values are mapped to on export. By default, empty values are mapped to <code>null</code> on import, and <code>null</code> values are mapped to an empty string (<code>""</code>) on export.</p>
-</li>
-<li>
-<p><code>S3</code>:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>s3.client-region</code> - when using S3 storage, the region to store the data in.</p>
-</li>
-<li>
-<p><code>s3.access-key-id</code> - when using S3 storage, the AWS access key.</p>
-</li>
-<li>
-<p><code>s3.secret-access-key</code> - when using S3 storage,  the AWS secret key.</p>
-</li>
-<li>
-<p>Iceberg-specific:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The <a href="https://iceberg.apache.org/docs/latest/configuration/#catalog-properties">catalog properties</a> are supported.</p>
-</li>
-<li>
-<p>The <code>table-identifier</code> property describes Apache Iceberg TableIdentifier names. The names can be dot-separated. For example, <code>db_name.table_name</code> or <code>table</code>.</p>
-</li>
-<li>
-<p>The <code>warehouse</code> path can be defined explicitly as a <code>'warehouse'='path'</code> property, or implicitly as a source or target <code>COPY FROM source INTO target</code>. If both ways are defined, the explicit property is used.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="examples">Examples</h3>
-<div class="paragraph">
-<p>Imports data from columns <code>name</code> and <code>age</code> of a CSV file with header into Table1 columns <code>name</code> and <code>age</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with column headers */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports data from the first two columns of a CSV file without header into Table1 columns <code>name</code> and <code>age</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV without column headers  */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports data from columns <code>name</code> and <code>age</code> of a CSV file that uses the <code>~</code> symbol as quotation character:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with custom quotation character */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'quoteChar'</span><span class="o">=</span><span class="s1">'~'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports data from columns <code>name</code>, <code>age</code> and <code>empty</code> of a CSV file and maps all empty values to <code>no data</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with custom quotation character */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'null'</span><span class="o">=</span><span class="s1">'no data'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports data from CSV table in batches of 2048 entries:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV without column headers  */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="s1">'batchSize'</span><span class="o">=</span><span class="s1">'2048'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Exports data from Table1 to a CSV file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Export data to CSV */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span> <span class="k">FROM</span> <span class="n">Table1</span><span class="p">)</span>
-<span class="k">INTO</span>  <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports CSV file from AWS S3 into Table1:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import CSV file from s3 */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'s3://mybucket/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'delimiter'</span><span class="o">=</span> <span class="s1">'|'</span><span class="p">,</span> <span class="s1">'s3.access-key-id'</span> <span class="o">=</span> <span class="s1">'keyid'</span><span class="p">,</span> <span class="s1">'s3.secret-access-key'</span> <span class="o">=</span> <span class="s1">'secretkey'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>A simple example of exporting data to Iceberg. For working with local file system you can use HadoopCatalog that does not need to connect to a Hive MetaStore.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">height</span><span class="p">)</span>
-<span class="k">INTO</span> <span class="s1">'/tmp/person.i/'</span>
-<span class="n">FORMAT</span> <span class="n">ICEBERG</span>
-<span class="k">WITH</span> <span class="s1">'table-identifier'</span><span class="o">=</span><span class="s1">'person'</span><span class="p">,</span> <span class="s1">'catalog-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.hadoop.HadoopCatalog'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Exports data into Iceberg on AWS S3:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="n">person</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">height</span><span class="p">)</span>
-<span class="k">INTO</span> <span class="s1">'s3://iceberg-warehouse/glue-catalog'</span>
-<span class="n">FORMAT</span> <span class="n">ICEBERG</span>
-<span class="k">WITH</span>
-    <span class="s1">'table-identifier'</span><span class="o">=</span><span class="s1">'iceberg_db_1.person'</span><span class="p">,</span>
-    <span class="s1">'io-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.aws.s3.S3FileIO'</span><span class="p">,</span>
-    <span class="s1">'catalog-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.aws.glue.GlueCatalog'</span><span class="p">,</span>
-    <span class="s1">'s3.client-region'</span><span class="o">=</span><span class="s1">'eu-central-1'</span><span class="p">,</span>
-    <span class="s1">'s3.access-key-id'</span><span class="o">=</span><span class="s1">'YOUR_KEY'</span><span class="p">,</span>
-    <span class="s1">'s3.secret-access-key'</span><span class="o">=</span><span class="s1">'YOUR_SECRET'</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
 <tr>
-<td class="icon">
-<div class="title">Warning</div>
-</td>
-<td class="content">
-Glue catalog requires the table identifier pattern <code>db_name.table_name - [a-z0-9_]</code> (all letters must be in low case with underscores and no spaces). It can be disabled by setting the <code>glue.skip-name-validation</code> property to <code>true</code> to skip validation. When database name and table name validation are skipped, there is no guarantee that downstream systems would all support the names.
-</td>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCHEMA</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Name of the schema used. Default is <code>SYSTEM</code>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view type. Possible values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NODE - The view provides node-specific information. Data will be collected from all nodes, and represented in the view.</p>
+</li>
+<li>
+<p>CLUSTER - The view provides cluster-wide information. Data will be collected from one node, chosen to represent the cluster.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="system_view_columns">SYSTEM_VIEW_COLUMNS</h3>
 <div class="paragraph">
-<p>Imports data from partitioned Parquet database:</p>
+<p>Describes available system view columns.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/tmp/partitioned_table_dir'</span>
-<span class="k">INTO</span> <span class="n">city</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">population</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">PARQUET</span>
-<span class="k">WITH</span> <span class="s1">'pattern'</span> <span class="o">=</span> <span class="s1">'.*'</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Where the Parquet table looks like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>partitioned_table_dir/
-├─ CountryCode=USA/
-│  ├─ 000000_0.parquet
-├─ CountryCode=FR/
-│  ├─ 000000_0.parquet</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kill-query">KILL QUERY</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Cancels a running query. When a query is canceled with the <code>KILL</code> command, all parts of the query running on all other nodes are canceled too.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('QUERY'),
-NonTerminal('query_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>VIEW_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>System view ID.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Column name.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Column type. Can by any of the <a href="/docs/ignite3/latest/sql-reference/data-types">supported types</a>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NULLABLE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>BOOLEAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines if the column can be empty.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PRECISION</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum number of digits.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SCALE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum number of decimal places.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>LENGTH</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Maximum length of the value. Symbols for string values or bytes for binary values.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
-<h3 id="parameters-3">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>query_id</code> - query identifier that can be retrieved via the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the query to be cancelled. You can monitor query status through the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kill-transaction">KILL TRANSACTION</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Cancels an active transaction.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('TRANSACTION'),
-NonTerminal('transaction_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
+<h3 id="system-zones">SYSTEM.ZONES</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NAME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The name of the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PARTITIONS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The number of partitions in the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>REPLICAS</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The number of copies of each partition in the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_AUTO_ADJUST_SCALE_UP</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The delay in seconds between the new node joining and the start of data zone adjustment.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_AUTO_ADJUST_SCALE_DOWN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The delay in seconds between the node leaving the cluster and the start of data zone adjustment.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>DATA_NODES_FILTER</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The filter that specifies what nodes will be used by the distribution zone.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>IS_DEFAULT_ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>BOOLEAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Defines if the data zone is used by default.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
-<h3 id="parameters-4">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>transaction_id</code> - transaction identifier that can be retrieved via the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the transaction to be cancelled. You can monitor transaction status through the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="kill-compute">KILL COMPUTE</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Cancels a running compute job. When a job is canceled with the <code>KILL</code> command, all parts of the job running on all other nodes are canceled too.</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('COMPUTE'),
-NonTerminal('job_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
-</div>
-<div class="sect2">
-<h3 id="parameters-5">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>job_id</code> - job identifier that can be retrieved via the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the job to be cancelled. You can monitor job status through the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
-</div>
+<h3 id="sql_cached_query_plans">SQL_CACHED_QUERY_PLANS</h3>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 66.6668%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Data Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>NODE_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>ID of the node where the plan is cached.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>PLAN_ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Internal identifier of the prepared plan.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>CATALOG_VERSION</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>INT32</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Catalog version used when the query was prepared.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>QUERY_DEFAULT_SCHEMA</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Default schema applied during query preparation.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>SQL</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Normalized SQL text of the query.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>QUERY_TYPE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Query type.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>QUERY_PLAN</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>STRING</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Serialized or explain representation of the chosen query plan.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>QUERY_PREPARE_TIME</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>TIMESTAMP WITH LOCAL TIME ZONE</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Time the plan was prepared on the node.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1600,32 +1579,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#select">SELECT</a>
+<li><a href="#getting-data">Getting Data</a></li>
+<li><a href="#available-views">Available Views</a>
 <ul class="sectlevel2">
-<li><a href="#parameters">Parameters</a></li>
-<li><a href="#joins">JOINs</a></li>
-</ul>
-</li>
-<li><a href="#copy-into">COPY INTO</a>
-<ul class="sectlevel2">
-<li><a href="#description">Description</a></li>
-<li><a href="#parameters-2">Parameters</a></li>
-<li><a href="#examples">Examples</a></li>
-</ul>
-</li>
-<li><a href="#kill-query">KILL QUERY</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-3">Parameters</a></li>
-</ul>
-</li>
-<li><a href="#kill-transaction">KILL TRANSACTION</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-4">Parameters</a></li>
-</ul>
-</li>
-<li><a href="#kill-compute">KILL COMPUTE</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-5">Parameters</a></li>
+<li><a href="#system_views">SYSTEM_VIEWS</a></li>
+<li><a href="#system_view_columns">SYSTEM_VIEW_COLUMNS</a></li>
+<li><a href="#system-zones">SYSTEM.ZONES</a></li>
+<li><a href="#sql_cached_query_plans">SQL_CACHED_QUERY_PLANS</a></li>
 </ul>
 </li>
 </ul>
@@ -1651,13 +1611,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1763133050' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1763133050' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1763133050' async></script>
-<script type='module' src='/assets/js/search.js?1763133050' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1763133049' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1763133049' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1763133049' async></script>
+<script type='module' src='/assets/js/search.js?1763133049' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1763133050" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1763133050"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1763133049" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1763133049"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
