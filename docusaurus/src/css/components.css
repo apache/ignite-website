@@ -11,7 +11,8 @@
 .button {
   font-family: inherit;
   display: flex;
-  flex-flow: row nowrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -64,7 +65,7 @@
   border: 1px solid var(--ai-border-medium);
   background: var(--ai-bg-primary);
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: var(--ai-radius-md);
   transition: box-shadow var(--ai-transition-slower);
   position: relative;
 }
@@ -76,13 +77,13 @@
 /* Use case card variant */
 .usecasecard {
   min-height: 29rem;
-  padding: 3rem 3rem 10rem;
+  padding: var(--ai-spacing-xl) var(--ai-spacing-xl) var(--section-spacing-lg);
 }
 
 .cardsimple__icon {
   width: 48px;
   height: 48px;
-  margin-bottom: 2rem;
+  margin-bottom: var(--ai-spacing-md);
 }
 
 .cardsimple__icon img {
@@ -95,7 +96,7 @@
   font-size: var(--ai-text-xl);
   line-height: 2.6rem;
   font-weight: bold;
-  padding-bottom: 1.2rem;
+  padding-bottom: var(--ai-spacing-sm);
 }
 
 .cardsimple__text:not(.cardsimple__text--long) {
@@ -104,8 +105,8 @@
 
 .cardsimple__bottom {
   position: absolute;
-  bottom: 3rem;
-  left: 3rem;
+  bottom: var(--ai-spacing-xl);
+  left: var(--ai-spacing-xl);
   z-index: 10;
 }
 
@@ -115,20 +116,458 @@
   height: 45px;
 }
 
+/* ============================================
+   PHASE 4: UNIFIED COMPONENT SYSTEM
+   Consolidated patterns from analysis of 60+ files
+   ============================================ */
+
+/* === Unified Card Component System === */
+/* Replaces 6 duplicate card patterns across 15+ files */
+
+/* Base card - core styling shared by all cards */
+.card {
+  background: var(--ai-bg-primary);
+  border-radius: var(--ai-radius-md);
+  box-shadow: var(--ai-shadow-sm);
+  transition: box-shadow var(--ai-transition-normal), transform var(--ai-transition-normal);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  box-shadow: var(--ai-shadow-md);
+}
+
+/* Card with border */
+.card--bordered {
+  border: 1px solid var(--ai-border-medium);
+}
+
+/* Card size variants - padding and border-radius */
+.card--xs {
+  padding: var(--ai-spacing-xs);
+  border-radius: var(--ai-radius-sm);
+}
+
+.card--sm {
+  padding: var(--ai-spacing-sm);
+  border-radius: var(--ai-radius-sm);
+}
+
+.card--md {
+  padding: var(--ai-spacing-md);
+  border-radius: 0.5rem;
+}
+
+.card--lg {
+  padding: var(--ai-spacing-lg);
+}
+
+.card--xl {
+  padding: var(--ai-spacing-xl);
+}
+
+.card--2xl {
+  padding: var(--ai-spacing-2xl);
+}
+
+/* Card height variants */
+.card--tall {
+  min-height: 29rem;
+}
+
+.card--taller {
+  min-height: 36rem;
+}
+
+.card--auto-height {
+  min-height: auto;
+}
+
+/* Card hover effects - lift on hover */
+.card--lift:hover {
+  transform: translateY(-2px);
+}
+
+.card--lift-more:hover {
+  transform: translateY(-4px);
+}
+
+/* Card with stronger shadow */
+.card--shadow-strong {
+  box-shadow: var(--ai-shadow-md);
+}
+
+.card--shadow-strong:hover {
+  box-shadow: var(--ai-shadow-lg);
+}
+
+/* Card flex layout helpers */
+.card--flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.card--flex-start {
+  justify-content: flex-start;
+}
+
+.card--flex-center {
+  justify-content: center;
+}
+
+/* === Button Size Modifiers === */
+/* Standardizes 12+ files with custom button sizes */
+
+.button--xs {
+  height: 3.5rem;
+  font-size: 1.3rem;
+  padding: 0 var(--ai-spacing-sm);
+}
+
+.button--sm {
+  height: 4rem;
+  font-size: 1.4rem;
+  padding: 0 var(--ai-spacing-md);
+}
+
+.button--md {
+  /* Default size - 5rem height already defined */
+  height: 5rem;
+  font-size: var(--ai-text-base);
+}
+
+.button--lg {
+  height: 6rem;
+  font-size: var(--ai-text-lg);
+  padding: 0 var(--ai-spacing-xl);
+}
+
+.button--xl {
+  height: 6rem;
+  font-size: var(--ai-text-xl);
+  padding: 0 var(--ai-spacing-2xl);
+}
+
+/* Button width variants */
+.button--fixed-sm {
+  width: 125px;
+}
+
+.button--fixed-md {
+  width: 16rem;
+}
+
+.button--fixed-lg {
+  width: 19rem;
+}
+
+.button--fixed-xl {
+  width: 20rem;
+}
+
+.button--full {
+  width: 100%;
+}
+
+.button--auto {
+  width: auto;
+  padding: 0 var(--ai-spacing-lg);
+}
+
+/* === Grid Utility Classes === */
+/* Replaces 30+ duplicate grid declarations */
+
+.grid {
+  display: grid;
+}
+
+/* Column count utilities */
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Auto-fill responsive grids */
+.grid-auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.grid-auto-fill-sm {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.grid-auto-fill-lg {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+/* Gap utilities */
+.gap-xs {
+  gap: var(--ai-spacing-xs);
+}
+
+.gap-sm {
+  gap: var(--ai-spacing-sm);
+}
+
+.gap-md {
+  gap: var(--ai-spacing-md);
+}
+
+.gap-lg {
+  gap: var(--ai-spacing-lg);
+}
+
+.gap-xl {
+  gap: var(--ai-spacing-xl);
+}
+
+.gap-2xl {
+  gap: var(--ai-spacing-2xl);
+}
+
+.gap-3xl {
+  gap: var(--ai-spacing-3xl);
+}
+
+/* Column and row gaps */
+.col-gap-sm {
+  column-gap: var(--ai-spacing-sm);
+}
+
+.col-gap-md {
+  column-gap: var(--ai-spacing-md);
+}
+
+.col-gap-lg {
+  column-gap: var(--ai-spacing-lg);
+}
+
+.col-gap-xl {
+  column-gap: var(--ai-spacing-xl);
+}
+
+.row-gap-sm {
+  row-gap: var(--ai-spacing-sm);
+}
+
+.row-gap-md {
+  row-gap: var(--ai-spacing-md);
+}
+
+.row-gap-lg {
+  row-gap: var(--ai-spacing-lg);
+}
+
+.row-gap-xl {
+  row-gap: var(--ai-spacing-xl);
+}
+
+/* === Hover Effect Utilities === */
+/* Standardizes 96+ hover declarations */
+
+.hover-shadow {
+  transition: box-shadow var(--ai-transition-normal);
+}
+
+.hover-shadow:hover {
+  box-shadow: var(--ai-shadow-md);
+}
+
+.hover-shadow-strong {
+  transition: box-shadow var(--ai-transition-normal);
+}
+
+.hover-shadow-strong:hover {
+  box-shadow: var(--ai-shadow-lg);
+}
+
+.hover-lift {
+  transition: transform var(--ai-transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift-more {
+  transition: transform var(--ai-transition-normal);
+}
+
+.hover-lift-more:hover {
+  transform: translateY(-4px);
+}
+
+.hover-shadow-lift {
+  transition: transform var(--ai-transition-normal), box-shadow var(--ai-transition-normal);
+}
+
+.hover-shadow-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ai-shadow-md);
+}
+
+.hover-opacity {
+  transition: opacity var(--ai-transition-normal);
+}
+
+.hover-opacity:hover {
+  opacity: 0.8;
+}
+
+.hover-opacity-less {
+  transition: opacity var(--ai-transition-normal);
+}
+
+.hover-opacity-less:hover {
+  opacity: 0.9;
+}
+
+/* === Flexbox Utilities === */
+/* Common flex patterns used 70+ times */
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* === Spacing Utilities === */
+/* Quick margin/padding utilities */
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.mb-auto {
+  margin-bottom: auto;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+/* === Position Utilities === */
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+/* === Common Layout Patterns === */
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+/* ============================================
+   END PHASE 4 UNIFIED COMPONENT SYSTEM
+   ============================================ */
+
 /* === Block Header Component === */
 
 .blockcapslead {
   letter-spacing: var(--ai-tracking-wide);
   text-transform: uppercase;
   white-space: nowrap;
-  padding-bottom: 6rem;
+  padding-bottom: var(--section-spacing-sm);
 }
 
 .blockheader {
-  flex-flow: column nowrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: stretch;
   position: relative;
-  padding-top: 3rem;
+  padding-top: var(--ai-spacing-xl);
 }
 
 .blockheader:not(.blockheader--spl)::before {
@@ -148,7 +587,7 @@
 
 .blockheader__left {
   width: 45%;
-  padding-right: 4rem;
+  padding-right: var(--ai-spacing-2xl);
   flex-shrink: 0;
 }
 
@@ -158,25 +597,26 @@
 
 .blockheader__right {
   display: block;
-  padding-top: 2rem;
+  padding-top: var(--ai-spacing-md);
   max-width: 850px;
 }
 
 .blockheader__right p:not(:last-child) {
-  margin-bottom: 1rem;
+  margin-bottom: var(--ai-spacing-sm);
 }
 
 .blockheader__button {
-  margin-top: 3rem;
+  margin-top: var(--ai-spacing-xl);
 }
 
 .blockheader--hor {
-  flex-flow: column nowrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 .blockheader--hor .blockheader__right {
   margin-left: 0;
-  padding-top: 2rem;
+  padding-top: var(--ai-spacing-md);
 }
 
 /* === Video Components === */
@@ -228,7 +668,7 @@
 }
 
 .videoscr__descr {
-  padding-top: 1.5rem;
+  padding-top: var(--ai-spacing-md);
   color: var(--ai-gray-300);
   max-width: 350px;
 }
@@ -295,8 +735,8 @@
   z-index: 5;
   font-size: var(--ai-text-2xl);
   line-height: var(--ai-leading-relaxed);
-  top: 3.5rem;
-  left: 3.5rem;
+  top: var(--ai-spacing-xl);
+  left: var(--ai-spacing-xl);
   max-width: 75%;
   color: var(--ai-text-inverse);
 }
@@ -309,22 +749,22 @@
   font-size: 1.9rem;
   line-height: var(--ai-leading-normal);
   max-width: 80%;
-  top: 2rem;
-  left: 2rem;
+  top: var(--ai-spacing-md);
+  left: var(--ai-spacing-md);
 }
 
 .comvideo__txt--medium {
   font-size: 2.2rem;
   line-height: var(--ai-leading-normal);
   max-width: 80%;
-  top: 2rem;
-  left: 2rem;
+  top: var(--ai-spacing-md);
+  left: var(--ai-spacing-md);
 }
 
 .comvideo__sub {
   position: absolute;
-  left: 3rem;
-  bottom: 3rem;
+  left: var(--ai-spacing-xl);
+  bottom: var(--ai-spacing-xl);
   text-transform: uppercase;
   font-size: 12px;
   line-height: 20px;
@@ -338,7 +778,7 @@
 }
 
 .comvideo__descr p {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--ai-spacing-xs);
 }
 
 .comvideo__gray {
@@ -352,7 +792,7 @@
   background: var(--ai-bg-blue);
   color: var(--ai-text-inverse);
   position: relative;
-  padding: 8rem 0 11rem;
+  padding: var(--section-spacing-md) 0 var(--section-spacing-lg);
   overflow: hidden;
 }
 
@@ -361,7 +801,8 @@
   max-width: 830px;
   width: 65%;
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: flex-start;
   justify-content: center;
 }
@@ -369,7 +810,7 @@
 .innerhero__mega {
   font-size: var(--ai-text-7xl);
   line-height: 1.18;
-  padding-top: 2rem;
+  padding-top: var(--ai-spacing-md);
 }
 
 .innerhero__main--long {
@@ -398,8 +839,8 @@
   color: var(--ai-blue);
   font-size: var(--ai-text-xl);
   line-height: 1;
-  padding: 0 4rem;
-  margin-top: 5rem;
+  padding: 0 var(--ai-spacing-2xl);
+  margin-top: var(--section-spacing-sm);
   height: 6rem;
 }
 
@@ -488,7 +929,8 @@
   height: 100%;
   display: flex;
   white-space: nowrap;
-  flex-flow: row nowrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -511,5 +953,5 @@
   right: 0;
   height: 3px;
   background: var(--ai-text-primary);
-  border-radius: 3px;
+  border-radius: var(--ai-radius-xs);
 }

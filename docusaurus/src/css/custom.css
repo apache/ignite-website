@@ -28,15 +28,37 @@
 
 /* === Global Resets === */
 
+/* More targeted reset - keep margin/padding reset but remove overly broad list-style and font-style */
 * {
   margin: 0;
   padding: 0;
-  list-style: none;
-  font-style: normal;
 }
 
-*:focus {
-  outline: none;
+/* Reset list styles only for navigation and UI elements */
+nav ul,
+.menu,
+.nav-list,
+.breadcrumb,
+.navbar ul,
+.footer ul,
+header ul {
+  list-style: none;
+}
+
+/* Let content lists keep their bullets - REMOVED universal list-style: none */
+article ul,
+.content ul,
+.markdown ul,
+.docusaurus ul {
+  list-style: disc;
+  padding-left: 2rem;
+}
+
+/* Remove outline: none - accessibility issue */
+/* Replaced with visible focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
 /* === Link Styles === */
@@ -129,32 +151,23 @@ body.homepage .navbar {
 
 /* Main content wrapper */
 .main-wrapper {
-  min-height: calc(100vh - 96px);
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height)); /* Modern dynamic viewport height for mobile */
 }
 
 /* === Utility Classes === */
-
-.flexi {
-  display: flex;
-  flex-flow: row nowrap;
-}
-
-.container {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
-}
+/* Note: .flexi and .container are defined in layout.css */
 
 .button {
   font-family: inherit;
   display: flex;
-  flex-flow: row nowrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 0 1rem;
-  color: #fff;
+  color: var(--ai-text-inverse);
   outline: none;
   box-sizing: border-box;
   cursor: pointer;
@@ -170,7 +183,7 @@ body.homepage .navbar {
 
 .button:hover {
   background: var(--ai-blue-dark);
-  color: #fff;
+  color: var(--ai-text-inverse);
   text-decoration: none;
 }
 
@@ -191,37 +204,7 @@ body.homepage .navbar {
 }
 
 /* === Scroll to Top Button === */
-
-.scrollTop {
-  display: flex;
-  pointer-events: none;
-  width: 50px;
-  height: 50px;
-  background-color: var(--ai-blue);
-  border-radius: 10px;
-  position: fixed;
-  opacity: 0.8;
-  right: 15px;
-  bottom: 15px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform: translateY(10px);
-  opacity: 0;
-  z-index: 200;
-}
-
-.scrollTop.active {
-  pointer-events: auto;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.scrollTop svg {
-  stroke: #fff;
-  display: block;
-  margin: auto;
-  width: 50%;
-  transform: translateY(-1px);
-}
+/* Note: .scrollTop is defined in layout.css */
 
 /* === Modal Styles === */
 /* HystModal library z-index overrides */
