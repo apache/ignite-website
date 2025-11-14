@@ -38,9 +38,9 @@
 
     
     <meta name="ignite-version" content="3.1.0" />
-    <title>Operational Commands | Ignite Documentation</title>
+    <title>Distribution Zones | Ignite Documentation</title>
     
-    <link rel="canonical" href="/docs/latest/sql-reference/operational-commands" />
+    <link rel="canonical" href="/docs/latest/administrators-guide/storage/distribution-zones" />
     
 	
 	  <link rel="shortcut icon" href="/favicon.ico">
@@ -650,8 +650,8 @@
 
             
 
-			<button type='button' class='group-toggle collapsed '>Administrator's Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group collapsed'>
+			<button type='button' class='group-toggle expanded '>Administrator's Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
             
                 
 
@@ -699,8 +699,8 @@
                             
                             <button
                                 type='button'
-                                class='collapsed '>Distributed Storage<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
-                            <nav class="sub_pages collapsed">
+                                class='expanded parent '>Distributed Storage<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages expanded parent">
 
                             
                                 
@@ -721,7 +721,7 @@
                                 
                                   
 
-								  <li><a href="/docs/ignite3/latest/administrators-guide/storage/distribution-zones" class=''>Data Partitions</a></li>
+								  <li><a href="/docs/ignite3/latest/administrators-guide/storage/distribution-zones" class='active'>Data Partitions</a></li>
                             
                             </nav>
                         
@@ -920,8 +920,8 @@
 
             
 
-			<button type='button' class='group-toggle expanded '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
-             <nav class='nav-group expanded'>
+			<button type='button' class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
             
                 
 
@@ -1010,7 +1010,7 @@
                     <li> 
                         
                             <a href="/docs/ignite3/latest/sql-reference/operational-commands"
-                                class='active'
+                                class=''
                             >Operational Commands</a>
                         
                     </li>
@@ -1151,441 +1151,350 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/sql-reference/operational-commands.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/administrators-guide/storage/distribution-zones.adoc" target="_blank">Edit</a>
         
-            <h1>Operational Commands</h1>
+            <h1>Distribution Zones</h1>
         
         <div class="sect1">
-<h2 id="select">SELECT</h2>
+<h2 id="what-is-a-distribution-zone">What is a Distribution Zone?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Retrieves data from a table or multiple tables.</p>
+<p>Distribution zones in Ignite are entities that combine sets of tables and define:</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('SELECT'),
-Optional(NonTerminal('hint_comment')),
-Optional(Sequence(
-Choice(1,
-Terminal('ALL'),
-Terminal('DISTINCT')
-))),
-Sequence(
-OneOrMore(Sequence(Terminal('project_item', {href:'./grammar-reference/#project_item'})
-),
-Terminal(',')
-),
-),
-Terminal('FROM'),
-NonTerminal('table_expression', {href:'./grammar-reference/#table_expression'}),
-Optional(
-Sequence(
-NonTerminal('WHERE'),
-Terminal('where_boolean_expression')
-)
-),
-End({type:'complex'}))</p>
-</div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Start({type:'complex'}),
-Optional(
-Sequence(
-NonTerminal('GROUP BY'),
-Optional(Choice(1,
-Terminal('ALL'),
-Terminal('DISTINCT')
-)),
-OneOrMore(Sequence(Terminal('group_item', {href:'./grammar-reference/#group_item'})
-),
-Terminal(',')
-),
-)
-),
-Optional(
-Sequence(
-NonTerminal('HAVING'),
-Terminal('having_boolean_expression')
-)))</p>
-</div>
-<div class="sect2">
-<h3 id="parameters">Parameters</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><code>hint_comment</code> - an sql <a href="/docs/ignite3/latest/sql-tuning#optimizer-hints">optimizer hint</a>.</p>
+<p>How these tables are distributed across the cluster, how many copies of data are made, how the data is partitioned, how partitions are assigned to nodes.</p>
 </li>
 <li>
-<p><code>where_boolean_expression</code> - an SQL expression that is run against table records and returns a boolean value. Only the records for which <code>TRUE</code> was returned will be returned. If not specified, all matching records are returned.</p>
+<p>On which cluster nodes these tables will be stored.</p>
 </li>
 <li>
-<p><code>having_boolean_expression</code> - an SQL expression that is run against groups and returns a boolean value. Can use <a href="/docs/ignite3/latest/sql-reference/operators-and-functions#aggregate-functions">aggregate functions</a>. Only the groups for which <code>TRUE</code> was returned will be returned. If not specified, all matching groups are returned.</p>
+<p>How the cluster reacts to nodes entering or leaving the cluster, e.g. whether the tables will automatically start using a new node when the cluster is scaled up.</p>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="joins">JOINs</h3>
 <div class="paragraph">
-<p>Apache Ignite supports colocated and non-colocated distributed SQL joins. Furthermore, if the data resides in different tables, Apache Ignite allows for cross-table joins as well.</p>
+<p>Distribution zones are not equivalent to the concept of availability zone commonly used in cloud computing.</p>
+</div>
+<div class="paragraph">
+<p>Availability zone is a set of infrastructure resources with independent hardware, networking, power, and is often physically separated from other availability zones.</p>
+</div>
+<div class="paragraph">
+<p>Ignite cluster often spans across multiple availability zones, and distribution zones also typically span across multiple availability zones. That way, tables can continue to be available even if one of the availability zones goes down.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="default-zone">Default Zone</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ignite 3 create a <code>default</code> distribution zone on startup. This distribution zone stores data from tables when they are not configured to use a different zone, or when a different distribution zone is not available. This distribution zone has 25 partitions, 1 partition replica and does not adjust itself to new nodes entering or exiting the cluster. For production purposes, we recommend creating a new distribution zone adjusted for your purposes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="creating-and-using-zones">Creating and Using Zones</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Distribution zones in Ignite 3 are created by using the SQL <code>CREATE ZONE</code> command. When creating a zone, you must specify the <a href="/docs/ignite3/latest/administrators-guide/storage/storage-overview">Storage Profile</a> to use. The storage profile determines what storage engine will be used, and storage properties.</p>
+</div>
+<div class="paragraph">
+<p>The example below creates a primary distribution zone with the default storage profile:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">PrimaryZone</span> <span class="p">(</span><span class="n">PARTITIONS</span> <span class="mi">25</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="copy-into">COPY INTO</h2>
+<h2 id="configuring-data-replication">Configuring Data Replication</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="description">Description</h3>
 <div class="paragraph">
-<p>Imports data from an external source into a table or exports data to a file from the table. The table the data is imported into must exist.</p>
+<p>You can control the number of partitions (how many pieces the data is split into) and replicas (how many copies of data are stored) by using the <code>PARTITIONS</code> and <code>REPLICAS</code> options.</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('COPY'),
-Terminal('FROM'),
-NonTerminal('source'),
-Terminal('INTO'),
-NonTerminal('target'),
-Terminal('FORMAT'),
-NonTerminal('formatType'),
-Optional(
-Sequence(
-Terminal('WITH'),
-OneOrMore (NonTerminal('parameter', {href:'./grammar-reference/#parameter'}), Terminal(','))
-)
-)
-)</p>
+<div class="paragraph">
+<p>If not specified, the distribution zone creates <code>(dataNodesCount * coresOnNode * 2) / replicaFactor</code> partitions, and does not create copies of data. The <code>dataNodesCount</code> is the estimated number of nodes that will be in the distribution zone when it  is created, according to its <a href="/docs/ignite3/latest/administrators-guide/storage/distribution-zones#node-filtering">filter</a> and <a href="/docs/ignite3/latest/administrators-guide/storage/storage-overview">storage profiles</a>. At least 1 partition is always created.</p>
+</div>
+<div class="paragraph">
+<p>In the example below, the tables will be split into 50 partitions, and each partition will have 3 copies of itself stored on the cluster:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">PARTITIONS</span> <span class="mi">50</span><span class="p">,</span> <span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="parameters-2">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>source</code> - the full path to the file to import the data from (if <code>target</code> is a table). Then name of the table and the list of columns to export the data from (if <code>target</code> is a file). If the source is a table, you can further narrow down the selection by using a query.</p>
-</li>
-<li>
-<p><code>target</code> - the table and table columns when importing data to the table. The path to the file when exporting data.</p>
-</li>
-<li>
-<p><code>formatType</code> - the format of the file to work with:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>CSV</code></p>
-</li>
-<li>
-<p><code>PARQUET</code></p>
-</li>
-<li>
-<p><code>ICEBERG</code></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Partitions with the same number for all tables in the zone are always stored on the same nodes within the distribution zone.</p>
 </div>
-</li>
-<li>
-<p><code>WITH</code> - accepts additional parameters. All properties are case-sensitive:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>delimiter</code> -  for CSV files only; default delimiter is <code>,</code>. Delimiter syntax is <code>'char'</code>. Any alphanumeric character can be a delimiter.</p>
-</li>
-<li>
-<p><code>pattern</code> - the file pattern used when importing partitioned Parquet tables in the regular expression format. The regular expression must be enclosed in <code>'</code> signs. For example, <code>'.*'</code> imports all files. Partitioned column will not be imported.</p>
-</li>
-<li>
-<p><code>header</code> - for CSV files only; if set to <code>true</code>, specifies that the created file should contain a header line with column names. Column names of the table are used to create the header line.</p>
-</li>
-<li>
-<p><code>quoteChar</code> - for CSV files only; the character to use for quoted elements. Default quote character is <code>"</code>.</p>
-</li>
-<li>
-<p><code>escapeChar</code> - for CSV files only; the character to use for escaping a separator or quote. Default escape character is <code>\</code>.</p>
-</li>
-<li>
-<p><code>ignoreLeadingWhiteSpace</code> - for CSV files only; if <code>true</code>, ignore leading whitespace, keep them otherwise. Default value is <code>true</code>.</p>
-</li>
-<li>
-<p><code>ignoreQuotations</code> - for CSV files only; if <code>true</code>, quoted elements are ignored, otherwise they are kept. Default value is <code>false</code>.</p>
-</li>
-<li>
-<p><code>strictQuotes</code> - for CSV files only; if <code>true</code>, characters outside the quoted elements are ignored, otherwise they are kept. Default value is <code>false</code>.</p>
-</li>
-<li>
-<p><code>batchSize</code> - the number of entries loaded in each batch. Default value is <code>1024</code>.</p>
-</li>
-<li>
-<p><code>null</code> - what value empty values are mapped to on import, and <code>null</code> values are mapped to on export. By default, empty values are mapped to <code>null</code> on import, and <code>null</code> values are mapped to an empty string (<code>""</code>) on export.</p>
-</li>
-<li>
-<p><code>S3</code>:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>s3.client-region</code> - when using S3 storage, the region to store the data in.</p>
-</li>
-<li>
-<p><code>s3.access-key-id</code> - when using S3 storage, the AWS access key.</p>
-</li>
-<li>
-<p><code>s3.secret-access-key</code> - when using S3 storage,  the AWS secret key.</p>
-</li>
-<li>
-<p>Iceberg-specific:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The <a href="https://iceberg.apache.org/docs/latest/configuration/#catalog-properties">catalog properties</a> are supported.</p>
-</li>
-<li>
-<p>The <code>table-identifier</code> property describes Apache Iceberg TableIdentifier names. The names can be dot-separated. For example, <code>db_name.table_name</code> or <code>table</code>.</p>
-</li>
-<li>
-<p>The <code>warehouse</code> path can be defined explicitly as a <code>'warehouse'='path'</code> property, or implicitly as a source or target <code>COPY FROM source INTO target</code>. If both ways are defined, the explicit property is used.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>You can also specify <code>ALL</code> as the number of replicas to automatically scale the number of replicas to be equal to the number of nodes in your cluster.</p>
 </div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="k">ALL</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="examples">Examples</h3>
+<h3 id="replicated-zones">Replicated Zones</h3>
 <div class="paragraph">
-<p>Imports data from columns <code>name</code> and <code>age</code> of a CSV file with header into Table1 columns <code>name</code> and <code>age</code>:</p>
+<p>For scenarios requiring maximum data availability, you can create a replicated zone by specifying <code>ALL</code> as the number of replicas. This automatically scales the number of replicas to match the number of nodes in your cluster, placing a copy of every partition on every node.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with column headers */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="k">ALL</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Imports data from the first two columns of a CSV file without header into Table1 columns <code>name</code> and <code>age</code>:</p>
+<p>When you create a replicated zone, Ignite ensures that each partition has a replica on every node in the cluster. As new nodes join the cluster, they automatically receive replicas and become learners in the RAFT groups until the zone adjusts its configuration.</p>
+</div>
+<div class="sect3">
+<h4 id="combining-replicated-and-standard-zones">Combining Replicated and Standard Zones</h4>
+<div class="paragraph">
+<p>A common pattern is to use replicated zones for reference data and standard zones with fewer replicas for transactional data:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV without column headers  */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">-- Replicated zone for reference data</span>
+<span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">RefDataZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="k">ALL</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span>
+<span class="c1">-- Standard zone for transactional data</span>
+<span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">TransactionalZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span>
+<span class="c1">-- Reference table in replicated zone</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Countries</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+  <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">ZONE</span> <span class="n">RefDataZone</span><span class="p">;</span>
+<span class="c1">-- Transactional table in standard zone</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+  <span class="n">customer_id</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">country_code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+  <span class="n">amount</span> <span class="nb">decimal</span>
+<span class="p">)</span> <span class="k">ZONE</span> <span class="n">TransactionalZone</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Imports data from columns <code>name</code> and <code>age</code> of a CSV file that uses the <code>~</code> symbol as quotation character:</p>
+<p>This approach gives you local access to reference data while keeping storage requirements reasonable for high-volume transactional data.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="storage-profiles">Storage Profiles</h3>
+<div class="paragraph">
+<p>When creating a distribution zone, you can define a set of <a href="/docs/ignite3/latest/administrators-guide/storage/storage-overview">storage profiles</a> that can be used by tables in this zone. You cannot alter storage profiles after the distribution zone was created. To create a Distribution Zone that will use one or multiple Storage Profiles, use the following SQL command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with custom quotation character */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'quoteChar'</span><span class="o">=</span><span class="s1">'~'</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">PARTITIONS</span> <span class="mi">2</span><span class="p">,</span> <span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'profile1'</span><span class="p">,</span> <span class="s1">'profile3'</span><span class="p">];</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Imports data from columns <code>name</code>, <code>age</code> and <code>empty</code> of a CSV file and maps all empty values to <code>no data</code>:</p>
+<p>In this case, the table created in this distribution zones can only use <code>profile1</code> or <code>profile3</code>.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV with custom quotation character */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'null'</span><span class="o">=</span><span class="s1">'no data'</span></code></pre>
 </div>
+<div class="sect2">
+<h3 id="quorum-size">Quorum Size</h3>
+<div class="paragraph">
+<p>You can set the <code>QUORUM SIZE</code> parameter to fine-tune the number of replicas that must be available for the zone to remain operational.</p>
 </div>
 <div class="paragraph">
-<p>Imports data from CSV table in batches of 2048 entries:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import data from CSV without column headers  */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="k">WITH</span> <span class="s1">'batchSize'</span><span class="o">=</span><span class="s1">'2048'</span></code></pre>
-</div>
+<p>Ignite automatically configures the minimum recommended number of replicas for your distribution zone. <code>3</code> data replicas are required for quorum if the distribution zone has 5 or more replicas, 2 if there are between 2 and 4 replicas, or 1 if only one data replica exists.</p>
 </div>
 <div class="paragraph">
-<p>Exports data from Table1 to a CSV file:</p>
+<p>There are the following limitations to quorum sizes depending on the number of replicas:</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Export data to CSV */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span> <span class="k">FROM</span> <span class="n">Table1</span><span class="p">)</span>
-<span class="k">INTO</span>  <span class="s1">'/path/to/dir/data.csv'</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Imports CSV file from AWS S3 into Table1:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="cm">/* Import CSV file from s3 */</span>
-<span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'s3://mybucket/data.csv'</span>
-<span class="k">INTO</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">CSV</span>
-<span class="k">WITH</span> <span class="s1">'delimiter'</span><span class="o">=</span> <span class="s1">'|'</span><span class="p">,</span> <span class="s1">'s3.access-key-id'</span> <span class="o">=</span> <span class="s1">'keyid'</span><span class="p">,</span> <span class="s1">'s3.secret-access-key'</span> <span class="o">=</span> <span class="s1">'secretkey'</span></code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Minimum</em> value: <code>1</code> if there is only one replica and <code>2</code> if there is more than one.</p>
+</li>
+<li>
+<p><em>Maximum</em> value: half the total number of replicas rounded up.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>A simple example of exporting data to Iceberg. For working with local file system you can use HadoopCatalog that does not need to connect to a Hive MetaStore.</p>
+<p>The example below shows how you can configure quorum size:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="n">Table1</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">height</span><span class="p">)</span>
-<span class="k">INTO</span> <span class="s1">'/tmp/person.i/'</span>
-<span class="n">FORMAT</span> <span class="n">ICEBERG</span>
-<span class="k">WITH</span> <span class="s1">'table-identifier'</span><span class="o">=</span><span class="s1">'person'</span><span class="p">,</span> <span class="s1">'catalog-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.hadoop.HadoopCatalog'</span></code></pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="mi">9</span><span class="p">,</span> <span class="n">QUORUM</span> <span class="k">SIZE</span> <span class="mi">5</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Exports data into Iceberg on AWS S3:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="n">person</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">height</span><span class="p">)</span>
-<span class="k">INTO</span> <span class="s1">'s3://iceberg-warehouse/glue-catalog'</span>
-<span class="n">FORMAT</span> <span class="n">ICEBERG</span>
-<span class="k">WITH</span>
-    <span class="s1">'table-identifier'</span><span class="o">=</span><span class="s1">'iceberg_db_1.person'</span><span class="p">,</span>
-    <span class="s1">'io-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.aws.s3.S3FileIO'</span><span class="p">,</span>
-    <span class="s1">'catalog-impl'</span><span class="o">=</span><span class="s1">'org.apache.iceberg.aws.glue.GlueCatalog'</span><span class="p">,</span>
-    <span class="s1">'s3.client-region'</span><span class="o">=</span><span class="s1">'eu-central-1'</span><span class="p">,</span>
-    <span class="s1">'s3.access-key-id'</span><span class="o">=</span><span class="s1">'YOUR_KEY'</span><span class="p">,</span>
-    <span class="s1">'s3.secret-access-key'</span><span class="o">=</span><span class="s1">'YOUR_SECRET'</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock warning">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<div class="title">Tip</div>
 </td>
 <td class="content">
-Glue catalog requires the table identifier pattern <code>db_name.table_name - [a-z0-9_]</code> (all letters must be in low case with underscores and no spaces). It can be disabled by setting the <code>glue.skip-name-validation</code> property to <code>true</code> to skip validation. When database name and table name validation are skipped, there is no guarantee that downstream systems would all support the names.
+It is recommended to use odd number of replicas as your quorum size.
 </td>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="node-filtering">Node Filtering</h3>
 <div class="paragraph">
-<p>Imports data from partitioned Parquet database:</p>
+<p>Distribution zones can get node attributes, that can be specified in <a href="/docs/ignite3/latest/administrators-guide/config/node-config">node configuration</a>, and dynamically distribute data only to nodes that have the specified attributes. This can be used, for example, to only process data from the application on nodes with SSD drives. If no node matches the filter, the data will be stored on all nodes instead. Distribution zone filter uses JSONPath rules.</p>
+</div>
+<div class="paragraph">
+<p>The example below creates a new <code>storage</code> attribute and sets it to <code>SSD</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="sql"><span class="k">COPY</span> <span class="k">FROM</span> <span class="s1">'/tmp/partitioned_table_dir'</span>
-<span class="k">INTO</span> <span class="n">city</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">population</span><span class="p">)</span>
-<span class="n">FORMAT</span> <span class="n">PARQUET</span>
-<span class="k">WITH</span> <span class="s1">'pattern'</span> <span class="o">=</span> <span class="s1">'.*'</span></code></pre>
+<pre>node config update -n defaultNode ignite.nodeAttributes.nodeAttributes.storage="SSD"</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Where the Parquet table looks like this:</p>
+<p>The example below creates a distribution zone that only stores data on nodes that have the SSD attribute:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>partitioned_table_dir/
-├─ CountryCode=USA/
-│  ├─ 000000_0.parquet
-├─ CountryCode=FR/
-│  ├─ 000000_0.parquet</pre>
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">NODES</span> <span class="n">FILTER</span> <span class="s1">'$[?(@.storage == "SSD")]'</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILEs</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can change the distribution zone filter by using the <code>ALTER ZONE</code> command, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="k">SET</span> <span class="n">DATA_NODES_FILTER</span><span class="o">=</span><span class="s1">'$[?(@.storage == "HDD")]'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you no longer need to filter the data nodes, set the filter to match all nodes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="k">SET</span> <span class="n">DATA_NODES_FILTER</span><span class="o">=</span><span class="s1">'$..*'</span><span class="p">;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="high-availability">High Availability</h3>
+<div class="paragraph">
+<p>By default, Ignite ensures strong consistency of data in the cluster. To do this, it requires the majority of <a href="/docs/ignite3/latest/administrators-guide/storage/distribution-zones">replicas of data partitions</a> to be available. As partitions are spread across the nodes, it is possible to lose the majority of nodes that hold data for the data region, leading to all operations in the data region being stopped until the majority can be safely restored. This ensures that no data is lost.</p>
+</div>
+<div class="paragraph">
+<p>In high load environments, this behavior may be undesirable, as it interrupts writing data at the cost of negating a minor chance of losing data together with the nodes that left the cluster. For this scenario, Ignite provides high availability zones. If a zone has high availability enabled, and the majority of nodes with data from it leave the cluster, the data on them is considered lost and, after a short delay in case the nodes return, the cluster continues to handle read and write requests normally.</p>
+</div>
+<div class="paragraph">
+<p>High availability mode can only be enabled when distribution zone is created. To do this, use the following SQL command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CONSISTENCY</span> <span class="k">MODE</span> <span class="s1">'HIGH AVAILABILITY'</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILEs</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kill-query">KILL QUERY</h2>
+<h2 id="cluster-scaling">Cluster Scaling</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Cancels a running query. When a query is canceled with the <code>KILL</code> command, all parts of the query running on all other nodes are canceled too.</p>
+<p>The number of active nodes in the cluster can dynamically change during its operation, as more nodes are added or nodes are taken down for maintenance or leave the cluster unexpectedly. You can configure whether and when Ignite adjusts the distribution zone to match the new cluster topology after a node enter or leaves the cluster.</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('QUERY'),
-NonTerminal('query_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
+<div class="paragraph">
+<p>Often it is a good idea to provide a buffer period before redistribution begins, allowing in-progress operations to complete. To control this behavior, you can specify the following parameters:</p>
 </div>
-<div class="sect2">
-<h3 id="parameters-3">Parameters</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><code>query_id</code> - query identifier that can be retrieved via the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
+<p><code>AUTO SCALE UP</code> - specifies the delay in seconds between nodes joining the cluster and the start of distribution zone adjustment to include the new nodes. This parameter is set to 0 seconds by default (immediate scale up).</p>
 </li>
 <li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the query to be cancelled. You can monitor query status through the <code>SQL_QUERIES</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
+<p><code>AUTO SCALE DOWN</code> - specifies the delay in seconds between nodes leaving the cluster and the start of distribution zone adjustment to exclude the departed nodes. This parameter is set to <code>OFF</code> by default (no automatic scale-down occurs).</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>The example below shows how you can configure cluster scaling delay:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="p">(</span><span class="n">AUTO</span> <span class="k">SCALE</span> <span class="n">UP</span> <span class="mi">300</span><span class="p">,</span> <span class="n">AUTO</span> <span class="k">SCALE</span> <span class="n">DOWN</span> <span class="mi">300</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span><span class="p">[</span><span class="s1">'default'</span><span class="p">];</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once distribution zone scaling is configured, you can disable it by specifying <code>OFF</code> in the corresponding parameter, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">exampleZone</span> <span class="k">SET</span> <span class="p">(</span><span class="n">AUTO</span> <span class="k">SCALE</span> <span class="n">DOWN</span> <span class="k">OFF</span><span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="considerations-for-zone-size">Considerations for Zone Size</h3>
+<div class="paragraph">
+<p>All tables stored in the distribution zone share resources. As the result, it is recommended to consider how large distribution zone needs to be.</p>
+</div>
+<div class="paragraph">
+<p>As partitions are colocated on the same nodes, assigning tables commonly accessed together to the same distribution zone can reduce the overhead required for transmitting query results between nodes, and allows colocated <a href="/docs/ignite3/latest/developers-guide/compute/compute">compute jobs</a>.</p>
+</div>
+<div class="paragraph">
+<p>However, if a table is under heavy load, it may negatively affect the performance when working with other tables in the same distribution zone. In most scenarios, this should not be a significant concern and correct data distribution for your scenarios should be prioritized.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kill-transaction">KILL TRANSACTION</h2>
+<h2 id="checking-distribution-zone-properties">Checking Distribution Zone Properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Cancels an active transaction.</p>
+<p>Distribution zone properties can be viewed through the <code>system.zones</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>. You can use the following SQL command to get it:</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('TRANSACTION'),
-NonTerminal('transaction_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="k">system</span><span class="p">.</span><span class="n">zones</span><span class="p">;</span></code></pre>
 </div>
-<div class="sect2">
-<h3 id="parameters-4">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>transaction_id</code> - transaction identifier that can be retrieved via the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the transaction to be cancelled. You can monitor transaction status through the <code>TRANSACTIONS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
+</div>
+<div class="paragraph">
+<p>The command lists information about all distribution zones on the cluster.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="adjusting-distribution-zones">Adjusting Distribution Zones</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To change distribution zone parameters, use the <code>ALTER ZONE</code> command. You can use the same parameters as when creating the zone. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">exampleZone</span> <span class="k">SET</span> <span class="p">(</span><span class="n">REPLICAS</span> <span class="mi">5</span><span class="p">);</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="kill-compute">KILL COMPUTE</h2>
+<h2 id="example-zone-usage">Example Zone Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Cancels a running compute job. When a job is canceled with the <code>KILL</code> command, all parts of the job running on all other nodes are canceled too.</p>
+<p>In this example, we create a distribution zone and then create 2 tables that will be colocated on the same zone.</p>
 </div>
-<div class="paragraph diagram-container">
-<p>Diagram(
-Terminal('KILL'),
-Terminal('COMPUTE'),
-NonTerminal('job_id'),
-Optional(Terminal('NO WAIT'))
-)</p>
-</div>
-<div class="sect2">
-<h3 id="parameters-5">Parameters</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>job_id</code> - job identifier that can be retrieved via the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a>.</p>
-</li>
-<li>
-<p><code>NO WAIT</code> - if specified, the command will return control immediately, without waiting for the job to be cancelled. You can monitor job status through the <code>COMPUTE_JOBS</code> <a href="/docs/ignite3/latest/administrators-guide/metrics/system-views">system view</a> to make sure it was cancelled.</p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">ZONE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">EXAMPLEZONE</span> <span class="p">(</span><span class="n">PARTITIONS</span> <span class="mi">20</span><span class="p">,</span> <span class="n">REPLICAS</span> <span class="mi">3</span><span class="p">)</span> <span class="k">STORAGE</span> <span class="n">PROFILES</span> <span class="p">[</span><span class="s1">'default'</span><span class="p">];</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Person</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+  <span class="n">city_id</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">varchar</span><span class="p">,</span>
+  <span class="n">age</span> <span class="nb">int</span><span class="p">,</span>
+  <span class="n">company</span> <span class="nb">varchar</span>
+<span class="p">)</span> <span class="k">PRIMARY</span> <span class="k">ZONE</span> <span class="n">EXAMPLEZONE</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">Account</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="nb">int</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+  <span class="n">name</span> <span class="nb">varchar</span><span class="p">,</span>
+  <span class="n">amount</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="k">PRIMARY</span> <span class="k">ZONE</span> <span class="n">EXAMPLEZONE</span><span class="p">;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1600,34 +1509,30 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <nav class="right-nav" data-swiftype-index='false'>
     <div class="toc-wrapper">
     <ul class="sectlevel1">
-<li><a href="#select">SELECT</a>
+<li><a href="#what-is-a-distribution-zone">What is a Distribution Zone?</a></li>
+<li><a href="#default-zone">Default Zone</a></li>
+<li><a href="#creating-and-using-zones">Creating and Using Zones</a></li>
+<li><a href="#configuring-data-replication">Configuring Data Replication</a>
 <ul class="sectlevel2">
-<li><a href="#parameters">Parameters</a></li>
-<li><a href="#joins">JOINs</a></li>
+<li><a href="#replicated-zones">Replicated Zones</a>
+<ul class="sectlevel3">
+<li><a href="#combining-replicated-and-standard-zones">Combining Replicated and Standard Zones</a></li>
 </ul>
 </li>
-<li><a href="#copy-into">COPY INTO</a>
-<ul class="sectlevel2">
-<li><a href="#description">Description</a></li>
-<li><a href="#parameters-2">Parameters</a></li>
-<li><a href="#examples">Examples</a></li>
+<li><a href="#storage-profiles">Storage Profiles</a></li>
+<li><a href="#quorum-size">Quorum Size</a></li>
+<li><a href="#node-filtering">Node Filtering</a></li>
+<li><a href="#high-availability">High Availability</a></li>
 </ul>
 </li>
-<li><a href="#kill-query">KILL QUERY</a>
+<li><a href="#cluster-scaling">Cluster Scaling</a>
 <ul class="sectlevel2">
-<li><a href="#parameters-3">Parameters</a></li>
+<li><a href="#considerations-for-zone-size">Considerations for Zone Size</a></li>
 </ul>
 </li>
-<li><a href="#kill-transaction">KILL TRANSACTION</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-4">Parameters</a></li>
-</ul>
-</li>
-<li><a href="#kill-compute">KILL COMPUTE</a>
-<ul class="sectlevel2">
-<li><a href="#parameters-5">Parameters</a></li>
-</ul>
-</li>
+<li><a href="#checking-distribution-zone-properties">Checking Distribution Zone Properties</a></li>
+<li><a href="#adjusting-distribution-zones">Adjusting Distribution Zones</a></li>
+<li><a href="#example-zone-usage">Example Zone Usage</a></li>
 </ul>
     </div>
           
@@ -1651,13 +1556,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1763133050' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1763133050' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1763133050' async></script>
-<script type='module' src='/assets/js/search.js?1763133050' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1763133049' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1763133049' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1763133049' async></script>
+<script type='module' src='/assets/js/search.js?1763133049' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1763133050" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1763133050"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1763133049" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1763133049"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
