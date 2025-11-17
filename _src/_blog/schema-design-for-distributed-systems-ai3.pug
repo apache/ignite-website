@@ -1,0 +1,384 @@
+---
+title: " Schema Design for Distributed Systems: Why Data Placement Matters"
+author: "Michael Aglietti"
+date: 2025-11-18
+tags:
+    - apache
+    - ignite
+---
+
+p Discover how Apache Ignite 3 keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.
+
+<!-- end -->
+
+h3 Schema Design for Distributed Systems: Why Data Placement Matters
+
+p You can scale out your database, add more nodes, and tune every index, but if your data isn’t in the right place, performance still hits a wall. Every distributed system eventually runs into this: joins that cross the network, caches that can’t keep up, and queries that feel slower the larger your cluster gets.
+
+p.
+  Most distributed SQL databases claim to solve scalability. They partition data evenly, replicate it across nodes, and promise linear performance. But #[em how] data is distributed and #[em which] records end up together matters more than most people realize.
+  If related data lands on different nodes, every query has to travel the network to fetch it, and each millisecond adds up.
+
+
+p.
+  That’s where #[strong data placement] becomes the real scaling strategy. Apache Ignite 3 takes a different path with #[strong schema-driven colocation] — a way to keep related data physically together. Instead of spreading rows randomly across nodes, Ignite uses your schema relationships to decide where data lives. The result: a 200 ms cross-node query becomes a 5 ms local read.
+
+hr
+
+h3 How Ignite 3 Differs from Other Distributed Databases
+
+p
+  strong Traditional Distributed SQL Databases:
+ul
+  li Hash-based partitioning ignores data relationships
+  li Related data scattered across nodes by default
+  li Cross-node joins create network bottlenecks
+  li Millisecond latencies due to disk-first architecture
+
+p
+  strong Ignite 3 Schema-Driven Approach:
+ul
+  li Colocation configuration in schema definitions
+  li Related data automatically placed together
+  li Local queries eliminate network overhead
+  li Microsecond latencies through memory-first storage
+
+hr
+
+h3 The Distributed Data Placement Problem
+
+p You’ve tuned indexes, optimized queries, and scaled your cluster—but latency still creeps in. The problem isn’t your SQL — it’s where your data lives.
+
+p Traditional hash-based partitioning distributes records randomly across nodes based on primary key values. While this ensures even data distribution, it scatters related records that applications frequently access together. It’s a clever approach — until you need to join data that doesn’t share the same key. Then every query turns into a distributed operation, and your network becomes the bottleneck.
+
+p Ignite 3 provides automatic colocation based on schema relationships. You define relationships directly in your schema, and Ignite automatically places related data on the same nodes using the specified colocation keys.
+
+p.
+  Using a #[a(href="https://github.com/lerocha/chinook-database/tree/master") music catalog example], we’ll demonstrate how schema-driven data placement reduces query latency from 200 ms to 5 ms.
+
+blockquote
+  p.
+    This post assumes you have a basic understanding of how to get an Ignite 3 cluster running and have worked with the Ignite 3 Java API. If you’re new to Ignite 3, start with the #[a(href="https://ignite.apache.org/docs/ignite3/latest/quick-start/java-api") Java API quick start guide] to set up your development environment.
+
+
+hr
+
+h3 How Ignite 3 Places Data Differently
+
+p Tables are distributed across multiple nodes using consistent hashing, but with a key difference: your schema definitions control data placement. Instead of accepting random distribution of related records, you declare relationships in your schema and let Ignite handle placement automatically.
+
+p
+  strong Partitioning Fundamentals:
+ul
+  li Each table is divided into partitions (typically 64–1024 per table)
+  li Primary key hash determines which partition data goes into
+  li Partitions are distributed evenly across available nodes
+  li Each partition has configurable replicas for fault tolerance
+
+p
+  strong Data Placement Concepts:
+ul
+  li
+    strong Affinity
+    |  – the algorithm that determines which nodes store which partitions
+  li
+    strong Colocation
+    |  – ensuring related data from different tables gets placed on the same nodes
+
+p.
+  The diagram below shows how colocation works in practice. Artist and Album tables use different primary keys, but colocation strategy ensures albums are partitioned by #[code ArtistId] rather than #[code AlbumId]:
+
+
+// prettier-ignore
+pre.mermaid.
+  %%{init: {
+    "themeVariables": { "fontSize": "24px" },
+    "flowchart": { "htmlLabels": true, "useMaxWidth": true, "nodeSpacing": 90, "rankSpacing": 90, "diagramPadding": 28 }
+  }}%%
+  flowchart TB
+    subgraph CLUSTER[3-Node Cluster]
+      N1["Node 1 Partitions: 0,3,6,9"]
+      N2["Node 2 Partitions: 1,4,7,10"]
+      N3["Node 3 Partitions: 2,5,8,11"]
+    end
+
+    subgraph ALBUMS[Album Table - colocateBy ArtistId]
+      B1["AlbumId=101; ArtistId=1; hash(1) -> P1 Node 2"]
+      B2["AlbumId=102; ArtistId=1; hash(1) -> P1 Node 2"]
+      B3["AlbumId=201; ArtistId=22; hash(22) -> P11 Node 3"]
+      B4["AlbumId=301; ArtistId=42; hash(42) -> P6 Node 1"]
+    end
+
+    subgraph ARTISTS[Artist Table]
+      A1["ArtistId=1; hash -> P1 Node 2"]
+      A2["ArtistId=22; hash -> P11 Node 3"]
+      A3["ArtistId=42; hash -> P6 Node 1"]
+    end
+
+    A1 -.->|Same partition| B1
+    A1 -.->|Same partition| B2
+    A2 -.->|Same partition| B3
+    A3 -.->|Same partition| B4
+
+
+p.
+  Colocation configuration in your schema ensures that Album records use the #[code ArtistId] value (not #[code AlbumId]) for partition assignment. This guarantees that Artist 1 and all albums with #[code ArtistId = 1] hash to the same partition and therefore live on the same nodes.
+
+
+hr
+
+h3 Distribution Zones and Data Placement
+
+p Distribution zones are cluster-level configurations that define how data is distributed and replicated.
+
+blockquote
+  p.
+    #[strong Zone Creation Options:] Ignite 3 supports multiple approaches:
+    #[br]
+    1. #[strong SQL DDL] – #[code CREATE ZONE] statements
+    #[br]
+    2. #[strong Java Builder API] – programmatic #[code ZoneDefinition.builder()]
+    #[br]
+    #[br]
+    We use the Java Builder API here for consistency with our programmatic schema examples.
+
+
+p A distribution zone specifies:
+ul
+  li
+    strong Partition count
+    |  – how many partitions your data is divided into (typically 64–1024 per table)
+  li
+    strong Replica count
+    |  – how many copies of each partition exist for fault tolerance
+  li
+    strong Node filters
+    |  – which nodes can store data for this zone
+
+p First, create the distribution zones:
+
+pre
+  code.
+    // Create the standard zone for frequently updated data
+    ignite.catalog().create(ZoneDefinition.builder("MusicStore")
+    .replicas(2)
+    .storageProfiles("default")
+    .build()).execute();
+
+    // Create the replicated zone for reference data (replicas = cluster size)
+    ignite.catalog().create(ZoneDefinition.builder("MusicStoreReplicated")
+    .replicas(clusterNodes().size())
+    .storageProfiles("default")
+    .build()).execute();
+
+hr
+
+h3 Building Your Music Platform Schema
+
+blockquote
+  p.
+    #[strong Schema Creation:] Ignite 3 supports three approaches:
+    #[br]
+    1. #[strong SQL DDL] – traditional #[code CREATE TABLE] statements
+    #[br]
+    2. #[strong Java Annotations API] – POJO markup with #[code @Table], #[code @Column], etc.
+    #[br]
+    3. #[strong Java Builder API] – programmatic #[code TableDefinition.builder()]
+    #[br]
+    #[br]
+    We use the Annotations API here for its clarity and type safety.
+
+p The Artist table establishes the partitioning strategy that dependent tables will follow through colocation:
+
+pre
+  code.
+    @Table(zone = @Zone(value = "MusicStore", storageProfiles = "default"))
+    public class Artist {
+        @Id
+        @Column(value = "ArtistId", nullable = false)
+        private Integer ArtistId;
+
+        @Column(value = "Name", nullable = false, length = 120)
+        private String Name;
+
+        public Artist() {}
+
+        public Artist(Integer artistId, String name) {
+            this.ArtistId = artistId;
+            this.Name = name;
+        }
+
+        public Integer getArtistId() { return ArtistId; }
+        public void setArtistId(Integer artistId) { this.ArtistId = artistId; }
+        public String getName() { return Name; }
+        public void setName(String name) { this.Name = name; }
+    }
+
+hr
+
+h3 Parent–Child Colocation Implementation
+
+p When users search for "The Beatles", they expect both artist details and album listings in the same query. Without colocation, this requires cross-node joins that can take 40–200 ms.
+
+p We solve this by setting
+  code colocateBy
+  | in the
+  code @Table
+  | annotation:
+
+pre
+  code.
+    @Table(
+        zone = @Zone(value = "MusicStore", storageProfiles = "default"),
+        colocateBy = @ColumnRef("ArtistId")
+    )
+    public class Album {
+        @Id
+        @Column(value = "AlbumId", nullable = false)
+        private Integer AlbumId;
+
+        @Id
+        @Column(value = "ArtistId", nullable = false)
+        private Integer ArtistId;
+
+        @Column(value = "Title", nullable = false, length = 160)
+        private String Title;
+
+        @Column(value = "ReleaseDate", nullable = true)
+        private LocalDate ReleaseDate;
+
+        // Constructors and getters/setters...
+    }
+
+p The colocation field (
+  code ArtistId
+  | ) must be part of the composite primary key. Ignite uses the
+  code ArtistId
+  | value to ensure albums with the same artist live on the same nodes as their corresponding artist record.
+
+hr
+
+h3 Performance Impact: Memory-First + Colocation
+
+p Let’s quantify the effect of combining memory-first storage with schema-driven colocation.
+
+p
+  strong Without Colocation – Data Scattered:
+pre
+  code.
+    Artist artist = artistView.get(null, artistKey);              // Node 2
+    Collection&lt;Album&gt; albums = albumView.getAll(null, albumKeys); // Nodes 1,2,3
+    // Result: 3 network operations for related data
+    // Query time: 40–200 ms (network latency × nodes involved)
+
+p
+  strong With Memory-First + Colocation – Data Local:
+pre
+  code.
+    Artist artist = artistView.get(null, artistKey);              // Node 2
+    Collection&lt;Album&gt; albums = albumView.getAll(null, albumKeys); // Node 2
+    // Result: 1 node involved, local memory access
+    // Query time: 1–5 ms (memory access + no network hops)
+
+ul
+  li
+    strong Query latency reduction:
+    |  200 ms → 5 ms (memory access + no network hops)
+  li
+    strong Network traffic elimination:
+    |  related data queries become local operations
+  li
+    strong Resource efficiency:
+    |  CPU focuses on serving requests instead of moving data
+
+hr
+
+h3 Colocation Enables Compute-to-Data Processing
+
+p Schema-driven colocation doesn’t just optimize queries—it enables processing where data lives:
+
+pre
+  code.
+    // Process all albums for an artist locally
+    ComputeJob&lt;RecommendationResult&gt; job = ComputeJob.colocated("Artist", artistId,
+    AlbumRecommendationJob.class);
+
+    // Runs on the same node where artist and album data live
+    CompletableFuture&lt;RecommendationResult&gt; result = ignite.compute()
+    .submitAsync(job, preferences);
+
+
+p Instead of moving gigabytes of album data to a compute cluster, you move kilobytes of logic to where the data already resides.
+
+hr
+
+h3 Implementation Guide
+
+p Deploy tables in dependency order to avoid colocation reference errors:
+
+pre
+  code.
+    try (IgniteClient client = IgniteClient.builder()
+            .addresses("127.0.0.1:10800")
+            .build()) {
+
+        // 1. Reference tables with no dependencies
+        client.catalog().createTable(Genre.class);
+
+        // 2. Root entities
+        client.catalog().createTable(Artist.class);
+
+        // 3. Dependent entities in hierarchy order
+        client.catalog().createTable(Album.class);      // References Artist
+        client.catalog().createTable(Track.class);      // References Album
+    }
+
+hr
+
+h3 Accessing Your Distributed Data
+
+p Ignite 3 provides multiple views of the same colocated data:
+
+pre
+  code.
+    // RecordView for entity operations
+    RecordView&lt;Artist&gt; artists = client.tables()
+    .table("Artist")
+    .recordView(Artist.class);
+
+    // Operations with partition keys route to single nodes
+    Artist beatles = new Artist(1, "The Beatles");
+    artists.upsert(null, beatles);
+
+    Album abbeyRoad = new Album(1, 1, "Abbey Road", LocalDate.of(1969, 9, 26));
+    albums.upsert(null, abbeyRoad);  // Automatically colocated with artist
+
+
+hr
+
+h3 Summary
+
+p.
+  Data placement is where distributed performance is won or lost. With #[strong schema-driven colocation], Apache Ignite 3 keeps related data together on the same nodes, so your queries stay local, fast, and predictable.
+
+p Instead of tuning around network latency, you design for it once at the schema level. Your joins stay local, your compute jobs run where the data lives, and scaling stops being a tradeoff between performance and size.
+
+ul
+  li
+    strong Memory-first + colocation
+    |  → microsecond access to related data
+  li
+    strong Schema-driven placement
+    |  → predictable performance at scale
+  li
+    strong Compute-to-data
+    |  → logic runs with data, not across the network
+  li
+    strong Unified platform
+    |  → transactions, analytics, and compute together
+
+p When data lives together, your system scales naturally — without complexity creeping in.
+
+p.
+  Explore the #[a(href="https://ignite.apache.org/docs/ignite3/latest/") Ignite 3 documentation] for detailed examples and API references.
+
