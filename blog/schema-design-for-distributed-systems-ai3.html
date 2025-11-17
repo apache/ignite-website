@@ -386,7 +386,7 @@
                 <p>
                   Ignite 3 provides automatic colocation based on schema relationships. You define relationships directly in your schema, and Ignite automatically places related data on the same nodes using the specified colocation keys.
                 </p>
-                <p>Using a <a href="https://github.com/lerocha/chinook-database/tree/master">music catalog example</a>, we’ll demonstrate how schema-driven data placement reduces query latency from 200 ms to 5 ms.</p>
+                <p>Using a <a href="https://github.com/maglietti/ignite3-chinook-demo">music catalog example</a>, we’ll demonstrate how schema-driven data placement reduces query latency from 200 ms to 5 ms.</p>
                 <blockquote>
                   <p>
                     This post assumes you have a basic understanding of how to get an Ignite 3 cluster running and have worked with the Ignite 3 Java API. If you’re new to Ignite 3, start with the
@@ -415,37 +415,37 @@
                   The diagram below shows how colocation works in practice. Artist and Album tables use different primary keys, but colocation strategy ensures albums are partitioned by <code>ArtistId</code> rather than
                   <code>AlbumId</code>:
                 </p>
-                <!-- prettier-ignore-->
-                <pre class="mermaid">%%{init: {
+                <pre class="mermaid">
+%%{init: {
   "themeVariables": { "fontSize": "24px" },
   "flowchart": { "htmlLabels": true, "useMaxWidth": true, "nodeSpacing": 90, "rankSpacing": 90, "diagramPadding": 28 }
 }}%%
-flowchart TB
-  subgraph CLUSTER[3-Node Cluster]
-    N1["Node 1 Partitions: 0,3,6,9"]
-    N2["Node 2 Partitions: 1,4,7,10"]
-    N3["Node 3 Partitions: 2,5,8,11"]
+graph TB
+  subgraph "3-Node Cluster"
+      N1["Node 1 Partitions: 0,3,6,9"]
+      N2["Node 2 Partitions: 1,4,7,10"]
+      N3["Node 3 Partitions: 2,5,8,11"]
   end
 
-  subgraph ALBUMS[Album Table - colocateBy ArtistId]
-    B1["AlbumId=101; ArtistId=1; hash(1) -> P1 Node 2"]
-    B2["AlbumId=102; ArtistId=1; hash(1) -> P1 Node 2"]
-    B3["AlbumId=201; ArtistId=22; hash(22) -> P11 Node 3"]
-    B4["AlbumId=301; ArtistId=42; hash(42) -> P6 Node 1"]
+  subgraph "Album Table - colocateBy ArtistId"
+      B1["AlbumId=101, ArtistId=1 hash(1)→P1 Node 2"]
+      B2["AlbumId=102, ArtistId=1 hash(1)→P1 Node 2"]
+      B3["AlbumId=201, ArtistId=22 hash(22)→P11 Node 3"]
+      B4["AlbumId=301, ArtistId=42 hash(42)→P6 Node 1"]
   end
 
-  subgraph ARTISTS[Artist Table]
-    A1["ArtistId=1; hash -> P1 Node 2"]
-    A2["ArtistId=22; hash -> P11 Node 3"]
-    A3["ArtistId=42; hash -> P6 Node 1"]
+  subgraph "Artist Table"
+      A1["ArtistId=1 hash→P1 Node 2"]
+      A2["ArtistId=22 hash→P11 Node 3"]
+      A3["ArtistId=42 hash→P6 Node 1"]
   end
 
-  A1 -.->|Same partition| B1
-  A1 -.->|Same partition| B2
-  A2 -.->|Same partition| B3
-  A3 -.->|Same partition| B4
-
-</pre>
+  A1 -.->|"Same partition"| B1 -.-> N2
+  A1 -.->|"Same partition"| B2 -.-> N2
+  A2 -.->|"Same partition"| B3 -.-> N3
+  A3 -.->|"Same partition"| B4 -.-> N1
+</pre
+                >
                 <p>
                   Colocation configuration in your schema ensures that Album records use the <code>ArtistId</code> value (not <code>AlbumId</code>) for partition assignment. This guarantees that Artist 1 and all albums with
                   <code>ArtistId = 1</code> hash to the same partition and therefore live on the same nodes.
