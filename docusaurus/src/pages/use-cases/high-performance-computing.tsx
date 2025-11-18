@@ -4,322 +4,241 @@ import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
 import '../../css/native-persistence.css';
-import '../../css/high-performance-computing.css';
+import '../../css/digital-hub.css';
 
 export default function HighPerformanceComputing(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>High-Performance Computing, HPC Cluster - Apache Ignite</title>
+        <title>High-Performance Computing - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite enables high-performance computing by providing APIs for data and compute-intensive calculations. Using Ignite as a HPC cluster, you can turn your commodity hardware or cloud environment into a distributed supercomputer."
+          content="Apache Ignite supports compute-to-data patterns through schema-driven colocation. Local joins and recommendation engines benefit from significant latency reduction through colocation."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/high-performance-computing.html" />
-        <meta property="og:title" content="High-Performance Computing, HPC Cluster - Apache Ignite" />
+        <meta property="og:title" content="High-Performance Computing - Apache Ignite" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ignite.apache.org/use-cases/high-performance-computing.html" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite enables high-performance computing by providing APIs for data and compute-intensive calculations. Using Ignite as a HPC cluster, you can turn your commodity hardware or cloud environment into a distributed supercomputer."
+          content="Apache Ignite supports compute-to-data patterns through schema-driven colocation."
         />
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main">
+          <div className="innerhero__main innerhero__main--long">
             <h1 className="h1 innerhero__h1">
-              High-Performance <br />
-              Computing
-              <span className="highperf__herosmall">With Apache Ignite</span>
+              High-Performance Computing
+              <br />
+              <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
-              Minimize network utilization by executing kilobyte-size custom <br />
-              code over petabytes of data
+              Schema-driven colocation and compute-to-data patterns
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
           </div>
-          <img
-            className="innerhero__pic innerhero__pic--highperf"
-            src="/img/usecases/high-peformance/hero.svg"
-            alt="High Performance Computing"
-          />
         </div>
       </section>
 
-      <section className="high1 container">
-        <h2 className="capstext pb-5">High-Performance Computing Overview</h2>
-        <div className="high1__wrap flexi">
-          <div className="high1__main pt-1">
-            <h3 className="h5 high1__title">What is high-performance computing?</h3>
-            <div className="high1__text pt-3 pb-5">
-              <p>High-performance computing is the ability to process data and perform complex calculations at high speeds.</p>
-              <p>
-                You keep all your data on the cluster node and execute your kilobyte-size custom code over petabytes of data,
-                avoiding network-like utilization.
-              </p>
-            </div>
-            <h3 className="h5 high1__title">How it works</h3>
-            <div className="high1__text pt-2">
-              <div className="high1__sub pb-2">
-                In traditional disk-based systems, <br />
-                such as relational or NoSQL databases
-              </div>
-              <p>
-                Client applications usually bring data from servers, use the records for local calculations, and discard the
-                data as soon as the business task is completed.
-              </p>
-              <p>This approach does not scale well if a significant volume of data gets transferred over the network.</p>
-              <div className="high1__sub pt-2 pb-2">
-                In in-memory computing systems, <br />
-                such as Apache Ignite
-              </div>
-              <p>
-                Apache Ignite supports a co-located processing technique. The primary aim of this technique is to increase the
-                performance of your data-intensive or compute-intensive calculations by running them straight on Ignite cluster
-                nodes.
-              </p>
-              <p>
-                In co-located processing, calculations are done on local data sets of the cluster nodes. This avoids records
-                shuffling over the network and eliminates the impact of network latency on the performance of your applications.
-              </p>
-            </div>
+      <section className="inmememor1 container">
+        <header className="blockheader blockheader--spl flexi">
+          <h2 className="capstext pb-3">Compute-To-Data Pattern</h2>
+          <div className="inmememor1__text">
+            <p>
+              Ignite supports compute-to-data patterns by executing calculations on nodes where data resides. Schema-driven
+              colocation through table design enables local joins without network transfers. Recommendation engines and
+              analytics benefit from significant latency reduction through colocation.
+            </p>
+            <p className="pt-3">
+              Both Ignite 2 and Ignite 3 support compute-to-data patterns. Ignite 2 uses Affinity Key annotation for
+              colocation. Ignite 3 uses colocation keys defined in table schema. Both versions provide Compute APIs for
+              executing code across cluster nodes.
+            </p>
           </div>
-          <aside className="high1__picwrap">
-            <img src="/img/usecases/high-peformance/perf-pic.svg" alt="" className="high1__pic" />
-            <div className="high1__picdescr flexi">
-              <div className="high1__arrowline flexi">
-                <i>1</i>
-                <p>– Map Phase</p>
-              </div>
-              <div className="high1__arrowline flexi">
-                <i>2</i>
-                <p>– Execution Phase</p>
-              </div>
-              <div className="high1__arrowline flexi">
-                <i>3</i>
-                <p>– Reduce Phase</p>
-              </div>
-            </div>
-          </aside>
-        </div>
+        </header>
       </section>
 
-      <section className="high2">
+      <section className="inmememor-adv">
         <div className="container">
-          <h2 className="capstext">Benefits Of Apache Ignite Compute APIs</h2>
-          <div className="high2__wrap">
-            <div className="high2__block">
-              <div className="high2__title">Broadcast or execute on specific nodes</div>
-              <div className="high2__text">
-                <p>— Broadcast your tasks to use all the CPUs of your distributed cluster.</p>
-                <p className="pt-1">— Or execute your computations on a specific group of nodes.</p>
+          <header className="blockheader blockheader--spl flexi">
+            <h2 className="h4">How Colocation Works</h2>
+            <div className="blockheader__right fz20">
+              Schema-driven colocation keeps related data on the same nodes for local processing
+            </div>
+          </header>
+          <div className="inmememor-adv__wrap">
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Schema-Driven Colocation</h3>
+              <div className="inmememor-adv__text">
+                Define colocation keys in table schema to control data placement. Related records (orders with order
+                items, users with transactions) stored on same partition. Local joins execute without network transfers.
+                Significant latency reduction compared to distributed joins.
               </div>
             </div>
-            <div className="high2__block">
-              <div className="high2__title">Load balance your queries</div>
-              <div className="high2__text">
-                <p>If some of the nodes are over-utilized, Ignite can load balance your calculations to the other node.</p>
-              </div>
-            </div>
-            <div className="high2__block">
-              <div className="high2__title">All computations are fault-tolerant</div>
-              <div className="high2__text">
-                <p>
-                  Some computations might take minutes or hours to complete, e.g. drug discovery or logistics planning. You
-                  don't need to start from the very beginning if something goes wrong.
-                </p>
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Compute-To-Data Execution</h3>
+              <div className="inmememor-adv__text">
+                Execute calculations on nodes where data resides. Compute APIs broadcast tasks to cluster nodes. Custom
+                code executes locally on colocated data sets. Eliminates network transfers for data-intensive
+                calculations.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="highicons container">
-        <h2 className="h4">
-          Sample Data- And Compute-Intensive Tasks That <br />
-          Leverage High-Performance Computing
-        </h2>
-        <div className="highicons__wrap pt-5">
-          <div className="highicons__item">
-            <div className="highicons__iconwrap flexi">
-              <img src="/img/usecases/high-peformance/icon-perf1.svg" alt="" className="highicons__icon" />
-            </div>
-            <div className="highicons__title">Finance</div>
-            <div className="highicons__descr">e.g. fraud-detection, risk management, financial modeling</div>
+      <section className="inmememor2 container">
+        <h2 className="h4">Architecture Pattern</h2>
+        <p className="fz20 pt-5">
+          <strong>Local Joins With Colocated Data</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-2">
+          <div className="inmememor2__left">
+            <p>
+              <em>
+                Define colocation keys in table schema to ensure related records reside on same partitions, enabling
+                local joins without network overhead.
+              </em>
+            </p>
           </div>
-          <div className="highicons__item">
-            <div className="highicons__iconwrap flexi">
-              <img src="/img/usecases/high-peformance/icon-perf2.svg" alt="" className="highicons__icon" />
-            </div>
-            <div className="highicons__title">Retail & Hospitality</div>
-            <div className="highicons__descr">e.g. recommendation systems, 360 customer experience</div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Integration Pattern:</strong> Design table schemas with colocation keys that match join patterns.
+              Orders table colocated with order items using orderId. Users table colocated with transactions using
+              userId. Local joins execute on single node without network transfers.
+            </p>
+            <p>
+              <strong>Performance Characteristics:</strong> Local joins deliver significant latency reduction compared
+              to distributed joins. Network transfers eliminated for colocated data. Memory-first storage enables
+              low-latency join execution. Horizontal scalability maintained through proper partitioning strategy.
+            </p>
+            <p>
+              <strong>Version Support:</strong> Ignite 2 uses Affinity Key annotation for colocation. Ignite 3 uses
+              colocation keys defined in CREATE TABLE statements. Both versions support same performance benefits.
+            </p>
           </div>
-          <div className="highicons__item">
-            <div className="highicons__iconwrap flexi">
-              <img src="/img/usecases/high-peformance/icon-perf3.svg" alt="" className="highicons__icon" />
-            </div>
-            <div className="highicons__title">Media & Entertainment</div>
-            <div className="highicons__descr">e.g. creating animations, rendering special effects</div>
+        </div>
+
+        <p className="fz20 pt-5">
+          <strong>Recommendation Engines</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <p>
+              <em>
+                Execute recommendation algorithms on nodes where user and product data resides, avoiding network
+                transfers for large feature sets.
+              </em>
+            </p>
           </div>
-          <div className="highicons__item">
-            <div className="highicons__iconwrap flexi">
-              <img src="/img/usecases/high-peformance/icon-perf4.svg" alt="" className="highicons__icon" />
-            </div>
-            <div className="highicons__title">Logistic and transportation</div>
-            <div className="highicons__descr">e.g. logistics planning, detecting potential hazardous situations</div>
-          </div>
-          <div className="highicons__item">
-            <div className="highicons__iconwrap flexi">
-              <img src="/img/usecases/high-peformance/icon-perf5.svg" alt="" className="highicons__icon" />
-            </div>
-            <div className="highicons__title">Biotech</div>
-            <div className="highicons__descr">e.g. drug and vaccine discovery, sequencing DNA</div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Integration Pattern:</strong> Colocate user profiles, purchase history, and product catalogs
+              using userId as colocation key. Execute recommendation algorithms using Compute APIs on colocated data
+              sets. Results calculated locally without network transfers.
+            </p>
+            <p>
+              <strong>Performance Characteristics:</strong> Compute-to-data pattern delivers significant latency
+              reduction for recommendation calculations. Feature extraction from colocated data avoids network
+              overhead. Parallel execution across cluster nodes for multiple user recommendations.
+            </p>
+            <p>
+              <strong>Example Use Cases:</strong> E-commerce product recommendations based on purchase history and
+              browsing patterns. Content recommendations for streaming platforms. Personalized search results.
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="highcases container">
-        <h2 className="h4">
-          High-Performance Computing Ignite <br />
-          User Stories
-        </h2>
-        <div className="highcases__one flexi pt-2 pb-4">
-          <div className="highcases__topleft">
-            <div className="highcases__subtitle pb-2">Personalized websites with dynamically changing content</div>
-            <p className="pb-3">
-              Whenever you visit Amazon, Walmart, Booking, or other websites, you see personalized content, such as relevant
-              deals made especially for you.
-            </p>
+      <section className="inmememor3 container pt-5">
+        <h2 className="h4">Key Benefits</h2>
+        <div className="inmememor3__botwrap flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Significant Latency Reduction</h3>
             <p>
-              Personalized content that takes your age, location, preferences, and previous interactions into consideration is
-              processed and displayed in just a few seconds thanks to high-performance computing tasks that process gigabytes
-              of data within a second.
+              Local joins and calculations on colocated data eliminate network transfers. Significant latency reduction
+              compared to distributed joins across nodes. Memory-first storage delivers low-latency data access for
+              local operations. Particularly effective for join-heavy queries and recommendation algorithms.
+            </p>
+            <h3 className="fz20 pt-4">Schema-Driven Design</h3>
+            <p>
+              Define colocation keys in table schema to control data placement. Compile-time awareness of colocation
+              patterns. Query optimizer leverages colocation for local execution. Explicit schema design makes
+              colocation patterns visible in DDL.
             </p>
           </div>
-          <div className="highcases__topright">
-            <div className="comvideo">
-              <a
-                href="https://www.youtube.com/watch?v=qYd9GGRC4L0"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="comvideo__screen"
-              >
-                <img src="/img/usecases/high-peformance/video-1.png" alt="HomeAway video" />
-              </a>
-            </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Horizontal Scalability</h3>
             <p>
-              <strong>HomeAway,</strong> rental website with personalized offers
+              Add nodes to increase compute capacity while maintaining colocation benefits. Each partition processed
+              independently in parallel. Scales to large data sets through proper partitioning strategy. Compute-to-data
+              pattern scales linearly with cluster size.
+            </p>
+            <h3 className="fz20 pt-4">Familiar SQL Patterns</h3>
+            <p>
+              Standard SQL joins work automatically with colocated data. No specialized APIs required for local joins.
+              Query optimizer detects colocation and executes locally. Compute APIs available for custom algorithms on
+              colocated data.
             </p>
           </div>
         </div>
+      </section>
 
-        <div className="highcases__two pt-4 pb-4">
-          <div className="highcases__subtitle pb-2">Data-driven modelling and simulations</div>
-          <p>
-            To create a new vaccine or drug you have to run thousands or millions <br />
-            of simulations to come up with the best formula.
-          </p>
-          <div className="highcases__twowrap flexi pt-5">
-            <div className="highcases__twoitem">
-              <div className="comvideo">
-                <a
-                  href="https://www.youtube.com/watch?v=PFHb-UuhGkk"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="comvideo__screen"
-                >
-                  <img src="/img/usecases/high-peformance/video-2.png" alt="E-Therapeutics video" />
-                </a>
-              </div>
-              <p>
-                <strong>E-Therapeutics</strong> uses Apache Ignite capabilities for drug discovery.
-              </p>
-            </div>
-            <div className="highcases__twoitem">
-              <div className="comvideo comvideo__txt--small">
-                <a
-                  href="https://www.youtube.com/watch?v=NUxdoL-K9Ys"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="comvideo__screen"
-                >
-                  <img src="/img/usecases/high-peformance/video-3.png" alt="nference.ai video" />
-                </a>
-              </div>
-              <p>
-                <strong>nference.ai:</strong> high-performance compute APIs used to define different statistical analyses and
-                execute numerical data in real time.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="highcases__one flexi pt-4 pb-4">
-          <div className="highcases__topleft">
-            <div className="highcases__subtitle pb-2">
-              Logistic and transportation companies use advanced calculations for logistics planning
-            </div>
+      <section className="inmememor2 container pt-5">
+        <h2 className="h4">When This Pattern Works</h2>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Best For Join-Heavy Workloads</h3>
             <p>
-              <strong>Dutch Railways</strong> have thousands of different trains to deliver cargo and people across the
-              country. They need to calculate how all those trains should be moving in real time. These calculations also
-              happen with high compute APIs.
+              This pattern works well when workloads have predictable join patterns (orders with order items, users
+              with transactions). Schema-driven colocation enables local joins for related records. Significant latency
+              reduction for join-heavy queries. Best when colocation key matches most frequent join patterns.
             </p>
           </div>
-          <div className="highcases__topright">
-            <div className="comvideo comvideo__txt--small">
-              <a
-                href="https://www.youtube.com/watch?v=wkCW8YC8eKU"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="comvideo__screen"
-              >
-                <img src="/img/usecases/high-peformance/video-4.png" alt="Dutch Railways video" />
-              </a>
-            </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Requires Careful Schema Design</h3>
+            <p>
+              Effective colocation requires upfront schema design with appropriate colocation keys. Poor colocation key
+              choice results in distributed joins. Single colocation key per table limits flexibility for multiple join
+              patterns. Query patterns should be analyzed before defining colocation strategy.
+            </p>
           </div>
         </div>
+      </section>
 
-        <div className="highcases__two pt-4">
-          <div className="highcases__subtitle pb-2">Real-time analytics enables fast and precise decisions</div>
-          <p>
-            High-performance computing allows the processing of unlimited data sets, <br />
-            with analysis taking only seconds.
-          </p>
-          <div className="highcases__twowrap flexi pt-5">
-            <div className="highcases__twoitem">
-              <div className="comvideo comvideo__txt--small">
-                <a
-                  href="https://www.youtube.com/watch?v=jF9T2cJB6t0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="comvideo__screen"
-                >
-                  <img src="/img/usecases/high-peformance/video-5.png" alt="JPMorgan Chase video" />
-                </a>
-              </div>
-              <p>
-                <strong>JPMorgan Chase</strong> use Apache Ignite for heavy computations which help to make effective exposure
-                management.
-              </p>
-            </div>
-            <div className="highcases__twoitem">
-              <div className="comvideo">
-                <a
-                  href="https://www.youtube.com/watch?v=B8A8yR_e6VM"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="comvideo__screen"
-                >
-                  <img src="/img/usecases/high-peformance/video-6.png" alt="JPMorgan Chase video" />
-                </a>
-              </div>
-            </div>
+      <section className="inmememor2 container pt-5">
+        <h2 className="h4">Example Applications</h2>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <p>This pattern applies to:</p>
+            <ul className="dashlist pt-1">
+              <li>E-commerce platforms with product recommendations based on purchase history</li>
+              <li>Financial applications with account-based analytics requiring local joins</li>
+              <li>Content platforms with personalized recommendations based on user behavior</li>
+              <li>IoT analytics with device-based aggregations on colocated sensor data</li>
+            </ul>
+          </div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Concrete Example:</strong>
+            </p>
+            <ul className="pt-1">
+              <li>
+                <strong>Order Processing:</strong> Orders table colocated with order_items using orderId. Local joins
+                for order totals without network transfers. Significant latency reduction for checkout processing.
+              </li>
+              <li>
+                <strong>Recommendation Engine:</strong> User profiles colocated with purchase history using userId.
+                Execute recommendation algorithms locally on colocated data. Parallel execution across cluster for
+                multiple users.
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -332,12 +251,11 @@ export default function HighPerformanceComputing(): JSX.Element {
               <span>Ready to Start?</span>
             </div>
             <p className="nativebotblock__text">
-              Discover our quick start guide and build <br />
-              your first application in 5-10 minutes
+              Discover our quick start guide and build your first application in 5-10 minutes
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -347,15 +265,12 @@ export default function HighPerformanceComputing(): JSX.Element {
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Want to View More Use-Cases?</span>
+              <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">
-              Check out success stories from <br />
-              different industries across the world
-            </p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/provenusecases.html">
-              Ignite User Stories
-            </a>
+            <p className="nativebotblock__text">Learn about other Ignite use cases</p>
+            <Link className="nativebotblock__link arrowlink" to="/use-cases/">
+              Use Cases Overview
+            </Link>
           </article>
         </div>
       </section>

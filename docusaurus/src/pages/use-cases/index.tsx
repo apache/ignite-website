@@ -117,14 +117,14 @@ export default function UseCasesIndex(): JSX.Element {
           <p className="blockcapslead">Additional Use Cases</p>
           <header className="blockheader flexi">
             <h2 className="h4 blockheader__left">
-              Specialized
+              Operational + Analytical
               <br />
-              Alternatives May Excel
+              In One Platform
             </h2>
             <div className="blockheader__right fz20">
               <p>
-                These use cases are supported by Ignite 3, but specialized databases may provide better performance
-                for specific workloads.
+                Ignite 3 supports operational analytics and time-series workloads while maintaining ACID guarantees
+                and SQL query capabilities across your entire data platform.
               </p>
             </div>
           </header>
@@ -157,43 +157,139 @@ export default function UseCasesIndex(): JSX.Element {
         </div>
       </section>
 
-      <section className="usecase3" id="supporting-patterns">
+      <section className="usecase4" id="supporting-patterns">
         <div className="container">
           <p className="blockcapslead">Supporting Patterns</p>
-          <div className="blockheader usecase3__block flexi">
-            <h2 className="h4 blockheader__left">Digital Integration Hub</h2>
+          <header className="blockheader flexi">
+            <h2 className="h4 blockheader__left">
+              Architectural
+              <br />
+              Patterns For Both Versions
+            </h2>
             <div className="blockheader__right fz20">
               <p>
+                These patterns apply to both Ignite 2 and Ignite 3, providing architectural guidance for specific
+                deployment scenarios.
+              </p>
+            </div>
+          </header>
+          <div className="usecase4__wrap">
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Digital Integration Hub</h4>
+              <div className="cardsimple__text">
                 An advanced platform architecture that aggregates multiple back-end systems and databases into a
                 low-latency and shared data store.
-              </p>
-              <Link to="/use-cases/digital-integration-hub" className="blockheader__button button button--shadow">
-                Learn More
-              </Link>
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/digital-integration-hub" className="cardsimple__button button">
+                  Learn More
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="blockheader usecase3__block flexi">
-            <h2 className="h4 blockheader__left">High-Performance Computing</h2>
-            <div className="blockheader__right fz20">
-              <p>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">High-Performance Computing</h4>
+              <div className="cardsimple__text">
                 Schema-driven colocation and compute-to-data patterns enable local joins and recommendation engines
                 with significant latency reduction through colocation.
-              </p>
-              <Link to="/use-cases/high-performance-computing" className="blockheader__button button button--shadow">
-                Learn More
-              </Link>
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/high-performance-computing" className="cardsimple__button button">
+                  Learn More
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="blockheader usecase3__block flexi">
-            <h2 className="h4 blockheader__left">Key-Value Store</h2>
-            <div className="blockheader__right fz20">
-              <p>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Key-Value Store</h4>
+              <div className="cardsimple__text">
                 Access the cluster with key-value requests using Ignite 3's Table API with RecordView and KeyValueView,
                 or explore Ignite 2's Cache API for legacy deployments.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/key-value-store" className="cardsimple__button button">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Database with Memory-First Storage</h4>
+              <div className="cardsimple__text">
+                Database-first platform with multi-tier storage (aimem, aipersist, rocksdb) and full SQL support.
+                Concurrent transactional and analytical workloads with flexible storage placement.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/in-memory-database" className="cardsimple__button button">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="usecase2" id="ignite-2-use-cases" style={{ background: '#f8f9fa' }}>
+        <div className="container">
+          <p className="blockcapslead">Apache Ignite 2.x Use Cases</p>
+          <header className="blockheader flexi">
+            <h2 className="h4 blockheader__left">
+              Legacy Use Cases
+              <br />
+              For Apache Ignite 2.x
+            </h2>
+            <div className="blockheader__right fz20">
+              <p>
+                These use cases apply to Apache Ignite 2.x, which remains actively supported. Each page includes
+                patterns and APIs specific to Ignite 2's architecture.
               </p>
-              <Link to="/use-cases/key-value-store" className="blockheader__button button button--shadow">
-                Learn More
-              </Link>
+            </div>
+          </header>
+          <div className="usecase2__wrap">
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">In-Memory Cache</h4>
+              <div className="cardsimple__text">
+                Distributed in-memory cache accelerates applications and databases. Cache data with SQL queries and ACID
+                transactions using cache-aside or read-through/write-through strategies.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/in-memory-cache" className="cardsimple__button button button--shadow">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">In-Memory Data Grid</h4>
+              <div className="cardsimple__text">
+                Advanced read-through/write-through cache deployed on top of multiple databases. Colocation enables
+                low-latency computing with data stored in-memory.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/in-memory-data-grid" className="cardsimple__button button button--shadow">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Apache Spark Acceleration</h4>
+              <div className="cardsimple__text">
+                Accelerate Spark applications by keeping data in a shared in-memory cluster. Minimize data shuffling with
+                Ignite's RDD and DataFrame implementations.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/spark-acceleration" className="cardsimple__button button button--shadow">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Apache Hadoop Acceleration</h4>
+              <div className="cardsimple__text">
+                Real-time analytics across Hadoop operational and historical data. Use Ignite as a high-performance data
+                access layer for low-latency operations.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/hadoop-acceleration" className="cardsimple__button button button--shadow">
+                  Learn More
+                </Link>
+              </div>
             </div>
           </div>
         </div>

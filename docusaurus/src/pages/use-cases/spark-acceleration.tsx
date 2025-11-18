@@ -57,6 +57,28 @@ export default function SparkAcceleration(): JSX.Element {
         </div>
       </section>
 
+      <section className="container" style={{ padding: '2rem 0' }}>
+        <div style={{
+          background: '#f0f7ff',
+          border: '1px solid #0066cc',
+          borderRadius: '8px',
+          padding: '1rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V11H13V17ZM13 9H11V7H13V9Z" fill="#0066cc"/>
+          </svg>
+          <div>
+            <strong style={{ color: '#0066cc' }}>Apache Ignite 2.x Use Case</strong>
+            <p style={{ margin: '0.25rem 0 0 0', color: '#333' }}>
+              This use case applies to Apache Ignite 2.x. For Ignite 3, see the <Link to="/use-cases/">new use cases</Link>.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="spark1">
         <div className="container">
           <h2 className="h5 spark1__h2">How Does Ignite Accelerate Spark Applications?</h2>

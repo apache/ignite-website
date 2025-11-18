@@ -4,155 +4,226 @@ import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
 import '../../css/native-persistence.css';
-import '../../css/compute-apis.css';
 import '../../css/digital-hub.css';
-import '../../css/datagrid.css';
-import '../../css/hadoop.css';
-import '../../css/key-value-store.css';
 
 export default function KeyValueStore(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>Key-Value Store / Database - Apache Ignite</title>
+        <title>Key-Value Store - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite is the best and fastest key-value database that stores data both in memory and on disk with support for key-value, SQL, ACID transactions, compute, and machine learning APIs."
+          content="Apache Ignite provides key-value access patterns across both versions. Ignite 2 uses Cache API for primary key-value operations. Ignite 3 provides Table API with RecordView and KeyValueView for key-value access patterns."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/key-value-store.html" />
-        <meta property="og:title" content="Key-Value Store / Database - Apache Ignite" />
+        <meta property="og:title" content="Key-Value Store - Apache Ignite" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ignite.apache.org/use-cases/key-value-store.html" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite is the best and fastest key-value database that stores data both in memory and on disk with support for key-value, SQL, ACID transactions, compute, and machine learning APIs."
+          content="Apache Ignite provides key-value access patterns across both versions."
         />
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main">
+          <div className="innerhero__main innerhero__main--long">
             <h1 className="h1 innerhero__h1">
               Key-Value Store
               <br />
               <span className="with-apache">With Apache Ignite</span>
             </h1>
-            <div className="innerhero__descr pt-2 h5">Distributed store for high-performance data access</div>
+            <div className="innerhero__descr pt-2 h5">
+              Direct key-value access patterns across Ignite 2 and Ignite 3
+            </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
           </div>
-          <img
-            className="innerhero__pic innerhero__pic--key"
-            src="/img/usecases/key-value/hero-image.svg"
-            alt="hero-image"
-          />
         </div>
       </section>
 
-      <section className="key1">
-        <div className="container">
-          <div className="hub1__block key1__block flexi">
-            <div className="hub1__info">
-              <h2 className="h5 hub1__title">What is a key-value store?</h2>
-              <p className="hub1__text">
-                A key-value store is a data storage software. It stores, retrieves, and manages data as a set of unique
-                keys. Each one is associated with one and only one value.
-              </p>
-              <h2 className="h5 hub1__title hub1__titleend">How a key-value store works</h2>
-              <p className="hub1__text">
-                A key-value store, or a key-value database, holds a collection of data records in various fields. The
-                data records have unique keys to retrieve and modify records quickly.
-              </p>
-            </div>
-            <img className="hub1__image" src="/img/usecases/key-value/image.svg" alt="image" />
+      <section className="inmememor1 container">
+        <header className="blockheader blockheader--spl flexi">
+          <h2 className="capstext pb-3">Key-Value Access Patterns</h2>
+          <div className="inmememor1__text">
+            <p>
+              Key-value access is a major pattern in Ignite 2 (Cache API) and a supporting pattern in Ignite 3 (Table
+              API with KeyValueView). Both versions provide direct key-based access without SQL overhead, but use
+              different APIs reflecting their architectural evolution.
+            </p>
+            <p className="pt-3">
+              Ignite 2 provides the Cache API (IgniteCache) as the primary interface for key-value operations. Ignite 3
+              provides the Table API with RecordView and KeyValueView for key-value access patterns. Both support
+              partition-aware routing for low-latency operations.
+            </p>
           </div>
-        </div>
+        </header>
       </section>
 
-      <section className="compute2">
+      <section className="inmememor-adv">
         <div className="container">
-          <div className="doop2__block">
-            <h2 className="compute2__h2">Benefits Of Key-Value Store</h2>
-            <div className="compute2__grid flexi hub2__grid doop2__grid">
-              <div className="compute2item hub2item doop2__item">
-                <div className="compute2-points__item fz20"></div>
-                <div className="compute2item__block">
-                  <h3 className="fz20 compute2item__title">Low-latency access and high-performance</h3>
-                  <p className="compute2__text base2__text">
-                    Thanks to their design, key-value stores can perform many more operations in a given amount of time
-                    than other database models
-                  </p>
-                </div>
+          <header className="blockheader blockheader--spl flexi">
+            <h2 className="h4">API Evolution</h2>
+            <div className="blockheader__right fz20">
+              Ignite 3 Table API provides key-value access through RecordView and KeyValueView
+            </div>
+          </header>
+          <div className="inmememor-adv__wrap">
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Ignite 2: Cache API</h3>
+              <div className="inmememor-adv__text">
+                Ignite 2 uses the Cache API (IgniteCache) for key-value operations. Supports get, put, remove operations
+                with ACID guarantees. Partition-aware routing enables direct access to data without coordinator overhead.
+                Colocation support through Affinity Key annotation.
               </div>
-
-              <div className="compute2item hub2item doop2__item">
-                <div className="compute2-points__item fz20"></div>
-                <div className="compute2item__block">
-                  <h3 className="fz20 compute2item__title">Horizontal scalability</h3>
-                  <p className="compute2__text base2__text">
-                    Key-value stores can keep and process large volumes of data by scaling horizontally
-                  </p>
-                </div>
+            </div>
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Ignite 3: Table API</h3>
+              <div className="inmememor-adv__text">
+                Ignite 3 provides Table API with RecordView for tuple-based access and KeyValueView for key-value
+                patterns. Schema-driven design with compile-time type safety. Partition-aware routing through
+                colocation keys defined in table schema. Supports same ACID guarantees with improved API design.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="key4">
-        <div className="container">
-          <div className="grid4__blocks flexi">
-            <h2 className="grid4__h2 h5 key4__h2">
-              With Apache Ignite, a key-value store can cache data in memory and persist it on disk
-            </h2>
-            <div className="grid4__block">
-              <p className="grid4__text">
-                The <a href="/arch/native-persistence.html">native persistence</a> feature eliminates the time-consuming
-                cache warm-up step as well as the data reloading phase from external databases.
-              </p>
-              <p className="grid4__text pt-1">
-                Since native persistence always keeps a full copy of data on disk, you are free to cache a subset of
-                records in memory.
-              </p>
-              <p className="grid4__text pt-1">
-                If a required data record is missing in memory, then Ignite reads it from disk automatically, regardless
-                of the API you use.
-              </p>
-            </div>
+      <section className="inmememor2 container">
+        <h2 className="h4">Side-By-Side Comparison</h2>
+        <p className="fz20 pt-5">
+          <strong>Simple Get/Put Operations</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-2">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Ignite 2: Cache API</h3>
+            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+              <code>{`// Get cache instance
+IgniteCache<Integer, Person> cache =
+    ignite.cache("person");
+
+// Put operation
+cache.put(1, new Person("John", 30));
+
+// Get operation
+Person person = cache.get(1);
+
+// Remove operation
+cache.remove(1);`}</code>
+            </pre>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Ignite 3: Table API</h3>
+            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+              <code>{`// Get KeyValueView from table
+KeyValueView<Integer, Person> kvView =
+    table.keyValueView(Integer.class, Person.class);
+
+// Put operation
+kvView.put(null, 1, new Person("John", 30));
+
+// Get operation
+Person person = kvView.get(null, 1);
+
+// Remove operation
+kvView.remove(null, 1);`}</code>
+            </pre>
+          </div>
+        </div>
+
+        <p className="fz20 pt-5">
+          <strong>Batch Operations</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Ignite 2: Cache API</h3>
+            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+              <code>{`// Batch put
+Map<Integer, Person> batch = new HashMap<>();
+batch.put(1, new Person("John", 30));
+batch.put(2, new Person("Jane", 25));
+cache.putAll(batch);
+
+// Batch get
+Set<Integer> keys = Set.of(1, 2);
+Map<Integer, Person> results = cache.getAll(keys);`}</code>
+            </pre>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Ignite 3: Table API</h3>
+            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
+              <code>{`// Batch put
+Map<Integer, Person> batch = Map.of(
+    1, new Person("John", 30),
+    2, new Person("Jane", 25)
+);
+kvView.putAll(null, batch);
+
+// Batch get
+Collection<Integer> keys = List.of(1, 2);
+Map<Integer, Person> results = kvView.getAll(null, keys);`}</code>
+            </pre>
           </div>
         </div>
       </section>
 
-      <section className="key5">
-        <div className="container">
-          <h2 className="grid5__h2 key5__h2 h4">
-            Key-value store is used when <strong>speed and scale are top priorities</strong>
-          </h2>
-          <div className="grid5__blocks flexi">
-            <article className="native2item grid5__item">
-              <h3 className="key5__h3">User sessions caching</h3>
-              <p className="grid5__text key5__text">
-                Key-value stores are used to accumulate user session details in web applications to personalize content.
-              </p>
-            </article>
-            <article className="native2item grid5__item">
-              <h3 className="key5__h3">360 Customer View</h3>
-              <p className="grid5__text key5__text">
-                Applications can collect user preferences and behavioral patterns to offer better services. The records
-                can be stored in a key-value database to enable fast customer data lookups.
-              </p>
-            </article>
-            <article className="native2item grid5__item">
-              <h3 className="key5__h3">Back-end systems acceleration</h3>
-              <p className="grid5__text key5__text">
-                Developers use key-value stores to cache specific records that don't require a regular update. This
-                reduces the load on core back-end systems and databases.
-              </p>
-            </article>
+      <section className="inmememor3 container pt-5">
+        <h2 className="h4">Common Use Cases</h2>
+        <div className="inmememor3__botwrap flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Session Management</h3>
+            <p>
+              Store user session data with direct key-based access. Both versions support partition-aware routing for
+              low-latency session retrieval. Any-node access eliminates sticky sessions. ACID guarantees ensure
+              consistency across replicas.
+            </p>
+            <h3 className="fz20 pt-4">Reference Data Caching</h3>
+            <p>
+              Cache frequently accessed reference data (product catalogs, configuration settings) with key-value
+              patterns. Direct partition access delivers low-latency lookups. Colocation support enables local joins
+              with related data.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">User Profile Lookups</h3>
+            <p>
+              Store user profiles with userId as key for direct access patterns. Partition-aware routing ensures
+              consistent latency across cluster. Both versions support atomic updates to profile data. Memory-first
+              architecture delivers low-latency reads.
+            </p>
+            <h3 className="fz20 pt-4">Shopping Cart State</h3>
+            <p>
+              Maintain shopping cart state with sessionId as key. Direct key-based access for cart operations without
+              SQL overhead. ACID guarantees ensure cart consistency during checkout. Automatic failover prevents cart
+              data loss.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="inmememor2 container pt-5">
+        <h2 className="h4">Key Differences</h2>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">API Design</h3>
+            <p>
+              Ignite 2 Cache API provides a simpler interface focused on key-value operations. Ignite 3 Table API
+              requires table schema definition upfront but provides compile-time type safety. RecordView offers
+              tuple-based access while KeyValueView provides key-value patterns. Both support same performance
+              characteristics.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Schema Management</h3>
+            <p>
+              Ignite 2 Cache API supports dynamic cache creation without schema definition. Ignite 3 requires table
+              schema definition using SQL DDL before accessing KeyValueView. Schema evolution supported in both
+              versions. Ignite 3 schema-driven design enables better query optimization.
+            </p>
           </div>
         </div>
       </section>
@@ -165,12 +236,11 @@ export default function KeyValueStore(): JSX.Element {
               <span>Ready to Start?</span>
             </div>
             <p className="nativebotblock__text">
-              Discover our quick start guide and build your first
-              <br /> application in 5-10 minutes
+              Discover our quick start guide and build your first application in 5-10 minutes
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -180,12 +250,12 @@ export default function KeyValueStore(): JSX.Element {
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Want to Learn More?</span>
+              <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Check out Ignite key-value APIs article</p>
-            <a className="nativebotblock__link arrowlink" href="/features/key-value-apis.html">
-              Key-Value APIs Article
-            </a>
+            <p className="nativebotblock__text">Learn about other Ignite use cases</p>
+            <Link className="nativebotblock__link arrowlink" to="/use-cases/">
+              Use Cases Overview
+            </Link>
           </article>
         </div>
       </section>

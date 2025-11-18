@@ -4,257 +4,252 @@ import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
 import '../../css/native-persistence.css';
-import '../../css/compute-apis.css';
 import '../../css/digital-hub.css';
-import '../../css/database.css';
 
 export default function InMemoryDatabase(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>In-Memory Database - Apache Ignite</title>
+        <title>Database with Memory-First Storage - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite, as the best open source in-memory database, is a high-performance system-of-records that can store and query large data sets from memory and disk without requiring to warm up the memory tier on cluster restarts."
+          content="Apache Ignite 3 is a database-first platform with memory-first storage profile. Multi-tier storage (aimem, aipersist, rocksdb) supports concurrent transactional and analytical workloads with full SQL support."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-database.html" />
-        <meta property="og:title" content="In-Memory Database - Apache Ignite" />
+        <meta property="og:title" content="Database with Memory-First Storage - Apache Ignite" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ignite.apache.org/use-cases/in-memory-database.html" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite, as the best open source in-memory database, is a high-performance system-of-records that can store and query large data sets from memory and disk without requiring to warm up the memory tier on cluster restarts."
+          content="Apache Ignite 3 is a database-first platform with memory-first storage profile and multi-tier storage."
         />
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main">
+          <div className="innerhero__main innerhero__main--long">
             <h1 className="h1 innerhero__h1">
-              In-Memory Database
+              Database with Memory-First Storage
               <br />
               <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
-              In-memory database that scales horizontally across memory
-              <br /> and disk with full SQL support
+              Database-first platform with multi-tier storage and full SQL support
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
           </div>
-          <img
-            className="innerhero__pic innerhero__pic--database"
-            src="/img/usecases/database/hero-image.svg"
-            alt="hero-image"
-          />
         </div>
       </section>
 
-      <section className="hub1">
-        <div className="container">
-          <h2 className="compute2__h2">In-Memory Database Overview</h2>
-          <div className="hub1__block flexi">
-            <div className="hub1__info">
-              <h3 className="h5 hub1__title">What is an in-memory database?</h3>
-              <p className="hub1__text">
-                An in-memory database (IMDB) is a data management system that stores data primarily in the computer's
-                main memory.
-              </p>
-              <h3 className="h5 hub1__title hub1__titleend">How does an in-memory database work?</h3>
-              <p className="hub1__text">
-                In-memory databases rely on spinning disks for data storage. IMDBs allow mission-critical applications
-                to benefit from faster response times than disk-based databases.
-              </p>
-            </div>
-            <img className="hub1__image" src="/img/usecases/database/image.svg" alt="image" />
+      <section className="inmememor1 container">
+        <header className="blockheader blockheader--spl flexi">
+          <h2 className="capstext pb-3">Database-First Platform</h2>
+          <div className="inmememor1__text">
+            <p>
+              Ignite 3 is a database-first platform with memory-first storage profile. Multi-tier storage enables
+              flexible data placement across memory (aimem), persistent memory-first (aipersist), and disk (rocksdb)
+              storage engines. Full SQL support with ACID transactions for both transactional and analytical workloads.
+            </p>
+            <p className="pt-3">
+              Memory-first architecture delivers low-latency operations while horizontal scalability handles growing
+              data volumes. Concurrent transactional writes and analytical queries operate on same data without
+              separate systems. Not positioned as full HTAP but supports operational analytics patterns.
+            </p>
           </div>
-        </div>
+        </header>
       </section>
 
-      <section className="base1">
+      <section className="inmememor-adv">
         <div className="container">
-          <h2 className="base1__h2 h5">
-            Apache Ignite as a distributed in-memory database scales horizontally across memory and disk without
-            compromise
-          </h2>
-          <div className="base1__blocks flexi">
-            <div className="base1__block">
-              <p className="base1__text">
-                Apache Ignite works with memory, disk, and Intel Optane as active storage tiers.
-              </p>
-              <p className="base1__text pt-1">
-                This <a href="/arch/multi-tier-storage.html">multi-tier</a> architecture combines the advantages of
-                in-memory computing with disk durability and strong consistency, all in one system.
-              </p>
+          <header className="blockheader blockheader--spl flexi">
+            <h2 className="h4">Multi-Tier Storage</h2>
+            <div className="blockheader__right fz20">
+              Flexible data placement across memory, persistent memory-first, and disk storage engines
             </div>
-            <div className="base1__block">
-              <div className="base1__item flexi">
-                <div className="compute2-points__item fz20"></div>
-                <h3 className="base1__black">Speed of memory</h3>
+          </header>
+          <div className="inmememor-adv__wrap">
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Storage Engine Options</h3>
+              <div className="inmememor-adv__text">
+                Three storage engines provide flexible data placement: aimem (pure memory), aipersist (memory-first with
+                disk persistence), and rocksdb (disk-based). Configure storage engine per table based on access patterns
+                and durability requirements. Hot data in memory with cold data on disk within same cluster.
               </div>
-              <div className="base1__item flexi">
-                <div className="compute2-points__item fz20"></div>
-                <h3 className="base1__black">Strong consistency</h3>
-              </div>
-              <div className="base1__item flexi">
-                <div className="compute2-points__item fz20"></div>
-                <h3 className="base1__black">Durability of disk</h3>
+            </div>
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Memory-First Performance</h3>
+              <div className="inmememor-adv__text">
+                Memory-first architecture (aimem, aipersist) delivers low-latency operations for hot data. Automatic
+                page management between memory and disk for aipersist storage. No warm-up required after restarts with
+                persistent storage engines. Horizontal scalability across cluster nodes.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="compute2">
-        <div className="container">
-          <h2 className="compute2__h2">Advantages Of Ignite Multi-Tiered Architecture</h2>
-          <div className="compute2__grid flexi hub2__grid">
-            <div className="compute2item hub2item">
-              <div className="compute2-points__item fz20"></div>
-              <div className="compute2item__block">
-                <h3 className="fz20 compute2item__title">Instantaneous cluster restarts</h3>
-                <p className="compute2__text base2__text">
-                  Ignite becomes fully operational from disk upon a cluster startup or restarts without requiring a
-                  preload or a warm-up the memory tier.
-                </p>
-              </div>
-            </div>
+      <section className="inmememor2 container">
+        <h2 className="h4">Architecture Pattern</h2>
+        <p className="fz20 pt-5">
+          <strong>Concurrent Transactional And Analytical Workloads</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-2">
+          <div className="inmememor2__left">
+            <p>
+              <em>
+                Single platform supports both transactional writes and analytical queries without separate systems for
+                OLTP and OLAP.
+              </em>
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Integration Pattern:</strong> Applications execute transactional operations (INSERT, UPDATE,
+              DELETE) using standard SQL with ACID guarantees. Analytical queries (aggregations, joins, GROUP BY) run
+              concurrently on same data. Snapshot isolation prevents analytical queries from blocking transactional
+              writes.
+            </p>
+            <p>
+              <strong>Storage Configuration:</strong> Configure storage engine per table: aimem for hot transactional
+              data, aipersist for durable memory-first operations, rocksdb for historical data. Multi-tier strategy
+              places frequently accessed data in memory with cold data on disk. Single SQL interface across all storage
+              tiers.
+            </p>
+            <p>
+              <strong>Performance Characteristics:</strong> Memory-first storage delivers low-latency transactional
+              operations. Analytical queries leverage snapshot isolation for concurrent execution. Horizontal
+              scalability handles growing data volumes across cluster. Not positioned as full HTAP but supports
+              operational analytics patterns.
+            </p>
+          </div>
+        </div>
 
-            <div className="compute2item hub2item">
-              <div className="compute2-points__item fz20"></div>
-              <div className="compute2item__block">
-                <h3 className="fz20 compute2item__title">Multi-tiered storage</h3>
-                <p className="compute2__text base2__text">
-                  Ignite treats disk as an active storage layer, allowing it to cache a subset of the data in memory
-                  and query both in-memory and disk-only records with SQL and all other available APIs.
-                </p>
-              </div>
-            </div>
+        <p className="fz20 pt-5">
+          <strong>When This Pattern Works</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <p>This architecture pattern is best for:</p>
+            <ul className="dashlist pt-1">
+              <li>Applications requiring both transactional operations and operational analytics</li>
+              <li>Systems needing low-latency data access with horizontal scalability</li>
+              <li>Workloads with mixed hot and cold data requiring flexible storage placement</li>
+              <li>Platforms consolidating transactional and analytical systems</li>
+            </ul>
+          </div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Example Use Cases:</strong>
+            </p>
+            <ul className="pt-1">
+              <li>
+                <strong>E-Commerce Platform:</strong> Transactional order processing with concurrent analytics for
+                inventory management and sales reporting
+              </li>
+              <li>
+                <strong>Financial Services:</strong> Account transactions with real-time fraud detection analytics and
+                compliance reporting
+              </li>
+              <li>
+                <strong>IoT Analytics:</strong> High-volume sensor data ingestion with operational dashboards and
+                time-series aggregations
+              </li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <section className="base3">
-        <div className="container">
-          <h2 className="base3__h2 h4">
-            Apache Ignite as an in-memory database <br />
-            supports a variety of developer APIs
-          </h2>
-          <div className="base3__blocks flexi">
-            <div className="base3__block">
-              <h3 className="base3__h3">Essential Developer APIs</h3>
-              <div className="base3__images flexi">
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/03-distributed-SQL.svg" alt="sql" />
-                  <div className="base3__subtext">SQL</div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/05-key-value-APIs.svg" alt="apis" />
-                  <div className="base3__subtext">Key-value</div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/04-ACID-transactions.svg" alt="acid" />
-                  <div className="base3__subtext">
-                    ACID
-                    <br /> transactions
-                  </div>
-                </div>
-              </div>
-              <p className="base3__text">Enable you to request, join, and group distributed datasets.</p>
-            </div>
-            <div className="base3__block">
-              <h3 className="base3__h3">High-Performance Computing APIs</h3>
-              <div className="base3__images flexi">
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/06-compute-APIs.svg" alt="sql" />
-                  <div className="base3__subtext">Compute</div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/07-machine-learning.svg" alt="apis" />
-                  <div className="base3__subtext">
-                    Machine
-                    <br /> learning
-                  </div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/08-services.svg" alt="acid" />
-                  <div className="base3__subtext">Services</div>
-                </div>
-              </div>
-              <p className="base3__text">
-                Execute logic close to the data, thus eliminating expensive data shuffling over the network.
-              </p>
-            </div>
-            <div className="base3__block">
-              <h3 className="base3__h3">Real-Time Streaming APIs</h3>
-              <div className="base3__images flexi">
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/09-streaming.svg" alt="sql" />
-                  <div className="base3__subtext">Streaming</div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/10-continuous-queries.svg" alt="apis" />
-                  <div className="base3__subtext">
-                    Continuous
-                    <br /> Queries
-                  </div>
-                </div>
-                <div className="base3__item flexi">
-                  <img className="base3__image" src="/img/features/11-messaging.svg" alt="acid" />
-                  <div className="base3__subtext">Messaging</div>
-                </div>
-              </div>
-              <p className="base3__text base3__textend">Allow the seamless implementation of event-driven architectures.</p>
-            </div>
+      <section className="inmememor3 container pt-5">
+        <h2 className="h4">Key Benefits</h2>
+        <div className="inmememor3__botwrap flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Flexible Storage Placement</h3>
+            <p>
+              Multi-tier storage enables per-table storage engine configuration. Hot transactional data in memory
+              (aimem) for low latency. Durable data with memory-first access (aipersist) for balanced performance.
+              Historical data on disk (rocksdb) for cost-effective storage. Single SQL interface across all tiers.
+            </p>
+            <h3 className="fz20 pt-4">Concurrent Workloads</h3>
+            <p>
+              Snapshot isolation enables analytical queries without blocking transactional writes. Single platform
+              eliminates ETL between transactional and analytical systems. Operational analytics on live data without
+              replication delays. Not full HTAP but supports operational reporting patterns.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Horizontal Scalability</h3>
+            <p>
+              Distributed architecture scales transactional and analytical workloads across cluster nodes. Add nodes to
+              increase capacity for both write throughput and query performance. Partition-aware routing distributes
+              load evenly. Memory-first storage maintains low latency at scale.
+            </p>
+            <h3 className="fz20 pt-4">Full SQL Support</h3>
+            <p>
+              Standard SQL for transactional operations (INSERT, UPDATE, DELETE) and analytical queries (aggregations,
+              joins, GROUP BY). ACID transactions with snapshot isolation. DDL for schema management. JDBC/ODBC
+              connectivity for standard tooling.
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="hub5">
-        <div className="container">
-          <h2 className="compute2__h2">In-Memory Database Ignite User Stories</h2>
-          <div className="highcases__two">
-            <div className="hub5__twowrap flexi pt-5">
-              <div className="hub5__item">
-                <div className="comvideo__txt--white hub5__video">
-                  <a
-                    href="https://www.youtube.com/watch?v=-t-Syy9blXQ"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="comvideo__screen"
-                  >
-                    <img src="/img/usecases/database/one-video.png" alt="BNP Paribas video" />
-                  </a>
-                </div>
-                <div className="h4 hub5__title">BNP Paribas</div>
-                <p className="hub5__text base5__text">
-                  with the help of Apache Ignite managed to design, build, and optimize a hybrid
-                  transactional-analytical processing (HTAP) solution. This enabled the bank to make key business
-                  decisions in real time.
-                </p>
-              </div>
-              <div className="hub5__item">
-                <div className="comvideo__txt--white hub5__video">
-                  <a
-                    href="https://www.youtube.com/watch?v=B8A8yR_e6VM&t=2s"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="comvideo__screen"
-                  >
-                    <img src="/img/usecases/datagrid/two-video.png" alt="JP Morgan Chase video" />
-                  </a>
-                </div>
-                <div className="h4 hub5__title">JP MorganChase</div>
-                <p className="hub5__text base5__text">
-                  faced an increasing need to apply transformations to large datasets in real time. To meet this need,
-                  their team selected Ignite to achieve persistence, caching and integrated compute.
-                </p>
-              </div>
-            </div>
+      <section className="inmememor2 container pt-5">
+        <h2 className="h4">Storage Engine Comparison</h2>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">aimem (Pure Memory)</h3>
+            <p>
+              Pure in-memory storage with no persistence. Delivers lowest latency for hot data. Suitable for
+              transactional workloads requiring microsecond-to-millisecond operations. Data lost on cluster restart.
+              Best for caching and session management patterns.
+            </p>
+            <h3 className="fz20 pt-4">aipersist (Memory-First Persistent)</h3>
+            <p>
+              Memory-first storage with automatic persistence to disk. Delivers low-latency operations with durability
+              guarantees. No warm-up required after restart. Automatic page management between memory and disk. Best for
+              transactional workloads requiring both performance and durability.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">rocksdb (Disk-Based)</h3>
+            <p>
+              Disk-based storage using RocksDB engine. Optimized for large datasets exceeding memory capacity.
+              Cost-effective storage for historical data. Higher latency than memory-first engines but better than
+              remote disk access. Best for analytical workloads on cold data.
+            </p>
+            <h3 className="fz20 pt-4">Mixed Strategy</h3>
+            <p>
+              Configure different storage engines per table within same cluster. Hot transactional tables use aimem or
+              aipersist for low latency. Historical tables use rocksdb for cost-effective storage. Single SQL interface
+              queries across all storage tiers. Optimize cost and performance through strategic placement.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="inmememor2 container pt-5">
+        <h2 className="h4">Important Limitations</h2>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Not Full HTAP</h3>
+            <p>
+              Ignite 3 supports concurrent transactional and analytical workloads but is not positioned as full HTAP
+              system. Window functions NOT supported (LAG, LEAD, ROW_NUMBER). For complex analytical workloads requiring
+              columnar storage and advanced analytics, specialized OLAP databases may provide better performance.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Memory Capacity Planning</h3>
+            <p>
+              Memory-first storage engines (aimem, aipersist) require capacity planning for hot data. Working set must
+              fit in cluster memory for optimal performance. Aipersist provides automatic page management but
+              performance degrades if working set exceeds memory. Rocksdb suitable for data exceeding memory capacity.
+            </p>
           </div>
         </div>
       </section>
@@ -267,12 +262,11 @@ export default function InMemoryDatabase(): JSX.Element {
               <span>Ready to Start?</span>
             </div>
             <p className="nativebotblock__text">
-              Discover our quick start guide and build your first
-              <br /> application in 5-10 minutes
+              Discover our quick start guide and build your first application in 5-10 minutes
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -282,12 +276,12 @@ export default function InMemoryDatabase(): JSX.Element {
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Want to View More Use-Cases?</span>
+              <span>Learn About Multi-Tier Storage</span>
             </div>
-            <p className="nativebotblock__text">Read the In-Memory Cache article</p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/in-memory-cache.html">
-              In-Memory Cache Article
-            </a>
+            <p className="nativebotblock__text">Explore Ignite 3 storage engines</p>
+            <Link className="nativebotblock__link arrowlink" to="/arch/multi-tier-storage">
+              Multi-Tier Storage
+            </Link>
           </article>
         </div>
       </section>

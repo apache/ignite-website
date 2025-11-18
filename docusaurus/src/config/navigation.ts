@@ -112,6 +112,11 @@ export const getStartedMenu: DropdownMenu = {
           href: '/use-cases/key-value-store',
           icon: '/img/menu/icon-folder.svg',
         },
+        {
+          label: 'Database with Memory-First Storage',
+          href: '/use-cases/in-memory-database',
+          icon: '/img/menu/icon-folder.svg',
+        },
       ],
     },
   ],
@@ -358,6 +363,7 @@ export const mobileMenuItems = [
       { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
       { label: 'High Performance Computing', href: '/use-cases/high-performance-computing' },
       { label: 'Key-Value Store', href: '/use-cases/key-value-store' },
+      { label: 'Database with Memory-First Storage', href: '/use-cases/in-memory-database' },
       { label: 'View All', href: '/use-cases' },
     ],
   },
@@ -429,6 +435,7 @@ export const footerSections = {
       { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
       { label: 'High-Performance Computing', href: '/use-cases/high-performance-computing' },
       { label: 'Key-Value Store', href: '/use-cases/key-value-store' },
+      { label: 'Database with Memory-First Storage', href: '/use-cases/in-memory-database' },
     ],
   },
   community: {
