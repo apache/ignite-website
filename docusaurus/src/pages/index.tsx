@@ -20,10 +20,10 @@ function HomepageHero() {
         <div className="container">
           <div className={styles.innerhero__main}>
             <h1 className={styles.innerhero__h1}>
-              Memory-First Distributed SQL Database <br />For High-Velocity Data Workloads
+              Fast OR Consistent? <br />Choose Both.
             </h1>
             <div className={styles.innerhero__h2}>
-              Distributed Scale Without Distributed Query Penalties
+              Memory-First Distributed SQL Database That Eliminates The Latency-Consistency Trade-off
             </div>
             <div className={styles.innerhero__action}>
               <Link className={clsx('button', styles.fronthero__button)} to="https://ignite.apache.org/docs/latest/index">
@@ -71,7 +71,7 @@ function TopCards() {
           <img src="/img/frontpage/b1-planet.svg" alt="" />
         </div>
         <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary, 'pt-3')}>
-          Leading companies around the world select Ignite to speed up and scale applications used by millions of people daily
+          Distributed applications force an impossible choice: fast OR consistent. Ignite 3 eliminates the trade-off. Cache-level speed with database-level consistency.
         </div>
       </Link>
     </aside>
@@ -360,25 +360,40 @@ function UsageScenarios() {
     <Section className={styles.frontnewcards}>
       <h2 className={styles.h2}>Apache Ignite 3 Use Cases</h2>
       <div className={styles.frontnewcards__wrap}>
-        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Event Stream Processing <br />And Enrichment</h4>
-          <div className={styles.cardsimple__text}>
-            Enrich streaming events with reference data lookups without latency penalties. Handle high-throughput streams while maintaining data consistency and eliminating cache complexity.
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)} style={{ display: 'flex', flexDirection: 'column', padding: 'var(--ai-spacing-2xl) var(--ai-spacing-xl) var(--ai-spacing-xl)' }}>
+          <div style={{ flex: 1 }}>
+            <h4 className={styles.cardsimple__title}>Event Stream Processing <br />And Enrichment</h4>
+            <div className={styles.cardsimple__text}>
+              <strong>Fast OR Consistent?</strong> Enrich high-throughput event streams with consistent reference data. Memory-first architecture delivers low-latency lookups while maintaining ACID guarantees. Eliminate cache invalidation complexity.
+            </div>
           </div>
+          <Link className="button button--primary button--outline" to="/use-cases/event-stream-processing" style={{ marginTop: '1.5rem' }}>
+            Learn More
+          </Link>
         </article>
 
-        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Session Management <br />And Caching At Scale</h4>
-          <div className={styles.cardsimple__text}>
-            Handle millions of concurrent sessions with automatic failover and any-node access. Eliminate sticky sessions while maintaining strong consistency and fast response times.
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)} style={{ display: 'flex', flexDirection: 'column', padding: 'var(--ai-spacing-2xl) var(--ai-spacing-xl) var(--ai-spacing-xl)' }}>
+          <div style={{ flex: 1 }}>
+            <h4 className={styles.cardsimple__title}>Session Management <br />And Caching At Scale</h4>
+            <div className={styles.cardsimple__text}>
+              <strong>Fast OR Durable?</strong> Any-node session access with automatic failover and zero data loss. Low-latency session retrieval with ACID guarantees eliminates sticky sessions while maintaining consistency.
+            </div>
           </div>
+          <Link className="button button--primary button--outline" to="/use-cases/session-management" style={{ marginTop: '1.5rem' }}>
+            Learn More
+          </Link>
         </article>
 
-        <article className={clsx(styles.frontsimplecard, styles.cardsimple)}>
-          <h4 className={styles.cardsimple__title}>Microservices <br />State Management</h4>
-          <div className={styles.cardsimple__text}>
-            Coordinate state across microservices with distributed transactions. Eliminate manual compensation logic while maintaining service autonomy and linear scalability.
+        <article className={clsx(styles.frontsimplecard, styles.cardsimple)} style={{ display: 'flex', flexDirection: 'column', padding: 'var(--ai-spacing-2xl) var(--ai-spacing-xl) var(--ai-spacing-xl)' }}>
+          <div style={{ flex: 1 }}>
+            <h4 className={styles.cardsimple__title}>Microservices <br />State Management</h4>
+            <div className={styles.cardsimple__text}>
+              <strong>Simple OR Scalable?</strong> Distributed ACID transactions across service boundaries eliminate saga complexity. Significant infrastructure cost reduction potential through system consolidation.
+            </div>
           </div>
+          <Link className="button button--primary button--outline" to="/use-cases/microservices-state" style={{ marginTop: '1.5rem' }}>
+            Learn More
+          </Link>
         </article>
       </div>
     </Section>

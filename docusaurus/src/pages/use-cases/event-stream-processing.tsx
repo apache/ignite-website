@@ -1,0 +1,234 @@
+import React from 'react';
+import Layout from '@theme/Layout';
+import Link from '@docusaurus/Link';
+import Head from '@docusaurus/Head';
+
+import '../../css/native-persistence.css';
+import '../../css/digital-hub.css';
+
+export default function EventStreamProcessing(): JSX.Element {
+  return (
+    <Layout>
+      <Head>
+        <title>Event Stream Processing and Enrichment - Apache Ignite</title>
+        <meta
+          name="description"
+          content="Apache Ignite 3 eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups using memory-first architecture and partition-aware routing."
+        />
+        <link rel="canonical" href="https://ignite.apache.org/use-cases/event-stream-processing.html" />
+        <meta property="og:title" content="Event Stream Processing and Enrichment - Apache Ignite" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ignite.apache.org/use-cases/event-stream-processing.html" />
+        <meta property="og:image" content="/img/og-pic.png" />
+        <meta
+          property="og:description"
+          content="Apache Ignite 3 eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups."
+        />
+      </Head>
+
+      <section className="innerhero">
+        <div className="container innerhero__cont">
+          <div className="innerhero__main innerhero__main--long">
+            <h1 className="h1 innerhero__h1">
+              Event Stream Processing
+              <br />
+              And Enrichment
+              <br />
+              <span className="with-apache">With Apache Ignite</span>
+            </h1>
+            <div className="innerhero__descr pt-2 h5">
+              Fast OR Consistent? Choose Both. <br />
+              Enrich high-throughput event streams with consistent reference data
+            </div>
+            <div className="innerhero__action">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+                Start Coding
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="inmememor1 container">
+        <header className="blockheader blockheader--spl flexi">
+          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <div className="inmememor1__text">
+            <p>
+              Traditional event stream architectures force an impossible choice: Redis for speed but stale data, or
+              PostgreSQL for consistency but high network round-trip latency. Stream processors need both low-latency
+              lookups AND strong consistency for reference data enrichment.
+            </p>
+            <p className="pt-3">
+              Cache invalidation complexity creates operational burden. Eventual consistency risks processing events
+              with outdated reference data. Database queries add latency that breaks real-time processing requirements.
+            </p>
+          </div>
+        </header>
+      </section>
+
+      <section className="inmememor-adv">
+        <div className="container">
+          <header className="blockheader blockheader--spl flexi">
+            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <div className="blockheader__right fz20">
+              Ignite 3 eliminates the latency-consistency trade-off through memory-first architecture with ACID
+              guarantees
+            </div>
+          </header>
+          <div className="inmememor-adv__wrap">
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Partition-Aware Routing</h3>
+              <div className="inmememor-adv__text">
+                Direct access to data without coordinator overhead. RecordView lookups bypass traditional database query
+                paths, delivering significant latency reduction for reference data access.
+              </div>
+            </div>
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Memory-First Storage</h3>
+              <div className="inmememor-adv__text">
+                Reference data remains in memory with automatic replication for fault tolerance. No cache invalidation
+                needed. ACID guarantees ensure stream processors always read consistent data.
+              </div>
+            </div>
+            <div className="inmememor-adv__item">
+              <h3 className="h4">Colocation Support</h3>
+              <div className="inmememor-adv__text">
+                Partition events and reference data together using colocation keys. Eliminates network hops for
+                enrichment operations. Local joins process faster than distributed queries.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="inmememor2 container">
+        <h2 className="h4">Architecture Pattern</h2>
+        <p className="fz20 pt-5">
+          <strong>Event Enrichment Without Cache Invalidation</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-2">
+          <div className="inmememor2__left">
+            <p>
+              <em>
+                Stream processors read reference data directly from Ignite 3 using partition-aware routing for
+                low-latency lookups with ACID consistency.
+              </em>
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Integration Pattern:</strong> Kafka or other streaming platforms process events, enriching each
+              event by looking up reference data in Ignite 3 through RecordView API.
+            </p>
+            <p>
+              <strong>Consistency Model:</strong> RAFT consensus ensures writes to reference data propagate to all
+              replicas with strong consistency. No eventual consistency delays.
+            </p>
+            <p>
+              <strong>Performance Characteristics:</strong> Memory-first architecture delivers microsecond-to-millisecond
+              lookup latency at high throughput. Partition-aware routing eliminates coordinator overhead.
+            </p>
+          </div>
+        </div>
+
+        <p className="fz20 pt-5">
+          <strong>When This Pattern Works</strong>
+        </p>
+        <div className="inmememor2__work flexi pt-3">
+          <div className="inmememor2__left">
+            <p>This architecture pattern is best for:</p>
+            <ul className="dashlist pt-1">
+              <li>High-throughput event stream enrichment (Kafka, Pulsar, etc.)</li>
+              <li>Reference data that changes infrequently or requires strong consistency</li>
+              <li>Real-time processing where cache staleness creates business risk</li>
+              <li>Systems where cache invalidation complexity becomes operational burden</li>
+            </ul>
+          </div>
+          <div className="inmememor2__right">
+            <p>
+              <strong>Example Use Cases:</strong>
+            </p>
+            <ul className="pt-1">
+              <li>
+                <strong>Financial Trading:</strong> Enrich order events with current instrument data, margin
+                requirements, and risk parameters
+              </li>
+              <li>
+                <strong>E-commerce:</strong> Enrich clickstream events with product catalog, pricing, and inventory
+                status
+              </li>
+              <li>
+                <strong>Fraud Detection:</strong> Enrich transaction events with customer profiles, risk scores, and
+                historical patterns
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="inmememor3 container pt-5">
+        <h2 className="h4">Key Benefits</h2>
+        <div className="inmememor3__botwrap flexi pt-3">
+          <div className="inmememor2__left">
+            <h3 className="fz20">Eliminate Cache Invalidation</h3>
+            <p>
+              ACID guarantees replace cache invalidation complexity. Stream processors read consistent reference data
+              without cache warming, TTL tuning, or invalidation logic. Updates propagate through RAFT consensus, not
+              cache invalidation messages.
+            </p>
+            <h3 className="fz20 pt-4">Low-Latency At Scale</h3>
+            <p>
+              Memory-first storage delivers microsecond-to-millisecond latency for reference data lookups.
+              Partition-aware routing bypasses coordinator overhead. Horizontal scalability handles throughput growth
+              without latency degradation.
+            </p>
+          </div>
+          <div className="inmememor2__right">
+            <h3 className="fz20">Strong Consistency</h3>
+            <p>
+              RAFT consensus ensures reference data updates propagate with strong consistency. No eventual consistency
+              windows. Stream processors never enrich events with stale reference data.
+            </p>
+            <h3 className="fz20 pt-4">System Consolidation</h3>
+            <p>
+              Single platform replaces separate cache (Redis) and database (PostgreSQL) for reference data. Reduces
+              infrastructure complexity and operational overhead. Eliminates synchronization between cache and database.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="native-bottom container">
+        <div className="native-bottom__grid">
+          <article className="nativebotblock">
+            <div className="h4 nativebotblock__title">
+              <img src="/img/features/native-rocket.svg" alt="" className="nativebotblock__icon" />
+              <span>Ready to Start?</span>
+            </div>
+            <p className="nativebotblock__text">
+              Discover our quick start guide and build your first application in 5-10 minutes
+            </p>
+            <a
+              className="nativebotblock__link arrowlink"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Quick Start Guide
+            </a>
+          </article>
+          <article className="nativebotblock nativebotblock--learn">
+            <div className="h4 nativebotblock__title">
+              <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
+              <span>Explore More Use Cases</span>
+            </div>
+            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <Link className="nativebotblock__link arrowlink" to="/use-cases/">
+              Use Cases Overview
+            </Link>
+          </article>
+        </div>
+      </section>
+    </Layout>
+  );
+}
