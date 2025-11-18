@@ -90,35 +90,8 @@ p.
 
 
 
-pre.mermaid.
-  %%{init: {
-    "themeVariables": { "fontSize": "24px" },
-    "flowchart": { "htmlLabels": true, "useMaxWidth": true, "nodeSpacing": 90, "rankSpacing": 90, "diagramPadding": 28 }
-  }}%%
-  graph TB
-    subgraph "3-Node Cluster"
-        N1["Node 1 Partitions: 0,3,6,9"]
-        N2["Node 2 Partitions: 1,4,7,10"]
-        N3["Node 3 Partitions: 2,5,8,11"]
-    end
-
-    subgraph "Album Table - colocateBy ArtistId"
-        B1["AlbumId=101, ArtistId=1 hash(1)→P1 Node 2"]
-        B2["AlbumId=102, ArtistId=1 hash(1)→P1 Node 2"]
-        B3["AlbumId=201, ArtistId=22 hash(22)→P11 Node 3"]
-        B4["AlbumId=301, ArtistId=42 hash(42)→P6 Node 1"]
-    end
-
-    subgraph "Artist Table"
-        A1["ArtistId=1 hash→P1 Node 2"]
-        A2["ArtistId=22 hash→P11 Node 3"]
-        A3["ArtistId=42 hash→P6 Node 1"]
-    end
-
-    A1 -.->|"Same partition"| B1 -.-> N2
-    A1 -.->|"Same partition"| B2 -.-> N2
-    A2 -.->|"Same partition"| B3 -.-> N3
-    A3 -.->|"Same partition"| B4 -.-> N1
+p
+  img(src="/assets/images/schema-design.png" alt="Data colocation diagram showing how Artist and Album tables are partitioned across a 3-node cluster" style="max-width: 100%; height: auto;")
 
 p.
   Colocation configuration in your schema ensures that Album records use the #[code ArtistId] value (not #[code AlbumId]) for partition assignment. This guarantees that Artist 1 and all albums with #[code ArtistId = 1] hash to the same partition and therefore live on the same nodes.
