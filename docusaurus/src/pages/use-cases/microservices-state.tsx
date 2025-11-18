@@ -41,7 +41,7 @@ export default function MicroservicesState(): JSX.Element {
               Distributed ACID transactions across service boundaries
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -79,25 +79,13 @@ export default function MicroservicesState(): JSX.Element {
             <div className="inmememor-adv__item">
               <h3 className="h4">Distributed ACID Transactions</h3>
               <div className="inmememor-adv__text">
-                RAFT consensus enables ACID guarantees across multiple microservices without two-phase commit overhead.
-                Transaction coordinator handles atomic commits across distribution zones. Eliminates compensation logic
-                required by saga patterns.
+                RAFT consensus enables ACID guarantees across multiple microservices without two-phase commit overhead. Transaction coordinator handles atomic commits across distribution zones. Eliminates compensation logic required by saga patterns. Each service maintains its own tables while supporting atomic operations across boundaries.
               </div>
             </div>
             <div className="inmememor-adv__item">
-              <h3 className="h4">Distribution Zones</h3>
+              <h3 className="h4">Infrastructure Consolidation</h3>
               <div className="inmememor-adv__text">
-                Logical partitioning enables per-service data isolation with cross-service transactions. Each service
-                maintains its own tables while supporting atomic operations across service boundaries. No shared schema
-                constraints.
-              </div>
-            </div>
-            <div className="inmememor-adv__item">
-              <h3 className="h4">System Consolidation</h3>
-              <div className="inmememor-adv__text">
-                Single platform replaces multiple per-service databases and coordination services. Significant
-                infrastructure cost reduction potential through consolidation. Reduces operational overhead of managing
-                multiple database systems.
+                Single platform replaces multiple per-service databases and coordination services. Significant infrastructure cost reduction potential through system consolidation. Logical partitioning with distribution zones enables per-service data isolation without shared schema constraints.
               </div>
             </div>
           </div>

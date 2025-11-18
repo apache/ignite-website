@@ -41,7 +41,7 @@ export default function SessionManagement(): JSX.Element {
               Any-node session access with automatic failover and zero data loss
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -77,25 +77,15 @@ export default function SessionManagement(): JSX.Element {
           </header>
           <div className="inmememor-adv__wrap">
             <div className="inmememor-adv__item">
-              <h3 className="h4">Any-Node Session Access</h3>
+              <h3 className="h4">Low-Latency Access</h3>
               <div className="inmememor-adv__text">
-                Partition-aware routing enables direct session access from any node without sticky sessions. Load
-                balancers can route requests to any application server. Sessions remain accessible regardless of which
-                node serves the request.
+                Memory-first architecture delivers low-latency session retrieval. Partition-aware routing enables direct access from any node without sticky sessions. Load balancers route requests freely across application servers without session affinity constraints.
               </div>
             </div>
             <div className="inmememor-adv__item">
-              <h3 className="h4">Automatic Failover</h3>
+              <h3 className="h4">Zero Data Loss</h3>
               <div className="inmememor-adv__text">
-                RAFT replication ensures session data survives node failures with zero data loss. Automatic replica
-                promotion maintains availability during failures. No manual intervention required for failover.
-              </div>
-            </div>
-            <div className="inmememor-adv__item">
-              <h3 className="h4">Memory-First Performance</h3>
-              <div className="inmememor-adv__text">
-                Session data remains in memory for low-latency access. ACID guarantees ensure session updates are
-                consistent across replicas. No trade-off between speed and durability.
+                RAFT replication ensures session data survives node failures with automatic replica promotion. ACID guarantees maintain session consistency across replicas. No trade-off between speed and durability.
               </div>
             </div>
           </div>

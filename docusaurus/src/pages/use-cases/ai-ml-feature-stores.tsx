@@ -39,7 +39,7 @@ export default function AIMLFeatureStores(): JSX.Element {
               Zero training/serving skew with low-latency feature retrieval
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -75,25 +75,15 @@ export default function AIMLFeatureStores(): JSX.Element {
           </header>
           <div className="inmememor-adv__wrap">
             <div className="inmememor-adv__item">
-              <h3 className="h4">MVCC Snapshots</h3>
+              <h3 className="h4">Zero Training/Serving Skew</h3>
               <div className="inmememor-adv__text">
-                Snapshot isolation enables training jobs to read feature values at specific points in time. Serving
-                endpoints read current feature values with strong consistency. Guarantees training and serving see the
-                same feature semantics without skew.
+                MVCC snapshot isolation enables training jobs to read feature values at specific points in time while serving endpoints read current features with strong consistency. Guarantees training and serving see the same feature semantics. No eventual consistency windows that degrade model accuracy.
               </div>
             </div>
             <div className="inmememor-adv__item">
-              <h3 className="h4">Low-Latency Retrieval</h3>
+              <h3 className="h4">Low-Latency Inference</h3>
               <div className="inmememor-adv__text">
-                Memory-first architecture delivers low-latency feature lookups for real-time inference. RecordView API
-                provides direct partition-aware access. No batch preprocessing required for serving.
-              </div>
-            </div>
-            <div className="inmememor-adv__item">
-              <h3 className="h4">Schema Evolution</h3>
-              <div className="inmememor-adv__text">
-                Table schema management supports adding features without breaking existing models. Version control for
-                feature definitions. SQL access enables feature exploration and validation during development.
+                Memory-first architecture delivers low-latency feature retrieval for real-time inference. RecordView API provides direct partition-aware access without batch preprocessing. Table schema management supports adding features without breaking models. SQL access enables feature exploration during development.
               </div>
             </div>
           </div>

@@ -41,7 +41,7 @@ export default function EventStreamProcessing(): JSX.Element {
               Enrich high-throughput event streams with consistent reference data
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -77,24 +77,15 @@ export default function EventStreamProcessing(): JSX.Element {
           </header>
           <div className="inmememor-adv__wrap">
             <div className="inmememor-adv__item">
-              <h3 className="h4">Partition-Aware Routing</h3>
+              <h3 className="h4">Low-Latency Lookups</h3>
               <div className="inmememor-adv__text">
-                Direct access to data without coordinator overhead. RecordView lookups bypass traditional database query
-                paths, delivering significant latency reduction for reference data access.
+                Memory-first architecture with partition-aware routing delivers microsecond-to-millisecond lookups. RecordView API provides direct partition access without coordinator overhead, delivering significant latency reduction for reference data enrichment.
               </div>
             </div>
             <div className="inmememor-adv__item">
-              <h3 className="h4">Memory-First Storage</h3>
+              <h3 className="h4">Strong Consistency</h3>
               <div className="inmememor-adv__text">
-                Reference data remains in memory with automatic replication for fault tolerance. No cache invalidation
-                needed. ACID guarantees ensure stream processors always read consistent data.
-              </div>
-            </div>
-            <div className="inmememor-adv__item">
-              <h3 className="h4">Colocation Support</h3>
-              <div className="inmememor-adv__text">
-                Partition events and reference data together using colocation keys. Eliminates network hops for
-                enrichment operations. Local joins process faster than distributed queries.
+                ACID guarantees with RAFT consensus eliminate cache invalidation complexity. Stream processors always read consistent reference data. No eventual consistency windows. Colocation support enables local joins for further performance optimization.
               </div>
             </div>
           </div>
