@@ -67,11 +67,16 @@ function TopCards() {
       </a>
 
       <Link to="/use-cases/provenusecases" className={styles.frontcard}>
-        <div className={styles.frontcard__network}>
-          <img src="/img/frontpage/b1-planet.svg" alt="" />
-        </div>
-        <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary, 'pt-3')}>
-          Distributed applications force an impossible choice: fast OR consistent. Ignite 3 eliminates the trade-off. Cache-level speed with database-level consistency.
+        <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary)} style={{ marginBottom: 0 }}>
+          <strong style={{ fontSize: '1.15em' }}>Distributed systems make you choose.</strong><br />
+          <br />
+          <span style={{ fontSize: '1.1em' }}>Event streams:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Fast OR Consistent?</span><br />
+          <span style={{ fontSize: '1.1em' }}>Distributed state:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Fast OR Durable?</span><br />
+          <span style={{ fontSize: '1.1em' }}>Data integrity:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Eventual OR ACID?</span><br />
+          <span style={{ fontSize: '1.1em' }}>Microservices:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Simple OR Scalable?</span><br />
+          <br />
+          <strong style={{ fontSize: '1.15em' }}>Apache Ignite eliminates the trade-off.</strong><br />
+          <span style={{ fontSize: '0.95em', opacity: 0.8 }}>Speed. Scale. Consistency. Durability. Queryability.</span>
         </div>
       </Link>
     </aside>
@@ -209,18 +214,18 @@ conn.close()`
 
   return (
     <div className={clsx('container', styles.forntcodes)}>
-      <h2 className={styles.h2}>Start Building With Apache Ignite 3</h2>
+      <h2 className={styles.h2}>Start Building With Apache Ignite</h2>
 
       <div className={clsx(styles.forntcodes__wrap)} style={{display: 'flex', gap: '4rem', alignItems: 'flex-start'}}>
         {/* Left Column - 1/3 width */}
         <div style={{flex: '0 0 33%', minWidth: '280px'}}>
           <p className="pt-3 pb-2" style={{fontSize: '16px', lineHeight: '1.6', color: '#333'}}>
-            Get up and running in minutes. Apache Ignite 3 provides a memory-first distributed SQL database
+            Get up and running in minutes. Apache Ignite provides a memory-first distributed SQL database
             that eliminates the scale/speed trade-off for high-velocity workloads.
           </p>
 
           <div style={{marginTop: '2rem'}}>
-            <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -358,7 +363,7 @@ conn.close()`
 function UsageScenarios() {
   return (
     <Section className={styles.frontnewcards}>
-      <h2 className={styles.h2}>Apache Ignite 3 Use Cases</h2>
+      <h2 className={styles.h2}>Apache Ignite Use Cases</h2>
       <div className={styles.frontnewcards__wrap}>
         <article className={clsx(styles.frontsimplecard, styles.cardsimple)} style={{ display: 'flex', flexDirection: 'column', padding: 'var(--ai-spacing-2xl) var(--ai-spacing-xl) var(--ai-spacing-xl)' }}>
           <div style={{ flex: 1 }}>
@@ -434,10 +439,10 @@ function UserStories() {
 
 function EventsSection() {
   return (
-    <Section className={styles.frontconfs}>
+    <Section className={clsx(styles.frontconfs, styles.frontblue)}>
       <h2 className={styles.h2}>Join The Community At Events <br />And Meetups Worldwide</h2>
       <div className={styles.frontconfs__wrap}>
-        <a href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--red'])} rel="noreferrer">
+        <a href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--white'])} rel="noreferrer">
           <div className={styles.frontconfs__iconwrap}>
             <img src="/img/frontpage/events/001.svg" alt="" />
           </div>
@@ -449,7 +454,7 @@ function EventsSection() {
           </div>
         </a>
 
-        <a href="https://ignite-summit.org/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--blue'])} rel="noreferrer">
+        <a href="https://ignite-summit.org/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--white'])} rel="noreferrer">
           <div className={styles.frontconfs__iconwrap}>
             <img src="/img/frontpage/events/004.svg" alt="" />
           </div>
@@ -462,7 +467,7 @@ function EventsSection() {
           </div>
         </a>
 
-        <a href="/events#upcoming" className={styles.frontconfcard}>
+        <a href="/events#upcoming" className={clsx(styles.frontconfcard, styles['frontconfcard--white'])}>
           <div className={styles.frontconfs__iconwrap}>
             <img src="/img/frontpage/events/003.svg" alt="" />
           </div>
@@ -484,7 +489,7 @@ function EventsSection() {
 
 function ResourcesSection() {
   return (
-    <Section className={styles.frontresourse}>
+    <Section className={clsx(styles.frontconfs, styles.frontblue)}>
       <h2 className={styles.h2}>Resources To Elevate Your <br />Ignite Experience</h2>
       <div className={styles.frontresourse__subtitle}>
         Get access to a variety of free technical <br />and learning resources
@@ -600,10 +605,10 @@ export default function Home(): ReactNode {
       </section>
 
       <UsageScenarios />
-      <UserStories />
+      {/*<UserStories />*/}
       <EventsSection />
-      <ResourcesSection />
       <ReadyToStart />
+      <ResourcesSection />
     </Layout>
   );
 }

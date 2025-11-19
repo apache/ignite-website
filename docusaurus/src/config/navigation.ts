@@ -178,7 +178,7 @@ export const featuresMenu: DropdownMenu = {
         },
         {
           label: 'Machine Learning',
-          href: '/features/machinelearning',
+          href: '/features/machine-learning',
           icon: '/img/menu/icon-cube.svg',
         },
       ],
@@ -378,7 +378,7 @@ export const mobileMenuItems = [
       { label: 'ACID Transactions', href: '/features/acid-transactions' },
       { label: 'Compute APIs', href: '/features/compute-apis' },
       { label: 'Services', href: '/features/service-apis' },
-      { label: 'Machine Learning', href: '/features/machinelearning' },
+      { label: 'Machine Learning', href: '/features/machine-learning' },
       { label: 'Real-Time Streaming APIs', href: '/features/streaming' },
       { label: 'Messaging', href: '/docs/latest/messaging' },
       { label: 'Continuous Queries', href: '/docs/latest/key-value-api/continuous-queries' },
@@ -415,7 +415,7 @@ export const footerSections = {
       { label: 'ACID Transactions', href: '/features/acid-transactions' },
       { label: 'Key Value APIs', href: '/features/key-value-apis' },
       { label: 'Compute APIs', href: '/features/compute-apis' },
-      { label: 'Machine Learning', href: '/features/machinelearning' },
+      { label: 'Machine Learning', href: '/features/machine-learning' },
       { label: 'Services', href: '/features/service-apis' },
       { label: 'Real-Streaming APIs', href: '/features/streaming' },
       { label: 'Continuous Queries', href: 'https://ignite.apache.org/docs/latest/key-value-api/continuous-queries', external: true },
@@ -440,7 +440,7 @@ export const footerSections = {
   },
   community: {
     links: [
-      { label: 'Community', href: '/our-community' },
+      { label: 'Community', href: '/community' },
       { label: 'Resources', href: '/resources' },
       { label: 'Events', href: '/events' },
     ],

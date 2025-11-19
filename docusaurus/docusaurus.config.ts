@@ -164,8 +164,8 @@ const config: Config = {
           items: [
             {label: 'Multi-Tier Storage', to: '/arch/multi-tier-storage'},
             {label: 'Native Persistence', to: '/arch/native-persistence'},
-            {label: 'Distributed SQL', to: '/use-cases/database/distributed-database'},
-            {label: 'ACID Transactions', to: '/features/transactions'},
+            {label: 'Distributed SQL', to: '/features/sql'},
+            {label: 'ACID Transactions', to: '/features/acid-transactions'},
             {label: 'Compute APIs', to: '/features/compute-apis'},
           ],
         },
