@@ -142,6 +142,18 @@ export default function UseCasesIndex(): JSX.Element {
               </div>
             </div>
             <div className="usecasecard cardsimple">
+              <h4 className="cardsimple__title">Fast Data Marts</h4>
+              <div className="cardsimple__text">
+                <strong>Warehouse Latency OR Data Mart Limits?</strong> Sub-second queries on curated datasets without cache complexity.
+                Purpose-built analytical repository with ETL-populated data and full SQL support.
+              </div>
+              <div className="cardsimple__bottom">
+                <Link to="/use-cases/fast-data-marts" className="cardsimple__button button">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+            <div className="usecasecard cardsimple">
               <h4 className="cardsimple__title">IoT and Time-Series Data</h4>
               <div className="cardsimple__text">
                 <strong>Scale OR Validate?</strong> High-volume writes with schema validation and SQL aggregations.

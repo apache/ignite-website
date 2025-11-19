@@ -88,6 +88,11 @@ export const getStartedMenu: DropdownMenu = {
           icon: '/img/menu/icon-folder.svg',
         },
         {
+          label: 'Fast Data Marts',
+          href: '/use-cases/fast-data-marts',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
           label: 'IoT and Time-Series Data',
           href: '/use-cases/iot-time-series',
           icon: '/img/menu/icon-folder.svg',
@@ -359,6 +364,7 @@ export const mobileMenuItems = [
       { label: 'AI/ML Feature Stores', href: '/use-cases/ai-ml-feature-stores' },
       { label: 'Session Management', href: '/use-cases/session-management' },
       { label: 'Operational Analytics', href: '/use-cases/operational-analytics' },
+      { label: 'Fast Data Marts', href: '/use-cases/fast-data-marts' },
       { label: 'IoT and Time-Series Data', href: '/use-cases/iot-time-series' },
       { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
       { label: 'High Performance Computing', href: '/use-cases/high-performance-computing' },
@@ -431,6 +437,7 @@ export const footerSections = {
       { label: 'AI/ML Feature Stores', href: '/use-cases/ai-ml-feature-stores' },
       { label: 'Session Management', href: '/use-cases/session-management' },
       { label: 'Operational Analytics', href: '/use-cases/operational-analytics' },
+      { label: 'Fast Data Marts', href: '/use-cases/fast-data-marts' },
       { label: 'IoT and Time-Series Data', href: '/use-cases/iot-time-series' },
       { label: 'Digital Integration Hub', href: '/use-cases/digital-integration-hub' },
       { label: 'High-Performance Computing', href: '/use-cases/high-performance-computing' },
