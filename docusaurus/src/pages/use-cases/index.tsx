@@ -133,7 +133,7 @@ export default function UseCasesIndex(): JSX.Element {
               <h4 className="cardsimple__title">Operational Analytics</h4>
               <div className="cardsimple__text">
                 <strong>Transactional OR Analytical?</strong> Run concurrent analytical queries on live transactional data
-                without blocking writes. Competes with PostgreSQL MVCC and dedicated OLAP systems.
+                without blocking writes. Competes with relational database MVCC and dedicated OLAP systems.
               </div>
               <div className="cardsimple__bottom">
                 <Link to="/use-cases/operational-analytics" className="cardsimple__button button">
@@ -157,7 +157,7 @@ export default function UseCasesIndex(): JSX.Element {
               <h4 className="cardsimple__title">IoT and Time-Series Data</h4>
               <div className="cardsimple__text">
                 <strong>Scale OR Validate?</strong> High-volume writes with schema validation and SQL aggregations.
-                Competes with specialized time-series databases (InfluxDB, TimescaleDB, QuestDB).
+                Competes with specialized time-series databases.
               </div>
               <div className="cardsimple__bottom">
                 <Link to="/use-cases/iot-time-series" className="cardsimple__button button">

@@ -109,15 +109,15 @@ export default function DigitalIntegrationHub(): JSX.Element {
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Back-end systems synchronize data to Ignite through streaming (Kafka,
-              Flink), change data capture (Debezium, Maxwell), or event-based integration. Applications query Ignite
+              <strong>Integration Pattern:</strong> Back-end systems synchronize data to Ignite through streaming platforms,
+              change data capture tools, or event-based integration. Applications query Ignite
               instead of accessing back-end systems directly. Ignite maintains aggregated view of data across multiple
               sources.
             </p>
             <p>
               <strong>Synchronization Options:</strong> Ignite 2 provides CacheStore interface for write-through and
               write-behind synchronization. Ignite 3 supports similar patterns through custom integration layers. Both
-              versions work with streaming platforms (Kafka Connect, Flink CDC) for bi-directional synchronization.
+              versions work with streaming platform connectors for bi-directional synchronization.
             </p>
             <p>
               <strong>Performance Characteristics:</strong> Memory-first architecture delivers low-latency queries across
@@ -210,8 +210,8 @@ export default function DigitalIntegrationHub(): JSX.Element {
           <div className="inmememor2__right">
             <h3 className="fz20">Bi-Directional Synchronization</h3>
             <p>
-              Both versions work with streaming platforms (Kafka, Flink) for bi-directional synchronization. Change data
-              capture tools (Debezium, Maxwell) stream database changes to Ignite. Event-based integration through message
+              Both versions work with streaming platforms for bi-directional synchronization. Change data
+              capture tools stream database changes to Ignite. Event-based integration through message
               queues. Custom integration layers for specific back-end systems.
             </p>
           </div>

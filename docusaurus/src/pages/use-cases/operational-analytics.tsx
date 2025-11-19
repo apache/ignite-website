@@ -54,7 +54,7 @@ export default function OperationalAnalytics(): JSX.Element {
             <p>
               Traditional relational databases force an impossible choice: run analytical queries on transactional data
               (blocking writes with table locks), or replicate data to separate OLAP systems (data staleness and ETL
-              complexity). PostgreSQL MVCC helps but analytical queries still cause lock contention on write-heavy tables.
+              complexity). Relational database MVCC helps but analytical queries still cause lock contention on write-heavy tables.
             </p>
             <p className="pt-3">
               Aggregation queries on transactional data create read locks that block writes. Replicating to data
@@ -211,7 +211,7 @@ export default function OperationalAnalytics(): JSX.Element {
           <div className="inmememor2__right">
             <h3 className="fz20">Competes With Specialized Systems</h3>
             <p>
-              This pattern competes with PostgreSQL MVCC and dedicated OLAP systems (ClickHouse, Druid). For extremely
+              This pattern competes with relational database MVCC and dedicated OLAP systems. For extremely
               complex analytical workloads (star schema joins, columnar compression, advanced analytics), specialized OLAP
               databases may provide better performance.
             </p>

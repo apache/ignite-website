@@ -58,7 +58,7 @@ export default function FastDataMarts(): JSX.Element {
               on curated datasets.
             </p>
             <p className="pt-3">
-              PostgreSQL or MySQL data marts struggle with high-concurrency analytical workloads. Redis caching layers
+              Relational database data marts struggle with high-concurrency analytical workloads. In-memory caching layers
               add cache invalidation complexity and lack SQL query capabilities. Data warehouse queries unsuitable for
               customer-facing analytics APIs or operational dashboards requiring sub-second response times.
             </p>
@@ -140,7 +140,7 @@ export default function FastDataMarts(): JSX.Element {
               <li>Department-specific dashboards requiring sub-second response times</li>
               <li>Customer-facing analytics APIs serving in-app dashboards</li>
               <li>Operational reporting on curated datasets</li>
-              <li>Organizations replacing PostgreSQL/MySQL analytical data marts</li>
+              <li>Organizations replacing relational database analytical data marts</li>
             </ul>
           </div>
           <div className="inmememor2__right">
@@ -185,7 +185,7 @@ export default function FastDataMarts(): JSX.Element {
           <div className="inmememor2__right">
             <h3 className="fz20">Infrastructure Consolidation</h3>
             <p>
-              Replace multiple PostgreSQL or MySQL departmental data marts with single platform. Eliminate Redis cache
+              Replace multiple relational database departmental data marts with single platform. Eliminate caching
               layers and database combinations. Reduce operational overhead of managing multiple systems. Single platform
               for all departmental analytics with consistent query interface.
             </p>

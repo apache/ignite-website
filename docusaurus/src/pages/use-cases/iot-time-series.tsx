@@ -204,7 +204,7 @@ export default function IoTTimeSeries(): JSX.Element {
           <div className="inmememor2__left">
             <h3 className="fz20">Competes With Specialized Systems</h3>
             <p>
-              This pattern competes with specialized time-series databases (InfluxDB, TimescaleDB, QuestDB) optimized for
+              This pattern competes with specialized time-series databases optimized for
               time-series workloads. For extremely high-frequency sensor writes, specialized time-series databases may
               provide better compression and query performance through columnar storage and time-series specific
               optimizations.

@@ -54,13 +54,13 @@ export default function SessionManagement(): JSX.Element {
           <h2 className="capstext pb-3">The Trade-off Problem</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional session management architectures force an impossible choice: Redis for low-latency access but
+              Traditional session management architectures force an impossible choice: in-memory caches for low-latency access but
               memory-only storage (data loss on failure), or disk-backed databases for durability but slower access and
               sticky session constraints.
             </p>
             <p className="pt-3">
-              Sticky sessions create operational complexity and limit failover capabilities. Redis without persistence
-              risks session data loss during node failures. Database-backed sessions add latency and read-write
+              Sticky sessions create operational complexity and limit failover capabilities. In-memory caches without persistence
+              risk session data loss during node failures. Database-backed sessions add latency and read-write
               blocking issues.
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function SessionManagement(): JSX.Element {
             </p>
             <h3 className="fz20 pt-4">System Consolidation</h3>
             <p>
-              Single platform replaces separate cache (Redis) and session persistence layer. Reduces infrastructure
+              Single platform replaces separate caching and session persistence layers. Reduces infrastructure
               complexity and operational overhead. Eliminates synchronization between in-memory cache and durable
               storage.
             </p>

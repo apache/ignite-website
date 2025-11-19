@@ -54,8 +54,8 @@ export default function EventStreamProcessing(): JSX.Element {
           <h2 className="capstext pb-3">The Trade-off Problem</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional event stream architectures force an impossible choice: Redis for speed but stale data, or
-              PostgreSQL for consistency but high network round-trip latency. Stream processors need both low-latency
+              Traditional event stream architectures force an impossible choice: in-memory caches for speed but stale data, or
+              relational databases for consistency but high network round-trip latency. Stream processors need both low-latency
               lookups AND strong consistency for reference data enrichment.
             </p>
             <p className="pt-3">
@@ -108,7 +108,7 @@ export default function EventStreamProcessing(): JSX.Element {
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Kafka or other streaming platforms process events, enriching each
+              <strong>Integration Pattern:</strong> Streaming platforms process events, enriching each
               event by looking up reference data in Apache Ignite through RecordView API.
             </p>
             <p>
@@ -129,7 +129,7 @@ export default function EventStreamProcessing(): JSX.Element {
           <div className="inmememor2__left">
             <p>This architecture pattern is best for:</p>
             <ul className="dashlist pt-1">
-              <li>High-throughput event stream enrichment (Kafka, Pulsar, etc.)</li>
+              <li>High-throughput event stream enrichment</li>
               <li>Reference data that changes infrequently or requires strong consistency</li>
               <li>Real-time processing where cache staleness creates business risk</li>
               <li>Systems where cache invalidation complexity becomes operational burden</li>
@@ -182,8 +182,8 @@ export default function EventStreamProcessing(): JSX.Element {
             </p>
             <h3 className="fz20 pt-4">System Consolidation</h3>
             <p>
-              Single platform replaces separate cache (Redis) and database (PostgreSQL) for reference data. Reduces
-              infrastructure complexity and operational overhead. Eliminates synchronization between cache and database.
+              Single platform replaces separate caching and database systems for reference data. Reduces
+              infrastructure complexity and operational overhead. Eliminates synchronization between cache and database layers.
             </p>
           </div>
         </div>
