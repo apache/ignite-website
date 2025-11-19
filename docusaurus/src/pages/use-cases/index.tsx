@@ -32,7 +32,7 @@ export default function UseCasesIndex(): JSX.Element {
             <h1 className="h1 innerhero__h1">Use Cases</h1>
             <div className="innerhero__descr pt-2 h5">
               Fast OR Consistent? Choose Both. Apache Ignite 3 eliminates the distributed systems trade-off through
-              memory-first architecture, partition-aware routing, and RAFT consensus.
+              memory-first architecture, partition-aware routing, and consensus replication.
             </div>
           </div>
           <img

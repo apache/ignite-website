@@ -112,7 +112,7 @@ export default function AIMLFeatureStores(): JSX.Element {
             </p>
             <p>
               <strong>Consistency Model:</strong> Snapshot isolation ensures training reads consistent feature values
-              at point-in-time. RAFT consensus ensures serving reads strongly consistent current values. No eventual
+              at point-in-time. Consensus replication ensures serving reads strongly consistent current values. No eventual
               consistency windows between feature writes and reads.
             </p>
             <p>

@@ -13,7 +13,7 @@ export default function MicroservicesState(): JSX.Element {
         <title>Microservices State Management - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity through memory-first architecture and RAFT consensus."
+          content="Apache Ignite 3 eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity through memory-first architecture and consensus replication."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/microservices-state.html" />
         <meta property="og:title" content="Microservices State Management - Apache Ignite" />
@@ -79,7 +79,7 @@ export default function MicroservicesState(): JSX.Element {
             <div className="inmememor-adv__item">
               <h3 className="h4">Distributed ACID Transactions</h3>
               <div className="inmememor-adv__text">
-                RAFT consensus enables ACID guarantees across multiple microservices without two-phase commit overhead. Transaction coordinator handles atomic commits across distribution zones. Eliminates compensation logic required by saga patterns. Each service maintains its own tables while supporting atomic operations across boundaries.
+                Consensus replication enables ACID guarantees across multiple microservices without two-phase commit overhead. Transaction coordinator handles atomic commits across distribution zones. Eliminates compensation logic required by saga patterns. Each service maintains its own tables while supporting atomic operations across boundaries.
               </div>
             </div>
             <div className="inmememor-adv__item">
@@ -113,7 +113,7 @@ export default function MicroservicesState(): JSX.Element {
               commits across service boundaries.
             </p>
             <p>
-              <strong>Consistency Model:</strong> RAFT consensus provides ACID guarantees for distributed transactions.
+              <strong>Consistency Model:</strong> Consensus replication provides ACID guarantees for distributed transactions.
               Snapshot isolation prevents read-write conflicts across services. No eventual consistency windows or
               compensation logic.
             </p>
@@ -172,7 +172,7 @@ export default function MicroservicesState(): JSX.Element {
             </p>
             <h3 className="fz20 pt-4">Strong Consistency</h3>
             <p>
-              RAFT consensus ensures cross-service transactions commit atomically. No eventual consistency windows or
+              Consensus replication ensures cross-service transactions commit atomically. No eventual consistency windows or
               intermediate states visible to other services. Snapshot isolation prevents read-write conflicts across
               service boundaries.
             </p>

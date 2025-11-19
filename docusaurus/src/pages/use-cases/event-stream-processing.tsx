@@ -85,7 +85,7 @@ export default function EventStreamProcessing(): JSX.Element {
             <div className="inmememor-adv__item">
               <h3 className="h4">Strong Consistency</h3>
               <div className="inmememor-adv__text">
-                ACID guarantees with RAFT consensus eliminate cache invalidation complexity. Stream processors always read consistent reference data. No eventual consistency windows. Colocation support enables local joins for further performance optimization.
+                ACID guarantees with consensus replication eliminate cache invalidation complexity. Stream processors always read consistent reference data. No eventual consistency windows. Colocation support enables local joins for further performance optimization.
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function EventStreamProcessing(): JSX.Element {
               event by looking up reference data in Ignite 3 through RecordView API.
             </p>
             <p>
-              <strong>Consistency Model:</strong> RAFT consensus ensures writes to reference data propagate to all
+              <strong>Consistency Model:</strong> Consensus replication ensures writes to reference data propagate to all
               replicas with strong consistency. No eventual consistency delays.
             </p>
             <p>
@@ -164,7 +164,7 @@ export default function EventStreamProcessing(): JSX.Element {
             <h3 className="fz20">Eliminate Cache Invalidation</h3>
             <p>
               ACID guarantees replace cache invalidation complexity. Stream processors read consistent reference data
-              without cache warming, TTL tuning, or invalidation logic. Updates propagate through RAFT consensus, not
+              without cache warming, TTL tuning, or invalidation logic. Updates propagate through consensus replication, not
               cache invalidation messages.
             </p>
             <h3 className="fz20 pt-4">Low-Latency At Scale</h3>
@@ -177,7 +177,7 @@ export default function EventStreamProcessing(): JSX.Element {
           <div className="inmememor2__right">
             <h3 className="fz20">Strong Consistency</h3>
             <p>
-              RAFT consensus ensures reference data updates propagate with strong consistency. No eventual consistency
+              Consensus replication ensures reference data updates propagate with strong consistency. No eventual consistency
               windows. Stream processors never enrich events with stale reference data.
             </p>
             <h3 className="fz20 pt-4">System Consolidation</h3>

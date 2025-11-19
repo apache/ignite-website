@@ -13,7 +13,7 @@ export default function SessionManagement(): JSX.Element {
         <title>Session Management and Caching at Scale - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss through memory-first architecture with RAFT replication."
+          content="Apache Ignite 3 eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss through memory-first architecture with distributed replication."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/session-management.html" />
         <meta property="og:title" content="Session Management and Caching at Scale - Apache Ignite" />
@@ -85,7 +85,7 @@ export default function SessionManagement(): JSX.Element {
             <div className="inmememor-adv__item">
               <h3 className="h4">Zero Data Loss</h3>
               <div className="inmememor-adv__text">
-                RAFT replication ensures session data survives node failures with automatic replica promotion. ACID guarantees maintain session consistency across replicas. No trade-off between speed and durability.
+                Distributed replication ensures session data survives node failures with automatic replica promotion. ACID guarantees maintain session consistency across replicas. No trade-off between speed and durability.
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function SessionManagement(): JSX.Element {
               requests freely across application servers.
             </p>
             <p>
-              <strong>Consistency Model:</strong> RAFT replication ensures session updates propagate to all replicas
+              <strong>Consistency Model:</strong> Distributed replication ensures session updates propagate to all replicas
               with strong consistency. Session data remains consistent across all nodes. No eventual consistency
               windows.
             </p>
@@ -172,7 +172,7 @@ export default function SessionManagement(): JSX.Element {
             </p>
             <h3 className="fz20 pt-4">Zero Data Loss</h3>
             <p>
-              RAFT replication ensures session data survives node failures. Automatic replica promotion maintains
+              Distributed replication ensures session data survives node failures. Automatic replica promotion maintains
               availability during failures. No session data loss during deployments or infrastructure failures. Meets
               high-availability requirements.
             </p>
