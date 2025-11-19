@@ -13,7 +13,7 @@ export default function MicroservicesState(): JSX.Element {
         <title>Microservices State Management - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity through memory-first architecture and consensus replication."
+          content="Apache Ignite eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity through memory-first architecture and consensus replication."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/microservices-state.html" />
         <meta property="og:title" content="Microservices State Management - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function MicroservicesState(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity."
+          content="Apache Ignite eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity."
         />
       </Head>
 
@@ -70,9 +70,9 @@ export default function MicroservicesState(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 provides distributed ACID transactions across service boundaries without saga complexity
+              Apache Ignite provides distributed ACID transactions across service boundaries without saga complexity
             </div>
           </header>
           <div className="inmememor-adv__wrap">
@@ -101,14 +101,14 @@ export default function MicroservicesState(): JSX.Element {
           <div className="inmememor2__left">
             <p>
               <em>
-                Microservices store state in Ignite 3 using service-specific tables within distribution zones, enabling
+                Microservices store state in Apache Ignite using service-specific tables within distribution zones, enabling
                 ACID transactions across service boundaries without saga complexity.
               </em>
             </p>
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Each microservice owns its tables within Ignite 3. Cross-service
+              <strong>Integration Pattern:</strong> Each microservice owns its tables within Apache Ignite. Cross-service
               operations use distributed transactions that span multiple tables. Transaction coordinator ensures atomic
               commits across service boundaries.
             </p>
@@ -218,7 +218,7 @@ export default function MicroservicesState(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>

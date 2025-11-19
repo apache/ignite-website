@@ -13,7 +13,7 @@ export default function InMemoryDatabase(): JSX.Element {
         <title>Database with Memory-First Storage - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 is a database-first platform with memory-first storage profile. Multi-tier storage (aimem, aipersist, rocksdb) supports concurrent transactional and analytical workloads with full SQL support."
+          content="Apache Ignite is a database-first platform with memory-first storage profile. Multi-tier storage (aimem, aipersist, rocksdb) supports concurrent transactional and analytical workloads with full SQL support."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-database.html" />
         <meta property="og:title" content="Database with Memory-First Storage - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function InMemoryDatabase(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 is a database-first platform with memory-first storage profile and multi-tier storage."
+          content="Apache Ignite is a database-first platform with memory-first storage profile and multi-tier storage."
         />
       </Head>
 
@@ -51,7 +51,7 @@ export default function InMemoryDatabase(): JSX.Element {
           <h2 className="capstext pb-3">Database-First Platform</h2>
           <div className="inmememor1__text">
             <p>
-              Ignite 3 is a database-first platform with memory-first storage profile. Multi-tier storage enables
+              Apache Ignite is a database-first platform with memory-first storage profile. Multi-tier storage enables
               flexible data placement across memory (aimem), persistent memory-first (aipersist), and disk (rocksdb)
               storage engines. Full SQL support with ACID transactions for both transactional and analytical workloads.
             </p>
@@ -238,7 +238,7 @@ export default function InMemoryDatabase(): JSX.Element {
           <div className="inmememor2__left">
             <h3 className="fz20">Not Full HTAP</h3>
             <p>
-              Ignite 3 supports concurrent transactional and analytical workloads but is not positioned as full HTAP
+              Apache Ignite supports concurrent transactional and analytical workloads but is not positioned as full HTAP
               system. Window functions NOT supported (LAG, LEAD, ROW_NUMBER). For complex analytical workloads requiring
               columnar storage and advanced analytics, specialized OLAP databases may provide better performance.
             </p>
@@ -278,7 +278,7 @@ export default function InMemoryDatabase(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Learn About Multi-Tier Storage</span>
             </div>
-            <p className="nativebotblock__text">Explore Ignite 3 storage engines</p>
+            <p className="nativebotblock__text">Explore Apache Ignite storage engines</p>
             <Link className="nativebotblock__link arrowlink" to="/arch/multi-tier-storage">
               Multi-Tier Storage
             </Link>

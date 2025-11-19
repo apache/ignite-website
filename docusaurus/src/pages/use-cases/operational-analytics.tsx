@@ -13,7 +13,7 @@ export default function OperationalAnalytics(): JSX.Element {
         <title>Operational Analytics - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the transactional-or-analytical trade-off. Run concurrent analytical queries on live transactional data without blocking writes through snapshot isolation and memory-first architecture."
+          content="Apache Ignite eliminates the transactional-or-analytical trade-off. Run concurrent analytical queries on live transactional data without blocking writes through snapshot isolation and memory-first architecture."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/operational-analytics.html" />
         <meta property="og:title" content="Operational Analytics - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function OperationalAnalytics(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the transactional-or-analytical trade-off. Run concurrent analytical queries on live transactional data without blocking writes."
+          content="Apache Ignite eliminates the transactional-or-analytical trade-off. Run concurrent analytical queries on live transactional data without blocking writes."
         />
       </Head>
 
@@ -68,9 +68,9 @@ export default function OperationalAnalytics(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 provides lock-free analytical queries on live transactional data through snapshot isolation
+              Apache Ignite provides lock-free analytical queries on live transactional data through snapshot isolation
             </div>
           </header>
           <div className="inmememor-adv__wrap">
@@ -112,7 +112,7 @@ export default function OperationalAnalytics(): JSX.Element {
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Transactional applications write to Ignite 3 tables using standard
+              <strong>Integration Pattern:</strong> Transactional applications write to Apache Ignite tables using standard
               ACID operations. Analytical queries use SQL aggregations (SUM, COUNT, GROUP BY, HAVING) to generate
               reports and dashboards directly from transactional tables.
             </p>
@@ -204,7 +204,7 @@ export default function OperationalAnalytics(): JSX.Element {
           <div className="inmememor2__left">
             <h3 className="fz20">Window Functions Not Supported</h3>
             <p>
-              Ignite 3 does not support SQL window functions (LAG, LEAD, ROW_NUMBER, RANK, DENSE_RANK). For complex
+              Apache Ignite does not support SQL window functions (LAG, LEAD, ROW_NUMBER, RANK, DENSE_RANK). For complex
               time-series analysis or ranking operations requiring window functions, use specialized analytical databases.
             </p>
           </div>
@@ -243,7 +243,7 @@ export default function OperationalAnalytics(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>

@@ -13,7 +13,7 @@ export default function IoTTimeSeries(): JSX.Element {
         <title>IoT and Time-Series Data - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the scale-or-validate trade-off for IoT data ingestion. High-volume writes with schema validation and SQL aggregations through memory-first architecture and horizontal scalability."
+          content="Apache Ignite eliminates the scale-or-validate trade-off for IoT data ingestion. High-volume writes with schema validation and SQL aggregations through memory-first architecture and horizontal scalability."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/iot-time-series.html" />
         <meta property="og:title" content="IoT and Time-Series Data - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function IoTTimeSeries(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the scale-or-validate trade-off for IoT data ingestion. High-volume writes with schema validation and SQL aggregations."
+          content="Apache Ignite eliminates the scale-or-validate trade-off for IoT data ingestion. High-volume writes with schema validation and SQL aggregations."
         />
       </Head>
 
@@ -68,9 +68,9 @@ export default function IoTTimeSeries(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 provides high-volume writes with schema validation and SQL aggregations through horizontal scalability
+              Apache Ignite provides high-volume writes with schema validation and SQL aggregations through horizontal scalability
             </div>
           </header>
           <div className="inmememor-adv__wrap">
@@ -105,14 +105,14 @@ export default function IoTTimeSeries(): JSX.Element {
           <div className="inmememor2__left">
             <p>
               <em>
-                IoT devices write sensor data to Ignite 3 tables with schema validation at ingestion, enabling SQL
+                IoT devices write sensor data to Apache Ignite tables with schema validation at ingestion, enabling SQL
                 aggregations for time-series analysis.
               </em>
             </p>
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> IoT gateways write sensor readings to Ignite 3 tables with defined
+              <strong>Integration Pattern:</strong> IoT gateways write sensor readings to Apache Ignite tables with defined
               schemas (timestamp, device_id, sensor_type, value, units). Schema validation rejects malformed data at
               ingestion. Analytical queries use GROUP BY with time intervals for rollups and aggregations.
             </p>
@@ -245,7 +245,7 @@ export default function IoTTimeSeries(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>

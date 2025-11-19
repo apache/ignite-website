@@ -12,7 +12,7 @@ export default function UseCasesIndex(): JSX.Element {
         <title>Use Cases - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates distributed systems trade-offs. Fast OR Consistent? Choose Both. Discover use cases for event stream processing, microservices, AI/ML feature stores, and more."
+          content="Apache Ignite eliminates distributed systems trade-offs. Fast OR Consistent? Choose Both. Discover use cases for event stream processing, microservices, AI/ML feature stores, and more."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases.html" />
         <meta property="og:title" content="Use Cases - Apache Ignite" />
@@ -21,7 +21,7 @@ export default function UseCasesIndex(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates distributed systems trade-offs. Fast OR Consistent? Choose Both."
+          content="Apache Ignite eliminates distributed systems trade-offs. Fast OR Consistent? Choose Both."
         />
       </Head>
 
@@ -31,7 +31,7 @@ export default function UseCasesIndex(): JSX.Element {
             <div className="innerhero__pre pb-3">Apache Ignite</div>
             <h1 className="h1 innerhero__h1">Use Cases</h1>
             <div className="innerhero__descr pt-2 h5">
-              Fast OR Consistent? Choose Both. Apache Ignite 3 eliminates the distributed systems trade-off through
+              Fast OR Consistent? Choose Both. Apache Ignite eliminates the distributed systems trade-off through
               memory-first architecture, partition-aware routing, and consensus replication.
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function UseCasesIndex(): JSX.Element {
             </h2>
             <div className="blockheader__right fz20">
               <p>
-                These use cases demonstrate Ignite 3's core differentiation: delivering both speed and consistency
+                These use cases demonstrate Apache Ignite's core differentiation: delivering both speed and consistency
                 where traditional systems force an impossible choice.
               </p>
             </div>
@@ -123,7 +123,7 @@ export default function UseCasesIndex(): JSX.Element {
             </h2>
             <div className="blockheader__right fz20">
               <p>
-                Ignite 3 supports operational analytics and time-series workloads while maintaining ACID guarantees
+                Apache Ignite supports operational analytics and time-series workloads while maintaining ACID guarantees
                 and SQL query capabilities across your entire data platform.
               </p>
             </div>

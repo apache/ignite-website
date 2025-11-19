@@ -13,7 +13,7 @@ export default function EventStreamProcessing(): JSX.Element {
         <title>Event Stream Processing and Enrichment - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups using memory-first architecture and partition-aware routing."
+          content="Apache Ignite eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups using memory-first architecture and partition-aware routing."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/event-stream-processing.html" />
         <meta property="og:title" content="Event Stream Processing and Enrichment - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function EventStreamProcessing(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups."
+          content="Apache Ignite eliminates the fast-or-consistent trade-off for event stream processing. Enrich high-throughput event streams with low-latency, ACID-compliant reference data lookups."
         />
       </Head>
 
@@ -69,9 +69,9 @@ export default function EventStreamProcessing(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 eliminates the latency-consistency trade-off through memory-first architecture with ACID
+              Apache Ignite eliminates the latency-consistency trade-off through memory-first architecture with ACID
               guarantees
             </div>
           </header>
@@ -101,7 +101,7 @@ export default function EventStreamProcessing(): JSX.Element {
           <div className="inmememor2__left">
             <p>
               <em>
-                Stream processors read reference data directly from Ignite 3 using partition-aware routing for
+                Stream processors read reference data directly from Apache Ignite using partition-aware routing for
                 low-latency lookups with ACID consistency.
               </em>
             </p>
@@ -109,7 +109,7 @@ export default function EventStreamProcessing(): JSX.Element {
           <div className="inmememor2__right">
             <p>
               <strong>Integration Pattern:</strong> Kafka or other streaming platforms process events, enriching each
-              event by looking up reference data in Ignite 3 through RecordView API.
+              event by looking up reference data in Apache Ignite through RecordView API.
             </p>
             <p>
               <strong>Consistency Model:</strong> Consensus replication ensures writes to reference data propagate to all
@@ -213,7 +213,7 @@ export default function EventStreamProcessing(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>

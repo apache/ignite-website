@@ -13,7 +13,7 @@ export default function AIMLFeatureStores(): JSX.Element {
         <title>AI/ML Feature Stores - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the real-time-or-accurate trade-off for ML feature stores. Zero training/serving skew with low-latency feature retrieval through MVCC snapshots and memory-first architecture."
+          content="Apache Ignite eliminates the real-time-or-accurate trade-off for ML feature stores. Zero training/serving skew with low-latency feature retrieval through MVCC snapshots and memory-first architecture."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/ai-ml-feature-stores.html" />
         <meta property="og:title" content="AI/ML Feature Stores - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function AIMLFeatureStores(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the real-time-or-accurate trade-off for ML feature stores. Zero training/serving skew with low-latency feature retrieval."
+          content="Apache Ignite eliminates the real-time-or-accurate trade-off for ML feature stores. Zero training/serving skew with low-latency feature retrieval."
         />
       </Head>
 
@@ -68,9 +68,9 @@ export default function AIMLFeatureStores(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 provides point-in-time consistency across training and serving through MVCC snapshots
+              Apache Ignite provides point-in-time consistency across training and serving through MVCC snapshots
             </div>
           </header>
           <div className="inmememor-adv__wrap">
@@ -106,7 +106,7 @@ export default function AIMLFeatureStores(): JSX.Element {
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Feature engineering pipelines write computed features to Ignite 3
+              <strong>Integration Pattern:</strong> Feature engineering pipelines write computed features to Apache Ignite
               tables. Training jobs specify snapshot timestamps for historical consistency. Serving endpoints read
               current features through RecordView API for real-time inference.
             </p>
@@ -198,7 +198,7 @@ export default function AIMLFeatureStores(): JSX.Element {
           <div className="inmememor2__left">
             <h3 className="fz20">Vector Search Not Supported</h3>
             <p>
-              Ignite 3 does not provide vector similarity search or nearest-neighbor lookups. For embedding-based
+              Apache Ignite does not provide vector similarity search or nearest-neighbor lookups. For embedding-based
               retrieval (semantic search, similarity recommendations), use specialized vector databases.
             </p>
           </div>
@@ -236,7 +236,7 @@ export default function AIMLFeatureStores(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>

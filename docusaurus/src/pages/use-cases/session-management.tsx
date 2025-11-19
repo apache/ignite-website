@@ -13,7 +13,7 @@ export default function SessionManagement(): JSX.Element {
         <title>Session Management and Caching at Scale - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite 3 eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss through memory-first architecture with distributed replication."
+          content="Apache Ignite eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss through memory-first architecture with distributed replication."
         />
         <link rel="canonical" href="https://ignite.apache.org/use-cases/session-management.html" />
         <meta property="og:title" content="Session Management and Caching at Scale - Apache Ignite" />
@@ -22,7 +22,7 @@ export default function SessionManagement(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite 3 eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss."
+          content="Apache Ignite eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss."
         />
       </Head>
 
@@ -70,9 +70,9 @@ export default function SessionManagement(): JSX.Element {
       <section className="inmememor-adv">
         <div className="container">
           <header className="blockheader blockheader--spl flexi">
-            <h2 className="h4">How Apache Ignite 3 Solves This</h2>
+            <h2 className="h4">How Apache Ignite Solves This</h2>
             <div className="blockheader__right fz20">
-              Ignite 3 combines memory-first performance with automatic replication for durability and any-node access
+              Apache Ignite combines memory-first performance with automatic replication for durability and any-node access
             </div>
           </header>
           <div className="inmememor-adv__wrap">
@@ -101,14 +101,14 @@ export default function SessionManagement(): JSX.Element {
           <div className="inmememor2__left">
             <p>
               <em>
-                Application servers store and retrieve session data using Ignite 3's KeyValueView API with automatic
+                Application servers store and retrieve session data using Apache Ignite's KeyValueView API with automatic
                 replication and partition-aware routing.
               </em>
             </p>
           </div>
           <div className="inmememor2__right">
             <p>
-              <strong>Integration Pattern:</strong> Web applications store session data in Ignite 3 using session ID as
+              <strong>Integration Pattern:</strong> Web applications store session data in Apache Ignite using session ID as
               key. Any application server can retrieve any session without sticky routing. Load balancers distribute
               requests freely across application servers.
             </p>
@@ -218,7 +218,7 @@ export default function SessionManagement(): JSX.Element {
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
               <span>Explore More Use Cases</span>
             </div>
-            <p className="nativebotblock__text">Learn about other Ignite 3 use cases</p>
+            <p className="nativebotblock__text">Learn about other Apache Ignite use cases</p>
             <Link className="nativebotblock__link arrowlink" to="/use-cases/">
               Use Cases Overview
             </Link>
