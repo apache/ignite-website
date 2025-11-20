@@ -47,10 +47,8 @@ export default function UseCasesIndex(): JSX.Element {
         <div className="container">
           <p className="blockcapslead">Primary Use Cases</p>
           <header className="blockheader flexi">
-            <h2 className="h4 blockheader__left">
-              Eliminating The
-              <br />
-              Distributed Systems Trade-off
+            <h2 className="h4">
+              Eliminating The Distributed Systems Trade-off
             </h2>
             <div className="blockheader__right fz20">
               <p>
@@ -112,14 +110,12 @@ export default function UseCasesIndex(): JSX.Element {
         </div>
       </section>
 
-      <section className="usecase4" id="additional-use-cases">
+      <section className="usecase2" id="additional-use-cases" style={{background: 'var(--blue4)'}}>
         <div className="container">
           <p className="blockcapslead">Additional Use Cases</p>
           <header className="blockheader flexi">
-            <h2 className="h4 blockheader__left">
-              Operational + Analytical
-              <br />
-              In One Platform
+            <h2 className="h4">
+              Operational + Analytical In One Platform
             </h2>
             <div className="blockheader__right fz20">
               <p>
@@ -128,7 +124,7 @@ export default function UseCasesIndex(): JSX.Element {
               </p>
             </div>
           </header>
-          <div className="usecase4__wrap">
+          <div className="usecase2__wrap">
             <div className="usecasecard cardsimple">
               <h4 className="cardsimple__title">Operational Analytics</h4>
               <div className="cardsimple__text">
@@ -169,14 +165,12 @@ export default function UseCasesIndex(): JSX.Element {
         </div>
       </section>
 
-      <section className="usecase4" id="supporting-patterns">
+      <section className="usecase2" id="supporting-patterns">
         <div className="container">
           <p className="blockcapslead">Supporting Patterns</p>
           <header className="blockheader flexi">
             <h2 className="h4 blockheader__left">
-              Architectural
-              <br />
-              Patterns For Both Versions
+              Architectural Patterns For Both Versions
             </h2>
             <div className="blockheader__right fz20">
               <p>
@@ -185,7 +179,7 @@ export default function UseCasesIndex(): JSX.Element {
               </p>
             </div>
           </header>
-          <div className="usecase4__wrap">
+          <div className="usecase2__wrap">
             <div className="usecasecard cardsimple">
               <h4 className="cardsimple__title">Digital Integration Hub</h4>
               <div className="cardsimple__text">
