@@ -73,11 +73,6 @@ export const getStartedMenu: DropdownMenu = {
           icon: '/img/menu/icon-folder.svg',
         },
         {
-          label: 'AI/ML Feature Stores',
-          href: '/use-cases/ai-ml-feature-stores',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
           label: 'Session Management',
           href: '/use-cases/session-management',
           icon: '/img/menu/icon-folder.svg',
@@ -88,8 +83,8 @@ export const getStartedMenu: DropdownMenu = {
           icon: '/img/menu/icon-folder.svg',
         },
         {
-          label: 'Fast Data Marts',
-          href: '/use-cases/fast-data-marts',
+          label: 'AI/ML Feature Stores',
+          href: '/use-cases/ai-ml-feature-stores',
           icon: '/img/menu/icon-folder.svg',
         },
         {
@@ -102,6 +97,11 @@ export const getStartedMenu: DropdownMenu = {
     {
       title: '',
       items: [
+        {
+          label: 'Fast Data Marts',
+          href: '/use-cases/fast-data-marts',
+          icon: '/img/menu/icon-folder.svg',
+        },
         {
           label: 'Digital Integration Hub',
           href: '/use-cases/digital-integration-hub',
