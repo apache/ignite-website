@@ -94,12 +94,19 @@ export default function Footer(): ReactNode {
 
       {/* Footer Bottom: Copyright */}
       <div className={`container ${styles.footerBot}`}>
-        <p>
-          © {copyrightInfo.startYear} - {currentYear}{' '}
-          <a href={copyrightInfo.organizationLink}>
-            {copyrightInfo.organization}
-          </a>
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <img
+            src="/img/asf-logo-mark.svg"
+            alt="Apache Software Foundation"
+            style={{ height: '40px', width: 'auto' }}
+          />
+          <p style={{ margin: 0 }}>
+            © {copyrightInfo.startYear} - {currentYear}{' '}
+            <a href={copyrightInfo.organizationLink}>
+              {copyrightInfo.organization}
+            </a>
+          </p>
+        </div>
         <p className={styles.pt1x}>{copyrightInfo.trademarkNotice}</p>
         <p className={styles.pt1x}>
           <a href={copyrightInfo.privacyPolicyLink}>Privacy Policy</a>

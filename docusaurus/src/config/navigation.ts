@@ -474,6 +474,6 @@ export const copyrightInfo = {
   startYear: 2015,
   organization: 'The Apache Software Foundation',
   organizationLink: 'http://www.apache.org/',
-  trademarkNotice: 'Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation',
+  trademarkNotice: 'Apache, Apache Ignite, the Apache oak leaf and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation',
   privacyPolicyLink: 'http://apache.org/foundation/policies/privacy.html',
 } as const;
