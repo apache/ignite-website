@@ -134,7 +134,7 @@ export default function InMemoryDatabase(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Applications requiring both transactional operations and operational analytics</li>
               <li>Systems needing low-latency data access with horizontal scalability</li>
@@ -143,10 +143,8 @@ export default function InMemoryDatabase(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>E-Commerce Platform:</strong> Transactional order processing with concurrent analytics for
                 inventory management and sales reporting

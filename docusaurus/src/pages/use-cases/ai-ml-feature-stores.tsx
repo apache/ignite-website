@@ -128,7 +128,7 @@ export default function AIMLFeatureStores(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Real-time ML inference requiring low-latency feature access</li>
               <li>Systems where training/serving skew degrades model accuracy</li>
@@ -137,10 +137,8 @@ export default function AIMLFeatureStores(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Recommendation Engines:</strong> User and item features with consistent snapshots for model
                 training and low-latency serving

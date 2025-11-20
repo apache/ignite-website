@@ -127,7 +127,7 @@ export default function EventStreamProcessing(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>High-throughput event stream enrichment</li>
               <li>Reference data that changes infrequently or requires strong consistency</li>
@@ -136,10 +136,8 @@ export default function EventStreamProcessing(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Financial Trading:</strong> Enrich order events with current instrument data, margin
                 requirements, and risk parameters
@@ -161,13 +159,13 @@ export default function EventStreamProcessing(): JSX.Element {
         <h2 className="h4">Key Benefits</h2>
         <div className="inmememor3__botwrap flexi pt-3">
           <div className="inmememor2__left">
-            <h3 className="fz20">Eliminate Cache Invalidation</h3>
+            <h3 className="fz20 pb-1">Eliminate Cache Invalidation</h3>
             <p>
               ACID guarantees replace cache invalidation complexity. Stream processors read consistent reference data
               without cache warming, TTL tuning, or invalidation logic. Updates propagate through consensus replication, not
               cache invalidation messages.
             </p>
-            <h3 className="fz20 pt-4">Low-Latency At Scale</h3>
+            <h3 className="fz20 pt-2 pb-1">Low-Latency At Scale</h3>
             <p>
               Memory-first storage delivers microsecond-to-millisecond latency for reference data lookups.
               Partition-aware routing bypasses coordinator overhead. Horizontal scalability handles throughput growth
@@ -175,12 +173,12 @@ export default function EventStreamProcessing(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <h3 className="fz20">Strong Consistency</h3>
+            <h3 className="fz20 pb-1">Strong Consistency</h3>
             <p>
               Consensus replication ensures reference data updates propagate with strong consistency. No eventual consistency
               windows. Stream processors never enrich events with stale reference data.
             </p>
-            <h3 className="fz20 pt-4">System Consolidation</h3>
+            <h3 className="fz20 pt-3 pb-1">System Consolidation</h3>
             <p>
               Single platform replaces separate caching and database systems for reference data. Reduces
               infrastructure complexity and operational overhead. Eliminates synchronization between cache and database layers.

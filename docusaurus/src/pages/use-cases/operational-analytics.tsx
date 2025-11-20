@@ -134,7 +134,7 @@ export default function OperationalAnalytics(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Operational reporting requiring real-time transactional data</li>
               <li>Compliance dashboards with audit trail queries</li>
@@ -143,10 +143,8 @@ export default function OperationalAnalytics(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Financial Reporting:</strong> Real-time account balances and transaction summaries without
                 blocking payment processing

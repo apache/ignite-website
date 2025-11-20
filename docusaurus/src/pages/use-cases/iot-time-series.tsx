@@ -134,7 +134,7 @@ export default function IoTTimeSeries(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>IoT deployments requiring schema validation at ingestion</li>
               <li>Sensor networks where data quality issues create downstream failures</li>
@@ -143,10 +143,8 @@ export default function IoTTimeSeries(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Industrial Monitoring:</strong> Sensor data validation at ingestion with time-grouped aggregations
                 for equipment health monitoring

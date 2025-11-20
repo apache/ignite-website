@@ -130,7 +130,7 @@ export default function MicroservicesState(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Microservices requiring atomic operations across service boundaries</li>
               <li>Systems where saga compensation logic becomes too complex to maintain</li>
@@ -139,10 +139,8 @@ export default function MicroservicesState(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Order Processing:</strong> Atomic updates to order, inventory, and payment services without
                 compensation rollback logic

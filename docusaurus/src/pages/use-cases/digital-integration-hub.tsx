@@ -132,7 +132,7 @@ export default function DigitalIntegrationHub(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Applications requiring unified access to data scattered across multiple back-end systems</li>
               <li>Omnichannel platforms aggregating customer data from disparate sources</li>
@@ -141,10 +141,8 @@ export default function DigitalIntegrationHub(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>Customer 360:</strong> Aggregate customer data from CRM, billing, support, and marketing systems
                 into unified view accessible through single interface

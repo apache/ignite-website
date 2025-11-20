@@ -130,7 +130,7 @@ export default function SessionManagement(): JSX.Element {
         </p>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
-            <p>This architecture pattern is best for:</p>
+            <p><strong>This architecture pattern is best for:</strong></p>
             <ul className="dashlist pt-1">
               <li>Web applications requiring elastic scalability without sticky sessions</li>
               <li>Microservices architectures where session data needs global access</li>
@@ -139,10 +139,8 @@ export default function SessionManagement(): JSX.Element {
             </ul>
           </div>
           <div className="inmememor2__right">
-            <p>
-              <strong>Example Use Cases:</strong>
-            </p>
-            <ul className="pt-1">
+            <p><strong>Example Use Cases:</strong></p>
+            <ul className="dashlist pt-1">
               <li>
                 <strong>E-commerce:</strong> Shopping cart state, user preferences, and checkout data accessible from
                 any application server

@@ -149,7 +149,7 @@ export default function HighPerformanceComputing(): JSX.Element {
               overhead. Parallel execution across cluster nodes for multiple user recommendations.
             </p>
             <p>
-              <strong>Example Use Cases:</strong> E-commerce product recommendations based on purchase history and
+              <p><strong>Example Use Cases:</strong></p> E-commerce product recommendations based on purchase history and
               browsing patterns. Content recommendations for streaming platforms. Personalized search results.
             </p>
           </div>
