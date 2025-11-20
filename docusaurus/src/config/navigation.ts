@@ -129,36 +129,26 @@ export const getStartedMenu: DropdownMenu = {
 
 /**
  * Features Dropdown Menu
- * Multi-tier storage, developer APIs, computing APIs, and streaming APIs
+ * Architectural foundation, core features, data placement, and operational capabilities
  */
 export const featuresMenu: DropdownMenu = {
   sections: [
     {
-      title: 'MULTI-TIER STORAGE',
+      title: 'ARCHITECTURAL BACKBONE',
       items: [
         {
-          label: 'Multi-Tier Storage',
-          href: '/arch/multi-tier-storage',
-          icon: '/img/menu/icon-db.svg',
-        },
-        {
-          label: 'Native Persistence',
-          href: '/arch/native-persistence',
+          label: 'Memory-First + MVCC + Distributed Replication',
+          href: '/features/architectural-foundation',
           icon: '/img/menu/icon-db.svg',
         },
       ],
     },
     {
-      title: 'ESSENTIAL Developer APIs',
+      title: 'CORE FEATURES',
       items: [
         {
-          label: 'Distributed SQL',
-          href: '/features/sql',
-          icon: '/img/menu/icon-cube.svg',
-        },
-        {
-          label: 'Key-Value APIs',
-          href: '/features/key-value-apis',
+          label: 'Memory-First Storage',
+          href: '/features/storage',
           icon: '/img/menu/icon-cube.svg',
         },
         {
@@ -166,47 +156,55 @@ export const featuresMenu: DropdownMenu = {
           href: '/features/acid-transactions',
           icon: '/img/menu/icon-cube.svg',
         },
-      ],
-    },
-    {
-      title: 'High-Performance Computing APIs',
-      items: [
         {
-          label: 'Compute APIs',
-          href: '/features/compute-apis',
+          label: 'Access Patterns',
+          href: '/features/sql',
           icon: '/img/menu/icon-cube.svg',
         },
         {
-          label: 'Services',
-          href: '/features/service-apis',
+          label: 'Schema Evolution',
+          href: '/features/schema-evolution',
           icon: '/img/menu/icon-cube.svg',
         },
         {
-          label: 'Machine Learning',
-          href: '/features/machine-learning',
-          icon: '/img/menu/icon-cube.svg',
-        },
-      ],
-    },
-    {
-      title: 'Real-Streaming APIs',
-      items: [
-        {
-          label: 'Real-Time Streaming APIs',
+          label: 'Backpressured Streaming',
           href: '/features/streaming',
           icon: '/img/menu/icon-cube.svg',
         },
+      ],
+    },
+    {
+      title: 'DATA PLACEMENT & PROCESSING',
+      items: [
         {
-          label: 'Messaging',
-          href: 'https://ignite.apache.org/docs/latest/messaging',
+          label: 'Schema-Driven Data Placement',
+          href: '/features/data-placement',
           icon: '/img/menu/icon-cube.svg',
-          external: true,
         },
         {
-          label: 'Continuous Queries',
-          href: 'https://ignite.apache.org/docs/latest/key-value-api/continuous-queries',
+          label: 'Processing Where Data Lives',
+          href: '/features/compute-apis',
           icon: '/img/menu/icon-cube.svg',
-          external: true,
+        },
+      ],
+    },
+    {
+      title: 'OPERATIONAL EXCELLENCE',
+      items: [
+        {
+          label: 'Coordination That Scales',
+          href: '/features/coordination',
+          icon: '/img/menu/icon-cube.svg',
+        },
+        {
+          label: 'Operations Built In',
+          href: '/features/tooling',
+          icon: '/img/menu/icon-cube.svg',
+        },
+        {
+          label: 'Multi-Language Support',
+          href: '/features/multilanguage',
+          icon: '/img/menu/icon-cube.svg',
         },
       ],
     },
@@ -377,17 +375,17 @@ export const mobileMenuItems = [
     label: 'Features',
     href: '/features/',
     children: [
-      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage' },
-      { label: 'Native Persistence', href: '/arch/native-persistence' },
-      { label: 'Distributed SQL', href: '/features/sql' },
-      { label: 'Key-Value APIs', href: '/features/key-value-apis' },
+      { label: 'Architectural Foundation', href: '/features/architectural-foundation' },
+      { label: 'Memory-First Storage', href: '/features/storage' },
       { label: 'ACID Transactions', href: '/features/acid-transactions' },
-      { label: 'Compute APIs', href: '/features/compute-apis' },
-      { label: 'Services', href: '/features/service-apis' },
-      { label: 'Machine Learning', href: '/features/machine-learning' },
-      { label: 'Real-Time Streaming APIs', href: '/features/streaming' },
-      { label: 'Messaging', href: '/docs/latest/messaging' },
-      { label: 'Continuous Queries', href: '/docs/latest/key-value-api/continuous-queries' },
+      { label: 'Access Patterns', href: '/features/sql' },
+      { label: 'Schema Evolution', href: '/features/schema-evolution' },
+      { label: 'Backpressured Streaming', href: '/features/streaming' },
+      { label: 'Schema-Driven Data Placement', href: '/features/data-placement' },
+      { label: 'Processing Where Data Lives', href: '/features/compute-apis' },
+      { label: 'Coordination That Scales', href: '/features/coordination' },
+      { label: 'Operations Built In', href: '/features/tooling' },
+      { label: 'Multi-Language Support', href: '/features/multilanguage' },
       { label: 'View All', href: '/features/' },
     ],
   },
@@ -415,17 +413,17 @@ export const footerSections = {
     title: 'Features',
     titleLink: '/features/',
     items: [
-      { label: 'Multi-Tier Storage', href: '/arch/multi-tier-storage' },
-      { label: 'Native Persistence', href: '/arch/native-persistence' },
-      { label: 'Distributed SQL', href: '/features/sql' },
+      { label: 'Architectural Foundation', href: '/features/architectural-foundation' },
+      { label: 'Memory-First Storage', href: '/features/storage' },
       { label: 'ACID Transactions', href: '/features/acid-transactions' },
-      { label: 'Key Value APIs', href: '/features/key-value-apis' },
-      { label: 'Compute APIs', href: '/features/compute-apis' },
-      { label: 'Machine Learning', href: '/features/machine-learning' },
-      { label: 'Services', href: '/features/service-apis' },
-      { label: 'Real-Streaming APIs', href: '/features/streaming' },
-      { label: 'Continuous Queries', href: 'https://ignite.apache.org/docs/latest/key-value-api/continuous-queries', external: true },
-      { label: 'Messaging', href: 'https://ignite.apache.org/docs/latest/messaging', external: true },
+      { label: 'Access Patterns', href: '/features/sql' },
+      { label: 'Schema Evolution', href: '/features/schema-evolution' },
+      { label: 'Backpressured Streaming', href: '/features/streaming' },
+      { label: 'Schema-Driven Data Placement', href: '/features/data-placement' },
+      { label: 'Processing Where Data Lives', href: '/features/compute-apis' },
+      { label: 'Coordination That Scales', href: '/features/coordination' },
+      { label: 'Operations Built In', href: '/features/tooling' },
+      { label: 'Multi-Language Support', href: '/features/multilanguage' },
     ],
   },
   useCases: {

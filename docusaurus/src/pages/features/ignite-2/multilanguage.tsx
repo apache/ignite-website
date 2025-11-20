@@ -3,40 +3,27 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
-import '../../css/native-persistence.css';
-import '../../css/compute-apis.css';
-import '../../css/multilanguage.css';
+import '../../../css/native-persistence.css';
+import '../../../css/compute-apis.css';
+import '../../../css/multilanguage.css';
 
 export default function Multilanguage(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>Multi-Language Support - Apache Ignite</title>
-        <meta
-          name="description"
-          content="Apache Ignite provides native clients for Java, .NET, C++, Python, and other languages. Consistent APIs across languages with partition-aware routing built in. Access through SQL, JDBC, or language-specific APIs."
-        />
-        <link rel="canonical" href="https://ignite.apache.org/features/multilanguage" />
-        <meta property="og:title" content="Multi-Language Support - Apache Ignite" />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/multilanguage" />
-        <meta property="og:image" content="/img/og-pic.png" />
-        <meta
-          property="og:description"
-          content="Apache Ignite provides native clients for Java, .NET, C++, Python, and other languages. Consistent APIs across languages with partition-aware routing built in. Access through SQL, JDBC, or language-specific APIs."
-        />
+        <title>Multi-language Support</title>
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
           <div className="innerhero__main innherhero__lang">
-            <div className="innerhero__pre pb-3">Apache Ignite</div>
+            <div className="innerhero__pre pb-3">Apache Ignite 2.x</div>
             <h1 className="h1 innerhero__h1">
               Multi-language
               <br /> Support
             </h1>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite3/latest/quick-start/getting-started-guide">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
                 Start Coding
               </a>
             </div>
@@ -49,27 +36,56 @@ export default function Multilanguage(): JSX.Element {
         </div>
       </section>
 
+      <section className="container" style={{ padding: '2rem 0' }}>
+        <div style={{
+          background: '#f0f7ff',
+          border: '1px solid #0066cc',
+          borderRadius: '8px',
+          padding: '1rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V11H13V17ZM13 9H11V7H13V9Z" fill="#0066cc"/>
+          </svg>
+          <div>
+            <strong style={{ color: '#0066cc' }}>Apache Ignite 2.x Feature</strong>
+            <p style={{ margin: '0.25rem 0 0 0', color: '#333' }}>
+              This feature applies to Apache Ignite 2.x. For current Apache Ignite capabilities, see the <Link to="/features">main features page</Link>.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="lang">
         <div className="container">
           <div className="lang-block flexi">
             <p className="lang__text">
               <span>
-                Apache Ignite provides native clients for Java, .NET, C++, and Python. Each client implements the same core capabilities including SQL queries, Table API operations, transactions, and compute job submission. Consistent APIs across languages simplify polyglot architectures.
+                Apache Ignite® is a Java-powered database and computing platform that works with operating systems and
+                architectures supported by Java Virtual Machines. You can find Ignite deployments running on Linux,
+                Windows, Mac OS, Oracle Solaris, IBM zOS and x86, x64, SPARC, and PowerPC instruction set
+                architectures.
                 <br />
                 <br />
               </span>
               <span>
-                All clients include partition-aware routing. Operations route directly to nodes holding the data. No coordinator overhead. This single-hop access delivers consistent performance regardless of client language. The system calculates partition ownership from keys automatically.
+                All the features and capabilities available in Ignite are supported in its Java libraries. This includes
+                SQL, key-value, co-located computations, machine learning algorithms, and much more.
                 <br />
                 <br />
               </span>
               <span>
-                The Java client provides the complete feature set including embedded SQL execution, compute APIs, and schema management. Other language clients support SQL queries through JDBC, Table API operations, transactions, and basic schema operations. Each client handles connection pooling and automatic failover.
+                In addition to Java, Ignite supports C#, C++, Python, Node.JS, and PHP languages out-of-the-box. The
+                thin client protocol allows expanding Ignite support to other programming languages. For instance, you
+                can find a Go client for Ignite that is not being developed or maintained by the Ignite community.
                 <br />
                 <br />
               </span>
               <span>
-                JDBC and ODBC drivers enable integration with existing SQL tools and BI platforms. Standard database connectivity works with reporting tools, ETL systems, and data integration frameworks. This compatibility simplifies adoption for SQL-oriented workloads.
+                Furthermore, you can interact with Ignite as you would with any other SQL database with the usage of
+                JDBC or ODBC drivers.
               </span>
             </p>
             <div className="lang__image">
@@ -94,11 +110,12 @@ export default function Multilanguage(): JSX.Element {
               <span>Ready to Start?</span>
             </div>
             <p className="nativebotblock__text">
-              Discover our quick start guide and build your first application in 5-10 minutes
+              Discover our quick start guide and build your first
+              <br /> application in 5-10 minutes
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
+              href="https://ignite.apache.org/docs/latest/index"
               target="_blank"
               rel="noreferrer"
             >
@@ -108,18 +125,18 @@ export default function Multilanguage(): JSX.Element {
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Read Documentation</span>
+              <span>Want to Learn More?</span>
             </div>
             <p className="nativebotblock__text">
-              Learn about Java, .NET, C++, and Python clients with partition-aware routing and connection pooling
+              Check out how to run Ignite with Java, .NET/C#, C++, Python, Node.JS, SQL, PHP, or REST API
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/clients/overview"
+              href="https://ignite.apache.org/docs/latest/quick-start/java"
               target="_blank"
               rel="noreferrer"
             >
-              Client Documentation
+              Multi-Language Guide
             </a>
           </article>
         </div>

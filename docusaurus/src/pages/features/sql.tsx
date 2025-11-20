@@ -4,244 +4,256 @@ import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
 import '../../css/native-persistence.css';
-import '../../css/compute-apis.css';
-import '../../css/sql.css';
 
-export default function SQL(): JSX.Element {
+export default function AccessPatterns(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>Distributed ANSI SQL Database - Apache Ignite</title>
+        <title>Access Patterns - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite comes with an ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that allows you to interact with Ignite as with a regular SQL database. Ignite can function in a pure in-memory mode in which it shows the highest performance."
+          content="Apache Ignite offers multiple access patterns for the same data: SQL with JDBC drivers, Table API with RecordView and KeyValueView, or native language APIs. All benefit from memory-first architecture and partition-aware routing."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/sql.html" />
-        <meta property="og:title" content="Distributed ANSI SQL Database - Apache Ignite" />
+        <link rel="canonical" href="https://ignite.apache.org/features/sql" />
+        <meta property="og:title" content="Access Patterns - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/sql.html" />
+        <meta property="og:url" content="https://ignite.apache.org/features/sql" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite comes with an ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that allows you to interact with Ignite as with a regular SQL database. Ignite can function in a pure in-memory mode in which it shows the highest performance."
+          content="Apache Ignite offers multiple access patterns for the same data: SQL with JDBC drivers, Table API with RecordView and KeyValueView, or native language APIs. All benefit from memory-first architecture and partition-aware routing."
         />
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main">
+          <div className="innerhero__main innerhero__main--long">
             <div className="innerhero__pre pb-3">Apache Ignite</div>
-            <h1 className="h1 innerhero__h1">Distributed ANSI SQL</h1>
+            <h1 className="h1 innerhero__h1">Your Choice of Access Pattern</h1>
             <div className="innerhero__descr pt-2 h5">
-              The same SQL you've been using for years but now with
-              <br /> in-memory speed and at unlimited scale
+              SQL, Table API, or native language APIs. All access the same data.
             </div>
-            <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
-                Start Coding
+          </div>
+          <img
+            className="innerhero__pic innerhero__pic--native"
+            src="/img/features/hero-bg.svg"
+            alt="Access Patterns"
+          />
+        </div>
+      </section>
+
+      <section className="container pt-5 pb-5">
+        <div className="pt-3 pb-3">
+          <p className="fz20">
+            Apache Ignite provides multiple ways to access data. Use SQL with standard JDBC drivers. Use the Table API with typed RecordView or efficient KeyValueView. Use native language-specific APIs. All approaches access the same underlying data and benefit from memory-first architecture with partition-aware routing.
+          </p>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container">
+        <h2 className="h4 pb-3">SQL with Distributed Execution</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">ANSI SQL Support</h3>
+            <p>
+              Apache Ignite implements ANSI SQL with support for DDL (CREATE, ALTER, DROP), DML (SELECT, INSERT, UPDATE, DELETE, MERGE), and complex queries with joins, aggregations, and subqueries. The query planner generates distributed execution plans.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Distributed Query Execution</h3>
+            <p>
+              Queries execute across cluster nodes in parallel. The planner routes operations to nodes holding relevant partitions. Results stream back through the coordinator. This enables queries against datasets larger than any single node's memory.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Colocated Joins</h3>
+            <p>
+              When tables share colocation keys, joins execute locally without data movement. The colocateBy annotation in schema definitions enables this optimization. Colocated joins deliver join performance comparable to single-node databases at distributed scale.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">JDBC Access</h3>
+            <p>
+              Apache Ignite provides standard JDBC drivers. Applications connect using familiar JDBC patterns. The driver implements automatic failover and connection pooling. This enables integration with existing tools and frameworks expecting JDBC connectivity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container pt-5 pb-5">
+        <h2 className="h4 pb-3">Table API: Type-Safe Access</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">RecordView</h3>
+            <p>
+              RecordView provides typed access to complete table rows. Methods accept and return objects matching the table schema. The API handles serialization automatically. Use RecordView when working with full records or when type safety matters.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">KeyValueView</h3>
+            <p>
+              KeyValueView separates key and value types for efficient partial updates. Operations specify only the columns involved. This reduces network traffic and serialization overhead. Use KeyValueView for high-throughput scenarios or targeted column updates.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Partition-Aware Routing</h3>
+            <p>
+              The Table API calculates partition ownership from keys. Operations route directly to nodes holding the data. No coordinator overhead. This single-hop access delivers minimal latency for point lookups and targeted updates.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Bulk Operations</h3>
+            <p>
+              Both RecordView and KeyValueView support batch operations. Methods like getAll, putAll, and deleteAll process multiple keys efficiently. The API groups operations by partition and executes them in parallel across relevant nodes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container pt-5 pb-5">
+        <h2 className="h4 pb-3">Native Language APIs</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Multi-Language Support</h3>
+            <p>
+              Apache Ignite provides native clients for Java, .NET, C++, Python, and other languages. Each client implements the same core APIs with language-specific patterns. Consistent functionality across languages enables polyglot architectures.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Protocol Efficiency</h3>
+            <p>
+              All clients communicate via an efficient binary protocol. The protocol minimizes serialization overhead and supports request pipelining. Partition awareness works identically across languages. This delivers consistent performance characteristics regardless of client language.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Transaction Support</h3>
+            <p>
+              SQL queries and Table API operations both support transactions. Begin transactions explicitly or use single-statement transactions. Choose isolation levels (REPEATABLE_READ or READ_COMMITTED). All access patterns provide the same transactional guarantees.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Async and Reactive APIs</h3>
+            <p>
+              The Table API offers asynchronous methods returning CompletableFuture. This enables non-blocking operations for high-concurrency scenarios. Reactive streams support backpressure for controlled data ingestion. Choose synchronous or asynchronous based on application requirements.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pt-5 pb-5">
+        <h2 className="h4 pb-4">Use Cases</h2>
+
+        <div className="cardswrap">
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/03-distributed-SQL.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Operational Analytics</h3>
+            <div className="cardsimple__text">
+              Run analytical SQL queries against operational data. Complex aggregations execute in parallel across cluster nodes. MVCC enables analytical queries while transactional updates proceed at full speed. No ETL to separate analytical systems.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/operational-analytics" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/05-key-value-APIs.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">High-Throughput Applications</h3>
+            <div className="cardsimple__text">
+              Use KeyValueView for maximum throughput. Partition-aware routing delivers single-hop access. Batch operations process thousands of keys efficiently. Memory-first architecture provides microsecond-level latency for point operations.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/high-performance-computing" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/06-compute-APIs.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Polyglot Architectures</h3>
+            <div className="cardsimple__text">
+              Build systems with multiple languages accessing the same data. Java services use RecordView. Python analytics use SQL. .NET applications use KeyValueView. Consistent APIs and performance across all languages.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/microservices-state" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pt-5 pb-5">
+        <h2 className="h4 pb-4">How Access Patterns Connect to the Foundation</h2>
+
+        <div className="cardswrap">
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/02-native-persistence.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Memory-First Operations</h3>
+            <div className="cardsimple__text">
+              All access patterns execute against in-memory data. SQL queries, Table API operations, and native calls all benefit from memory-resident processing. No cache-miss penalties. No cache-warming strategies needed.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/features/storage" className="cardsimple__button button button--shadow">
+                Learn About Storage
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/04-ACID-transactions.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">MVCC Enables Concurrent Access</h3>
+            <div className="cardsimple__text">
+              MVCC allows SQL analytical queries and Table API updates to run simultaneously. Long-running aggregations work on stable snapshots. Transactional updates proceed at full throughput. Readers never block writers.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/features/architectural-foundation" className="cardsimple__button button button--shadow">
+                Learn About MVCC
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/05-key-value-APIs.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Partition-Aware Routing</h3>
+            <div className="cardsimple__text">
+              Table API and SQL both leverage partition awareness. Operations route directly to data owners. Colocated joins execute locally. This delivers minimal latency through single-hop access patterns.
+            </div>
+            <div className="cardsimple__bottom">
+              <a
+                href="https://ignite.apache.org/docs/3.0.0/developers-guide/table/colocation"
+                className="cardsimple__button button button--shadow"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Learn About Colocation
               </a>
-            </div>
-          </div>
-          <img className="innerhero__pic innerhero__pic--sql" src="/img/features/sql/hero-image.svg" alt="sql-hero" />
-        </div>
-      </section>
-
-      <section className="dist">
-        <div className="container">
-          <div className="dist__block flexi">
-            <div className="dist__info">
-              <h2 className="dist__h2 h4">Apache Ignite as a SQL Database</h2>
-              <p className="dist__text">
-                The native support for SQL let's you work with Ignite as with a standard SQL database. You can use simply
-                SQL if your applications need nothing else:
-              </p>
-              <div className="dist__items flexi">
-                <div className="dist__item">
-                  <h3 className="dist__item-title">DDL commands</h3>
-                  <div className="dist__item-grey dist__item-grey1 flexi">
-                    <div className="dist__itemitem flexi">
-                      <span className="dist__item-span">CREATE</span>
-                      <span className="dist__item-span">ALTER</span>
-                      <span className="dist__item-span">DROP</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="dist__item">
-                  <h3 className="dist__item-title">DML commands</h3>
-                  <div className="dist__item-grey dist__item-grey2 flexi">
-                    <div className="dist__itemitem flexi">
-                      <span className="dist__item-span">SELECT</span>
-                      <span className="dist__item-span">INSERT</span>
-                      <span className="dist__item-span">UPDATE</span>
-                    </div>
-                    <div className="dist__itemitem dist__itemitem__end flexi">
-                      <span className="dist__item-span">MERGE</span>
-                      <span className="dist__item-span">DELETE</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h3 className="dist__h3">Apache Ignite is shipped with:</h3>
-              <div className="dist__parts flexi">
-                <div className="dist__part flexi">
-                  <div className="compute2-points__item fz20"></div>
-                  <div className="dist__part-text">JDBC driver</div>
-                </div>
-                <div className="dist__part flexi">
-                  <div className="compute2-points__item fz20"></div>
-                  <div className="dist__part-text">ODBC driver</div>
-                </div>
-                <div className="dist__part flexi">
-                  <div className="compute2-points__item fz20"></div>
-                  <div className="dist__part-text dist__part-textend flexi">
-                    Built-in SQL APIs
-                    <div className="dist__part-grey">
-                      Available for Java, C#, C++, Python, and other programming languages
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <img className="dist__image" src="/img/features/sql/image.svg" alt="sql-hero" />
-          </div>
-        </div>
-      </section>
-
-      <section className="dist1">
-        <div className="container">
-          <h2 className="dist1__h2 h4">Join, Group and Aggregate Distributed Data Sets</h2>
-          <div className="dist1__subtext">Whether you use a two or thousand-node cluster, you can always do the following:</div>
-          <div className="dist1__parts flexi">
-            <div className="dist1__part">group data</div>
-            <div className="dist1__part">join data</div>
-            <div className="dist1__part">order data</div>
-            <div className="dist1__part dist1__partend">aggregate data</div>
-          </div>
-          <div className="dist1__title">What is a distributed join?</div>
-          <p className="dist1__text h4">
-            A distributed join is a SQL statement with a join clause that combines two or more tables that have their data
-            distributed across many cluster nodes.
-          </p>
-          <h3 className="dist1__h3 h4">Types of joins in Ignite</h3>
-          <div className="dist1__blocks flexi">
-            <div className="dist1__block">
-              <h4 className="dist1__h4">Co-located joins</h4>
-              <p className="dist1__texts">
-                These are the most performant types of joins that avoid data shuffling between nodes and minimize network
-                usage.
-              </p>
-              <p className="dist1__texts pt-1">
-                This type of join is used if you join{' '}
-                <a
-                  className="dist1__link"
-                  href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  partitioned and replicated tables
-                </a>{' '}
-                or partitioned tables that are co-located with each other.
-              </p>
-            </div>
-            <div className="dist1__block">
-              <h4 className="dist1__h4">Non-colocated joins</h4>
-              <p className="dist1__texts">
-                A less performant type of join that joins data of non&#8209;colocated tables. Ignite needs to shuffle data
-                over the network to produce a correct result set.
-              </p>
-            </div>
-            <div className="dist1__block">
-              <h4 className="dist1__h4">Hash joins</h4>
-              <p className="dist1__texts">
-                Ignite supports classic hash join algorithm that is more efficient than nested loop joins for many
-                scenarios.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="dist2">
-        <div className="container">
-          <h2 className="dist2__h2 h4">Ignite SQL Engine and Multi-Tier Storage</h2>
-          <p className="dist2__p">
-            Depending on your storage configuration, Ignite SQL engine can query both in-memory and disk-only records
-          </p>
-          <div className="dist2__blocks flexi">
-            <div className="dist2__block">
-              <h3 className="dist2__h3">In-Memory Mode</h3>
-              <p className="dist2__text dist2__text1">Ignite caches data only in memory</p>
-              <details className="dist2__details">
-                <summary className="dist2__active">
-                  <img src="/img/features/sql/plus.svg" alt="sql-hero" />
-                </summary>
-                <div className="dist2__subtext">
-                  <p>
-                    In this mode, Ignite SQL carries out tasks as quickly as possible, as long as all the data is served
-                    from memory, with no usage of the disk tier at all.
-                  </p>
-                </div>
-              </details>
-            </div>
-            <div className="dist2__block">
-              <h3 className="dist2__h3">
-                In-Memory <br />+ Native Persistence Mode
-              </h3>
-              <p className="dist2__text">
-                Ignite scales beyond available
-                <br /> memory capacity
-              </p>
-              <details className="dist2__details">
-                <summary className="dist2__active">
-                  <img src="/img/features/sql/plus.svg" alt="sql-hero" />
-                </summary>
-                <div className="dist2__subtext">
-                  <p>
-                    Ignite persists 100% of data and indexes in the{' '}
-                    <a href="/arch/native-persistence.html">native persistence</a> while caching as much as possible in
-                    memory.
-                  </p>
-                  <p className="pt-1">
-                    Ignite SQL engine does not require the caching of entire data set in memory to operate correctly.
-                  </p>
-                  <p className="pt-1">
-                    If the engine finds that a record is not cached, then it will read the record from disk. Your
-                    application only executes SQL queries, and Ignite gets the records from both memory and disk
-                    automatically.
-                  </p>
-                  <p className="pt-1">
-                    On cluster restarts, Ignite reads data and indexes from disk, eliminating the need for memory warm-up,
-                    which significantly decreases downtime.
-                  </p>
-                </div>
-              </details>
-            </div>
-
-            <div className="dist2__block">
-              <h3 className="dist2__h3">
-                In-Memory
-                <br />+ External Database Mode
-              </h3>
-              <p className="dist2__text">
-                Ignite accelerates your
-                <br /> existing databases
-              </p>
-              <details className="dist2__details">
-                <summary className="dist2__active">
-                  <img src="/img/features/sql/plus.svg" alt="sql-hero" />
-                </summary>
-                <div className="dist2__subtext">
-                  <p>
-                    In this mode, the Ignite SQL engine requires caching of all the data needed for distributed queries in
-                    memory, since the engine does not currently support federated queries.
-                  </p>
-                  <p className="pt-1">
-                    If federated queries between Ignite and an external database are required, then you can consider Ignite
-                    integration for Spark, where the DataFrames API can combine the data stored in Ignite and other systems.
-                  </p>
-                </div>
-              </details>
             </div>
           </div>
         </div>
@@ -255,34 +267,32 @@ export default function SQL(): JSX.Element {
               <span>Ready to Start?</span>
             </div>
             <p className="nativebotblock__text">
-              Discover more details about Apache Ignite SQL engine
-              <br /> and apply it for your use-case
+              Discover our quick start guide and build your first application in 5-10 minutes
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/persistence/native-persistence"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
-              Memory Architecture
+              Quick Start Guide
             </a>
           </article>
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Want to Learn More?</span>
+              <span>Read Documentation</span>
             </div>
             <p className="nativebotblock__text">
-              Ignite SQL will become even more powerful and advanced with the release of the Apache Calcite based engine
+              Learn about SQL syntax, Table API methods, and client configuration
             </p>
-            <div className="dist__link">Coming in Ignite 3.0</div>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://cwiki.apache.org/confluence/display/IGNITE/Apache+Calcite-powered+SQL+Engine+Roadmap"
+              href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/sql/sql-odbc-jdbc"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
-              New Calcite powered SQL engine
+              SQL and JDBC Documentation
             </a>
           </article>
         </div>

@@ -4,156 +4,256 @@ import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 
 import '../../css/native-persistence.css';
-import '../../css/compute-apis.css';
-import '../../css/streaming.css';
 
-export default function Streaming(): JSX.Element {
+export default function BackpressuredStreaming(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>Apache Ignite Streaming, Real-Time Data Processing</title>
+        <title>Backpressured Streaming - Apache Ignite</title>
         <meta
           name="description"
-          content="Apache Ignite data loading, streaming, and real-time processing capabilities allow to inject large amounts of data into an Ignite cluster in a scalable and fault-tolerant way. Learn more here."
+          content="Apache Ignite provides reactive streaming with automatic backpressure control. DataStreamer delivers high-throughput ingestion while respecting cluster capacity. Integrates with MVCC and transactions for consistent data ingestion."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/streaming.html" />
-        <meta property="og:title" content="Apache Ignite Streaming, Real-Time Data Processing" />
+        <link rel="canonical" href="https://ignite.apache.org/features/streaming" />
+        <meta property="og:title" content="Backpressured Streaming - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/streaming.html" />
+        <meta property="og:url" content="https://ignite.apache.org/features/streaming" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Apache Ignite data loading, streaming, and real-time processing capabilities allow to inject large amounts of data into an Ignite cluster in a scalable and fault-tolerant way. Learn more here."
+          content="Apache Ignite provides reactive streaming with automatic backpressure control. DataStreamer delivers high-throughput ingestion while respecting cluster capacity. Integrates with MVCC and transactions for consistent data ingestion."
         />
       </Head>
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main">
+          <div className="innerhero__main innerhero__main--long">
             <div className="innerhero__pre pb-3">Apache Ignite</div>
-            <h1 className="h1 innerhero__h1">
-              Real-Time Streaming
-              <br /> APIs
-            </h1>
-            <div className="innerhero__descr pt-2 h5">Ingest streams of data and build event-driven architectures</div>
-            <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
-                Start Coding
-              </a>
+            <h1 className="h1 innerhero__h1">Backpressured Streaming</h1>
+            <div className="innerhero__descr pt-2 h5">
+              Reactive streams with automatic rate coordination
             </div>
           </div>
           <img
-            className="innerhero__pic innerhero__pic--stream"
-            src="/img/features/streaming/hero-image.svg"
-            alt="stream-hero"
+            className="innerhero__pic innerhero__pic--native"
+            src="/img/features/hero-bg.svg"
+            alt="Backpressured Streaming"
           />
         </div>
       </section>
 
-      <section className="stream1">
-        <div className="container">
-          <div className="stream1__block flexi">
-            <p className="stream1__p h4">
-              With Apache Ignite you can<strong> load and stream</strong> large finite — or never-ending — volumes of
-              data<strong> in a scalable and fault-tolerant way</strong> into the cluster.
-            </p>
-            <div className="stream1__part">
-              <img className="stream1__img" src="/img/features/streaming/speed.png" alt="speed" />
-              <p className="stream1__text">
-                The rate at which data can be injected into Ignite{' '}
-                <strong>exceeds millions of events per second </strong>on a moderately sized cluster.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="stream2">
-        <div className="container">
-          <div className="stream2__block flexi">
-            <div className="stream2__content">
-              <h2 className="stream2__h2 h4">Ignite Core Streaming APIs</h2>
-              <h3 className="stream2__h3">What are those APIs?</h3>
-              <p className="stream2__text">
-                With Ignite core streaming APIs such as IgniteDataStreamer you get basic streaming capabilities out of
-                the box. You can stream and transform your data originating from multiple custom sources.
-                <br />
-                <br />
-                Ignite data streamers automatically buffer the data and group it into batches for better performance,
-                and send it in parallel to multiple nodes.
-              </p>
-            </div>
-            <img className="stream2__img" src="/img/features/streaming/sql.svg" alt="sql" />
-          </div>
-        </div>
-      </section>
-
-      <section className="stream3">
-        <div className="container">
-          <h2 className="stream3__h2 h4">IgniteDataStreamer is used for:</h2>
-          <div className="stream3__blocks flexi">
-            <div className="stream3__block">
-              <div className="stream3__part flexi">
-                <div className="compute2-points__item fz20"></div>
-                <p className="stream3__text">Data loading</p>
-              </div>
-              <div className="stream3__part stream3__end flexi ml-04">
-                <div className="compute2-points__item fz20"></div>
-                <p className="stream3__text">Real-time data streaming</p>
-              </div>
-            </div>
-            <div className="stream3__block">
-              <div className="stream3__part stream3__first flexi">
-                <div className="compute2-points__item fz20"></div>
-                <p className="stream3__text">
-                  Achieving advanced streaming capabilities by integrating with streaming frameworks:
-                </p>
-              </div>
-              <div className="stream3__item stream3__itemstart flexi">
-                <img className="stream3__img" src="/img/features/streaming/one.png" alt="one" />
-                <img className="stream3__img" src="/img/features/streaming/two.svg" alt="two" />
-                <img className="stream3__img" src="/img/features/streaming/three.png" alt="three" />
-              </div>
-              <div className="stream3__item flexi">
-                <img className="stream3__img" src="/img/features/streaming/four.svg" alt="four" />
-                <img className="stream3__img" src="/img/features/streaming/five.svg" alt="five" />
-                <img className="stream3__img" src="/img/features/streaming/six.svg" alt="six" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="stream4">
-        <div className="container">
-          <h2 className="stream4__h2 h4">Event-Driven Architecture Basic Principles</h2>
-          <p className="stream4__p">
-            In many cases, streams of data we receive comprise events that we have to react to.
-            <br />
-            <span className="stream4__greys">With Apache Ignite, you can:</span>
+      <section className="container pt-5 pb-5">
+        <div className="pt-3 pb-3">
+          <p className="fz20">
+            Apache Ignite provides reactive streaming with automatic backpressure control. DataStreamer delivers high-throughput ingestion while respecting cluster capacity. The system coordinates producer and consumer rates automatically. This prevents memory overflow and maintains cluster stability under high-velocity data streams.
           </p>
-          <div className="stream4__block flexi">
-            <div className="stream4__part">
-              <div className="stream4__number">01</div>
-              <div className="stream4__text">
-                Enrich and transform your data <br />
-                on the fly.
-              </div>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container">
+        <h2 className="h4 pb-3">Reactive Streaming with Backpressure</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Publisher Interface</h3>
+            <p>
+              DataStreamer implements reactive Publisher patterns. Producers publish data items. The system requests items based on cluster capacity. This pull-based approach prevents overwhelming the cluster with data faster than it can process.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Automatic Rate Coordination</h3>
+            <p>
+              The streaming system signals producers when ready for more data. Producers slow down when cluster capacity decreases. Producers speed up when capacity increases. This dynamic coordination happens automatically without manual tuning.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Buffer Management</h3>
+            <p>
+              DataStreamer maintains internal buffers sized based on cluster capacity. Buffers absorb temporary rate mismatches. The system applies backpressure before buffers overflow. This prevents out-of-memory conditions during ingestion spikes.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Flow Control</h3>
+            <p>
+              The Publisher interface provides natural flow control. Applications receive signals when the cluster needs more data. Applications pause data generation when backpressure applies. This coordination works across network boundaries.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container pt-5 pb-5">
+        <h2 className="h4 pb-3">High-Throughput Ingestion</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Batching and Buffering</h3>
+            <p>
+              DataStreamer groups individual items into batches automatically. Batch sizes adapt to network conditions and cluster load. Larger batches reduce network overhead. Smaller batches reduce latency. The system balances throughput and latency dynamically.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Partition-Aware Distribution</h3>
+            <p>
+              The streamer routes data items to partition owners directly. Single-hop writes avoid coordinator overhead. Items for the same partition group together in batches. This optimization delivers maximum throughput for partitioned data.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Parallel Processing</h3>
+            <p>
+              DataStreamer processes multiple batches in parallel across cluster nodes. Each node processes its partition data independently. This parallelism scales linearly with cluster size. Adding nodes increases total ingestion throughput proportionally.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Memory-First Writes</h3>
+            <p>
+              Streamed data writes directly to memory. No disk I/O during ingestion. Replication handles durability through distributed consensus. This memory-first approach delivers the throughput needed for high-velocity streams.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nativepersistence3 container pt-5 pb-5">
+        <h2 className="h4 pb-3">Integration with Transactions and MVCC</h2>
+
+        <div className="nativepersistence3__block flexi">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Transactional Streaming</h3>
+            <p>
+              DataStreamer supports transactional writes. Batches commit atomically. Failures trigger automatic rollback. This ensures consistency for streamed data. Applications choose between throughput-optimized non-transactional mode or consistency-optimized transactional mode.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">MVCC Compatibility</h3>
+            <p>
+              Streaming writes create new MVCC versions. Concurrent queries see consistent snapshots. Long-running aggregations don't block streaming ingestion. Readers never block writers. This enables mixed streaming and analytical workloads.
+            </p>
+          </div>
+        </div>
+
+        <div className="nativepersistence3__block flexi pt-4">
+          <div className="nativepersistence3__left">
+            <h3 className="h5">Upsert Semantics</h3>
+            <p>
+              DataStreamer supports upsert operations. Inserts new records. Updates existing records. Applications specify keys for conflict resolution. This handles duplicate events in streaming scenarios without application-level deduplication logic.
+            </p>
+          </div>
+          <div className="nativepersistence3__right">
+            <h3 className="h5">Ordered Processing</h3>
+            <p>
+              The system preserves ordering within partitions. Events for the same key process in order. Events across partitions process in parallel. This ordering guarantee simplifies event stream processing logic.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pt-5 pb-5">
+        <h2 className="h4 pb-4">Use Cases</h2>
+
+        <div className="cardswrap">
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/09-streaming.svg" alt="" />
             </div>
-            <div className="stream4__part stream4__parttwo">
-              <div className="stream4__number">02</div>
-              <div className="stream4__text">
-                Execute any calculations in response
-                <br /> to an event on the cluster-node side.
-              </div>
+            <h3 className="cardsimple__title">Event Stream Processing</h3>
+            <div className="cardsimple__text">
+              Ingest event streams at high velocity. Process events with transactional guarantees. Update multiple aggregations atomically. Backpressure prevents data loss during spikes. MVCC enables concurrent analytics on streaming data.
             </div>
-            <div className="stream4__part">
-              <div className="stream4__number">03</div>
-              <div className="stream4__text">React to your streams of data on the application side with continuous queries.</div>
-              <div className="stream4__grey">
-                If streamed data represents an event, your application-side logic can react to it after receiving a
-                notification from continuous queries.
-              </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/event-stream-processing" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/05-key-value-APIs.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">IoT Data Ingestion</h3>
+            <div className="cardsimple__text">
+              Stream sensor data from millions of devices. Partition-aware routing delivers maximum throughput. Memory-first writes provide minimal latency. Backpressure protects cluster during device bursts. Upsert semantics handle sensor state updates.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/high-performance-computing" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/03-distributed-SQL.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Real-Time Aggregations</h3>
+            <div className="cardsimple__text">
+              Stream events into base tables. Update materialized aggregations on write. Transactional streaming ensures consistent aggregates. Queries run against current aggregated state. No batch processing delays.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/use-cases/operational-analytics" className="cardsimple__button button button--shadow">
+                View Use Case
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container pt-5 pb-5">
+        <h2 className="h4 pb-4">How Streaming Connects to the Foundation</h2>
+
+        <div className="cardswrap">
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/02-native-persistence.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Memory-First Ingestion</h3>
+            <div className="cardsimple__text">
+              DataStreamer writes directly to memory without disk I/O. Distributed replication provides durability. This memory-first approach delivers the throughput needed for high-velocity event streams.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/features/storage" className="cardsimple__button button button--shadow">
+                Learn About Storage
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/04-ACID-transactions.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Transactional Guarantees</h3>
+            <div className="cardsimple__text">
+              Streaming writes support full ACID transactions. Batches commit atomically. MVCC enables concurrent queries during ingestion. This provides consistency without sacrificing streaming throughput.
+            </div>
+            <div className="cardsimple__bottom">
+              <Link to="/features/acid-transactions" className="cardsimple__button button button--shadow">
+                Learn About Transactions
+              </Link>
+            </div>
+          </div>
+
+          <div className="usecasecard cardsimple">
+            <div className="cardsimple__icon">
+              <img src="/img/features/05-key-value-APIs.svg" alt="" />
+            </div>
+            <h3 className="cardsimple__title">Partition-Aware Routing</h3>
+            <div className="cardsimple__text">
+              DataStreamer routes items to partition owners directly. Single-hop writes eliminate coordinator overhead. Items group by partition in batches. This optimization scales linearly with cluster size.
+            </div>
+            <div className="cardsimple__bottom">
+              <a
+                href="https://ignite.apache.org/docs/3.0.0/developers-guide/table/colocation"
+                className="cardsimple__button button button--shadow"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Learn About Colocation
+              </a>
             </div>
           </div>
         </div>
@@ -166,31 +266,33 @@ export default function Streaming(): JSX.Element {
               <img src="/img/features/native-rocket.svg" alt="" className="nativebotblock__icon" />
               <span>Ready to Start?</span>
             </div>
-            <p className="nativebotblock__text">Start coding with Ignite Streaming APIs</p>
+            <p className="nativebotblock__text">
+              Discover our quick start guide and build your first application in 5-10 minutes
+            </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/data-streaming"
+              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
-              Ignite Streaming APIs
+              Quick Start Guide
             </a>
           </article>
           <article className="nativebotblock nativebotblock--learn">
             <div className="h4 nativebotblock__title">
               <img src="/img/features/native-docs.svg" alt="" className="nativebotblock__icon" />
-              <span>Want to Learn More?</span>
+              <span>Read Documentation</span>
             </div>
             <p className="nativebotblock__text">
-              Explore our out-of-the-box integrations with Kafka, Flink, MQTT and other advanced streaming technologies
+              Learn about DataStreamer configuration, batching strategies, and reactive patterns
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/extensions-and-integrations/streaming/kafka-streamer"
+              href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/table/data-streaming"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
-              Extensions And Integrations Guide
+              Streaming Documentation
             </a>
           </article>
         </div>
