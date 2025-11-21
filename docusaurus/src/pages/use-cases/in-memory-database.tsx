@@ -31,8 +31,6 @@ export default function InMemoryDatabase(): JSX.Element {
           <div className="innerhero__main innerhero__main--long">
             <h1 className="h1 innerhero__h1">
               Database with Memory-First Storage
-              <br />
-              <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
               Database-first platform with multi-tier storage and full SQL support
@@ -225,28 +223,6 @@ export default function InMemoryDatabase(): JSX.Element {
               Configure different storage engines per table within same cluster. Hot transactional tables use aimem or
               aipersist for low latency. Historical tables use rocksdb for cost-effective storage. Single SQL interface
               queries across all storage tiers. Optimize cost and performance through strategic placement.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="inmememor2 container pt-5">
-        <h2 className="h4">Important Limitations</h2>
-        <div className="inmememor2__work flexi pt-3">
-          <div className="inmememor2__left">
-            <h3 className="fz20">Not Full HTAP</h3>
-            <p>
-              Apache Ignite supports concurrent transactional and analytical workloads but is not positioned as full HTAP
-              system. Window functions NOT supported (LAG, LEAD, ROW_NUMBER). For complex analytical workloads requiring
-              columnar storage and advanced analytics, specialized OLAP databases may provide better performance.
-            </p>
-          </div>
-          <div className="inmememor2__right">
-            <h3 className="fz20">Memory Capacity Planning</h3>
-            <p>
-              Memory-first storage engines (aimem, aipersist) require capacity planning for hot data. Working set must
-              fit in cluster memory for optimal performance. Aipersist provides automatic page management but
-              performance degrades if working set exceeds memory. Rocksdb suitable for data exceeding memory capacity.
             </p>
           </div>
         </div>
