@@ -196,29 +196,6 @@ export default function IoTTimeSeries(): JSX.Element {
         </div>
       </section>
 
-      <section className="inmememor2 container pt-5">
-        <h2 className="h4">Important Limitations</h2>
-        <div className="inmememor2__work flexi pt-3">
-          <div className="inmememor2__left">
-            <h3 className="fz20">Competes With Specialized Systems</h3>
-            <p>
-              This pattern competes with specialized time-series databases optimized for
-              time-series workloads. For extremely high-frequency sensor writes, specialized time-series databases may
-              provide better compression and query performance through columnar storage and time-series specific
-              optimizations.
-            </p>
-          </div>
-          <div className="inmememor2__right">
-            <h3 className="fz20">Best For Standard Aggregations</h3>
-            <p>
-              This pattern works well for standard SQL aggregations (GROUP BY time intervals, AVG, SUM, COUNT). For complex
-              time-series analysis requiring window functions, downsampling, or interpolation, specialized time-series
-              databases provide richer query capabilities.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">

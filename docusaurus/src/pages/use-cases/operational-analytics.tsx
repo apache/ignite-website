@@ -196,27 +196,6 @@ export default function OperationalAnalytics(): JSX.Element {
         </div>
       </section>
 
-      <section className="inmememor2 container pt-5">
-        <h2 className="h4">Important Limitations</h2>
-        <div className="inmememor2__work flexi pt-3">
-          <div className="inmememor2__left">
-            <h3 className="fz20">Window Functions Not Supported</h3>
-            <p>
-              Apache Ignite does not support SQL window functions (LAG, LEAD, ROW_NUMBER, RANK, DENSE_RANK). For complex
-              time-series analysis or ranking operations requiring window functions, use specialized analytical databases.
-            </p>
-          </div>
-          <div className="inmememor2__right">
-            <h3 className="fz20">Competes With Specialized Systems</h3>
-            <p>
-              This pattern competes with relational database MVCC and dedicated OLAP systems. For extremely
-              complex analytical workloads (star schema joins, columnar compression, advanced analytics), specialized OLAP
-              databases may provide better performance.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">

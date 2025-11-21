@@ -190,26 +190,6 @@ export default function AIMLFeatureStores(): JSX.Element {
         </div>
       </section>
 
-      <section className="inmememor2 container pt-5">
-        <h2 className="h4">Important Limitations</h2>
-        <div className="inmememor2__work flexi pt-3">
-          <div className="inmememor2__left">
-            <h3 className="fz20">Vector Search Not Supported</h3>
-            <p>
-              Apache Ignite does not provide vector similarity search or nearest-neighbor lookups. For embedding-based
-              retrieval (semantic search, similarity recommendations), use specialized vector databases.
-            </p>
-          </div>
-          <div className="inmememor2__right">
-            <h3 className="fz20">Best For Structured Features</h3>
-            <p>
-              This pattern works best for structured tabular features (user attributes, aggregations, computed metrics).
-              For unstructured data (embeddings, images, text), consider specialized ML infrastructure.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">

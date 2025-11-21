@@ -197,28 +197,6 @@ export default function FastDataMarts(): JSX.Element {
         </div>
       </section>
 
-      <section className="inmememor2 container pt-5">
-        <h2 className="h4">Important Limitations</h2>
-        <div className="inmememor2__work flexi pt-3">
-          <div className="inmememor2__left">
-            <h3 className="fz20">Not a Complete Data Warehouse</h3>
-            <p>
-              Fast data marts contain curated subsets, not comprehensive historical data. Ad-hoc exploratory queries
-              across all dimensions require data warehouse. Long-term data retention (years) better suited to warehouse
-              storage. Complex ETL logic remains in data warehouse layer.
-            </p>
-          </div>
-          <div className="inmememor2__right">
-            <h3 className="fz20">ETL Dependency and Query Constraints</h3>
-            <p>
-              Data freshness depends on ETL or CDC update frequency. Not suitable for use cases requiring writes from
-              applications. Window functions NOT supported (LAG, LEAD, ROW_NUMBER, RANK). For extremely complex analytical
-              workloads, specialized OLAP databases may provide better performance.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">
