@@ -105,12 +105,12 @@ export default function AIMLFeatureStores(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Feature engineering pipelines write computed features to Apache Ignite
               tables. Training jobs specify snapshot timestamps for historical consistency. Serving endpoints read
               current features through RecordView API for real-time inference.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> Snapshot isolation ensures training reads consistent feature values
               at point-in-time. Consensus replication ensures serving reads strongly consistent current values. No eventual
               consistency windows between feature writes and reads.

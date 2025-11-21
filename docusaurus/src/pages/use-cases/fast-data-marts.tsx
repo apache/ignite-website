@@ -111,13 +111,13 @@ export default function FastDataMarts(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> ETL pipelines or CDC streams populate department-specific tables in
               Apache Ignite (sales_mart, finance_mart, customer_mart). Applications query data marts directly for
               dashboards, customer APIs, and operational reports. Scheduled refreshes (hourly, daily) or real-time updates
               based on business requirements.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> ACID guarantees ensure data consistency during ETL updates. No cache
               invalidation logic required. Queries read consistent snapshots without blocking concurrent updates. Point-in-time
               consistency for reporting periods.

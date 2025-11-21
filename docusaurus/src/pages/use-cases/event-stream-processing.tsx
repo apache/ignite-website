@@ -107,11 +107,11 @@ export default function EventStreamProcessing(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Streaming platforms process events, enriching each
               event by looking up reference data in Apache Ignite through RecordView API.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> Consensus replication ensures writes to reference data propagate to all
               replicas with strong consistency. No eventual consistency delays.
             </p>

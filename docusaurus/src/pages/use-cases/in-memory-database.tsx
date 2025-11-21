@@ -106,7 +106,7 @@ export default function InMemoryDatabase(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Applications execute transactional operations (INSERT, UPDATE,
               DELETE) using standard SQL with ACID guarantees. Analytical queries (aggregations, joins, GROUP BY) run
               concurrently on same data. Snapshot isolation prevents analytical queries from blocking transactional

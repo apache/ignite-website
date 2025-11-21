@@ -111,12 +111,12 @@ export default function IoTTimeSeries(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> IoT gateways write sensor readings to Apache Ignite tables with defined
               schemas (timestamp, device_id, sensor_type, value, units). Schema validation rejects malformed data at
               ingestion. Analytical queries use GROUP BY with time intervals for rollups and aggregations.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> ACID guarantees ensure sensor writes commit atomically. Schema
               enforcement validates data types and constraints during ingestion. Queries read consistent snapshots without
               blocking concurrent writes.

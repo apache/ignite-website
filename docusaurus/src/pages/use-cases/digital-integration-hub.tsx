@@ -108,7 +108,7 @@ export default function DigitalIntegrationHub(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Back-end systems synchronize data to Ignite through streaming platforms,
               change data capture tools, or event-based integration. Applications query Ignite
               instead of accessing back-end systems directly. Ignite maintains aggregated view of data across multiple

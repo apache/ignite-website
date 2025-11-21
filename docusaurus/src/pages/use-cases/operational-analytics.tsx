@@ -111,12 +111,12 @@ export default function OperationalAnalytics(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Transactional applications write to Apache Ignite tables using standard
               ACID operations. Analytical queries use SQL aggregations (SUM, COUNT, GROUP BY, HAVING) to generate
               reports and dashboards directly from transactional tables.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> Snapshot isolation ensures analytical queries read consistent data at
               point-in-time without blocking writes. Queries see committed transactions only. No table locks or read
               blocking during aggregations.

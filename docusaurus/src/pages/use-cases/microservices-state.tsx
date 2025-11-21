@@ -107,12 +107,12 @@ export default function MicroservicesState(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Each microservice owns its tables within Apache Ignite. Cross-service
               operations use distributed transactions that span multiple tables. Transaction coordinator ensures atomic
               commits across service boundaries.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> Consensus replication provides ACID guarantees for distributed transactions.
               Snapshot isolation prevents read-write conflicts across services. No eventual consistency windows or
               compensation logic.

@@ -107,12 +107,12 @@ export default function SessionManagement(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Web applications store session data in Apache Ignite using session ID as
               key. Any application server can retrieve any session without sticky routing. Load balancers distribute
               requests freely across application servers.
             </p>
-            <p>
+            <p className="pb-2">
               <strong>Consistency Model:</strong> Distributed replication ensures session updates propagate to all replicas
               with strong consistency. Session data remains consistent across all nodes. No eventual consistency
               windows.

@@ -108,7 +108,7 @@ export default function HighPerformanceComputing(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Design table schemas with colocation keys that match join patterns.
               Orders table colocated with order items using orderId. Users table colocated with transactions using
               userId. Local joins execute on single node without network transfers.
@@ -138,7 +138,7 @@ export default function HighPerformanceComputing(): JSX.Element {
             </p>
           </div>
           <div className="inmememor2__right">
-            <p>
+            <p className="pb-2">
               <strong>Integration Pattern:</strong> Colocate user profiles, purchase history, and product catalogs
               using userId as colocation key. Execute recommendation algorithms using Compute APIs on colocated data
               sets. Results calculated locally without network transfers.
