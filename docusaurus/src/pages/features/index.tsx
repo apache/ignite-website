@@ -31,11 +31,10 @@ export default function FeaturesIndex(): JSX.Element {
             <div className="innerhero__pre pb-3">Apache Ignite</div>
             <h1 className="h1 innerhero__h1">Features</h1>
             <div className="innerhero__descr pt-2 h5">
-              Built Memory-First for Modern Workloads
+              Built Memory-First for Modern Workloads.<br />
+              Apache Ignite delivers complex operations<br />
+              within shrinking transaction windows at scale.
             </div>
-            <p className="pt-3" style={{ fontSize: '1rem', lineHeight: '1.6', maxWidth: '600px' }}>
-              Apache Ignite addresses the central challenge of distributed data systems: delivering complex operations within shrinking transaction windows at scale. The architecture places data and operations in memory by default, using persistence for durability rather than as the primary access path.
-            </p>
           </div>
           <img className="innerhero__pic innerhero__pic--features" src="/img/features/hero-bg.svg" alt="Apache Ignite Features" />
         </div>
