@@ -4,286 +4,612 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
+import { FAQCategoryTabs, type FAQCategory } from '@site/src/components/FAQAccordion';
 import styles from './faq.module.css';
-
-interface FAQCardProps {
-  question: string;
-  answer: string;
-  description?: ReactNode;
-  learnMoreLink?: string;
-  learnMoreText?: string;
-}
-
-function FAQCard({ question, answer, description, learnMoreLink, learnMoreText }: FAQCardProps) {
-  return (
-    <article className={clsx(styles.faqbox, styles.cardsimple)}>
-      <h3 className={clsx(styles.faqbox__itemtitle, styles.h5)}>{question}</h3>
-      <div className={clsx(styles.faqbox__anwser, styles.h5, 'pt-3')}>{answer}</div>
-      <div className={clsx(styles.faqbox__text, 'pt-3')}>
-        {description}
-      </div>
-      {learnMoreLink && (
-        <div className={styles.cardsimple__bottom}>
-          <Link to={learnMoreLink} className="button button--shadow">
-            {learnMoreText || 'Learn More'}
-          </Link>
-        </div>
-      )}
-    </article>
-  );
-}
 
 function HeroSection() {
   return (
-    <section className={clsx(styles.innerhero, styles['innerhero--faq'])}>
-      <div className={clsx('container', styles.innerhero__cont)}>
-        <div className={clsx(styles.innerhero__main, styles['innerhero__main--long'])}>
-          <h1 className={clsx(styles.h1, styles.innerhero__h1)}>
-            Frequently Asked Questions <br />About Apache Ignite
-          </h1>
-          <div className={clsx(styles.innerhero__descr, 'pt-5', styles.h4)}>
-            Ignite's rich feature set means it has a myriad of use cases.<br />
-            Is Ignite a cache, transactional database, key-value store? <br />Find the answers below.
+    <section className="innerhero">
+      <div className="container innerhero__cont">
+        <div className="innerhero__main">
+          <div className="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 className="h1 innerhero__h1">Frequently Asked Questions</h1>
+          <div className="innerhero__descr pt-2 h5">
+            Answers to common questions about Apache Ignite<br />the memory-first distributed SQL database
           </div>
         </div>
         <img
+          className="innerhero__pic innerhero__pic--faq"
           src="/img/faq/hero.svg"
-          alt="Frequently asked questions"
-          className={clsx(styles.innerhero__pic, styles['innerhero__pic--faq'])}
+          alt="Apache Ignite FAQ"
         />
       </div>
     </section>
   );
 }
 
-function InMemoryComputingSection() {
+function OverviewSection() {
   return (
-    <Section className={styles.faqabout}>
-      <div className="capstext">Apache Ignite FAQs</div>
-      <div className={clsx(styles.faqabout__wrap, 'flexi', 'pt-5')}>
-        <div className={styles.faqabout__left}>
-          <h2 className={clsx(styles.h4, 'pb-2')}>What Is In-Memory Computing?</h2>
-          <p>
-            In-memory computing is a software and data-processing technique that stores data sets in memory across a cluster of interconnected nodes. An average speed performance is 10-1000x faster than in disk-based systems.
+    <Section className={styles.overview}>
+      <div className={styles.overviewGrid}>
+        <div className={styles.overviewContent}>
+          <div className="capstext">What is Apache Ignite?</div>
+          <p className={styles.overviewLead}>
+            Apache Ignite is a memory-first distributed SQL database built for high-velocity data workloads where milliseconds matter.
           </p>
-          <p>
-            In-memory computing software includes a distributed in-memory store with APIs and libraries optimized for high-performance data processing. Each cluster node (physical or virtual machine) contributes its available memory space with CPU cores to the total capacity of the cluster.
-          </p>
-          <p>
-            An application interacts with the cluster as a single unit, letting the in-memory computing software shield and manage all the internals related to inter-node communications, data distribution, and queries processing. The cluster scales linearly and horizontally to meet the data volume and throughput goals of the applications.
-          </p>
+          <ul className={styles.overviewList}>
+            <li>Memory-first storage with optional persistence</li>
+            <li>Schema-driven data placement for local query execution</li>
+            <li>ACID transactions across partitions using Raft consensus</li>
+            <li>Non-blocking reads through MVCC snapshot isolation</li>
+            <li>Full SQL support via Apache Calcite</li>
+          </ul>
         </div>
-        <aside className={styles.faqabout__right}>
-          <div className={clsx(styles.faqabout__num, styles.h3)}>10-1000x</div>
-          <p className={styles.h5}>performance increase</p>
-          <div className={clsx(styles.faqabout__rightbot, styles.h5)}>Unlimited horizontal scalability</div>
+        <aside className={styles.overviewMetrics}>
+          <div className={styles.metric}>
+            <span className={styles.metricValue}>Sub-10ms</span>
+            <span className={styles.metricLabel}>query latency with colocation</span>
+          </div>
+          <div className={styles.metric}>
+            <span className={styles.metricValue}>ACID</span>
+            <span className={styles.metricLabel}>transactions across partitions</span>
+          </div>
         </aside>
       </div>
     </Section>
   );
 }
 
-function FeatureBenefitsSection() {
+function ValuePropsSection() {
+  const valueProps = [
+    {
+      title: 'Speed Without Compromise',
+      description: 'Memory-first architecture delivers microsecond latencies. Data lives in RAM, not behind disk I/O.',
+      icon: '/img/faq/icon-faq1.svg',
+    },
+    {
+      title: 'Scale Without Penalties',
+      description: 'Schema-driven colocation keeps related data together, eliminating cross-node join penalties.',
+      icon: '/img/faq/icon-faq2.svg',
+    },
+    {
+      title: 'Consistency Without Tradeoffs',
+      description: 'ACID transactions across partitions with Raft consensus. No eventual consistency compromises.',
+      icon: '/img/faq/icon-faq3.svg',
+    },
+  ];
+
   return (
-    <Section className={styles.faqfeats}>
-      <h2 className={clsx(styles.h4, styles.faqfeats__title)}>
-        Apache Ignite Belongs To The In-Memory <br />Computing Category:
-      </h2>
-      <div className={clsx(styles.faqfeats__wrap, 'flexi', 'pt-5')}>
-        <article className={clsx(styles.faqfeat, 'pt-1')}>
-          <div className={clsx(styles.faqfeat__iconwrap, 'flexi')}>
-            <img src="/img/faq/icon-faq1.svg" alt="" />
-          </div>
-          <div className={clsx(styles.faqfeat__text, 'pt-2')}>
-            Build real-time and event-driven solutions that process data with in-memory speed
-          </div>
-        </article>
-        <article className={clsx(styles.faqfeat, 'pt-1')}>
-          <div className={clsx(styles.faqfeat__iconwrap, 'flexi')}>
-            <img src="/img/faq/icon-faq2.svg" alt="" />
-          </div>
-          <div className={clsx(styles.faqfeat__text, 'pt-2')}>
-            Scale up and out across available memory and disk capacity
-          </div>
-        </article>
-        <article className={clsx(styles.faqfeat, 'pt-1')}>
-          <div className={clsx(styles.faqfeat__iconwrap, 'flexi')}>
-            <img src="/img/faq/icon-faq3.svg" alt="" />
-          </div>
-          <div className={clsx(styles.faqfeat__text, 'pt-2')}>
-            Take advantage of built-in SQL, high-performance computing and real-time processing APIs
-          </div>
-        </article>
+    <Section className={styles.valueProps}>
+      <div className={styles.valuePropsGrid}>
+        {valueProps.map((prop, index) => (
+          <article key={index} className={styles.valueProp}>
+            <div className={styles.valuePropIcon}>
+              <img src={prop.icon} alt="" />
+            </div>
+            <h3 className={styles.valuePropTitle}>{prop.title}</h3>
+            <p className={styles.valuePropDescription}>{prop.description}</p>
+          </article>
+        ))}
       </div>
     </Section>
   );
 }
 
-function FAQCardsSection() {
-  const faqItems: FAQCardProps[] = [
+function FAQSection() {
+  const categories: FAQCategory[] = [
     {
-      question: 'Is Ignite A Distributed Cache?',
-      answer: 'Yes',
-      description: (
-        <p>
-          When Ignite native persistence is disabled, Ignite can function as a distributed in-memory cache with support distributed ACID transactions, SQL queries, high-performance computing APIs, and more.
-        </p>
-      ),
-      learnMoreLink: '/use-cases/in-memory-cache',
-      learnMoreText: 'Learn More: In-Memory Cache',
+      id: 'getting-started',
+      title: 'Getting Started',
+      questions: [
+        {
+          question: 'What is Apache Ignite?',
+          answer: (
+            <>
+              <p>
+                Apache Ignite is a memory-first distributed SQL database built for high-velocity data workloads where milliseconds matter. It combines:
+              </p>
+              <ul>
+                <li>Memory-first storage with optional persistence (AIPERSIST, AIMEM)</li>
+                <li>Schema-driven data placement (colocation) for local query execution</li>
+                <li>ACID transactions across partitions using Raft consensus</li>
+                <li>Non-blocking reads through MVCC snapshot isolation</li>
+                <li>Full SQL support via Apache Calcite</li>
+              </ul>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/',
+          learnMoreText: 'Read the Documentation',
+        },
+        {
+          question: 'How is Ignite 3 different from Ignite 2?',
+          answer: (
+            <>
+              <p>
+                Ignite 3 represents an architectural evolution from cache-centric platform to database-first design:
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Aspect</th>
+                    <th>Ignite 2</th>
+                    <th>Ignite 3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Primary API</td>
+                    <td>Cache API</td>
+                    <td>Table API</td>
+                  </tr>
+                  <tr>
+                    <td>Schema</td>
+                    <td>Optional via configuration</td>
+                    <td>Required via SQL DDL</td>
+                  </tr>
+                  <tr>
+                    <td>Transactions</td>
+                    <td>6 modes</td>
+                    <td>Single mode (strict serializable)</td>
+                  </tr>
+                  <tr>
+                    <td>Consistency</td>
+                    <td>Configurable</td>
+                    <td>Strong by default (Raft)</td>
+                  </tr>
+                  <tr>
+                    <td>SQL</td>
+                    <td>Optional addon</td>
+                    <td>Primary interface (Calcite)</td>
+                  </tr>
+                  <tr>
+                    <td>Data Placement</td>
+                    <td>Manual</td>
+                    <td>Schema-driven colocation</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Both versions remain under Apache Software Foundation governance for different use cases.
+              </p>
+            </>
+          ),
+        },
+        {
+          question: 'What languages and clients are supported?',
+          answer: (
+            <>
+              <p>Ignite provides native thin clients for:</p>
+              <ul>
+                <li><strong>Java</strong>: Full feature set with CompletableFuture async support</li>
+                <li><strong>.NET (C#)</strong>: Native thin-client protocol with async/await</li>
+                <li><strong>C++</strong>: Native thin-client implementation</li>
+                <li><strong>Python</strong>: Native thin-client bindings</li>
+              </ul>
+              <p>All clients provide partition-aware routing for direct access to data nodes.</p>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/clients/',
+          learnMoreText: 'Client Documentation',
+        },
+      ],
     },
     {
-      question: 'Is Ignite A Distributed Database?',
-      answer: 'Yes',
-      description: (
-        <>
-          <p>
-            Ignite is a distributed database for high-performance computing with in-memory speed.
-          </p>
-          <p>
-            Data in Ignite is stored in-memory and/or on-disk, and is either partitioned or replicated across a cluster of multiple nodes. This provides scalability, performance, and resiliency.
-          </p>
-        </>
-      ),
-      learnMoreLink: '/arch/multi-tier-storage',
-      learnMoreText: 'Learn More: Multi-Tier Storage',
+      id: 'architecture',
+      title: 'Architecture',
+      questions: [
+        {
+          question: 'How does schema-driven colocation work?',
+          answer: (
+            <>
+              <p>
+                Traditional distributed databases use <code>hash(primary_key)</code> by default, and scatter data randomly across nodes. When you query related data (e.g., artist + albums), this requires expensive cross-node joins adding tens to hundreds of milliseconds additional latency.
+              </p>
+              <p>
+                Ignite's <code>colocateBy</code> annotation declares relationships in the schema. Related data lives together, so queries execute locally in memory (sub-10ms) instead of coordinating across nodes.
+              </p>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/sql-reference/ddl/',
+          learnMoreText: 'Schema Design Guide',
+        },
+        {
+          question: 'What is memory-first architecture?',
+          answer: (
+            <>
+              <p>
+                Memory-first architecture treats RAM as the primary storage tier, not as cache in front of disk. Data lives in memory by default. Persistence (if enabled) provides durability through background checkpointing, not synchronous disk writes.
+              </p>
+              <p>This eliminates the latency tax disk-based systems impose on every operation:</p>
+              <ul>
+                <li>Hot data reads: microsecond-level latency</li>
+                <li>MVCC version chains traverse in memory</li>
+                <li>Transaction coordination happens in memory</li>
+                <li>No write-ahead log bottleneck (WAL-free with Raft)</li>
+              </ul>
+            </>
+          ),
+        },
+        {
+          question: 'What storage options are available?',
+          answer: (
+            <>
+              <p>Three storage profiles for different workload needs:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Profile</th>
+                    <th>Characteristics</th>
+                    <th>Use Case</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>AIMEM</strong></td>
+                    <td>Pure in-memory, no persistence</td>
+                    <td>Caches, session stores, temporary data</td>
+                  </tr>
+                  <tr>
+                    <td><strong>AIPERSIST</strong></td>
+                    <td>Memory-first with checkpointing</td>
+                    <td>Production transactional workloads (default)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>RocksDB</strong></td>
+                    <td>LSM-tree disk storage</td>
+                    <td>Large datasets exceeding memory (experimental)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/config/storage/',
+          learnMoreText: 'Storage Configuration',
+        },
+        {
+          question: 'How does Ignite achieve sub-10ms query latency?',
+          answer: (
+            <>
+              <p>Three architectural choices combine to deliver low latency:</p>
+              <ol>
+                <li><strong>Memory-First Storage</strong>: Data lives in memory. No disk seeks for hot data.</li>
+                <li><strong>Schema-Driven Colocation</strong>: Related data lives together. No cross-node joins.</li>
+                <li><strong>MVCC Non-Blocking Reads</strong>: Readers never wait for writers. Version chains traverse in memory.</li>
+              </ol>
+              <p>
+                For colocated relationship queries (e.g., customer + orders), expect 1-5ms latency. For cross-partition queries, expect 10-50ms depending on data distribution.
+              </p>
+            </>
+          ),
+        },
+      ],
     },
     {
-      question: 'Is Ignite An In-Memory Database?',
-      answer: 'Yes',
-      description: (
-        <p>
-          Ignite multi-tier storage supports both in-memory and disk tiers. You can always disable the native persistence and use Ignite as a distributed in-memory database, with support for SQL, transactions and other APIs.
-        </p>
-      ),
-      learnMoreLink: '/use-cases/in-memory-database',
-      learnMoreText: 'Learn More: In-Memory Database',
+      id: 'transactions',
+      title: 'Transactions',
+      questions: [
+        {
+          question: 'Does Ignite support ACID transactions?',
+          answer: (
+            <>
+              <p>Yes. Ignite provides full ACID transactions across any number of partitions:</p>
+              <ul>
+                <li><strong>Atomicity</strong>: Two-phase commit ensures all partitions commit or all abort</li>
+                <li><strong>Consistency</strong>: Schema constraints validated before commit</li>
+                <li><strong>Isolation</strong>: REPEATABLE_READ via MVCC snapshot isolation</li>
+                <li><strong>Durability</strong>: Raft replication to multiple nodes before acknowledgment</li>
+              </ul>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/transactions/',
+          learnMoreText: 'Transaction Guide',
+        },
+        {
+          question: 'What isolation level does Ignite use?',
+          answer: (
+            <>
+              <p>Ignite uses REPEATABLE_READ isolation (snapshot isolation) for all transactions:</p>
+              <ul>
+                <li><strong>Read-write transactions</strong>: Strict serializable isolation with lock-based coordination</li>
+                <li><strong>Read-only transactions</strong>: Snapshot isolation on any replica without locking</li>
+              </ul>
+              <p>
+                This prevents dirty reads, non-repeatable reads, and phantom reads. The simplified model (one isolation level vs Ignite 2's six modes) reduces configuration complexity.
+              </p>
+            </>
+          ),
+        },
+        {
+          question: 'How does Raft consensus provide consistency?',
+          answer: (
+            <>
+              <p>Each partition forms a Raft replication group with a leader and followers:</p>
+              <ol>
+                <li>Leader processes all writes for the partition</li>
+                <li>Writes replicate to followers before acknowledgment</li>
+                <li>Majority quorum (e.g., 2 of 3 replicas) required for commit</li>
+                <li>If leader fails, remaining nodes elect new leader in milliseconds</li>
+              </ol>
+              <p>
+                This eliminates split-brain scenarios. The partition with quorum continues operating. Isolated partitions cannot accept writes.
+              </p>
+              <p><strong>Recommended</strong>: 3+ replicas for production (tolerates 1 failure)</p>
+            </>
+          ),
+        },
+        {
+          question: 'Can transactions span multiple partitions?',
+          answer: (
+            <p>
+              Yes. Ignite supports distributed ACID transactions across any number of partitions on any number of nodes. The coordinator tracks participating partitions and uses Raft to ensure atomic commit. If any partition fails, all abort. This eliminates the need for application-level sagas or compensation logic.
+            </p>
+          ),
+        },
+      ],
     },
     {
-      question: 'Is Ignite An In-Memory Data Grid?',
-      answer: 'Yes',
-      description: (
-        <p>
-          Ignite is a full-featured distributed data grid. As a grid, Ignite can automatically integrate with and accelerate any 3rd party databases, including any RDBMS or NoSQL stores.
-        </p>
-      ),
-      learnMoreLink: '/use-cases/in-memory-data-grid',
-      learnMoreText: 'Learn More: In-Memory Data Grid',
+      id: 'sql',
+      title: 'SQL & Data Access',
+      questions: [
+        {
+          question: 'What SQL capabilities does Ignite support?',
+          answer: (
+            <>
+              <p>Ignite uses Apache Calcite for SQL processing:</p>
+              <ul>
+                <li><strong>DDL</strong>: CREATE TABLE, ALTER TABLE, CREATE INDEX, distribution zones</li>
+                <li><strong>DML</strong>: INSERT, UPDATE, DELETE, MERGE</li>
+                <li><strong>Queries</strong>: Joins (all types), aggregations, subqueries, CTEs, set operations</li>
+                <li><strong>Indexes</strong>: Hash and sorted indexes, composite and covering indexes</li>
+                <li><strong>Functions</strong>: Standard SQL functions plus aggregations with GROUP BY</li>
+              </ul>
+              <p>The cost-based optimizer handles partition pruning, index selection, and join reordering automatically.</p>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/sql-reference/',
+          learnMoreText: 'SQL Reference',
+        },
+        {
+          question: 'What are RecordView and KeyValueView?',
+          answer: (
+            <>
+              <p>Ignite provides multiple API views over the same schema:</p>
+              <p>
+                <strong>RecordView</strong>: Type-safe object mapping with compile-time validation. Best for domain-driven access patterns.
+              </p>
+              <p>
+                <strong>KeyValueView</strong>: Key-value semantics for cache-like access patterns. Best for simple lookups by primary key.
+              </p>
+              <p>Both views provide the same ACID guarantees. Choose based on access pattern preference.</p>
+            </>
+          ),
+        },
+        {
+          question: 'How do distributed joins perform?',
+          answer: (
+            <>
+              <p>Join performance depends on data colocation:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scenario</th>
+                    <th>Expected Latency</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Colocated join (related data together)</td>
+                    <td>1-5ms (local memory)</td>
+                  </tr>
+                  <tr>
+                    <td>Non-colocated join</td>
+                    <td>40-200ms (cross-node coordination)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Design schemas with colocation in mind. Use <code>colocateBy</code> to keep related data together. The query optimizer recognizes colocated joins and generates local execution plans.
+              </p>
+            </>
+          ),
+        },
+        {
+          question: 'Can I run analytics on transactional data?',
+          answer: (
+            <>
+              <p>Yes. MVCC snapshot isolation enables non-blocking analytical queries:</p>
+              <ul>
+                <li>Read-only transactions access consistent snapshots</li>
+                <li>No locks acquired, no impact on write throughput</li>
+                <li>Long-running queries don't block updates</li>
+                <li>Same SQL interface for both OLTP and analytics</li>
+              </ul>
+              <p>This eliminates ETL pipelines for operational analytics.</p>
+            </>
+          ),
+        },
+      ],
     },
     {
-      question: 'Is Ignite An SQL Database?',
-      answer: 'Not fully',
-      description: (
-        <>
-          <p>
-            Although Ignite supports SQL natively, there are differences in how Ignite handles constraints and indexes.
-          </p>
-          <p>
-            Ignite supports primary and secondary indexes, however the uniqueness can only be enforced for the primary indexes. Ignite also does not support foreign key constraints at the moment.
-          </p>
-        </>
-      ),
-      learnMoreLink: '/use-cases/in-memory-database',
-      learnMoreText: 'Learn More: SQL Database',
+      id: 'operations',
+      title: 'Operations',
+      questions: [
+        {
+          question: 'How do I deploy Ignite in Kubernetes?',
+          answer: (
+            <>
+              <p>
+                Ignite supports Kubernetes-native deployment via Helm charts. StatefulSets provide stable pod identity. Anti-affinity rules distribute replicas across availability zones. Automatic partition rebalancing handles node additions and removals.
+              </p>
+            </>
+          ),
+          learnMoreLink: 'https://ignite.apache.org/docs/latest/quick-start/java/',
+          learnMoreText: 'Getting Started Guide',
+        },
+        {
+          question: 'How does replication and failover work?',
+          answer: (
+            <>
+              <p>Each partition replicates via Raft consensus:</p>
+              <ol>
+                <li>Configure replication factor per distribution zone (recommend 3 for production)</li>
+                <li>Each partition has a leader and followers</li>
+                <li>Writes replicate to majority before acknowledgment</li>
+                <li>If leader fails, new leader elected in milliseconds</li>
+                <li>Client connections automatically failover to new leader</li>
+              </ol>
+            </>
+          ),
+        },
+        {
+          question: 'Can I change schema without downtime?',
+          answer: (
+            <>
+              <p>Yes. The catalog manages schema metadata with atomic versioning:</p>
+              <ul>
+                <li>Add columns, modify constraints, create indexes while cluster runs</li>
+                <li>HybridTimestamp coordination ensures cluster-wide consistency</li>
+                <li>Applications continue operating during schema changes</li>
+                <li>Schema changes activate after configurable delay (default 500ms)</li>
+              </ul>
+              <p>This enables rolling deployments and A/B testing without coordination windows.</p>
+            </>
+          ),
+        },
+        {
+          question: 'What monitoring and observability options exist?',
+          answer: (
+            <>
+              <p>Ignite provides:</p>
+              <ul>
+                <li><strong>OpenTelemetry metrics</strong>: Export to Prometheus, Grafana, etc.</li>
+                <li><strong>System views</strong>: Query cluster state as SQL tables</li>
+                <li><strong>Distributed tracing</strong>: Integration with observability platforms</li>
+                <li><strong>Event logging</strong>: Configurable sinks for audit and debugging</li>
+              </ul>
+            </>
+          ),
+        },
+      ],
     },
     {
-      question: 'Is Ignite A Disk- Or Memory-Only Storage?',
-      answer: 'Both',
-      description: (
-        <>
-          <p>
-            Native persistence in Ignite can be turned on and off. This allows Ignite to store data sets bigger than can fit in the available memory.
-          </p>
-          <p>
-            Essentially, smaller operational data sets can be stored in-memory only, and larger data sets that do not fit in memory can be stored on disk, using memory as a caching layer for better performance.
-          </p>
-        </>
-      ),
-      learnMoreLink: '/arch/native-persistence',
-      learnMoreText: 'Learn More: Native Persistence',
-    },
-    {
-      question: 'Is Ignite A NoSQL Database?',
-      answer: 'Not exactly',
-      description: (
-        <>
-          <p>
-            Just like other NoSQL databases, Ignite is highly available and horizontally scalable.
-          </p>
-          <p>
-            However, unlike other NoSQL databases, Ignite supports SQL and ACID transactions across multiple cluster nodes.
-          </p>
-        </>
-      ),
-    },
-    {
-      question: 'Is Ignite A Transactional Database?',
-      answer: 'Not fully',
-      description: (
-        <>
-          <p>
-            ACID Transactions are supported, but only at key-value API level. Ignite also supports cross-partition transactions, which means that transactions can span keys residing in different partitions on different servers.
-          </p>
-          <p>
-            At SQL level, Ignite supports atomic but not yet transactional consistency. A SQL transactions implementation is already{' '}
-            <a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-3%3A+Transactional+SQL" target="_blank" rel="noreferrer">
-              in the works
-            </a>{' '}
-            and will be released in Ignite 3.
-          </p>
-        </>
-      ),
-      learnMoreLink: '/features/acid-transactions',
-      learnMoreText: 'Learn More: ACID Transactions',
-    },
-    {
-      question: 'Is Ignite A Multi-Model Database?',
-      answer: 'Yes',
-      description: (
-        <>
-          <p>Ignite supports both key-value and SQL for modelling and accessing data.</p>
-          <p>In addition, Ignite provides strong processing APIs for computing on distributed data.</p>
-        </>
-      ),
-    },
-    {
-      question: 'Is Ignite A Key-Value Store?',
-      answer: 'Yes',
-      description: (
-        <p>
-          Ignite provides a feature-rich key-value API that is JCache (JSR-107) compliant and supports Java, C++, .NET, and other programming languages.
-        </p>
-      ),
-      learnMoreLink: '/use-cases/key-value-store',
-      learnMoreText: 'Learn More: Distributed Key-Value Store',
+      id: 'comparison',
+      title: 'Comparison',
+      questions: [
+        {
+          question: 'How does Ignite compare to other distributed databases?',
+          answer: (
+            <>
+              <p>The key differentiator is <strong>schema-driven colocation</strong>:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Database Type</th>
+                    <th>Scale</th>
+                    <th>Consistency</th>
+                    <th>SQL</th>
+                    <th>Data Locality Control</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Distributed SQL databases</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>No (blind hash)</td>
+                  </tr>
+                  <tr>
+                    <td>Ignite</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                    <td><strong>Yes (colocateBy)</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Most distributed SQL databases scatter related data randomly using hash-based partitioning. Every relationship query requires cross-node coordination (40-200ms). Ignite keeps related data together for local execution (1-5ms).
+              </p>
+            </>
+          ),
+        },
+        {
+          question: 'What problems does Ignite solve that traditional databases don\'t?',
+          answer: (
+            <>
+              <p>Traditional database architectures force trade-offs:</p>
+              <ul>
+                <li><strong>Traditional RDBMS</strong>: SQL support, but vertical scaling limits</li>
+                <li><strong>In-memory key-value stores</strong>: Fast, but no SQL or ACID transactions</li>
+                <li><strong>Distributed SQL databases</strong>: Horizontal scaling, but slow relationship queries due to blind hashing</li>
+              </ul>
+              <p>Ignite delivers all six requirements without compromise:</p>
+              <ol>
+                <li>Sub-10ms query latencies (memory-first + colocation)</li>
+                <li>Horizontal scaling (distributed partitioning)</li>
+                <li>ACID guarantees (Raft + MVCC)</li>
+                <li>SQL with joins (Apache Calcite)</li>
+                <li>Data locality control (colocateBy)</li>
+                <li>System consolidation (unified platform)</li>
+              </ol>
+            </>
+          ),
+        },
+        {
+          question: 'When should I use Ignite vs other database types?',
+          answer: (
+            <>
+              <p><strong>Choose Ignite when you need</strong>:</p>
+              <ul>
+                <li>Sub-10ms latency WITH ACID transactions</li>
+                <li>Horizontal scaling WITHOUT application-level sharding</li>
+                <li>SQL queries on distributed data WITH predictable performance</li>
+                <li>Related data queried together WITH local execution</li>
+              </ul>
+              <p><strong>In-memory key-value stores may be sufficient when</strong>:</p>
+              <ul>
+                <li>Pure key-value access (no relationships)</li>
+                <li>Eventual consistency acceptable</li>
+                <li>No SQL query requirements</li>
+              </ul>
+              <p><strong>Traditional RDBMS may be sufficient when</strong>:</p>
+              <ul>
+                <li>Single-node capacity sufficient</li>
+                <li>Mature ecosystem tools required</li>
+                <li>No horizontal scaling needed</li>
+              </ul>
+            </>
+          ),
+        },
+      ],
     },
   ];
 
   return (
-    <section className={clsx(styles.faqboxs, 'container')}>
-      {faqItems.map((item, idx) => (
-        <FAQCard key={idx} {...item} />
-      ))}
-    </section>
+    <Section className={styles.faqSection}>
+      <div className="capstext">Frequently Asked Questions</div>
+      <div className={styles.faqContainer}>
+        <FAQCategoryTabs categories={categories} />
+      </div>
+    </Section>
   );
 }
 
-function ReadyToStartSection() {
+function CTASection() {
   return (
-    <section className={clsx(styles.toolingend, styles['toolingend--front'])}>
-      <div className={clsx('container', 'flexi')}>
-        <div className={styles.toolingend__main}>
-          <p className={clsx(styles.toolingend__title, styles.h3)}>
-            <strong>Ready To Start?</strong>
-          </p>
-          <p className={clsx(styles.h5, 'pt-2')}>
-            Discover our quick start guides and build your first <br />application in 5-10 minutes
+    <section className={styles.cta}>
+      <div className={clsx('container', styles.ctaContainer)}>
+        <div className={styles.ctaContent}>
+          <h2 className={styles.ctaTitle}>Ready to Start?</h2>
+          <p className={styles.ctaDescription}>
+            Get started with Apache Ignite in minutes with our quick start guide.
           </p>
         </div>
-        <div className={styles.toolingend__action}>
-          <a className="button" href="https://ignite.apache.org/docs/latest/" target="_blank" rel="noreferrer">
-            Discover Quick Start Guide
-          </a>
+        <div className={styles.ctaAction}>
+          <Link className="button" to="https://ignite.apache.org/docs/latest/quick-start/java/">
+            Quick Start Guide
+          </Link>
         </div>
       </div>
     </section>
@@ -294,21 +620,21 @@ export default function FAQPage(): ReactNode {
   return (
     <Layout>
       <Head>
-        <title>What Is Apache Ignite - FAQ</title>
-        <meta name="description" content="What is Apache Ignite? What is in-memory computing? Read the answers on our FAQ page." />
+        <title>Apache Ignite FAQ - Frequently Asked Questions</title>
+        <meta name="description" content="Answers to common questions about Apache Ignite, the memory-first distributed SQL database. Learn about architecture, transactions, SQL capabilities, and deployment." />
         <link rel="canonical" href="https://ignite.apache.org/faq.html" />
-        <meta property="og:title" content="What Is Apache Ignite - FAQ" />
+        <meta property="og:title" content="Apache Ignite FAQ" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ignite.apache.org/faq.html" />
         <meta property="og:image" content="/img/og-pic.png" />
-        <meta property="og:description" content="What is Apache Ignite? What is in-memory computing? Read the answers on our FAQ page." />
+        <meta property="og:description" content="Answers to common questions about Apache Ignite, the memory-first distributed SQL database." />
       </Head>
       <main>
         <HeroSection />
-        <InMemoryComputingSection />
-        <FeatureBenefitsSection />
-        <FAQCardsSection />
-        <ReadyToStartSection />
+        <OverviewSection />
+        <ValuePropsSection />
+        <FAQSection />
+        <CTASection />
       </main>
     </Layout>
   );
