@@ -274,7 +274,7 @@ export default function InMemoryCache(): JSX.Element {
                     rel="noopener noreferrer"
                     className="comvideo__screen"
                   >
-                    <img src="/img/poweredby/videos/002.png" alt="Raiffeisen Bank video" />
+                    <img src="https://img.youtube.com/vi/Mhtt2QL_qCQ/hqdefault.jpg" alt="Raiffeisen Bank video" />
                   </a>
                 </div>
                 <div className="h4 hub5__title">Raiffeisen Bank</div>

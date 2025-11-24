@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useLocation } from '@docusaurus/router';
 import TopBanner from '@site/src/components/TopBanner';
 import MobileModal from '@site/src/components/MobileModal';
-import { mainNavItems, getStartedMenu, featuresMenu, communityMenu, resourcesMenu } from '@site/src/config/navigation';
+import { mainNavItems, getStartedMenu, featuresMenu, useCasesMenu, communityMenu, resourcesMenu } from '@site/src/config/navigation';
 import type { DropdownMenu } from '@site/src/config/navigation';
 import styles from '@site/src/css/navigation.module.css';
 
@@ -20,7 +20,7 @@ interface DropdownProps {
 function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Element {
   const gridClass = panelKey === 'getStarted' || panelKey === 'resources'
     ? styles.dropmenu1Grid
-    : panelKey === 'features'
+    : panelKey === 'features' || panelKey === 'useCases'
     ? styles.dropmenu2Grid
     : styles.dropmenu3Grid;
 
@@ -107,12 +107,10 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
         })}
       </div>
 
-      {(panelKey === 'getStarted' || panelKey === 'features') && (
-        <div className={clsx(styles.panelmorelinkwrap, {
-          [styles.panelmorelinkwrapEnd]: panelKey === 'getStarted'
-        }, 'container')}>
+      {(panelKey === 'features' || panelKey === 'useCases') && (
+        <div className={clsx(styles.panelmorelinkwrap, 'container')}>
           <a
-            href={panelKey === 'getStarted' ? '/use-cases' : '/features/'}
+            href={panelKey === 'useCases' ? '/use-cases' : '/features/'}
             className={styles.panellink}
           >
             View all
@@ -338,6 +336,11 @@ export default function NavbarContent(): ReactNode {
                 panelKey="features"
               />
               <DropdownMenuPanel
+                menu={useCasesMenu}
+                isActive={activeDropdown === 'useCases'}
+                panelKey="useCases"
+              />
+              <DropdownMenuPanel
                 menu={communityMenu}
                 isActive={activeDropdown === 'community'}
                 panelKey="community"
@@ -430,6 +433,11 @@ export default function NavbarContent(): ReactNode {
                 menu={featuresMenu}
                 isActive={activeDropdown === 'features'}
                 panelKey="features"
+              />
+              <DropdownMenuPanel
+                menu={useCasesMenu}
+                isActive={activeDropdown === 'useCases'}
+                panelKey="useCases"
               />
               <DropdownMenuPanel
                 menu={communityMenu}

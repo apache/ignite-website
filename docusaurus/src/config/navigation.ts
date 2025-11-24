@@ -31,7 +31,7 @@ export interface DropdownMenu {
 
 /**
  * Get Started Dropdown Menu
- * Quick start guide, learning resources, FAQ, and use cases
+ * Quick start guide, learning resources, and FAQ
  */
 export const getStartedMenu: DropdownMenu = {
   featured: {
@@ -55,72 +55,6 @@ export const getStartedMenu: DropdownMenu = {
         {
           label: 'FAQ',
           href: '/faq',
-        },
-      ],
-    },
-    {
-      title: 'USE CASES',
-      titleLink: '/use-cases',
-      items: [
-        {
-          label: 'Event Stream Processing',
-          href: '/use-cases/event-stream-processing',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Microservices State Management',
-          href: '/use-cases/microservices-state',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Session Management',
-          href: '/use-cases/session-management',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Operational Analytics',
-          href: '/use-cases/operational-analytics',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'AI/ML Feature Stores',
-          href: '/use-cases/ai-ml-feature-stores',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'IoT and Time-Series Data',
-          href: '/use-cases/iot-time-series',
-          icon: '/img/menu/icon-folder.svg',
-        },
-      ],
-    },
-    {
-      title: '',
-      items: [
-        {
-          label: 'Fast Data Marts',
-          href: '/use-cases/fast-data-marts',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Digital Integration Hub',
-          href: '/use-cases/digital-integration-hub',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'High-Performance Computing',
-          href: '/use-cases/high-performance-computing',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Key-Value Store',
-          href: '/use-cases/key-value-store',
-          icon: '/img/menu/icon-folder.svg',
-        },
-        {
-          label: 'Database with Memory-First Storage',
-          href: '/use-cases/in-memory-database',
-          icon: '/img/menu/icon-folder.svg',
         },
       ],
     },
@@ -205,6 +139,86 @@ export const featuresMenu: DropdownMenu = {
           label: 'Multi-Language Support',
           href: '/features/multilanguage',
           icon: '/img/menu/icon-cube.svg',
+        },
+      ],
+    },
+  ],
+};
+
+/**
+ * Use Cases Dropdown Menu
+ * Primary, additional, supporting, and legacy use cases
+ */
+export const useCasesMenu: DropdownMenu = {
+  sections: [
+    {
+      title: 'PRIMARY USE CASES',
+      titleLink: '/use-cases',
+      items: [
+        {
+          label: 'Event Stream Processing',
+          href: '/use-cases/event-stream-processing',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'Microservices State Management',
+          href: '/use-cases/microservices-state',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'Session Management',
+          href: '/use-cases/session-management',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'AI/ML Feature Stores',
+          href: '/use-cases/ai-ml-feature-stores',
+          icon: '/img/menu/icon-folder.svg',
+        },
+      ],
+    },
+    {
+      title: 'ADDITIONAL USE CASES',
+      items: [
+        {
+          label: 'Operational Analytics',
+          href: '/use-cases/operational-analytics',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'Fast Data Marts',
+          href: '/use-cases/fast-data-marts',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'IoT and Time-Series Data',
+          href: '/use-cases/iot-time-series',
+          icon: '/img/menu/icon-folder.svg',
+        },
+      ],
+    },
+    {
+      title: 'SUPPORTING PATTERNS',
+      items: [
+        {
+          label: 'Digital Integration Hub',
+          href: '/use-cases/digital-integration-hub',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'High-Performance Computing',
+          href: '/use-cases/high-performance-computing',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'Key-Value Store',
+          href: '/use-cases/key-value-store',
+          icon: '/img/menu/icon-folder.svg',
+        },
+        {
+          label: 'Database with Memory-First Storage',
+          href: '/use-cases/in-memory-database',
+          icon: '/img/menu/icon-folder.svg',
         },
       ],
     },
@@ -338,8 +352,8 @@ export const resourcesMenu: DropdownMenu = {
 export const mainNavItems = [
   { label: 'Get Started', key: 'getStarted', href: '/', menu: getStartedMenu },
   { label: 'Features', key: 'features', href: '/features/', menu: featuresMenu },
+  { label: 'Use Cases', key: 'useCases', href: '/use-cases', menu: useCasesMenu },
   { label: 'Community', key: 'community', href: '/community', menu: communityMenu },
-  { label: 'Powered By', href: '/use-cases/provenusecases' },
   { label: 'Resources', key: 'resources', href: '/resources', menu: resourcesMenu },
   { label: 'Docs', href: '//ignite.apache.org/docs/latest/', external: true },
 ] as const;
@@ -398,7 +412,6 @@ export const mobileMenuItems = [
     ],
     isDefault: true,
   },
-  { label: 'Powered by', href: '/use-cases/provenusecases' },
   { label: 'Resources', href: '/resources' },
   { label: 'Blog', href: '/blog/' },
   { label: 'Docs', href: '/docs/latest/' },

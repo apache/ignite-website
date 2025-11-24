@@ -66,7 +66,7 @@ function TopCards() {
         </div>
       </a>
 
-      <Link to="/use-cases/provenusecases" className={styles.frontcard}>
+      <Link to="/use-cases" className={styles.frontcard}>
         <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary)} style={{ marginBottom: 0 }}>
           <strong style={{ fontSize: '1.15em' }}>Distributed systems make you choose.</strong><br />
           <br />
@@ -431,7 +431,7 @@ function UserStories() {
       </div>
 
       <div className={clsx(styles.frontstories__bottom, 'pt-5')}>
-        <Link to="/use-cases/provenusecases" className="button button--shadow">Watch Other Stories</Link>
+        <Link to="/use-cases" className="button button--shadow">Explore Use Cases</Link>
       </div>
     </Section>
   );

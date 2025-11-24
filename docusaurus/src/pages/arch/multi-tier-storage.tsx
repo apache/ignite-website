@@ -145,7 +145,7 @@ export default function MultiTierStorage(): JSX.Element {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img className="comvideo__pic" src="/img/poweredby/videos/006.png" alt="" />
+                  <img className="comvideo__pic" src="https://img.youtube.com/vi/CPmwnjDJ1Sk/hqdefault.jpg" alt="ING Bank video" />
                   <div className="comvideo__txt comvideo__txt--small">
                     Embracing The Service Consumption Shift In Banking
                   </div>
