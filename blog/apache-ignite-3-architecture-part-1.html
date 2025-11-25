@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite 3 Architecture Series: Part 1 — When Multi-System Complexity Compounds at Scale</title>
+    <title>Apache Ignite 3 Architecture Series: Part 1 : When Multi-System Complexity Compounds at Scale</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
@@ -334,10 +334,10 @@
     <div class="container blog">
       <section class="blog__header post_page__header">
         <a href="/blog/">← Apache Ignite Blog</a>
-        <h1>Apache Ignite 3 Architecture Series: Part 1 — When Multi-System Complexity Compounds at Scale</h1>
+        <h1>Apache Ignite 3 Architecture Series: Part 1 : When Multi-System Complexity Compounds at Scale</h1>
         <p>
           November 25, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
-          ><a href="http://twitter.com/home?status=Apache Ignite 3 Architecture Series: Part 1 — When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/undefined">Twitter</a>
+          ><a href="http://twitter.com/home?status=Apache Ignite 3 Architecture Series: Part 1 : When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/undefined">Twitter</a>
         </p>
       </section>
       <div class="blog__content">
@@ -369,16 +369,16 @@
                   <li>Each event requires immediate consistency checks against live data</li>
                   <li>Results must update multiple downstream systems simultaneously</li>
                   <li>Network delays compound into user-visible lag</li>
-                  <li><strong>Traffic spikes create systemic pressure</strong> — traditional stacks drop connections or crash when overwhelmed</li>
+                  <li><strong>Traffic spikes create systemic pressure</strong>: traditional stacks drop connections or crash when overwhelmed</li>
                 </ul>
                 <p><strong>The compounding effect</strong></p>
                 <p>At 100 events / s, 2 ms network latency adds negligible overhead.</p>
-                <p>At 10 000 events / s, that same latency produces a 20-second processing backlog.</p>
-                <p>At 50 000 + events / s, traditional systems collapse — dropping connections and losing data when they’re needed most.</p>
+                <p>At 10,000 events / s, that same latency produces a 20-second processing backlog.</p>
+                <p>At 50,000 + events / s, traditional systems collapse : dropping connections and losing data when they’re needed most.</p>
                 <p>The math scales against you.</p>
                 <hr />
                 <h3>When Smart Choices Become Scaling Limits</h3>
-                <p><strong>Initial Architecture — works well at low scale</strong></p>
+                <p><strong>Initial Architecture: works well at low scale</strong></p>
                 <pre
                   class="mermaid"
                 >flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10 000 / sec]; end; subgraph "Multi-System Architecture"; Redis[(Redis Cache<br/>Session Data – 2 ms latency)]; PostgreSQL[(PostgreSQL – Transaction Data – 5 ms latency)]; Processing[Custom Processing – Business Logic – 3 ms latency]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis;
@@ -394,22 +394,22 @@
                 <h3>The Hidden Cost of Multi-System Success</h3>
                 <p>Each event must maintain consistency across all systems, triggering:</p>
                 <ul>
-                  <li><strong>Cache lookup (Redis):</strong> ≈ 0.5 ms</li>
+                  <li><strong>Cache lookup (Redis):</strong> ≈ 0,5 ms</li>
                   <li><strong>Transaction validation (PostgreSQL):</strong> ≈ 2 ms + disk I/O</li>
                   <li><strong>Business-logic execution (Custom):</strong> ≈ 1 ms</li>
                   <li><strong>Result synchronization (across systems):</strong> ≈ 3 ms</li>
                 </ul>
                 <p><strong>Minimum per-event cost ≈ 7 ms before business logic.</strong></p>
-                <p>At 10 000 events / s, you’d need 70 seconds of processing capacity per real-time second — impossible sequentially.</p>
+                <p>At 10,000 events / s, you’d need 70 seconds of processing capacity per real-time second — impossible sequentially.</p>
                 <hr />
                 <h3>The Performance Gap That Grows With Success</h3>
                 <h3>Why Traditional Options Fail</h3>
-                <p><strong>Option 1 — Scale out each system</strong></p>
+                <p><strong>Option 1: Scale out each system</strong></p>
                 <p>Add Redis clusters, PostgreSQL replicas, processing nodes → More coordination, exponentially higher complexity.</p>
                 <p>Network overhead grows faster than capacity.</p>
-                <p><strong>Option 2 — Custom optimization</strong></p>
+                <p><strong>Option 2: Custom optimization</strong></p>
                 <p>Implement app-layer caching or custom consistency protocols → High maintenance, system-specific code, technical debt.</p>
-                <p><strong>Option 3 — Accept compromises</strong></p>
+                <p><strong>Option 3: Accept compromises</strong></p>
                 <p>Use async processing and eventual consistency → Delayed insights, weakened guarantees, lost competitiveness.</p>
                 <hr />
                 <h3>The Critical Performance Gap</h3>
@@ -443,7 +443,7 @@
                 <p><strong>Reality:</strong> applications demanding microsecond insights on millisecond transactions have no viable path in multi-system architectures.</p>
                 <p>During spikes, systems either drop connections (data loss) or degrade (missed SLAs). High-velocity apps require flow control that preserves integrity under pressure.</p>
                 <hr />
-                <h3>Event Processing at Scale — Real Numbers</h3>
+                <h3>Event Processing at Scale: Real Numbers</h3>
                 <p><strong>Traditional multi-system cost example:</strong></p>
                 <pre><code>// Traditional multi-system event processing
 long startTime = System.nanoTime();
@@ -482,15 +482,15 @@ long totalTime = System.nanoTime() - startTime;
                   </thead>
                   <tbody>
                     <tr>
-                      <td style="border: 1px solid #ddd; padding: 12px">1 000 events / s</td>
+                      <td style="border: 1px solid #ddd; padding: 12px">1,000 events / s</td>
                       <td style="border: 1px solid #ddd; padding: 12px">6–12 s</td>
                     </tr>
                     <tr>
-                      <td style="border: 1px solid #ddd; padding: 12px">5 000 events / s</td>
+                      <td style="border: 1px solid #ddd; padding: 12px">5,000 events / s</td>
                       <td style="border: 1px solid #ddd; padding: 12px">30–60 s</td>
                     </tr>
                     <tr>
-                      <td style="border: 1px solid #ddd; padding: 12px">10 000 events / s</td>
+                      <td style="border: 1px solid #ddd; padding: 12px">10,000 events / s</td>
                       <td style="border: 1px solid #ddd; padding: 12px">60–120 s</td>
                     </tr>
                   </tbody>
@@ -499,7 +499,7 @@ long totalTime = System.nanoTime() - startTime;
                 <hr />
                 <h3>Real-World Breaking Points</h3>
                 <ul>
-                  <li><strong>Financial services</strong> — compliance reporting delays affect trades</li>
+                  <li><strong>Financial services</strong>: compliance reporting delays affect trades</li>
                   <li><strong>Gaming platforms</strong> — leaderboard updates lag behind gameplay</li>
                   <li><strong>IoT analytics</strong> — anomaly detection arrives too late for prevention</li>
                 </ul>
@@ -538,7 +538,7 @@ try (IgniteClient client = IgniteClient.builder().addresses("cluster:10800").bui
 }
 // Result: microsecond-range event processing through integrated architecture
 </code></pre>
-                <p>Processing 10 000 events / s is achievable when cache, database, and compute operate in one in-memory platform.</p>
+                <p>Processing 10,000 events / s is achievable when cache, database, and compute operate in one in-memory platform.</p>
                 <hr />
                 <h3>The Unified Data-Access Advantage</h3>
                 <pre><code>// The SAME data, THREE access paradigms, ONE system
@@ -571,39 +571,39 @@ CustomerRecord record = customerTable.recordView()
                 <h3>Ignite 3 Architecture Preview</h3>
                 <p>High-velocity performance depends on several architectural innovations:</p>
                 <ul>
-                  <li><strong>Memory-first storage</strong> — event data in memory with < 10 μs access</li>
-                  <li><strong>Collocated compute</strong> — processing happens where data resides</li>
-                  <li><strong>Integrated transactions</strong> — ACID across cache, database, and compute</li>
-                  <li><strong>Minimal data copying</strong> — direct memory access avoids duplication</li>
+                  <li><strong>Memory-first storage</strong>: event data in memory with < 10 microseconds access</li>
+                  <li><strong>Collocated compute</strong>: processing happens where data resides</li>
+                  <li><strong>Integrated transactions</strong>: ACID across cache, database, and compute</li>
+                  <li><strong>Minimal data copying</strong>: direct memory access avoids duplication</li>
                 </ul>
                 <p>These features neutralize the compound effects that make multi-system designs unsuitable for high-frequency workloads.</p>
                 <hr />
                 <h3>Business Impact of Architectural Evolution</h3>
                 <h3>Cost Efficiency</h3>
                 <ul>
-                  <li><strong>Reduced infrastructure</strong> — one platform instead of several</li>
-                  <li><strong>Lower network costs</strong> — no inter-system bandwidth overhead</li>
-                  <li><strong>Simplified operations</strong> — unified monitoring, backup, and scaling</li>
+                  <li><strong>Reduced infrastructure</strong>: one platform instead of several</li>
+                  <li><strong>Lower network costs</strong>: no inter-system bandwidth overhead</li>
+                  <li><strong>Simplified operations</strong>: unified monitoring, backup, and scaling</li>
                 </ul>
                 <h3>Performance Gains</h3>
                 <ul>
-                  <li><strong>Microsecond latency</strong> — eliminates network overhead</li>
-                  <li><strong>Higher throughput</strong> — more events on existing hardware</li>
-                  <li><strong>Predictable scaling</strong> — consistent performance under load</li>
+                  <li><strong>Microsecond latency</strong>: eliminates network overhead</li>
+                  <li><strong>Higher throughput</strong>: more events on existing hardware</li>
+                  <li><strong>Predictable scaling</strong>: consistent performance under load</li>
                 </ul>
                 <h3>Developer Experience</h3>
                 <ul>
-                  <li><strong>Single API</strong> — one model for all data operations</li>
-                  <li><strong>Consistent behavior</strong> — no synchronization anomalies</li>
-                  <li><strong>Faster delivery</strong> — one integrated system to test and debug</li>
+                  <li><strong>Single API</strong>: one model for all data operations</li>
+                  <li><strong>Consistent behavior</strong>: no synchronization anomalies</li>
+                  <li><strong>Faster delivery</strong>: one integrated system to test and debug</li>
                 </ul>
                 <hr />
                 <h3>The Architectural Evolution Decision</h3>
                 <p>Every successful application reaches this point: the architecture that once fueled growth now constrains it.</p>
-                <p><strong>The question isn’t whether you’ll hit scaling limits — it’s how you’ll evolve past them.</strong></p>
+                <p><em>The question isn’t whether you’ll hit scaling limits, it’s how you’ll evolve past them.</em></p>
                 <p><strong>Apache Ignite 3</strong> consolidates transactions, caching, and compute into a single, memory-first platform designed for high-velocity workloads.</p>
                 <p>Instead of fighting the complexity of multiple systems, you evolve toward an architecture built for sustained growth.</p>
-                <p>Your winning architecture doesn’t have to become your scaling limit — it can become the foundation for your next phase.</p>
+                <p>Your winning architecture doesn’t have to become your scaling limit: it can become the foundation for your next phase.</p>
                 <hr />
                 <br />
                 <p>
