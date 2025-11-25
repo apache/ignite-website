@@ -384,9 +384,24 @@
                 <hr />
                 <h3>When Smart Choices Become Scaling Limits</h3>
                 <p><strong>Initial Architecture, works great at lower scale:</strong></p>
-                <pre
-                  class="mermaid"
-                >flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10,000/sec]; end; subgraph "Multi-System Architecture"; Redis[(Redis Cache<br/>Session Data<br/>2ms latency)]; PostgreSQL[(PostgreSQL<br/>Transaction Data<br/>5ms latency)]; Processing[Custom Processing<br/>Business Logic<br/>3ms latency]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis
+                <pre class="mermaid">flowchart TB
+    subgraph "Event Processing"
+        Events[High-Volume Events<br/>10,000/sec]
+    end
+
+    subgraph "Multi-System Architecture"
+        Redis[(Cache<br/>Session Data<br/>2ms latency)]
+        PostgreSQL[(Relational DB<br/>Transaction Data<br/>5ms latency)]
+        Processing[Custom Processing<br/>Business Logic<br/>3ms latency]
+    end
+
+    Events --> Redis
+    Events --> PostgreSQL
+    Events --> Processing
+
+    Redis <-->|Sync Overhead| PostgreSQL
+    PostgreSQL <-->|Data Movement| Processing
+    Processing <-->|Cache Updates| Redis
 </pre>
                 <p><strong>What happens at scale</strong></p>
                 <ul>
@@ -531,19 +546,21 @@ long totalTime = System.nanoTime() - startTime;
         Events[High-Volume Events<br/>10,000/sec]
     end
 
-    subgraph "Multi-System Architecture"
-        Redis[(Cache<br/>Session Data<br/>2ms latency)]
-        PostgreSQL[(Relational DB<br/>Transaction Data<br/>5ms latency)]
-        Processing[Custom Processing<br/>Business Logic<br/>3ms latency]
+    subgraph "Apache Ignite Platform"
+        subgraph "Collocated Processing"
+            Memory[Memory-First Storage<br/>Optimized Access Times]
+            Transactions[MVCC Transactions<br/>ACID Guarantees]
+            Compute[Event Processing<br/>Where Data Lives]
+        end
     end
 
-    Events --> Redis
-    Events --> PostgreSQL
-    Events --> Processing
+    Events --> Memory
+    Memory --> Transactions
+    Transactions --> Compute
 
-    Redis <-->|Sync Overhead| PostgreSQL
-    PostgreSQL <-->|Data Movement| Processing
-    Processing <-->|Cache Updates| Redis
+    Memory <-->|Minimal Copying| Transactions
+    Transactions <-->|Collocated| Compute
+    Compute <-->|Direct Access| Memory
 </pre>
                 <p><strong>Key difference:</strong> events process <strong>where the data lives</strong>, eliminating inter-system latency.</p>
                 <hr />
