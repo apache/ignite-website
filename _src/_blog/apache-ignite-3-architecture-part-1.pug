@@ -35,9 +35,10 @@ ul
   li #[strong Traffic spikes create systemic pressure] — traditional stacks drop connections or crash when overwhelmed
 
 p #[strong The compounding effect]
-p At 100 events per second, network latency of 2ms adds minimal overhead.
-p At 10,000 events per second, that same 2ms latency creates a 20-second processing backlog within system boundaries.
-p During traffic spikes (50,000+ events per second), traditional systems collapse entirely, dropping connections and losing data when they're needed most.
+ul
+  li At 100 events per second, network latency of 2ms adds minimal overhead.
+  li At 10,000 events per second, that same 2ms latency creates a 20-second processing backlog within system boundaries.
+  li During traffic spikes (50,000+ events per second), traditional systems collapse entirely, dropping connections and losing data when they're needed most.
 p The math scales against you.
 
 hr
@@ -47,7 +48,7 @@ h3 When Smart Choices Become Scaling Limits
 p #[strong Initial Architecture, works great at lower scale:]
 
 pre.mermaid.
-    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10 000 / sec]; end; subgraph "Multi-System Architecture"; Redis[(Redis Cache<br/>Session Data – 2 ms latency)]; PostgreSQL[(PostgreSQL – Transaction Data – 5 ms latency)]; Processing[Custom Processing – Business Logic – 3 ms latency]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis;
+    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10,000/sec]; end; subgraph "Multi-System Architecture"; Redis[(Redis Cache<br/>Session Data<br/>2ms latency)]; PostgreSQL[(PostgreSQL<br/>Transaction Data<br/>5ms latency)]; Processing[Custom Processing<br/>Business Logic<br/>3ms latency]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis
 
 p #[strong What happens at scale]
 ul
@@ -197,7 +198,7 @@ h3 The Apache Ignite Alternative
 h3 Eliminating Multi-System Overhead
 
 pre.mermaid.
-    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10 000 / sec]; end; subgraph "Apache Ignite Platform"; subgraph "Collocated Processing"; Memory[Memory-First Storage]; Transactions[MVCC Transactions – ACID Guarantees]; Compute[Event Processing Where Data Lives]; end; end; Events --> Memory; Memory --> Transactions; Transactions --> Compute; Memory <-->|Minimal Copying| Transactions; Transactions <-->|Collocated| Compute; Compute <-->|Direct Access| Memory;
+    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10,000/sec]; end; subgraph "Multi-System Architecture"; Redis[(Cache<br/>Session Data<br/>2ms latency)]; PostgreSQL[(Relational DB<br/>Transaction Data<br/>5ms latency)]; Processing[Custom Processing<br/>Business Logic<br/>3ms latency)]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis
 
 p #[strong Key difference:] events process #[strong where the data lives], eliminating inter-system latency.
 
