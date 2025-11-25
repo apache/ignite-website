@@ -198,7 +198,24 @@ h3 The Apache Ignite Alternative
 h3 Eliminating Multi-System Overhead
 
 pre.mermaid.
-    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10,000/sec]; end; subgraph "Multi-System Architecture"; Redis[(Cache<br/>Session Data<br/>2ms latency)]; PostgreSQL[(Relational DB<br/>Transaction Data<br/>5ms latency)]; Processing[Custom Processing<br/>Business Logic<br/>3ms latency)]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis
+    flowchart TB
+        subgraph "Event Processing"
+            Events[High-Volume Events<br/>10,000/sec]
+        end
+
+        subgraph "Multi-System Architecture"
+            Redis[(Cache<br/>Session Data<br/>2ms latency)]
+            PostgreSQL[(Relational DB<br/>Transaction Data<br/>5ms latency)]
+            Processing[Custom Processing<br/>Business Logic<br/>3ms latency]
+        end
+
+        Events --> Redis
+        Events --> PostgreSQL
+        Events --> Processing
+
+        Redis <-->|Sync Overhead| PostgreSQL
+        PostgreSQL <-->|Data Movement| Processing
+        Processing <-->|Cache Updates| Redis
 
 p #[strong Key difference:] events process #[strong where the data lives], eliminating inter-system latency.
 
