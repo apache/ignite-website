@@ -125,8 +125,31 @@ p #[strong Traditional multi-system cost example:]
 pre
   code.
     // Traditional multi-system event processing
-    ...
-    // Total: 6–12 ms per event (not including queuing delays)
+    long startTime = System.nanoTime();
+
+    // 1. Cache lookup for session data
+    String sessionData = redisClient.get("session:" + eventId);  // ~500μs network
+    if (sessionData == null) {
+        sessionData = postgresDB.query("SELECT * FROM sessions WHERE id = ?", eventId);  // ~2ms fallback
+        redisClient.setex("session:" + eventId, 300, sessionData);  // ~300μs cache update
+    }
+
+    // 2. Transaction processing
+    postgresDB.executeTransaction(tx -> {  // ~2-5ms transaction
+        tx.execute("INSERT INTO events VALUES (?, ?, ?)", eventId, userId, eventData);
+        tx.execute("UPDATE user_stats SET event_count = event_count + 1 WHERE user_id = ?", userId);
+    });
+
+    // 3. Custom processing with consistency coordination
+    ProcessingResult result = customProcessor.process(eventData, sessionData);  // ~1ms processing
+    redisClient.setex("result:" + eventId, 600, result);  // ~300μs result caching
+
+    // 4. Synchronization across systems
+    ensureConsistency(eventId, sessionData, result);  // ~2-3ms coordination
+
+    long totalTime = System.nanoTime() - startTime;
+    // Total: 6-12ms per event (not including queuing delays)
+
 
 p #[strong Compound effect]
 
@@ -174,7 +197,28 @@ h3 Apache Ignite 3 Performance Reality Check
 pre
   code.
     // Apache Ignite 3 integrated event processing
-    ...
+    try (IgniteClient client = IgniteClient.builder().addresses("cluster:10800").build()) {
+        // Single integrated transaction spanning cache, database, and compute
+        client.transactions().runInTransaction(tx -> {
+            // 1. Access session data (in memory, no network overhead)
+            Session session = client.tables().table("sessions")
+                .keyValueView().get(tx, Tuple.create().set("id", eventId));
+
+            // 2. Process event with ACID guarantees (same memory space)
+            client.sql().execute(tx, "INSERT INTO events VALUES (?, ?, ?)",
+                               eventId, userId, eventData);
+
+            // 3. Execute processing collocated with data
+            ProcessingResult result = client.compute().execute(
+                JobTarget.colocated("events", Tuple.create().set("id", eventId)),
+                EventProcessor.class, eventData);
+
+            // 4. Update derived data (same transaction, guaranteed consistency)
+            client.sql().execute(tx, "UPDATE user_stats SET event_count = event_count + 1 WHERE user_id = ?", userId);
+
+            return result;
+        });
+    }
     // Result: microsecond-range event processing through integrated architecture
 
 p Processing 10 000 events / s is achievable when cache, database, and compute operate in one in-memory platform.
@@ -185,8 +229,22 @@ h3 The Unified Data-Access Advantage
 
 pre
   code.
-    // Same data, three access paradigms, one system
-    ...
+    // The SAME data, THREE access paradigms, ONE system
+    Table customerTable = client.tables().table("customers");
+
+    // 1. Key-value access for cache-like performance
+    Customer customer = customerTable.keyValueView()
+        .get(tx, Tuple.create().set("customer_id", customerId));
+
+    // 2. SQL access for complex analytics
+    ResultSet&lt;SqlRow&gt analytics = client.sql().execute(tx,
+        "SELECT segment, AVG(order_value) FROM customers WHERE region = ?", region);
+
+    // 3. Record access for type-safe operations
+    CustomerRecord record = customerTable.recordView()
+        .get(tx, new CustomerRecord(customerId));
+
+    // All three: same schema, same data, same transaction model
 
 p #[strong Eliminates:]
 ul
