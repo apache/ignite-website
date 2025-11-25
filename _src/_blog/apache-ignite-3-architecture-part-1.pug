@@ -7,7 +7,7 @@ tags:
     - ignite
 ---
 
-p Apache Ignite 3 shows what really happens once your “good enough” multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first architecture removes the latency tax entirely.
+p Apache Ignite 3 shows what really happens once your #[em good enough] multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first architecture removes the latency tax entirely.
 
 <!-- end -->
 
@@ -15,7 +15,8 @@ p Your high-velocity application began with smart architectural choices: Postgre
 
 p But success changes the game. Your system now handles thousands of events per second, and customers expect microsecond-level response times. The same architectural choices that enabled growth now create performance bottlenecks that compound with every additional event.
 
-p At high event volumes, data movement between systems becomes the primary performance constraint.
+p.
+  #[strong At high event volumes, data movement between systems becomes the primary performance constraint].
 
 hr
 
@@ -25,15 +26,15 @@ p As event volume grows, compromises that once seemed reasonable become critical
 
 h3 Event Processing Under Pressure
 
-p High-frequency event characteristics
+p #[strong High-frequency event characteristics]
 ul
   li Events arrive faster than traditional batch processing can handle
   li Each event requires immediate consistency checks against live data
   li Results must update multiple downstream systems simultaneously
   li Network delays compound into user-visible lag
-  li Traffic spikes create systemic pressure — traditional stacks drop connections or crash when overwhelmed
+  li #[strong Traffic spikes create systemic pressure] — traditional stacks drop connections or crash when overwhelmed
 
-p The compounding effect
+p #[strong The compounding effect]
 p At 100 events / s, 2 ms network latency adds negligible overhead.
 p At 10 000 events / s, that same latency produces a 20-second processing backlog.
 p At 50 000 + events / s, traditional systems collapse — dropping connections and losing data when they’re needed most.
@@ -43,34 +44,17 @@ hr
 
 h3 When Smart Choices Become Scaling Limits
 
-p Initial Architecture — works well at low scale
+p #[strong Initial Architecture — works well at low scale]
 
 pre.mermaid.
-  flowchart TB
-      subgraph "Event Processing"
-          Events[High-Volume Events<br/>10 000 / sec]
-      end
+    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10 000 / sec]; end; subgraph "Multi-System Architecture"; Redis[(Redis Cache<br/>Session Data – 2 ms latency)]; PostgreSQL[(PostgreSQL – Transaction Data – 5 ms latency)]; Processing[Custom Processing – Business Logic – 3 ms latency]; end; Events --> Redis; Events --> PostgreSQL; Events --> Processing; Redis <-->|Sync Overhead| PostgreSQL; PostgreSQL <-->|Data Movement| Processing; Processing <-->|Cache Updates| Redis;
 
-      subgraph "Multi-System Architecture"
-          Redis[(Redis Cache<br/>Session Data – 2 ms latency)]
-          PostgreSQL[(PostgreSQL – Transaction Data – 5 ms latency)]
-          Processing[Custom Processing – Business Logic – 3 ms latency]
-      end
-
-      Events → Redis
-      Events → PostgreSQL
-      Events → Processing
-
-      Redis →|Sync Overhead| PostgreSQL
-      PostgreSQL →|Data Movement| Processing
-      Processing →|Cache Updates| Redis
-
-p At scale
+p #[strong At scale]
 ul
-  li strong Network-latency tax | — every system hop adds milliseconds that accumulate
-  li strong Synchronization delays | — maintaining consistency builds queues
-  li strong Memory overhead | — each system caches duplicate data in different formats
-  li strong Consistency windows | — short periods where systems diverge
+  li #[strong Network-latency tax] — every system hop adds milliseconds that accumulate
+  li #[strong Synchronization delays] — maintaining consistency builds queues
+  li #[strong Memory overhead] — each system caches duplicate data in different formats
+  li #[strong Consistency windows] — short periods where systems diverge
 
 hr
 
@@ -78,12 +62,12 @@ h3 The Hidden Cost of Multi-System Success
 
 p Each event must maintain consistency across all systems, triggering:
 ul
-  li strong Cache lookup (Redis): | ≈ 0.5 ms
-  li strong Transaction validation (PostgreSQL): | ≈ 2 ms + disk I/O
-  li strong Business-logic execution (Custom): | ≈ 1 ms
-  li strong Result synchronization (across systems): | ≈ 3 ms
+  li #[strong Cache lookup (Redis):] ≈ 0.5 ms
+  li #[strong Transaction validation (PostgreSQL):] ≈ 2 ms + disk I/O
+  li #[strong Business-logic execution (Custom):] ≈ 1 ms
+  li #[strong Result synchronization (across systems):] ≈ 3 ms
 
-p strong Minimum per-event cost ≈ 7 ms before business logic.
+p #[strong Minimum per-event cost ≈ 7 ms before business logic.]
 p At 10 000 events / s, you’d need 70 seconds of processing capacity per real-time second — impossible sequentially.
 
 hr
@@ -92,18 +76,15 @@ h3 The Performance Gap That Grows With Success
 
 h3 Why Traditional Options Fail
 
-p strong Option 1 — Scale out each system
-p Add Redis clusters, PostgreSQL replicas, processing nodes.
-p → More coordination, exponentially higher complexity.
+p #[strong Option 1 — Scale out each system]
+p Add Redis clusters, PostgreSQL replicas, processing nodes → More coordination, exponentially higher complexity.
 p Network overhead grows faster than capacity.
 
-p strong Option 2 — Custom optimization
-p Implement app-layer caching or custom consistency protocols.
-p → High maintenance, system-specific code, technical debt.
+p #[strong Option 2 — Custom optimization]
+p Implement app-layer caching or custom consistency protocols → High maintenance, system-specific code, technical debt.
 
-p strong Option 3 — Accept compromises
-p Use async processing and eventual consistency.
-p → Delayed insights, weakened guarantees, lost competitiveness.
+p #[strong Option 3 — Accept compromises]
+p Use async processing and eventual consistency → Delayed insights, weakened guarantees, lost competitiveness.
 
 hr
 
@@ -111,34 +92,35 @@ h3 The Critical Performance Gap
 
 p The following illustrates typical latency behavior:
 
-table
+table(style="border-collapse: collapse; margin: 20px 0; width: 100%;")
   thead
     tr
-      th Component
-      th Optimized for
-      th Typical Latency
+      th(style="border: 1px solid #ddd; padding: 12px; background-color: #f5f5f5; text-align: left;") Component
+      th(style="border: 1px solid #ddd; padding: 12px; background-color: #f5f5f5; text-align: left;") Optimized for
+      th(style="border: 1px solid #ddd; padding: 12px; background-color: #f5f5f5; text-align: left;") Typical Latency
   tbody
     tr
-      td Database
-      td ACID transactions
-      td Milliseconds
+      td(style="border: 1px solid #ddd; padding: 12px;") Database
+      td(style="border: 1px solid #ddd; padding: 12px;") ACID transactions
+      td(style="border: 1px solid #ddd; padding: 12px;") Milliseconds
     tr
-      td Cache
-      td Access speed
-      td Microseconds
+      td(style="border: 1px solid #ddd; padding: 12px;") Cache
+      td(style="border: 1px solid #ddd; padding: 12px;") Access speed
+      td(style="border: 1px solid #ddd; padding: 12px;") Microseconds
     tr
-      td Compute
-      td Throughput
-      td Minutes – hours
+      td(style="border: 1px solid #ddd; padding: 12px;") Compute
+      td(style="border: 1px solid #ddd; padding: 12px;") Throughput
+      td(style="border: 1px solid #ddd; padding: 12px;") Minutes – hours
 
-p strong Reality: | applications demanding microsecond insights on millisecond transactions have no viable path in multi-system architectures.
+
+p #[strong Reality:] applications demanding microsecond insights on millisecond transactions have no viable path in multi-system architectures.
 p During spikes, systems either drop connections (data loss) or degrade (missed SLAs). High-velocity apps require flow control that preserves integrity under pressure.
 
 hr
 
 h3 Event Processing at Scale — Real Numbers
 
-p strong Traditional multi-system cost example:
+p #[strong Traditional multi-system cost example:]
 
 pre
   code.
@@ -146,23 +128,23 @@ pre
     ...
     // Total: 6–12 ms per event (not including queuing delays)
 
-p strong Compound effect
+p #[strong Compound effect]
 
-table
+table(style="border-collapse: collapse; margin: 20px 0; width: 100%;")
   thead
     tr
-      th Rate
-      th Required processing time / s
+      th(style="border: 1px solid #ddd; padding: 12px; background-color: #f5f5f5; text-align: left;") Rate
+      th(style="border: 1px solid #ddd; padding: 12px; background-color: #f5f5f5; text-align: left;") Required processing time / s
   tbody
     tr
-      td 1 000 events / s
-      td 6–12 s
+      td(style="border: 1px solid #ddd; padding: 12px;") 1 000 events / s
+      td(style="border: 1px solid #ddd; padding: 12px;") 6–12 s
     tr
-      td 5 000 events / s
-      td 30–60 s
+      td(style="border: 1px solid #ddd; padding: 12px;") 5 000 events / s
+      td(style="border: 1px solid #ddd; padding: 12px;") 30–60 s
     tr
-      td 10 000 events / s
-      td 60–120 s
+      td(style="border: 1px solid #ddd; padding: 12px;") 10 000 events / s
+      td(style="border: 1px solid #ddd; padding: 12px;") 60–120 s
 
 p The math doesn’t work: parallelism helps, but coordination overhead grows faster than throughput.
 
@@ -170,9 +152,9 @@ hr
 
 h3 Real-World Breaking Points
 ul
-  li strong Financial services | — compliance reporting delays affect trades
-  li strong Gaming platforms | — leaderboard updates lag behind gameplay
-  li strong IoT analytics | — anomaly detection arrives too late for prevention
+  li #[strong Financial services] — compliance reporting delays affect trades
+  li #[strong Gaming platforms] — leaderboard updates lag behind gameplay
+  li #[strong IoT analytics] — anomaly detection arrives too late for prevention
 
 hr
 
@@ -181,28 +163,9 @@ h3 The Apache Ignite 3 Alternative
 h3 Eliminating Multi-System Overhead
 
 pre.mermaid.
-  flowchart TB
-      subgraph "Event Processing"
-          Events[High-Volume Events<br/>10 000 / sec]
-      end
+    flowchart TB; subgraph "Event Processing"; Events[High-Volume Events<br/>10 000 / sec]; end; subgraph "Apache Ignite 3 Platform"; subgraph "Collocated Processing"; Memory[Memory-First Storage]; Transactions[MVCC Transactions – ACID Guarantees]; Compute[Event Processing Where Data Lives]; end; end; Events --> Memory; Memory --> Transactions; Transactions --> Compute; Memory <-->|Minimal Copying| Transactions; Transactions <-->|Collocated| Compute; Compute <-->|Direct Access| Memory;
 
-      subgraph "Apache Ignite 3 Platform"
-          subgraph "Collocated Processing"
-              Memory[Memory-First Storage]
-              Transactions[MVCC Transactions – ACID Guarantees]
-              Compute[Event Processing Where Data Lives]
-          end
-      end
-
-      Events → Memory
-      Memory → Transactions
-      Transactions → Compute
-
-      Memory →|Minimal Copying| Transactions
-      Transactions →|Collocated| Compute
-      Compute →|Direct Access| Memory
-
-p strong Key difference: | events process where the data lives, eliminating inter-system latency.
+p #[strong Key difference:] events process where the data lives, eliminating inter-system latency.
 
 hr
 
@@ -225,7 +188,7 @@ pre
     // Same data, three access paradigms, one system
     ...
 
-p strong Eliminates:
+p #[strong Eliminates:]
 ul
   li Redis SDKs
   li PostgreSQL drivers
@@ -233,7 +196,7 @@ ul
   li Cross-system synchronization
   li Schema drift risk
 
-p strong Unified advantage: | one schema, one transaction model, multiple access paths.
+p #[strong Unified advantage:] One schema, one transaction model, multiple access paths.
 
 hr
 
@@ -241,10 +204,10 @@ h3 Ignite 3 Architecture Preview
 
 p High-velocity performance depends on several architectural innovations:
 ul
-  li strong Memory-first storage | — event data in memory with < 10 μs access
-  li strong Collocated compute | — processing happens where data resides
-  li strong Integrated transactions | — ACID across cache, database, and compute
-  li strong Minimal data copying | — direct memory access avoids duplication
+  li #[strong Memory-first storage] — event data in memory with < 10 μs access
+  li #[strong Collocated compute] — processing happens where data resides
+  li #[strong Integrated transactions] — ACID across cache, database, and compute
+  li #[strong Minimal data copying] — direct memory access avoids duplication
 
 p These features neutralize the compound effects that make multi-system designs unsuitable for high-frequency workloads.
 
@@ -254,21 +217,21 @@ h3 Business Impact of Architectural Evolution
 
 h3 Cost Efficiency
 ul
-  li strong Reduced infrastructure | — one platform instead of several
-  li strong Lower network costs | — no inter-system bandwidth overhead
-  li strong Simplified operations | — unified monitoring, backup, and scaling
+  li #[strong Reduced infrastructure] — one platform instead of several
+  li #[strong Lower network costs] — no inter-system bandwidth overhead
+  li #[strong Simplified operations] — unified monitoring, backup, and scaling
 
 h3 Performance Gains
 ul
-  li strong Microsecond latency | — eliminates network overhead
-  li strong Higher throughput | — more events on existing hardware
-  li strong Predictable scaling | — consistent performance under load
+  li #[strong Microsecond latency] — eliminates network overhead
+  li #[strong Higher throughput] — more events on existing hardware
+  li #[strong Predictable scaling] — consistent performance under load
 
 h3 Developer Experience
 ul
-  li strong Single API | — one model for all data operations
-  li strong Consistent behavior | — no synchronization anomalies
-  li strong Faster delivery | — one integrated system to test and debug
+  li #[strong Single API] — one model for all data operations
+  li #[strong Consistent behavior] — no synchronization anomalies
+  li #[strong Faster delivery] — one integrated system to test and debug
 
 hr
 
@@ -276,11 +239,17 @@ h3 The Architectural Evolution Decision
 
 p Every successful application reaches this point: the architecture that once fueled growth now constrains it.
 
-p strong The question isn’t whether you’ll hit scaling limits — it’s how you’ll evolve past them.
+p #[strong The question isn’t whether you’ll hit scaling limits — it’s how you’ll evolve past them.]
 
-p strong Apache Ignite 3 | consolidates transactions, caching, and compute into a single, memory-first platform designed for high-velocity workloads.
+p #[strong Apache Ignite 3] consolidates transactions, caching, and compute into a single, memory-first platform designed for high-velocity workloads.
 
 p Instead of fighting the complexity of multiple systems, you evolve toward an architecture built for sustained growth.
 
 p Your winning architecture doesn’t have to become your scaling limit — it can become the foundation for your next phase.
+
+hr
+br
+|
+p #[em Return next Tuesday for Part 2, where we examine how Apache Ignite 3’s memory-first architecture enables optimized event processing while maintaining durability, forming the basis for true high-velocity performance.]
+
 
