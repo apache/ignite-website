@@ -245,6 +245,11 @@ export const communityMenu: DropdownMenu = {
           href: '/community#community',
           icon: '/img/menu/icon-comment.svg',
         },
+        {
+          label: 'Project Governance',
+          href: '/community#governance',
+          icon: '/img/menu/icon-clip.svg',
+        },
       ],
     },
     {
@@ -256,8 +261,8 @@ export const communityMenu: DropdownMenu = {
           icon: '/img/menu/icon-puzzle.svg',
         },
         {
-          label: 'Ask Questions',
-          href: '/community#faq',
+          label: 'Get In Touch',
+          href: '/community#channels',
           icon: '/img/menu/icon-question.svg',
         },
       ],

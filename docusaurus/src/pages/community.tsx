@@ -4,45 +4,27 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
-import { committers, pmcMembers, type Committer } from '@site/src/data/committers';
+import { pmcMembers, type Committer } from '@site/src/data/committers';
 import styles from './community.module.css';
 
 function HeroSection() {
   return (
-    <section className={styles.cmtyhero}>
-      <div className="container">
-        <div className={styles.cmtyhero__main}>
-          <h1 className={styles.cmtyhero__h1}>
-            Welcome To The Apache <br />Ignite Community
-          </h1>
-          <div className={styles.cmtyhero__text}>
-            A community of software engineers, tech writers, and technologists who drive the evolution of a top-5 project of the Apache Software Foundation
-          </div>
-          <div className={styles.cmtyhero__sub}>
-            <a href="https://blogs.apache.org/ignite/entry/apache-ignite-momentum-highlights-from" target="_blank" rel="noreferrer">
-              Learn more
-            </a>{' '}
-            about Ignite ranking in various categories.
+    <section className="innerhero">
+      <div className="container innerhero__cont">
+        <div className="innerhero__main">
+          <div className="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 className="h1 innerhero__h1">Community</h1>
+          <div className="innerhero__descr pt-2 h5">
+            Connect with developers worldwide building
+            <br />
+            distributed applications with Apache Ignite
           </div>
         </div>
-        <a href="https://blogs.apache.org/ignite/entry/apache-ignite-momentum-highlights-from" target="_blank" rel="noreferrer" className={styles.cmtyhero__img}>
-          <img src="/img/community/b1-photo.svg" alt="Welcome to the Apache Ignite Community" />
-        </a>
-      </div>
-    </section>
-  );
-}
-
-function NavigationBlock() {
-  return (
-    <section className={styles.cmtynavblock}>
-      <div className="container">
-        <ul className={clsx(styles.cmtynavblock__list, 'flexi')}>
-          <li><a href="#story">Learn Our Story</a></li>
-          <li><a href="#community">Meet the Community</a></li>
-          <li><a href="#contributing">Start Contributing</a></li>
-          <li><a href="#faq">Ask a Question</a></li>
-        </ul>
+        <img
+          className="innerhero__pic innerhero__pic--community"
+          src="/img/community/b1-photo.svg"
+          alt="Apache Ignite Community"
+        />
       </div>
     </section>
   );
@@ -131,13 +113,17 @@ function TimelineSection() {
         <div className={clsx(styles.cmtyhistory3, 'pt-5')}>
           <div className={clsx(styles.cmtyhistory3__wrap, 'flexi')}>
             <div className={styles.cmtyhistory3__left}>
-              <div className={styles.cmtyhistory__year}>Today</div>
+              <div className={styles.cmtyhistory__year}>2025</div>
               <img src="/img/community/b3-rocket5.svg" alt="" />
             </div>
             <div className={styles.cmtyhistory3__right}>
-              <h3 className={clsx(styles.cmtyhistory1__h3, 'fz30', 'pb-3')}>Ignite 3.0 version is under way</h3>
-              <p>Even when your project boasts hundreds of thousands of downloads a month and is being selected by elite developers and architects for applications that are used by millions of people daily, there is still room for innovation.</p>
-              <p className="pt-3">Ignite 3 is a significant leap forward for both the project and its community. Join or support us in an effort to create a cutting-edge distributed database...</p>
+              <h3 className={clsx(styles.cmtyhistory1__h3, 'fz30', 'pb-3')}>Ignite 3 is released</h3>
+              <p>
+                After years of development, Apache Ignite 3.0 was released in January 2025, representing a significant architectural evolution. The new version introduces a database-first design with SQL as the primary interface, schema-driven data colocation, Raft-based consensus for strong consistency, and MVCC for non-blocking reads.
+              </p>
+              <p className="pt-3">
+                Ignite 3.1 followed in October 2025 with additional enhancements. The community continues to innovate, building a cutting-edge distributed database for high-velocity data workloads.
+              </p>
             </div>
           </div>
         </div>
@@ -160,7 +146,7 @@ function MeetCommunitySection() {
               <a href="http://www.apache.org/theapacheway/" target="_blank" rel="noreferrer">
                 The Apache Way
               </a>{' '}
-              – get to know our collaboration and contribution values with principles.
+              - get to know our collaboration and contribution values with principles.
             </div>
           </div>
           <div className={styles['cmty-meet__pic']}>
@@ -180,7 +166,7 @@ function ContributorsSection() {
           <div className={styles['cmty-contrib__main']}>
             <h3 className="h4">Contributors</h3>
             <div className={clsx(styles['cmty-contrib__text'], 'pt-2')}>
-              More than 100 members help the project grow and progress daily. Code contributions, documentation creation, project awareness, developer support — <strong>this is just a sample of the contributions that we recognize.</strong>
+              More than 100 members help the project grow and progress daily. Code contributions, documentation creation, project awareness, developer support - <strong>this is just a sample of the contributions that we recognize.</strong>
             </div>
           </div>
           <div className={styles['cmty-contrib__pic']}>
@@ -192,106 +178,51 @@ function ContributorsSection() {
   );
 }
 
-interface CommitterCardProps {
-  committer: Committer;
-}
-
-function CommitterCard({ committer }: CommitterCardProps) {
-  return (
-    <div className={clsx(styles.committer, 'flexi')}>
-      <div className={styles.committer__name}>{committer.Name}</div>
-      {committer.GitHub && (
-        <a className={styles.committer__github} href={committer.GitHub} target="_blank" rel="noreferrer">
-          <img src="/img/icon-github.svg" alt="" />
-        </a>
-      )}
-      {committer['Apache profile'] ? (
-        <a className={styles.committer__apache} href={committer['Apache profile']} target="_blank" rel="noreferrer">
-          <img src="/img/icon-pero.svg" alt="" />
-        </a>
-      ) : (
-        <span className={styles.committer__apache} />
-      )}
-    </div>
-  );
-}
-
-function CommittersSection() {
-  const [showAll, setShowAll] = useState(false);
-  const visibleCommitters = showAll ? committers : committers.slice(0, 14);
-
-  return (
-    <section className={styles['cmty-committers']}>
-      <div className="container">
-        <h3 className="h4">Committers</h3>
-        <div className={clsx(styles['cmty-committers__text'], 'pt-2')}>
-          Most active contributors who make a significant contribution <br />to the project become Apache Ignite committers.
-        </div>
-        <p className={clsx(styles['cmty-committers__small'], 'pt-2')}>Here is the list of committers for the project.</p>
-
-        <div className={styles.committers__wrap}>
-          {visibleCommitters.map((committer, idx) => (
-            <CommitterCard key={idx} committer={committer} />
-          ))}
-        </div>
-
-        {!showAll && (
-          <a href="#" className={styles.committers__morelink} onClick={(e) => { e.preventDefault(); setShowAll(true); }}>
-            <i>Load more</i>
-          </a>
-        )}
-        {showAll && (
-          <a href="#" className={styles.committers__morelink} onClick={(e) => { e.preventDefault(); setShowAll(false); }}>
-            <span>Hide</span>
-          </a>
-        )}
-      </div>
-    </section>
-  );
-}
-
 function PMCSection() {
   const [showAll, setShowAll] = useState(false);
-  const pmcChair = {
-    Name: 'Dmitriy Pavlov',
-    Comitter: 'YES',
-    PMC: 'PMC Chair',
-    GitHub: 'https://github.com/dspavlov',
-    'Apache profile': 'http://people.apache.org/phonebook.html?uid=dpavlov',
-    Company: 'SberTech',
-  };
-  const otherPMC = pmcMembers.filter(m => m.PMC !== 'PMC Chair');
+  const pmcChair = pmcMembers.find((m) => m.PMC === 'PMC Chair');
+  const otherPMC = pmcMembers.filter((m) => m.PMC !== 'PMC Chair');
   const visiblePMC = showAll ? otherPMC : otherPMC.slice(0, 3);
 
   return (
-    <section className={styles['cmty-pm']}>
+    <section className={styles['cmty-pm']} id="governance">
       <div className="container">
         <h3 className="fz30">Project Management Committee</h3>
         <div className={clsx(styles['cmty-committers__text'], 'pt-2')}>
-          A group of Ignite committers who oversee project management and operational matters. <br />They vote on new committers, releases and make other vital decisions.
+          A group of Ignite committers who oversee project management and operational matters.
+          <br />
+          They vote on new committers, releases and make other vital decisions.
         </div>
-        <p className={clsx(styles['cmty-committers__small'], 'pt-2')}>Here is the list of PMC members for the project.</p>
+        <p className={clsx(styles['cmty-committers__small'], 'pt-2')}>
+          View the complete{' '}
+          <a href="https://projects.apache.org/committee.html?ignite" target="_blank" rel="noreferrer">
+            PMC and committer list
+          </a>{' '}
+          on the Apache Projects site.
+        </p>
 
         <div className={clsx(styles['cmty-pm__wrap'], 'pt-5')}>
-          <article className={styles['cmty-pmitem']}>
-            <div className={styles['cmty-pmitem__proff']}>
-              <img src="/img/community/b7-chair-star.svg" alt="" />
-              <span>PMC CHAIR</span>
-            </div>
-            <p className={clsx(styles['cmty-pmitem__name'], 'h5')}>{pmcChair.Name}</p>
-            <div className={clsx(styles['cmty-pmitem__links'], 'flexi')}>
-              {pmcChair.GitHub && (
-                <a className={styles['cmty-pmitem__github']} href={pmcChair.GitHub} target="_blank" rel="noreferrer">
-                  <img src="/img/icon-github.svg" alt="" />
-                </a>
-              )}
-              {pmcChair['Apache profile'] && (
-                <a className={styles['cmty-pmitem__apache']} href={pmcChair['Apache profile']} target="_blank" rel="noreferrer">
-                  <img src="/img/icon-pero.svg" alt="" />
-                </a>
-              )}
-            </div>
-          </article>
+          {pmcChair && (
+            <article className={styles['cmty-pmitem']}>
+              <div className={styles['cmty-pmitem__proff']}>
+                <img src="/img/community/b7-chair-star.svg" alt="" />
+                <span>PMC CHAIR</span>
+              </div>
+              <p className={clsx(styles['cmty-pmitem__name'], 'h5')}>{pmcChair.Name}</p>
+              <div className={clsx(styles['cmty-pmitem__links'], 'flexi')}>
+                {pmcChair.GitHub && (
+                  <a className={styles['cmty-pmitem__github']} href={pmcChair.GitHub} target="_blank" rel="noreferrer">
+                    <img src="/img/icon-github.svg" alt="" />
+                  </a>
+                )}
+                {pmcChair['Apache profile'] && (
+                  <a className={styles['cmty-pmitem__apache']} href={pmcChair['Apache profile']} target="_blank" rel="noreferrer">
+                    <img src="/img/asf-logo-mark.svg" alt="" />
+                  </a>
+                )}
+              </div>
+            </article>
+          )}
 
           {visiblePMC.map((member, idx) => (
             <article key={idx} className={styles['cmty-pmitem']}>
@@ -304,7 +235,7 @@ function PMCSection() {
                 )}
                 {member['Apache profile'] && (
                   <a className={styles['cmty-pmitem__apache']} href={member['Apache profile']} target="_blank" rel="noreferrer">
-                    <img src="/img/icon-pero.svg" alt="" />
+                    <img src="/img/asf-logo-mark.svg" alt="" />
                   </a>
                 )}
               </div>
@@ -312,8 +243,15 @@ function PMCSection() {
           ))}
         </div>
 
-        {!showAll && (
-          <a href="#" className={styles['cmty-pm__morelink']} onClick={(e) => { e.preventDefault(); setShowAll(true); }}>
+        {!showAll && otherPMC.length > 3 && (
+          <a
+            href="#"
+            className={styles['cmty-pm__morelink']}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowAll(true);
+            }}
+          >
             <i>Load more</i>
           </a>
         )}
@@ -331,14 +269,21 @@ function PMCSection() {
                     )}
                     {member['Apache profile'] && (
                       <a className={styles['cmty-pmitem__apache']} href={member['Apache profile']} target="_blank" rel="noreferrer">
-                        <img src="/img/icon-pero.svg" alt="" />
+                        <img src="/img/asf-logo-mark.svg" alt="" />
                       </a>
                     )}
                   </div>
                 </article>
               ))}
             </div>
-            <a href="#" className={clsx(styles['cmty-pm__morelink'], 'pt-3')} onClick={(e) => { e.preventDefault(); setShowAll(false); }}>
+            <a
+              href="#"
+              className={clsx(styles['cmty-pm__morelink'], 'pt-3')}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowAll(false);
+              }}
+            >
               <span>Hide</span>
             </a>
           </div>
@@ -356,7 +301,7 @@ function ContributingSection() {
           <div className={styles['cmty-startcont__main']}>
             <h2 className={clsx('h3', styles['cmty-startcont__title'])}>Start Contributing</h2>
             <div className={clsx(styles['cmty-startcont__text'], 'h5', 'pt-3')}>
-              There are multiple ways you can contribute to Ignite — contribute to the codebase, help developers on the mailing lists, write technical docs or popularize our technology!
+              There are multiple ways you can contribute to Ignite - contribute to the codebase, help developers on the mailing lists, write technical docs or popularize our technology!
             </div>
           </div>
           <div className={styles['cmty-startcont__pic']}>
@@ -364,14 +309,23 @@ function ContributingSection() {
           </div>
         </div>
 
-        <div className="pt-5">
-          <h3 className="h4">Code and technical documentation contributions</h3>
-          <p className="pt-2">Visit the{' '}
-            <a href="https://cwiki.apache.org/confluence/display/IGNITE/How+to+Contribute" target="_blank" rel="noreferrer">
-              Contribution and Development
-            </a>{' '}
-            page for detailed instructions on how to contribute to Apache Ignite.
-          </p>
+        <div className={styles.contributeGrid}>
+          <a href="https://cwiki.apache.org/confluence/display/IGNITE/How+to+Contribute" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
+            <h4 className="h5">How to Contribute</h4>
+            <p>Guide for code, documentation, and community contributions</p>
+          </a>
+          <a href="https://github.com/apache/ignite-3/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
+            <h4 className="h5">Good First Issues</h4>
+            <p>Issues suitable for new contributors</p>
+          </a>
+          <a href="https://github.com/apache/ignite-3" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
+            <h4 className="h5">Apache Ignite 3</h4>
+            <p>Current generation development</p>
+          </a>
+          <a href="https://github.com/apache/ignite" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
+            <h4 className="h5">Apache Ignite 2</h4>
+            <p>Long-term support (LTS)</p>
+          </a>
         </div>
       </div>
     </section>
@@ -380,13 +334,15 @@ function ContributingSection() {
 
 function AskQuestionSection() {
   return (
-    <section className={styles['cmty-ask']} id="faq">
+    <section className={styles['cmty-ask']} id="channels">
       <div className="container">
         <div className={clsx(styles['cmty-ask__wrap'], 'flexi')}>
           <div className={styles['cmty-ask__main']}>
-            <h2 className={clsx(styles['cmty-ask__title'], 'fz50', 'pb-3')}>Ask a Question</h2>
+            <h2 className={clsx(styles['cmty-ask__title'], 'fz50', 'pb-3')}>Get In Touch</h2>
             <div className={clsx(styles['cmty-ask__text'], 'h5')}>
-              Feel free to reach out to our community if you have <br />any questions, doubts or proposals. There are a few <br />ways to do this.
+              Reach out to our community if you have
+              <br />
+              any questions, feedback, or proposals.
             </div>
           </div>
           <img className={styles['cmty-ask__bg']} src="/img/community/b15-askimg.svg" alt="" />
@@ -399,9 +355,15 @@ function AskQuestionSection() {
               <span>For General Questions</span>
             </h3>
             <div className={styles.faqblock__right}>
-              <p className={styles.faqblock__rightitle}>By e-mail</p>
+              <p className={styles.faqblock__rightitle}>User Mailing List</p>
               <p>
-                For general questions about Ignite <a href="mailto:user@ignite.apache.org">user@ignite.apache.org</a>
+                For questions about using Apache Ignite:{' '}
+                <a href="mailto:user@ignite.apache.org">user@ignite.apache.org</a>
+              </p>
+              <p className="pt-2">
+                <a href="https://lists.apache.org/list.html?user@ignite.apache.org" target="_blank" rel="noreferrer">
+                  Browse archives
+                </a>
               </p>
             </div>
           </div>
@@ -409,19 +371,23 @@ function AskQuestionSection() {
           <div className={clsx(styles.faqblock, 'flexi', 'pb-5')}>
             <h3 className={clsx(styles.faqblock__title, 'h5')}>
               <img src="/img/community/b16-icon-comments.svg" alt="" />
-              <span>
-                For Contribution Related <br />Questions And Discussions
-              </span>
+              <span>For Development Discussions</span>
             </h3>
             <div className={styles.faqblock__right}>
-              <p className={styles.faqblock__rightitle}>By e-mail</p>
+              <p className={styles.faqblock__rightitle}>Dev Mailing List</p>
               <p>
-                For contribution-related discussions <a href="mailto:dev@ignite.apache.org">dev@ignite.apache.org</a>
+                For contribution and development discussions:{' '}
+                <a href="mailto:dev@ignite.apache.org">dev@ignite.apache.org</a>
+              </p>
+              <p className="pt-2">
+                <a href="https://lists.apache.org/list.html?dev@ignite.apache.org" target="_blank" rel="noreferrer">
+                  Browse archives
+                </a>
               </p>
             </div>
           </div>
 
-          <div className={clsx(styles.faqblock, 'flexi')}>
+          <div className={clsx(styles.faqblock, 'flexi', 'pb-5')}>
             <h3 className={clsx(styles.faqblock__title, 'h5')}>
               <img src="/img/community/b16-icon-reports.svg" alt="" />
               <span>Report An Issue</span>
@@ -429,10 +395,72 @@ function AskQuestionSection() {
             <div className={styles.faqblock__right}>
               <p className={styles.faqblock__rightitle}>On GitHub</p>
               <p>
-                Visit <a href="https://github.com/apache/ignite/issues" target="_blank" rel="noreferrer">Ignite GitHub</a> if you would like to file a new issue.
+                <a href="https://github.com/apache/ignite-3/issues" target="_blank" rel="noreferrer">
+                  Apache Ignite 3 Issues
+                </a>{' '}
+                |{' '}
+                <a href="https://github.com/apache/ignite/issues" target="_blank" rel="noreferrer">
+                  Apache Ignite 2 Issues
+                </a>
               </p>
             </div>
           </div>
+
+          <div className={clsx(styles.faqblock, 'flexi')}>
+            <h3 className={clsx(styles.faqblock__title, 'h5')}>
+              <img src="/img/community/b16-icon-quest.svg" alt="" />
+              <span>Stack Overflow</span>
+            </h3>
+            <div className={styles.faqblock__right}>
+              <p className={styles.faqblock__rightitle}>Technical Q&A</p>
+              <p>
+                Ask questions with the{' '}
+                <a href="https://stackoverflow.com/questions/tagged/apache-ignite" target="_blank" rel="noreferrer">
+                  apache-ignite tag
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EventsCTA() {
+  return (
+    <Section className={styles.eventsCta}>
+      <div className={clsx(styles.eventsCta__wrap, 'flexi')}>
+        <div className={styles.eventsCta__main}>
+          <h2 className="h3">Join Us at Events</h2>
+          <p className="pt-2 h5">
+            Connect with the community at Apache Ignite Summit, virtual meetups, and conferences worldwide.
+          </p>
+        </div>
+        <div className={styles.eventsCta__action}>
+          <Link className="button" to="/events">
+            View Events
+          </Link>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+function CTASection() {
+  return (
+    <section className={styles.cta}>
+      <div className={clsx('container', styles.ctaContainer)}>
+        <div className={styles.ctaContent}>
+          <h2 className={styles.ctaTitle}>Ready to Get Started?</h2>
+          <p className={styles.ctaDescription}>
+            Join the Apache Ignite community and start building distributed applications.
+          </p>
+        </div>
+        <div className={styles.ctaAction}>
+          <Link className="button" to="https://ignite.apache.org/docs/3.1.0/getting-started/quick-start">
+            Quick Start Guide
+          </Link>
         </div>
       </div>
     </section>
@@ -443,31 +471,31 @@ export default function CommunityPage(): ReactNode {
   return (
     <Layout>
       <Head>
-        <title>Apache Ignite Community - Start Contributing</title>
+        <title>Apache Ignite Community - Join and Contribute</title>
         <meta
           name="description"
-          content="Meet an Apache Ignite community and get help. Contribute to Ignite by helping answer user questions, coding, changing technical documentation, or becoming a committer and PMC member."
+          content="Join the Apache Ignite community. Connect with developers, contribute to the project, and get help through mailing lists, Stack Overflow, and GitHub."
         />
         <link rel="canonical" href="https://ignite.apache.org/community.html" />
-        <meta property="og:title" content="Apache Ignite Community - Start Contributing" />
+        <meta property="og:title" content="Apache Ignite Community - Join and Contribute" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ignite.apache.org/community.html" />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Meet an Apache Ignite community and get help. Contribute to Ignite by helping answer user questions, coding, changing technical documentation, or becoming a committer and PMC member."
+          content="Join the Apache Ignite community. Connect with developers, contribute to the project, and get help through mailing lists, Stack Overflow, and GitHub."
         />
       </Head>
       <main>
         <HeroSection />
-        <NavigationBlock />
         <TimelineSection />
         <MeetCommunitySection />
-        <ContributorsSection />
-        <CommittersSection />
+        {/* <ContributorsSection /> */}
         <PMCSection />
         <ContributingSection />
         <AskQuestionSection />
+        <EventsCTA />
+        {/* <CTASection /> */}
       </main>
     </Layout>
   );
