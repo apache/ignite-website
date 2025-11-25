@@ -565,7 +565,7 @@ function ReadyToStart() {
           </p>
         </div>
         <div className={styles.toolingend__action}>
-          <a className="button" href="https://ignite.apache.org/docs/latest/" target="_blank" rel="noreferrer">Discover Quick Start Guide</a>
+          <a className="button" href="https://ignite.apache.org/docs/latest/" target="_blank" rel="noreferrer">Quick Start Guide</a>
         </div>
       </div>
     </section>

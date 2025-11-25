@@ -37,7 +37,7 @@ export const getStartedMenu: DropdownMenu = {
   featured: {
     icon: '/img/menu/icon-red-rocket.svg',
     label: 'Quick Start Guide',
-    href: 'https://ignite.apache.org/docs/latest/',
+    href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start',
     className: 'dropmenu__redbutton'
   },
   sections: [
@@ -45,8 +45,8 @@ export const getStartedMenu: DropdownMenu = {
       title: '',
       items: [
         {
-          label: 'Learning resources',
-          href: '/resources#learning',
+          label: 'Developer Resources',
+          href: '/resources',
         },
         {
           label: 'Training and Courses',
@@ -312,12 +312,16 @@ export const resourcesMenu: DropdownMenu = {
       title: '',
       items: [
         {
-          label: 'Technical resources',
-          href: '/resources#technical',
+          label: 'Get Started',
+          href: '/resources#get-started',
         },
         {
-          label: 'Learning resources',
-          href: '/resources#learning',
+          label: 'Documentation',
+          href: '/resources#documentation',
+        },
+        {
+          label: 'Source Code',
+          href: '/resources#source-code',
         },
       ],
     },
@@ -329,12 +333,8 @@ export const resourcesMenu: DropdownMenu = {
           href: '/resources#training',
         },
         {
-          label: 'Apache Ignite Book',
-          href: '/resources#book',
-        },
-        {
-          label: 'Mailing Lists, Forums And Discussion Archives',
-          href: '/resources#mail',
+          label: 'Community',
+          href: '/resources#community',
         },
         {
           label: 'FAQ',
@@ -355,7 +355,7 @@ export const mainNavItems = [
   { label: 'Use Cases', key: 'useCases', href: '/use-cases', menu: useCasesMenu },
   { label: 'Community', key: 'community', href: '/community', menu: communityMenu },
   { label: 'Resources', key: 'resources', href: '/resources', menu: resourcesMenu },
-  { label: 'Docs', href: '//ignite.apache.org/docs/latest/', external: true },
+  { label: 'Docs', href: 'https://ignite-dev.gridgain.com/docs/3.1.0/', external: true },
 ] as const;
 
 /**
@@ -363,8 +363,8 @@ export const mainNavItems = [
  * Flattened navigation for mobile display
  */
 export const mobileMenuItems = [
-  { label: 'Quick Start', href: '/docs/latest/' },
-  { label: 'Learning resources', href: '/resources#learning' },
+  { label: 'Quick Start', href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start' },
+  { label: 'Developer Resources', href: '/resources' },
   { label: 'Training and Courses', href: '/resources#training' },
   { label: 'FAQ', href: '/faq' },
   {
@@ -474,7 +474,7 @@ export const footerSections = {
     ],
     ctaButton: {
       label: 'Start Using Apache Ignite',
-      href: 'https://ignite.apache.org/docs/latest/index',
+      href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start',
     },
   },
 } as const;
