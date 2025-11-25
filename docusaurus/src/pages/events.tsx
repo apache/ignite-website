@@ -1,544 +1,369 @@
-import React, { useState } from 'react';
+import React, { useState, type ReactNode } from 'react';
+import clsx from 'clsx';
 import Layout from '@theme/Layout';
-import { EVENTS } from '../data/events';
+import Head from '@docusaurus/Head';
+import Link from '@docusaurus/Link';
+import Section from '@site/src/components/Section';
+import styles from './events.module.css';
 
-// Helper function to group events by year
-function groupEventsByYear(events: typeof EVENTS) {
-  const grouped: Record<string, typeof EVENTS> = {};
-  events.forEach((event) => {
-    const year = event.date.substring(0, 4);
-    if (!grouped[year]) {
-      grouped[year] = [];
-    }
-    grouped[year].push(event);
-  });
-  return grouped;
-}
+// Upcoming events data - manually maintained since Meetup API requires OAuth
+const upcomingEvents = [
+  {
+    id: 'dec-2025-spring-boot',
+    title: 'Apache Ignite 3 and GridGain 9 for Spring Boot and Spring Data Development',
+    date: '2025-12-11',
+    time: '10:00 AM - 12:00 PM PT',
+    location: 'Online',
+    description: 'Two-hour workshop for Java developers and architects exploring best practices for using Spring Boot and Spring Data with Apache Ignite 3 and GridGain 9.',
+    link: 'https://www.meetup.com/apache-ignite-virtual-meetup/events/312167964/',
+    type: 'workshop' as const,
+  },
+];
 
-// Event card component matching PUG structure
-function EventCard({ event }: { event: typeof EVENTS[0] }) {
+// Past summit data
+const pastSummits = [
+  {
+    year: '2025',
+    title: 'Ignite Summit 2025',
+    image: '/img/events/banner-bott-7.png',
+    link: 'https://ignite-summit.org/2025/',
+  },
+  {
+    year: '2023',
+    title: 'Ignite Summit June 2023',
+    image: '/img/events/banner-bott-5.jpg',
+    link: 'https://ignite-summit.org/2023-june/',
+  },
+  {
+    year: '2022 Nov',
+    title: 'Ignite Summit November 2022',
+    image: '/img/events/banner-bott-4.jpg',
+    link: 'https://ignite-summit.org/2022-november/',
+  },
+  {
+    year: '2022 Jun',
+    title: 'Ignite Summit June 2022',
+    image: '/img/events/banner-bott-3.jpg',
+    link: 'https://ignite-summit.org/2022-june/',
+  },
+];
+
+// Past events from Virtual Meetup (recent only, within 6 months)
+const pastEvents = [
+  {
+    id: 'nov-2025-essentials-emea',
+    title: 'Apache Ignite 3 Essentials: Principles for Building Data-Intensive Apps (EMEA)',
+    date: '2025-11-13',
+    location: 'Online',
+    link: 'https://www.meetup.com/apache-ignite-virtual-meetup/events/311839185/',
+    type: 'training',
+  },
+  {
+    id: 'oct-2025-essentials-americas',
+    title: 'Apache Ignite 3 Essentials - Free Online Developer Training Session (Americas)',
+    date: '2025-10-30',
+    location: 'Online',
+    link: 'https://www.meetup.com/apache-ignite-virtual-meetup/events/311523148/',
+    type: 'training',
+  },
+  {
+    id: 'sep-2025-spring-boot',
+    title: 'Apache Ignite 3 and GridGain 9 for Spring Boot and Spring Data Development',
+    date: '2025-09-18',
+    location: 'Online',
+    link: 'https://www.meetup.com/apache-ignite-virtual-meetup/events/310709112/',
+    type: 'training',
+  },
+];
+
+function HeroSection() {
   return (
-    <article className="eventcard">
-      <div className="eventcard__date">{event.date}</div>
-      <div className="eventcard__title pt-2">{event.title}</div>
-      <div className="eventcard__info pt-2">
-        {event.speakers && event.speakers.length > 0 && (
-          <div
-            className="eventcard__speaker"
-            dangerouslySetInnerHTML={{ __html: event.speakers.join('<br>') }}
-          />
-        )}
-        <div className="eventcard__loc">{event.location}</div>
+    <section className="innerhero">
+      <div className="container innerhero__cont">
+        <div className="innerhero__main">
+          <div className="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 className="h1 innerhero__h1">Events</h1>
+          <div className="innerhero__descr pt-2 h5">
+            Connect with the community at conferences,
+            <br />
+            summits, and virtual meetups worldwide
+          </div>
+        </div>
+        <img
+          className="innerhero__pic innerhero__pic--events"
+          src="/img/events/b1-mainpic.svg"
+          alt="Apache Ignite Events"
+        />
       </div>
-      <a className="eventcard__button button button--shadow" href={event.link} target="_blank" rel="noopener noreferrer">
-        Learn more details
-      </a>
-    </article>
+    </section>
   );
 }
 
-export default function EventsPage(): JSX.Element {
-  const eventsByYear = groupEventsByYear(EVENTS);
-  const years = Object.keys(eventsByYear).sort((a, b) => parseInt(b) - parseInt(a));
-
-  const [activeYear, setActiveYear] = useState(years[0]);
-  const [expandedYears, setExpandedYears] = useState<Set<string>>(new Set());
-
-  const handleShowMore = (year: string) => {
-    const newExpanded = new Set(expandedYears);
-    if (newExpanded.has(year)) {
-      newExpanded.delete(year);
-    } else {
-      newExpanded.add(year);
-    }
-    setExpandedYears(newExpanded);
-  };
-
-  const renderYearEvents = (year: string) => {
-    const yearEvents = eventsByYear[year] || [];
-    const isExpanded = expandedYears.has(year);
-    const visibleEvents = isExpanded ? yearEvents : yearEvents.slice(0, 3);
-    const hasMore = yearEvents.length > 3;
-
+function UpcomingEventsSection() {
+  if (upcomingEvents.length === 0) {
     return (
-      <div
-        className={`eventspast__tabwrap ${activeYear === year ? 'active' : ''}`}
-        data-tab={`e${year}`}
-        key={year}
-      >
-        <div className="eventspast__tab">
-          {visibleEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+      <Section id="upcoming" className={styles.upcoming}>
+        <p className="capstext">Upcoming Events</p>
+        <h2 className="h3 pt-2">Join Us at an Upcoming Event</h2>
+        <div className={styles.noEvents}>
+          <p>No upcoming events scheduled. Check back soon or join our meetup group to stay informed.</p>
+          <a
+            className="button button--shadow"
+            href="https://www.meetup.com/apache-ignite-virtual-meetup/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Join Virtual Meetup Group
+          </a>
         </div>
-        {hasMore && (
-          <div className="eventspast__bottom pt-1">
-            <a
-              className="eventspast__more jsLoadMoreEvents"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handleShowMore(year);
-              }}
-              data-invis={isExpanded ? '0' : '1'}
-            >
-              {isExpanded ? 'Show less' : 'Show more'}
-            </a>
-          </div>
-        )}
-      </div>
+      </Section>
     );
-  };
+  }
 
   return (
-    <Layout
-      title="Apache Ignite Events - Meetups, Summit, Conference"
-      description="Join our upcoming events: in-memory computing meetups, Apache Ignite summits or conferences. Find an Apache Ignite meetup/group near you."
-    >
-      <head>
-        <link rel="canonical" href="https://ignite.apache.org/events" />
-        <meta property="og:title" content="Apache Ignite Events - Meetups, Summit, Conference" />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/events" />
-        <meta property="og:image" content="/img/og-pic.png" />
-        <meta property="og:description" content="Join our upcoming events: in-memory computing meetups, Apache Ignite summits or conferences. Find an Apache Ignite meetup/group near you." />
-      </head>
-
-      <section className="eventhero">
-        <div className="container">
-          <div className="eventhero__main">
-            <h1 className="h2">
-              Join The Apache Ignite <br />
-              Community At Conferences, <br />
-              Summits And Other Events
-            </h1>
-            <div className="h5 pt-3">
-              The community meets online and offline regularly. <br />
-              Join our meetup groups and events to learn from <br />
-              Ignite experts or to share your Ignite experience.
+    <Section id="upcoming" className={styles.upcoming}>
+      <p className="capstext">Upcoming Events</p>
+      <h2 className="h3 pt-2">Join Us at an Upcoming Event</h2>
+      <div className={styles.upcomingGrid}>
+        {upcomingEvents.map((event) => (
+          <article key={event.id} className={clsx(styles.upcomingCard, 'cardsimple')}>
+            <div className={styles.upcomingDate}>
+              <span className={styles.upcomingDay}>
+                {new Date(event.date + 'T00:00:00').getDate()}
+              </span>
+              <span className={styles.upcomingMonth}>
+                {new Date(event.date + 'T00:00:00').toLocaleString('en-US', { month: 'short' }).toUpperCase()}
+              </span>
+              <span className={styles.upcomingYear}>
+                {new Date(event.date + 'T00:00:00').getFullYear()}
+              </span>
             </div>
-          </div>
-          <img
-            className="eventhero__img"
-            src="/img/events/b1-mainpic.svg"
-            alt="Join the Apache Ignite Community at Conferences, Summits and Other Events"
-          />
-        </div>
-      </section>
-
-      <section className="cmtynavblock">
-        <div className="container">
-          <ul className="cmtynavblock__list flexi">
-            <li>
-              <a className="cmtynavblock__active" href="#summit">
-                Ignite Summit
-              </a>
-            </li>
-            <li>
-              <a href="#meetups">Meetups Worldwide</a>
-            </li>
-            <li>
-              <a href="#upcoming">Upcoming Events</a>
-            </li>
-            <li>
-              <a href="#past">Past Events</a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section className="event-featured container">
-        <p className="capstext">Featured Event</p>
-        <a
-          href="https://ignite-summit.org/2025/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="event-featured__banner pt-5"
-        >
-          <picture>
-            <source srcSet="/images/promos/ignite-Summit-call-for-speakers.png" media="(max-width: 767px)" />
-            <img
-              src="/images/promos/ignite-Summit-call-for-speakers.png"
-              alt="Ignite Summit call for speakers"
-            />
-          </picture>
-        </a>
-      </section>
-
-      <section className="evsummit container" id="summit">
-        <div className="evsummit__info flexi pt-5">
-          <div className="evsummit__logo">
-            <img src="/img/events/ignite-summit-logo.svg" alt="" />
-          </div>
-          <div className="evsummit__descr">
-            <h2 className="h3">Apache Ignite Summit</h2>
-            <p className="h5 pt-2">
-              This virtual conference will feature speakers from industry-leading companies <br />
-              and hundreds of participants from all over the world.
-            </p>
-          </div>
-        </div>
-        <div className="evsummit__twobanners pt-5">
-          <a
-            href="https://ignite-summit.org/2025/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-7.png" alt="" />
-          </a>
-          <a
-            href="https://ignite-summit.org/2023-june/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-5.jpg" alt="" />
-          </a>
-          <a
-            href="https://ignite-summit.org/2022-november/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-4.jpg" alt="" />
-          </a>
-          <a
-            href="https://ignite-summit.org/2022-june/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-3.jpg" alt="" />
-          </a>
-          <a
-            href="https://www.youtube.com/playlist?list=PLMc7NR20hA-JvgLWtvp2R9tEnD5vlp9l0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-1.jpg" alt="" />
-          </a>
-          <a
-            href="https://www.youtube.com/playlist?list=PLMc7NR20hA-KF8c_hVICKpzKnWkjzfC2V"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="evsummit__twobannerslink"
-          >
-            <img src="/img/events/banner-bott-2.jpg" alt="" />
-          </a>
-        </div>
-      </section>
-
-      <section className="event-planet" id="meetups">
-        <div className="container">
-          <div className="event-planet__wrap flexi">
-            <div className="event-planet__main">
-              <h2 className="h3 pb-1">Apache Ignite Meetups Worldwide</h2>
-              <p className="h5 pt-5">
-                Meet the community — developers, experts, and practitioners — face-to-face, virtually, or onsite in your city.
+            <div className={styles.upcomingContent}>
+              <span className={styles.upcomingType}>{event.type}</span>
+              <h3 className="h5">{event.title}</h3>
+              <p className={styles.upcomingMeta}>
+                <span>{event.time}</span>
+                <span>{event.location}</span>
               </p>
+              <p className={clsx(styles.upcomingDescription, 'pb-3')}>{event.description}</p>
+              <a
+                className="button"
+                href={event.link}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Register Now
+              </a>
             </div>
-            <div className="event-planet__pic">
-              <img src="/img/events/b4-world.svg" alt="" />
-            </div>
-          </div>
-        </div>
-      </section>
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+}
 
-      <section className="event-virtual container" id="virtual">
-        <div className="eventvirt flexi">
-          <div className="eventvirt__left">
-            <h3 className="h4">Virtual Apache Ignite Meetup</h3>
-            <p className="pt-2">
-              Join Ignite users, developers, committers, contributors, and architects from all over the world and get
-              access to the online talks and presentations by Apache Ignite experts and practitioners.
-            </p>
-          </div>
-          <div className="eventvirt__right">
+function SummitSection() {
+  return (
+    <Section id="summit" className={styles.summit}>
+      <div className={clsx(styles.summitHeader, 'flexi')}>
+        <div className={styles.summitLogo}>
+          <img src="/img/events/ignite-summit-logo.svg" alt="Ignite Summit" />
+        </div>
+        <div className={styles.summitInfo}>
+          <h2 className="h3">Apache Ignite Summit</h2>
+          <p className="h5 pt-2">
+            The annual virtual conference featuring speakers from industry-leading companies
+            and hundreds of participants from around the world.
+          </p>
+        </div>
+      </div>
+      <div className={styles.summitGrid}>
+        {pastSummits.map((summit) => (
+          <a
+            key={summit.year}
+            href={summit.link}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.summitCard}
+          >
+            <img src={summit.image} alt={summit.title} />
+            <span className={styles.summitYear}>{summit.year}</span>
+          </a>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function MeetupsSection() {
+  return (
+    <Section id="meetups" className={styles.meetups}>
+      <div className={clsx(styles.meetupsHeader, 'flexi')}>
+        <div className={styles.meetupsContent}>
+          <h2 className="h3">Virtual Apache Ignite Meetup</h2>
+          <p className="h5 pt-3">
+            Join Ignite users, developers, committers, and architects from around the world.
+            Access online talks and presentations by Apache Ignite experts and practitioners.
+          </p>
+          <div className={styles.meetupsActions}>
             <a
               className="button"
-              href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/"
+              href="https://www.meetup.com/apache-ignite-virtual-meetup/"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
             >
               Join Virtual Meetup
             </a>
           </div>
         </div>
+        <div className={styles.meetupsImage}>
+          <img src="/img/events/b4-world.svg" alt="Worldwide Meetups" />
+        </div>
+      </div>
+    </Section>
+  );
+}
 
-        <div className="event-virtbot">
-          <div className="event-virtbot__col">
-            <h4 className="h4">Recordings Of Past Meetups</h4>
-            <p className="pt-2">
-              Find a collection of past Virtual Apache Ignite Meetup <br />
-              presentations, talks, and webinars.
-            </p>
-          </div>
-          <div className="event-virtbot__col event-virtbot__col--long">
-            <h4 className="h4">Upcoming Virtual Meetup</h4>
-            <div className="event-dynamicsect">
-              <h3 className="fz20">
-                Join our group and don't <br />
-                miss an upcoming virtual event
-              </h3>
-            </div>
-          </div>
-          <div className="event-virtbot__col">
-            <div className="event-recording pb-2">
-              <a
-                href="https://www.youtube.com/watch?v=f2ArcJPH4iU&list=PLMc7NR20hA-LQ0GR1QW5SDQflMOuPUqDQ&index=1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-recorditem videoscr glightbox"
-              >
-                <img
-                  className="event-recpic"
-                  src="https://img.youtube.com/vi/f2ArcJPH4iU/maxresdefault.jpg"
-                  alt=""
-                />
-              </a>
-              <a
-                href="https://www.youtube.com/watch?v=lCiZ3x8IRvI&list=PLMc7NR20hA-LQ0GR1QW5SDQflMOuPUqDQ&index=2"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-recorditem videoscr glightbox"
-              >
-                <img
-                  className="event-recpic"
-                  src="https://img.youtube.com/vi/lCiZ3x8IRvI/maxresdefault.jpg"
-                  alt=""
-                />
-              </a>
-              <a
-                href="https://www.youtube.com/watch?v=7UjENQBFvIQ&list=PLMc7NR20hA-LQ0GR1QW5SDQflMOuPUqDQ&index=3"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="event-recorditem videoscr glightbox"
-              >
-                <img
-                  className="event-recpic"
-                  src="https://img.youtube.com/vi/7UjENQBFvIQ/maxresdefault.jpg"
-                  alt=""
-                />
-              </a>
-            </div>
+function HostEventSection() {
+  return (
+    <Section className={styles.hostEvent}>
+      <div className={clsx(styles.hostEventWrap, 'flexi')}>
+        <div className={styles.hostEventMain}>
+          <h2 className="h3">Share Your Ignite Experience</h2>
+          <p className="h5 pt-2">
+            Have you built something with Apache Ignite? Consider sharing your experience with the community.
+          </p>
+        </div>
+        <div className={styles.hostEventPic}>
+          <img src="/img/community/b8-img.svg" alt="Share your experience" />
+        </div>
+      </div>
+      <div className={styles.hostEventGrid}>
+        <article className={clsx(styles.hostEventCard, 'cardsimple')}>
+          <h3 className="h5">Present at a Virtual Meetup</h3>
+          <p>Share your use case, lessons learned, or technical deep-dive with the global Ignite community.</p>
+          <a href="mailto:dev@ignite.apache.org?subject=Virtual Meetup Presentation Proposal" className="button button--shadow">
+            Propose a Talk
+          </a>
+        </article>
+        <article className={clsx(styles.hostEventCard, 'cardsimple')}>
+          <h3 className="h5">Speak at Conferences</h3>
+          <p>Represent Apache Ignite at industry conferences. We can help with talk preparation and materials.</p>
+          <a href="mailto:dev@ignite.apache.org?subject=Conference Speaking Inquiry" className="button button--shadow">
+            Get in Touch
+          </a>
+        </article>
+        <article className={clsx(styles.hostEventCard, 'cardsimple')}>
+          <h3 className="h5">Write for the Blog</h3>
+          <p>Share technical articles, tutorials, or case studies on the Apache Ignite blog.</p>
+          <Link to="/community#contributing" className="button button--shadow">
+            Learn How
+          </Link>
+        </article>
+      </div>
+    </Section>
+  );
+}
+
+function PastEventsSection() {
+  return (
+    <Section id="past" className={styles.past}>
+      <p className="capstext">Past Events</p>
+      <h2 className="h3 pt-2">Recent Community Events</h2>
+      <p className={styles.pastDescription}>
+        Browse past virtual meetups and community events. Visit our{' '}
+        <a href="https://www.meetup.com/apache-ignite-virtual-meetup/events/past/" target="_blank" rel="noreferrer">
+          Meetup page
+        </a>{' '}
+        for the complete archive.
+      </p>
+      {pastEvents.length > 0 ? (
+        <div className={styles.pastGrid}>
+          {pastEvents.map((event) => (
             <a
-              className="event-recbutton button button--shadow"
-              href="https://www.youtube.com/playlist?list=PLMc7NR20hA-LQ0GR1QW5SDQflMOuPUqDQ"
+              key={event.id}
+              href={event.link}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noreferrer"
+              className={clsx(styles.pastCard, 'cardsimple')}
             >
-              <i>
-                <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8.71423 4.99993L0.142805 9.94865L0.142805 0.0512134L8.71423 4.99993Z" />
-                </svg>
-              </i>
-              <span>Watch Virtual Meetup videos</span>
+              <span className={styles.pastDate}>{event.date}</span>
+              <h4 className="h5">{event.title}</h4>
+              <span className={styles.pastLocation}>{event.location}</span>
             </a>
-          </div>
-          <div className="event-virtbot__col">
-            <img className="event-dynamicsect__pic" src="/img/events/logo-meetup.svg" alt="" />
-            <a
-              className="button button--shadow event-recmorebutton"
-              href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn more
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="eventyoucity container">
-        <h2 className="h4">Apache Ignite Meetups In Your City</h2>
-        <div className="eventyoucity__wrap pt-5">
-          <article className="eventyoucity__item">
-            <div className="eventyoucity__icon">
-              <img src="/img/events/flag-uk.svg" alt="" />
-            </div>
-            <div className="eventyoucity__town h5">
-              <strong>London</strong>
-              <span>Apache Ignite Meetup</span>
-            </div>
-            <div className="eventyoucity__action">
-              <a
-                className="button button--shadow"
-                href="https://www.meetup.com/Apache-Ignite-London/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img/events/icon-plus.svg" alt="" />
-                <span>Join</span>
-              </a>
-            </div>
-          </article>
-          <article className="eventyoucity__item">
-            <div className="eventyoucity__icon">
-              <img src="/img/events/flag-ru.svg" alt="" />
-            </div>
-            <div className="eventyoucity__town h5">
-              <strong>St.Petersburg</strong>
-              <span>Apache Ignite Meetup</span>
-            </div>
-            <div className="eventyoucity__action">
-              <a
-                className="button button--shadow"
-                href="https://www.meetup.com/St-Petersburg-Apache-Ignite-Meetup/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img/events/icon-plus.svg" alt="" />
-                <span>Join</span>
-              </a>
-            </div>
-          </article>
-          <article className="eventyoucity__item">
-            <div className="eventyoucity__icon">
-              <img src="/img/events/flag-ru.svg" alt="" />
-            </div>
-            <div className="eventyoucity__town h5">
-              <strong>Moscow</strong>
-              <span>Apache Ignite Meetup</span>
-            </div>
-            <div className="eventyoucity__action">
-              <a
-                className="button button--shadow"
-                href="https://www.meetup.com/Moscow-Apache-Ignite-Meetup/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img/events/icon-plus.svg" alt="" />
-                <span>Join</span>
-              </a>
-            </div>
-          </article>
-          <article className="eventyoucity__last">
-            <p className="fz20 pb-3">Start an onsite Apache Ignite Meetup in your city.</p>
-            <small>Take the first step.</small>
-            <small>
-              Send us a note to <br />
-              <a href="mailto:dev@ignite.apache.org">dev@ignite.apache.org</a> <br />
-              and we'll see what can be done.
-            </small>
-          </article>
-        </div>
-      </section>
-
-      <section className="eventupcoming container" id="upcoming">
-        <div className="capstext pb-1">Upcoming Events Schedule</div>
-        <div className="eventupcoming__wrap py-4">
-          <h2 className="h4 pb-4">Offline events (3)</h2>
-
-          <article className="eventcomingitem flexi">
-            <div className="eventcomingitem__left">
-              <p className="eventcomingitem__num">8</p>
-              <p className="eventcomingitem__month">OCTOBER</p>
-              <p className="eventcomingitem__year pt-3">2023</p>
-            </div>
-            <div className="eventcomingitem__main">
-              <p className="eventcomingitem__title h5">
-                Scalable Distributed Computing with Groovy Using Apache Ignite
-              </p>
-              <a
-                className="eventcomingitem__more"
-                href="https://communityovercode.org/schedule-list/#GR008"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn more details
-              </a>
-            </div>
-            <div className="eventcomingitem__right">
-              <div className="eventcomingitem__mic">
-                <div className="eventcomingitem__speaker">Jeremy Meyer</div>
-              </div>
-              <div className="eventcomingitem__loc">
-                <div className="eventcomingitem__loctitle">Community Over Code</div>
-                <div className="eventcomingitem__address">Halifax, Canada</div>
-              </div>
-            </div>
-          </article>
-
-          <article className="eventcomingitem flexi">
-            <div className="eventcomingitem__left">
-              <p className="eventcomingitem__num">8</p>
-              <p className="eventcomingitem__month">OCTOBER</p>
-              <p className="eventcomingitem__year pt-3">2023</p>
-            </div>
-            <div className="eventcomingitem__main">
-              <p className="eventcomingitem__title h5">
-                Whiskey Clustering with Apache Groovy and Apache Ignite
-              </p>
-              <a
-                className="eventcomingitem__more"
-                href="https://communityovercode.org/schedule-list/#GR007"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn more details
-              </a>
-            </div>
-            <div className="eventcomingitem__right">
-              <div className="eventcomingitem__mic">
-                <div className="eventcomingitem__speaker">Paul King</div>
-              </div>
-              <div className="eventcomingitem__loc">
-                <div className="eventcomingitem__loctitle">Community Over Code</div>
-                <div className="eventcomingitem__address">Halifax, Canada</div>
-              </div>
-            </div>
-          </article>
-
-          <article className="eventcomingitem flexi">
-            <div className="eventcomingitem__left">
-              <p className="eventcomingitem__num">9</p>
-              <p className="eventcomingitem__month">OCTOBER</p>
-              <p className="eventcomingitem__year pt-3">2023</p>
-            </div>
-            <div className="eventcomingitem__main">
-              <p className="eventcomingitem__title h5">
-                Enhancing Apache Ignite 3.0 with the Power of Open-Source
-              </p>
-              <a
-                className="eventcomingitem__more"
-                href="https://communityovercode.org/schedule-list/#BDC006"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn more details
-              </a>
-            </div>
-            <div className="eventcomingitem__right">
-              <div className="eventcomingitem__mic">
-                <div className="eventcomingitem__speaker">Stanislav Lukyanov</div>
-              </div>
-              <div className="eventcomingitem__loc">
-                <div className="eventcomingitem__loctitle">Community Over Code</div>
-                <div className="eventcomingitem__address">Halifax, Canada</div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="eventspast container jsTabWrap" id="past">
-        <h3 className="capstext pb-5">Past Events</h3>
-        <div className="eventspast__tablinks flexi">
-          {years.map((year) => (
-            <button
-              key={year}
-              className={`eventpast__link ${activeYear === year ? 'active' : ''}`}
-              data-tablink={`e${year}`}
-              onClick={() => setActiveYear(year)}
-            >
-              {year}
-            </button>
           ))}
         </div>
-        <div className="eventspast__tabs">{years.map((year) => renderYearEvents(year))}</div>
-      </section>
+      ) : (
+        <div className={styles.noEvents}>
+          <p>
+            Visit our{' '}
+            <a href="https://www.meetup.com/apache-ignite-virtual-meetup/events/past/" target="_blank" rel="noreferrer">
+              Meetup page
+            </a>{' '}
+            to browse past events.
+          </p>
+        </div>
+      )}
+    </Section>
+  );
+}
+
+function CTASection() {
+  return (
+    <Section className={styles.cta}>
+      <div className={clsx(styles.ctaWrap, 'flexi')}>
+        <div className={styles.ctaMain}>
+          <h2 className="h3">Stay Connected</h2>
+          <p className="h5 pt-2">
+            Join our mailing list to receive announcements about upcoming events and community news.
+          </p>
+        </div>
+        <div className={styles.ctaActions}>
+          <a
+            className="button"
+            href="https://www.meetup.com/apache-ignite-virtual-meetup/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Join Meetup Group
+          </a>
+          <Link className="button button--shadow" to="/community#channels">
+            Subscribe to Mailing List
+          </Link>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+export default function EventsPage(): ReactNode {
+  return (
+    <Layout>
+      <Head>
+        <title>Apache Ignite Events - Meetups, Summit, Conferences</title>
+        <meta
+          name="description"
+          content="Join Apache Ignite community events: virtual meetups, Ignite Summit, and conferences. Connect with developers and learn from Ignite experts."
+        />
+        <link rel="canonical" href="https://ignite.apache.org/events" />
+        <meta property="og:title" content="Apache Ignite Events - Meetups, Summit, Conferences" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ignite.apache.org/events" />
+        <meta property="og:image" content="/img/og-pic.png" />
+        <meta
+          property="og:description"
+          content="Join Apache Ignite community events: virtual meetups, Ignite Summit, and conferences."
+        />
+      </Head>
+      <main>
+        <HeroSection />
+        <UpcomingEventsSection />
+        <SummitSection />
+        <MeetupsSection />
+        <HostEventSection />
+        <PastEventsSection />
+        <CTASection />
+      </main>
     </Layout>
   );
 }
