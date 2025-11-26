@@ -25,7 +25,7 @@ const pastSummits = [
   {
     year: '2025',
     title: 'Ignite Summit 2025',
-    image: '/img/events/banner-bott-7.png',
+    image: '/img/events/ignite-summit-2025-watch-1200х630_2.png',
     link: 'https://ignite-summit.org/2025/',
   },
   {
