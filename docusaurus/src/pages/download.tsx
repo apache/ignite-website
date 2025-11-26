@@ -1,35 +1,27 @@
 import React, {useState} from 'react';
+import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import CodeBlock from '@theme/CodeBlock';
-import DownloadTable from '@site/src/components/Download/DownloadTable';
-import MirrorSelector from '@site/src/components/Download/MirrorSelector';
-import DockerTable from '@site/src/components/Download/DockerTable';
-import VerificationGuide from '@site/src/components/Download/VerificationGuide';
+import QuickDownload from '@site/src/components/Download/QuickDownload';
+import DownloadSelector from '@site/src/components/Download/DownloadSelector';
+import CollapsibleSection from '@site/src/components/Download/CollapsibleSection';
 import {
-  ignite3SourceReleases,
-  ignite2SourceReleases,
-  ignite3BinaryReleases,
-  ignite2BinaryReleases,
-  ignite2SlimReleases,
-  dockerImages,
   extensionSourceReleases,
   extensionBinaryReleases,
   springBootDependencies,
 } from '@site/src/data/downloads';
 import styles from './download.module.css';
 
+const DOCS_BASE_URL = 'https://ignite.apache.org/docs/ignite3/3.1.0';
+
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');
-
-  const handleMirrorChange = (newMirror: string) => {
-    setPreferredMirror(newMirror);
-  };
 
   return (
     <Layout
       title="Download - Apache Ignite"
-      description="Download Apache Ignite here and install in your environment. It's for free – just select from one of the available options and download.">
+      description="Download Apache Ignite and start building distributed applications. Get the latest binary, source code, or Docker images.">
       <Head>
         <link rel="canonical" href="https://ignite.apache.org/download" />
         <meta property="og:title" content="Download - Apache Ignite" />
@@ -38,15 +30,21 @@ export default function DownloadPage(): JSX.Element {
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"
-          content="Download Apache Ignite here and install in your environment. It's for free – just select from one of the available options and download."
+          content="Download Apache Ignite and start building distributed applications. Get the latest binary, source code, or Docker images."
         />
       </Head>
 
-      <section className={`innerhero ${styles.downloadHero}`}>
+      {/* Hero Section */}
+      <section className="innerhero">
         <div className="container innerhero__cont">
           <div className="innerhero__main">
             <div className="innerhero__pre pb-3">Apache Ignite</div>
-            <h1 className={`h1 innerhero__h1 innerhero__mega ${styles.downloadTitle}`}>Downloads</h1>
+            <h1 className="h1 innerhero__h1">Downloads</h1>
+            <div className="innerhero__descr pt-2 h5">
+              Get Apache Ignite and start building
+              <br />
+              distributed applications
+            </div>
           </div>
           <img
             className="innerhero__pic innerhero__pic--download"
@@ -56,184 +54,218 @@ export default function DownloadPage(): JSX.Element {
         </div>
       </section>
 
-      <section className={`container pb-5 ${styles.downloadtitle}`}>
-        <p>
-          Download Apache Ignite and install in your environment.
-          <br />
-          Select from one of the available options.
-        </p>
-      </section>
+      {/* Quick Download - Featured Ignite 3 */}
+      <QuickDownload />
 
-      <section className={`cmtynavblock jsNavBlock ${styles.cmtynavblockDownwrap}`}>
-        <div className="container">
-          <ul className="cmtynavblock__list flexi cmtynavblock--down">
-            <li>
-              <a className="cmtynavblock__active" href="#source">
-                Source Releases
-              </a>
-            </li>
-            <li>
-              <a href="#binary">Binary Releases</a>
-            </li>
-            <li>
-              <a href="#docker">
-                Docker and <br />
-                Cloud Images
-              </a>
-            </li>
-            <li>
-              <a href="#git">Git Repository</a>
-            </li>
-            <li>
-              <a href="#extensions">Extensions</a>
-            </li>
-            <li>
-              <a href="#party3rd">3rd Party Binaries</a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section className={`${styles.downloadSrc} container`} id="source">
-        <h2 className="capstext pb-5">SOURCE RELEASES</h2>
-
-        <DownloadTable
-          ignite3Releases={ignite3SourceReleases}
-          ignite2Releases={ignite2SourceReleases}
-          type="source"
-          preferredMirror={preferredMirror}
-        />
-
-        <div className={`${styles.downloadSrcBottom} flexi pt-5`}>
-          <div className={styles.downloadSrcLeft}>
-            <p>
-              If you are looking for an earlier version of Apache Ignite, please find it in the archive.
-              If you encounter a problem with the selected mirror, please choose another one. If primary
-              mirrors are not reachable, switch to backup servers added to the end of the list.
-            </p>
-          </div>
-          <div className={styles.downloadSrcRight}>
-            <MirrorSelector onMirrorChange={handleMirrorChange} />
-          </div>
-        </div>
-      </section>
-
-      <section className={`${styles.downloadBin} container`} id="binary">
-        <h2 className="capstext">BINARY RELEASES</h2>
-
-        <div className={`${styles.downloadBinHeader} pt-4 pb-5`}>
-          <p>
-            Binary release packages are provided for your convenience and not considered as primary release
-            artifacts of the ASF. It's recommended to verify a release downloadable, following{' '}
-            <a href="#verify">this guidelines.</a> For more information about Apache release policy see{' '}
-            <a href="http://www.apache.org/dev/release.html#what" target="_blank" rel="noopener noreferrer">
-              What is a Release?
-            </a>
+      {/* Download Options - Ignite 3 */}
+      <section className={`${styles.downloadSection} container`} id="ignite3">
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Choose Your Installation Method</h2>
+          <p className={styles.sectionDescription}>
+            Select how you want to install Apache Ignite 3. Binary packages are recommended for most
+            users. Source releases are available for building from source.
           </p>
         </div>
 
-        <DownloadTable
-          ignite3Releases={ignite3BinaryReleases}
-          ignite2Releases={ignite2BinaryReleases}
-          type="binary"
-          preferredMirror={preferredMirror}
-        />
+        <DownloadSelector variant="ignite3" preferredMirror={preferredMirror} />
 
-        <p className="pt-5">
-          If you are looking for previous release versions of Apache Ignite, please have a look in the{' '}
-          <a href="https://archive.apache.org/dist/ignite" target="_blank" rel="noopener noreferrer">
-            archive
-          </a>
-          .
+        <div className={styles.archiveNote}>
+          <p>
+            Looking for an older version?{' '}
+            <a href="https://archive.apache.org/dist/ignite" target="_blank" rel="noopener noreferrer">
+              Browse the archive
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* Verification Guide - Collapsed */}
+      <CollapsibleSection id="verify" title="VERIFY YOUR DOWNLOAD" defaultOpen={false}>
+        <div className={styles.verifyContent}>
+          <p>
+            It is essential to verify the integrity of downloaded files. Verification ensures the
+            file was not corrupted during download and that it was released by the Apache Ignite
+            project.
+          </p>
+
+          <h4>Using PGP Signature</h4>
+          <CodeBlock language="bash">
+            {`# Download the KEYS file
+wget https://downloads.apache.org/ignite/KEYS
+
+# Import the keys
+gpg --import KEYS
+
+# Verify the signature
+gpg --verify apache-ignite-*.zip.asc apache-ignite-*.zip`}
+          </CodeBlock>
+
+          <h4>Using SHA512 Checksum</h4>
+          <CodeBlock language="bash">
+            {`# Download the SHA512 file
+wget https://downloads.apache.org/ignite/3.1.0/apache-ignite-3.1.0-src.zip.sha512
+
+# Verify the checksum
+sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
+          </CodeBlock>
+
+          <p className={styles.verifyLinks}>
+            <a
+              href="https://www.apache.org/info/verification.html"
+              target="_blank"
+              rel="noopener noreferrer">
+              Apache Verification Guide
+            </a>
+            {' | '}
+            <a
+              href="https://downloads.apache.org/ignite/KEYS"
+              target="_blank"
+              rel="noopener noreferrer">
+              Download KEYS File
+            </a>
+          </p>
+        </div>
+      </CollapsibleSection>
+
+      {/* Ignite 2 LTS */}
+      <CollapsibleSection
+        id="ignite2"
+        title="APACHE IGNITE 2 (LTS)"
+        subtitle="Long-term support release"
+        defaultOpen={false}>
+        <div className={styles.ltsNotice}>
+          <p>
+            Apache Ignite 2.x is the long-term support (LTS) version. It continues to receive
+            maintenance updates and is recommended for existing deployments. For new projects,
+            consider Apache Ignite 3.
+          </p>
+        </div>
+
+        <DownloadSelector variant="ignite2" preferredMirror={preferredMirror} />
+
+        <div className={styles.ltsExtras}>
+          <h4>Slim Binary Releases</h4>
+          <p>
+            Slim packages contain a minimal set of modules for reduced deployment size. Available
+            for Ignite 2.x only.
+          </p>
+        </div>
+      </CollapsibleSection>
+
+      {/* Extensions - Ignite 2 Only */}
+      <CollapsibleSection
+        id="extensions"
+        title="EXTENSIONS"
+        subtitle="Apache Ignite 2 Only"
+        defaultOpen={false}>
+        <p className={styles.extensionIntro}>
+          Extensions provide additional functionality for Apache Ignite 2.x, including cloud
+          discovery, Spring integration, and performance monitoring.
         </p>
-      </section>
 
-      <section className={`${styles.downloadslim} container`}>
-        <h3 className="h5 pb-2">Slim binary releases</h3>
-        <DownloadTable ignite2Releases={ignite2SlimReleases} type="slim" preferredMirror={preferredMirror} />
-      </section>
+        <div className={styles.extensionList}>
+          {extensionSourceReleases.map((ext) => (
+            <div key={ext.name} className={styles.extensionItem}>
+              <div className={styles.extensionName}>{ext.displayName}</div>
+              <div className={styles.extensionVersion}>v{ext.version}</div>
+              <div className={styles.extensionLinks}>
+                <a href={ext.sourceUrl} target="_blank" rel="noopener noreferrer">
+                  Source
+                </a>
+                {extensionBinaryReleases.find((b) => b.name === ext.name) && (
+                  <a
+                    href={extensionBinaryReleases.find((b) => b.name === ext.name)?.binaryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Binary
+                  </a>
+                )}
+                {ext.guide && (
+                  <a href={ext.guide} target="_blank" rel="noopener noreferrer">
+                    Guide
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
 
-      <section className={`${styles.downloadDocker} container`} id="docker">
-        <h2 className="capstext pb-5">DOCKER AND CLOUD IMAGES</h2>
-        <DockerTable images={dockerImages} />
-      </section>
+        <h4 className={styles.springBootTitle}>Spring Boot Auto-Configuration</h4>
+        <CodeBlock language="xml">{springBootDependencies}</CodeBlock>
+      </CollapsibleSection>
 
-      <VerificationGuide />
+      {/* Additional Resources */}
+      <section className={styles.resourcesSection}>
+        <div className="container">
+          <h2 className={styles.sectionTitle}>Additional Resources</h2>
 
-      <section className={`${styles.downfooter} container`} id="git">
-        <h2 className="capstext pb-3">GIT REPOSITORY</h2>
-        <CodeBlock language="bash" className={styles.nomargin}>
-          {`$ git clone https://gitbox.apache.org/repos/asf/ignite`}
-        </CodeBlock>
+          <div className={styles.resourcesGrid}>
+            {/* Git Repositories */}
+            <div className={styles.resourceCard}>
+              <h3>Git Repositories</h3>
+              <div className={styles.gitCommands}>
+                <div className={styles.gitCommand}>
+                  <span className={styles.gitLabel}>Ignite 3</span>
+                  <code>git clone https://github.com/apache/ignite-3.git</code>
+                </div>
+                <div className={styles.gitCommand}>
+                  <span className={styles.gitLabel}>Ignite 2</span>
+                  <code>git clone https://github.com/apache/ignite.git</code>
+                </div>
+              </div>
+            </div>
 
-        <div className={`${styles.downfooterSpacer} pt-5 pb-5`}></div>
-      </section>
-
-      <section className={`${styles.downloadExtensions} container`} id="extensions">
-        <h2 className="capstext pb-3">EXTENSIONS</h2>
-
-        <h3 className="h5 pb-2">Source Releases</h3>
-        <DownloadTable extensions={extensionSourceReleases} type="extension" preferredMirror={preferredMirror} />
-
-        <h3 className="h5 pt-5 pb-2">Binary Releases</h3>
-        <p className="pb-2">
-          Binary release packages are provided for your convenience and not considered as primary release
-          artifacts of the ASF. It's recommended to verify a release downloadable, following{' '}
-          <a href="#verify">this guidelines</a>. For more information about Apache release policy see{' '}
-          <a
-            href="https://www.apache.org/legal/release-policy.html#what"
-            target="_blank"
-            rel="noopener noreferrer">
-            What is a Release?
-          </a>
-        </p>
-        <DownloadTable extensions={extensionBinaryReleases} type="extension" preferredMirror={preferredMirror} />
-
-        <p className="pt-2 pb-2">Spring Boot extensions:</p>
-        <CodeBlock language="xml" className={styles.nomargin}>
-          {springBootDependencies}
-        </CodeBlock>
-      </section>
-
-      <section className={`${styles.party3rd} container`} id="party3rd">
-        <h2 className="capstext">3RD PARTY BINARIES</h2>
-        <div className={`${styles.party3rdWrap} pt-5 flexi`}>
-          <div className={styles.party3rdLeft}>
-            <p className="pb-2">
-              This is a list of 3rd party binary packages based on Apache Ignite. The Apache Ignite project
-              does not endorse or maintain any 3rd party binary packages.
-            </p>
-            <p>
+            {/* Archive */}
+            <div className={styles.resourceCard}>
+              <h3>Release Archive</h3>
+              <p>Access all previous versions of Apache Ignite.</p>
               <a
-                href="https://www.gridgain.com/resources/download#communityEdition"
+                href="https://archive.apache.org/dist/ignite"
                 target="_blank"
-                rel="noopener noreferrer">
-                GridGain Community Edition
-              </a>{' '}
-              is a binary build of Apache Ignite created by GridGain, which includes optional LGPL
-              dependencies, such as Hibernate L2 cache integration and Geospatial Indexing, as well as bug
-              fixes and features which may be included into the future official Apache Ignite releases.
+                rel="noopener noreferrer"
+                className={styles.resourceLink}>
+                Browse Archive
+              </a>
+            </div>
+
+            {/* 3rd Party */}
+            <div className={styles.resourceCard}>
+              <h3>3rd Party Distributions</h3>
+              <p>
+                <a
+                  href="https://www.gridgain.com/resources/download#communityEdition"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  GridGain Community Edition
+                </a>{' '}
+                includes LGPL dependencies like Hibernate L2 cache and Geospatial Indexing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ready to Start CTA */}
+      <section className={styles.readyToStart}>
+        <div className={clsx('container', 'flexi')}>
+          <div className={styles.readyToStartMain}>
+            <p className={clsx(styles.readyToStartTitle, 'h3')}>
+              <strong>Ready To Start?</strong>
+            </p>
+            <p className="h5 pt-2">
+              Discover our quick start guides and build your first
+              <br />
+              application in 5-10 minutes
             </p>
           </div>
-          <div className={styles.party3rdRight}>
-            <p>
-              GridGain also provides his own{' '}
-              <a
-                href="http://www.gridgainsystems.com/nexus/content/repositories/external"
-                target="_blank"
-                rel="noopener noreferrer">
-                GridGain Maven Repository
-              </a>{' '}
-              containing Apache Ignite LGPL artifacts such as ignite-hibernate.
-            </p>
-            <p>
-              Please note that artifacts located at GridGain Maven Repository provided for convenience and are
-              NOT official Apache Ignite artifacts.
-            </p>
-            <p>
-              If you would like to provide your own edition of Apache Ignite here, please send email to{' '}
-              <a href="mailto:dev@ignite.apache.org">Ignite dev list.</a>
-            </p>
+          <div className={styles.readyToStartAction}>
+            <a
+              className="button"
+              href={`${DOCS_BASE_URL}/getting-started/quick-start`}
+              target="_blank"
+              rel="noreferrer">
+              Quick Start Guide
+            </a>
           </div>
         </div>
       </section>
