@@ -14,6 +14,14 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
+  // Enable Mermaid diagrams in Markdown
+  markdown: {
+    mermaid: true,
+  },
+
+  // Mermaid theme
+  themes: ['@docusaurus/theme-mermaid'],
+
   // Set the production url of your site here
   url: 'https://ignite.apache.org',
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -49,6 +57,8 @@ const config: Config = {
           blogDescription: 'News, updates, and technical articles about Apache Ignite',
           blogSidebarCount: 'ALL',
           blogSidebarTitle: 'All Posts',
+          authorsMapPath: 'authors.yml',
+          onInlineAuthors: 'ignore',
           feedOptions: {
             type: 'all',
             title: 'Apache Ignite Blog',
