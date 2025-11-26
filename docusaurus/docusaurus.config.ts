@@ -191,6 +191,11 @@ const config: Config = {
           ],
         },
         {
+          label: 'Blog',
+          to: '/blog/',
+          position: 'left',
+        },
+        {
           label: 'Docs',
           href: 'https://ignite-dev.gridgain.com/docs/3.1.0/',
           position: 'left',

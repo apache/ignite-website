@@ -360,6 +360,7 @@ export const mainNavItems = [
   { label: 'Use Cases', key: 'useCases', href: '/use-cases', menu: useCasesMenu },
   { label: 'Community', key: 'community', href: '/community', menu: communityMenu },
   { label: 'Resources', key: 'resources', href: '/resources', menu: resourcesMenu },
+  { label: 'Blog', href: '/blog/' },
   { label: 'Docs', href: 'https://ignite-dev.gridgain.com/docs/3.1.0/', external: true },
 ] as const;
 
@@ -466,6 +467,7 @@ export const footerSections = {
       { label: 'Community', href: '/community' },
       { label: 'Resources', href: '/resources' },
       { label: 'Events', href: '/events' },
+      { label: 'Blog', href: '/blog/' },
     ],
   },
   contact: {
