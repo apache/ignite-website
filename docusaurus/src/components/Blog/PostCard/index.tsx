@@ -92,7 +92,9 @@ export default function PostCard({
             <span className={styles.postCard__category}>
               {effectiveCategory}
             </span>
-            <span className={styles.postCard__separator}>&#8226;</span>
+          </div>
+
+          <div className={styles.postCard__dateLine}>
             <time dateTime={date} className={styles.postCard__date}>
               {formatDate(date, formattedDate)}
             </time>
@@ -114,23 +116,25 @@ export default function PostCard({
         )}
       </Link>
 
-      {author && variant !== 'compact' && variant !== 'related' && (
-        <div className={styles.postCard__author}>
-          {author.imageURL && (
-            <img
-              src={author.imageURL}
-              alt={author.name}
-              className={styles.postCard__authorImage}
-            />
-          )}
-          <div className={styles.postCard__authorInfo}>
-            <span className={styles.postCard__authorName}>{author.name}</span>
-            {author.title && (
-              <span className={styles.postCard__authorTitle}>{author.title}</span>
+      <div className={styles.postCard__footer}>
+        {author && variant !== 'compact' && variant !== 'related' && (
+          <div className={styles.postCard__author}>
+            {author.imageURL && (
+              <img
+                src={author.imageURL}
+                alt={author.name}
+                className={styles.postCard__authorImage}
+              />
             )}
+            <div className={styles.postCard__authorInfo}>
+              <span className={styles.postCard__authorName}>{author.name}</span>
+              {author.title && (
+                <span className={styles.postCard__authorTitle}>{author.title}</span>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {tags && tags.length > 0 && variant === 'default' && (
         <div className={styles.postCard__tags}>

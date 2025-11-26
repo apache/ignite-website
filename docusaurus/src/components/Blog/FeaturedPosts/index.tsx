@@ -63,48 +63,25 @@ export default function FeaturedPosts({
     return null;
   }
 
-  const [mainPost, ...secondaryPosts] = featuredPosts;
-
   return (
     <section className={clsx(styles.featuredPosts, className)}>
       <div className="container">
         <div className={styles.featuredPosts__grid}>
-          {mainPost && (
-            <div className={styles.featuredPosts__main}>
-              <PostCard
-                title={mainPost.metadata.title}
-                permalink={mainPost.metadata.permalink}
-                date={mainPost.metadata.date}
-                formattedDate={mainPost.metadata.formattedDate}
-                readingTime={mainPost.metadata.readingTime}
-                description={mainPost.metadata.description}
-                authors={mainPost.metadata.authors}
-                tags={mainPost.metadata.tags}
-                category={mainPost.metadata.frontMatter?.category}
-                variant="featured"
-              />
-            </div>
-          )}
-
-          {secondaryPosts.length > 0 && (
-            <div className={styles.featuredPosts__secondary}>
-              {secondaryPosts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  title={post.metadata.title}
-                  permalink={post.metadata.permalink}
-                  date={post.metadata.date}
-                  formattedDate={post.metadata.formattedDate}
-                  readingTime={post.metadata.readingTime}
-                  description={post.metadata.description}
-                  authors={post.metadata.authors}
-                  tags={post.metadata.tags}
-                  category={post.metadata.frontMatter?.category}
-                  variant="default"
-                />
-              ))}
-            </div>
-          )}
+          {featuredPosts.map((post) => (
+            <PostCard
+              key={post.id}
+              title={post.metadata.title}
+              permalink={post.metadata.permalink}
+              date={post.metadata.date}
+              formattedDate={post.metadata.formattedDate}
+              readingTime={post.metadata.readingTime}
+              description={post.metadata.description}
+              authors={post.metadata.authors}
+              tags={post.metadata.tags}
+              category={post.metadata.frontMatter?.category}
+              variant="featured"
+            />
+          ))}
         </div>
       </div>
     </section>
