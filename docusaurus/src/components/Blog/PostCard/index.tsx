@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-export type PostCategory = 'release' | 'technical' | 'tutorial' | 'community';
+export type PostCategory = string;
 
 export interface PostCardProps {
   title: string;
@@ -27,23 +27,19 @@ export interface PostCardProps {
   className?: string;
 }
 
-const categoryLabels: Record<PostCategory, string> = {
-  release: 'Release',
-  technical: 'Technical',
-  tutorial: 'Tutorial',
-  community: 'Community',
-};
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
-function deriveCategory(tags?: Array<{ label: string }>): PostCategory {
-  if (!tags || tags.length === 0) return 'technical';
+function deriveCategory(tags?: Array<{ label: string }>): string {
+  if (!tags || tags.length === 0) return 'Technical';
 
-  const tagLabels = tags.map(t => t.label.toLowerCase());
+  const firstTag = tags[0].label.toLowerCase();
 
-  if (tagLabels.some(t => t.includes('release') || t === 'ignite')) return 'release';
-  if (tagLabels.some(t => t.includes('tutorial') || t.includes('guide'))) return 'tutorial';
-  if (tagLabels.some(t => t.includes('community') || t.includes('event'))) return 'community';
+  // Special case: "apache" tag means it's a release announcement
+  if (firstTag === 'apache') return 'Release';
 
-  return 'technical';
+  return capitalizeFirst(firstTag);
 }
 
 function formatReadingTime(minutes?: number): string {
@@ -93,13 +89,8 @@ export default function PostCard({
       <Link to={permalink} className={styles.postCard__link}>
         <header className={styles.postCard__header}>
           <div className={styles.postCard__meta}>
-            <span
-              className={clsx(
-                styles.postCard__category,
-                styles[`postCard__category--${effectiveCategory}`]
-              )}
-            >
-              {categoryLabels[effectiveCategory]}
+            <span className={styles.postCard__category}>
+              {effectiveCategory}
             </span>
             <span className={styles.postCard__separator}>&#8226;</span>
             <time dateTime={date} className={styles.postCard__date}>

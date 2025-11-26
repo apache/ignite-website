@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import PostCard, { type PostCardProps, type PostCategory } from '../PostCard';
+import PostCard, { type PostCategory } from '../PostCard';
 import styles from './styles.module.css';
 
 export interface BlogPost {

@@ -14,16 +14,19 @@ import type { CategoryKey, Category } from '../../components/Blog/CategoryFilter
 import type { PostCategory } from '../../components/Blog/PostCard';
 import styles from './styles.module.css';
 
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 function deriveCategory(tags?: Array<{ label: string }>): PostCategory {
-  if (!tags || tags.length === 0) return 'technical';
+  if (!tags || tags.length === 0) return 'Technical';
 
-  const tagLabels = tags.map((t) => t.label.toLowerCase());
+  const firstTag = tags[0].label.toLowerCase();
 
-  if (tagLabels.some((t) => t.includes('release') || t === 'ignite')) return 'release';
-  if (tagLabels.some((t) => t.includes('tutorial') || t.includes('guide'))) return 'tutorial';
-  if (tagLabels.some((t) => t.includes('community') || t.includes('event'))) return 'community';
+  // Special case: "apache" tag means it's a release announcement
+  if (firstTag === 'apache') return 'Release';
 
-  return 'technical';
+  return capitalizeFirst(firstTag);
 }
 
 function isCurrentPost(date: string): boolean {
@@ -66,25 +69,25 @@ function BlogListPageContent(props: Props): React.ReactElement {
   );
 
   const categories: Category[] = useMemo(() => {
-    const counts: Record<PostCategory, number> = {
-      release: 0,
-      technical: 0,
-      tutorial: 0,
-      community: 0,
-    };
+    const counts: Record<string, number> = {};
 
     blogPosts.forEach((post) => {
-      const category = post.metadata.frontMatter?.category || 'technical';
-      counts[category]++;
+      const category = post.metadata.frontMatter?.category || 'Technical';
+      counts[category] = (counts[category] || 0) + 1;
     });
+
+    const dynamicCategories = Object.entries(counts)
+      .map(([key, count]) => ({
+        key: key as CategoryKey,
+        label: key,
+        count,
+      }))
+      .sort((a, b) => b.count - a.count);
 
     return [
       { key: 'all' as CategoryKey, label: 'All Posts', count: blogPosts.length },
-      { key: 'release' as CategoryKey, label: 'Releases', count: counts.release },
-      { key: 'technical' as CategoryKey, label: 'Technical', count: counts.technical },
-      { key: 'tutorial' as CategoryKey, label: 'Tutorials', count: counts.tutorial },
-      { key: 'community' as CategoryKey, label: 'Community', count: counts.community },
-    ].filter((cat) => cat.key === 'all' || cat.count > 0);
+      ...dynamicCategories,
+    ];
   }, [blogPosts]);
 
   const filteredPosts = useMemo(() => {

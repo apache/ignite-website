@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-export type CategoryKey = 'all' | 'release' | 'technical' | 'tutorial' | 'community';
+export type CategoryKey = 'all' | string;
 
 export interface Category {
   key: CategoryKey;

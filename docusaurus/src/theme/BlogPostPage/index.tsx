@@ -38,13 +38,19 @@ function formatReadingTime(minutes?: number): string {
   return `${rounded} minute read`;
 }
 
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 function deriveCategory(tags?: Array<{ label: string }>): string {
   if (!tags || tags.length === 0) return 'Technical';
-  const tagLabels = tags.map((t) => t.label.toLowerCase());
-  if (tagLabels.some((t) => t.includes('release') || t === 'ignite')) return 'Release';
-  if (tagLabels.some((t) => t.includes('tutorial') || t.includes('guide'))) return 'Tutorial';
-  if (tagLabels.some((t) => t.includes('community') || t.includes('event'))) return 'Community';
-  return 'Technical';
+
+  const firstTag = tags[0].label.toLowerCase();
+
+  // Special case: "apache" tag means it's a release announcement
+  if (firstTag === 'apache') return 'Release';
+
+  return capitalizeFirst(firstTag);
 }
 
 function BlogPostPageContent({
