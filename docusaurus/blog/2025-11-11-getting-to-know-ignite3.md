@@ -9,6 +9,8 @@ tags: [technical, ignite, ignite3, featured]
 
 Apache Ignite 3 is a memory-first distributed SQL database platform that consolidates transactions, analytics, and compute workloads previously requiring separate systems. Built from the ground up over four years of development, it represents a complete departure from traditional caching solutions toward a unified distributed computing platform with microsecond latencies and collocated processing capabilities.
 
+<!-- truncate -->
+
 **Forget everything you knew about Apache Ignite.** Version 3.0 is a complete architectural rewrite that transforms Ignite from a caching platform into a memory-first distributed computing platform with microsecond latencies and collocated processing.
 
 ## Architectural Foundation: Schema-Driven Design

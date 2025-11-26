@@ -9,6 +9,8 @@ tags: [architecture, technical, ignite, ignite3]
 
 Your high-velocity application began with smart architectural choices: PostgreSQL for reliable transactions, Redis for fast cache access, and custom processing for domain-specific logic. These decisions powered early success and growth.
 
+<!-- truncate -->
+
 But success changes the game. Your system now handles thousands of events per second, and customers expect microsecond-level response times. The same architectural choices that enabled growth now create performance bottlenecks that compound with every additional event.
 
 **At high event volumes, data movement between systems becomes the primary performance constraint.**
