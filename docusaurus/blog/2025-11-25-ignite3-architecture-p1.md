@@ -336,8 +336,4 @@ Your winning architecture doesn't have to become your scaling limit. It can evol
 
 ---
 
-**[→ Continue with Part 2: Memory-First Architecture for High-Velocity Applications](ai3-arch-blog-2-memory-foundation.md)**  
-
----
-
 _Next: Part 2 explores how Apache Ignite’s memory-first architecture enables optimized event processing without compromising durability. This foundation makes true high-velocity performance possible._
