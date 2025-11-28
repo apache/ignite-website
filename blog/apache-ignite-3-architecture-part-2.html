@@ -354,6 +354,7 @@
                 </p>
                 <p><strong>Performance transformation: significant speed improvements with enterprise durability.</strong></p>
                 <hr />
+                <br />
                 <h3>The Event Processing Performance Challenge</h3>
                 <p><strong> Traditional Database Performance Under Load</strong></p>
                 <p>When applications process high event volumes, disk-based databases create predictable performance degradation:</p>
@@ -382,7 +383,9 @@ long totalTime = System.nanoTime() - startTime;
                   <li>10,000 events/sec × 15ms avg = 150 seconds processing time needed per second</li>
                 </ul>
                 <p><strong>The constraint</strong>: Disk I/O creates a performance ceiling on throughput regardless of CPU or memory.</p>
-                <p><strong>Memory-First Performance Results</strong></p>
+                <hr />
+                <br />
+                <h3><strong>Memory-First Performance Results</strong></h3>
                 <p><strong>Concrete performance improvement with Apache Ignite memory-first architecture:</strong></p>
                 <pre><code>// Event processing with memory-first architecture
 long startTime = System.nanoTime();
@@ -401,6 +404,7 @@ try (IgniteClient client = IgniteClient.builder().addresses("cluster:10800").bui
 long totalTime = System.nanoTime() - startTime;
 // Result: ~200-500 microseconds per event (20x+ faster than disk-based)
 </code></pre>
+                <br />
                 <p><strong>Real-world performance characteristics:</strong></p>
                 <ul>
                   <li><strong>10,000 events/sec processing</strong>: 0.5 seconds total vs 150 seconds with disk I/O</li>
@@ -408,6 +412,7 @@ long totalTime = System.nanoTime() - startTime;
                   <li><strong>Consistent performance</strong>: Sub-millisecond response times even during traffic spikes</li>
                   <li><strong>Resource utilization</strong>: Memory bandwidth becomes the scaling factor, not disk I/O waits</li>
                 </ul>
+                <hr />
                 <h3>Architecture Comparison: Disk-First vs Memory-First</h3>
                 <pre class="mermaid">flowchart LR
     subgraph "Disk-First Architecture"
@@ -442,10 +447,12 @@ long totalTime = System.nanoTime() - startTime;
                   <li><strong>Scalability</strong>: Memory bandwidth scales linearly vs disk I/O bottlenecks</li>
                 </ul>
                 <hr />
-                <h2>Memory-First Architecture Principles</h2>
+                <br />
+                <h3>Memory-First Architecture Principles</h3>
+                <br />
                 <h3>Off-Heap Memory Management</h3>
                 <p>Apache Ignite manages memory regions directly outside the JVM heap to eliminate garbage collection interference.</p>
-                <h4>Performance Benefits</h4>
+                <p><strong>Performance Benefits:</strong></p>
                 <ul>
                   <li><strong>Predictable Access Times</strong>: No Java GC pauses during event processing bursts</li>
                   <li><strong>Large Memory Utilization</strong>: Event data can consume large amounts of RAM without heap issues</li>
@@ -467,7 +474,8 @@ long totalTime = System.nanoTime() - startTime;
                 </ul>
                 <p><strong>The Evolution Solution</strong>: Instead of choosing between fast caches and durable databases, you get both performance characteristics in the same platform based on your specific data requirements.</p>
                 <hr />
-                <h2>Event Processing Performance Characteristics</h2>
+                <br />
+                <h3>Event Processing Performance Characteristics</h3>
                 <h3>Memory-First Operations</h3>
                 <p>Event processing benefits from memory-first operations that reduce traditional I/O bottlenecks:</p>
                 <p><strong>Architecture Benefits</strong>:</p>
@@ -488,8 +496,9 @@ long totalTime = System.nanoTime() - startTime;
                 </ul>
                 <p><strong>Key Advantage</strong>: Event processing continues at memory speeds while persistence happens in background threads.</p>
                 <hr />
-                <h2>B+ Tree Organization for Event Data</h2>
-                <h3>Event-Optimized Data Structures</h3>
+                <br />
+                <h3>B+ Tree Organization for Event Data</h3>
+                <p>Event-Optimized Data Structures</p>
                 <p>Apache Ignite organizes event data through specialized B+ tree variations optimized for time-series and event-driven access patterns:</p>
                 <p><strong>Event Processing Optimizations</strong>:</p>
                 <ul>
@@ -507,8 +516,9 @@ long totalTime = System.nanoTime() - startTime;
                   <li><strong>Recovery Guarantees</strong>: Event ordering maintained across failures</li>
                 </ul>
                 <hr />
-                <h2>Performance Characteristics at Event Scale</h2>
-                <h3>Memory-First Performance Profile</h3>
+                <br />
+                <h3>Performance Characteristics at Event Scale</h3>
+                <p>Memory-First Performance Profile</p>
                 <p><strong>Event Processing Characteristics</strong>:</p>
                 <ul>
                   <li><strong>Write Operations</strong>: Events commit to memory efficiently</li>
@@ -531,7 +541,9 @@ long totalTime = System.nanoTime() - startTime;
                 <p><strong>IoT Event Processing</strong>: Sensor data ingestion scales to device-native rates without sampling or queuing delays. Anomaly detection runs on live data streams rather than batch-processed snapshots.</p>
                 <p><strong>Gaming Backends</strong>: Player actions process immediately while leaderboards, achievements, and session state update concurrently. No delays between action and world state changes.</p>
                 <hr />
+                <br />
                 <h2>Foundation for High-Velocity Applications</h2>
+                <br />
                 <p>Memory-first architecture creates the performance foundation that makes high-velocity event processing practical:</p>
                 <p><strong>Eliminates Traditional Bottlenecks</strong>:</p>
                 <ul>
@@ -559,8 +571,8 @@ long totalTime = System.nanoTime() - startTime;
                 <br />
                 <p>
                   <em
-                    >Come back next Tuesday for part 3, where we will show you how flexible schema management enables operational evolution without the downtime and coordination overhead that traditional schema changes require. These
-                    capabilities are critical when managing high-velocity applications that can't tolerate processing interruptions.</em
+                    >Come back next Tuesday for Part 3, where we explain how flexible schema management lets systems evolve without downtime or complex coordination, and why these capabilities are essential for high-velocity applications
+                    that cannot afford processing interruptions.</em
                   >
                 </p>
               </div>
