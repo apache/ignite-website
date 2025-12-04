@@ -266,9 +266,7 @@ export default function ACIDTransactions(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/getting-started/quick-start"
             >
               Quick Start Guide
             </a>
@@ -283,9 +281,7 @@ export default function ACIDTransactions(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/transactions"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/develop/work-with-data/transactions"
             >
               Transactions Documentation
             </a>

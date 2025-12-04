@@ -41,7 +41,7 @@ export default function EventStreamProcessing(): JSX.Element {
               Enrich high-throughput event streams with consistent reference data
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="/docs/3.1.0/" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -199,9 +199,7 @@ export default function EventStreamProcessing(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/getting-started/quick-start"
             >
               Quick Start Guide
             </a>

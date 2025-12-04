@@ -13,7 +13,7 @@ import {
 } from '@site/src/data/downloads';
 import styles from './download.module.css';
 
-const DOCS_BASE_URL = 'https://ignite.apache.org/docs/ignite3/3.1.0';
+const DOCS_BASE_URL = '/docs/3.1.0';
 
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');
@@ -261,9 +261,7 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
           <div className={styles.readyToStartAction}>
             <a
               className="button"
-              href={`${DOCS_BASE_URL}/getting-started/quick-start`}
-              target="_blank"
-              rel="noreferrer">
+              href={`${DOCS_BASE_URL}/getting-started/quick-start`}>
               Quick Start Guide
             </a>
           </div>

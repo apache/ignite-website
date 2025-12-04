@@ -247,10 +247,8 @@ export default function AccessPatterns(): JSX.Element {
             </div>
             <div className="cardsimple__bottom">
               <a
-                href="https://ignite.apache.org/docs/3.0.0/developers-guide/table/colocation"
+                href="/docs/3.1.0/configure-and-operate/operations/colocation"
                 className="cardsimple__button button button--shadow"
-                target="_blank"
-                rel="noreferrer"
               >
                 Learn About Colocation
               </a>
@@ -271,9 +269,7 @@ export default function AccessPatterns(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/getting-started/quick-start"
             >
               Quick Start Guide
             </a>
@@ -288,9 +284,7 @@ export default function AccessPatterns(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/sql/sql-odbc-jdbc"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/api-reference/sql-only-apis/jdbc"
             >
               SQL and JDBC Documentation
             </a>

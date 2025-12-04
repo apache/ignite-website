@@ -7,7 +7,7 @@ import styles from './resources.module.css';
 
 // Data definitions
 // Note: Documentation links use full URLs because docs are hosted separately
-const DOCS_BASE_URL = 'https://ignite-dev.gridgain.com/docs/3.1.0';
+const DOCS_BASE_URL = '/docs/3.1.0';
 
 const gettingStartedLinks = [
   {
@@ -43,7 +43,7 @@ const documentationLinks = {
   ],
   architecture: [
     { title: 'Core Concepts', url: `${DOCS_BASE_URL}/understand/` },
-    { title: 'Installation Guides', url: `${DOCS_BASE_URL}/category/installation/` },
+    { title: 'Installation Guides', url: `${DOCS_BASE_URL}/configure-and-operate/installation/` },
     { title: 'Configuration & Monitoring', url: `${DOCS_BASE_URL}/configure-and-operate/` },
     { title: 'Ignite Wiki', url: 'https://cwiki.apache.org/confluence/display/IGNITE/', external: true },
   ],

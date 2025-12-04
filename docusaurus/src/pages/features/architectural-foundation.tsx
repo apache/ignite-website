@@ -85,10 +85,8 @@ export default function ArchitecturalFoundation(): JSX.Element {
 
         <div className="pt-4">
           <a
-            href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/transactions"
+            href="/docs/3.1.0/develop/work-with-data/transactions"
             className="button button--shadow"
-            target="_blank"
-            rel="noreferrer"
           >
             Read Transactions Documentation
           </a>
@@ -130,10 +128,8 @@ export default function ArchitecturalFoundation(): JSX.Element {
 
         <div className="pt-4">
           <a
-            href="https://ignite.apache.org/docs/ignite3/latest/administrators-guide/storage/distribution-zones"
+            href="/docs/3.1.0/sql/reference/language-definition/distribution-zones"
             className="button button--shadow"
-            target="_blank"
-            rel="noreferrer"
           >
             Read Distribution Zones Documentation
           </a>
@@ -199,10 +195,8 @@ export default function ArchitecturalFoundation(): JSX.Element {
             </div>
             <div className="cardsimple__bottom">
               <a
-                href="https://ignite.apache.org/docs/ignite3/latest/administrators-guide/storage/distribution-zones"
+                href="/docs/3.1.0/sql/reference/language-definition/distribution-zones"
                 className="cardsimple__button button button--shadow"
-                target="_blank"
-                rel="noreferrer"
               >
                 Learn More
               </a>
@@ -223,9 +217,7 @@ export default function ArchitecturalFoundation(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/getting-started/quick-start"
             >
               Quick Start Guide
             </a>

@@ -118,7 +118,7 @@ function FAQSection() {
               </ul>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/',
+          learnMoreLink: '/docs/3.1.0/',
           learnMoreText: 'Read the Documentation',
         },
         {
@@ -189,7 +189,7 @@ function FAQSection() {
               <p>All clients provide partition-aware routing for direct access to data nodes.</p>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/clients/',
+          learnMoreLink: '/docs/3.1.0/develop/ignite-clients/',
           learnMoreText: 'Client Documentation',
         },
       ],
@@ -210,7 +210,7 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/sql-reference/ddl/',
+          learnMoreLink: '/docs/3.1.0/sql/reference/language-definition/ddl',
           learnMoreText: 'Schema Design Guide',
         },
         {
@@ -263,7 +263,7 @@ function FAQSection() {
               </table>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/config/storage/',
+          learnMoreLink: '/docs/3.1.0/configure-and-operate/configuration/config-storage-overview',
           learnMoreText: 'Storage Configuration',
         },
         {
@@ -301,7 +301,7 @@ function FAQSection() {
               </ul>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/transactions/',
+          learnMoreLink: '/docs/3.1.0/develop/work-with-data/transactions',
           learnMoreText: 'Transaction Guide',
         },
         {
@@ -366,7 +366,7 @@ function FAQSection() {
               <p>The cost-based optimizer handles partition pruning, index selection, and join reordering automatically.</p>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/sql-reference/',
+          learnMoreLink: '/docs/3.1.0/sql/',
           learnMoreText: 'SQL Reference',
         },
         {
@@ -443,7 +443,7 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: 'https://ignite.apache.org/docs/latest/quick-start/java/',
+          learnMoreLink: '/docs/3.1.0/getting-started/quick-start',
           learnMoreText: 'Getting Started Guide',
         },
         {
@@ -607,7 +607,7 @@ function CTASection() {
           </p>
         </div>
         <div className={styles.ctaAction}>
-          <Link className="button" to="https://ignite.apache.org/docs/latest/quick-start/java/">
+          <Link className="button" to="/docs/3.1.0/getting-started/quick-start">
             Quick Start Guide
           </Link>
         </div>

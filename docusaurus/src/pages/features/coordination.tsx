@@ -249,9 +249,7 @@ export default function Coordination(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/getting-started/quick-start"
             >
               Quick Start Guide
             </a>
@@ -266,9 +264,7 @@ export default function Coordination(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/ignite3/latest/administrators-guide/config"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs/3.1.0/configure-and-operate/configuration/config-cluster-and-nodes"
             >
               Configuration Documentation
             </a>
