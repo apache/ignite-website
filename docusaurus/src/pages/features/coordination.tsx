@@ -249,7 +249,9 @@ export default function Coordination(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
@@ -264,7 +266,9 @@ export default function Coordination(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/configure-and-operate/configuration/config-cluster-and-nodes"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/configure-and-operate/configuration/config-cluster-and-nodes"
+              target="_blank"
+              rel="noreferrer"
             >
               Configuration Documentation
             </a>

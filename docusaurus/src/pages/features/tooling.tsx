@@ -249,7 +249,9 @@ export default function Operations(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
@@ -264,7 +266,9 @@ export default function Operations(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/sql/working-with-sql/system-views"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/sql/working-with-sql/system-views"
+              target="_blank"
+              rel="noreferrer"
             >
               System Views Documentation
             </a>

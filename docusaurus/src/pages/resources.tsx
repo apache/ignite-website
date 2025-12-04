@@ -7,7 +7,7 @@ import styles from './resources.module.css';
 
 // Data definitions
 // Note: Documentation links use full URLs because docs are hosted separately
-const DOCS_BASE_URL = '/docs/3.1.0';
+const DOCS_BASE_URL = 'https://ignite-dev.gridgain.com/docs/3.1.0';
 
 const gettingStartedLinks = [
   {

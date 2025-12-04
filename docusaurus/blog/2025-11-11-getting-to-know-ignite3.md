@@ -265,4 +265,4 @@ Apache Ignite 3 represents a schema-driven distributed computing platform that c
 
 The platform addresses scenarios where traditional multi-system architectures create operational complexity and performance bottlenecks through data movement between separate databases, compute clusters, and analytics systems.
 
-Explore the [Ignite 3 documentation](/docs/3.1.0/) for detailed implementation guides and API references.
+Explore the [Ignite 3 documentation](https://ignite-dev.gridgain.com/docs/3.1.0/) for detailed implementation guides and API references.

@@ -266,7 +266,9 @@ export default function SchemaEvolution(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
@@ -281,7 +283,9 @@ export default function SchemaEvolution(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/develop/work-with-data/table-api"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/develop/work-with-data/table-api"
+              target="_blank"
+              rel="noreferrer"
             >
               Tables Documentation
             </a>

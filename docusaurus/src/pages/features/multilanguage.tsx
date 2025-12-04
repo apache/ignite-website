@@ -36,7 +36,7 @@ export default function Multilanguage(): JSX.Element {
               <br /> Support
             </h1>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="/docs/3.1.0/getting-started/quick-start">
+              <a className="button innerhero__button" href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start" target="_blank" rel="noreferrer">
                 Start Coding
               </a>
             </div>
@@ -98,7 +98,9 @@ export default function Multilanguage(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
@@ -113,7 +115,9 @@ export default function Multilanguage(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/develop/ignite-clients/"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/develop/ignite-clients/"
+              target="_blank"
+              rel="noreferrer"
             >
               Client Documentation
             </a>

@@ -247,8 +247,10 @@ export default function AccessPatterns(): JSX.Element {
             </div>
             <div className="cardsimple__bottom">
               <a
-                href="/docs/3.1.0/configure-and-operate/operations/colocation"
+                href="https://ignite-dev.gridgain.com/docs/3.1.0/configure-and-operate/operations/colocation"
                 className="cardsimple__button button button--shadow"
+                target="_blank"
+                rel="noreferrer"
               >
                 Learn About Colocation
               </a>
@@ -269,7 +271,9 @@ export default function AccessPatterns(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
@@ -284,7 +288,9 @@ export default function AccessPatterns(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/api-reference/sql-only-apis/jdbc"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/api-reference/sql-only-apis/jdbc"
+              target="_blank"
+              rel="noreferrer"
             >
               SQL and JDBC Documentation
             </a>

@@ -85,8 +85,10 @@ export default function ArchitecturalFoundation(): JSX.Element {
 
         <div className="pt-4">
           <a
-            href="/docs/3.1.0/develop/work-with-data/transactions"
+            href="https://ignite-dev.gridgain.com/docs/3.1.0/develop/work-with-data/transactions"
             className="button button--shadow"
+            target="_blank"
+            rel="noreferrer"
           >
             Read Transactions Documentation
           </a>
@@ -128,8 +130,10 @@ export default function ArchitecturalFoundation(): JSX.Element {
 
         <div className="pt-4">
           <a
-            href="/docs/3.1.0/sql/reference/language-definition/distribution-zones"
+            href="https://ignite-dev.gridgain.com/docs/3.1.0/sql/reference/language-definition/distribution-zones"
             className="button button--shadow"
+            target="_blank"
+            rel="noreferrer"
           >
             Read Distribution Zones Documentation
           </a>
@@ -195,8 +199,10 @@ export default function ArchitecturalFoundation(): JSX.Element {
             </div>
             <div className="cardsimple__bottom">
               <a
-                href="/docs/3.1.0/sql/reference/language-definition/distribution-zones"
+                href="https://ignite-dev.gridgain.com/docs/3.1.0/sql/reference/language-definition/distribution-zones"
                 className="cardsimple__button button button--shadow"
+                target="_blank"
+                rel="noreferrer"
               >
                 Learn More
               </a>
@@ -217,7 +223,9 @@ export default function ArchitecturalFoundation(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              target="_blank"
+              rel="noreferrer"
             >
               Quick Start Guide
             </a>
