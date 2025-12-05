@@ -108,9 +108,9 @@ const communityChannels = [
     url: 'https://stackoverflow.com/questions/tagged/apache-ignite',
   },
   {
-    title: 'GitHub Discussions',
-    description: 'Community conversations and support',
-    url: 'https://github.com/apache/ignite',
+    title: 'Slack Discussions',
+    description: 'ASF Community conversations and support',
+    joinUrl: 'https://join.slack.com/t/the-asf/shared_invite/zt-3jdgark5c-fZpONqHfM~PoSS4qEoOl7g',
   },
 ];
 
@@ -291,6 +291,10 @@ function CommunitySection() {
                     Archives
                   </a>
                 </>
+              ) : channel.joinUrl ? (
+                <a href={channel.joinUrl} target="_blank" rel="noreferrer" className="button">
+                  Join
+                </a>
               ) : (
                 <a href={channel.url} target="_blank" rel="noreferrer" className="button">
                   Visit
