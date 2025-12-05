@@ -498,7 +498,7 @@ function ResourcesSection() {
       <div className={styles.frontresourse__wrap}>
         <div className={styles.frontresourse__col}>
           <div className={styles.capstext}>Technical resources</div>
-          <Link to="/resources#technical" className={clsx(styles.frontresitem, styles['frontresitem--black'])}>
+          <Link to="/resources#documentation" className={clsx(styles.frontresitem, styles['frontresitem--black'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-docs.svg" alt="" />
             </div>
@@ -509,39 +509,39 @@ function ResourcesSection() {
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-wiki.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Ignite Wiki with a collection of low-level design documents and instructions</div>
+            <div className={styles.frontresitem__text}>Ignite Wiki with design documents and contributor instructions</div>
           </a>
 
-          <Link to="/resources#git" className={clsx(styles.frontresitem, styles['frontresitem--gray'])}>
+          <Link to="/resources#source-code" className={clsx(styles.frontresitem, styles['frontresitem--gray'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/icon-github.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Git repositories with Ignite source code and code samples and examples</div>
+            <div className={styles.frontresitem__text}>GitHub repositories with Ignite source code and extensions</div>
           </Link>
         </div>
 
         <div className={styles.frontresourse__col}>
           <div className={styles.capstext}>Learning resources</div>
-          <Link to="/resources#learning" className={clsx(styles.frontresitem, styles['frontresitem--red'])}>
+          <Link to="/resources#get-started" className={clsx(styles.frontresitem, styles['frontresitem--red'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-videos.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Dozens of essential videos and webinar <br />recordings</div>
+            <div className={styles.frontresitem__text}>Quick start guides and hands-on tutorials <br />to begin building</div>
           </Link>
 
           <Link to="/resources#training" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-vebinar.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Trainings and courses that help with building high-performance and data-intensive applications with the Apache Ignite</div>
+            <div className={styles.frontresitem__text}>Free training courses for building high-performance applications with Apache Ignite</div>
           </Link>
 
-          <a href="https://www.shamimbhuiyan.com/ignitebook" target="_blank" className={clsx(styles.frontresitem, styles['frontresitem--rose'])} rel="noreferrer">
+          <Link to="/blog" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-book.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Apache Ignite book to expand your knowledge in in-memory computing and distributed databases</div>
-          </a>
+            <div className={styles.frontresitem__text}>Technical articles and tutorials on distributed computing with Apache Ignite</div>
+          </Link>
         </div>
       </div>
 
