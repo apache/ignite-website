@@ -379,38 +379,44 @@
                 <br />
                 <h2>Testing Setup</h2>
                 <h3>Server</h3>
-                <p>I'm using the <a href="https://ignite.apache.org/download.cgi">binary distribution</a> of Apache Ignite 3.1.0 for this test.</p>
-                <p>The default node configuration is good enough; the only change was reducing the logging level in <code>etc/ignite.java.util.logging.properties</code> to reduce overhead.</p>
+                <p>I'm going to use the <a href="https://ignite.apache.org/download.cgi">binary distribution</a> of Apache Ignite 3.1.0 for this test.</p>
+                <p>The default node configuration is good enough, the only thing I changed was the logging level in <code>etc/ignite.java.util.logging.properties</code> to reduce logging overhead.</p>
                 <h3>Client</h3>
                 <p>
-                  The connections are created using the <a href="https://www.nuget.org/packages/Apache.Ignite/3.1.0">Ignite.NET client</a> in a simple console app that connects to the server in a loop and keeps all connections open. After
-                  the loop, the program verifies that every connection remains alive.
+                  To establish the connections, I'm using the <a href="https://www.nuget.org/packages/Apache.Ignite/3.1.0">Ignite.NET client</a> in a simple console app that connects to the server in a loop and keeps the connections open.
+                  After the loop we verify that all connections are still alive.
                 </p>
-                <p>Full code: <a href="https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948">https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948</a></p>
+                <p>Full program is on GitHub: <a href="https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948">https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948</a></p>
                 <h3>Ephemeral Port Exhaustion</h3>
-                <p>The program uses multiple localhost addresses (<code>127.0.0.1</code>, <code>127.0.0.2</code>, etc). Without this, about 28k connections cause a <code>SocketException (99): Cannot assign requested address</code>.</p>
                 <p>
-                  Every TCP connection requires a unique <code>IP:port</code> pair. The port is selected from the ephemeral range (typically 32768–60999 on Linux). A single address cannot support more connections than the number of
-                  available ephemeral ports, so using multiple addresses avoids this limitation.
+                  In the program you can notice the trick with multiple localhost addresses (<code>127.0.0.1</code>, <code>127.0.0.2</code>, etc). Without it, after about 28k connections, the program fails with a
+                  <code>SocketException (99): Cannot assign requested address</code>.
+                </p>
+                <p>
+                  Basically, every TCP connection has a source <code>IP:port</code> pair and the port is chosen from the ephemeral port range (typically 32768–60999 on Linux). We can't have more connections on the same address than the
+                  number of ephemeral ports available. Using multiple localhost addresses works around this limitation.
                 </p>
                 <hr />
                 <br />
                 <h2>Results</h2>
                 <br />
-                <p>Errors and timeouts begin around 250k connections with default settings. At <strong>200k connections</strong>, the node remains fully stable and responsive.</p>
-                <p>Initial node memory usage was ~200 MB. With 200k active connections it reached ~900 MB after a full GC — about <strong>3.5 KB per connection</strong>.</p>
+                <p>
+                  I'm starting to get weird errors and timeouts at about 250k (yes, 250 thousand) connections with default settings. At <strong>200k connections</strong> the system is stable and responsive, so I decided to stop the test
+                  there.
+                </p>
+                <p>Initial memory usage of the Apache Ignite node was about 200 MB, and with 200k active connections it was about 900 MB after a full GC — about <strong>3.5 KB per connection</strong>.</p>
                 <p>VisualVM screenshot:</p>
                 <img src="/img/blog/2025-12-04-How-Many-Client-Connections-Can-Ignite-Handle.png" alt="VisualVM memory usage with 200k client connections" />
                 <p>Client log:</p>
                 <pre><code>Connected 200000 connections in 00:02:49.2601996
 Verified connectivity in 00:00:09.1446883
 </code></pre>
-                <p>Each connection sends a heartbeat every 10 seconds. This results in ~20k tiny requests per second, which require almost no CPU.</p>
+                <p>Note that each connection exchanges a heartbeat message every 10 seconds, so the system is not completely idle. We have about 20k small requests per second, but this barely requires any CPU.</p>
                 <hr />
                 <br />
                 <h2>Conclusion</h2>
                 <br />
-                <p>Ignite client connections are extremely lightweight, so open as many as your application requires and keep them open for optimal performance.</p>
+                <p>Apache Ignite client connections are very lightweight, so open as many as your application requires and keep them open for the best performance!</p>
               </div>
             </article>
             <section class="blog__footer">
