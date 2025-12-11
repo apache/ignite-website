@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite Blog</title>
-    <meta property="og:title" content="Apache Ignite Blog" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>How many client connections can Apache Ignite 3 handle?</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Matomo -->
@@ -337,168 +332,99 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Apache Ignite Blog</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>How many client connections can Apache Ignite 3 handle?</h1>
+        <p>
+          December 10, 2025 by <strong>Pavel Tupitsyn. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=How many client connections can Apache Ignite 3 handle?%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-client-connections-handling.html">How many client connections can Apache Ignite 3 handle?</a></h2>
-                <div>
-                  December 10, 2025 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=How many client connections can Apache Ignite 3 handle?%20https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-client-connections-handling.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-3.html">Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option</a></h2>
-                <div>
-                  December 9, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
+              <div>
+                <p>Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.</p>
+                <!-- end --><br />
+                <h2>The Question</h2>
+                <br />
+                <p>A common capacity planning question we get from users is: "How many client connections can one Ignite node maintain?"</p>
+                <p>With traditional relational databases, the common knowledge is:</p>
+                <ul>
+                  <li>Client connection is typically single-threaded and short-lived. "Open -> Do work -> Close" is the usual pattern.</li>
+                  <li>
+                    The server can handle a limited number of concurrent connections.
+                    <ul>
+                      <li><a href="https://www.postgresql.org/docs/current/runtime-config-connection.html#GUC-MAX-CONNECTIONS">Postgres defaults to 100</a> <code>max_connections</code>.</li>
+                      <li>Each connection has significant memory overhead (<a href="https://blog.anarazel.de/2020/10/07/measuring-the-memory-overhead-of-a-postgres-connection/">a few MBs</a>).</li>
+                    </ul>
+                  </li>
+                  <li>An external connection pool (like <a href="https://www.pgbouncer.org/">PgBouncer</a>) is recommended to improve scalability.</li>
+                </ul>
+                <p><a href="https://ignite.apache.org/">Apache Ignite 3</a> is quite different:</p>
+                <ul>
+                  <li>Client connections are long-lived, multiplexed, and thread-safe. Quite often, a single client connection is enough for the entire application lifetime.</li>
+                  <li>On the server side, each client connection has a small memory footprint (a few KB).</li>
+                </ul>
+                <p>This approach with cheap long-lived connections provides low latency and great scalability for applications:</p>
+                <ul>
+                  <li>The connection is always open and responds to queries immediately.</li>
+                  <li>Multiple queries can be executed concurrently over the same connection (multiplexing).</li>
+                  <li>No need for an external connection pool.</li>
+                  <li>Query metadata is cached by the client connection, improving performance for repeated queries.</li>
+                </ul>
+                <p>Let's see how many concurrent client connections a single Apache Ignite 3 node can handle.</p>
+                <hr />
+                <br />
+                <h2>Testing Setup</h2>
+                <h3>Server</h3>
+                <p>I'm going to use the <a href="https://ignite.apache.org/download.cgi">binary distribution</a> of Apache Ignite 3.1.0 for this test.</p>
+                <p>The default node configuration is good enough, the only thing I changed was the logging level in <code>etc/ignite.java.util.logging.properties</code> to reduce logging overhead.</p>
+                <h3>Client</h3>
                 <p>
-                  Schema changes in traditional databases mean downtime, lost revenue, and deployment chaos across multiple systems. This piece demonstrates how Apache Ignite's flexible schema approach helps lets data model evolve at the
-                  pace of your business requirements.
+                  To establish the connections, I'm using the <a href="https://www.nuget.org/packages/Apache.Ignite/3.1.0">Ignite.NET client</a> in a simple console app that connects to the server in a loop and keeps the connections open.
+                  After the loop we verify that all connections are still alive.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-2.html">Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing</a></h2>
-                <div>
-                  December 2, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional databases force a choice: fast memory access or durable storage. High-velocity applications processing 10,000+ events per second hit a wall when disk I/O adds 5-15ms to every transaction.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-2.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-1.html">Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale</a></h2>
-                <div>
-                  November 25, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
+                <p>Full program is on GitHub: <a href="https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948">https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948</a></p>
+                <h3>Ephemeral Port Exhaustion</h3>
                 <p>
-                  Apache Ignite shows what really happens once your <em>good enough</em> multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first
-                  architecture removes the latency tax entirely.
+                  In the program you can notice the trick with multiple localhost addresses (<code>127.0.0.1</code>, <code>127.0.0.2</code>, etc). Without it, after about 28k connections, the program fails with a
+                  <code>SocketException (99): Cannot assign requested address</code>.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/schema-design-for-distributed-systems-ai3.html"> Schema Design for Distributed Systems: Why Data Placement Matters</a></h2>
-                <div>
-                  November 18, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status= Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Discover how Apache Ignite 3 keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/schema-design-for-distributed-systems-ai3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/getting-to-know-apache-ignite-3.html">Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform</a></h2>
-                <div>
-                  November 11, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform%20https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
                 <p>
-                  Apache Ignite 3 is a memory-first distributed SQL database platform that consolidates transactions, analytics, and compute workloads previously requiring separate systems. Built from the ground up, it represents a complete
-                  departure from traditional caching solutions toward a unified distributed computing platform with microsecond latencies and collocated processing capabilities.
+                  Basically, every TCP connection has a source <code>IP:port</code> pair and the port is chosen from the ephemeral port range (typically 32768–60999 on Linux). We can't have more connections on the same address than the
+                  number of ephemeral ports available. Using multiple localhost addresses works around this limitation.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/getting-to-know-apache-ignite-3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/whats-new-in-apache-ignite-3-1.html">Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening</a></h2>
-                <div>
-                  November 3, 2025 by Evgeniy Stanilovskiy. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening%20https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
+                <hr />
+                <br />
+                <h2>Results</h2>
+                <br />
                 <p>
-                  Apache Ignite 3.1 improves the three areas that matter most when running distributed systems: performance at scale, language flexibility, and operational visibility. The release also fixes hundreds of bugs related to data
-                  corruption, race conditions, and edge cases discovered since 3.0.
+                  I'm starting to get weird errors and timeouts at about 250k (yes, 250 thousand) connections with default settings. At <strong>200k connections</strong> the system is stable and responsive, so I decided to stop the test
+                  there.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/whats-new-in-apache-ignite-3-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/whats-new-in-apache-ignite-3-0.html">What's New in Apache Ignite 3.0</a></h2>
-                <div>
-                  February 24, 2025 by Stanislav Lukyanov. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=What's New in Apache Ignite 3.0%20https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite 3.0 is the latest milestone in Apache Ignite evolution that enhances developer experience, platform resilience, and efficiency. In this article, we’ll explore the key new features and improvements in Apache
-                  Ignite 3.0.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/whats-new-in-apache-ignite-3-0.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-17-0.html">Apache Ignite 2.17 Release: What’s New</a></h2>
-                <div>
-                  February 13, 2025 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.17 Release: What’s New%20https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  We are happy to announce the release of <a href="https://ignite.apache.org/">Apache Ignite </a>2.17.0! In this latest version, the Ignite community has introduced a range of new features and improvements to deliver a more
-                  efficient, flexible, and future-proof platform. Below, we’ll cover the key highlights that you can look forward to when upgrading to the new release.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-17-0.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-net-intel-cet-fix.html">Ignite on .NET 9 and Intel CET</a></h2>
-                <div>
-                  November 22, 2024 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-net-intel-cet-fix.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Ignite on .NET 9 and Intel CET%20https://ignite.apache.org/blog/apache-ignite-net-intel-cet-fix.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Old JDK code meets new Intel security feature, JVM + CLR in one process, and a mysterious crash.</p>
-                <p><a href="https://ptupitsyn.github.io/Ignite-on-NET-9/">Read More...</a></p>
+                <p>Initial memory usage of the Apache Ignite node was about 200 MB, and with 200k active connections it was about 900 MB after a full GC — about <strong>3.5 KB per connection</strong>.</p>
+                <p>VisualVM screenshot:</p>
+                <img src="/img/blog/2025-12-04-How-Many-Client-Connections-Can-Ignite-Handle.png" alt="VisualVM memory usage with 200k client connections" />
+                <p>Client log:</p>
+                <pre><code>Connected 200000 connections in 00:02:49.2601996
+Verified connectivity in 00:00:09.1446883
+</code></pre>
+                <p>Note that each connection exchanges a heartbeat message every 10 seconds, so the system is not completely idle. We have about 20k small requests per second, but this barely requires any CPU.</p>
+                <hr />
+                <br />
+                <h2>Conclusion</h2>
+                <br />
+                <p>Apache Ignite client connections are very lightweight, so open as many as your application requires and keep them open for the best performance!</p>
               </div>
             </article>
-          </section>
-          <section class="blog__footer">
-            <ul class="pagination">
-              <li><a class="current" href="/blog/">1</a></li>
-              <li><a class="item" href="/blog/1/">2</a></li>
-              <li><a class="item" href="/blog/2/">3</a></li>
-              <li><a class="item" href="/blog/3/">4</a></li>
-            </ul>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
           </section>
         </main>
         <aside class="blog__sidebar">
