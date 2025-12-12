@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkdocs=globalThis.webpackChunkdocs||[]).push([[8401],{45140:(o,n,c)=>{c.d(n,{A:()=>h});c(96540);var i=c(78466),s=c(37399),a=c(74848);const h={...i.A,IIcon:({icon:o="mdi:information-outline",...n})=>(0,a.jsx)(s.In,{icon:o,...n})}}}]);
