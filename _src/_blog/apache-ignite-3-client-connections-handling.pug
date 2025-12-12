@@ -1,0 +1,91 @@
+---
+title: "How many client connections can Apache Ignite 3 handle?"
+author: "Pavel Tupitsyn"
+date: 2025-12-10
+tags:
+    - apache
+    - ignite
+---
+
+p Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.
+
+<!-- end -->
+br
+h2 The Question
+br
+p A common capacity planning question we get from users is: "How many client connections can one Ignite node maintain?"
+
+p With traditional relational databases, the common knowledge is:
+
+ul
+  li Client connection is typically single-threaded and short-lived. "Open -> Do work -> Close" is the usual pattern.
+  li The server can handle a limited number of concurrent connections.
+    ul
+      li #[a(href="https://www.postgresql.org/docs/current/runtime-config-connection.html#GUC-MAX-CONNECTIONS") Postgres defaults to 100] #[code max_connections].
+      li Each connection has significant memory overhead (#[a(href="https://blog.anarazel.de/2020/10/07/measuring-the-memory-overhead-of-a-postgres-connection/") a few MBs]).
+  li An external connection pool (like #[a(href="https://www.pgbouncer.org/") PgBouncer]) is recommended to improve scalability.
+
+p #[a(href="https://ignite.apache.org/") Apache Ignite 3] is quite different:
+
+ul
+  li Client connections are long-lived, multiplexed, and thread-safe. Quite often, a single client connection is enough for the entire application lifetime.
+  li On the server side, each client connection has a small memory footprint (a few KB).
+
+p This approach with cheap long-lived connections provides low latency and great scalability for applications:
+
+ul
+  li The connection is always open and responds to queries immediately.
+  li Multiple queries can be executed concurrently over the same connection (multiplexing).
+  li No need for an external connection pool.
+  li Query metadata is cached by the client connection, improving performance for repeated queries.
+
+p Let's see how many concurrent client connections a single Apache Ignite 3 node can handle.
+
+hr
+br
+h2 Testing Setup
+
+h3 Server
+
+p I'm going to use the #[a(href="https://ignite.apache.org/download.cgi") binary distribution] of Apache Ignite 3.1.0 for this test.
+
+p The default node configuration is good enough, the only thing I changed was the logging level in #[code etc/ignite.java.util.logging.properties] to reduce logging overhead.
+
+h3 Client
+
+p To establish the connections, I'm using the #[a(href="https://www.nuget.org/packages/Apache.Ignite/3.1.0") Ignite.NET client] in a simple console app that connects to the server in a loop and keeps the connections open. After the loop we verify that all connections are still alive.
+
+p Full program is on GitHub: #[a(href="https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948") https://gist.github.com/ptupitsyn/86056d4143811ba5dde6b2d1704fa948]
+
+h3 Ephemeral Port Exhaustion
+
+p In the program you can notice the trick with multiple localhost addresses (#[code 127.0.0.1], #[code 127.0.0.2], etc). Without it, after about 28k connections, the program fails with a #[code SocketException (99): Cannot assign requested address].
+
+p Basically, every TCP connection has a source #[code IP:port] pair and the port is chosen from the ephemeral port range (typically 32768–60999 on Linux). We can't have more connections on the same address than the number of ephemeral ports available. Using multiple localhost addresses works around this limitation.
+
+hr
+br
+h2 Results
+br
+p I'm starting to get weird errors and timeouts at about 250k (yes, 250 thousand) connections with default settings. At #[strong 200k connections] the system is stable and responsive, so I decided to stop the test there.
+
+p Initial memory usage of the Apache Ignite node was about 200 MB, and with 200k active connections it was about 900 MB after a full GC — about #[strong 3.5 KB per connection].
+
+p VisualVM screenshot:
+
+img(src="/img/blog/2025-12-04-How-Many-Client-Connections-Can-Ignite-Handle.png" alt="VisualVM memory usage with 200k client connections")
+
+p Client log:
+
+pre
+  code.
+    Connected 200000 connections in 00:02:49.2601996
+    Verified connectivity in 00:00:09.1446883
+
+p Note that each connection exchanges a heartbeat message every 10 seconds, so the system is not completely idle. We have about 20k small requests per second, but this barely requires any CPU.
+
+hr
+br
+h2 Conclusion
+br
+p Apache Ignite client connections are very lightweight, so open as many as your application requires and keep them open for the best performance!
