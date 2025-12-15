@@ -38,11 +38,19 @@
     
     <meta name="ignite-version" content="{{site.attrs.version}}" />
     <title>{{page.title}} | Ignite Documentation</title>
-    {% if site.attrs.base_url contains "/latest" %}
-    <link rel="canonical" href="{{page.id | replace_first: site.attrs.version, 'latest' }}" />
+    {% assign major_version = site.attrs.version | split: "." | first %}
+    {% if major_version == '3' %}
+        {% assign url_version = "ignite3" %}
     {% else %}
-    <link rel="canonical" href="{{page.id}}" />
-    <META NAME="ROBOTS" CONTENT="NOINDEX" />
+        {% assign url_version = "ignite2" %}
+    {% endif %}
+    {% if site.attrs.base_url contains "/latest" %}
+    {% assign url_version = url_version | append: "/latest" %}
+    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
+    {% else %}
+    {% assign url_version = url_version | append: "/" | append: site.attrs.version %}
+    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
+    <meta name="robots" content="noindex" />
     {% endif %}
 	{% capture timestamp %}{{"now"| date: '%s'}}{% endcapture %}
 	  <link rel="shortcut icon" href="{{'/favicon.ico'|relative_url}}">
