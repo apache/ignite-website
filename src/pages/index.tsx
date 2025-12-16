@@ -85,6 +85,12 @@ function TopCards() {
 function CoreCapabilities() {
   const [selectedLanguage, setSelectedLanguage] = useState<'java' | 'dotnet' | 'cpp' | 'python'>('java');
   const [copied, setCopied] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only render SyntaxHighlighter on the client to avoid hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(codeExamples[selectedLanguage].code);
@@ -340,16 +346,22 @@ conn.close()`
                   </>
                 )}
               </button>
-              <div className={clsx(styles.nativecode__tab, 'active')} style={{background: '#2d3748', borderRadius: '8px', overflow: 'hidden'}}>
-                <SyntaxHighlighter
-                  language={codeExamples[selectedLanguage].language}
-                  style={tomorrow}
-                  customStyle={{ margin: 0, background: '#2d3748', padding: '20px' }}
-                  showLineNumbers={true}
-                  wrapLongLines={false}
-                >
-                  {codeExamples[selectedLanguage].code}
-                </SyntaxHighlighter>
+              <div className={clsx(styles.nativecode__tab, 'active')} style={{background: '#2d3748', borderRadius: '8px', overflow: 'hidden', minHeight: '400px'}}>
+                {isMounted ? (
+                  <SyntaxHighlighter
+                    language={codeExamples[selectedLanguage].language}
+                    style={tomorrow}
+                    customStyle={{ margin: 0, background: '#2d3748', padding: '20px' }}
+                    showLineNumbers={true}
+                    wrapLongLines={false}
+                  >
+                    {codeExamples[selectedLanguage].code}
+                  </SyntaxHighlighter>
+                ) : (
+                  <pre style={{ margin: 0, background: '#2d3748', padding: '20px', color: '#ccc', overflow: 'auto' }}>
+                    <code>{codeExamples[selectedLanguage].code}</code>
+                  </pre>
+                )}
               </div>
             </div>
           </div>
