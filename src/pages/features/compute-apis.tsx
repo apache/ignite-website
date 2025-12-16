@@ -266,7 +266,7 @@ export default function ComputeAPIs(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              href="/docs/3.1.0/getting-started/quick-start"
               target="_blank"
               rel="noreferrer"
             >
@@ -283,7 +283,7 @@ export default function ComputeAPIs(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite-dev.gridgain.com/docs/3.1.0/develop/work-with-data/compute"
+              href="/docs/3.1.0/develop/work-with-data/compute"
               target="_blank"
               rel="noreferrer"
             >

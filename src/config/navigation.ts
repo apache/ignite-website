@@ -6,6 +6,8 @@
  * custom Navbar and Footer components.
  */
 
+import { DOCS_PATHS, DOCS_INDEX } from './docs-urls';
+
 export interface NavItem {
   label: string;
   href: string;
@@ -37,7 +39,7 @@ export const getStartedMenu: DropdownMenu = {
   featured: {
     icon: '/img/menu/icon-red-rocket.svg',
     label: 'Quick Start Guide',
-    href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start',
+    href: DOCS_PATHS.gettingStarted.quickStart,
     className: 'dropmenu__redbutton'
   },
   sections: [
@@ -361,7 +363,7 @@ export const mainNavItems = [
   { label: 'Community', key: 'community', href: '/community', menu: communityMenu },
   { label: 'Resources', key: 'resources', href: '/resources', menu: resourcesMenu },
   { label: 'Blog', href: '/blog/' },
-  { label: 'Docs', href: 'https://ignite-dev.gridgain.com/docs/3.1.0/', external: true },
+  { label: 'Docs', href: DOCS_INDEX },
 ] as const;
 
 /**
@@ -369,7 +371,7 @@ export const mainNavItems = [
  * Flattened navigation for mobile display
  */
 export const mobileMenuItems = [
-  { label: 'Quick Start', href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start' },
+  { label: 'Quick Start', href: DOCS_PATHS.gettingStarted.quickStart },
   { label: 'Developer Resources', href: '/resources' },
   { label: 'Training and Courses', href: '/resources#training' },
   { label: 'FAQ', href: '/faq' },
@@ -481,7 +483,7 @@ export const footerSections = {
     ],
     ctaButton: {
       label: 'Start Using Apache Ignite',
-      href: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start',
+      href: DOCS_PATHS.gettingStarted.quickStart,
     },
   },
 } as const;

@@ -38,7 +38,7 @@ export default function HighPerformanceComputing(): JSX.Element {
               Schema-driven colocation and compute-to-data patterns
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite-dev.gridgain.com/docs/3.1.0/" target="_blank" rel="noreferrer" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="/docs/3.1.0/" target="_blank" rel="noreferrer" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -255,7 +255,7 @@ export default function HighPerformanceComputing(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start"
+              href="/docs/3.1.0/getting-started/quick-start"
               target="_blank"
               rel="noreferrer"
             >

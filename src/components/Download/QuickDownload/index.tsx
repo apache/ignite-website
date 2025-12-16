@@ -2,9 +2,10 @@ import React from 'react';
 import clsx from 'clsx';
 import {ignite3BinaryReleases} from '@site/src/data/downloads';
 import {trackDownload} from '@site/src/components/Download/downloadUtils';
+import { DOCS_INDEX } from '@site/src/config/docs-urls';
 import styles from './styles.module.css';
 
-const DOCS_BASE_URL = 'https://ignite-dev.gridgain.com/docs/3.1.0';
+const DOCS_BASE_URL = DOCS_INDEX;
 
 export default function QuickDownload(): JSX.Element {
   const latestRelease = ignite3BinaryReleases.find((r) => r.latest) || ignite3BinaryReleases[0];

@@ -3,11 +3,12 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Section from '@site/src/components/Section';
+import { DOCS_INDEX } from '@site/src/config/docs-urls';
 import styles from './resources.module.css';
 
 // Data definitions
-// Note: Documentation links use full URLs because docs are hosted separately
-const DOCS_BASE_URL = 'https://ignite-dev.gridgain.com/docs/3.1.0';
+// Documentation links are relative paths, resolved with baseUrl at build time
+const DOCS_BASE_URL = DOCS_INDEX;
 
 const gettingStartedLinks = [
   {

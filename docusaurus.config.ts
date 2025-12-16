@@ -32,7 +32,9 @@ const config: Config = {
   organizationName: 'apache',
   projectName: 'ignite-website',
 
-  onBrokenLinks: 'throw',
+  // Documentation is built separately and merged into the final site.
+  // Links to /docs/ will appear broken during standalone builds but work in production.
+  onBrokenLinks: 'warn',
   onBrokenAnchors: 'ignore',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -171,7 +173,7 @@ const config: Config = {
           label: 'Get Started',
           position: 'left',
           items: [
-            {label: 'Quick Start', to: 'https://ignite-dev.gridgain.com/docs/3.1.0/getting-started/quick-start'},
+            {label: 'Quick Start', to: '/docs/3.1.0/getting-started/quick-start'},
             {label: 'Developer Resources', to: '/resources'},
             {label: 'Training and Courses', to: '/resources#training'},
             {label: 'FAQ', to: '/faq'},
@@ -217,7 +219,7 @@ const config: Config = {
         },
         {
           label: 'Docs',
-          href: 'https://ignite-dev.gridgain.com/docs/3.1.0/',
+          to: '/docs/3.1.0/',
           position: 'left',
         },
       ],

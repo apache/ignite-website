@@ -11,9 +11,10 @@ import {
   extensionBinaryReleases,
   springBootDependencies,
 } from '@site/src/data/downloads';
+import { DOCS_INDEX } from '@site/src/config/docs-urls';
 import styles from './download.module.css';
 
-const DOCS_BASE_URL = 'https://ignite-dev.gridgain.com/docs/3.1.0';
+const DOCS_BASE_URL = DOCS_INDEX;
 
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');
