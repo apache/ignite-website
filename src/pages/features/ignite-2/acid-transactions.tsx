@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/acid-transactions.css';
 
 export default function ACIDTransactions(): JSX.Element {
   const [showWALDetails, setShowWALDetails] = useState(false);
+  const canonicalUrl = useCanonicalUrl();
 
   return (
     <Layout>
@@ -17,10 +19,10 @@ export default function ACIDTransactions(): JSX.Element {
           name="description"
           content="Apache Ignite can operate in a strongly consistent mode with full support for distributed ACID transactions. Ignite is an ACID compliant storage engine which can handle possible distributed failures properly to avoid data inconsistencies cluster-wide."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/acid-transactions.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Distributed ACID Transactions - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/acid-transactions.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,12 +2,15 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/compute-apis.css';
 import '../../../css/sql.css';
 
 export default function SQL(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -16,10 +19,10 @@ export default function SQL(): JSX.Element {
           name="description"
           content="Apache Ignite comes with an ANSI-99 compliant, horizontally scalable, and fault-tolerant SQL engine that allows you to interact with Ignite as with a regular SQL database. Ignite can function in a pure in-memory mode in which it shows the highest performance."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/sql.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Distributed ANSI SQL Database - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/sql.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

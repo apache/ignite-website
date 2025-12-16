@@ -2,12 +2,15 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/compute-apis.css';
 import '../../css/multilanguage.css';
 
 export default function Multilanguage(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -16,10 +19,10 @@ export default function Multilanguage(): JSX.Element {
           name="description"
           content="Apache Ignite provides native clients for Java, .NET, C++, Python, and other languages. Consistent APIs across languages with partition-aware routing built in. Access through SQL, JDBC, or language-specific APIs."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/multilanguage" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Multi-Language Support - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/multilanguage" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

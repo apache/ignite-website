@@ -5,6 +5,7 @@ import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
 import { pmcMembers, type Committer } from '@site/src/data/committers';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './community.module.css';
 
 function HeroSection() {
@@ -468,6 +469,8 @@ function CTASection() {
 }
 
 export default function CommunityPage(): ReactNode {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -476,10 +479,10 @@ export default function CommunityPage(): ReactNode {
           name="description"
           content="Join the Apache Ignite community. Connect with developers, contribute to the project, and get help through mailing lists, Stack Overflow, and GitHub."
         />
-        <link rel="canonical" href="https://ignite.apache.org/community.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Community - Join and Contribute" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/community.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

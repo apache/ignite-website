@@ -2,10 +2,13 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 
 export default function ACIDTransactions(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -14,10 +17,10 @@ export default function ACIDTransactions(): JSX.Element {
           name="description"
           content="Apache Ignite provides full ACID transactions across any number of partitions. MVCC enables snapshot isolation without blocking readers. Distributed replication ensures durability."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/acid-transactions" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="ACID Transactions - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/acid-transactions" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/digital-hub.css';
 
 export default function IoTTimeSeries(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function IoTTimeSeries(): JSX.Element {
           name="description"
           content="Apache Ignite eliminates the scale-or-validate trade-off for IoT data ingestion. High-volume writes with schema validation and SQL aggregations through memory-first architecture and horizontal scalability."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/iot-time-series.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="IoT and Time-Series Data - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/iot-time-series.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

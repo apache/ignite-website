@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/multi-tier.css';
 
 export default function MultiTierStorage(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function MultiTierStorage(): JSX.Element {
           name="description"
           content="Apache Ignite multi-tier storage uses memory, disk, and Intel Optane as active storage tiers to provide the speed of memory with the consistency of disk-based databases without the need for memory warm-ups on restarts."
         />
-        <link rel="canonical" href="https://ignite.apache.org/arch/multi-tier-storage.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Multi-Tier Storage, Memory Tier - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/arch/multi-tier-storage.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

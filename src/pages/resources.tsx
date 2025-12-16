@@ -4,6 +4,7 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Section from '@site/src/components/Section';
 import { DOCS_INDEX } from '@site/src/config/docs-urls';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './resources.module.css';
 
 // Data definitions
@@ -334,6 +335,8 @@ function ReadyToStart() {
 }
 
 export default function ResourcesPage(): ReactNode {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -342,10 +345,10 @@ export default function ResourcesPage(): ReactNode {
           name="description"
           content="Developer resources for Apache Ignite: documentation, tutorials, source code, training courses, and community channels."
         />
-        <link rel="canonical" href="https://ignite.apache.org/resources.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Resources" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/resources.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/compute-apis.css';
@@ -10,6 +11,8 @@ import '../../css/database.css';
 import '../../css/datagrid.css';
 
 export default function InMemoryDataGrid(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -18,10 +21,10 @@ export default function InMemoryDataGrid(): JSX.Element {
           name="description"
           content="The Apache Ignite in-memory data grid accelerates and scales out distributed databases, services, and APIs. Learn more about an IMDG with Apache Ignite."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/in-memory-data-grid.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="In-Memory Data Grid - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/in-memory-data-grid.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

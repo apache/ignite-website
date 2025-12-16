@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/compute-apis.css';
@@ -9,6 +10,8 @@ import '../../css/digital-hub.css';
 import '../../css/spark.css';
 
 export default function SparkAcceleration(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -17,13 +20,13 @@ export default function SparkAcceleration(): JSX.Element {
           name="description"
           content="Ignite integrates with Apache Spark to accelerate the performance of Spark applications and APIs by keeping data in a shared in-memory cluster."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/spark-acceleration.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta
           property="og:title"
           content="Apache Spark Performance Acceleration - Distributed Cache, In-Memory Computing"
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/spark-acceleration.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

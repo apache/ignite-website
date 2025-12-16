@@ -2,10 +2,13 @@ import React from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import Head from "@docusaurus/Head";
+import { useCanonicalUrl } from "@site/src/hooks/useCanonicalUrl";
 
 import "../../../css/features.css";
 
 export default function Ignite2FeaturesIndex(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -14,19 +17,13 @@ export default function Ignite2FeaturesIndex(): JSX.Element {
           name="description"
           content="Apache Ignite 2.x feature set. These features represent the previous generation of Apache Ignite. For current Apache Ignite capabilities, see the main features page."
         />
-        <link
-          rel="canonical"
-          href="https://ignite.apache.org/features/ignite-2/"
-        />
+        <link rel="canonical" href={canonicalUrl} />
         <meta
           property="og:title"
           content="Apache Ignite 2.x Features - Previous Generation"
         />
         <meta property="og:type" content="article" />
-        <meta
-          property="og:url"
-          content="https://ignite.apache.org/features/ignite-2/"
-        />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

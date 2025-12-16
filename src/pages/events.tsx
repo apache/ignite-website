@@ -4,6 +4,7 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './events.module.css';
 
 // Upcoming events data - manually maintained since Meetup API requires OAuth
@@ -337,6 +338,8 @@ function CTASection() {
 }
 
 export default function EventsPage(): ReactNode {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -345,10 +348,10 @@ export default function EventsPage(): ReactNode {
           name="description"
           content="Join Apache Ignite community events: virtual meetups, Ignite Summit, and conferences. Connect with developers and learn from Ignite experts."
         />
-        <link rel="canonical" href="https://ignite.apache.org/events" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Events - Meetups, Summit, Conferences" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/events" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

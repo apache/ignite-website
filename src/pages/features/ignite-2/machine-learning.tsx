@@ -2,12 +2,15 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/compute-apis.css';
 import '../../../css/machinelearning.css';
 
 export default function MachineLearning(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -16,13 +19,13 @@ export default function MachineLearning(): JSX.Element {
           name="description"
           content="Apache Ignite Machine Learning is a set of simple and efficient APIs to enable continuous learning. It relies on Ignite's multi-tier storage that bring massive scalability for machine learning and deep learning tasks."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/machinelearning.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta
           property="og:title"
           content="Continuous Machine Learning, Scalable Deep Learning - Apache Ignite"
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/machinelearning.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

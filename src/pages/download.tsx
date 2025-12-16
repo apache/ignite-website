@@ -12,22 +12,24 @@ import {
   springBootDependencies,
 } from '@site/src/data/downloads';
 import { DOCS_INDEX } from '@site/src/config/docs-urls';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './download.module.css';
 
 const DOCS_BASE_URL = DOCS_INDEX;
 
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');
+  const canonicalUrl = useCanonicalUrl();
 
   return (
     <Layout
       title="Download - Apache Ignite"
       description="Download Apache Ignite and start building distributed applications. Get the latest binary, source code, or Docker images.">
       <Head>
-        <link rel="canonical" href="https://ignite.apache.org/download" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Download - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/download" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

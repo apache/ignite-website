@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/digital-hub.css';
 
 export default function AIMLFeatureStores(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function AIMLFeatureStores(): JSX.Element {
           name="description"
           content="Apache Ignite eliminates the real-time-or-accurate trade-off for ML feature stores. Zero training/serving skew with low-latency feature retrieval through MVCC snapshots and memory-first architecture."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/ai-ml-feature-stores.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="AI/ML Feature Stores - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/ai-ml-feature-stores.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

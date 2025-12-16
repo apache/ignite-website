@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/compute-apis.css';
 
 export default function ComputeAPIs(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function ComputeAPIs(): JSX.Element {
           name="description"
           content="Apache Ignite compute APIs allow you to perform computations at high speeds. Achieve high performance, low latency, and linear scalability in data-intensive computing."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/compute-apis.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Compute APIs - Data-Intensive Computing" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/compute-apis.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

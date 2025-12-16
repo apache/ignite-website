@@ -2,10 +2,13 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/usecases.css';
 
 export default function UseCasesIndex(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -14,10 +17,10 @@ export default function UseCasesIndex(): JSX.Element {
           name="description"
           content="Apache Ignite eliminates distributed systems trade-offs. Fast OR Consistent? Choose Both. Discover use cases for event stream processing, microservices, AI/ML feature stores, and more."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Use Cases - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/digital-hub.css';
 
 export default function SessionManagement(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function SessionManagement(): JSX.Element {
           name="description"
           content="Apache Ignite eliminates the fast-or-durable trade-off for session management. Any-node session access with automatic failover and zero data loss through memory-first architecture with distributed replication."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/session-management.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Session Management and Caching at Scale - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/session-management.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,12 +2,15 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../../css/native-persistence.css';
 import '../../../css/compute-apis.css';
 import '../../../css/streaming.css';
 
 export default function Streaming(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -16,10 +19,10 @@ export default function Streaming(): JSX.Element {
           name="description"
           content="Apache Ignite data loading, streaming, and real-time processing capabilities allow to inject large amounts of data into an Ignite cluster in a scalable and fault-tolerant way. Learn more here."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/streaming.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Streaming, Real-Time Data Processing" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/streaming.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

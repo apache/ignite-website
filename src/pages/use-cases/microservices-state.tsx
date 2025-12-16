@@ -2,11 +2,14 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/digital-hub.css';
 
 export default function MicroservicesState(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -15,10 +18,10 @@ export default function MicroservicesState(): JSX.Element {
           name="description"
           content="Apache Ignite eliminates the simple-or-scalable trade-off for microservices. Distributed ACID transactions across service boundaries without saga complexity through memory-first architecture and consensus replication."
         />
-        <link rel="canonical" href="https://ignite.apache.org/use-cases/microservices-state.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Microservices State Management - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/use-cases/microservices-state.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

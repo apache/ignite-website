@@ -2,10 +2,13 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 
 export default function SchemaEvolution(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -14,10 +17,10 @@ export default function SchemaEvolution(): JSX.Element {
           name="description"
           content="Apache Ignite enables schema changes without cluster restarts. Catalog-driven schema management provides atomic versioning. Add columns, modify indexes, and change distributions while applications continue running."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/schema-evolution" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Schema Evolution Without Downtime - Apache Ignite" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/schema-evolution" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

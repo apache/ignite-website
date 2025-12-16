@@ -2,12 +2,15 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/service.css';
 import '../../css/compute-apis.css';
 
 export default function ServiceAPIs(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -16,10 +19,10 @@ export default function ServiceAPIs(): JSX.Element {
           name="description"
           content="Apache Ignite Service Grid allows to deploy various types of singleton services in the cluster or multiple service instances. Build a fault-tolerant, scalable, high-performant, microservice-based solution with Apache Ignite."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/service-apis.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Services, Distributed Service Grid" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/service-apis.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

@@ -2,10 +2,13 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/features.css';
 
 export default function FeaturesIndex(): JSX.Element {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
@@ -14,10 +17,10 @@ export default function FeaturesIndex(): JSX.Element {
           name="description"
           content="Apache Ignite delivers ACID transactions, distributed SQL, and compute capabilities through memory-first architecture with MVCC and distributed replication."
         />
-        <link rel="canonical" href="https://ignite.apache.org/features/" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite Features - Built Memory-First for Modern Workloads" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/features/" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta
           property="og:description"

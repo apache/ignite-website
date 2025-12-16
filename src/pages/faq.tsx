@@ -5,6 +5,7 @@ import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
 import { FAQCategoryTabs, type FAQCategory } from '@site/src/components/FAQAccordion';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './faq.module.css';
 
 function HeroSection() {
@@ -617,15 +618,17 @@ function CTASection() {
 }
 
 export default function FAQPage(): ReactNode {
+  const canonicalUrl = useCanonicalUrl();
+
   return (
     <Layout>
       <Head>
         <title>Apache Ignite FAQ - Frequently Asked Questions</title>
         <meta name="description" content="Answers to common questions about Apache Ignite, the memory-first distributed SQL database. Learn about architecture, transactions, SQL capabilities, and deployment." />
-        <link rel="canonical" href="https://ignite.apache.org/faq.html" />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content="Apache Ignite FAQ" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/faq.html" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta property="og:description" content="Answers to common questions about Apache Ignite, the memory-first distributed SQL database." />
       </Head>

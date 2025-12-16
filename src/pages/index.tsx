@@ -7,6 +7,7 @@ import Link from '@docusaurus/Link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Section from '@site/src/components/Section';
+import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './index.module.css';
 
 function HomepageHero() {
@@ -540,6 +541,7 @@ function ReadyToStart() {
 
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
+  const canonicalUrl = useCanonicalUrl();
 
   useEffect(() => {
     document.body.classList.add('homepage');
@@ -556,10 +558,10 @@ export default function Home(): ReactNode {
       <Head>
         <meta property="og:title" content="Distributed Database - Apache Ignite®" />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ignite.apache.org/" />
+        <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content="/img/og-pic.png" />
         <meta property="og:description" content="Apache Ignite is a leading distributed database management system for high-performance computing with in-memory speed. Learn how to use the Ignite decentralized database system and get started." />
-        <link rel="canonical" href="https://ignite.apache.org/" />
+        <link rel="canonical" href={canonicalUrl} />
       </Head>
 
       {/* Header is rendered inside fronttop (in HomepageHero) to match PUG structure */}
