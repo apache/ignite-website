@@ -1,5 +1,7 @@
-import React, { useState, useEffect, type ReactNode } from 'react';
+import React, { useState, useEffect, useCallback, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { mobileMenuItems } from '@site/src/config/navigation';
 import styles from './styles.module.css';
 
@@ -12,9 +14,41 @@ interface AccordionState {
   [key: string]: boolean;
 }
 
+/**
+ * Helper to check if a URL is external (absolute URL)
+ */
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//');
+}
+
+/**
+ * Create a URL resolver function that prepends baseUrl to relative paths
+ */
+function createUrlResolver(baseUrl: string): (url: string) => string {
+  return (url: string): string => {
+    if (!url) return url;
+    if (isExternalUrl(url)) return url;
+    const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const normalizedPath = url.startsWith('/') ? url : `/${url}`;
+    return `${normalizedBase}${normalizedPath}`;
+  };
+}
+
 export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
   const [accordionState, setAccordionState] = useState<AccordionState>({});
   const [mounted, setMounted] = useState(false);
+  const { siteConfig } = useDocusaurusContext();
+
+  // Static asset URLs with baseUrl support
+  const logoUrl = useBaseUrl('/img/logo.svg');
+  const homeUrl = useBaseUrl('/');
+  const downloadUrl = useBaseUrl('/download');
+
+  // Create URL resolver for dynamic paths (menu items from config)
+  const resolveUrl = useCallback(
+    createUrlResolver(siteConfig.baseUrl),
+    [siteConfig.baseUrl]
+  );
 
   // Handle mount state for portal
   useEffect(() => {
@@ -50,8 +84,8 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
             Close
           </button>
           <div className={styles.mobmenuContent}>
-            <a className={styles.mobmenuLogo} href="/">
-              <img src="/img/logo.svg" alt="Apache Ignite" />
+            <a className={styles.mobmenuLogo} href={homeUrl}>
+              <img src={logoUrl} alt="Apache Ignite" />
             </a>
             <div className={styles.mobmenuMenu}>
               <ul>
@@ -65,11 +99,11 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
                       <li key={item.label} className={isDefault ? styles.isdefault : (isOpen ? styles.isopen : '')}>
                         {isDefault ? (
                           // Community without accordion button - just the link
-                          <a href={item.href}>{item.label}</a>
+                          <a href={resolveUrl(item.href)}>{item.label}</a>
                         ) : (
                           // Use Cases and Features with accordion button
                           <span className={styles.mobmenuParent}>
-                            <a href={item.href}>{item.label}</a>
+                            <a href={resolveUrl(item.href)}>{item.label}</a>
                             <button
                               className={styles.mobmenuOpener}
                               onClick={() => toggleAccordion(item.label)}
@@ -80,7 +114,7 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
                         <ul className={isDefault ? styles.isdefault : undefined}>
                           {item.children.map((child, idx) => (
                             <li key={idx}>
-                              <a href={child.href}>{child.label}</a>
+                              <a href={resolveUrl(child.href)}>{child.label}</a>
                             </li>
                           ))}
                         </ul>
@@ -90,7 +124,7 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
 
                   return (
                     <li key={item.label}>
-                      <a href={item.href}>
+                      <a href={resolveUrl(item.href)}>
                         {item.label}
                       </a>
                     </li>
@@ -98,7 +132,7 @@ export default function MobileModal({ isOpen, onClose }: Props): ReactNode {
                 })}
               </ul>
               <a
-                href="/download"
+                href={downloadUrl}
                 className={`button ${styles.mobmenuButton}`}
               >
                 Download Ignite

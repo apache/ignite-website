@@ -1,4 +1,5 @@
 import React from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
 /**
@@ -8,6 +9,8 @@ import styles from './styles.module.css';
  * Used for important events, releases, or community announcements.
  */
 export default function TopBanner(): JSX.Element {
+  const arrowIcon = useBaseUrl('/images/promos/arrow-white.svg');
+
   return (
     <div id="promotion-bar" className={styles.promotionBar}>
       <a
@@ -19,7 +22,7 @@ export default function TopBanner(): JSX.Element {
       >
         Ignite Summit 2025 — Watch on demand &nbsp;
         <span className={styles.more}>
-          <img src="/images/promos/arrow-white.svg" alt="" />
+          <img src={arrowIcon} alt="" />
         </span>
       </a>
     </div>

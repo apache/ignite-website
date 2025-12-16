@@ -1,11 +1,34 @@
-import React, { useState, useEffect, useRef, type ReactNode } from 'react';
+import React, { useState, useEffect, useRef, useCallback, type ReactNode } from 'react';
 import clsx from 'clsx';
 import { useLocation } from '@docusaurus/router';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import TopBanner from '@site/src/components/TopBanner';
 import MobileModal from '@site/src/components/MobileModal';
 import { mainNavItems, getStartedMenu, featuresMenu, useCasesMenu, communityMenu, resourcesMenu } from '@site/src/config/navigation';
 import type { DropdownMenu } from '@site/src/config/navigation';
 import styles from '@site/src/css/navigation.module.css';
+
+/**
+ * Helper to check if a URL is external (absolute URL)
+ */
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//');
+}
+
+/**
+ * Create a URL resolver function that prepends baseUrl to relative paths
+ */
+function createUrlResolver(baseUrl: string): (url: string) => string {
+  return (url: string): string => {
+    if (!url) return url;
+    if (isExternalUrl(url)) return url;
+    // Ensure baseUrl ends without slash and path starts with slash
+    const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const normalizedPath = url.startsWith('/') ? url : `/${url}`;
+    return `${normalizedBase}${normalizedPath}`;
+  };
+}
 
 /**
  * Dropdown Menu Component
@@ -15,9 +38,10 @@ interface DropdownProps {
   menu: DropdownMenu;
   isActive: boolean;
   panelKey: string;
+  resolveUrl: (url: string) => string;
 }
 
-function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Element {
+function DropdownMenuPanel({ menu, isActive, panelKey, resolveUrl }: DropdownProps): JSX.Element {
   const gridClass = panelKey === 'getStarted' || panelKey === 'resources'
     ? styles.dropmenu1Grid
     : panelKey === 'features' || panelKey === 'useCases'
@@ -37,18 +61,18 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
         {menu.featured && (
           <div className={clsx(styles.dropmenuBox, styles.dropmenuBoxButtonin)}>
             <a
-              href={menu.featured.href}
+              href={resolveUrl(menu.featured.href)}
               className={clsx(styles.dropmenuRedbutton, menu.featured.className)}
             >
-              <img src={menu.featured.icon} alt="" />
+              <img src={resolveUrl(menu.featured.icon)} alt="" />
               <span>{menu.featured.label}</span>
             </a>
             {menu.sections[0] && menu.sections[0].items && (
               <ul className={styles.dropmenuMenu}>
                 {menu.sections[0].items.map((item, idx) => (
                   <li key={idx}>
-                    <a href={item.href} className={styles.dropmenuIconitem}>
-                      {item.icon && <img src={item.icon} alt="" />}
+                    <a href={resolveUrl(item.href)} className={styles.dropmenuIconitem}>
+                      {item.icon && <img src={resolveUrl(item.icon)} alt="" />}
                       <span>{item.label}</span>
                     </a>
                   </li>
@@ -79,7 +103,7 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
               {section.title && (
                 <p className="capstext">
                   {section.titleLink ? (
-                    <a href={section.titleLink} className={styles.dropmenuCapslink}>
+                    <a href={resolveUrl(section.titleLink)} className={styles.dropmenuCapslink}>
                       {section.title}
                     </a>
                   ) : (
@@ -91,12 +115,12 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
                 {section.items.map((item, itemIdx) => (
                   <li key={itemIdx}>
                     <a
-                      href={item.href}
+                      href={resolveUrl(item.href)}
                       className={styles.dropmenuIconitem}
                       target={item.external ? '_blank' : undefined}
                       rel={item.external ? 'noopener noreferrer' : undefined}
                     >
-                      {item.icon && <img src={item.icon} alt="" />}
+                      {item.icon && <img src={resolveUrl(item.icon)} alt="" />}
                       <span>{item.label}</span>
                     </a>
                   </li>
@@ -110,7 +134,7 @@ function DropdownMenuPanel({ menu, isActive, panelKey }: DropdownProps): JSX.Ele
       {(panelKey === 'features' || panelKey === 'useCases') && (
         <div className={clsx(styles.panelmorelinkwrap, 'container')}>
           <a
-            href={panelKey === 'useCases' ? '/use-cases' : '/features/'}
+            href={resolveUrl(panelKey === 'useCases' ? '/use-cases' : '/features/')}
             className={styles.panellink}
           >
             View all
@@ -131,9 +155,23 @@ export default function NavbarContent(): ReactNode {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { siteConfig } = useDocusaurusContext();
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const baseDropmenuRef = useRef<HTMLDivElement | null>(null);
   const floatDropmenuRef = useRef<HTMLDivElement | null>(null);
+
+  // Static asset URLs with baseUrl support
+  const menuIcon = useBaseUrl('/img/menu.svg');
+  const logoWhite = useBaseUrl('/img/logo-white.svg');
+  const logo = useBaseUrl('/img/logo.svg');
+  const homeUrl = useBaseUrl('/');
+  const downloadUrl = useBaseUrl('/download');
+
+  // Create URL resolver for dynamic paths (menu items from config)
+  const resolveUrl = useCallback(
+    createUrlResolver(siteConfig.baseUrl),
+    [siteConfig.baseUrl]
+  );
 
   // Handle scroll behavior
   useEffect(() => {
@@ -270,23 +308,23 @@ export default function NavbarContent(): ReactNode {
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Toggle mobile menu"
             >
-              <img src="/img/menu.svg" alt="" />
+              <img src={menuIcon} alt="" />
             </button>
 
-            <a href="/" className={styles.hdrLogo}>
+            <a href={homeUrl} className={styles.hdrLogo}>
               <img
-                src="/img/logo-white.svg"
+                src={logoWhite}
                 alt="Apache Ignite"
                 className={clsx(styles.hdrLogoImg, styles.hdrLogoWhite)}
               />
               <img
-                src="/img/logo.svg"
+                src={logo}
                 alt="Apache Ignite"
                 className={clsx(styles.hdrLogoImg, styles.hdrLogoBlack)}
               />
             </a>
 
-            <a href="/download" className={clsx('button', styles.hdrButton)}>
+            <a href={downloadUrl} className={clsx('button', styles.hdrButton)}>
               Download Ignite
             </a>
 
@@ -306,7 +344,7 @@ export default function NavbarContent(): ReactNode {
                       onMouseEnter={() => hasMenu && key && handleMouseEnter(key)}
                     >
                       <a
-                        href={itemHref || '#'}
+                        href={itemHref ? resolveUrl(itemHref) : '#'}
                         className={clsx({
                           [styles.hdrmenuExpanded]: hasMenu,
                           [styles.hdrmenuCurrent]: isCurrent,
@@ -329,26 +367,31 @@ export default function NavbarContent(): ReactNode {
                 menu={getStartedMenu}
                 isActive={activeDropdown === 'getStarted'}
                 panelKey="getStarted"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={featuresMenu}
                 isActive={activeDropdown === 'features'}
                 panelKey="features"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={useCasesMenu}
                 isActive={activeDropdown === 'useCases'}
                 panelKey="useCases"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={communityMenu}
                 isActive={activeDropdown === 'community'}
                 panelKey="community"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={resourcesMenu}
                 isActive={activeDropdown === 'resources'}
                 panelKey="resources"
+                resolveUrl={resolveUrl}
               />
             </div>
           </div>
@@ -374,18 +417,18 @@ export default function NavbarContent(): ReactNode {
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Toggle mobile menu"
             >
-              <img src="/img/menu.svg" alt="" />
+              <img src={menuIcon} alt="" />
             </button>
 
-            <a href="/" className={styles.hdrLogo}>
+            <a href={homeUrl} className={styles.hdrLogo}>
               <img
-                src="/img/logo.svg"
+                src={logo}
                 alt="Apache Ignite"
                 className={styles.hdrLogoImg}
               />
             </a>
 
-            <a href="/download" className={clsx('button', styles.hdrButton)}>
+            <a href={downloadUrl} className={clsx('button', styles.hdrButton)}>
               Download Ignite
             </a>
 
@@ -405,7 +448,7 @@ export default function NavbarContent(): ReactNode {
                       onMouseEnter={() => hasMenu && key && handleMouseEnter(key)}
                     >
                       <a
-                        href={itemHref || '#'}
+                        href={itemHref ? resolveUrl(itemHref) : '#'}
                         className={clsx({
                           [styles.hdrmenuExpanded]: hasMenu,
                           [styles.hdrmenuCurrent]: isCurrent,
@@ -428,26 +471,31 @@ export default function NavbarContent(): ReactNode {
                 menu={getStartedMenu}
                 isActive={activeDropdown === 'getStarted'}
                 panelKey="getStarted"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={featuresMenu}
                 isActive={activeDropdown === 'features'}
                 panelKey="features"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={useCasesMenu}
                 isActive={activeDropdown === 'useCases'}
                 panelKey="useCases"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={communityMenu}
                 isActive={activeDropdown === 'community'}
                 panelKey="community"
+                resolveUrl={resolveUrl}
               />
               <DropdownMenuPanel
                 menu={resourcesMenu}
                 isActive={activeDropdown === 'resources'}
                 panelKey="resources"
+                resolveUrl={resolveUrl}
               />
             </div>
           </div>
