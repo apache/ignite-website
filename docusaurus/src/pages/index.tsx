@@ -7,8 +7,6 @@ import Link from '@docusaurus/Link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Section from '@site/src/components/Section';
-import {userStories, storyCategories} from '@site/src/data/userStories';
-
 import styles from './index.module.css';
 
 function HomepageHero() {
@@ -405,38 +403,6 @@ function UsageScenarios() {
   );
 }
 
-function UserStories() {
-  return (
-    <Section className={styles.frontstories}>
-      <h2 className={styles.h2}>Ignite User Stories</h2>
-      <div className={clsx(styles.frontstories__checkerswrap, styles.cardsimple)}>
-        <ul className={clsx(styles.frontstories__checkers, 'capstext')}>
-          {storyCategories.map(category => (
-            <li key={category}>{category}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className={styles.frontstories__grid}>
-        {userStories.map((story, idx) => (
-          <article key={idx} className={styles.userStory}>
-            <a href={story.url} className={styles.userStory__link} target="_blank" rel="noreferrer">
-              <img src={story.thumbnail} alt={story.title} className={styles.userStory__thumbnail} />
-              <div className={clsx(styles.userStory__title, story.titleClass)}>
-                {story.title}
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-
-      <div className={clsx(styles.frontstories__bottom, 'pt-5')}>
-        <Link to="/use-cases" className="button button--shadow">Explore Use Cases</Link>
-      </div>
-    </Section>
-  );
-}
-
 function EventsSection() {
   return (
     <Section className={clsx(styles.frontconfs, styles.frontblue)}>
@@ -605,7 +571,6 @@ export default function Home(): ReactNode {
       </section>
 
       <UsageScenarios />
-      {/*<UserStories />*/}
       <EventsSection />
       <ReadyToStart />
       <ResourcesSection />
