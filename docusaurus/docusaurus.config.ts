@@ -96,7 +96,17 @@ const config: Config = {
           { from: '/blog/2/', to: '/blog/page/2' },
           { from: '/blog/3/', to: '/blog/page/3' },
 
-          // Individual blog posts (26 posts)
+          // Individual blog posts
+          // 2025 posts (November-December additions from main branch)
+          { from: '/blog/whats-new-in-apache-ignite-3-1', to: '/blog/2025/11/03/apache-ignite-3-1' },
+          { from: '/blog/getting-to-know-ignite3', to: '/blog/2025/11/11/getting-to-know-ignite3' },
+          { from: '/blog/schema-design-for-distributed-systems-ai3', to: '/blog/2025/11/18/schema-design-for-distributed-systems-ai3' },
+          { from: '/blog/apache-ignite-3-architecture-part-1', to: '/blog/2025/11/25/ignite3-architecture-p1' },
+          { from: '/blog/apache-ignite-3-architecture-part-2', to: '/blog/2025/12/02/ignite3-architecture-p2' },
+          { from: '/blog/apache-ignite-3-architecture-part-3', to: '/blog/2025/12/09/ignite3-architecture-p3' },
+          { from: '/blog/apache-ignite-3-client-connections-handling', to: '/blog/2025/12/10/ignite3-client-connections' },
+
+          // 2025 posts (original)
           { from: '/blog/whats-new-in-apache-ignite-3-0', to: '/blog/2025/02/24/whats-new-in-apache-ignite-3-0' },
           { from: '/blog/apache-ignite-2-17-0', to: '/blog/2025/02/13/apache-ignite-2-17-0' },
           { from: '/blog/ignite-net-intel-cet-fix', to: '/blog/2024/11/22/apache-ignite-net-intel-cet-fix' },
