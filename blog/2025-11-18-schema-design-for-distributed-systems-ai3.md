@@ -325,4 +325,4 @@ Your joins stay local, your compute jobs run where the data lives, and scaling s
 
 When data lives together, your system scales naturally — without complexity creeping in.
 
-Explore the [Ignite 3 documentation](/docs/3.1.0/) for detailed examples and API references.
+Explore the [Ignite 3 documentation](/docs/) for detailed examples and API references.

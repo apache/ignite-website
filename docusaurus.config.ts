@@ -219,7 +219,7 @@ const config: Config = {
         },
         {
           label: 'Docs',
-          to: '/docs/3.1.0/',
+          to: '/docs/',
           position: 'left',
         },
       ],

@@ -25,7 +25,7 @@ function HomepageHero() {
               Memory-First Distributed SQL Database That Eliminates The Latency-Consistency Trade-off
             </div>
             <div className={styles.innerhero__action}>
-              <Link className={clsx('button', styles.fronthero__button)} to="/docs/3.1.0/">
+              <Link className={clsx('button', styles.fronthero__button)} to="/docs/">
                 Get Started
               </Link>
             </div>
@@ -268,7 +268,7 @@ conn.close()`
           </div>
 
           <div style={{marginTop: '4rem'}}>
-            <a className="button" href="/docs/3.1.0/" target="_blank" rel="noreferrer" style={{fontSize: '16px'}}>View Client Documentation</a>
+            <a className="button" href="/docs/" target="_blank" rel="noreferrer" style={{fontSize: '16px'}}>View Client Documentation</a>
           </div>
         </div>
 

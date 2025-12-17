@@ -59,4 +59,5 @@ export const DOCS_PATHS = {
  * Flat exports for common paths (convenience)
  */
 export const DOCS_QUICK_START = DOCS_PATHS.gettingStarted.quickStart;
-export const DOCS_INDEX = DOCS_PATHS.index;
+// Landing page uses /docs/ to let the docs site handle version routing
+export const DOCS_INDEX = '/docs/';

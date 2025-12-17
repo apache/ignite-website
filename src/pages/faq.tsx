@@ -119,7 +119,7 @@ function FAQSection() {
               </ul>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/',
+          learnMoreLink: '/docs/',
           learnMoreText: 'Read the Documentation',
         },
         {

@@ -42,7 +42,7 @@ export default function OperationalAnalytics(): JSX.Element {
               Concurrent queries on live transactional data without blocking writes
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="/docs/3.1.0/" target="_blank" rel="noreferrer" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="/docs/" target="_blank" rel="noreferrer" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
