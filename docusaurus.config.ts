@@ -34,7 +34,7 @@ const config: Config = {
 
   // Documentation is built separately and merged into the final site.
   // Links to /docs/ will appear broken during standalone builds but work in production.
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'ignore',
   onBrokenAnchors: 'ignore',
 
   // Even if you don't use internationalization, you can use this field to set
