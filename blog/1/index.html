@@ -343,6 +343,200 @@
           <section class="blog__posts">
             <article class="post">
               <div class="post__header">
+                <h2><a href="/blog/apache-ignite-net-intel-cet-fix.html">Ignite on .NET 9 and Intel CET</a></h2>
+                <div>
+                  November 22, 2024 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-net-intel-cet-fix.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Ignite on .NET 9 and Intel CET%20https://ignite.apache.org/blog/apache-ignite-net-intel-cet-fix.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>Old JDK code meets new Intel security feature, JVM + CLR in one process, and a mysterious crash.</p>
+                <p><a href="https://ptupitsyn.github.io/Ignite-on-NET-9/">Read More...</a></p>
+              </div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-2-16-0.html">Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes</a></h2>
+                <div>
+                  December 25, 2023 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-16-0.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes%20https://ignite.apache.org/blog/apache-ignite-2-16-0.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  As of December 25, 2023, <a href="https://ignite.apache.org/">Apache Ignite </a>2.16 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/j3brc">Important JIRA tasks </a>but
+                  let&apos;s briefly overview some valuable improvements.
+                </p>
+                <h3 id="cache-dumps">Cache dumps</h3>
+                <p>
+                  Ignite has persistent cache <a href="https://ignite.apache.org/docs/latest/snapshots/snapshots">snapshots </a>and this feature is highly appreciated by Ignite users. This release introduces another way to make a copy of
+                  user data - a cache dump.
+                </p>
+                <p>
+                  The cache dump is essentially a file that contains all entries of a cache group at the time of dump creation. Dump is consistent like a snapshot, which means all entries that existed in the cluster at the moment of dump
+                  creation will be included in the dump file. Meta information of dumped caches and binary meta are also included in the dump.
+                </p>
+                <p>Main differences from cache snapshots:</p>
+                <ul>
+                  <li>Supports in-memory caches that a snapshot feature does not support.</li>
+                  <li>Takes up less disk space. The dump contains only the cache entries as-is.</li>
+                  <li>Can be used for offline data processing.</li>
+                </ul>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-16-0.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-net-dynamic-linq.html">Dynamic LINQ performance and usability with Ignite.NET and System.Linq.Dynamic</a></h2>
+                <div>
+                  May 22, 2023 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-net-dynamic-linq.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Dynamic LINQ performance and usability with Ignite.NET and System.Linq.Dynamic%20https://ignite.apache.org/blog/apache-ignite-net-dynamic-linq.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>Dynamically building database queries can be necessary for some use cases, such as UI-defined filtering. This can get challenging with LINQ frameworks like EF Core and Ignite.NET.</p>
+                <p><a href="https://ptupitsyn.github.io/Dynamic-LINQ-With-Ignite/">Read More...</a></p>
+              </div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-2-13-0.html">Apache Ignite 2.13.0: new Apache Calcite-based SQL engine</a></h2>
+                <div>
+                  April 28, 2022 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-13-0.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite 2.13.0: new Apache Calcite-based SQL engine%20https://ignite.apache.org/blog/apache-ignite-2-13-0.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  As of April 26, 2022, <a href="https://ignite.apache.org/">Apache Ignite</a> 2.13 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/x8u49">Important JIRA tasks</a> but here
+                  let&apos;s briefly overview some valuable improvements.
+                </p>
+                <h4>This is a breaking change release: The legacy service grid implementation was removed.</h4>
+                <h3 id="new-apache-calcite-based-sql-engine">New Apache Calcite-based SQL engine</h3>
+                <p>We&apos;ve implemented a new experimental SQL engine based on Apache Calcite. Now it&apos;s possible to:</p>
+                <ul>
+                  <li>Get rid of some <a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Motivation">H2 limitations</a>;</li>
+                  <li><a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Implementationdetails">Optimize</a> some query execution.</li>
+                </ul>
+                <p>The current H2-based engine has fundamental limitations. For example:</p>
+                <ul>
+                  <li>some queries should be splitted into 2 phases (map subquery and reduce subquery), but some of them cannot be effectively executed in 2 phases.</li>
+                  <li>H2 is a third-party database product with not-ASF license.</li>
+                  <li>The optimizer and other internal things are not supposed to work in a distributed environment.</li>
+                  <li>It&apos;s hard to make Ignite-specific changes to the H2 code, patches are often declined.</li>
+                </ul>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-13-0.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-2-12-0.html">Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes</a></h2>
+                <div>
+                  January 14, 2022 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-12-0.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes%20https://ignite.apache.org/blog/apache-ignite-2-12-0.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  As of January 14, 2022, <a href="https://ignite.apache.org/">Apache Ignite</a> 2.12 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/0zyi2">Important JIRA tasks</a> but here
+                  let&rsquo;s briefly overview some valuable improvements.
+                </p>
+                <h3 id="vulnerability-updates">Vulnerability Updates</h3>
+                <p>
+                  The Apache Ignite versions lower than 2.11.1 are vulnerable to <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44832">CVE-2021-44832</a> which is related to the <code>ignite-log4j2</code> module usage.
+                </p>
+                <p>The release also fixes 10+ CVE&rsquo;s of various modules. See <a href="https://ignite.apache.org/releases/ignite2/2.12.0/release_notes.html">release notes</a> for more details.</p>
+                <h3 id="change-data-capture">Change Data Capture</h3>
+                <p>
+                  Change Data Capture (<a href="https://en.wikipedia.org/wiki/Change_data_capture">CDC</a>) is a data processing pattern used to asynchronously receive entries that have been changed on the local node so that action can be
+                  taken using the changed entry.
+                </p>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-12-0.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-2-11-1.html">Apache Ignite 2.11.1: Emergency Log4j2 Update</a></h2>
+                <div>
+                  December 21, 2021 by Maxim Muzafarov. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-11-1.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite 2.11.1: Emergency Log4j2 Update%20https://ignite.apache.org/blog/apache-ignite-2-11-1.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  The new <a href="https://ignite.apache.org/">Apache Ignite</a> 2.11.1 is an emergency release that fixes <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228">CVE-2021-44228</a>,
+                  <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45046">CVE-2021-45046</a>,<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-45105">CVE-2021-45105</a> related to the ignite-log4j2 module
+                  usage.
+                </p>
+                <h3 id="apache-ignite-with-log4j-vulnerability">Apache Ignite with Log4j Vulnerability</h3>
+                <p>All the following conditions must be met:</p>
+                <ul>
+                  <li>The Apache Ignite version lower than 2.11.0 is used (since these vulnerabilities are already fixed in 2.11.1, 2.12, and upper versions);</li>
+                  <li>The <code>ignite-logj42</code> is used by Apache Ignite and located in the <code>libs</code> directory (by default it is located in the <code>libs/optional</code>directory, so these deployments are not affected);</li>
+                  <li>
+                    The Java version in use is older than the following versions: <code>8u191</code>, <code>11.0.1</code>. This is due to the fact that later versions set the JVM property
+                    <code>com.sun.jndi.ldap.object.trustURLCodebase</code> to <code>false</code> by default, which disables JNDI loading of classes from arbitrary URL code bases.
+                  </li>
+                </ul>
+                <p>NOTE: Relying only on the Java version as a protection against these vulnerabilities is very risky and has not been tested.</p>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-11-1.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-2-11-stabilization.html">Apache Ignite 2.11: Stabilization First</a></h2>
+                <div>
+                  September 20, 2021 by Maxim Muzafarov. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-11-stabilization.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite 2.11: Stabilization First%20https://ignite.apache.org/blog/apache-ignite-2-11-stabilization.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  The new <a href="https://ignite.apache.org/">Apache Ignite</a> 2.11 was released on September 17, 2021. It can be considered to be a greater extent as a stabilization release that closed a number of technical debts of the
+                  internal architecture and bugs. Out of more than 200 completed tasks, 120 are bug fixes. However, some valuable improvements still exist, so let&apos;s take a quick look at them together.
+                </p>
+                <h3 id="thin-clients">Thin Clients</h3>
+                <p>
+                  Partition awareness is enabled by default in the 2.11 release and allows thin clients to send query requests directly to the node that owns the queried data. Without partition awareness, an application executes all queries
+                  and operations via a single server node that acts as a proxy for the incoming requests.
+                </p>
+                <p>
+                  The support of <a href="https://ignite.apache.org/docs/latest/thin-clients/java-thin-client#cache-entry-listening">Continuous Queries</a>added to the java thin client. For the other supported features, you can check - the
+                  <a href="https://cwiki.apache.org/confluence/display/IGNITE/Thin+clients+features">List of Thin Client Features</a>.
+                </p>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-11-stabilization.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
+                <h2><a href="/blog/apache-ignite-momentum-highlights-from.html">Apache Ignite Momentum: Highlights from 2020-2021</a></h2>
+                <div>
+                  September 14, 2021 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-momentum-highlights-from.html">Facebook</a><span>, </span
+                  ><a href="http://twitter.com/home?status=Apache Ignite Momentum: Highlights from 2020-2021%20https://ignite.apache.org/blog/apache-ignite-momentum-highlights-from.html">Twitter</a>
+                </div>
+              </div>
+              <div class="post__content">
+                <p>
+                  When Apache Ignite entered the Apache Software Foundation (ASF) Incubator in 2014, it took less than a year for the project and its community to graduate from the Incubator and become a top-level project for the ASF. Since
+                  then, Ignite has experienced a significant and steady growth in popularity, and it has been used by thousands of application developers and architects to create high-performance and scalable applications used by millions
+                  of people daily. In this article, we&rsquo;ll recap the achievements of Ignite in 2020-2021.
+                </p>
+                <p></p>
+                <h3><br />Ignite is Ranked as a Top 5 Project<br /></h3>
+                <p></p>
+                <p>
+                  The ASF has ranked Apache ignite as a Top 5 project in various categories since 2017. <a href="https://blogs.apache.org/foundation/entry/apache-in-2017-by-the" target="_blank">That year</a>, Ignite was in the Top 5 of
+                  Apache Project Repositories by Commits and most active Apache mailing lists. <a href="https://www.apache.org/foundation/docs/FY2021AnnualReport.pdf" target="_blank">Today</a>, the momentum continues, and Ignite continues
+                  to be ranked as a Top 5 project in multiple categories: second on the Top 5 big data user lists, third on the Top 5 big data dev lists, second on the Top 5 of all user lists, third on the Top 5 repos by size.
+                </p>
+                <p>
+                  <a href="/img/blog/463ae37d-866d-4c15-8ebf-6b88499daa81.jpeg"><img src="/img/blog/463ae37d-866d-4c15-8ebf-6b88499daa81.jpeg" width="30%" /></a>
+                </p>
+              </div>
+              <div class="post__footer"><a class="more" href="/blog/apache-ignite-momentum-highlights-from.html">↓ Read all</a></div>
+            </article>
+            <article class="post">
+              <div class="post__header">
                 <h2><a href="/blog/apache-ignite-2-10-thin.html">Apache Ignite 2.10: Thin Client Expansion</a></h2>
                 <div>
                   March 18, 2021 by Maxim Muzafarov. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-10-thin.html">Facebook</a><span>, </span
@@ -393,210 +587,13 @@
               </div>
               <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-9-released.html">↓ Read all</a></div>
             </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/ignite-2-8-released-less.html">Ignite 2.8 Released: Less Stress in Production and Advances in Machine Learning</a></h2>
-                <div>
-                  March 11, 2020 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/ignite-2-8-released-less.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Ignite 2.8 Released: Less Stress in Production and Advances in Machine Learning%20https://ignite.apache.org/blog/ignite-2-8-released-less.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  With thousands of changes contributed to Apache Ignite 2.8 that enhanced almost all the components of the platform, it&rsquo;s possible to overlook some of the improvements that can convince you to upgrade to this version
-                  sooner than later. While a quick check of the <a href="https://ignite.apache.org/releases/ignite2/2.8.0/release_notes.html" target="_blank">release notes</a> will help to discover anticipated bug fixes, this article aims
-                  to guide through enhancements every Ignite developer should be aware of.
-                </p>
-                <h3>New Subsystem for Production Monitoring and Tracing</h3>
-                <p>
-                  Several months of constant work on <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=112820392" target="_blank">IEP-35: Monitoring &amp; Profiling</a> has resulted in the creation of a robust and
-                  elastic subsystem for production monitoring and diagnostic (aka. profiling). This was influenced by the needs of many developers who deployed Ignite in critical environments and were asking for a foundation that can be
-                  integrated with many external monitoring tools and be expanded easily.
-                </p>
-                <p>
-                  The <a href="https://apacheignite.readme.io/docs/new-metrics#section-exporters" target="_blank">new subsystem</a> consists of several registries that group individual metrics related to a specific Ignite component. For
-                  instance, you will find registries for cache, compute, or service grid APIs. Since the registries are designed to be generic, specific exporters can observe the state of Ignite via a myriad of tools supporting various
-                  protocols. By default, Ignite 2.8 introduces exporters for monitoring interfaces such as log files, JMX and SQL views, and contemporary ones such as OpenCensus.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/ignite-2-8-released-less.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-7-deep.html">Apache Ignite 2.7: Deep Learning and Extended Languages Support</a></h2>
-                <div>
-                  December 13, 2018 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-7-deep.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.7: Deep Learning and Extended Languages Support%20https://ignite.apache.org/blog/apache-ignite-2-7-deep.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <h3>Deep Learning With TensorFlow</h3>
-                <p></p>
-                <p>
-                  Even though it was natural to provide machine learning algorithms in Ignite out of the box, another direction was taken for deep learning capabilities. Primarily because machine learning approaches have already been
-                  adopted in businesses from big to small -- while deep learning is still being used for narrow and specific use cases.
-                </p>
-                <p>
-                  Thus, Ignite 2.7 can boast about an <a href="https://ignite.apache.org/features/tensorflow.html" target="_blank">official integration</a> with TensorFlow deep learning framework that gives a way to use Ignite as a
-                  distributed storage for TensorFlow calculations. With Ignite, data scientists can store unlimited data sets across a cluster, gain performance improvements and rely on fault-tolerance of both products if an algorithm fails
-                  in the middle of an execution.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-7-deep.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-5-scaling.html">Apache Ignite 2.5: Scaling to 1000s Nodes Clusters</a></h2>
-                <div>
-                  May 31, 2018 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-5-scaling.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.5: Scaling to 1000s Nodes Clusters%20https://ignite.apache.org/blog/apache-ignite-2-5-scaling.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite was always appreciated by its users for two primary things it delivers - scalability and performance. Throughout the lifetime many distributed systems tend to do performance optimizations from a release to
-                  release while making scalability related improvements just a couple of times. It&apos;s not because the scalability is of no interest. Usually, scalability requirements are set and solved once by a distributed system and
-                  don&apos;t require significant additional interventions by engineers.
-                </p>
-                <p>
-                  However, Apache Ignite grew to the point when the community decided to revisit its discovery subsystem that influences how well and far Ignite scales out. The goal was pretty clear - Ignite has to scale to 1000s of nodes
-                  as good as it scales to 100s now.
-                </p>
-                <p>
-                  It took many months to get the task implemented. So, please join me in welcoming Apache Ignite 2.5 that now can be scaled easily to 1000s of nodes and goes with other exciting capabilities. Let&apos;s check out the most
-                  prominent ones.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-5-scaling.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-4-brings.html">Apache Ignite 2.4 ings Advanced Machine Learning and Spark DataFrames Capabilities</a></h2>
-                <div>
-                  March 15, 2018 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-4-brings.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.4 ings Advanced Machine Learning and Spark DataFrames Capabilities%20https://ignite.apache.org/blog/apache-ignite-2-4-brings.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Usually, Ignite community rolls out a new version once in 3 months, but we had to make an exception for Apache Ignite 2.4 that consumed five months in total. We could easily blame Thanksgiving, Christmas and New Year
-                  holidays for the delay and would be forgiven, but, in fact, we were forging the release you can&apos;t simply pass by.
-                </p>
-                <p>Let&apos;s dive in and search for a big fish.</p>
-                <h3>Machine Learning General Availability</h3>
-                <p>
-                  Eight months ago, at the time of Apache Ignite 2.0, we put out the first APIs that formed the foundation of the Ignite&apos;s machine learning component of today. Since that time, Ignite machine learning experts and
-                  enthusiasts have been moving the liary to the general availability condition meticulously. And Ignite 2.4 became a milestone that let us consider the
-                  <a href="https://apacheignite.readme.io/docs/machine-learning" target="_blank">ML Grid</a> to be production ready.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-4-brings.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/meltdown-and-spectre-patches-show.html">Meltdown and Spectre patches show negligible impact to Apache Ignite performance</a></h2>
-                <div>
-                  January 30, 2018 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/meltdown-and-spectre-patches-show.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Meltdown and Spectre patches show negligible impact to Apache Ignite performance%20https://ignite.apache.org/blog/meltdown-and-spectre-patches-show.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  As promised in my&nbsp;<a href="https://blogs.apache.org/ignite/entry/protecting-apache-ignite-from-meltdown">initial blog post</a> on this matter, Apache Ignite community&nbsp;applied security patches against the
-                  notorious Meltdown Spectre vulnerabilities and completed performance testing of general operations and workloads that are typical for Ignite deployments.
-                </p>
-                <p>
-                  The security patches were applied only for&nbsp;<a href="https://nvd.nist.gov/vuln/detail/CVE-2017-5754" target="_blank">CVE-2017-5754</a>&nbsp;(Meltdown) and&nbsp;<a
-                    href="https://nvd.nist.gov/vuln/detail/CVE-2017-5753"
-                    target="_blank"
-                    >CVE-2017-5753</a
-                  >&nbsp;(Spectre Variant 1) vulnerabilities. The patches for&nbsp;<a href="https://nvd.nist.gov/vuln/detail/CVE-2017-5715" target="_blank">CVE-2017-5715</a>&nbsp;(Spectre Variant 2) for the hardware the community used for
-                  testing are not stable yet an can
-                  <a href="https://newsroom.intel.com/news/root-cause-of-reboot-issue-identified-updated-guidance-for-customers-and-partners/" target="_blank">cause system reboot issues or another unpredictable behavior</a>.&nbsp;
-                </p>
-                <p>The applied patches have shown that the performance implications&nbsp;are negligible - the performance drop is just in the 0 - 7% range as the figure shows:</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/meltdown-and-spectre-patches-show.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/protecting-apache-ignite-from-meltdown.html">Protecting Apache Ignite from 'Meltdown' and 'Spectre' vulnerabilities</a></h2>
-                <div>
-                  January 8, 2018 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/protecting-apache-ignite-from-meltdown.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Protecting Apache Ignite from 'Meltdown' and 'Spectre' vulnerabilities%20https://ignite.apache.org/blog/protecting-apache-ignite-from-meltdown.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  The world was rocked after the recent disclosure of the
-                  <a href="https://www.vox.com/business-and-finance/2018/1/4/16850004/meltdown-spectre-intel-security-flaw-update" target="_blank">Meltdown and Spectre</a> vulnerabilities that literally affect almost all software ever
-                  developed. Both issues are related to the way all modern CPUs are designed and this is why they have opened&nbsp;unprecedented security breaches -- making the software, including Apache Ignite, vulnerable to
-                  hacker&nbsp;attacks.
-                </p>
-                <p>The vulnerabilities are registered in the National Vulnerability Database under the following CVEs:</p>
-                <ul>
-                  <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2017-5753" target="_blank">CVE-2017-5753</a> &mdash; Spectre variant 1</li>
-                  <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2017-5715" target="_blank">CVE-2017-5715</a> &mdash; Spectre variant 2</li>
-                  <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2017-5754" target="_blank">CVE-2017-5754</a> &mdash; Meltdown</li>
-                </ul>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/protecting-apache-ignite-from-meltdown.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-essentials-series-for.html">Apache Ignite Essentials: 2-part Webinar Series for Architects and Java Developers</a></h2>
-                <div>
-                  November 17, 2017 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-essentials-series-for.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Essentials: 2-part Webinar Series for Architects and Java Developers%20https://ignite.apache.org/blog/apache-ignite-essentials-series-for.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p class="entryContent">
-                  We finally made this happen! I&rsquo;m happy to invite all of the software architects and engineers out there to a series of webinars that will introduce you to the fundamental capabilities of in-memory computing platforms
-                  such as Apache Ignite.
-                </p>
-                <p>There will also be a mix of theory and practice. A lot of code examples are waiting to be shown so that you can apply the theory in practice right away.</p>
-                <p>The series consists of two parts.</p>
-                <h3><a href="https://ignite.apache.org/events.html#in-memory-computing-essentials-architects-and-developers-part-1" target="_blank">Part 1: Tuesday, November 21, 2017, 11:00am PT / 2:00pm ET</a></h3>
-                To be covered:
-                <ul>
-                  <li>Cluster configuration and deployment.</li>
-                  <li>Distributed database internals (partitioning, replication).</li>
-                  <li>Data processing with key-value APIs.</li>
-                  <li>Affinity Collocation.</li>
-                  <li>Data processing with SQL.</li>
-                </ul>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-essentials-series-for.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-3-more.html">Apache Ignite 2.3 - More SQL and Persistence Capabilities</a></h2>
-                <div>
-                  November 1, 2017 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-3-more.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.3 - More SQL and Persistence Capabilities%20https://ignite.apache.org/blog/apache-ignite-2-3-more.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Putting aside the regular bug fixes and performance optimizations, the Apache Ignite 2.3 release brings new SQL capabilities and Ignite persistence improvements that are worth mentioning.</p>
-                <p></p>
-                <h3>SQL</h3>
-                <p></p>
-                <p>Let&apos;s start with SQL first.</p>
-                <p>Apache Ignite users have consistently told us that despite all of Ignite&rsquo;s SQL capabilities, it&rsquo;s been at times challenging trying to figure out how to start using Ignite as an SQL database.</p>
-                <p>
-                  This was mostly caused by scattered documentation pages, lack of &ldquo;getting started&rdquo; guides and tutorials. We&rsquo;ve remedied this oversight! All related SQL knowledge has been curated in a
-                  <a href="https://apacheignite-sql.readme.io/docs" target="_blank">single documentation domain</a>.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-3-more.html">↓ Read all</a></div>
-            </article>
           </section>
           <section class="blog__footer">
             <ul class="pagination">
               <li><a class="item" href="/blog/">1</a></li>
               <li><a class="current" href="/blog/1/">2</a></li>
               <li><a class="item" href="/blog/2/">3</a></li>
+              <li><a class="item" href="/blog/3/">4</a></li>
             </ul>
           </section>
         </main>
@@ -702,6 +699,7 @@
     ></a>
     <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
     <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
     <script src="/js/main.js?ver=0.9"></script>
   </body>
 </html>
