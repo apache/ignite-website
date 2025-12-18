@@ -173,7 +173,7 @@ const config: Config = {
           label: 'Get Started',
           position: 'left',
           items: [
-            {label: 'Quick Start', to: '/docs/3.1.0/getting-started/quick-start'},
+            {label: 'Quick Start', to: '/docs/ignite3/3.1.0/getting-started/quick-start'},
             {label: 'Developer Resources', to: '/resources'},
             {label: 'Training and Courses', to: '/resources#training'},
             {label: 'FAQ', to: '/faq'},

@@ -269,7 +269,7 @@ export default function SchemaEvolution(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="/docs/ignite3/3.1.0/getting-started/quick-start"
               target="_blank"
               rel="noreferrer"
             >
@@ -286,7 +286,7 @@ export default function SchemaEvolution(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/develop/work-with-data/table-api"
+              href="/docs/ignite3/3.1.0/develop/work-with-data/table-api"
               target="_blank"
               rel="noreferrer"
             >

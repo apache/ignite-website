@@ -190,7 +190,7 @@ function FAQSection() {
               <p>All clients provide partition-aware routing for direct access to data nodes.</p>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/develop/ignite-clients/',
+          learnMoreLink: '/docs/ignite3/3.1.0/develop/ignite-clients/',
           learnMoreText: 'Client Documentation',
         },
       ],
@@ -211,7 +211,7 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/sql/reference/language-definition/ddl',
+          learnMoreLink: '/docs/ignite3/3.1.0/sql/reference/language-definition/ddl',
           learnMoreText: 'Schema Design Guide',
         },
         {
@@ -264,7 +264,7 @@ function FAQSection() {
               </table>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/configure-and-operate/configuration/config-storage-overview',
+          learnMoreLink: '/docs/ignite3/3.1.0/configure-and-operate/configuration/config-storage-overview',
           learnMoreText: 'Storage Configuration',
         },
         {
@@ -302,7 +302,7 @@ function FAQSection() {
               </ul>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/develop/work-with-data/transactions',
+          learnMoreLink: '/docs/ignite3/3.1.0/develop/work-with-data/transactions',
           learnMoreText: 'Transaction Guide',
         },
         {
@@ -367,7 +367,7 @@ function FAQSection() {
               <p>The cost-based optimizer handles partition pruning, index selection, and join reordering automatically.</p>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/sql/',
+          learnMoreLink: '/docs/ignite3/3.1.0/sql/',
           learnMoreText: 'SQL Reference',
         },
         {
@@ -444,7 +444,7 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: '/docs/3.1.0/getting-started/quick-start',
+          learnMoreLink: '/docs/ignite3/3.1.0/getting-started/quick-start',
           learnMoreText: 'Getting Started Guide',
         },
         {
@@ -608,7 +608,7 @@ function CTASection() {
           </p>
         </div>
         <div className={styles.ctaAction}>
-          <Link className="button" to="/docs/3.1.0/getting-started/quick-start">
+          <Link className="button" to="/docs/ignite3/3.1.0/getting-started/quick-start">
             Quick Start Guide
           </Link>
         </div>

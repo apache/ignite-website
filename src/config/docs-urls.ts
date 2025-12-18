@@ -7,7 +7,7 @@
  */
 
 export const DOCS_VERSION = '3.1.0';
-export const DOCS_BASE_PATH = `/docs/${DOCS_VERSION}`;
+export const DOCS_BASE_PATH = `/docs/ignite3/${DOCS_VERSION}`;
 
 /**
  * Documentation paths organized by section

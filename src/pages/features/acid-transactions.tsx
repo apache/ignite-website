@@ -269,7 +269,7 @@ export default function ACIDTransactions(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="/docs/ignite3/3.1.0/getting-started/quick-start"
               target="_blank"
               rel="noreferrer"
             >
@@ -286,7 +286,7 @@ export default function ACIDTransactions(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/develop/work-with-data/transactions"
+              href="/docs/ignite3/3.1.0/develop/work-with-data/transactions"
               target="_blank"
               rel="noreferrer"
             >

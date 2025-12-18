@@ -250,7 +250,7 @@ export default function BackpressuredStreaming(): JSX.Element {
             </div>
             <div className="cardsimple__bottom">
               <a
-                href="/docs/3.1.0/configure-and-operate/operations/colocation"
+                href="/docs/ignite3/3.1.0/configure-and-operate/operations/colocation"
                 className="cardsimple__button button button--shadow"
                 target="_blank"
                 rel="noreferrer"
@@ -274,7 +274,7 @@ export default function BackpressuredStreaming(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/getting-started/quick-start"
+              href="/docs/ignite3/3.1.0/getting-started/quick-start"
               target="_blank"
               rel="noreferrer"
             >
@@ -291,7 +291,7 @@ export default function BackpressuredStreaming(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/docs/3.1.0/develop/work-with-data/streaming"
+              href="/docs/ignite3/3.1.0/develop/work-with-data/streaming"
               target="_blank"
               rel="noreferrer"
             >

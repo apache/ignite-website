@@ -30,7 +30,7 @@ const docVersions: DocVersion[] = [
     links: [
       { label: 'Quick Start', href: `/docs/ignite3/${IGNITE3_VERSION}/getting-started/quick-start` },
       { label: 'SQL Reference', href: `/docs/ignite3/${IGNITE3_VERSION}/sql/` },
-      { label: 'Java Client', href: `/docs/ignite3/${IGNITE3_VERSION}/develop/ignite-clients/java` },
+      { label: 'Java Client', href: `/docs/ignite3/${IGNITE3_VERSION}/api-reference/native-clients/java/` },
       { label: 'Installation', href: `/docs/ignite3/${IGNITE3_VERSION}/configure-and-operate/installation/` },
     ],
   },

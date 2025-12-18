@@ -230,7 +230,7 @@ conn.close()`
           </p>
 
           <div style={{marginTop: '2rem'}}>
-            <a href="/docs/3.1.0/getting-started/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href="/docs/ignite3/3.1.0/getting-started/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -239,7 +239,7 @@ conn.close()`
               <span>Configure a cluster in under 5 minutes</span>
             </a>
 
-            <a href="/docs/3.1.0/getting-started/work-with-sql" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href="/docs/ignite3/3.1.0/getting-started/work-with-sql" className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -248,7 +248,7 @@ conn.close()`
               <span>Run SQL queries on your distributed data</span>
             </a>
 
-            <a href="/docs/3.1.0/getting-started/key-value-api" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href="/docs/ignite3/3.1.0/getting-started/key-value-api" className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -257,7 +257,7 @@ conn.close()`
               <span>Store and retrieve data with the Java API</span>
             </a>
 
-            <a href="/docs/3.1.0/configure-and-operate/configuration/config-storage-persistent" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href="/docs/ignite3/3.1.0/configure-and-operate/configuration/config-storage-persistent" className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -544,7 +544,7 @@ function ReadyToStart() {
           </p>
         </div>
         <div className={styles.toolingend__action}>
-          <a className="button" href="/docs/3.1.0/getting-started/quick-start" target="_blank" rel="noreferrer">Quick Start Guide</a>
+          <a className="button" href="/docs/ignite3/3.1.0/getting-started/quick-start" target="_blank" rel="noreferrer">Quick Start Guide</a>
         </div>
       </div>
     </section>

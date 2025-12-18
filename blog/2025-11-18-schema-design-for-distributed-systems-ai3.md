@@ -54,7 +54,7 @@ Using a [music catalog example](https://github.com/lerocha/chinook-database/tree
 we’ll demonstrate how schema-driven data placement reduces query latency from 200 ms to 5 ms.
 
 > This post assumes you have a basic understanding of how to get an Ignite 3 cluster running and have worked with the Ignite 3 Java API.  
-> If you're new to Ignite 3, start with the [Java API quick start guide](/docs/3.1.0/getting-started/key-value-api) to set up your development environment.
+> If you're new to Ignite 3, start with the [Java API quick start guide](/docs/ignite3/3.1.0/getting-started/key-value-api) to set up your development environment.
 
 ---
 
