@@ -110,6 +110,8 @@ echo "=== [3/9] Copying website build to staging directory ==="
 rm -rf "$STAGING_DIR"
 mkdir -p "$STAGING_DIR"
 cp -r "$WEBSITE_DIR/build/"* "$STAGING_DIR/"
+# Create .nojekyll to prevent GitHub Pages from processing with Jekyll
+touch "$STAGING_DIR/.nojekyll"
 echo "<<< Copied website to $STAGING_DIR"
 
 # Step 4: Copy Ignite 3 docs directly from ignite-3 repo build
