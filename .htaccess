@@ -205,15 +205,41 @@ RewriteRule ^docs/ignite3/latest/(.*)$ docs/ignite3/3.1.0/$1 [L]
 RewriteRule ^docs/ignite3/?$ docs/ignite3/latest/ [R=301,L]
 RewriteRule ^docs/ignite3/latest$ docs/ignite3/latest/ [R=301,L]
 
-# remove trailing slash under /docs (avoid loop on /docs/ignite3/latest[/])
-RewriteCond %{REQUEST_URI} !^/docs/ignite3/latest/?$
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^docs/(.*)/$ docs/$1 [R=301,L]
+# =============================================================================
+# Docusaurus clean URL handling for Ignite 3 (/docs/ignite3/)
+# Docusaurus generates static HTML in directories with index.html files
+# =============================================================================
 
-# serve .html if it exists (in case of request without .html)
+# Serve index.html for directory requests under /docs/ignite3/
+# This handles Docusaurus clean URLs (e.g., /docs/ignite3/3.1.0/getting-started/)
+RewriteCond %{REQUEST_URI} ^/docs/ignite3/
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.*)$ $1/index.html [L]
+
+# For non-directory paths under /docs/ignite3/, try adding /index.html
+# This handles paths like /docs/ignite3/3.1.0/getting-started (no trailing slash)
+RewriteCond %{REQUEST_URI} ^/docs/ignite3/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.*)$ $1/index.html [L]
+
+# =============================================================================
+# Jekyll handling for Ignite 2 (/docs/ignite2/)
+# Jekyll uses .html extension but we serve without it
+# =============================================================================
+
+# remove trailing slash under /docs/ignite2 (Jekyll convention)
+RewriteCond %{REQUEST_URI} ^/docs/ignite2/
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^docs/ignite2/(.*)/$ docs/ignite2/$1 [R=301,L]
+
+# serve .html if it exists for Ignite 2 (Jekyll clean URLs)
+RewriteCond %{REQUEST_URI} ^/docs/ignite2/
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
-RewriteRule ^docs/(.*)$ docs/$1.html [L,NC]
+RewriteRule ^docs/ignite2/(.*)$ docs/ignite2/$1.html [L,NC]
 
 
 
