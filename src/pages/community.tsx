@@ -459,9 +459,9 @@ function CTASection() {
           </p>
         </div>
         <div className={styles.ctaAction}>
-          <Link className="button" to="/docs/ignite3/3.1.0/getting-started/quick-start">
+          <a className="button" href="/docs/ignite3/3.1.0/getting-started/quick-start">
             Quick Start Guide
-          </Link>
+          </a>
         </div>
       </div>
     </section>

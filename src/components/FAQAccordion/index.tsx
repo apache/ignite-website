@@ -1,6 +1,5 @@
 import React, { useState, type ReactNode } from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 export interface FAQItem {
@@ -43,9 +42,9 @@ function FAQAccordionItem({ question, answer, learnMoreLink, learnMoreText, isOp
           {answer}
           {learnMoreLink && (
             <div className={styles.accordionLearnMore}>
-              <Link to={learnMoreLink} className="button button--outline button--sm">
+              <a href={learnMoreLink} className="button button--outline button--sm">
                 {learnMoreText || 'Learn More'}
-              </Link>
+              </a>
             </div>
           )}
         </div>
