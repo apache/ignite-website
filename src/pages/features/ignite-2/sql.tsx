@@ -224,7 +224,7 @@ export default function SQL(): JSX.Element {
                 <div className="dist2__subtext">
                   <p>
                     Ignite persists 100% of data and indexes in the{' '}
-                    <a href="/arch/native-persistence.html">native persistence</a> while caching as much as possible in
+                    <a href="/arch/native-persistence">native persistence</a> while caching as much as possible in
                     memory.
                   </p>
                   <p className="pt-1">

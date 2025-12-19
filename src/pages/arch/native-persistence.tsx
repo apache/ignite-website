@@ -114,7 +114,7 @@ export default function NativePersistence(): JSX.Element {
               <p>
                 The native persistence functions as a distributed, ACID, and SQL-compliant disk-based store. It
                 integrates into the Ignite{' '}
-                <a href="/features/multi-tier-storage.html">multi-tier storage</a> as a disk tier.
+                <a href="/arch/multi-tier-storage">multi-tier storage</a> as a disk tier.
               </p>
               <p className="pt-1">
                 When the native persistence is enabled, Ignite stores a superset of data on disk and caches as much as

@@ -277,7 +277,7 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="/use-cases/high-performance-computing.html"
+              href="/use-cases/high-performance-computing"
               target="_blank"
               rel="noreferrer"
             >

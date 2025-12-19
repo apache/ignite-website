@@ -107,7 +107,7 @@ export default function Clustering(): JSX.Element {
               <span>Want To Learn More?</span>
             </h3>
             <p className="nativebotblock__text">Read Native Persistence article</p>
-            <a className="nativebotblock__link arrowlink" href="/arch/native-persistence.html">
+            <a className="nativebotblock__link arrowlink" href="/arch/native-persistence">
               Native Persistence Article
             </a>
           </article>

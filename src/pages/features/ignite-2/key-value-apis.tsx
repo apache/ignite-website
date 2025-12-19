@@ -208,7 +208,7 @@ export default function KeyValueAPIs(): JSX.Element {
               An&nbsp;Ignite transaction can update multiple records from different tables stored on&nbsp;different
               cluster nodes. Ignite can even span a&nbsp;transaction to&nbsp;an&nbsp;underlying relational database.
               Ignite implements{' '}
-              <a href="/features/acid-transactions.html">
+              <a href="/features/acid-transactions">
                 two-phase-commit protocol to&nbsp;ensure data consistency at&nbsp;scale.
               </a>
             </p>
@@ -252,7 +252,7 @@ export default function KeyValueAPIs(): JSX.Element {
               <br />
               and used as a standard key-value store
             </p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/key-value-store.html">
+            <a className="nativebotblock__link arrowlink" href="/use-cases/key-value-store">
               Key-Value Store
             </a>
           </article>

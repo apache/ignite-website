@@ -244,7 +244,7 @@ export default function InMemoryCache(): JSX.Element {
             <div className="inmememor2__left">
               <p>
                 When Apache Ignite is deployed in a cache-aside configuration, its native persistence can be used as a
-                disk store for Ignite datasets. <a href="/arch/native-persistence.html">Native persistence</a> allows
+                disk store for Ignite datasets. <a href="/arch/native-persistence">Native persistence</a> allows
                 for the elimination of the time-consuming cache warm-up step.
               </p>
               <p>
@@ -318,7 +318,7 @@ export default function InMemoryCache(): JSX.Element {
               <span>Want to View More Use-Cases?</span>
             </div>
             <p className="nativebotblock__text">Read In-Memory Data Grid article</p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/in-memory-data-grid.html">
+            <a className="nativebotblock__link arrowlink" href="/use-cases/in-memory-data-grid">
               In-Memory Data Grid
             </a>
           </article>

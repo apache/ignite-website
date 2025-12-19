@@ -197,7 +197,6 @@ const config: Config = {
           items: [
             {label: 'Project Info', to: '/community'},
             {label: 'Events', to: '/events'},
-            {label: 'Powered by', to: '/powered-by-ignite'},
           ],
         },
         {

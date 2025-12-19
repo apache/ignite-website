@@ -87,7 +87,7 @@ export default function Tooling(): JSX.Element {
                 </dl>
               </div>
               <div className="toolvarlist1__more">
-                <a className="button" href="/use-cases/in-memory-cache.html">
+                <a className="button" href="/use-cases/in-memory-cache">
                   Learn more
                 </a>
               </div>
@@ -113,7 +113,7 @@ export default function Tooling(): JSX.Element {
                 </dl>
               </div>
               <div className="toolvarlist1__more">
-                <a className="button" href="/use-cases/in-memory-cache.html">
+                <a className="button" href="/use-cases/in-memory-cache">
                   Learn more
                 </a>
               </div>

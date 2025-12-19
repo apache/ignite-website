@@ -122,7 +122,7 @@ export default function HadoopAcceleration(): JSX.Element {
               <div className="fz20 doop3__number">01</div>
               <p className="doop3__subtext">
                 Depending on the data volume and available memory capacity, you can enable
-                <a href="/arch/native-persistence.html" target="_blank">
+                <a href="/arch/native-persistence" target="_blank">
                   {' '}
                   Ignite native persistence
                 </a>{' '}
@@ -145,7 +145,7 @@ export default function HadoopAcceleration(): JSX.Element {
               </p>
               <p className="doop3__subtext pt-1">
                 Ignite is{' '}
-                <a href="/use-cases/spark-acceleration.html" target="_blank">
+                <a href="/use-cases/spark-acceleration" target="_blank">
                   integrated with Spark
                 </a>
                 , which natively supports Hive/Hadoop. Cross-database queries should be considered only for a limited number
@@ -272,7 +272,7 @@ export default function HadoopAcceleration(): JSX.Element {
               <span>Want to Learn More?</span>
             </div>
             <p className="nativebotblock__text">Read the Apache Spark acceleration article</p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/spark-acceleration.html">
+            <a className="nativebotblock__link arrowlink" href="/use-cases/spark-acceleration">
               Apache Spark Acceleration Article
             </a>
           </article>

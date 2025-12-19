@@ -198,7 +198,7 @@ export default function InMemoryDataGrid(): JSX.Element {
             <h2 className="grid4__h2 h5">Native Persistence And In-Memory Data</h2>
             <div className="grid4__block">
               <p className="grid4__text">
-                When <a href="/arch/native-persistence.html">native persistence</a> is enabled, Ignite stores both data
+                When <a href="/arch/native-persistence">native persistence</a> is enabled, Ignite stores both data
                 and indexes
                 <br /> on disk, thus eliminating the time-consuming cache warm-up step.
               </p>
@@ -228,7 +228,7 @@ export default function InMemoryDataGrid(): JSX.Element {
             </article>
             <article className="native2item grid5__item">
               <p className="grid5__text">
-                Support <a href="/use-cases/high-performance-computing.html"> high-performance computing.</a>
+                Support <a href="/use-cases/high-performance-computing"> high-performance computing.</a>
               </p>
             </article>
             <article className="native2item grid5__item">
@@ -307,7 +307,7 @@ export default function InMemoryDataGrid(): JSX.Element {
               <span>Want to View More Use-Cases?</span>
             </div>
             <p className="nativebotblock__text">Read the In-Memory Database article</p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/in-memory-database.html">
+            <a className="nativebotblock__link arrowlink" href="/use-cases/in-memory-database">
               In-Memory Database
             </a>
           </article>

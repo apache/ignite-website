@@ -194,7 +194,7 @@ export default function SparkAcceleration(): JSX.Element {
             <p className="nativebotblock__text">
               Using Hadoop with Spark? See how Ignite accelerates Hadoop-based deployments
             </p>
-            <a className="nativebotblock__link arrowlink" href="/use-cases/hadoop-acceleration.html">
+            <a className="nativebotblock__link arrowlink" href="/use-cases/hadoop-acceleration">
               Apache Hadoop Acceleration Article
             </a>
           </article>
