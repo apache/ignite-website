@@ -44,7 +44,7 @@ export default function SessionManagement(): JSX.Element {
               Any-node session access with automatic failover and zero data loss
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -207,7 +207,7 @@ export default function SessionManagement(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
+              href="https://ignite.apache.org/docs/ignite2/latest/#quick-start-guides"
               target="_blank"
               rel="noopener noreferrer"
             >

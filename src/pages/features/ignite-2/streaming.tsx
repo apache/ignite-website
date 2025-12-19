@@ -40,7 +40,7 @@ export default function Streaming(): JSX.Element {
             </h1>
             <div className="innerhero__descr pt-2 h5">Ingest streams of data and build event-driven architectures</div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -194,7 +194,7 @@ export default function Streaming(): JSX.Element {
             <p className="nativebotblock__text">Start coding with Ignite Streaming APIs</p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/data-streaming"
+              href="https://ignite.apache.org/docs/ignite2/latest/data-streaming"
               target="_blank"
               rel="noreferrer"
             >
@@ -211,7 +211,7 @@ export default function Streaming(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/extensions-and-integrations/streaming/kafka-streamer"
+              href="https://ignite.apache.org/docs/ignite2/latest/extensions-and-integrations/streaming/kafka-streamer"
               target="_blank"
               rel="noreferrer"
             >

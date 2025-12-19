@@ -39,7 +39,7 @@ export default function ComputeAPIs(): JSX.Element {
               <br /> and get the logic executed over a distributed cluster
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -260,7 +260,7 @@ ignite.compute().affinityRun("City", newYorkId, new IgniteRunnable() {
             <p className="nativebotblock__text">Start coding distributed computing APIs</p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/key-value-api/transactions"
+              href="https://ignite.apache.org/docs/ignite2/latest/key-value-api/transactions"
               target="_blank"
               rel="noreferrer"
             >

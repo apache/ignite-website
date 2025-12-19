@@ -11,11 +11,11 @@ import {
   extensionBinaryReleases,
   springBootDependencies,
 } from '@site/src/data/downloads';
-import { DOCS_INDEX } from '@site/src/config/docs-urls';
+import { DOCS_BASE_PATH } from '@site/src/config/docs-urls';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './download.module.css';
 
-const DOCS_BASE_URL = DOCS_INDEX;
+const DOCS_BASE_URL = DOCS_BASE_PATH;
 
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');

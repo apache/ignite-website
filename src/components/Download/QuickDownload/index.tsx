@@ -2,10 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import {ignite3BinaryReleases} from '@site/src/data/downloads';
 import {trackDownload} from '@site/src/components/Download/downloadUtils';
-import { DOCS_INDEX } from '@site/src/config/docs-urls';
+import { DOCS_BASE_PATH } from '@site/src/config/docs-urls';
 import styles from './styles.module.css';
-
-const DOCS_BASE_URL = DOCS_INDEX;
 
 export default function QuickDownload(): JSX.Element {
   const latestRelease = ignite3BinaryReleases.find((r) => r.latest) || ignite3BinaryReleases[0];
@@ -40,7 +38,7 @@ export default function QuickDownload(): JSX.Element {
                 Download {fileName}
               </a>
               <a
-                href={`${DOCS_BASE_URL}/category/installation`}
+                href={`${DOCS_BASE_PATH}/configure-and-operate/installation/`}
                 className="button button--shadow"
                 target="_blank"
                 rel="noopener noreferrer">

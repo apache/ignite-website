@@ -23,7 +23,7 @@ export default function Multilanguage(): JSX.Element {
               <br /> Support
             </h1>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -115,7 +115,7 @@ export default function Multilanguage(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/index"
+              href="https://ignite.apache.org/docs/ignite2/latest/index"
               target="_blank"
               rel="noreferrer"
             >
@@ -132,7 +132,7 @@ export default function Multilanguage(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/quick-start/java"
+              href="https://ignite.apache.org/docs/ignite2/latest/quick-start/java"
               target="_blank"
               rel="noreferrer"
             >

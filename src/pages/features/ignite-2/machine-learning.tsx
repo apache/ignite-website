@@ -46,7 +46,7 @@ export default function MachineLearning(): JSX.Element {
               <br /> models at scale and in real time
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -188,7 +188,7 @@ export default function MachineLearning(): JSX.Element {
             <p className="nativebotblock__text">Start coding machine learning APIs</p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/machine-learning/machine-learning"
+              href="https://ignite.apache.org/docs/ignite2/latest/machine-learning/machine-learning"
               target="_blank"
               rel="noreferrer"
             >
@@ -206,7 +206,7 @@ export default function MachineLearning(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/machine-learning/updating-trained-models"
+              href="https://ignite.apache.org/docs/ignite2/latest/machine-learning/updating-trained-models"
               target="_blank"
               rel="noreferrer"
             >

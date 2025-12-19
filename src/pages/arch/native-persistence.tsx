@@ -38,7 +38,7 @@ export default function NativePersistence(): JSX.Element {
               and skip memory warm-ups on restarts
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -163,7 +163,7 @@ export default function NativePersistence(): JSX.Element {
                   As soon as the update comes from the application side, a record is updated in memory. Then, the change
                   is added{' '}
                   <a
-                    href="https://ignite.apache.org/docs/latest/persistence/native-persistence.html#write-ahead-log"
+                    href="https://ignite.apache.org/docs/ignite2/latest/persistence/native-persistence.html#write-ahead-log"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -182,7 +182,7 @@ export default function NativePersistence(): JSX.Element {
                 <p>As the WAL grows, it periodically gets checkpointed to the main storage.</p>
                 <p>
                   <a
-                    href="https://ignite.apache.org/docs/latest/persistence/native-persistence.html#checkpointing"
+                    href="https://ignite.apache.org/docs/ignite2/latest/persistence/native-persistence.html#checkpointing"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -290,7 +290,7 @@ cfg.setDataStorageConfiguration(storageCfg);`}</code>
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/persistence/native-persistence"
+              href="https://ignite.apache.org/docs/ignite2/latest/persistence/native-persistence"
               target="_blank"
               rel="noreferrer"
             >

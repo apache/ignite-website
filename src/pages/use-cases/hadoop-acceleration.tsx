@@ -44,7 +44,7 @@ export default function HadoopAcceleration(): JSX.Element {
               as a high-performance data access layer
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -234,7 +234,7 @@ export default function HadoopAcceleration(): JSX.Element {
                   <p className="doop5__end">
                     To write-through changes to Hadoop directly,
                     <br /> implement{' '}
-                    <a href="https://ignite.apache.org/docs/latest/persistence/external-storage" target="_blank">
+                    <a href="https://ignite.apache.org/docs/ignite2/latest/persistence/external-storage" target="_blank">
                       Ignite's CacheStore
                     </a>{' '}
                     interface.
@@ -259,7 +259,7 @@ export default function HadoopAcceleration(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/ignite2/latest/"
               target="_blank"
               rel="noopener noreferrer"
             >

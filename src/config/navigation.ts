@@ -422,7 +422,7 @@ export const mobileMenuItems = [
   },
   { label: 'Resources', href: '/resources' },
   { label: 'Blog', href: '/blog/' },
-  { label: 'Docs', href: '/docs/latest/' },
+  { label: 'Docs', href: '/docs/' },
 ] as const;
 
 /**

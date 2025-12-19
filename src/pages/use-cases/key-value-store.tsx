@@ -41,7 +41,7 @@ export default function KeyValueStore(): JSX.Element {
               Direct key-value access patterns across Ignite 2 and Ignite 3
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
@@ -243,7 +243,7 @@ Map<Integer, Person> results = kvView.getAll(null, keys);`}</code>
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/#quick-start-guides"
+              href="https://ignite.apache.org/docs/ignite2/latest/#quick-start-guides"
               target="_blank"
               rel="noopener noreferrer"
             >

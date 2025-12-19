@@ -44,7 +44,7 @@ export default function KeyValueAPIs(): JSX.Element {
               with key-value APIs
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -235,7 +235,7 @@ export default function KeyValueAPIs(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/key-value-api/basic-cache-operations"
+              href="https://ignite.apache.org/docs/ignite2/latest/key-value-api/basic-cache-operations"
               target="_blank"
               rel="noreferrer"
             >

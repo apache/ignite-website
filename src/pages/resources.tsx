@@ -3,13 +3,13 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Section from '@site/src/components/Section';
-import { DOCS_INDEX } from '@site/src/config/docs-urls';
+import { DOCS_BASE_PATH } from '@site/src/config/docs-urls';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './resources.module.css';
 
 // Data definitions
 // Documentation links are relative paths, resolved with baseUrl at build time
-const DOCS_BASE_URL = DOCS_INDEX;
+const DOCS_BASE_URL = DOCS_BASE_PATH;
 
 const gettingStartedLinks = [
   {

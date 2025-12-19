@@ -39,7 +39,7 @@ export default function MultiTierStorage(): JSX.Element {
               and disk without compromise
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -119,7 +119,7 @@ export default function MultiTierStorage(): JSX.Element {
             <p>
               Ignite slides in between your existing application and data layer. Ignite{' '}
               <a
-                href="https://ignite.apache.org/docs/latest/persistence/external-storage#read-through-and-write-through"
+                href="https://ignite.apache.org/docs/ignite2/latest/persistence/external-storage#read-through-and-write-through"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -127,7 +127,7 @@ export default function MultiTierStorage(): JSX.Element {
               </a>{' '}
               or{' '}
               <a
-                href="https://ignite.apache.org/docs/latest/persistence/external-storage#write-behind-caching"
+                href="https://ignite.apache.org/docs/ignite2/latest/persistence/external-storage#write-behind-caching"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -237,7 +237,7 @@ export default function MultiTierStorage(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/persistence/native-persistence"
+              href="https://ignite.apache.org/docs/ignite2/latest/persistence/native-persistence"
               target="_blank"
               rel="noreferrer"
             >

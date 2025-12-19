@@ -40,7 +40,7 @@ export default function ServiceAPIs(): JSX.Element {
               <br /> trigger execution from the application code
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -211,7 +211,7 @@ services.deployClusterSingleton("myCounterService", new MyCounterServiceImpl());
             <p className="nativebotblock__text">Start coding with Ignite Service APIs</p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/services/services#re-deploying-services"
+              href="https://ignite.apache.org/docs/ignite2/latest/services/services#re-deploying-services"
               target="_blank"
               rel="noreferrer"
             >

@@ -94,7 +94,7 @@ export default function Clustering(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/ignite2/latest/"
               target="_blank"
               rel="noreferrer"
             >

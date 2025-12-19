@@ -321,13 +321,10 @@ if [ "$SERVE" = true ]; then
   echo "  - Ignite 3 versioned:    http://localhost:$PORT/docs/ignite3/3.1.0/"
   echo "  - Ignite 2 latest:       http://localhost:$PORT/docs/ignite2/latest/"
   echo "  - Ignite 2 versioned:    http://localhost:$PORT/docs/ignite2/2.17.0/"
-  echo "  - Deep link test:        http://localhost:$PORT/docs/ignite2/latest/quick-start/java.html"
-  echo ""
-  echo "NOTE: Ignite 2 URLs require .html extension locally (Apache handles clean URLs in production)"
+  echo "  - Deep link test:        http://localhost:$PORT/docs/ignite2/latest/quick-start/java"
   echo ""
   echo "Press Ctrl+C to stop the server"
   echo ""
-  cd "$STAGING_DIR"
-  # Use Python's http.server which properly serves index.html for directories
-  python3 -m http.server "$PORT"
+  # Use custom Python server with .html extension fallback (mimics Apache .htaccess)
+  python3 "$WEBSITE_DIR/serve.py" "$PORT" "$STAGING_DIR"
 fi

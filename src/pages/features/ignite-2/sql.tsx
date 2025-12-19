@@ -40,7 +40,7 @@ export default function SQL(): JSX.Element {
               <br /> in-memory speed and at unlimited scale
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -160,7 +160,7 @@ export default function SQL(): JSX.Element {
                 This type of join is used if you join{' '}
                 <a
                   className="dist1__link"
-                  href="https://ignite.apache.org/docs/latest/data-modeling/affinity-collocation"
+                  href="https://ignite.apache.org/docs/ignite2/latest/data-modeling/affinity-collocation"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -285,7 +285,7 @@ export default function SQL(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/persistence/native-persistence"
+              href="https://ignite.apache.org/docs/ignite2/latest/persistence/native-persistence"
               target="_blank"
               rel="noreferrer"
             >

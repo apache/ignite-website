@@ -106,8 +106,8 @@ export default function DownloadSelector({
 
   // Documentation URLs for Ignite 3
   const IGNITE3_DOCS_BASE = 'https://ignite.apache.org/docs/ignite3/3.1.0';
-  const IGNITE3_INSTALL_ZIP = `${IGNITE3_DOCS_BASE}/installation/installing-using-zip`;
-  const IGNITE3_INSTALL_DOCKER = `${IGNITE3_DOCS_BASE}/installation/installing-using-docker`;
+  const IGNITE3_INSTALL_ZIP = `${IGNITE3_DOCS_BASE}/configure-and-operate/installation/installing-using-zip`;
+  const IGNITE3_INSTALL_DOCKER = `${IGNITE3_DOCS_BASE}/configure-and-operate/installation/installing-using-docker`;
 
   // Docker content
   const renderDockerContent = () => {

@@ -47,7 +47,7 @@ export default function SparkAcceleration(): JSX.Element {
               <br /> Ignite implementation of RDD and Dataframe APIs
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -179,7 +179,7 @@ export default function SparkAcceleration(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/"
+              href="https://ignite.apache.org/docs/ignite2/latest/"
               target="_blank"
               rel="noopener noreferrer"
             >

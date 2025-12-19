@@ -45,7 +45,7 @@ export default function ACIDTransactions(): JSX.Element {
               consistently, durably and with in-memory speed
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">
+              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
                 Start Coding
               </a>
             </div>
@@ -239,7 +239,7 @@ export default function ACIDTransactions(): JSX.Element {
             </p>
             <a
               className="nativebotblock__link arrowlink"
-              href="https://ignite.apache.org/docs/latest/key-value-api/transactions"
+              href="https://ignite.apache.org/docs/ignite2/latest/key-value-api/transactions"
               target="_blank"
               rel="noreferrer"
             >
