@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure</title>
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['setDoNotTrack', true]);
+      _paq.push(['disableCookies']);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://analytics.apache.org/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '77']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.async = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <!-- MOBILE MENU START-->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button class="hystmodal__close" data-hystclose="">Close</button>
+          <div class="mobmenu__wrap">
+            <a class="mobmenu__logo" href="/"><img src="/img/logo.svg" alt="Logo" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li><a href="/docs/latest/">Quick Start</a></li>
+                <li><a href="/resources.html#learning">Learning resources</a></li>
+                <li><a href="/resources.html#training">Training and Courses</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+                    <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+                    <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+                    <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+                    <li><a href="/use-cases/high-performance-computing.html">High Performance Computing</a></li>
+                    <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+                    <li><a href="/use-cases/spark-acceleration.html">Spark Acceleration</a></li>
+                    <li><a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a></li>
+                    <li><a href="/use-cases.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/features/">Features</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+                    <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+                    <li><a href="/features/sql.html">Distributed SQL</a></li>
+                    <li><a href="/features/key-value-apis.html">Key-Value APIs</a></li>
+                    <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+                    <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+                    <li><a href="/features/service-apis.html">Services</a></li>
+                    <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+                    <li><a href="/features/streaming.html">Real-Time Streaming APIs</a></li>
+                    <li><a href="/docs/latest/messaging">Messaging</a></li>
+                    <li><a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+                    <li><a href="/features/index.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li><a href="/use-cases/provenusecases.html">Powered by</a></li>
+                <li><a href="/resources.html">Resources</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/docs/latest/">Docs</a></li>
+              </ul>
+              <a class="button mobmenu__button" href="/download.cgi">Download Ignite</a>
+            </div>
+            <!-- //mobmenu__menu-->
+          </div>
+          <!-- //mobmenu__wrap-->
+        </div>
+        <!-- //mobmenu-->
+      </div>
+    </div>
+    <!-- MOBILE MENU END-->
+    <header class="hdr hdr__white jsHdrBase">
+      <div class="jsHdrLine">
+        <div id="promotion-bar">
+          <a
+            href="https://ignite-summit.org/2025/?utm_medium=website-direct&amp;utm_source=apache_ignite&amp;utm_term=ignite-summit&amp;utm_content=event-hosted&amp;utm_campaign=2023-06-06-ignite-summit-nam"
+            target="_blank"
+            title="Ignite Summit 2025"
+            rel="noopener noreferrer"
+            >Ignite Summit 2025 — Watch on demand &nbsp;<span class="more d-none d-lg-block"><img src="/images/promos/arrow-white.svg" /></span
+          ></a>
+        </div>
+        <div class="hdr__wrap flexi">
+          <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+          ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+          ><a class="button hdr__button" href="/download.cgi">Download Ignite</a>
+          <nav class="hdrmenu">
+            <ul class="flexi">
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+              <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/resources.html" data-panel="resources">Resources</a></li>
+              <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+            </ul>
+          </nav>
+          <div class="dropmenu">
+            <div class="dropmenu__panel" data-menupanel="getStarted">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+              <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="features">
+              <div class="container dropmenu2__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext">MULTI-TIER STORAGE</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">ESSENTIAL Developer APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">High-Performance <br />Computing APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">Real-Streaming APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu2__grid-->
+              <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-2-->
+            <div class="dropmenu__panel" data-menupanel="community">
+              <div class="container dropmenu3__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu3__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="resources">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton blog" href="/blog/"><img src="/img/menu/icon-blog.svg" alt="" /><span>Blog</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#technical"><span>Technical resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box blog">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#book"><span>Apache Ignite Book</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#mail"><span>Mailing Lists, Forums And Discussion Archives</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+          </div>
+          <!-- /.dropmeu-->
+        </div>
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <div class="container blog">
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure</h1>
+        <p>
+          December 16, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
+      <div class="blog__content">
+        <main class="blog_main">
+          <section class="blog__posts">
+            <article class="post">
+              <div>
+                <p>Traditional systems force a choice: real-time analytics or fast transactions. Apache Ignite eliminates this trade-off with integrated platform performance that delivers both simultaneously.</p>
+                <!-- end -->
+                <p>
+                  Financial trades execute in microseconds while risk analytics run concurrently on the same live data. Compliance reporting processes millions of transactions without blocking operational processing. This happens through a
+                  unified performance architecture that maintains speed characteristics across all workload types.
+                </p>
+                <p><strong>Real-time analytics breakthrough: query live transactional data without ETL delays or performance interference.</strong></p>
+                <hr />
+                <br />
+                <h2>Performance Comparison: Traditional vs Integrated</h2>
+                <h3>Traditional Multi-System Performance</h3>
+                <p><strong>Concrete performance degradation in financial trading systems:</strong></p>
+                <p><strong>Resource Competition Example</strong> (Financial Trading System):</p>
+                <pre><code>// Traditional system: workloads interfere with each other
+public class TradingSystemBottlenecks {
+
+    public void processTradeWithInterference() {
+        long tradeStart = System.nanoTime();
+
+        // 1. High-frequency trading (requires <100μs)
+        Trade trade = executeTradeLogic();  // Target: 50μs
+
+        // But system is also running:
+        // - Risk analytics (heavy CPU usage)
+        // - Compliance reporting (heavy I/O)
+        // - Position calculations (memory pressure)
+
+        long actualTime = System.nanoTime() - tradeStart;
+        // Result: 300-2000 microseconds instead of 50 microseconds (6-40x degradation)
+    }
+}
+</code></pre>
+                <p><strong>Performance interference causes:</strong></p>
+                <ul>
+                  <li><strong>CPU competition</strong>: Analytics consume CPU needed for microsecond trading</li>
+                  <li><strong>Memory competition</strong>: Large queries trigger garbage collection during trades</li>
+                  <li><strong>I/O competition</strong>: Batch reports block transaction log writes</li>
+                  <li><strong>Network competition</strong>: Cross-system data movement affects all operations</li>
+                </ul>
+                <h3>Multi-System Performance Fragmentation</h3>
+                <p>Separating workloads creates different performance problems:</p>
+                <pre class="mermaid">flowchart TB
+    subgraph "Separate Systems"
+        Trading[Trading System<br/>50μs trades<br/>BUT: Stale risk data]
+        Analytics[Analytics System<br/>Fast queries<br/>BUT: Delayed trade data]
+        Reporting[Reporting System<br/>Complete data<br/>BUT: 10-30min lag]
+    end
+
+    subgraph "Data Movement Overhead"
+        Sync1[Trading → Analytics<br/>2-5ms synchronization]
+        Sync2[Analytics → Reporting<br/>Batch ETL delays]
+        Sync3[Cross-system validation<br/>10-50ms coordination]
+    end
+
+    Trading -->|Real-time feed| Sync1
+    Sync1 --> Analytics
+    Analytics -->|Hourly batch| Sync2
+    Sync2 --> Reporting
+    Reporting -->|Compliance check| Sync3
+    Sync3 --> Trading
+</pre>
+                <p><strong>Performance Trade-off Reality:</strong></p>
+                <ul>
+                  <li>Fast trading with stale risk calculations (compliance risk)</li>
+                  <li>Fresh analytics with trading delays (performance risk)</li>
+                  <li>Complete reporting with operational lag (business risk)</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>Apache Ignite Integrated Performance Architecture</h2>
+                <h3>Before/After Performance Transformation</h3>
+                <p><strong>Traditional: Choose between fast transactions OR real-time analytics</strong></p>
+                <ul>
+                  <li>Trading: 50 microseconds per trade (when analytics are OFF)</li>
+                  <li>Analytics: 2-5 second query response (when trading is PAUSED)</li>
+                  <li>Reports: 10-30 minute ETL delay before data availability</li>
+                </ul>
+                <p><strong>Integrated Platform: Fast transactions AND real-time analytics simultaneously</strong></p>
+                <ul>
+                  <li>Trading: 50 microseconds per trade (while analytics run concurrently)</li>
+                  <li>Analytics: 100-500 milliseconds query response (on live trading data)</li>
+                  <li>Reports: Real-time query results (no ETL delays)</li>
+                </ul>
+                <h3>Storage Engine Performance Strategy</h3>
+                <p>Apache Ignite provides two storage engines that solve different performance challenges:</p>
+                <p>
+                  <strong>Memory-Only Storage (aimem)</strong>: Optimized for latency-critical workloads requiring maximum speed. High-frequency trading operations, real-time analytics calculations, and session data management benefit from
+                  pure memory operations without persistence overhead. Performance characteristics focus on microsecond response times.
+                </p>
+                <p>
+                  <strong>Memory-First Persistence (aipersist)</strong>: Combines memory-speed access with durability guarantees through asynchronous persistence. Financial transactions, audit logs, and regulatory data maintain ACID
+                  properties while achieving memory-speed performance. Background checkpointing provides durability without blocking operations.
+                </p>
+                <p><strong>Storage Engine Benefits:</strong></p>
+                <ul>
+                  <li><strong>Performance optimization</strong>: Each engine optimizes for specific workload characteristics</li>
+                  <li><strong>Operational flexibility</strong>: Choose durability vs speed based on data requirements</li>
+                  <li><strong>Resource efficiency</strong>: Avoid persistence overhead when durability isn't required</li>
+                  <li><strong>Mixed workload support</strong>: Different tables use different engines within the same cluster</li>
+                </ul>
+                <h3>Memory Management for Consistent Performance</h3>
+                <p>Page-based memory management eliminates the serialization overhead and garbage collection interference that affects performance predictability in traditional systems:</p>
+                <p><strong>Performance Architecture Benefits:</strong></p>
+                <ul>
+                  <li><strong>Predictable access times</strong>: Direct memory operations without GC interference</li>
+                  <li><strong>Zero serialization overhead</strong>: Binary operations on native memory layouts</li>
+                  <li><strong>Cache efficiency</strong>: Page-based data organization optimizes CPU cache usage</li>
+                  <li><strong>Linear memory scaling</strong>: Performance grows directly with available RAM</li>
+                </ul>
+                <p>
+                  <strong>The Integration Advantage</strong>: Instead of managing memory efficiency at the application level, the platform handles memory optimization automatically while maintaining the simple APIs your business logic
+                  requires.
+                </p>
+                <h3>Asynchronous API Design for Concurrent Processing</h3>
+                <p>High-velocity applications require non-blocking operations to maximize resource utilization:</p>
+                <pre><code>// Concurrent processing without blocking
+public class ConcurrentTradingProcessor {
+
+    public CompletableFuture&lt;TradingResult&gt processConcurrentWorkloads(IgniteClient client) {
+        // Execute multiple operations concurrently
+        CompletableFuture&lt;Trade&gt tradeExecution = client.transactions().runInTransactionAsync(tx ->
+            client.sql().executeAsync(tx, "INSERT INTO trades VALUES (?, ?, ?)", tradeId, amount, timestamp)
+        );
+
+        CompletableFuture&lt;RiskMetrics&gt riskCalculation = client.compute().executeAsync(
+            JobTarget.colocated("trades", tradeId),
+            RiskCalculationJob.class, tradeId
+        );
+
+        CompletableFuture&lt;ComplianceResult&gt complianceCheck = client.compute().executeAsync(
+            JobTarget.colocated("trades", tradeId),
+            ComplianceValidationJob.class, tradeId
+        );
+
+        // Combine results when all complete
+        return CompletableFuture.allOf(tradeExecution, riskCalculation, complianceCheck)
+            .thenApply(v -> new TradingResult(
+                tradeExecution.join(),
+                riskCalculation.join(),
+                complianceCheck.join()
+            ));
+    }
+}
+</code></pre>
+                <p><strong>Concurrency Benefits:</strong></p>
+                <ul>
+                  <li><strong>Resource utilization</strong>: CPU cores stay busy while I/O completes</li>
+                  <li><strong>Throughput scaling</strong>: Process multiple operations per thread</li>
+                  <li><strong>Latency hiding</strong>: Overlapping operations reduce total processing time</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>Performance Under Real-World Load Conditions</h2>
+                <h3>Performance Under Mixed Workloads</h3>
+                <p><strong>High-Frequency Trading Performance:</strong></p>
+                <p>
+                  Trade processing achieves sub-microsecond operations through memory-resident data access. Portfolio validation, risk calculations, and trade execution happen locally without network calls. Performance scales linearly with
+                  available CPU cores while maintaining consistent latency.
+                </p>
+                <p><strong>Concurrent Analytics Performance:</strong></p>
+                <p>
+                  Risk analytics run simultaneously with live trading without mutual interference. Portfolio analysis queries process the same data that trading operations update, but analytics access consistent snapshots without blocking
+                  trade execution. Complex SQL aggregations complete while high-frequency trading continues at full speed.
+                </p>
+                <p>
+                  <strong>The Performance Integration</strong>: Traditional systems force trade-offs between transaction speed and analytical capability. Integrated platform performance eliminates these constraints by supporting both
+                  workload types within the same optimized architecture.
+                </p>
+                <h3>Unified Access Performance Characteristics</h3>
+                <p><strong>Here's how the same data maintains optimal performance across different access patterns:</strong></p>
+                <pre><code>// Trading data accessed through optimal API for each use case
+Table tradesTable = client.tables().table("trades");
+// 1. Key-value access for high-frequency lookups
+Trade trade = tradesTable.keyValueView()
+    .get(tx, Tuple.create().set("trade_id", tradeId));     // <1 ms lookup
+// 2. SQL access for complex risk analytics
+ResultSet&lt;SqlRow&gt; riskAnalysis = client.sql().execute(tx,
+    "SELECT account_id, SUM(quantity * price) as exposure " +
+    "FROM trades WHERE trade_date = CURRENT_DATE " +
+    "GROUP BY account_id HAVING exposure > 1000000");      // Parallel execution
+// 3. Record access for type-safe transaction processing
+TradeRecord record = tradesTable.recordView()
+    .get(tx, new TradeRecord(tradeId));                     // Type-safe operations
+</code></pre>
+                <p><strong>Performance Optimization per Access Pattern:</strong></p>
+                <ul>
+                  <li><strong>Key-value operations</strong>: Direct memory access with microsecond response times</li>
+                  <li><strong>SQL operations</strong>: Query optimization with parallel execution and colocation</li>
+                  <li><strong>Record operations</strong>: Type-safe processing without serialization overhead</li>
+                  <li><strong>All operations</strong>: Share same memory-resident data and transaction guarantees</li>
+                </ul>
+                <p>
+                  <strong>The unified performance advantage</strong>: Each access method optimizes for its specific use case while operating against the same high-performance data store. No performance compromises, no data movement
+                  overhead.
+                </p>
+                <h3>Compliance Reporting Performance</h3>
+                <p><strong>Regulatory Reporting Without Operational Impact:</strong></p>
+                <p>
+                  Compliance reporting processes millions of transactions for regulatory analysis while live trading continues at full speed. Complex aggregation queries scan large datasets to identify position limit violations, unusual
+                  trading patterns, and risk exposure calculations. These operations complete without blocking operational processing through concurrent access control.
+                </p>
+                <p><strong>Performance Characteristics:</strong></p>
+                <ul>
+                  <li><strong>High data scan rate</strong>: Reports process complete trading datasets efficiently</li>
+                  <li><strong>Minimal operational impact</strong>: Compliance queries run concurrently with live trading</li>
+                  <li><strong>Memory efficient processing</strong>: Large-scale aggregations use streaming patterns</li>
+                  <li><strong>Transactional consistency</strong>: Reports reflect exact point-in-time data state</li>
+                </ul>
+                <h3>Real-Time Analytics Without ETL</h3>
+                <p><strong>Live transactional data analytics without traditional ETL delays:</strong></p>
+                <pre><code>// Analytics query running against live trading data
+// Read-only transaction for snapshot isolation
+Transaction readOnlyTx = client.transactions().begin(new TransactionOptions().readOnly(true));
+ResultSet&lt;SqlRow&gt; liveRiskAnalysis = client.sql().execute(readOnlyTx, """
+    SELECT
+        account_id,
+        symbol,
+        SUM(quantity * price) as current_exposure,
+        COUNT(*) as trade_count,
+        MAX(timestamp) as last_trade
+    FROM trades
+    WHERE trade_date = CURRENT_DATE
+      AND status = 'EXECUTED'
+    GROUP BY account_id, symbol
+    HAVING current_exposure > 1000000
+    ORDER BY current_exposure DESC
+""");
+// This query runs concurrently with:
+// - Live trading operations inserting new trades
+// - Risk systems updating positions
+// - Settlement processes modifying trade status
+// - All without blocking any operational processing
+</code></pre>
+                <p><strong>The Real-Time Analytics Breakthrough:</strong></p>
+                <ul>
+                  <li><strong>No ETL delays</strong>: Analytics queries run directly against operational data</li>
+                  <li><strong>No data staleness</strong>: See trades and positions as they happen, not hours later</li>
+                  <li><strong>No system separation</strong>: Same data serves both operations and analytics</li>
+                  <li><strong>No performance interference</strong>: Concurrent access prevents analytics from blocking operations</li>
+                </ul>
+                <p><strong>Traditional ETL Problem Solved:</strong></p>
+                <pre><code>// Traditional: Wait for ETL, work with stale data
+// 1. Trading system writes trades
+// 2. ETL process extracts (30 min delay)
+// 3. Analytics warehouse loads (60 min delay)
+// 4. Dashboard shows 90-minute-old data
+// Ignite 3: Instant analytics on live data
+// 1. Trading system writes trades
+// 2. Analytics queries see data immediately
+// 3. Dashboard shows real-time positions
+</code></pre>
+                <p><strong>The integrated approach</strong>: The operational database becomes the analytics database when designed for both workloads. No more choosing between fresh data and analytical power.</p>
+                <h3>Intelligent Flow Control Under Extreme Load</h3>
+                <p>
+                  <strong>The system pressure challenge</strong>: During traffic spikes (market volatility, Black Friday, viral events), traditional systems either drop connections or crash. Apache Ignite responds intelligently with
+                  automatic backpressure that maintains system stability while preserving data integrity.
+                </p>
+                <pre><code>// Intelligent backpressure prevents system collapse during traffic spikes
+DataStreamerOptions options = DataStreamerOptions.builder()
+    .pageSize(10_000)                    // Batch size control
+    .perPartitionParallelOperations(4)   // Concurrency limits per partition
+    .autoFlushInterval(1000)             // Memory pressure relief (1 second)
+    .retryLimit(32)                      // Resilience under pressure
+    .build();
+// Publisher provides intelligent flow control - automatically throttles when system pressure detected
+try (var publisher = new SubmissionPublisherDataStreamerItem&lt;TradeRecord&gt()) {
+    CompletableFuture&lt;Void&gt streamerFut = tradesTable.recordView().streamData(publisher, options);
+
+    // System automatically applies backpressure when memory pressure or partition limits reached
+    // Instead of dropping connections, Ignite 3 intelligently throttles input rates
+    publisher.submit(DataStreamerItem.of(tradeRecord));
+
+    streamerFut.join(); // Completes when all data processed with backpressure applied
+}
+</code></pre>
+                <p><strong>Backpressure vs Traditional Approaches:</strong></p>
+                <pre class="mermaid">
+flowchart LR
+    subgraph "System Under Load"
+        Events1[High Traffic Spike 50,000 events/sec]
+        DB1[(Traditional Database)]
+        Crash1[System Overload 503 Service Unavailable]
+        Loss1[Data Lost Revenue Impact Customer Complaints]
+
+        Events1 -->|Overwhelms| DB1
+        DB1 -->|Cannot Handle Load| Crash1
+        Crash1 --> Loss1
+    end
+</pre
+                >
+                <pre class="mermaid">
+flowchart LR
+    subgraph "Ignite 3 Backpressure"
+        Events2[High Traffic Spike 50,000 events/sec]
+        Ignite[Apache Ignite Backpressure Control]
+        Throttle[Intelligent Throttling Flow Control Active]
+        Success[System Stable Data Preserved 99.9% Uptime]
+
+        Events2 -->|High Load Detected| Ignite
+        Ignite -->|Applies Backpressure| Throttle
+        Throttle -->|Maintains Stability| Success
+    end
+</pre
+                >
+                <p><strong>Traditional Database</strong>: "503 Service Unavailable" → Connections dropped, data lost</p>
+                <br />
+                <p><strong>Apache Ignite</strong>: "Intelligent throttling" → System stays up, data preserved</p>
+                <p><strong>Real-world scenarios where backpressure saves systems:</strong></p>
+                <ul>
+                  <li><strong>Market volatility</strong>: 10x normal trading volume handled gracefully without transaction loss</li>
+                  <li><strong>IoT sensor bursts</strong>: 50M device readings processed without memory exhaustion</li>
+                  <li><strong>E-commerce spikes</strong>: Black Friday traffic managed without dropped orders</li>
+                  <li><strong>Data migration</strong>: 100TB+ datasets streamed without overwhelming target systems</li>
+                </ul>
+                <p><strong>The wow moment</strong>: While competitors' systems crash during peak demand, yours maintains 99.9% uptime through intelligent flow control that automatically adapts to system pressure.</p>
+                <hr />
+                <br />
+                <h2>Performance Optimization Strategies</h2>
+                <h3>Workload-Specific Optimization</h3>
+                <p><strong>Trading Workload Optimization:</strong></p>
+                <p>
+                  High-frequency trading tables use the volatile memory engine (aimem) for maximum speed. Tables configure colocation by account ID to ensure related trades process on the same nodes. Distribution zones optimize partition
+                  count and replica settings for trading-specific access patterns.
+                </p>
+                <p><strong>Analytics Workload Optimization:</strong></p>
+                <p>
+                  Analytical processing uses the persistent memory engine (aipersist) for durability with memory-speed access. Market data tables colocate by symbol to optimize time-series queries. Higher partition counts distribute
+                  analytical workloads across more nodes for better parallelization.
+                </p>
+                <p><strong>Configuration Benefits:</strong></p>
+                <ul>
+                  <li><strong>Workload isolation</strong>: Different storage engines prevent interference between workload types</li>
+                  <li><strong>Access optimization</strong>: Colocation strategies minimize network overhead for common query patterns</li>
+                  <li><strong>Resource utilization</strong>: Optimized partition counts maximize hardware utilization</li>
+                  <li><strong>Performance predictability</strong>: Configuration choices align with specific performance requirements</li>
+                </ul>
+                <h3>Performance Monitoring and Validation</h3>
+                <p><strong>Continuous Performance Validation:</strong></p>
+                <p>
+                  Integrated performance monitoring tracks latency histograms and throughput gauges across all workload types. The system measures interference patterns between trading, analytics, and reporting operations to ensure
+                  performance isolation. Automated validation confirms that trading latency remains below microsecond thresholds while analytical queries maintain their target response times.
+                </p>
+                <p><strong>Performance Validation Results:</strong></p>
+                <ul>
+                  <li><strong>Trading performance</strong>: Sub-microsecond 99.9th percentile latency under mixed loads</li>
+                  <li><strong>Analytics performance</strong>: Consistent query response times regardless of trading volume</li>
+                  <li><strong>Interference detection</strong>: Less than 5% mutual performance impact between workload types</li>
+                  <li><strong>Capacity planning</strong>: Predictable scaling characteristics enable accurate resource allocation</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>Business Impact of Consistent Performance</h2>
+                <h3>Risk Reduction Through Performance Predictability</h3>
+                <p><strong>Financial Risk Mitigation:</strong></p>
+                <ul>
+                  <li><strong>Trading execution</strong>: Consistent low-latency execution prevents slippage</li>
+                  <li><strong>Risk calculations</strong>: Real-time risk assessment prevents overexposure</li>
+                  <li><strong>Compliance monitoring</strong>: Immediate violation detection prevents penalties</li>
+                </ul>
+                <p><strong>Operational Risk Mitigation:</strong></p>
+                <ul>
+                  <li><strong>System capacity</strong>: Predictable performance enables accurate capacity planning</li>
+                  <li><strong>SLA compliance</strong>: Consistent performance characteristics enable SLA guarantees</li>
+                  <li><strong>Incident reduction</strong>: Performance predictability reduces operational incidents</li>
+                </ul>
+                <h3>Revenue Impact of Performance Consistency</h3>
+                <p><strong>High-Frequency Trading Firm Benefits:</strong></p>
+                <ul>
+                  <li><strong>Execution advantage</strong>: Microsecond latency improvements translate to competitive advantage</li>
+                  <li><strong>Risk management</strong>: Real-time risk assessment prevents significant financial exposure</li>
+                  <li><strong>Operational efficiency</strong>: Consistent performance reduces manual intervention needs</li>
+                </ul>
+                <p><strong>E-commerce Platform Benefits:</strong></p>
+                <ul>
+                  <li><strong>Response time consistency</strong>: Low-latency checkout processes improve conversion rates</li>
+                  <li><strong>Analytics availability</strong>: Real-time insights enable rapid revenue optimization</li>
+                  <li><strong>System reliability</strong>: High availability during peak load prevents revenue loss</li>
+                </ul>
+                <h3>Competitive Advantage Through Integration</h3>
+                <p><strong>Market Differentiation:</strong></p>
+                <ul>
+                  <li><strong>Customer experience</strong>: Millisecond response times vs competitor delays</li>
+                  <li><strong>Operational agility</strong>: Real-time decision making vs batch processing delays</li>
+                  <li><strong>Cost efficiency</strong>: Single platform vs multi-system operational overhead</li>
+                </ul>
+                <p><strong>Innovation Enablement:</strong></p>
+                <ul>
+                  <li><strong>New product capabilities</strong>: Performance characteristics enable previously impossible features</li>
+                  <li><strong>Market expansion</strong>: Consistent performance supports higher-volume markets</li>
+                  <li><strong>Technical differentiation</strong>: Platform capabilities become competitive advantages</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>The Performance Integration Advantage</h2>
+                <br />
+                <p>
+                  Traditional architectures force performance trade-offs between workload types. Fast operations require dedicated systems. Analytical processing needs separate infrastructure. Reporting workloads get isolated environments.
+                </p>
+                <p>
+                  Apache Ignite eliminates these trade-offs through integrated platform performance. All workload types achieve their required performance characteristics within the same system, using the same data, without interference.
+                </p>
+                <p><strong>The principle: Performance consistency enables operational simplicity.</strong></p>
+                <p>
+                  When all workloads perform predictably within the same platform, you eliminate the operational complexity of managing performance trade-offs across multiple systems. Your architecture supports business requirements instead
+                  of constraining them.
+                </p>
+                <p>High-velocity applications need performance characteristics they can depend on. Integrated platform performance provides both the speed individual operations require and the consistency mixed workloads demand.</p>
+                <hr />
+                <br />
+                <p>
+                  <em
+                    >Return next Tuesday for Part 5, that explores how data colocation eliminates the network overhead that traditional distributed systems accept as inevitable. This transforms distributed processing into local memory
+                    operations while maintaining the scale and fault tolerance benefits of distributed architecture.</em
+                  >
+                </p>
+              </div>
+            </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
+          </section>
+        </main>
+        <aside class="blog__sidebar">
+          <ul>
+            <li><a href="/blog/apache">apache</a></li>
+            <li><a href="/blog/ignite">ignite</a></li>
+            <li><a href="/blog/release">release</a></li>
+            <li><a href="/blog/database">database</a></li>
+            <li><a href="/blog/in">in</a></li>
+            <li><a href="/blog/memory">memory</a></li>
+            <li><a href="/blog/open">open</a></li>
+            <li><a href="/blog/source">source</a></li>
+            <li><a href="/blog/.NET">.NET</a></li>
+            <li><a href="/blog/security">security</a></li>
+            <li><a href="/blog/Intel">Intel</a></li>
+            <li><a href="/blog/CET">CET</a></li>
+            <li><a href="/blog/linq">linq</a></li>
+            <li><a href="/blog/SQL">SQL</a></li>
+            <li><a href="/blog/performance">performance</a></li>
+            <li><a href="/blog/csharp">csharp</a></li>
+            <li><a href="/blog/in-memory">in-memory</a></li>
+            <li><a href="/blog/open-source">open-source</a></li>
+            <li><a href="/blog/log4j2">log4j2</a></li>
+            <li><a href="/blog/bigdata">bigdata</a></li>
+            <li><a href="/blog/computing">computing</a></li>
+            <li><a href="/blog/two">two</a></li>
+            <li><a href="/blog/learning">learning</a></li>
+            <li><a href="/blog/machine">machine</a></li>
+            <li><a href="/blog/spark">spark</a></li>
+            <li><a href="/blog/sql">sql</a></li>
+            <li><a href="/blog/data">data</a></li>
+            <li><a href="/blog/fast">fast</a></li>
+            <li><a href="/blog/nodal">nodal</a></li>
+            <li><a href="/blog/meltdown">meltdown</a></li>
+            <li><a href="/blog/spectre">spectre</a></li>
+            <li><a href="/blog/key-value">key-value</a></li>
+            <li><a href="/blog/store">store</a></li>
+            <li><a href="/blog/meetup">meetup</a></li>
+            <li><a href="/blog/biodata">biodata</a></li>
+            <li><a href="/blog/rdbms">rdbms</a></li>
+            <li><a href="/blog/grid">grid</a></li>
+            <li><a href="/blog/imdb">imdb</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/our-community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2024 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
+</html>
