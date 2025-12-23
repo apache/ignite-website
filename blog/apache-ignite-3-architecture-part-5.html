@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Apache Ignite Blog</title>
-    <meta property="og:title" content="Apache Ignite Blog" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Matomo -->
@@ -337,190 +332,324 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Apache Ignite Blog</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</h1>
+        <p>
+          December 23, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-5.html">Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</a></h2>
-                <div>
-                  December 23, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
+              <div>
                 <p>
                   Your high-velocity application processes events fast enough until it doesn't. The bottleneck isn't CPU or memory. It's data movement. Every time event processing requires data from another node, network latency adds
                   milliseconds that compound into seconds of delay under load.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-5.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-4.html">Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure</a></h2>
-                <div>
-                  December 16, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html"
-                    >Twitter</a
+                <!-- end -->
+                <p>
+                  Consider a financial trading system processing peak loads of 10,000 trades per second. Each trade requires risk calculations against a customer's portfolio. If portfolio data lives on different nodes than the processing
+                  logic, network round-trips create an impossible performance equation: 10,000 trades × 2ms network latency = 20 seconds of network delay per second of wall clock time.
+                </p>
+                <p>Apache Ignite eliminates this constraint through data colocation. Related data and processing live on the same nodes, transforming distributed operations into local memory operations.</p>
+                <p><strong>The result: distributed system performance without distributed system overhead.</strong></p>
+                <hr />
+                <br />
+                <h2>The Data Movement Tax on High-Velocity Applications</h2>
+                <h3>Network Latency Arithmetic</h3>
+                <p>At scale, network latency creates mathematical impossibilities:</p>
+                <p><strong>Here's what distributed processing costs in practice:</strong></p>
+                <pre><code>// Traditional distributed processing (data on different nodes)
+long startTime = System.nanoTime();
+// 1. Fetch event data (potentially remote: 0.5-2 ms)
+EventData event = eventService.getEvent(eventId);                       // Network: 0.5-2 ms
+// 2. Fetch related customer data (potentially remote: 0.5-2 ms)
+CustomerData customer = customerService.getCustomer(event.customerId);  // Network: 0.5-2 ms
+// 3. Fetch processing rules (potentially remote: 0.5-2 ms)
+ProcessingRules rules = rulesService.getRules(customer.segment);        // Network: 0.5-2 ms
+// 4. Execute processing logic (local: 0.1 ms)
+ProcessingResult result = processEvent(event, customer, rules);         // CPU: 0.1 ms
+// 5. Store results (potentially remote: 0.5-2 ms)
+resultService.storeResult(eventId, result);                             // Network: 0.5-2 ms
+long totalTime = System.nanoTime() - startTime;
+// Total: 2.6-10.1 ms per event (90%+ network overhead)
+</code></pre>
+                <p><strong>At Scale:</strong></p>
+                <ul>
+                  <li>1,000 events/sec × 5 ms average = 5 seconds processing time per second (impossible)</li>
+                  <li>10,000 events/sec × 5 ms average = 50 seconds processing time per second (catastrophic)</li>
+                </ul>
+                <h3>The Compound Effect of Distribution</h3>
+                <p>Real applications don't just move data once per event. They move data multiple times:</p>
+                <p><strong>Here's how the cascade effect compounds:</strong></p>
+                <pre><code>// Multi-hop data movement for single order
+OrderEvent order = getOrder(orderId);                                    // Network hop 1: 1 ms
+CustomerData customer = getCustomer(order.customerId);                   // Network hop 2: 1 ms
+InventoryData inventory = getInventory(order.productId);                 // Network hop 3: 1 ms
+PricingData pricing = getPricing(order.productId, customer.segment);     // Network hop 4: 1 ms
+PaymentData payment = processPayment(order.amount, customer.paymentId);  // Network hop 5: 2 ms
+ShippingData shipping = calculateShipping(order, customer.address);      // Network hop 6: 1 ms
+PromotionData promotions = applyPromotions(order, customer);             // Network hop 7: 1 ms
+// Total network overhead: 8ms per order (before any business logic)
+</code></pre>
+                <p><strong>The cascade effect</strong>: Each data dependency creates another network round-trip. Complex event processing can require 10+ network operations per event.</p>
+                <hr />
+                <br />
+                <h2>Strategic Data Placement Through Colocation</h2>
+                <h3>Apache Ignite Colocation Architecture</h3>
+                <p>
+                  Apache Ignite uses deterministic hash distribution to ensure related data lands on the same nodes. The platform automatically generates consistent hash values for colocation keys, ensuring all data with the same colocation
+                  key always lands on the same node. This deterministic placement means that once data is colocated, subsequent access patterns benefit from data locality without manual coordination.
+                </p>
+                <h3>Table Design for Event Processing Colocation</h3>
+                <pre><code>-- Create distribution zone for customer-based colocation
+CREATE ZONE customer_zone WITH
+    partitions=64,
+    replicas=3;
+-- Orders table using customer-based distribution zone
+CREATE TABLE orders (
+    order_id BIGINT PRIMARY KEY,
+    customer_id BIGINT,
+    product_id BIGINT,
+    amount DECIMAL(10,2),
+    order_date TIMESTAMP
+) WITH ZONE='customer_zone';
+-- Customer data using same distribution zone for colocation
+CREATE TABLE customers (
+    customer_id BIGINT PRIMARY KEY,
+    name VARCHAR(100),
+    segment VARCHAR(20),
+    payment_method VARCHAR(50)
+) WITH ZONE='customer_zone';
+-- Customer pricing using same zone for colocation
+CREATE TABLE customer_pricing (
+    customer_id BIGINT,
+    product_id BIGINT,
+    price DECIMAL(10,2),
+    discount_rate DECIMAL(5,2),
+    PRIMARY KEY (customer_id, product_id)
+) WITH ZONE='customer_zone';
+</code></pre>
+                <p>
+                  <strong>Result</strong>: All tables using the same distribution zone share the same partitioning strategy. Data for customer 12345 distributes to the same partition across all tables, enabling local processing without
+                  network communication.
+                </p>
+                <h3>Compute Colocation for Event Processing</h3>
+                <p><strong>Processing Moves to Where Data Lives:</strong></p>
+                <p>
+                  Instead of moving data to processing logic, compute jobs execute on the nodes where related data already exists. For customer order processing, the compute job runs on the node containing the customer's data, orders, and
+                  pricing information. All data access becomes local memory operations rather than network calls.
+                </p>
+                <p><strong>Simple Colocation Example:</strong></p>
+                <pre><code>// Execute processing where customer data lives
+Tuple customerKey = Tuple.create().set("customer_id", customerId);
+CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
+    JobTarget.colocated("customers", customerKey),  // Run on node with customer data
+    OrderProcessingJob.class,
+    customerId
+);
+</code></pre>
+                <p><strong>Performance Impact</strong>: 8ms distributed processing becomes sub-millisecond colocated processing through data locality.</p>
+                <hr />
+                <br />
+                <h2>Real-World Colocation Performance Impact</h2>
+                <h3>Financial Risk Calculation Example</h3>
+                <p><strong>Problem</strong>: Trading system needs real-time portfolio risk calculation for each trade.</p>
+                <p><strong>Here's what the distributed approach costs:</strong></p>
+                <p>
+                  Traditional risk calculations require multiple network calls: fetch trade details (1ms), retrieve portfolio data (2ms), get current market prices (1ms), and load risk rules (1ms). The actual risk calculation takes 0.2ms,
+                  but network overhead dominates at 5.2ms total. At 10,000 trades per second, this creates 52 seconds of processing time per second. This is mathematically impossible.
+                </p>
+                <p><strong>Colocated Risk Processing:</strong></p>
+                <p>
+                  When account portfolios, trade histories, and risk rules colocate by account ID, risk calculations become local operations. All required data lives on the same node where the processing executes. Network overhead
+                  disappears, transforming 5.2ms distributed operations into sub-millisecond local calculations.
+                </p>
+                <p><strong>Business Impact:</strong></p>
+                <ul>
+                  <li><strong>Trading velocity</strong>: Process 10,000+ trades per second with real-time risk assessment</li>
+                  <li><strong>Risk accuracy</strong>: Use complete portfolio context without stale data</li>
+                  <li><strong>Regulatory compliance</strong>: Meet sub-second risk calculation requirements</li>
+                </ul>
+                <h3>IoT Event Processing Example</h3>
+                <p><strong>Problem</strong>: Manufacturing system processes sensor events requiring contextual data for anomaly detection.</p>
+                <p><strong>Colocated Design</strong>:</p>
+                <pre><code>-- Create distribution zone for equipment-based colocation
+CREATE ZONE equipment_zone WITH
+    partitions=32,
+    replicas=2;
+-- Sensor data using equipment-based distribution zone
+CREATE TABLE sensor_readings (
+    sensor_id BIGINT,
+    equipment_id BIGINT,
+    timestamp TIMESTAMP,
+    temperature DECIMAL(5,2),
+    pressure DECIMAL(8,2),
+    vibration DECIMAL(6,3),
+    PRIMARY KEY (sensor_id, timestamp)
+) WITH ZONE='equipment_zone';
+-- Equipment specifications using same zone for colocation
+CREATE TABLE equipment_specs (
+    equipment_id BIGINT PRIMARY KEY,
+    max_temperature DECIMAL(5,2),
+    max_pressure DECIMAL(8,2),
+    max_vibration DECIMAL(6,3),
+    maintenance_schedule VARCHAR(50)
+) WITH ZONE='equipment_zone';
+</code></pre>
+                <p><strong>Processing Performance:</strong></p>
+                <p>
+                  Anomaly detection jobs execute on the nodes containing the equipment data they analyze. Current sensor readings, historical patterns, and equipment specifications all reside locally. The processing accesses recent sensor
+                  data, compares against equipment tolerances, and detects anomalies without any network calls.
+                </p>
+                <p>
+                  <strong>Performance Outcome</strong>: Sub-millisecond anomaly detection vs multi-millisecond distributed processing. Single cluster processes tens of thousands of sensor readings per second with real-time anomaly
+                  detection.
+                </p>
+                <hr />
+                <br />
+                <h2>Colocation Strategy Selection</h2>
+                <h3>Event-Driven Colocation Patterns</h3>
+                <p><strong>Customer-Centric Applications</strong>:</p>
+                <pre><code>-- Customer-focused distribution zone
+CREATE ZONE customer_zone WITH partitions=64;
+CREATE TABLE orders (...) WITH ZONE='customer_zone';
+</code></pre>
+                <ul>
+                  <li>Orders, payments, preferences, history distributed by customer key</li>
+                  <li>Customer service queries access data from same partition</li>
+                  <li>Personalization engines process complete customer context locally</li>
+                </ul>
+                <p><strong>Time-Series Event Processing</strong>:</p>
+                <pre><code>-- Time-based distribution zone
+CREATE ZONE hourly_zone WITH partitions=24;
+CREATE TABLE events (...) WITH ZONE='hourly_zone';
+</code></pre>
+                <ul>
+                  <li>Recent events distribute based on time windows</li>
+                  <li>Historical analysis accesses time-coherent partitions</li>
+                  <li>Event correlation happens without cross-node communication</li>
+                </ul>
+                <p><strong>Geographic Distribution</strong>:</p>
+                <pre><code>-- Region-based distribution zone
+CREATE ZONE regional_zone WITH partitions=16;
+CREATE TABLE locations (...) WITH ZONE='regional_zone';
+</code></pre>
+                <ul>
+                  <li>Regional data partitions to regional node groups</li>
+                  <li>Location-aware services access local partition data</li>
+                  <li>Geographic analytics minimize cross-region data movement</li>
+                </ul>
+                <h3>Automatic Query Optimization Through Colocation</h3>
+                <p><strong>When related data lives together, query performance transforms:</strong></p>
+                <pre><code>-- Before colocation: expensive cross-node JOINs
+SELECT c.name, o.order_total, p.amount
+FROM customers c
+  JOIN orders o ON c.customer_id = o.customer_id
+  JOIN payments p ON o.order_id = p.order_id
+WHERE c.customer_id = 12345;
+-- Network overhead: 3 tables × potential cross-node fetches = high latency
+-- After colocation: local memory JOINs
+-- Same query, but all customer 12345 data lives on same node
+-- Result: JOIN operations become local memory operations
+</code></pre>
+                <p><strong>Complex Analytics Become Local Operations:</strong></p>
+                <pre><code>// Complex analytical query becomes local operation
+ResultSet&lt;SqlRow&gt; customerAnalysis = client.sql().execute(tx, """
+    SELECT
+        c.segment,
+        COUNT(o.order_id) as order_count,
+        SUM(o.amount) as total_spent,
+        AVG(p.processing_time) as avg_payment_time
+    FROM customers c
+      JOIN orders o ON c.customer_id = o.customer_id
+      JOIN payments p ON o.order_id = p.order_id
+    WHERE c.registration_date >= ?
+    GROUP BY c.segment
+    HAVING total_spent > 10000
+""", lastMonth);
+// When all three tables share the same distribution zone:
+// - Multi-table JOINs execute locally per partition
+// - No network overhead for related data access
+// - Query performance scales with CPU, not network bandwidth
+</code></pre>
+                <p><strong>Query Performance Transformation:</strong></p>
+                <ul>
+                  <li><strong>JOIN operations</strong>: Cross-node network calls → local memory operations</li>
+                  <li><strong>Complex analytics</strong>: Network-bound → CPU-bound (much faster)</li>
+                  <li><strong>Query planning</strong>: Distributed execution → local partition execution</li>
+                  <li><strong>Performance scaling</strong>: Limited by network → limited by CPU/memory</li>
+                </ul>
+                <p>
+                  <strong>The performance transformation</strong>: Query optimization through data placement. When related data lives together, complex queries become simple local operations, fundamentally changing performance
+                  characteristics.
+                </p>
+                <h3>Performance Validation</h3>
+                <p><strong>Colocation Effectiveness Monitoring:</strong></p>
+                <p>
+                  Apache Ignite provides built-in metrics to monitor colocation effectiveness: query response times, network traffic patterns, and CPU utilization versus network wait time. Effective colocation strategies achieve specific
+                  performance indicators that demonstrate data locality success.
+                </p>
+                <p><strong>Success Indicators:</strong></p>
+                <ul>
+                  <li><strong>Local execution</strong>: >95% of queries execute locally without network hops</li>
+                  <li><strong>Memory-speed access</strong>: Average query latency <1 ms for colocated data</li>
+                  <li><strong>CPU utilization</strong>: >80% processing time versus network waiting</li>
+                  <li><strong>Predictable performance</strong>: Consistent response times independent of cluster size</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>The Business Impact of Eliminating Data Movement</h2>
+                <h3>Cost Reduction</h3>
+                <ul>
+                  <li><strong>Network Infrastructure</strong>: 10x reduction in inter-node bandwidth requirements</li>
+                  <li><strong>Hardware Efficiency</strong>: Higher CPU/memory utilization vs network-bound systems</li>
+                  <li><strong>Operational Complexity</strong>: Fewer moving parts in event processing pipelines</li>
+                </ul>
+                <h3>Performance Gains</h3>
+                <ul>
+                  <li><strong>Response Time</strong>: 10-50x improvement in event processing latency</li>
+                  <li><strong>Throughput</strong>: 5-10x higher event processing capacity with same hardware</li>
+                  <li><strong>Predictability</strong>: Consistent performance independent of network conditions</li>
+                </ul>
+                <h3>Application Capabilities</h3>
+                <ul>
+                  <li><strong>Real-Time Analytics</strong>: Sub-millisecond analytics on live transactional event streams</li>
+                  <li><strong>Complex Event Processing</strong>: Multi-step event processing without coordination overhead</li>
+                  <li><strong>Interactive Applications</strong>: User-facing features with database-backed logic at cache speeds</li>
+                </ul>
+                <hr />
+                <br />
+                <h2>The Architectural Evolution</h2>
+                <p>Traditional distributed systems accept network overhead as inevitable. Apache Ignite eliminates it through intelligent data placement.</p>
+                <p>
+                  Your high-velocity application doesn't need to choose between distributed scale and local performance. Colocation provides both: the data capacity and fault tolerance of distributed systems with the performance
+                  characteristics of single-node processing.
+                </p>
+                <p><strong>The principle</strong>: Colocate related data, localize dependent processing.</p>
+                <p>
+                  Every network hop you eliminate returns performance to your application's processing budget. At high event volumes, those performance gains determine whether your architecture scales with your business success or becomes
+                  the constraint that limits it.
+                </p>
+                <hr />
+                <br />
+                <p>
+                  <em
+                    >Return next Tuesday for Part 6 to discover how distributed consensus maintains data consistency during high-frequency operations. We'll explore how to preserve the performance gains from colocation while ensuring your
+                    high-velocity applications remain both fast and reliable.</em
                   >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional systems force a choice: real-time analytics or fast transactions. Apache Ignite eliminates this trade-off with integrated platform performance that delivers both simultaneously.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-4.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-client-connections-handling.html">How many client connections can Apache Ignite 3 handle?</a></h2>
-                <div>
-                  December 10, 2025 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=How many client connections can Apache Ignite 3 handle?%20https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-client-connections-handling.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-3.html">Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option</a></h2>
-                <div>
-                  December 9, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Schema changes in traditional databases mean downtime, lost revenue, and deployment chaos across multiple systems. This piece demonstrates how Apache Ignite's flexible schema approach helps lets data model evolve at the
-                  pace of your business requirements.
                 </p>
               </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-3.html">↓ Read all</a></div>
             </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-2.html">Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing</a></h2>
-                <div>
-                  December 2, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional databases force a choice: fast memory access or durable storage. High-velocity applications processing 10,000+ events per second hit a wall when disk I/O adds 5-15ms to every transaction.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-2.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-1.html">Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale</a></h2>
-                <div>
-                  November 25, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite shows what really happens once your <em>good enough</em> multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first
-                  architecture removes the latency tax entirely.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/schema-design-for-distributed-systems-ai3.html"> Schema Design for Distributed Systems: Why Data Placement Matters</a></h2>
-                <div>
-                  November 18, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status= Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Discover how Apache Ignite 3 keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/schema-design-for-distributed-systems-ai3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/getting-to-know-apache-ignite-3.html">Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform</a></h2>
-                <div>
-                  November 11, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform%20https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite 3 is a memory-first distributed SQL database platform that consolidates transactions, analytics, and compute workloads previously requiring separate systems. Built from the ground up, it represents a complete
-                  departure from traditional caching solutions toward a unified distributed computing platform with microsecond latencies and collocated processing capabilities.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/getting-to-know-apache-ignite-3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/whats-new-in-apache-ignite-3-1.html">Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening</a></h2>
-                <div>
-                  November 3, 2025 by Evgeniy Stanilovskiy. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening%20https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite 3.1 improves the three areas that matter most when running distributed systems: performance at scale, language flexibility, and operational visibility. The release also fixes hundreds of bugs related to data
-                  corruption, race conditions, and edge cases discovered since 3.0.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/whats-new-in-apache-ignite-3-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/whats-new-in-apache-ignite-3-0.html">What's New in Apache Ignite 3.0</a></h2>
-                <div>
-                  February 24, 2025 by Stanislav Lukyanov. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=What's New in Apache Ignite 3.0%20https://ignite.apache.org/blog/whats-new-in-apache-ignite-3-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite 3.0 is the latest milestone in Apache Ignite evolution that enhances developer experience, platform resilience, and efficiency. In this article, we’ll explore the key new features and improvements in Apache
-                  Ignite 3.0.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/whats-new-in-apache-ignite-3-0.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-17-0.html">Apache Ignite 2.17 Release: What’s New</a></h2>
-                <div>
-                  February 13, 2025 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.17 Release: What’s New%20https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  We are happy to announce the release of <a href="https://ignite.apache.org/">Apache Ignite </a>2.17.0! In this latest version, the Ignite community has introduced a range of new features and improvements to deliver a more
-                  efficient, flexible, and future-proof platform. Below, we’ll cover the key highlights that you can look forward to when upgrading to the new release.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-17-0.html">↓ Read all</a></div>
-            </article>
-          </section>
-          <section class="blog__footer">
-            <ul class="pagination">
-              <li><a class="current" href="/blog/">1</a></li>
-              <li><a class="item" href="/blog/1/">2</a></li>
-              <li><a class="item" href="/blog/2/">3</a></li>
-              <li><a class="item" href="/blog/3/">4</a></li>
-            </ul>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
           </section>
         </main>
         <aside class="blog__sidebar">
