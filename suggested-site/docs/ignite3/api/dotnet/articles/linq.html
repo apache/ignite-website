@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Apache Ignite LINQ provider | Apache Ignite.NET API Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Apache Ignite LINQ provider | Apache Ignite.NET API Documentation ">
+      
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/apache/ignite-3/blob/main/modules/platforms/dotnet/docs/articles/linq.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="apache-ignite-linq-provider">Apache Ignite LINQ provider</h1>
+
+<h2 id="what">What?</h2>
+<p>LINQ provider translates C# LINQ expressions into Ignite-specific SQL.</p>
+<p>For example, the following two snippets achieve the same result:</p>
+<p><strong>SQL</strong></p>
+<pre><code class="lang-csharp">var query = &quot;select KEY, VAL from PUBLIC.TBL1 where (KEY &gt; ?) order by KEY asc&quot;;
+await using IResultSet&lt;IIgniteTuple&gt; resultSet = await Client.Sql.ExecuteAsync(transaction: null, query, 3);
+
+var queryResults = new List&lt;Poco&gt;();
+
+await foreach (IIgniteTuple row in resultSet)
+{
+    queryResults.Add(new Poco { Key = (long)row[0]!, Val = (string?)row[1] });
+}
+</code></pre>
+<p><strong>LINQ</strong></p>
+<pre><code class="lang-csharp">var table = await Client.Tables.GetTableAsync(&quot;TBL1&quot;);
+
+IQueryable&lt;Poco&gt; query = table!.GetRecordView&lt;Poco&gt;().AsQueryable()
+    .Where(x =&gt; x.Key &gt; 3)
+    .OrderBy(x =&gt; x.Key);
+
+List&lt;Poco&gt; queryResults = await query.ToListAsync();
+</code></pre>
+<h2 id="why">Why?</h2>
+<p>LINQ has the following advantages over SQL:</p>
+<ul>
+<li>Queries are strongly typed and compile-time checked:
+<ul>
+<li>Easier to write and maintain with IDE support (auto-completion, navigation, find usages).</li>
+<li>Refactoring-friendly: rename a column and all queries are updated at once.</li>
+</ul>
+</li>
+<li>Ignite-specific SQL knowledge is not required, and most C# developers are already familiar with LINQ.</li>
+<li>Safe against SQL injections.</li>
+<li>Results are mapped to types naturally.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>Create a table.</li>
+</ol>
+<pre><code class="lang-csharp">await Client.Sql.ExecuteAsync(null, @&quot;CREATE TABLE PUBLIC.PERSON (NAME VARCHAR PRIMARY KEY, AGE INT)&quot;);
+</code></pre>
+<ol start="2">
+<li>Define classes (or records) that represent tables.
+<ul>
+<li>Member names should match column names (case-insensitive).</li>
+<li>If a column name is not a valid C# identifier, use <code>[Column(&quot;name&quot;)]</code> attribute to specify the name.</li>
+</ul>
+</li>
+</ol>
+<pre><code class="lang-csharp">public record Person(string Name, int Age, string Address, string Status);
+</code></pre>
+<ol start="3">
+<li>Obtain a table reference</li>
+</ol>
+<pre><code class="lang-csharp">ITable table = await Client.Tables.GetTableAsync(&quot;PERSON&quot;);
+</code></pre>
+<ol start="5">
+<li>Use <code>GetRecordView&lt;T&gt;()</code> to get a typed view of the table.</li>
+</ol>
+<pre><code class="lang-csharp">IRecordView&lt;Person&gt; view = table.GetRecordView&lt;Person&gt;();
+</code></pre>
+<ol start="6">
+<li>Use <code>AsQueryable()</code> to perform LINQ queries on <code>IRecordView&lt;T&gt;</code>.</li>
+</ol>
+<pre><code class="lang-csharp">List&lt;string&gt; names = await view.AsQueryable()
+    .Where(x =&gt; x.Age &gt; 30)
+    .Select(x =&gt; x.Name)
+    .ToListAsync();
+</code></pre>
+<h2 id="inspecting-generated-sql">Inspecting Generated SQL</h2>
+<p>Viewing generated SQL is useful for debugging and performance tuning. There are two ways to do it:</p>
+<ul>
+<li><code>IgniteQueryableExtensions.ToQueryString()</code> extension method:</li>
+</ul>
+<pre><code class="lang-csharp">IQueryable&lt;Person&gt; query = table.GetRecordView&lt;Person&gt;().AsQueryable().Where(x =&gt; x.Age &gt; 30);
+
+string sql = query.ToQueryString();
+</code></pre>
+<ul>
+<li>Debug logging:</li>
+</ul>
+<pre><code class="lang-csharp">var cfg = new IgniteClientConfiguration
+{
+    Logger = LoggerFactory.Create(builder =&gt; builder.AddConsole().SetMinimumLevel(LogLevel.Debug)),
+    ...
+};
+
+using var client = IgniteClient.StartAsync(cfg);
+...
+</code></pre>
+<p>All generated SQL will be logged with <code>Debug</code> level to the specified logger.</p>
+<h2 id="using-transactions">Using Transactions</h2>
+<p>Transaction can be passed to the LINQ provider via the first <code>AsQueryeable</code> parameter:</p>
+<pre><code class="lang-csharp">await using var tx = await client.Transactions.BeginAsync();
+var view = (await client.Tables.GetTableAsync(&quot;person&quot;))!.GetRecordView&lt;Person&gt;();
+
+pocoView.AsQueryable(tx)...;
+</code></pre>
+<h2 id="custom-query-options">Custom Query Options</h2>
+<p>Custom query options (timeout, page size) can be specified via the second <code>AsQueryable</code> parameter with <code>QueryableOptions</code>:</p>
+<pre><code class="lang-csharp">var options = new QueryableOptions
+{
+    PageSize = 512,
+    Timeout = TimeSpan.FromSeconds(30)
+};
+
+table.GetRecordView&lt;Person&gt;().AsQueryable(options: options)...;
+</code></pre>
+<h2 id="result-materialization">Result Materialization</h2>
+<p>Materialization is the process of converting query results (<code>IQueryable&lt;T&gt;</code>) into an object or a collection of objects.</p>
+<p>LINQ is lazy. Nothing happens (no network calls, no SQL translation) until the query is materialized.
+For example, the following code only constructs an expression, but does not execute anything:</p>
+<pre><code class="lang-csharp">IQueryable&lt;Person&gt; query = table!.GetRecordView&lt;Person&gt;().AsQueryable()
+    .Where(x =&gt; x.Key &gt; 3)
+    .OrderBy(x =&gt; x.Key);
+</code></pre>
+<p>Query execution and materialization can be triggered in multiple ways:</p>
+<h3 id="iteration">Iteration</h3>
+<pre><code class="lang-csharp">foreach (var person in query) { ... }
+
+await foreach (var person in query.AsAsyncEnumerable()) { ... }
+</code></pre>
+<h3 id="tolist-todictionary">ToList, ToDictionary</h3>
+<pre><code class="lang-csharp">List&lt;Person&gt; list = query.ToList();
+Dictionary&lt;string, int&gt; dict = query.ToDictionary(x =&gt; x.Name, x =&gt; x.Age);
+</code></pre>
+<p>Async variants are available in <code>IgniteQueryableExtensions</code>:</p>
+<pre><code class="lang-csharp">List&lt;Person&gt; list = await query.ToListAsync();
+Dictionary&lt;string, int&gt; dict = await query.ToDictionaryAsync(x =&gt; x.Name, x =&gt; x.Age);
+</code></pre>
+<h3 id="single-result-functions">Single Result Functions</h3>
+<pre><code class="lang-csharp">Person first = query.First();
+Person? firstOrDefault = query.FirstOrDefault();
+Person single = query.Single();
+Person? singleOrDefault = query.SingleOrDefault();
+int maxAge = query.Max(x =&gt; x.Age); 
+int minAge = query.Min(x =&gt; x.Age); 
+int avgAge = query.Average(x =&gt; x.Age);
+int sumAge = query.Sum(x =&gt; x.Age);
+int count = query.Count();
+long longCount = query.LongCount();
+bool any = query.Any(x =&gt; x.Age &gt; 30);
+bool all = query.All(x =&gt; x.Age &gt; 30);
+</code></pre>
+<p>Async variants are available in <code>IgniteQueryableExtensions</code>:</p>
+<pre><code class="lang-csharp">Person first = await query.FirstAsync();
+Person? firstOrDefault = await query.FirstOrDefaultAsync();
+Person single = await query.SingleAsync();
+Person? singleOrDefault = await query.SingleOrDefaultAsync();
+int maxAge = await query.MaxAsync(x =&gt; x.Age); 
+int minAge = await query.MinAsync(x =&gt; x.Age); 
+int avgAge = await query.AverageAsync(x =&gt; x.Age);
+int sumAge = await query.SumAsync(x =&gt; x.Age);
+int count = await query.CountAsync();
+long longCount = await query.LongCountAsync();
+bool any = await query.AnyAsync(x =&gt; x.Age &gt; 30);
+bool all = await query.AllAsync(x =&gt; x.Age &gt; 30);
+</code></pre>
+<h3 id="ignite-specific-iresultset">Ignite-specific IResultSet</h3>
+<p>Underlying <code>IResultSet</code> can be obtained via <code>IgniteQueryableExtensions.ToResultSetAsync()</code> extension method:</p>
+<pre><code class="lang-csharp">await using IResultSet&lt;Person&gt; resultSet = await query.ToResultSetAsync();
+
+Console.WriteLine(resultSet.Metadata);
+var rows = resultSet.CollectAsync(...);
+</code></pre>
+<p>Obtaining <code>IResultSet</code> can be useful for access to metadata and <code>CollectAsync</code> method, which provides more control over result materialization.</p>
+<h2 id="supported-linq-features">Supported LINQ Features</h2>
+<h3 id="projections">Projections</h3>
+<p>Projection is the process of converting query results into a different type.
+Among other things, projections are used to select a subset of columns.</p>
+<p>For example, <code>Person</code> table may have many columns, but we only need <code>Name</code> and <code>Age</code>. First, create a projection class:</p>
+<pre><code class="lang-csharp">public record PersonInfo(string Name, int Age);
+</code></pre>
+<p>Then, use <code>Select</code> to project query results:</p>
+<pre><code class="lang-csharp">List&lt;PersonInfo&gt; result = query
+    .Select(x =&gt; new PersonInfo(x.Name, x.Age))
+    .ToList();
+</code></pre>
+<p>Resulting SQL will select only those two columns, avoiding overfetching
+(overfetching is a common issue when ORM-generated query includes all table columns, but only a few of them are needed by the business logic).</p>
+<p>Ignite also supports anonymous type projections:</p>
+<pre><code class="lang-csharp">var result = query.Select(x =&gt; new { x.Name, x.Age }).ToList();
+</code></pre>
+<h3 id="inner-joins">Inner Joins</h3>
+<p>Use standard <code>Join</code> method to perform joins on other tables:</p>
+<pre><code class="lang-csharp">var customerQuery = customerTable.GetRecordView&lt;Customer&gt;().AsQueryable();
+var orderQuery = orderTable.GetRecordView&lt;Order&gt;().AsQueryable();
+
+var ordersByCustomer = customerQuery
+    .Join(orderQuery, cust =&gt; cust.Id, order =&gt; order.CustId, (cust, order) =&gt; new { cust.Name, order.Amount })
+    .ToList();
+</code></pre>
+<h3 id="outer-joins">Outer Joins</h3>
+<p>Outer joins are supported via <code>DefaultIfEmpty</code> method.
+For example, not every book in a library is borrowed by a student, so a left outer join is used to retrieve all books and their current borrowers (if any):</p>
+<pre><code class="lang-csharp">var bookQuery = bookTable.GetRecordView&lt;Book&gt;().AsQueryable();
+var studentQuery = studentTable.GetRecordView&lt;Student&gt;().AsQueryable();
+
+var booksWithStudents = bookQuery
+    .Join(studentQuery.DefaultIfEmpty(), book =&gt; book.StudentId, student =&gt; student.Id, (book, student) =&gt; new { book.Title, student.Name })
+    .ToList();
+</code></pre>
+<h3 id="grouping">Grouping</h3>
+<p>Single column:</p>
+<pre><code class="lang-csharp">var bookCountByAuthor = bookTable.GetRecordView&lt;Book&gt;().AsQueryable()
+    .GroupBy(book =&gt; book.Author)
+    .Select(grp =&gt; new { Author = grp.Key, Count = x.Count() })
+    .ToList();
+</code></pre>
+<p>Multiple columns - use anonymous type:</p>
+<pre><code class="lang-csharp">var bookCountByAuthorAndYear = bookTable.GetRecordView&lt;Book&gt;().AsQueryable()
+    .GroupBy(book =&gt; new { book.Author, book.Year })
+    .Select(grp =&gt; new { Author = grp.Key.Author, Year = grp.Key.Year, Count = x.Count() })
+    .ToList();
+</code></pre>
+<p>Aggregate functions <code>Count</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Average</code> can be used with groupings.</p>
+<h3 id="ordering">Ordering</h3>
+<p><code>OrderBy</code>, <code>OrderByDescending</code>, <code>ThenBy</code>, <code>ThenByDescending</code> are supported. Combine them to order by multiple columns:</p>
+<pre><code class="lang-csharp">var booksOrderedByAuthorAndYear = bookTable.GetRecordView&lt;Book&gt;().AsQueryable()
+    .OrderBy(book =&gt; book.Author)
+    .ThenByDescending(book =&gt; book.Year)
+    .ToList();
+</code></pre>
+<h3 id="aggregates">Aggregates</h3>
+<p>All aggregate functions are supported: <code>Count</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Average</code>. Async variants are available in <code>IgniteQueryableExtensions</code>.</p>
+<p>See examples in &quot;Single Result Functions&quot; above.</p>
+<h3 id="union-intersect-except">Union, Intersect, Except</h3>
+<p>Multiple result sets can be combined using <code>Union</code>, <code>Intersect</code>, <code>Except</code> methods.</p>
+<pre><code class="lang-csharp">IQueryable&lt;string&gt; employeeEmails = employeeTable.GetRecordView&lt;Employee&gt;().AsQueryable()
+    .Select(x =&gt; x.Email);
+    
+IQueryable&lt;string&gt; customerEmails = customerTable.GetRecordView&lt;Customer&gt;().AsQueryable()
+    .Select(x =&gt; x.Email);
+    
+List&lt;string&gt; allEmails = employeeEmails.Union(customerEmails)
+    .OrderBy(x =&gt; x)
+    .ToList();
+    
+List&lt;string&gt; employeesThatAreCustomers = employeeEmails.Intersect(customerEmails).ToList();
+</code></pre>
+<h3 id="math-functions">Math Functions</h3>
+<p>The following <code>Math</code> functions are supported (will be translated to SQL equivalents):
+<code>Abs</code>, <code>Cos</code>, <code>Cosh</code>, <code>Acos</code>, <code>Sin</code>, <code>Sinh</code>, <code>Asin</code>, <code>Tan</code>, <code>Tanh</code>, <code>Atan</code>, <code>Ceiling</code>, <code>Floor</code>,
+<code>Exp</code>, <code>Log</code>, <code>Log10</code>, <code>Pow</code>, <code>Round</code>, <code>Sign</code>, <code>Sqrt</code>, <code>Truncate</code>.</p>
+<p>The following <code>Math</code> functions are NOT supported (no equivalent in Ignite SQL engine):
+<code>Acosh</code>, <code>Asinh</code>, <code>Atanh</code>, <code>Atan2</code>, <code>Log2</code>, <code>Log(x, y)</code>.</p>
+<p>Example:</p>
+<pre><code class="lang-csharp">var triangles = table.GetRecordView&lt;Triangle&gt;().AsQueryable()
+    .Select(t =&gt; new { 
+            Hypotenuse, 
+            Opposite = t.Hypotenuse * Math.Sin(t.Angle), 
+            Adjacent = t.Hypotenuse * Math.Cos(t.Angle) 
+        })
+    .ToList();
+</code></pre>
+<h3 id="string-functions">String Functions</h3>
+<p><code>string.Compare(string)</code>, <code>string.Compare(string, bool ignoreCase)</code>, concatenation <code>s1 + s2 + s3</code>, <code>ToUpper</code>, <code>ToLower</code>,
+<code>Substring(start)</code>, <code>Substring(start, len)</code>,
+<code>Trim</code>, <code>Trim(char)</code>, <code>TrimStart</code>, <code>TrimStart(char)</code>, <code>TrimEnd</code>, <code>TrimEnd(char)</code>,
+<code>Contains</code>, <code>StartsWith</code>, <code>EndsWith</code>, <code>IndexOf</code>, <code>Length</code>, <code>Replace</code>.</p>
+<p>Example:</p>
+<pre><code class="lang-csharp">List&lt;string&gt; fullNames = table.GetRecordView&lt;Person&gt;().AsQueryable()
+    .Where(p =&gt; p.FirstName.StartsWith(&quot;Jo&quot;))
+    .Select(p =&gt; new { FullName = p.FirstName.ToUpper() + &quot; &quot; + p.LastName.ToLower() })
+    .ToList();
+</code></pre>
+<h3 id="regular-expressions">Regular Expressions</h3>
+<p><code>Regex.Replace</code> is translated to <code>regexp_replace</code> function.</p>
+<pre><code class="lang-csharp">List&lt;string&gt; addresses = table.GetRecordView&lt;Person&gt;().AsQueryable()
+    .Select(p =&gt; new { Address = Regex.Replace(p.Address, @&quot;(\d+)&quot;, &quot;[$1]&quot;)
+    .ToList();
+</code></pre>
+<p>Keep in mind that regex engine within SQL may behave differently from .NET regex engine.</p>
+<h3 id="dml-bulk-update-and-delete">DML (Bulk Update and Delete)</h3>
+<p>Bulk update and delete with optional conditions are supported via <code>ExecuteUpdateAsync</code> and <code>ExecuteDeleteAsync</code> extensions methods on <code>IQueryable&lt;T&gt;</code>:</p>
+<pre><code class="lang-csharp">var orders = orderTable.GetRecordView&lt;Order&gt;().AsQueryable();
+
+await orders.Where(x =&gt; x.Amount == 0).ExecuteDeleteAsync();
+</code></pre>
+<p>Update statement can set properties to constant values or to an expression based on other properties of the same row:</p>
+<pre><code class="lang-csharp">var orders = orderTable.GetRecordView&lt;Order&gt;().AsQueryable();
+
+await orders
+    .Where(x =&gt; x.CustomerId == customerId)
+    .ExecuteUpdateAsync(
+        order =&gt; order.SetProperty(x =&gt; x.Discount, 0.1m)
+                      .SetProperty(x =&gt; x.Note, x =&gt; x.Note + &quot; Happy birthday, &quot; + x.CustomerName));
+</code></pre>
+<p>Resulting SQL:</p>
+<pre><code class="lang-sql">update PUBLIC.tbl1 as _T0 
+set NOTE = concat(concat(_T0.NOTE, ?), _T0.CUSTOMERNAME), DISCOUNT = ? 
+where (_T0.CUSTOMERID IS NOT DISTINCT FROM ?)
+</code></pre>
+<h3 id="composing-queries">Composing Queries</h3>
+<p><code>IQueryable&lt;T&gt;</code> expressions can be composed dynamically. A common use case is to compose a query based on user input.
+For example, optional filters on different columns can be applied to a query:</p>
+<pre><code class="lang-csharp">public List&lt;Book&gt; GetBooks(string? author, int? year)
+{
+    IQueryable&lt;Book&gt; query = bookTable.GetRecordView&lt;Book&gt;().AsQueryable();
+
+    if (!string.IsNullOrEmpty(author))
+        query = query.Where(x =&gt; x.Author == author);
+        
+    if (year != null)
+        query = query.Where(x =&gt; x.Year == year);
+
+    return query.ToList();
+}
+</code></pre>
+<h3 id="column-name-mapping">Column Name Mapping</h3>
+<p>Unless custom mapping is provided with <code>[Column]</code>, LINQ provider will use property or field names as column names,
+using unquoted identifiers, which are case-insensitive.</p>
+<p><strong>C#</strong></p>
+<pre><code class="lang-csharp">bookTable.GetRecordView&lt;Book&gt;().AsQueryable().Select(x =&gt; x.Author).ToList();
+</code></pre>
+<p><strong>Resulting SQL</strong></p>
+<pre><code class="lang-sql">select _T0.AUTHOR from PUBLIC.books as _T0
+</code></pre>
+<p>To use quoted identifiers, or to map column names to different property names, use <code>[Column]</code> attribute:</p>
+<pre><code class="lang-csharp">public class Book 
+{
+    [Column(&quot;book_author&quot;)]
+    public string Author { get; set; }
+}
+
+// Or a record:
+public record Book([property: Column(&quot;book_author&quot;)] string Author);
+</code></pre>
+<p><strong>Resulting SQL</strong></p>
+<pre><code class="lang-sql">select _T0.&quot;book_author&quot; from PUBLIC.books as _T0
+</code></pre>
+<h3 id="keyvalueview">KeyValueView</h3>
+<p>All examples above use <code>IRecordView&lt;T&gt;</code> to perform queries; LINQ provider supports <code>IKeyValueView&lt;TK, TV&gt;</code> equally well:</p>
+<pre><code class="lang-csharp">IQueryable&lt;KeyValuePair&lt;int, Book&gt;&gt; query = bookTable.GetKeyValueView&lt;int, Book&gt;().AsQueryable();
+
+List&lt;Book&gt; books = query
+    .Where(x =&gt; x.Key &gt; 10)
+    .Select(x =&gt; x.Value)
+    .ToList();
+</code></pre>
+<h2 id="performance-considerations">Performance Considerations</h2>
+<p>Our benchmarks indicate that in real-world scenarios LINQ queries are on par with equivalent SQL queries.</p>
+<p>However, a small overhead still exists (due to query translation), and your mileage may vary depending on the query complexity,
+so it's recommended to measure the performance of your queries.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/apache/ignite-3/blob/main/modules/platforms/dotnet/docs/articles/linq.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright 2023 The Apache Software Foundation
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
