@@ -11,6 +11,7 @@
 #   ./build_suggested_site.sh --serve            # Build and start server
 #   ./build_suggested_site.sh --skip-docs-build  # Skip Docusaurus docs build (use existing)
 #   ./build_suggested_site.sh --skip-site-build  # Skip website build (use existing)
+#   ./build_suggested_site.sh --staging-dir=PATH # Stage to custom directory (for PR submission)
 
 set -e
 
@@ -20,7 +21,8 @@ WEBSITE_DIR="$SCRIPT_DIR"
 IGNITE3_DOCS_DIR="${IGNITE3_DOCS_DIR:-$HOME/Code/magliettiGit/ignite-3/docs}"
 # Stage combined site into suggested-site/ for testing and review
 # This keeps build/ pure Docusaurus output for local development
-STAGING_DIR="$WEBSITE_DIR/suggested-site"
+# Can be overridden with --staging-dir for PR submission to different repos
+STAGING_DIR="${STAGING_DIR:-$WEBSITE_DIR/suggested-site}"
 
 # Options
 SERVE=false
@@ -45,6 +47,11 @@ while [ "$#" -gt 0 ]; do
     --ignite3-docs=*)
       IGNITE3_DOCS_DIR="${1#*=}"
       ;;
+    --staging-dir=*)
+      STAGING_DIR="${1#*=}"
+      # Expand ~ to home directory
+      STAGING_DIR="${STAGING_DIR/#\~/$HOME}"
+      ;;
     -h|--help)
       echo "Usage: $0 [options]"
       echo ""
@@ -54,10 +61,19 @@ while [ "$#" -gt 0 ]; do
       echo "  --skip-site-build    Skip building the main website"
       echo "  --port=PORT          Port for local server (default: 3000)"
       echo "  --ignite3-docs=PATH  Path to ignite-3/docs directory"
+      echo "  --staging-dir=PATH   Output directory for staged site (for PR submission)"
       echo "  -h, --help           Show this help message"
       echo ""
       echo "Environment Variables:"
       echo "  IGNITE3_DOCS_DIR     Path to ignite-3/docs (default: ~/Code/magliettiGit/ignite-3/docs)"
+      echo "  STAGING_DIR          Output directory (default: ./suggested-site)"
+      echo ""
+      echo "Examples:"
+      echo "  # Build and serve locally"
+      echo "  $0 --serve"
+      echo ""
+      echo "  # Build to Apache ignite-website repo for PR submission"
+      echo "  $0 --staging-dir=~/Code/ignite/ignite-website/suggested-site"
       exit 0
       ;;
     *)
