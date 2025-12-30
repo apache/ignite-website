@@ -1,0 +1,560 @@
+---
+title: "Apache Ignite Architecture Series: Part 6 - Distributed Consistency Under Load: When High-Velocity Meets High-Availability"
+author: "Michael Aglietti"
+date: 2025-12-30
+tags:
+    - apache
+    - ignite
+---
+
+p Distributed systems traditionally force a choice between consistency and speed. Apache Ignite's RAFT implementation delivers both: strong guarantees that protect your business without the coordination penalties that limit throughput.
+
+<!-- end -->
+
+p When network partitions split your cluster, duplicate payments happen. Apache Ignite prevents this through automatic coordination that maintains consistency without performance penalties.
+
+p #[strong Business scenario:] Your payment processing system handles 10,000 transactions per second across 5 nodes. Network issues isolate 2 nodes from the remaining 3 nodes. Both groups continue processing payments. Customer payment gets charged twice.
+p #[strong The solution:] Automatic consensus ensures only one group can process payments during network splits. Your application code stays simple while the platform handles distributed coordination automatically.
+p #[strong Performance guarantee:] Consensus happens in the background without blocking transaction processing.
+br
+
+h2 Business Problems from Inconsistent Data
+
+h3 Duplicate Payment Scenario
+
+p Network partitions create business-critical consistency problems:
+
+p #[strong What happens during network partition without proper coordination:]
+pre
+  code.
+    // Network partition splits payment cluster
+    // Both partitions continue processing payments independently
+    // Partition A (3 nodes) processes payment:
+    PaymentResult resultA = processPayment(payment); // SUCCESS: Balance updated to $500
+    // Partition B (2 nodes) processes same payment:
+    PaymentResult resultB = processPayment(payment); // SUCCESS: Balance updated to $500
+    // When network heals: customer charged twice, balance corrupted
+    // Expected: $500 final balance
+    // Actual: $0 final balance (double charge)
+
+p #[strong Business impact of consistency failures:]
+ul
+  li #[strong Customer complaints]: Duplicate charges from partition processing
+  li #[strong Financial exposure]: Regulatory penalties for transaction sequence errors
+  li #[strong System downtime]: Manual reconciliation required when partitions heal
+  li #[strong Business risk]: Revenue loss during extended partition scenarios
+
+h3 Why Traditional Solutions Fail
+
+p #[strong Performance penalty:] Traditional consensus adds 20-50ms to every transaction through multiple network round-trips. At 10,000 payments per second, this creates a 200-500 second processing backlog.
+p #[strong Failure problems:]
+ul
+  li #[strong Network delays]: Every transaction requires multiple round-trips to all nodes
+  li #[strong Processing blocks]: All nodes wait for slowest participant
+  li #[strong Failure stops processing]: Single node failure blocks all transactions
+  li #[strong Partition stops everything]: Network partition stops all processing
+br
+
+h2 Apache Ignite Automatic Coordination Solution
+
+h3 Zero-Code Consistency for Normal Operations
+
+p #[strong Your application code stays simple. Apache Ignite handles distributed coordination automatically.]
+pre
+  code.
+    // Your application code - simple and clean
+    public PaymentResult processPayment(PaymentRequest payment) {
+        return ignite.transactions().runInTransaction(tx -> {
+            Table accounts = ignite.tables().table("accounts");
+
+            // Standard database operations
+            Tuple account = accounts.recordView().get(tx,
+                Tuple.create().set("account_id", payment.accountId));
+
+            if (account.decimalValue("balance").compareTo(payment.amount) < 0) {
+                return PaymentResult.INSUFFICIENT_FUNDS;
+            }
+
+            // Update account balance
+            accounts.recordView().upsert(tx, Tuple.create()
+                .set("account_id", payment.accountId)
+                .set("balance", account.decimalValue("balance").subtract(payment.amount)));
+
+            return PaymentResult.SUCCESS;
+        });
+        // Apache Ignite handles all distributed coordination automatically:
+        // - Prevents duplicate processing during network partitions
+        // - Ensures balance consistency across all nodes
+        // - Maintains transaction ordering for compliance
+        // - Provides automatic failure recovery
+    }
+p #[strong Automatic coordination benefits:]
+
+ul
+  li #[strong No coordination code]: Write business logic, Ignite handles distributed consistency
+  li #[strong No duplicate processing]: Network partitions cannot create duplicate payments
+  li #[strong No configuration needed]: Consistency works automatically without setup
+  li #[strong No performance penalty]: Coordination happens in the background without blocking operations
+br
+
+h2 Advanced Features: Manual Coordination Control
+br
+
+p For specialized use cases, Apache Ignite provides manual control over distributed coordination. Most applications never need this.
+
+h3 When Manual Control Matters
+
+ul
+  li Custom distributed workflows with specific ordering requirements
+  li Multi-step operations requiring atomic coordination across steps
+  li Application-specific conflict resolution logic
+  li Performance-critical operations needing direct coordination control
+pre
+  code.
+    // Advanced RAFT control for custom distributed algorithms
+    public class CustomPaymentWorkflowRaft {
+
+        private final RaftGroupService paymentRaftGroup;
+        private final ClusterService clusterService;
+
+        public CompletableFuture&lt;PaymentResult&gt; processCustomPaymentWorkflow(PaymentRequest payment) {
+            // Custom multi-step payment workflow requiring specific consensus behavior
+            CustomPaymentCommand paymentCommand = new CustomPaymentCommand(payment);
+
+            // Direct RAFT group control for specialized workflow
+            return paymentRaftGroup.run(paymentCommand)
+                .thenApply(result -> {
+                    // Custom workflow processed with specialized consensus logic
+                    return (PaymentResult) result;
+                });
+        }
+
+        // Custom command for specialized payment workflows
+        public static class CustomPaymentCommand implements Command {
+            private final PaymentRequest payment;
+
+            public CustomPaymentCommand(PaymentRequest payment) {
+                this.payment = payment;
+            }
+
+            public PaymentRequest getPayment() {
+                return payment;
+            }
+        }
+
+        // Custom RAFT group listener for specialized processing
+        public class CustomPaymentRaftGroupListener implements RaftGroupListener {
+
+            @Override
+            public void onWrite(Iterator&lt;CommandClosure&lt;WriteCommand&gt;&gt; iterator) {
+                while (iterator.hasNext()) {
+                    CommandClosure&lt;WriteCommand&gt; closure = iterator.next();
+
+                    if (closure.command() instanceof CustomPaymentCommand) {
+                        CustomPaymentCommand cmd = (CustomPaymentCommand) closure.command();
+                        PaymentResult result = processCustomPaymentWorkflow(cmd.getPayment());
+                        closure.result(result);
+                    }
+                }
+            }
+
+            private PaymentResult processCustomPaymentWorkflow(PaymentRequest payment) {
+                // Custom distributed workflow requiring specific consensus behavior
+                // This would implement specialized logic not available through standard transactions
+                return new PaymentResult();
+            }
+        }
+    }
+
+p #[strong Advanced Control Use Cases:]
+ul
+  li Custom distributed state machines
+  li Specialized ordering requirements
+  li Performance-critical consensus operations
+  li Application-specific replication logic
+
+p #[strong RAFT Performance Advantages:]
+ul
+  li #[strong Leader-based]: Single node processes operations, eliminating coordination overhead
+  li #[strong Pipeline efficiency]: Leaders process operations without blocking
+  li #[strong Majority consensus]: Only majority nodes required (faster than unanimous)
+  li #[strong Log-based replication]: Efficient state machine replication
+
+h3 RAFT Group Configuration
+
+p RAFT groups are created and managed through RaftManager for specialized processing requirements:
+pre
+  code.
+    // RAFT group configuration for specialized processing
+    public class CustomRaftConfiguration {
+
+        private final RaftManager raftManager;
+        private final ClusterService clusterService;
+        private final String groupId = "custom-processing-group";
+
+        public RaftGroupService createCustomRaftGroup() {
+            ClusterNode localNode = clusterService.topologyService().localMember();
+            RaftNodeId nodeId = new RaftNodeId(groupId, localNode);
+            PeersAndLearners configuration = selectProcessingNodes();
+
+            CustomRaftGroupListener listener = new CustomRaftGroupListener();
+            RaftGroupEventsListener eventsListener = new CustomRaftGroupEventsListener();
+
+            return raftManager.startRaftGroupNode(
+                nodeId,
+                configuration,
+                listener,
+                eventsListener,
+                RaftGroupService::new,
+                createRaftOptionsConfigurer()
+            );
+        }
+
+        private PeersAndLearners selectProcessingNodes() {
+            // Select available cluster nodes for RAFT group
+            List&lt;Peer&gt; peers = clusterService.topologyService().allMembers().stream()
+                .limit(5) // Optimal RAFT group size for consensus
+                .map(node -> new Peer(node.name()))
+                .collect(Collectors.toList());
+
+            // Create learners list (can be empty for basic setup)
+            List&lt;Peer&gt; learners = List.of();
+
+            return PeersAndLearners.fromPeers(peers, learners);
+        }
+
+        private RaftGroupOptionsConfigurer createRaftOptionsConfigurer() {
+            return options -> {
+                // Configure RAFT group options for specialized processing
+                RaftGroupOptions groupOptions = (RaftGroupOptions) options;
+                groupOptions.serverDataPath(Paths.get("/path/to/raft/data"));
+            };
+        }
+    }
+br
+
+h2 Consensus Performance Under High-Velocity Load
+
+h3 RAFT Consensus Performance Impact
+
+p #[strong Standard Transaction Performance:]
+pre
+  code.
+    @Benchmark
+    public class StandardTransactionPerformance {
+
+        @Benchmark
+        public PaymentResult processStandardPayment() {
+            long startTime = System.nanoTime();
+
+            // Standard transaction - RAFT consensus handled automatically
+            PaymentResult result = ignite.transactions().runInTransaction(tx - {
+                // Business logic - Ignite handles distributed consistency
+                return processPaymentLogic(paymentRequest, tx);
+            });
+
+            long processingTime = System.nanoTime() - startTime;
+            // Performance includes automatic RAFT consensus overhead
+
+            return result;
+        }
+    }
+
+p #[strong Standard Operation Performance:]
+ul
+  li #[strong Transaction processing]: Milliseconds range depending on cluster configuration
+  li #[strong Automatic consensus]: Ignite optimizes RAFT for table operations
+  li #[strong Developer simplicity]: No consensus code required
+  li #[strong Throughput]: Scales with cluster capacity
+
+p #[strong Advanced RAFT Performance] (when using direct control):
+ul
+  li #[strong Custom processing]: Microseconds for specialized logic
+  li #[strong Direct consensus]: Application controls consensus behavior
+  li #[strong Specialized optimization]: Custom performance tuning possible
+  li #[strong Complex workflows]: Multi-step distributed operations
+
+h3 Handling Network Partitions During High Load
+
+p #[strong Partition Tolerance in Distributed Processing:]
+pre
+  code.
+    public class RaftPartitionHandling {
+
+        private final RaftGroupService raftGroupService;
+        private final ClusterService clusterService;
+
+        public CompletableFuture&lt;String&gt; handleOperationDuringPartition(String operationData) {
+            // RAFT automatically handles network partitions through leader-based consensus
+            Peer currentLeader = raftGroupService.leader();
+
+            if (currentLeader != null && isNodeInCluster()) {
+                // This node can communicate with cluster - process operation
+                CustomCommand command = new CustomCommand(operationData);
+                return raftGroupService.run(command)
+                    .thenApply(result -> "Operation completed: " + result);
+            } else {
+                // This node is isolated or no leader available - reject operation
+                return CompletableFuture.completedFuture("Operation temporarily unavailable");
+            }
+        }
+
+        private boolean isNodeInCluster() {
+            // Check if this node is still part of the active cluster topology
+            ClusterNode localNode = clusterService.topologyService().localMember();
+            Collection&lt;ClusterNode&gt; allMembers = clusterService.topologyService().allMembers();
+
+            return allMembers.contains(localNode);
+        }
+
+        // Custom command implementation for RAFT processing
+        public static class CustomCommand implements Command {
+            private final String data;
+
+            public CustomCommand(String data) {
+                this.data = data;
+            }
+
+            public String getData() {
+                return data;
+            }
+        }
+    }
+
+p #[strong Partition Behavior:]
+ul
+  li #[strong Majority partition]: Continues processing operations with full consistency
+  li #[strong Minority partition]: Stops processing to prevent split-brain scenarios
+  li #[strong Recovery]: Partitions automatically reconcile when network heals
+  li #[strong Data safety]: No data loss or duplication across partitions
+
+h3 Leader Election Performance
+
+p #[strong Fast Leader Election for Business Continuity:]
+pre
+  code.
+    public class RaftLeaderElection {
+
+        public void handleLeaderFailureDuringPeakLoad() {
+            // RAFT leader election for distributed processing
+            long electionStart = System.currentTimeMillis();
+
+            raftGroup.refreshLeader().thenAccept(newLeader -> {
+                long electionTime = System.currentTimeMillis() - electionStart;
+
+                // Election time depends on network conditions and RAFT configuration
+                log.info("Leader election completed in {}ms", electionTime);
+
+                // Resume processing immediately
+                resumeProcessing(newLeader);
+            });
+        }
+
+        private void resumeProcessing(Peer newLeader) {
+            // New leader immediately continues from RAFT log state
+            // No data loss or inconsistency during leadership change
+            log.info("Processing resumed under new leader: {}", newLeader.consistentId());
+        }
+    }
+
+p #[strong Leader Election Characteristics:]
+ul
+  li #[strong Election time]: Configurable based on network conditions and RAFT settings
+  li #[strong Service continuity]: Processing resumes immediately after election
+  li #[strong Data consistency]: All committed operations preserved across leader changes
+  li #[strong Automatic recovery]: No manual intervention required
+br
+
+h2 Real-World Consensus Scenarios
+
+h3 Bank Payment Processing Under Load
+
+p #[strong Daily Payment Volume]: 1 million payments across 24 hours
+p #[strong Standard Bank Payment Processing:]
+pre
+  code.
+    // Bank payment processing - Ignite handles RAFT automatically
+    @Service
+    public class BankPaymentProcessor {
+
+        public PaymentResult processInterBankTransfer(TransferRequest transfer) {
+            // Standard transaction processing with automatic consistency
+            return ignite.transactions().runInTransaction(tx -> {
+                Table senderAccounts = ignite.tables().table("sender_accounts");
+                Table receiverAccounts = ignite.tables().table("receiver_accounts");
+                Table auditLog = ignite.tables().table("audit_log");
+
+                // Atomic transfer with automatic RAFT consensus
+                Tuple senderKey = Tuple.create().set("account_id", transfer.senderAccountId);
+                Tuple senderAccount = senderAccounts.recordView().get(tx, senderKey);
+
+                if (senderAccount.decimalValue("balance").compareTo(transfer.amount) < 0) {
+                    return PaymentResult.INSUFFICIENT_FUNDS;
+                }
+
+                // Update both accounts atomically with automatic consensus
+                BigDecimal newSenderBalance = senderAccount.decimalValue("balance").subtract(transfer.amount);
+                senderAccounts.recordView().upsert(tx,
+                    Tuple.create()
+                        .set("account_id", transfer.senderAccountId)
+                        .set("balance", newSenderBalance));
+
+                receiverAccounts.recordView().upsert(tx,
+                    Tuple.create()
+                        .set("account_id", transfer.receiverAccountId)
+                        .set("balance", transfer.amount));
+
+                // Audit logging with automatic replication
+                auditLog.recordView().insert(tx, createAuditRecord(transfer));
+
+                return PaymentResult.SUCCESS;
+            });
+        }
+    }
+
+p #[strong For Complex Multi-Bank Workflows] (advanced scenarios):
+pre
+  code.
+    // Custom consensus for specialized inter-bank protocols
+    public class AdvancedInterBankProcessor {
+
+        public PaymentResult processComplexInterBankWorkflow(TransferRequest transfer) {
+            // Specialized workflow requiring custom consensus behavior
+            InterBankWorkflowCommand command = new InterBankWorkflowCommand(transfer);
+
+            return paymentRaftGroup.run(command)
+                .thenApply(result -> {
+                    // Custom workflow with specialized consistency requirements
+                    return (PaymentResult) result;
+                });
+        }
+    }
+
+p #[strong Performance Under Peak Load:]
+ul
+  li #[strong Peak hour volume]: 100,000 payments/hour (27/second average, 200/second peak)
+  li #[strong Consensus latency]: Depends on network and storage configuration
+  li #[strong System availability]: High availability through RAFT consensus and automatic failover
+  li #[strong Regulatory compliance]: Guaranteed transaction ordering accuracy
+
+h3 E-commerce Order Processing
+
+p #[strong Flash Sale Event]: 50,000 orders in 1 hour
+p #[strong Standard Order Processing:]
+pre
+  code.
+    // E-commerce order processing - automatic consistency
+    public class FlashSaleOrderProcessor {
+
+        public OrderResult processFlashSaleOrder(OrderRequest order) {
+            // Standard transaction handling flash sale inventory
+            return ignite.transactions().runInTransaction(tx -> {
+                Table inventory = ignite.tables().table("inventory");
+                Table orders = ignite.tables().table("orders");
+                Table payments = ignite.tables().table("payments");
+
+                // Inventory check with automatic consistency
+                Tuple productKey = Tuple.create().set("product_id", order.productId);
+                Tuple product = inventory.recordView().get(tx, productKey);
+
+                int availableQuantity = product.intValue("quantity");
+                if (availableQuantity < order.quantity) {
+                    return OrderResult.OUT_OF_STOCK;
+                }
+
+                // Atomic inventory update, order creation, payment processing
+                inventory.recordView().upsert(tx,
+                    Tuple.create()
+                        .set("product_id", order.productId)
+                        .set("quantity", availableQuantity - order.quantity));
+
+                orders.recordView().insert(tx, createOrderRecord(order));
+                payments.recordView().insert(tx, createPaymentRecord(order.payment));
+
+                return OrderResult.SUCCESS;
+            });
+        }
+    }
+
+p #[strong For Specialized Inventory Algorithms] (advanced scenarios):
+pre
+  code.
+    // Custom consensus for complex inventory management
+    public class AdvancedInventoryProcessor {
+
+        public OrderResult processWithCustomInventoryLogic(OrderRequest order) {
+            // Specialized inventory workflow requiring custom consensus
+            CustomInventoryCommand command = new CustomInventoryCommand(order);
+            return inventoryRaftGroup.run(command)
+                .thenApply(result -> (OrderResult) result);
+        }
+    }
+
+p #[strong Flash Sale Performance:]
+ul
+  li #[strong Order processing rate]: Scales with cluster capacity and configuration
+  li #[strong Inventory consistency]: Maintained through RAFT consensus (prevents overselling)
+  li #[strong Payment consistency]: Guaranteed through RAFT consensus (prevents duplicate charges)
+  li #[strong Customer experience]: Response time depends on network and processing configuration
+br
+
+h2 Business Impact of Distributed Consistency
+
+h3 Risk Mitigation
+
+p #[strong Financial Risk Reduction:]
+ul
+  li #[strong Payment accuracy]: Eliminates duplicate payments and lost transactions
+  li #[strong Regulatory compliance]: Guaranteed transaction ordering for audit trails
+  li #[strong System reliability]: Automatic failover maintains business continuity
+  li #[strong Data protection]: Strong consistency prevents data corruption
+
+p #[strong Operational Risk Reduction:]
+ul
+  li #[strong Manual intervention]: Consensus automation reduces human error
+  li #[strong System recovery]: Automatic partition healing reduces downtime
+  li #[strong Capacity planning]: Predictable consensus behavior enables accurate sizing
+  li #[strong Incident response]: Built-in fault tolerance reduces emergency responses
+
+h3 Revenue Protection
+
+p #[strong Payment Processing Firm Benefits:]
+ul
+  li #[strong Transaction volume]: Supports high-volume payment processing
+  li #[strong System availability]: RAFT consensus provides automatic failover
+  li #[strong Consistency guarantees]: Eliminates payment errors that damage customer trust
+  li #[strong Scalability]: Horizontal scaling through RAFT group partitioning
+
+p #[strong E-commerce Platform Benefits:]
+ul
+  li #[strong Peak load handling]: Flash sales process high volumes without consistency issues
+  li #[strong Customer trust]: Zero payment errors maintain customer confidence
+  li #[strong Competitive advantage]: Reliable order processing during high-demand events
+  li #[strong Revenue capture]: Consistent order processing vs eventual consistency risks
+
+h3 Operational Efficiency
+
+p #[strong Development Team Benefits:]
+ul
+  li #[strong Simplified architecture]: Single consistency model across all operations
+  li #[strong Reduced debugging]: Strong consistency eliminates race condition bugs
+  li #[strong Faster deployment]: Consensus handles failure scenarios automatically
+  li #[strong Predictable behavior]: Deterministic failure modes simplify testing
+
+p #[strong Operations Team Benefits:]
+ul
+  li #[strong Automated failover]: RAFT consensus reduces manual intervention requirements
+  li #[strong Consistent monitoring]: Single consistency model simplifies observability
+  li #[strong Predictable recovery]: Automated partition healing reduces incident response time
+  li #[strong Scalable operations]: Consensus qscales with cluster size
+br
+
+h2 The Consistency-Performance Balance
+br
+p Traditional distributed systems force trade-offs between consistency and performance. Strong consistency requires coordination overhead. Eventual consistency risks business-critical errors.
+p Apache Ignite's RAFT implementation optimizes for both consistency and performance. Strong consistency guarantees protect business operations while consensus performance supports high-velocity application requirements.
+p #[strong The principle: Consistency should enable performance, not limit it.]
+p When your distributed system maintains strong consistency without significant performance penalties, you eliminate the architectural compromises that force trade-offs between business safety and operational speed.
+p High-velocity applications need both consistency guarantees and performance characteristics. RAFT consensus provides the distributed coordination foundation that enables both requirements simultaneously.
+
+p #[em Return next Tuesday for Part 7, that examines how MVCC transactions build on the RAFT consensus foundation to provide ACID guarantees optimized for high-frequency operations. This ensures that distributed consistency enables rather than constrains transaction processing performance.]
