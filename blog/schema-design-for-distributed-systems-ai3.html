@@ -337,7 +337,7 @@
         <h1>Schema Design for Distributed Systems: Why Data Placement Matters</h1>
         <p>
           November 18, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
-          ><a href="http://twitter.com/home?status= Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/undefined">Twitter</a>
+          ><a href="http://twitter.com/home?status=Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/undefined">Twitter</a>
         </p>
       </section>
       <div class="blog__content">
@@ -345,7 +345,7 @@
           <section class="blog__posts">
             <article class="post">
               <div>
-                <p>Discover how Apache Ignite 3 keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p>
+                <p>Discover how Apache Ignite keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p>
                 <!-- end -->
                 <h3>Schema Design for Distributed Systems: Why Data Placement Matters</h3>
                 <p>
@@ -357,10 +357,9 @@
                   together matters more than most people realize. If related data lands on different nodes, every query has to travel the network to fetch it, and each millisecond adds up.
                 </p>
                 <p>
-                  That’s where <strong>data placement</strong> becomes the real scaling strategy. Apache Ignite 3 takes a different path with <strong>schema-driven colocation</strong> — a way to keep related data physically together.
-                  Instead of spreading rows randomly across nodes, Ignite uses your schema relationships to decide where data lives. The result: a 200 ms cross-node query becomes a 5 ms local read.
+                  That’s where <strong>data placement</strong> becomes the real scaling strategy. Apache Ignite takes a different path with <strong>schema-driven colocation</strong> — a way to keep related data physically together. Instead
+                  of spreading rows randomly across nodes, Ignite uses your schema relationships to decide where data lives. The result: a 200 ms cross-node query becomes a 5 ms local read.
                 </p>
-                <hr />
                 <h3>How Ignite 3 Differs from Other Distributed Databases</h3>
                 <p><strong>Traditional Distributed SQL Databases:</strong></p>
                 <ul>
@@ -376,7 +375,6 @@
                   <li>Local queries eliminate network overhead</li>
                   <li>Microsecond latencies through memory-first storage</li>
                 </ul>
-                <hr />
                 <h3>The Distributed Data Placement Problem</h3>
                 <p>You’ve tuned indexes, optimized queries, and scaled your cluster—but latency still creeps in. The problem isn’t your SQL — it’s where your data lives.</p>
                 <p>
@@ -393,7 +391,6 @@
                     <a href="https://ignite.apache.org/docs/ignite3/latest/quick-start/java-api">Java API quick start guide</a> to set up your development environment.
                   </p>
                 </blockquote>
-                <hr />
                 <h3>How Ignite 3 Places Data Differently</h3>
                 <p>
                   Tables are distributed across multiple nodes using consistent hashing, but with a key difference: your schema definitions control data placement. Instead of accepting random distribution of related records, you declare
@@ -420,7 +417,6 @@
                   Colocation configuration in your schema ensures that Album records use the <code>ArtistId</code> value (not <code>AlbumId</code>) for partition assignment. This guarantees that Artist 1 and all albums with
                   <code>ArtistId = 1</code> hash to the same partition and therefore live on the same nodes.
                 </p>
-                <hr />
                 <h3>Distribution Zones and Data Placement</h3>
                 <p>Distribution zones are cluster-level configurations that define how data is distributed and replicated.</p>
                 <blockquote>
@@ -453,8 +449,9 @@ ignite.catalog().create(ZoneDefinition.builder("MusicStoreReplicated")
 .replicas(clusterNodes().size())
 .storageProfiles("default")
 .build()).execute();
+
+
 </code></pre>
-                <hr />
                 <h3>Building Your Music Platform Schema</h3>
                 <blockquote>
                   <p>
@@ -492,8 +489,9 @@ public class Artist {
     public String getName() { return Name; }
     public void setName(String name) { this.Name = name; }
 }
+
+
 </code></pre>
-                <hr />
                 <h3>Parent–Child Colocation Implementation</h3>
                 <p>When users search for "The Beatles", they expect both artist details and album listings in the same query. Without colocation, this requires cross-node joins that can take 40–200 ms.</p>
                 <p>We solve this by setting<code>colocateBy</code>in the<code>@Table</code>annotation:</p>
@@ -523,7 +521,6 @@ public class Album {
                   The colocation field (<code>ArtistId</code>) must be part of the composite primary key. Ignite uses the<code>ArtistId</code>value to ensure albums with the same artist live on the same nodes as their corresponding artist
                   record.
                 </p>
-                <hr />
                 <h3>Performance Impact: Memory-First + Colocation</h3>
                 <p>Let’s quantify the effect of combining memory-first storage with schema-driven colocation.</p>
                 <p><strong>Without Colocation – Data Scattered:</strong></p>
@@ -543,7 +540,6 @@ Collection&lt;Album&gt; albums = albumView.getAll(null, albumKeys); // Node 2
                   <li><strong>Network traffic elimination:</strong> related data queries become local operations</li>
                   <li><strong>Resource efficiency:</strong> CPU focuses on serving requests instead of moving data</li>
                 </ul>
-                <hr />
                 <h3>Colocation Enables Compute-to-Data Processing</h3>
                 <p>Schema-driven colocation doesn’t just optimize queries—it enables processing where data lives:</p>
                 <pre><code>// Process all albums for an artist locally
@@ -556,7 +552,6 @@ CompletableFuture&lt;RecommendationResult&gt; result = ignite.compute()
 
 </code></pre>
                 <p>Instead of moving gigabytes of album data to a compute cluster, you move kilobytes of logic to where the data already resides.</p>
-                <hr />
                 <h3>Implementation Guide</h3>
                 <p>Deploy tables in dependency order to avoid colocation reference errors:</p>
                 <pre><code>try (IgniteClient client = IgniteClient.builder()
@@ -573,8 +568,9 @@ CompletableFuture&lt;RecommendationResult&gt; result = ignite.compute()
     client.catalog().createTable(Album.class);      // References Artist
     client.catalog().createTable(Track.class);      // References Album
 }
+
+
 </code></pre>
-                <hr />
                 <h3>Accessing Your Distributed Data</h3>
                 <p>Ignite 3 provides multiple views of the same colocated data:</p>
                 <pre><code>// RecordView for entity operations
@@ -589,11 +585,12 @@ artists.upsert(null, beatles);
 Album abbeyRoad = new Album(1, 1, "Abbey Road", LocalDate.of(1969, 9, 26));
 albums.upsert(null, abbeyRoad);  // Automatically colocated with artist
 
+
+
 </code></pre>
-                <hr />
                 <h3>Summary</h3>
                 <p>
-                  Data placement is where distributed performance is won or lost. With <strong>schema-driven colocation</strong>, Apache Ignite 3 keeps related data together on the same nodes, so your queries stay local, fast, and
+                  Data placement is where distributed performance is won or lost. With <strong>schema-driven colocation</strong>, Apache Ignite keeps related data together on the same nodes, so your queries stay local, fast, and
                   predictable.
                 </p>
                 <p>Instead of tuning around network latency, you design for it once at the schema level. Your joins stay local, your compute jobs run where the data lives, and scaling stops being a tradeoff between performance and size.</p>
