@@ -359,7 +359,6 @@
                   that enabled growth now create performance bottlenecks that compound with every additional event.
                 </p>
                 <p><strong>At high event volumes, data movement between systems becomes the primary performance constraint</strong>.</p>
-                <hr />
                 <h3>The Scale Reality for High-Velocity Applications</h3>
                 <p>
                   As event volume grows, architectural compromises that once seemed reasonable at lower scale become critical bottlenecks. Consider a financial trading platform, gaming backend, or IoT processor handling tens of thousands of
@@ -381,7 +380,6 @@
                   <li>During traffic spikes (50,000+ events per second), traditional systems collapse entirely, dropping connections and losing data when they're needed most.</li>
                 </ul>
                 <p>The math scales against you.</p>
-                <hr />
                 <h3>When Smart Choices Become Scaling Limits</h3>
                 <p><strong>Initial Architecture, works great at lower scale:</strong></p>
                 <pre class="mermaid">flowchart TB
@@ -410,7 +408,6 @@
                   <li><strong>Memory overhead:</strong> Each system caches the same data in different formats</li>
                   <li><strong>Consistency windows:</strong> Brief periods where systems show different data states</li>
                 </ul>
-                <hr />
                 <h3>The Hidden Cost of Multi-System Success</h3>
                 <p><strong>Data Movement Overhead:</strong></p>
                 <p>Your events don't just need processing, they need processing that maintains consistency across all systems.</p>
@@ -423,7 +420,6 @@
                 </ul>
                 <p><strong>Minimum per-event cost ≈ 7 ms before business logic.</strong></p>
                 <p>At 10,000 events/s, you’d need 70 seconds of processing capacity just <strong>for data movement</strong> per real-time second!</p>
-                <hr />
                 <h3>The Performance Gap That Grows With Success</h3>
                 <h3>Why Traditional Options Fail</h3>
                 <p><strong>Option 1: Scale out each system</strong></p>
@@ -444,7 +440,6 @@
                   <li><strong>Result</strong>: Business requirements compromised to fit architectural limitations</li>
                   <li><strong>Reality</strong>: Competitive disadvantage as customer expectations grow</li>
                 </ul>
-                <hr />
                 <h3>The Critical Performance Gap</h3>
                 <table style="borderlicollapse: collapse; margin: 20px 0; width: 100%">
                   <thead>
@@ -477,7 +472,6 @@
                   During traffic spikes, traditional architectures either drop connections (data loss) or degrade performance (missed SLAs). High-velocity applications need intelligent flow control that guarantees stability under pressure
                   while preserving data integrity.
                 </p>
-                <hr />
                 <h3>Event Processing at Scale</h3>
                 <p><strong>Here's what traditional multi-system event processing costs:</strong></p>
                 <pre><code>// Traditional multi-system event processing
@@ -531,14 +525,12 @@ long totalTime = System.nanoTime() - startTime;
                   </tbody>
                 </table>
                 <p><strong>The math doesn’t work:</strong> parallelism helps, but coordination overhead grows exponentially with system count.</p>
-                <hr />
                 <h3>Real-World Breaking Points</h3>
                 <ul>
                   <li><strong>Financial services</strong>: Trading platforms hitting 10,000+ trades/second discover that compliance reporting delays impact trading decisions.</li>
                   <li><strong>Gaming platforms</strong>: Multiplayer backends processing user actions find that leaderboard updates lag behind gameplay events.</li>
                   <li><strong>IoT analytics</strong>: Manufacturing systems processing sensor data realize that anomaly detection arrives too late for preventive action.</li>
                 </ul>
-                <hr />
                 <h3>The Apache Ignite Alternative</h3>
                 <h3>Eliminating Multi-System Overhead</h3>
                 <pre class="mermaid">flowchart TB
@@ -563,7 +555,6 @@ long totalTime = System.nanoTime() - startTime;
     Compute <-->|Direct Access| Memory
 </pre>
                 <p><strong>Key difference:</strong> events process <strong>where the data lives</strong>, eliminating inter-system latency.</p>
-                <hr />
                 <h3>Apache Ignite Performance Reality Check</h3>
                 <p><strong>Here's the same event processing with integrated architecture:</strong></p>
                 <pre><code>// Apache Ignite integrated event processing
@@ -592,7 +583,6 @@ try (IgniteClient client = IgniteClient.builder().addresses("cluster:10800").bui
 // Result: microsecond-range event processing through integrated architecture
 </code></pre>
                 <p>Processing 10,000 events/s is achievable with integrated architecture eliminating network overhead.</p>
-                <hr />
                 <h3>The Unified Data-Access Advantage</h3>
                 <p><strong>Here's what eliminates the need for separate systems:</strong></p>
                 <pre><code>// The SAME data, THREE access paradigms, ONE system
@@ -621,7 +611,6 @@ CustomerRecord record = customerTable.recordView()
                   <li><strong>Schema drift risks</strong> across different systems</li>
                 </ul>
                 <p><strong>Unified advantage:</strong> One schema, one transaction model, multiple access paths.</p>
-                <hr />
                 <h3>Apache Ignite Architecture Preview</h3>
                 <p>The ability to handle high-velocity events without multi-system overhead requires specific technical innovations:</p>
                 <ul>
@@ -631,7 +620,6 @@ CustomerRecord record = customerTable.recordView()
                   <li><strong>Minimal data copying</strong>: Events process against live data through collocated processing and direct memory access</li>
                 </ul>
                 <p>These innovations address the compound effects that make multi-system architectures unsuitable for high-velocity applications.</p>
-                <hr />
                 <h3>Business Impact of Architectural Evolution</h3>
                 <h3>Cost Efficiency</h3>
                 <ul>
@@ -651,7 +639,6 @@ CustomerRecord record = customerTable.recordView()
                   <li><strong>Consistent behavior</strong>: no synchronization anomalies</li>
                   <li><strong>Faster delivery</strong>: one integrated system to test and debug</li>
                 </ul>
-                <hr />
                 <h3>The Architectural Evolution Decision</h3>
                 <p>Every successful application reaches this point: the architecture that once fueled growth now constrains it.</p>
                 <p><strong>The question isn't whether you'll hit multi-system scaling limits. It's how you'll evolve past them.</strong></p>
@@ -660,7 +647,6 @@ CustomerRecord record = customerTable.recordView()
                   systems at scale, you consolidate core operations into a platform designed for high-velocity applications.
                 </p>
                 <p>Your winning architecture doesn't have to become your scaling limit. It can evolve into the foundation for your next phase of growth.</p>
-                <hr />
                 <br />
                 <p>
                   <em>Return next Tuesday for Part 2, where we examine how Apache Ignite’s memory-first architecture enables optimized event processing while maintaining durability, forming the basis for true high-velocity performance.</em>
