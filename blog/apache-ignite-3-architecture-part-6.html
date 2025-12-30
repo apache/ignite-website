@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Distributed Consistency Under Load: When High-Velocity Meets High-Availability</title>
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['setDoNotTrack', true]);
+      _paq.push(['disableCookies']);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://analytics.apache.org/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '77']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.async = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <!-- MOBILE MENU START-->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button class="hystmodal__close" data-hystclose="">Close</button>
+          <div class="mobmenu__wrap">
+            <a class="mobmenu__logo" href="/"><img src="/img/logo.svg" alt="Logo" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li><a href="/docs/latest/">Quick Start</a></li>
+                <li><a href="/resources.html#learning">Learning resources</a></li>
+                <li><a href="/resources.html#training">Training and Courses</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+                    <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+                    <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+                    <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+                    <li><a href="/use-cases/high-performance-computing.html">High Performance Computing</a></li>
+                    <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+                    <li><a href="/use-cases/spark-acceleration.html">Spark Acceleration</a></li>
+                    <li><a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a></li>
+                    <li><a href="/use-cases.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/features/">Features</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+                    <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+                    <li><a href="/features/sql.html">Distributed SQL</a></li>
+                    <li><a href="/features/key-value-apis.html">Key-Value APIs</a></li>
+                    <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+                    <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+                    <li><a href="/features/service-apis.html">Services</a></li>
+                    <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+                    <li><a href="/features/streaming.html">Real-Time Streaming APIs</a></li>
+                    <li><a href="/docs/latest/messaging">Messaging</a></li>
+                    <li><a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+                    <li><a href="/features/index.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li><a href="/use-cases/provenusecases.html">Powered by</a></li>
+                <li><a href="/resources.html">Resources</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/docs/latest/">Docs</a></li>
+              </ul>
+              <a class="button mobmenu__button" href="/download.cgi">Download Ignite</a>
+            </div>
+            <!-- //mobmenu__menu-->
+          </div>
+          <!-- //mobmenu__wrap-->
+        </div>
+        <!-- //mobmenu-->
+      </div>
+    </div>
+    <!-- MOBILE MENU END-->
+    <header class="hdr hdr__white jsHdrBase">
+      <div class="jsHdrLine">
+        <div id="promotion-bar">
+          <a
+            href="https://ignite-summit.org/2025/?utm_medium=website-direct&amp;utm_source=apache_ignite&amp;utm_term=ignite-summit&amp;utm_content=event-hosted&amp;utm_campaign=2023-06-06-ignite-summit-nam"
+            target="_blank"
+            title="Ignite Summit 2025"
+            rel="noopener noreferrer"
+            >Ignite Summit 2025 — Watch on demand &nbsp;<span class="more d-none d-lg-block"><img src="/images/promos/arrow-white.svg" /></span
+          ></a>
+        </div>
+        <div class="hdr__wrap flexi">
+          <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+          ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+          ><a class="button hdr__button" href="/download.cgi">Download Ignite</a>
+          <nav class="hdrmenu">
+            <ul class="flexi">
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+              <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/resources.html" data-panel="resources">Resources</a></li>
+              <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+            </ul>
+          </nav>
+          <div class="dropmenu">
+            <div class="dropmenu__panel" data-menupanel="getStarted">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+              <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="features">
+              <div class="container dropmenu2__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext">MULTI-TIER STORAGE</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">ESSENTIAL Developer APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">High-Performance <br />Computing APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">Real-Streaming APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu2__grid-->
+              <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-2-->
+            <div class="dropmenu__panel" data-menupanel="community">
+              <div class="container dropmenu3__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu3__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="resources">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton blog" href="/blog/"><img src="/img/menu/icon-blog.svg" alt="" /><span>Blog</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#technical"><span>Technical resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box blog">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#book"><span>Apache Ignite Book</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#mail"><span>Mailing Lists, Forums And Discussion Archives</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+          </div>
+          <!-- /.dropmeu-->
+        </div>
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <div class="container blog">
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Distributed Consistency Under Load: When High-Velocity Meets High-Availability</h1>
+        <p>
+          December 30, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Distributed Consistency Under Load: When High-Velocity Meets High-Availability%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
+      <div class="blog__content">
+        <main class="blog_main">
+          <section class="blog__posts">
+            <article class="post">
+              <div>
+                <p>
+                  Distributed systems traditionally force a choice between consistency and speed. Apache Ignite's RAFT implementation delivers both: strong guarantees that protect your business without the coordination penalties that limit
+                  throughput.
+                </p>
+                <!-- end -->
+                <p>When network partitions split your cluster, duplicate payments happen. Apache Ignite prevents this through automatic coordination that maintains consistency without performance penalties.</p>
+                <p>
+                  <strong>Business scenario:</strong> Your payment processing system handles 10,000 transactions per second across 5 nodes. Network issues isolate 2 nodes from the remaining 3 nodes. Both groups continue processing payments.
+                  Customer payment gets charged twice.
+                </p>
+                <p>
+                  <strong>The solution:</strong> Automatic consensus ensures only one group can process payments during network splits. Your application code stays simple while the platform handles distributed coordination automatically.
+                </p>
+                <p><strong>Performance guarantee:</strong> Consensus happens in the background without blocking transaction processing.</p>
+                <br />
+                <h2>Business Problems from Inconsistent Data</h2>
+                <h3>Duplicate Payment Scenario</h3>
+                <p>Network partitions create business-critical consistency problems:</p>
+                <p><strong>What happens during network partition without proper coordination:</strong></p>
+                <pre><code>// Network partition splits payment cluster
+// Both partitions continue processing payments independently
+// Partition A (3 nodes) processes payment:
+PaymentResult resultA = processPayment(payment); // SUCCESS: Balance updated to $500
+// Partition B (2 nodes) processes same payment:
+PaymentResult resultB = processPayment(payment); // SUCCESS: Balance updated to $500
+// When network heals: customer charged twice, balance corrupted
+// Expected: $500 final balance
+// Actual: $0 final balance (double charge)
+</code></pre>
+                <p><strong>Business impact of consistency failures:</strong></p>
+                <ul>
+                  <li><strong>Customer complaints</strong>: Duplicate charges from partition processing</li>
+                  <li><strong>Financial exposure</strong>: Regulatory penalties for transaction sequence errors</li>
+                  <li><strong>System downtime</strong>: Manual reconciliation required when partitions heal</li>
+                  <li><strong>Business risk</strong>: Revenue loss during extended partition scenarios</li>
+                </ul>
+                <h3>Why Traditional Solutions Fail</h3>
+                <p><strong>Performance penalty:</strong> Traditional consensus adds 20-50ms to every transaction through multiple network round-trips. At 10,000 payments per second, this creates a 200-500 second processing backlog.</p>
+                <p><strong>Failure problems:</strong></p>
+                <ul>
+                  <li><strong>Network delays</strong>: Every transaction requires multiple round-trips to all nodes</li>
+                  <li><strong>Processing blocks</strong>: All nodes wait for slowest participant</li>
+                  <li><strong>Failure stops processing</strong>: Single node failure blocks all transactions</li>
+                  <li><strong>Partition stops everything</strong>: Network partition stops all processing</li>
+                </ul>
+                <br />
+                <h2>Apache Ignite Automatic Coordination Solution</h2>
+                <h3>Zero-Code Consistency for Normal Operations</h3>
+                <p><strong>Your application code stays simple. Apache Ignite handles distributed coordination automatically.</strong></p>
+                <pre><code>// Your application code - simple and clean
+public PaymentResult processPayment(PaymentRequest payment) {
+    return ignite.transactions().runInTransaction(tx -> {
+        Table accounts = ignite.tables().table("accounts");
+
+        // Standard database operations
+        Tuple account = accounts.recordView().get(tx,
+            Tuple.create().set("account_id", payment.accountId));
+
+        if (account.decimalValue("balance").compareTo(payment.amount) < 0) {
+            return PaymentResult.INSUFFICIENT_FUNDS;
+        }
+
+        // Update account balance
+        accounts.recordView().upsert(tx, Tuple.create()
+            .set("account_id", payment.accountId)
+            .set("balance", account.decimalValue("balance").subtract(payment.amount)));
+
+        return PaymentResult.SUCCESS;
+    });
+    // Apache Ignite handles all distributed coordination automatically:
+    // - Prevents duplicate processing during network partitions
+    // - Ensures balance consistency across all nodes
+    // - Maintains transaction ordering for compliance
+    // - Provides automatic failure recovery
+}</code></pre>
+                <p><strong>Automatic coordination benefits:</strong></p>
+                <ul>
+                  <li><strong>No coordination code</strong>: Write business logic, Ignite handles distributed consistency</li>
+                  <li><strong>No duplicate processing</strong>: Network partitions cannot create duplicate payments</li>
+                  <li><strong>No configuration needed</strong>: Consistency works automatically without setup</li>
+                  <li><strong>No performance penalty</strong>: Coordination happens in the background without blocking operations</li>
+                </ul>
+                <br />
+                <h2>Advanced Features: Manual Coordination Control</h2>
+                <br />
+                <p>For specialized use cases, Apache Ignite provides manual control over distributed coordination. Most applications never need this.</p>
+                <h3>When Manual Control Matters</h3>
+                <ul>
+                  <li>Custom distributed workflows with specific ordering requirements</li>
+                  <li>Multi-step operations requiring atomic coordination across steps</li>
+                  <li>Application-specific conflict resolution logic</li>
+                  <li>Performance-critical operations needing direct coordination control</li>
+                </ul>
+                <pre><code>// Advanced RAFT control for custom distributed algorithms
+public class CustomPaymentWorkflowRaft {
+
+    private final RaftGroupService paymentRaftGroup;
+    private final ClusterService clusterService;
+
+    public CompletableFuture&lt;PaymentResult&gt; processCustomPaymentWorkflow(PaymentRequest payment) {
+        // Custom multi-step payment workflow requiring specific consensus behavior
+        CustomPaymentCommand paymentCommand = new CustomPaymentCommand(payment);
+
+        // Direct RAFT group control for specialized workflow
+        return paymentRaftGroup.run(paymentCommand)
+            .thenApply(result -> {
+                // Custom workflow processed with specialized consensus logic
+                return (PaymentResult) result;
+            });
+    }
+
+    // Custom command for specialized payment workflows
+    public static class CustomPaymentCommand implements Command {
+        private final PaymentRequest payment;
+
+        public CustomPaymentCommand(PaymentRequest payment) {
+            this.payment = payment;
+        }
+
+        public PaymentRequest getPayment() {
+            return payment;
+        }
+    }
+
+    // Custom RAFT group listener for specialized processing
+    public class CustomPaymentRaftGroupListener implements RaftGroupListener {
+
+        @Override
+        public void onWrite(Iterator&lt;CommandClosure&lt;WriteCommand&gt;&gt; iterator) {
+            while (iterator.hasNext()) {
+                CommandClosure&lt;WriteCommand&gt; closure = iterator.next();
+
+                if (closure.command() instanceof CustomPaymentCommand) {
+                    CustomPaymentCommand cmd = (CustomPaymentCommand) closure.command();
+                    PaymentResult result = processCustomPaymentWorkflow(cmd.getPayment());
+                    closure.result(result);
+                }
+            }
+        }
+
+        private PaymentResult processCustomPaymentWorkflow(PaymentRequest payment) {
+            // Custom distributed workflow requiring specific consensus behavior
+            // This would implement specialized logic not available through standard transactions
+            return new PaymentResult();
+        }
+    }
+}
+</code></pre>
+                <p><strong>Advanced Control Use Cases:</strong></p>
+                <ul>
+                  <li>Custom distributed state machines</li>
+                  <li>Specialized ordering requirements</li>
+                  <li>Performance-critical consensus operations</li>
+                  <li>Application-specific replication logic</li>
+                </ul>
+                <p><strong>RAFT Performance Advantages:</strong></p>
+                <ul>
+                  <li><strong>Leader-based</strong>: Single node processes operations, eliminating coordination overhead</li>
+                  <li><strong>Pipeline efficiency</strong>: Leaders process operations without blocking</li>
+                  <li><strong>Majority consensus</strong>: Only majority nodes required (faster than unanimous)</li>
+                  <li><strong>Log-based replication</strong>: Efficient state machine replication</li>
+                </ul>
+                <h3>RAFT Group Configuration</h3>
+                <p>RAFT groups are created and managed through RaftManager for specialized processing requirements:</p>
+                <pre><code>// RAFT group configuration for specialized processing
+public class CustomRaftConfiguration {
+
+    private final RaftManager raftManager;
+    private final ClusterService clusterService;
+    private final String groupId = "custom-processing-group";
+
+    public RaftGroupService createCustomRaftGroup() {
+        ClusterNode localNode = clusterService.topologyService().localMember();
+        RaftNodeId nodeId = new RaftNodeId(groupId, localNode);
+        PeersAndLearners configuration = selectProcessingNodes();
+
+        CustomRaftGroupListener listener = new CustomRaftGroupListener();
+        RaftGroupEventsListener eventsListener = new CustomRaftGroupEventsListener();
+
+        return raftManager.startRaftGroupNode(
+            nodeId,
+            configuration,
+            listener,
+            eventsListener,
+            RaftGroupService::new,
+            createRaftOptionsConfigurer()
+        );
+    }
+
+    private PeersAndLearners selectProcessingNodes() {
+        // Select available cluster nodes for RAFT group
+        List&lt;Peer&gt; peers = clusterService.topologyService().allMembers().stream()
+            .limit(5) // Optimal RAFT group size for consensus
+            .map(node -> new Peer(node.name()))
+            .collect(Collectors.toList());
+
+        // Create learners list (can be empty for basic setup)
+        List&lt;Peer&gt; learners = List.of();
+
+        return PeersAndLearners.fromPeers(peers, learners);
+    }
+
+    private RaftGroupOptionsConfigurer createRaftOptionsConfigurer() {
+        return options -> {
+            // Configure RAFT group options for specialized processing
+            RaftGroupOptions groupOptions = (RaftGroupOptions) options;
+            groupOptions.serverDataPath(Paths.get("/path/to/raft/data"));
+        };
+    }
+}</code></pre>
+                <br />
+                <h2>Consensus Performance Under High-Velocity Load</h2>
+                <h3>RAFT Consensus Performance Impact</h3>
+                <p><strong>Standard Transaction Performance:</strong></p>
+                <pre><code>@Benchmark
+public class StandardTransactionPerformance {
+
+    @Benchmark
+    public PaymentResult processStandardPayment() {
+        long startTime = System.nanoTime();
+
+        // Standard transaction - RAFT consensus handled automatically
+        PaymentResult result = ignite.transactions().runInTransaction(tx - {
+            // Business logic - Ignite handles distributed consistency
+            return processPaymentLogic(paymentRequest, tx);
+        });
+
+        long processingTime = System.nanoTime() - startTime;
+        // Performance includes automatic RAFT consensus overhead
+
+        return result;
+    }
+}
+</code></pre>
+                <p><strong>Standard Operation Performance:</strong></p>
+                <ul>
+                  <li><strong>Transaction processing</strong>: Milliseconds range depending on cluster configuration</li>
+                  <li><strong>Automatic consensus</strong>: Ignite optimizes RAFT for table operations</li>
+                  <li><strong>Developer simplicity</strong>: No consensus code required</li>
+                  <li><strong>Throughput</strong>: Scales with cluster capacity</li>
+                </ul>
+                <p><strong>Advanced RAFT Performance</strong> (when using direct control):</p>
+                <ul>
+                  <li><strong>Custom processing</strong>: Microseconds for specialized logic</li>
+                  <li><strong>Direct consensus</strong>: Application controls consensus behavior</li>
+                  <li><strong>Specialized optimization</strong>: Custom performance tuning possible</li>
+                  <li><strong>Complex workflows</strong>: Multi-step distributed operations</li>
+                </ul>
+                <h3>Handling Network Partitions During High Load</h3>
+                <p><strong>Partition Tolerance in Distributed Processing:</strong></p>
+                <pre><code>public class RaftPartitionHandling {
+
+    private final RaftGroupService raftGroupService;
+    private final ClusterService clusterService;
+
+    public CompletableFuture&lt;String&gt; handleOperationDuringPartition(String operationData) {
+        // RAFT automatically handles network partitions through leader-based consensus
+        Peer currentLeader = raftGroupService.leader();
+
+        if (currentLeader != null && isNodeInCluster()) {
+            // This node can communicate with cluster - process operation
+            CustomCommand command = new CustomCommand(operationData);
+            return raftGroupService.run(command)
+                .thenApply(result -> "Operation completed: " + result);
+        } else {
+            // This node is isolated or no leader available - reject operation
+            return CompletableFuture.completedFuture("Operation temporarily unavailable");
+        }
+    }
+
+    private boolean isNodeInCluster() {
+        // Check if this node is still part of the active cluster topology
+        ClusterNode localNode = clusterService.topologyService().localMember();
+        Collection&lt;ClusterNode&gt; allMembers = clusterService.topologyService().allMembers();
+
+        return allMembers.contains(localNode);
+    }
+
+    // Custom command implementation for RAFT processing
+    public static class CustomCommand implements Command {
+        private final String data;
+
+        public CustomCommand(String data) {
+            this.data = data;
+        }
+
+        public String getData() {
+            return data;
+        }
+    }
+}
+</code></pre>
+                <p><strong>Partition Behavior:</strong></p>
+                <ul>
+                  <li><strong>Majority partition</strong>: Continues processing operations with full consistency</li>
+                  <li><strong>Minority partition</strong>: Stops processing to prevent split-brain scenarios</li>
+                  <li><strong>Recovery</strong>: Partitions automatically reconcile when network heals</li>
+                  <li><strong>Data safety</strong>: No data loss or duplication across partitions</li>
+                </ul>
+                <h3>Leader Election Performance</h3>
+                <p><strong>Fast Leader Election for Business Continuity:</strong></p>
+                <pre><code>public class RaftLeaderElection {
+
+    public void handleLeaderFailureDuringPeakLoad() {
+        // RAFT leader election for distributed processing
+        long electionStart = System.currentTimeMillis();
+
+        raftGroup.refreshLeader().thenAccept(newLeader -> {
+            long electionTime = System.currentTimeMillis() - electionStart;
+
+            // Election time depends on network conditions and RAFT configuration
+            log.info("Leader election completed in {}ms", electionTime);
+
+            // Resume processing immediately
+            resumeProcessing(newLeader);
+        });
+    }
+
+    private void resumeProcessing(Peer newLeader) {
+        // New leader immediately continues from RAFT log state
+        // No data loss or inconsistency during leadership change
+        log.info("Processing resumed under new leader: {}", newLeader.consistentId());
+    }
+}
+</code></pre>
+                <p><strong>Leader Election Characteristics:</strong></p>
+                <ul>
+                  <li><strong>Election time</strong>: Configurable based on network conditions and RAFT settings</li>
+                  <li><strong>Service continuity</strong>: Processing resumes immediately after election</li>
+                  <li><strong>Data consistency</strong>: All committed operations preserved across leader changes</li>
+                  <li><strong>Automatic recovery</strong>: No manual intervention required</li>
+                </ul>
+                <br />
+                <h2>Real-World Consensus Scenarios</h2>
+                <h3>Bank Payment Processing Under Load</h3>
+                <p><strong>Daily Payment Volume</strong>: 1 million payments across 24 hours</p>
+                <p><strong>Standard Bank Payment Processing:</strong></p>
+                <pre><code>// Bank payment processing - Ignite handles RAFT automatically
+@Service
+public class BankPaymentProcessor {
+
+    public PaymentResult processInterBankTransfer(TransferRequest transfer) {
+        // Standard transaction processing with automatic consistency
+        return ignite.transactions().runInTransaction(tx -> {
+            Table senderAccounts = ignite.tables().table("sender_accounts");
+            Table receiverAccounts = ignite.tables().table("receiver_accounts");
+            Table auditLog = ignite.tables().table("audit_log");
+
+            // Atomic transfer with automatic RAFT consensus
+            Tuple senderKey = Tuple.create().set("account_id", transfer.senderAccountId);
+            Tuple senderAccount = senderAccounts.recordView().get(tx, senderKey);
+
+            if (senderAccount.decimalValue("balance").compareTo(transfer.amount) < 0) {
+                return PaymentResult.INSUFFICIENT_FUNDS;
+            }
+
+            // Update both accounts atomically with automatic consensus
+            BigDecimal newSenderBalance = senderAccount.decimalValue("balance").subtract(transfer.amount);
+            senderAccounts.recordView().upsert(tx,
+                Tuple.create()
+                    .set("account_id", transfer.senderAccountId)
+                    .set("balance", newSenderBalance));
+
+            receiverAccounts.recordView().upsert(tx,
+                Tuple.create()
+                    .set("account_id", transfer.receiverAccountId)
+                    .set("balance", transfer.amount));
+
+            // Audit logging with automatic replication
+            auditLog.recordView().insert(tx, createAuditRecord(transfer));
+
+            return PaymentResult.SUCCESS;
+        });
+    }
+}
+</code></pre>
+                <p><strong>For Complex Multi-Bank Workflows</strong> (advanced scenarios):</p>
+                <pre><code>// Custom consensus for specialized inter-bank protocols
+public class AdvancedInterBankProcessor {
+
+    public PaymentResult processComplexInterBankWorkflow(TransferRequest transfer) {
+        // Specialized workflow requiring custom consensus behavior
+        InterBankWorkflowCommand command = new InterBankWorkflowCommand(transfer);
+
+        return paymentRaftGroup.run(command)
+            .thenApply(result -> {
+                // Custom workflow with specialized consistency requirements
+                return (PaymentResult) result;
+            });
+    }
+}
+</code></pre>
+                <p><strong>Performance Under Peak Load:</strong></p>
+                <ul>
+                  <li><strong>Peak hour volume</strong>: 100,000 payments/hour (27/second average, 200/second peak)</li>
+                  <li><strong>Consensus latency</strong>: Depends on network and storage configuration</li>
+                  <li><strong>System availability</strong>: High availability through RAFT consensus and automatic failover</li>
+                  <li><strong>Regulatory compliance</strong>: Guaranteed transaction ordering accuracy</li>
+                </ul>
+                <h3>E-commerce Order Processing</h3>
+                <p><strong>Flash Sale Event</strong>: 50,000 orders in 1 hour</p>
+                <p><strong>Standard Order Processing:</strong></p>
+                <pre><code>// E-commerce order processing - automatic consistency
+public class FlashSaleOrderProcessor {
+
+    public OrderResult processFlashSaleOrder(OrderRequest order) {
+        // Standard transaction handling flash sale inventory
+        return ignite.transactions().runInTransaction(tx -> {
+            Table inventory = ignite.tables().table("inventory");
+            Table orders = ignite.tables().table("orders");
+            Table payments = ignite.tables().table("payments");
+
+            // Inventory check with automatic consistency
+            Tuple productKey = Tuple.create().set("product_id", order.productId);
+            Tuple product = inventory.recordView().get(tx, productKey);
+
+            int availableQuantity = product.intValue("quantity");
+            if (availableQuantity < order.quantity) {
+                return OrderResult.OUT_OF_STOCK;
+            }
+
+            // Atomic inventory update, order creation, payment processing
+            inventory.recordView().upsert(tx,
+                Tuple.create()
+                    .set("product_id", order.productId)
+                    .set("quantity", availableQuantity - order.quantity));
+
+            orders.recordView().insert(tx, createOrderRecord(order));
+            payments.recordView().insert(tx, createPaymentRecord(order.payment));
+
+            return OrderResult.SUCCESS;
+        });
+    }
+}
+</code></pre>
+                <p><strong>For Specialized Inventory Algorithms</strong> (advanced scenarios):</p>
+                <pre><code>// Custom consensus for complex inventory management
+public class AdvancedInventoryProcessor {
+
+    public OrderResult processWithCustomInventoryLogic(OrderRequest order) {
+        // Specialized inventory workflow requiring custom consensus
+        CustomInventoryCommand command = new CustomInventoryCommand(order);
+        return inventoryRaftGroup.run(command)
+            .thenApply(result -> (OrderResult) result);
+    }
+}
+</code></pre>
+                <p><strong>Flash Sale Performance:</strong></p>
+                <ul>
+                  <li><strong>Order processing rate</strong>: Scales with cluster capacity and configuration</li>
+                  <li><strong>Inventory consistency</strong>: Maintained through RAFT consensus (prevents overselling)</li>
+                  <li><strong>Payment consistency</strong>: Guaranteed through RAFT consensus (prevents duplicate charges)</li>
+                  <li><strong>Customer experience</strong>: Response time depends on network and processing configuration</li>
+                </ul>
+                <br />
+                <h2>Business Impact of Distributed Consistency</h2>
+                <h3>Risk Mitigation</h3>
+                <p><strong>Financial Risk Reduction:</strong></p>
+                <ul>
+                  <li><strong>Payment accuracy</strong>: Eliminates duplicate payments and lost transactions</li>
+                  <li><strong>Regulatory compliance</strong>: Guaranteed transaction ordering for audit trails</li>
+                  <li><strong>System reliability</strong>: Automatic failover maintains business continuity</li>
+                  <li><strong>Data protection</strong>: Strong consistency prevents data corruption</li>
+                </ul>
+                <p><strong>Operational Risk Reduction:</strong></p>
+                <ul>
+                  <li><strong>Manual intervention</strong>: Consensus automation reduces human error</li>
+                  <li><strong>System recovery</strong>: Automatic partition healing reduces downtime</li>
+                  <li><strong>Capacity planning</strong>: Predictable consensus behavior enables accurate sizing</li>
+                  <li><strong>Incident response</strong>: Built-in fault tolerance reduces emergency responses</li>
+                </ul>
+                <h3>Revenue Protection</h3>
+                <p><strong>Payment Processing Firm Benefits:</strong></p>
+                <ul>
+                  <li><strong>Transaction volume</strong>: Supports high-volume payment processing</li>
+                  <li><strong>System availability</strong>: RAFT consensus provides automatic failover</li>
+                  <li><strong>Consistency guarantees</strong>: Eliminates payment errors that damage customer trust</li>
+                  <li><strong>Scalability</strong>: Horizontal scaling through RAFT group partitioning</li>
+                </ul>
+                <p><strong>E-commerce Platform Benefits:</strong></p>
+                <ul>
+                  <li><strong>Peak load handling</strong>: Flash sales process high volumes without consistency issues</li>
+                  <li><strong>Customer trust</strong>: Zero payment errors maintain customer confidence</li>
+                  <li><strong>Competitive advantage</strong>: Reliable order processing during high-demand events</li>
+                  <li><strong>Revenue capture</strong>: Consistent order processing vs eventual consistency risks</li>
+                </ul>
+                <h3>Operational Efficiency</h3>
+                <p><strong>Development Team Benefits:</strong></p>
+                <ul>
+                  <li><strong>Simplified architecture</strong>: Single consistency model across all operations</li>
+                  <li><strong>Reduced debugging</strong>: Strong consistency eliminates race condition bugs</li>
+                  <li><strong>Faster deployment</strong>: Consensus handles failure scenarios automatically</li>
+                  <li><strong>Predictable behavior</strong>: Deterministic failure modes simplify testing</li>
+                </ul>
+                <p><strong>Operations Team Benefits:</strong></p>
+                <ul>
+                  <li><strong>Automated failover</strong>: RAFT consensus reduces manual intervention requirements</li>
+                  <li><strong>Consistent monitoring</strong>: Single consistency model simplifies observability</li>
+                  <li><strong>Predictable recovery</strong>: Automated partition healing reduces incident response time</li>
+                  <li><strong>Scalable operations</strong>: Consensus scales with cluster size</li>
+                </ul>
+                <br />
+                <h2>The Consistency-Performance Balance</h2>
+                <p>Traditional distributed systems force trade-offs between consistency and performance. Strong consistency requires coordination overhead. Eventual consistency risks business-critical errors.</p>
+                <p>
+                  Apache Ignite's RAFT implementation optimizes for both consistency and performance. Strong consistency guarantees protect business operations while consensus performance supports high-velocity application requirements.
+                </p>
+                <p><strong>The principle: Consistency should enable performance, not limit it.</strong></p>
+                <p>When your distributed system maintains strong consistency without significant performance penalties, you eliminate the architectural compromises that force trade-offs between business safety and operational speed.</p>
+                <p>High-velocity applications need both consistency guarantees and performance characteristics. RAFT consensus provides the distributed coordination foundation that enables both requirements simultaneously.</p>
+                <p>
+                  <em
+                    >Return next Tuesday for Part 7, that examines how MVCC transactions build on the RAFT consensus foundation to provide ACID guarantees optimized for high-frequency operations. This ensures that distributed consistency
+                    enables rather than constrains transaction processing performance.</em
+                  >
+                </p>
+              </div>
+            </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
+          </section>
+        </main>
+        <aside class="blog__sidebar">
+          <ul>
+            <li><a href="/blog/apache">apache</a></li>
+            <li><a href="/blog/ignite">ignite</a></li>
+            <li><a href="/blog/release">release</a></li>
+            <li><a href="/blog/database">database</a></li>
+            <li><a href="/blog/in">in</a></li>
+            <li><a href="/blog/memory">memory</a></li>
+            <li><a href="/blog/open">open</a></li>
+            <li><a href="/blog/source">source</a></li>
+            <li><a href="/blog/.NET">.NET</a></li>
+            <li><a href="/blog/security">security</a></li>
+            <li><a href="/blog/Intel">Intel</a></li>
+            <li><a href="/blog/CET">CET</a></li>
+            <li><a href="/blog/linq">linq</a></li>
+            <li><a href="/blog/SQL">SQL</a></li>
+            <li><a href="/blog/performance">performance</a></li>
+            <li><a href="/blog/csharp">csharp</a></li>
+            <li><a href="/blog/in-memory">in-memory</a></li>
+            <li><a href="/blog/open-source">open-source</a></li>
+            <li><a href="/blog/log4j2">log4j2</a></li>
+            <li><a href="/blog/bigdata">bigdata</a></li>
+            <li><a href="/blog/computing">computing</a></li>
+            <li><a href="/blog/two">two</a></li>
+            <li><a href="/blog/learning">learning</a></li>
+            <li><a href="/blog/machine">machine</a></li>
+            <li><a href="/blog/spark">spark</a></li>
+            <li><a href="/blog/sql">sql</a></li>
+            <li><a href="/blog/data">data</a></li>
+            <li><a href="/blog/fast">fast</a></li>
+            <li><a href="/blog/nodal">nodal</a></li>
+            <li><a href="/blog/meltdown">meltdown</a></li>
+            <li><a href="/blog/spectre">spectre</a></li>
+            <li><a href="/blog/key-value">key-value</a></li>
+            <li><a href="/blog/store">store</a></li>
+            <li><a href="/blog/meetup">meetup</a></li>
+            <li><a href="/blog/biodata">biodata</a></li>
+            <li><a href="/blog/rdbms">rdbms</a></li>
+            <li><a href="/blog/grid">grid</a></li>
+            <li><a href="/blog/imdb">imdb</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/our-community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2024 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
+</html>
