@@ -354,9 +354,8 @@
                   Consider a financial trading system processing peak loads of 10,000 trades per second. Each trade requires risk calculations against a customer's portfolio. If portfolio data lives on different nodes than the processing
                   logic, network round-trips create an impossible performance equation: 10,000 trades × 2ms network latency = 20 seconds of network delay per second of wall clock time.
                 </p>
-                <p>Apache Ignite eliminates this constraint through data colocation. Related data and processing live on the same nodes, transforming distributed operations into local memory operations.</p>
+                <p>Apache Ignite eliminates this constraint through data collocation. Related data and processing live on the same nodes, transforming distributed operations into local memory operations.</p>
                 <p><strong>The result: distributed system performance without distributed system overhead.</strong></p>
-                <hr />
                 <br />
                 <h2>The Data Movement Tax on High-Velocity Applications</h2>
                 <h3>Network Latency Arithmetic</h3>
@@ -396,16 +395,15 @@ PromotionData promotions = applyPromotions(order, customer);             // Netw
 // Total network overhead: 8ms per order (before any business logic)
 </code></pre>
                 <p><strong>The cascade effect</strong>: Each data dependency creates another network round-trip. Complex event processing can require 10+ network operations per event.</p>
-                <hr />
                 <br />
-                <h2>Strategic Data Placement Through Colocation</h2>
-                <h3>Apache Ignite Colocation Architecture</h3>
+                <h2>Strategic Data Placement Through collocation</h2>
+                <h3>Apache Ignite collocation Architecture</h3>
                 <p>
-                  Apache Ignite uses deterministic hash distribution to ensure related data lands on the same nodes. The platform automatically generates consistent hash values for colocation keys, ensuring all data with the same colocation
-                  key always lands on the same node. This deterministic placement means that once data is colocated, subsequent access patterns benefit from data locality without manual coordination.
+                  Apache Ignite uses deterministic hash distribution to ensure related data lands on the same nodes. The platform automatically generates consistent hash values for collocation keys, ensuring all data with the same
+                  collocation key always lands on the same node. This deterministic placement means that once data is collocated, subsequent access patterns benefit from data locality without manual coordination.
                 </p>
-                <h3>Table Design for Event Processing Colocation</h3>
-                <pre><code>-- Create distribution zone for customer-based colocation
+                <h3>Table Design for Event Processing collocation</h3>
+                <pre><code>-- Create distribution zone for customer-based collocation
 CREATE ZONE customer_zone WITH
     partitions=64,
     replicas=3;
@@ -417,14 +415,14 @@ CREATE TABLE orders (
     amount DECIMAL(10,2),
     order_date TIMESTAMP
 ) WITH ZONE='customer_zone';
--- Customer data using same distribution zone for colocation
+-- Customer data using same distribution zone for collocation
 CREATE TABLE customers (
     customer_id BIGINT PRIMARY KEY,
     name VARCHAR(100),
     segment VARCHAR(20),
     payment_method VARCHAR(50)
 ) WITH ZONE='customer_zone';
--- Customer pricing using same zone for colocation
+-- Customer pricing using same zone for collocation
 CREATE TABLE customer_pricing (
     customer_id BIGINT,
     product_id BIGINT,
@@ -437,13 +435,13 @@ CREATE TABLE customer_pricing (
                   <strong>Result</strong>: All tables using the same distribution zone share the same partitioning strategy. Data for customer 12345 distributes to the same partition across all tables, enabling local processing without
                   network communication.
                 </p>
-                <h3>Compute Colocation for Event Processing</h3>
+                <h3>Compute collocation for Event Processing</h3>
                 <p><strong>Processing Moves to Where Data Lives:</strong></p>
                 <p>
                   Instead of moving data to processing logic, compute jobs execute on the nodes where related data already exists. For customer order processing, the compute job runs on the node containing the customer's data, orders, and
                   pricing information. All data access becomes local memory operations rather than network calls.
                 </p>
-                <p><strong>Simple Colocation Example:</strong></p>
+                <p><strong>Simple collocation Example:</strong></p>
                 <pre><code>// Execute processing where customer data lives
 Tuple customerKey = Tuple.create().set("customer_id", customerId);
 CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
@@ -452,10 +450,9 @@ CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
     customerId
 );
 </code></pre>
-                <p><strong>Performance Impact</strong>: 8ms distributed processing becomes sub-millisecond colocated processing through data locality.</p>
-                <hr />
+                <p><strong>Performance Impact</strong>: 8ms distributed processing becomes sub-millisecond collocated processing through data locality.</p>
                 <br />
-                <h2>Real-World Colocation Performance Impact</h2>
+                <h2>Real-World collocation Performance Impact</h2>
                 <h3>Financial Risk Calculation Example</h3>
                 <p><strong>Problem</strong>: Trading system needs real-time portfolio risk calculation for each trade.</p>
                 <p><strong>Here's what the distributed approach costs:</strong></p>
@@ -463,9 +460,9 @@ CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
                   Traditional risk calculations require multiple network calls: fetch trade details (1ms), retrieve portfolio data (2ms), get current market prices (1ms), and load risk rules (1ms). The actual risk calculation takes 0.2ms,
                   but network overhead dominates at 5.2ms total. At 10,000 trades per second, this creates 52 seconds of processing time per second. This is mathematically impossible.
                 </p>
-                <p><strong>Colocated Risk Processing:</strong></p>
+                <p><strong>collocated Risk Processing:</strong></p>
                 <p>
-                  When account portfolios, trade histories, and risk rules colocate by account ID, risk calculations become local operations. All required data lives on the same node where the processing executes. Network overhead
+                  When account portfolios, trade histories, and risk rules collocate by account ID, risk calculations become local operations. All required data lives on the same node where the processing executes. Network overhead
                   disappears, transforming 5.2ms distributed operations into sub-millisecond local calculations.
                 </p>
                 <p><strong>Business Impact:</strong></p>
@@ -476,8 +473,8 @@ CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
                 </ul>
                 <h3>IoT Event Processing Example</h3>
                 <p><strong>Problem</strong>: Manufacturing system processes sensor events requiring contextual data for anomaly detection.</p>
-                <p><strong>Colocated Design</strong>:</p>
-                <pre><code>-- Create distribution zone for equipment-based colocation
+                <p><strong>collocated Design</strong>:</p>
+                <pre><code>-- Create distribution zone for equipment-based collocation
 CREATE ZONE equipment_zone WITH
     partitions=32,
     replicas=2;
@@ -491,7 +488,7 @@ CREATE TABLE sensor_readings (
     vibration DECIMAL(6,3),
     PRIMARY KEY (sensor_id, timestamp)
 ) WITH ZONE='equipment_zone';
--- Equipment specifications using same zone for colocation
+-- Equipment specifications using same zone for collocation
 CREATE TABLE equipment_specs (
     equipment_id BIGINT PRIMARY KEY,
     max_temperature DECIMAL(5,2),
@@ -509,10 +506,9 @@ CREATE TABLE equipment_specs (
                   <strong>Performance Outcome</strong>: Sub-millisecond anomaly detection vs multi-millisecond distributed processing. Single cluster processes tens of thousands of sensor readings per second with real-time anomaly
                   detection.
                 </p>
-                <hr />
                 <br />
-                <h2>Colocation Strategy Selection</h2>
-                <h3>Event-Driven Colocation Patterns</h3>
+                <h2>collocation Strategy Selection</h2>
+                <h3>Event-Driven collocation Patterns</h3>
                 <p><strong>Customer-Centric Applications</strong>:</p>
                 <pre><code>-- Customer-focused distribution zone
 CREATE ZONE customer_zone WITH partitions=64;
@@ -543,16 +539,16 @@ CREATE TABLE locations (...) WITH ZONE='regional_zone';
                   <li>Location-aware services access local partition data</li>
                   <li>Geographic analytics minimize cross-region data movement</li>
                 </ul>
-                <h3>Automatic Query Optimization Through Colocation</h3>
+                <h3>Automatic Query Optimization Through collocation</h3>
                 <p><strong>When related data lives together, query performance transforms:</strong></p>
-                <pre><code>-- Before colocation: expensive cross-node JOINs
+                <pre><code>-- Before collocation: expensive cross-node JOINs
 SELECT c.name, o.order_total, p.amount
 FROM customers c
   JOIN orders o ON c.customer_id = o.customer_id
   JOIN payments p ON o.order_id = p.order_id
 WHERE c.customer_id = 12345;
 -- Network overhead: 3 tables × potential cross-node fetches = high latency
--- After colocation: local memory JOINs
+-- After collocation: local memory JOINs
 -- Same query, but all customer 12345 data lives on same node
 -- Result: JOIN operations become local memory operations
 </code></pre>
@@ -588,19 +584,18 @@ ResultSet&lt;SqlRow&gt; customerAnalysis = client.sql().execute(tx, """
                   characteristics.
                 </p>
                 <h3>Performance Validation</h3>
-                <p><strong>Colocation Effectiveness Monitoring:</strong></p>
+                <p><strong>collocation Effectiveness Monitoring:</strong></p>
                 <p>
-                  Apache Ignite provides built-in metrics to monitor colocation effectiveness: query response times, network traffic patterns, and CPU utilization versus network wait time. Effective colocation strategies achieve specific
+                  Apache Ignite provides built-in metrics to monitor collocation effectiveness: query response times, network traffic patterns, and CPU utilization versus network wait time. Effective collocation strategies achieve specific
                   performance indicators that demonstrate data locality success.
                 </p>
                 <p><strong>Success Indicators:</strong></p>
                 <ul>
                   <li><strong>Local execution</strong>: >95% of queries execute locally without network hops</li>
-                  <li><strong>Memory-speed access</strong>: Average query latency <1 ms for colocated data</li>
+                  <li><strong>Memory-speed access</strong>: Average query latency <1 ms for collocated data</li>
                   <li><strong>CPU utilization</strong>: >80% processing time versus network waiting</li>
                   <li><strong>Predictable performance</strong>: Consistent response times independent of cluster size</li>
                 </ul>
-                <hr />
                 <br />
                 <h2>The Business Impact of Eliminating Data Movement</h2>
                 <h3>Cost Reduction</h3>
@@ -621,24 +616,22 @@ ResultSet&lt;SqlRow&gt; customerAnalysis = client.sql().execute(tx, """
                   <li><strong>Complex Event Processing</strong>: Multi-step event processing without coordination overhead</li>
                   <li><strong>Interactive Applications</strong>: User-facing features with database-backed logic at cache speeds</li>
                 </ul>
-                <hr />
                 <br />
                 <h2>The Architectural Evolution</h2>
                 <p>Traditional distributed systems accept network overhead as inevitable. Apache Ignite eliminates it through intelligent data placement.</p>
                 <p>
-                  Your high-velocity application doesn't need to choose between distributed scale and local performance. Colocation provides both: the data capacity and fault tolerance of distributed systems with the performance
+                  Your high-velocity application doesn't need to choose between distributed scale and local performance. collocation provides both: the data capacity and fault tolerance of distributed systems with the performance
                   characteristics of single-node processing.
                 </p>
-                <p><strong>The principle</strong>: Colocate related data, localize dependent processing.</p>
+                <p><strong>The principle</strong>: collocate related data, localize dependent processing.</p>
                 <p>
                   Every network hop you eliminate returns performance to your application's processing budget. At high event volumes, those performance gains determine whether your architecture scales with your business success or becomes
                   the constraint that limits it.
                 </p>
-                <hr />
                 <br />
                 <p>
                   <em
-                    >Return next Tuesday for Part 6 to discover how distributed consensus maintains data consistency during high-frequency operations. We'll explore how to preserve the performance gains from colocation while ensuring your
+                    >Return next Tuesday for Part 6 to discover how distributed consensus maintains data consistency during high-frequency operations. We'll explore how to preserve the performance gains from collocation while ensuring your
                     high-velocity applications remain both fast and reliable.</em
                   >
                 </p>
