@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Entries tagged [ignite]</title>
-    <meta property="og:title" content="Entries tagged [ignite]" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Matomo -->
@@ -337,174 +332,322 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Entries tagged [ignite]</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale</h1>
+        <p>
+          January 6, 2026 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-7.html">Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale</a></h2>
-                <div>
-                  January 6, 2026 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-7.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-7.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content"><p>Traditional databases force a choice between fast transactions and concurrent analytics, but Apache Ignite's universal transaction model delivers both simultaneously.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-7.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-6.html">Apache Ignite Architecture Series: Part 6 - Distributed Consistency Under Load: When High-Velocity Meets High-Availability</a></h2>
-                <div>
-                  December 30, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-6.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 6 - Distributed Consistency Under Load: When High-Velocity Meets High-Availability%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-6.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
+              <div>
+                <p>Traditional databases force a choice between fast transactions and concurrent analytics, but Apache Ignite's universal transaction model delivers both simultaneously.</p>
+                <!-- end -->
                 <p>
-                  Distributed systems traditionally force a choice between consistency and speed. Apache Ignite's RAFT implementation delivers both: strong guarantees that protect your business without the coordination penalties that limit
-                  throughput.
+                  <strong>The transformation:</strong> Traditional systems force you to choose between fast operations and consistent data. Apache Ignite eliminates this choice through universal transaction consistency that works across all
+                  APIs.
+                </p>
+                <p>
+                  <strong>Business scenario:</strong> Your bank transfer application needs both instant balance updates for customers and concurrent fraud analytics on live transaction data. Traditional databases lock accounts during
+                  transfers, blocking fraud detection exactly when you need it most.
+                </p>
+                <p><strong>The solution:</strong> Universal transaction model ensures balance updates and fraud queries both get full ACID guarantees while running concurrently without blocking each other.</p>
+                <br />
+                <h2>Why Traditional Transactions Fail at Scale</h2>
+                <h3>The Blocking Problem</h3>
+                <p><strong>Traditional transaction problems compound at scale:</strong></p>
+                <ol>
+                  <li><strong>Locking blocks analytics</strong>: Account transfers lock balances, preventing concurrent fraud detection</li>
+                  <li><strong>Eventually consistent risks</strong>: Stale balance data enables overdrafts during high-frequency transfers</li>
+                  <li><strong>System coordination complexity</strong>: Multiple databases with different consistency guarantees create reconciliation problems</li>
+                </ol>
+                <p><strong>Business impact:</strong> Transaction processing and analytical queries become mutually exclusive during peak load.</p>
+                <p><strong>Here's what the blocking problem looks like in practice:</strong></p>
+                <pre><code>// Traditional locking blocks concurrent operations
+public TransferResult processTransfer(TransferRequest transfer) {
+    // Exclusive locks block all concurrent access
+    return database.withExclusiveLock(transfer.fromAccountId, () -> {
+        Account account = getAccount(transfer.fromAccountId);  // Lock acquired
+
+        if (account.balance >= transfer.amount) {
+            account.balance -= transfer.amount;                // Account locked during update
+            logTransaction(transfer);                          // Transaction log locked
+
+            // Problem: All queries blocked during this processing
+            // Fraud detection: BLOCKED (can't read account during transfer)
+            // Balance inquiry: BLOCKED (can't check balance)
+            // Analytics: BLOCKED (can't read transaction history)
+
+            return TransferResult.SUCCESS;
+        }
+        return TransferResult.INSUFFICIENT_FUNDS;
+    });
+}</code></pre>
+                <p><strong>Eventual Consistency Problems:</strong></p>
+                <pre><code>// Eventually consistent systems create business risks
+public void processConcurrentTransfers(String accountId) {
+    // Operations see different data states
+    CompletableFuture&lt;Void&gt; transfer1 = CompletableFuture.runAsync(() -> {
+        Account account = getAccount(accountId);      // Version 1: $1,000 balance
+        if (account.balance >= 600) {
+            processTransfer(accountId, 600);          // Transfer $600
+        }
+    });
+
+    CompletableFuture&lt;Void&gt; transfer2 = CompletableFuture.runAsync(() -> {
+        Account account = getAccount(accountId);      // Version 1: $1,000 balance (stale)
+        if (account.balance >= 500) {
+            processTransfer(accountId, 500);          // Transfer $500 (overdraft!)
+        }
+    });
+
+    CompletableFuture.allOf(transfer1, transfer2).join();
+    // Result: $1,100 transferred from $1,000 account (business error)
+}</code></pre>
+                <h3>Business Requirements That Traditional Systems Can't Meet</h3>
+                <p><strong>Banking platform needs:</strong></p>
+                <ul>
+                  <li><strong>Transfer processing</strong>: 10,000 transfers/second with ACID guarantees</li>
+                  <li><strong>Fraud detection</strong>: Real-time analytics on live transaction data</li>
+                  <li><strong>Balance inquiries</strong>: Customer balance checks without blocking transfers</li>
+                  <li><strong>Compliance reporting</strong>: Regulatory queries on active transaction streams</li>
+                  <li><strong>Performance requirement</strong>: All operations sub-millisecond response time</li>
+                </ul>
+                <br />
+                <h2>Apache Ignite Universal Transaction Model</h2>
+                <br />
+                <p><strong>The breakthrough:</strong> Every API provides identical ACID guarantees. No complexity tiers, no eventual consistency compromises.</p>
+                <h3>How Universal Transactions Work</h3>
+                <p>Apache Ignite combines distributed coordination with concurrent access control to solve both consistency and performance problems:</p>
+                <p><strong>Universal benefits:</strong></p>
+                <ul>
+                  <li><strong>Same consistency everywhere</strong>: Cache operations, SQL queries, and compute jobs all provide identical ACID guarantees</li>
+                  <li><strong>Concurrent access</strong>: Analytics run simultaneously with transaction processing without blocking</li>
+                  <li><strong>Distributed safety</strong>: All nodes maintain consistency during network partitions</li>
+                  <li><strong>Performance optimized</strong>: Background coordination doesn't block application operations</li>
+                </ul>
+                <h3>The One Transaction Model Advantage</h3>
+                <p><strong>Here's the unified transaction guarantee that changes everything:</strong></p>
+                <pre><code>// ALL operations share the same transaction model and ACID guarantees
+Table accountsTable = client.tables().table("accounts");
+// Key-value operation - full ACID guarantees
+Tuple account = accountsTable.keyValueView().get(tx, accountKey);
+// SQL operation - full ACID guarantees (concurrent fraud detection)
+ResultSet&lt;SqlRow&gt; fraudCheck = client.sql().execute(tx,
+    "SELECT account_id, COUNT(*) FROM transfers WHERE amount > 5000 GROUP BY account_id");
+// Record operation - full ACID guarantees
+Tuple transfer = accountsTable.recordView().get(tx,
+    Tuple.create().set("transfer_id", transferId));
+// Compute operation - accesses same transactional data
+CompletableFuture&lt;String&gt; riskFuture = client.compute().executeAsync(
+    JobTarget.colocated("trades", tradeKey), RiskJob.class, tradeId);
+// Every operation: same consistency model, same isolation level, same durability</code></pre>
+                <p><strong>Universal Transaction Benefits:</strong></p>
+                <ul>
+                  <li><strong>Same safety everywhere</strong>: Cache operations, SQL queries, and compute jobs all provide identical ACID safety</li>
+                  <li><strong>No complexity tiers</strong>: Every operation gets enterprise-grade transaction safety automatically</li>
+                  <li><strong>Consistent behavior</strong>: Operations and analytics see identical consistency guarantees</li>
+                  <li><strong>Unified recovery</strong>: All operations participate in the same failure recovery mechanism</li>
+                </ul>
+                <p><strong>The breakthrough</strong>: One transaction model handles everything from microsecond lookups to complex analytical queries. No complexity tiers, no eventual consistency compromises.</p>
+                <h3>How Universal Transactions Handle Mixed Workloads</h3>
+                <p><strong>Apache Ignite solves this with simple API patterns that provide both consistency and concurrency:</strong></p>
+                <pre><code>// Read-only transactions for analytics (don't block updates)
+public FraudAnalytics checkFraudPatterns(String accountId) {
+    // Read-only transaction gets consistent snapshot automatically
+    return ignite.transactions().runInTransaction(tx -> {
+        // All reads see the same consistent point-in-time snapshot
+        Account account = accountTable.get(tx, accountId);
+        List&lt;Transfer&gt; recentTransfers = transferTable.query(tx,
+            "SELECT * FROM transfers WHERE account_id = ? AND timestamp > ?",
+            accountId, Instant.now().minus(Duration.ofHours(24)));
+
+        // Fraud analysis on consistent data
+        return new FraudAnalytics(account, recentTransfers);
+    }, new TransactionOptions().readOnly(true));
+}
+// Read-write transactions provide ACID guarantees
+public TransferResult executeTransfer(TransferRequest transfer) {
+    return ignite.transactions().runInTransaction(tx -> {
+        // Read current account state
+        Account account = accountTable.get(tx, transfer.fromAccountId);
+
+        if (account.balance >= transfer.amount) {
+            // Update account balance atomically
+            account.balance -= transfer.amount;
+            accountTable.put(tx, transfer.fromAccountId, account);
+
+            // Record transfer execution
+            Transfer executedTransfer = new Transfer(transfer, TransferStatus.COMPLETED);
+            transferTable.put(tx, executedTransfer.transferId, executedTransfer);
+
+            return TransferResult.SUCCESS;
+        }
+        return TransferResult.INSUFFICIENT_FUNDS;
+    }); // Automatic coordination and commit
+}</code></pre>
+                <h3>How Concurrent Access Works</h3>
+                <p>Apache Ignite maintains multiple data versions to enable true concurrency:</p>
+                <p><strong>Concurrent processing benefits:</strong></p>
+                <ul>
+                  <li><strong>Analytics queries</strong>: Read from stable data versions without blocking active transfers</li>
+                  <li><strong>Transfer updates</strong>: Create new versions while fraud detection continues accessing stable snapshots</li>
+                  <li><strong>Memory efficiency</strong>: Automatic cleanup of old versions no longer needed for consistent reads</li>
+                  <li><strong>Performance optimization</strong>: Both real-time transfers and historical analysis operate simultaneously</li>
+                </ul>
+                <p><strong>The breakthrough:</strong> Instead of forcing operations to wait for each other, multiple versions let both transfer processing and fraud analytics operate simultaneously against the same logical data.</p>
+                <br />
+                <h2>Performance Under High Load</h2>
+                <h3>Real-World Performance Characteristics</h3>
+                <p><strong>The performance impact becomes clear in a typical trade execution:</strong></p>
+                <pre><code>// Single trade execution demonstrating performance characteristics
+public TradeResult processTradeWithMVCC(TradeRequest tradeRequest) {
+    return ignite.transactions().runInTransaction(tx -> {
+        // Read account data (MVCC snapshot access)
+        Account account = accountTable.get(tx, tradeRequest.accountId);
+
+        // Validate and execute trade (MVCC write + RAFT coordination)
+        if (account.balance >= tradeRequest.amount) {
+            account.balance -= tradeRequest.amount;
+            accountTable.put(tx, account.accountId, account);
+
+            Trade trade = new Trade(tradeRequest, TradeStatus.EXECUTED);
+            tradeTable.put(tx, trade.tradeId, trade);
+            return TradeResult.EXECUTED;
+        }
+        return TradeResult.INSUFFICIENT_FUNDS;
+    });
+}</code></pre>
+                <p><strong>Performance Outcomes:</strong></p>
+                <ul>
+                  <li><strong>Transaction latency</strong>: Sub-millisecond execution with ACID guarantees</li>
+                  <li><strong>Concurrent analytics</strong>: Portfolio calculations run simultaneously without blocking trades</li>
+                  <li><strong>Throughput capacity</strong>: 12,500 trades/second + 2,500 analytics queries/second</li>
+                  <li><strong>Performance interference</strong>: Less than 5% mutual impact during mixed workloads</li>
+                </ul>
+                <p><strong>The Performance Advantage:</strong> Traditional systems force you to choose between transaction speed and analytical access. RAFT + MVCC provides both simultaneously.</p>
+                <br />
+                <h2>Real-World Scenarios</h2>
+                <h3>High-Volume Event Handling</h3>
+                <p><strong>Market Volatility Processing:</strong></p>
+                <p>
+                  During flash crash events or extreme market volatility, trading systems face spikes to 50,000+ trades per minute while risk monitoring systems need continuous portfolio analysis. Traditional systems either sacrifice
+                  transaction accuracy or block analytical queries when they're needed most.
+                </p>
+                <p><strong>RAFT + MVCC Response:</strong></p>
+                <ul>
+                  <li><strong>Transaction processing</strong>: Maintains ACID guarantees even during volume spikes</li>
+                  <li><strong>Risk monitoring</strong>: Continues real-time portfolio calculations without blocking trades</li>
+                  <li><strong>Performance stability</strong>: Consistent sub-millisecond trade execution regardless of analytical load</li>
+                  <li><strong>Data accuracy</strong>: No account overdrafts or position errors even under extreme conditions</li>
+                </ul>
+                <h3>Regulatory Compliance Operations</h3>
+                <p><strong>Live Compliance Reporting:</strong></p>
+                <p>
+                  Regulatory requirements demand real-time transaction monitoring and complex daily reporting while trading operations continue uninterrupted. Traditional approaches force compliance teams to wait for low-volume periods or
+                  accept stale data that might miss violations.
+                </p>
+                <p><strong>The Integration Solution:</strong></p>
+                <ul>
+                  <li><strong>Concurrent reporting</strong>: Complex compliance queries process millions of trades without affecting live operations</li>
+                  <li><strong>Data consistency</strong>: Point-in-time snapshots ensure accurate violation detection</li>
+                  <li><strong>Operational continuity</strong>: Trading performance remains stable during report generation</li>
+                  <li><strong>Audit accuracy</strong>: Complete transaction ordering maintained across distributed nodes</li>
+                </ul>
+                <p>
+                  <strong>Business Impact:</strong> These scenarios demonstrate why RAFT + MVCC matters for distributed architectures. It's not just about performance. It's about maintaining business operations and regulatory compliance
+                  during the high-stress periods when accurate data matters most.
+                </p>
+                <br />
+                <h2>Business Impact of MVCC at Scale</h2>
+                <h3>Financial Risk Mitigation</h3>
+                <p><strong>Trading Firm Benefits:</strong></p>
+                <ul>
+                  <li><strong>ACID guarantees</strong>: Zero account overdrafts or position errors under high load</li>
+                  <li><strong>Real-time risk management</strong>: Continuous monitoring without trading performance impact</li>
+                  <li><strong>Regulatory compliance</strong>: Accurate transaction ordering and reporting during volatility</li>
+                  <li><strong>Operational reliability</strong>: Consistent performance during market stress events</li>
+                </ul>
+                <p><strong>Cost Avoidance Through Accuracy:</strong></p>
+                <ul>
+                  <li><strong>Regulatory fines</strong>: Reduced penalties for compliance violations</li>
+                  <li><strong>Trading errors</strong>: Eliminated losses from account overdrafts</li>
+                  <li><strong>System downtime</strong>: High availability during peak trading periods</li>
+                  <li><strong>Manual reconciliation</strong>: Reduced trade settlement errors</li>
+                </ul>
+                <h3>Performance-Enabled Business Capabilities</h3>
+                <p><strong>New Business Opportunities:</strong></p>
+                <ul>
+                  <li><strong>High-frequency trading</strong>: Low-latency execution enables competitive strategies</li>
+                  <li><strong>Real-time analytics</strong>: Traders get instant portfolio insights during active trading</li>
+                  <li><strong>Complex compliance</strong>: Sophisticated regulatory reporting without operational impact</li>
+                  <li><strong>Market making</strong>: Provide liquidity during volatility with confidence in data accuracy</li>
+                </ul>
+                <p><strong>Competitive Differentiation:</strong></p>
+                <ul>
+                  <li><strong>Customer experience</strong>: Fast trade confirmations with real-time position updates</li>
+                  <li><strong>Risk management</strong>: Superior risk controls enable larger position limits</li>
+                  <li><strong>Market participation</strong>: Participate in volatile events while maintaining safety</li>
+                  <li><strong>Operational efficiency</strong>: Single platform serves trading, analytics, and compliance</li>
+                </ul>
+                <h3>Development and Operations Benefits</h3>
+                <p><strong>Engineering Productivity:</strong></p>
+                <ul>
+                  <li><strong>Single transaction model</strong>: No complex coordination between OLTP and OLAP systems</li>
+                  <li><strong>Consistent behavior</strong>: MVCC semantics eliminate race condition bugs</li>
+                  <li><strong>Simplified testing</strong>: Integrated transactions easier to validate than distributed coordination</li>
+                  <li><strong>Faster deployment</strong>: Single system reduces coordination complexity</li>
+                </ul>
+                <p><strong>Operational Simplification:</strong></p>
+                <ul>
+                  <li><strong>Unified monitoring</strong>: Single consistency model across all operations</li>
+                  <li><strong>Predictable performance</strong>: MVCC performance characteristics remain stable under load</li>
+                  <li><strong>Reduced complexity</strong>: Eliminate eventual consistency edge case handling</li>
+                  <li><strong>Automatic recovery</strong>: MVCC built on RAFT provides automatic failure handling</li>
+                </ul>
+                <br />
+                <h2>Breaking Free from Distributed Architecture Constraints</h2>
+                <p>
+                  Your application's evolution from single database to distributed architecture created the transaction concurrency problem. Traditional solutions force you to accept either performance compromises or consistency risks. Each
+                  system you added to handle scale introduced new coordination challenges.
+                </p>
+                <p><strong>The RAFT + MVCC Integration Advantage:</strong></p>
+                <p>
+                  Apache Ignite's approach is fundamentally different. Instead of managing consistency between separate transaction and analytical systems, RAFT-backed MVCC provides both transaction isolation and concurrent analytical
+                  access within the same distributed platform.
+                </p>
+                <p><strong>Why This Matters for Distributed Architectures:</strong></p>
+                <ul>
+                  <li><strong>Eliminates system coordination</strong>: No complex synchronization between transaction and analytical systems</li>
+                  <li><strong>Reduces consistency windows</strong>: RAFT ensures all nodes see the same transaction order</li>
+                  <li><strong>Enables concurrent workloads</strong>: MVCC snapshots support analytics without blocking transactions</li>
+                  <li><strong>Maintains ACID guarantees</strong>: Full transaction safety at distributed scale</li>
+                </ul>
+                <p><strong>The architectural evolution principle</strong>: Your transaction processing should enable operational intelligence, not constrain it.</p>
+                <p>
+                  When applications outgrow single databases, they typically sacrifice either consistency or concurrency. Apache Ignite's RAFT + MVCC architecture preserves both, enabling the operational and analytical capabilities your
+                  business requires without the complexity of coordinating separate systems.
+                </p>
+                <p>This isn't just better transaction processing. It's the foundation that lets high-velocity applications scale past the limitations that force architectural fragmentation.</p>
+                <br />
+                <p>
+                  <em
+                    >Return next Tuesday for Part 8 that concludes our series by examining the comprehensive business impact of architectural consolidation. This demonstrates how the technical capabilities explored throughout this series
+                    translate into measurable competitive advantages and operational benefits that matter to both engineering teams and business stakeholders.</em
+                  >
                 </p>
               </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-6.html">↓ Read all</a></div>
             </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-5.html">Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</a></h2>
-                <div>
-                  December 23, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Your high-velocity application processes events fast enough until it doesn't. The bottleneck isn't CPU or memory. It's data movement. Every time event processing requires data from another node, network latency adds
-                  milliseconds that compound into seconds of delay under load.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-5.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-4.html">Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure</a></h2>
-                <div>
-                  December 16, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional systems force a choice: real-time analytics or fast transactions. Apache Ignite eliminates this trade-off with integrated platform performance that delivers both simultaneously.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-4.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-client-connections-handling.html">How many client connections can Apache Ignite 3 handle?</a></h2>
-                <div>
-                  December 10, 2025 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=How many client connections can Apache Ignite 3 handle?%20https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-client-connections-handling.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-3.html">Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option</a></h2>
-                <div>
-                  December 9, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Schema changes in traditional databases mean downtime, lost revenue, and deployment chaos across multiple systems. This piece demonstrates how Apache Ignite's flexible schema approach helps lets data model evolve at the
-                  pace of your business requirements.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-2.html">Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing</a></h2>
-                <div>
-                  December 2, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional databases force a choice: fast memory access or durable storage. High-velocity applications processing 10,000+ events per second hit a wall when disk I/O adds 5-15ms to every transaction.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-2.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-1.html">Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale</a></h2>
-                <div>
-                  November 25, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite shows what really happens once your <em>good enough</em> multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first
-                  architecture removes the latency tax entirely.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/schema-design-for-distributed-systems-ai3.html">Schema Design for Distributed Systems: Why Data Placement Matters</a></h2>
-                <div>
-                  November 18, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Discover how Apache Ignite keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/schema-design-for-distributed-systems-ai3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/getting-to-know-apache-ignite-3.html">Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform</a></h2>
-                <div>
-                  November 11, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform%20https://ignite.apache.org/blog/getting-to-know-apache-ignite-3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite 3 is a memory-first distributed SQL database platform that consolidates transactions, analytics, and compute workloads previously requiring separate systems. Built from the ground up, it represents a complete
-                  departure from traditional caching solutions toward a unified distributed computing platform with microsecond latencies and collocated processing capabilities.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/getting-to-know-apache-ignite-3.html">↓ Read all</a></div>
-            </article>
-          </section>
-          <section class="blog__footer">
-            <ul class="pagination">
-              <li><a class="current" href="/blog/ignite">1</a></li>
-              <li><a class="item" href="/blog/ignite/1/">2</a></li>
-              <li><a class="item" href="/blog/ignite/2/">3</a></li>
-              <li><a class="item" href="/blog/ignite/3/">4</a></li>
-            </ul>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
           </section>
         </main>
         <aside class="blog__sidebar">
