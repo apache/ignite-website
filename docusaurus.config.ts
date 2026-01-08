@@ -26,7 +26,8 @@ const config: Config = {
   url: 'https://ignite.apache.org',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  // Can be overridden with BASE_URL environment variable for staging builds
+  baseUrl: process.env.BASE_URL || '/',
 
   // Apache Software Foundation deployment config
   organizationName: 'apache',
