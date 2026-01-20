@@ -475,71 +475,6 @@ function EventsSection() {
   );
 }
 
-function ResourcesSection() {
-  return (
-    <Section className={clsx(styles.frontconfs, styles.frontblue)}>
-      <h2 className={styles.h2}>Resources To Elevate Your Ignite Experience</h2>
-      <div className={styles.frontresourse__subtitle}>
-        Get access to a variety of free technical and learning resources
-      </div>
-
-      <div className={styles.frontresourse__wrap}>
-        <div className={styles.frontresourse__col}>
-          <div className={styles.capstext}>Technical resources</div>
-          <Link to="/resources#documentation" className={clsx(styles.frontresitem, styles['frontresitem--black'])}>
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/frontpage/res-docs.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>Apache Ignite technical documentation</div>
-          </Link>
-
-          <a href="https://cwiki.apache.org/confluence/display/IGNITE/" target="_blank" className={clsx(styles.frontresitem, styles['frontresitem--gray'])} rel="noreferrer">
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/frontpage/res-wiki.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>Ignite Wiki with design documents and contributor instructions</div>
-          </a>
-
-          <Link to="/resources#source-code" className={clsx(styles.frontresitem, styles['frontresitem--gray'])}>
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/icon-github.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>GitHub repositories with Ignite source code and extensions</div>
-          </Link>
-        </div>
-
-        <div className={styles.frontresourse__col}>
-          <div className={styles.capstext}>Learning resources</div>
-          <Link to="/resources#get-started" className={clsx(styles.frontresitem, styles['frontresitem--red'])}>
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/frontpage/res-videos.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>Quick start guides and hands-on tutorials to begin building</div>
-          </Link>
-
-          <Link to="/resources#training" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/frontpage/res-vebinar.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>Free training courses for building high-performance applications with Apache Ignite</div>
-          </Link>
-
-          <Link to="/blog" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
-            <div className={styles.frontresitem__icon}>
-              <img src="/img/frontpage/res-book.svg" alt="" />
-            </div>
-            <div className={styles.frontresitem__text}>Technical articles and tutorials on distributed computing with Apache Ignite</div>
-          </Link>
-        </div>
-      </div>
-
-      <div className={clsx(styles.frontconfs__bottom, 'pt-5')}>
-        <Link to="/resources" className="button button--shadow">View All Resources</Link>
-      </div>
-    </Section>
-  );
-}
-
 function ReadyToStart() {
   return (
     <section className={clsx(styles.toolingend, styles['toolingend--front'])}>
@@ -595,7 +530,6 @@ export default function Home(): ReactNode {
       <UsageScenarios />
       <EventsSection />
       <ReadyToStart />
-      <ResourcesSection />
     </Layout>
   );
 }
