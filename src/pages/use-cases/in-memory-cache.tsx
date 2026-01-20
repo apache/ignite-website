@@ -262,35 +262,6 @@ export default function InMemoryCache(): JSX.Element {
         </div>
       </section>
 
-      <section className="hub5 inmememorvideowrap pt-5">
-        <div className="container pt-5">
-          <h2 className="capstext pt-5">IN-MEMORY CACHE USER STORIES</h2>
-          <div className="highcases__two">
-            <div className="hub5__twowrap flexi pt-5">
-              <div className="hub5__item">
-                <div className="hub5__video comvideo__txt--black">
-                  <a
-                    href="https://www.youtube.com/watch?v=Mhtt2QL_qCQ"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="comvideo__screen"
-                  >
-                    <img src="https://img.youtube.com/vi/Mhtt2QL_qCQ/hqdefault.jpg" alt="Raiffeisen Bank video" />
-                  </a>
-                </div>
-                <div className="h4 hub5__title">Raiffeisen Bank</div>
-                <div className="comvideo__descr">
-                  <p>
-                    As users transition to digital channels, the load on the bank's systems has increased. Therefore,
-                    load reduction and system scaling are constant and top priorities.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">

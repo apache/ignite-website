@@ -140,12 +140,14 @@ export function extractYouTubeVideoId(url: string): string | null {
 }
 
 /**
- * Get YouTube thumbnail URL from video URL
+ * Get video thumbnail URL for display
+ * Returns a local placeholder image to comply with ASF Content Security Policy
+ * which prohibits loading external resources without user interaction
  */
 export function getYouTubeThumbnail(videoUrl: string): string | null {
   const videoId = extractYouTubeVideoId(videoUrl);
   if (!videoId) return null;
-  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  return '/img/events/content/meetup.png';
 }
 
 /**

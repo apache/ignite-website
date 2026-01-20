@@ -76,7 +76,7 @@ export default function VirtualMeetup(): React.ReactElement {
                   rel="noopener noreferrer"
                 >
                   <img
-                    src={`https://img.youtube.com/vi/${recording.videoId}/maxresdefault.jpg`}
+                    src="/img/events/content/meetup.png"
                     alt={recording.title}
                     className={styles.thumbnail}
                   />

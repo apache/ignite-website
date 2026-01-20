@@ -236,49 +236,6 @@ export default function InMemoryDataGrid(): JSX.Element {
         </div>
       </section>
 
-      <section className="hub5">
-        <div className="container">
-          <h2 className="compute2__h2">In-Memory Data Grid Ignite User Stories</h2>
-          <div className="highcases__two">
-            <div className="hub5__twowrap flexi pt-5">
-              <div className="hub5__item">
-                <div className="comvideo__txt--white hub5__video">
-                  <a
-                    href="https://www.youtube.com/watch?v=78UE11GrWzk&t=2586s"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="comvideo__screen"
-                  >
-                    <img src="/img/usecases/database/one-video.png" alt="Agilent Technologies video" />
-                  </a>
-                </div>
-                <div className="h4 hub5__title">Agilent Technologies Inc.</div>
-                <p className="hub5__text base5__text">
-                  improved its online channel by implementing in-memory solutions. They leveraged an in-memory data grid
-                  to achieve faster time-to-market, and data flexibility across digital channels.
-                </p>
-              </div>
-              <div className="hub5__item">
-                <div className="comvideo__txt--white comvideo__txthub hub5__video">
-                  <a
-                    href="https://www.youtube.com/watch?v=CPmwnjDJ1Sk&feature=emb_imp_woyt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="comvideo__screen"
-                  >
-                    <img src="/img/usecases/database/two-video.png" alt="ING Bank video" />
-                  </a>
-                </div>
-                <div className="h4 hub5__title">ING Bank</div>
-                <p className="hub5__text base5__text base5__textend">
-                  used in-memory computing platforms to meet increasing demand for performance and scalability.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="native-bottom container">
         <div className="native-bottom__grid">
           <article className="nativebotblock">
