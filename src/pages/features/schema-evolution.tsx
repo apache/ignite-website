@@ -32,7 +32,7 @@ export default function SchemaEvolution(): JSX.Element {
         <div className="container innerhero__cont">
           <div className="innerhero__main innerhero__main--long">
             <div className="innerhero__pre pb-3">Apache Ignite</div>
-            <h1 className="h1 innerhero__h1">Schema Evolution Without Downtime</h1>
+            <h1 className="h1 innerhero__h1">Evolve Without Downtime</h1>
             <div className="innerhero__descr pt-2 h5">
               Add columns, modify indexes, change distributions. Applications keep running.
             </div>
