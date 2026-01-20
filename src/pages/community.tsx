@@ -361,11 +361,11 @@ function AskQuestionSection() {
                 For questions about using Apache Ignite:{' '}
                 <a href="mailto:user@ignite.apache.org">user@ignite.apache.org</a>
               </p>
-              <p className="pt-2">
-                <a href="https://lists.apache.org/list.html?user@ignite.apache.org" target="_blank" rel="noreferrer">
-                  Browse archives
+              <div className={styles.faqblock__actions}>
+                <a className="button button--shadow" href="https://lists.apache.org/list.html?user@ignite.apache.org" target="_blank" rel="noreferrer">
+                  Browse Archives
                 </a>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -380,11 +380,11 @@ function AskQuestionSection() {
                 For contribution and development discussions:{' '}
                 <a href="mailto:dev@ignite.apache.org">dev@ignite.apache.org</a>
               </p>
-              <p className="pt-2">
-                <a href="https://lists.apache.org/list.html?dev@ignite.apache.org" target="_blank" rel="noreferrer">
-                  Browse archives
+              <div className={styles.faqblock__actions}>
+                <a className="button button--shadow" href="https://lists.apache.org/list.html?dev@ignite.apache.org" target="_blank" rel="noreferrer">
+                  Browse Archives
                 </a>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -395,15 +395,14 @@ function AskQuestionSection() {
             </h3>
             <div className={styles.faqblock__right}>
               <p className={styles.faqblock__rightitle}>On GitHub</p>
-              <p>
-                <a href="https://github.com/apache/ignite-3/issues" target="_blank" rel="noreferrer">
-                  Apache Ignite 3 Issues
-                </a>{' '}
-                |{' '}
-                <a href="https://github.com/apache/ignite/issues" target="_blank" rel="noreferrer">
-                  Apache Ignite 2 Issues
+              <div className={styles.faqblock__actions}>
+                <a className="button button--shadow" href="https://github.com/apache/ignite-3/issues" target="_blank" rel="noreferrer">
+                  Ignite 3 Issues
                 </a>
-              </p>
+                <a className="button button--shadow" href="https://github.com/apache/ignite/issues" target="_blank" rel="noreferrer">
+                  Ignite 2 Issues
+                </a>
+              </div>
             </div>
           </div>
 
@@ -415,11 +414,13 @@ function AskQuestionSection() {
             <div className={styles.faqblock__right}>
               <p className={styles.faqblock__rightitle}>Technical Q&A</p>
               <p>
-                Ask questions with the{' '}
-                <a href="https://stackoverflow.com/questions/tagged/apache-ignite" target="_blank" rel="noreferrer">
-                  apache-ignite tag
-                </a>
+                Ask questions tagged with apache-ignite
               </p>
+              <div className={styles.faqblock__actions}>
+                <a className="button button--shadow" href="https://stackoverflow.com/questions/tagged/apache-ignite" target="_blank" rel="noreferrer">
+                  View on Stack Overflow
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -439,7 +440,7 @@ function EventsCTA() {
           </p>
         </div>
         <div className={styles.eventsCta__action}>
-          <Link className="button" to="/events">
+          <Link className={clsx('button', styles.eventsCta__button)} to="/events">
             View Events
           </Link>
         </div>

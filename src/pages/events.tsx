@@ -8,7 +8,8 @@ import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './events.module.css';
 
 // Upcoming events data - manually maintained since Meetup API requires OAuth
-const upcomingEvents = [
+// Events are automatically filtered to hide past events
+const allUpcomingEvents = [
   {
     id: 'dec-2025-spring-boot',
     title: 'Apache Ignite 3 and GridGain 9 for Spring Boot and Spring Data Development',
@@ -20,6 +21,13 @@ const upcomingEvents = [
     type: 'workshop' as const,
   },
 ];
+
+// Filter to only show events that haven't happened yet
+const upcomingEvents = allUpcomingEvents.filter((event) => {
+  const eventDate = new Date(event.date + 'T23:59:59');
+  const today = new Date();
+  return eventDate >= today;
+});
 
 // Past summit data
 const pastSummits = [
