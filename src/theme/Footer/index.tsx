@@ -64,9 +64,11 @@ export default function Footer(): ReactNode {
               Dev Mailing List
             </a>
           </div>
-          <div className={`${styles.footer4Item} pt-2`}>Or write your question</div>
-          <div className={`${styles.footer4Item} pt-1`}>
-            {footerSections.contact.userMailingList}
+          <div className={`${styles.footer4Item} pt-2`}>
+            Or email the{' '}
+            <a href={`mailto:${footerSections.contact.userMailingList}`}>
+              User Mailing List
+            </a>
           </div>
           <div className={`${styles.footer4Item} pt-5`}>Follow Us:</div>
           <div className={`${styles.footer4Socwrap} pt-2`}>

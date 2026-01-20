@@ -41,7 +41,7 @@ function TopCards() {
     <aside className={clsx(styles.fronttopcards, 'container')}>
       <a href="https://blogs.apache.org/ignite/entry/apache-ignite-momentum-highlights-from" target="_blank" className={styles.frontcard} rel="noreferrer">
         <div className={styles.frontcard__title}>
-          A top-5 project of the Apache Software <br />Foundation
+          A top-5 project of the Apache Software Foundation
         </div>
         <div className={styles.frontcard__prises}>
           <div className={styles.frontcard__price}>
@@ -419,7 +419,7 @@ function UsageScenarios() {
 function EventsSection() {
   return (
     <Section className={clsx(styles.frontconfs, styles.frontblue)}>
-      <h2 className={styles.h2}>Join The Community At Events <br />And Meetups Worldwide</h2>
+      <h2 className={styles.h2}>Join The Community At Events And Meetups Worldwide</h2>
       <div className={styles.frontconfs__wrap}>
         <a href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank" className={clsx(styles.frontconfcard, styles['frontconfcard--white'])} rel="noreferrer">
           <div className={styles.frontconfs__iconwrap}>
@@ -469,9 +469,9 @@ function EventsSection() {
 function ResourcesSection() {
   return (
     <Section className={clsx(styles.frontconfs, styles.frontblue)}>
-      <h2 className={styles.h2}>Resources To Elevate Your <br />Ignite Experience</h2>
+      <h2 className={styles.h2}>Resources To Elevate Your Ignite Experience</h2>
       <div className={styles.frontresourse__subtitle}>
-        Get access to a variety of free technical <br />and learning resources
+        Get access to a variety of free technical and learning resources
       </div>
 
       <div className={styles.frontresourse__wrap}>
@@ -505,7 +505,7 @@ function ResourcesSection() {
             <div className={styles.frontresitem__icon}>
               <img src="/img/frontpage/res-videos.svg" alt="" />
             </div>
-            <div className={styles.frontresitem__text}>Quick start guides and hands-on tutorials <br />to begin building</div>
+            <div className={styles.frontresitem__text}>Quick start guides and hands-on tutorials to begin building</div>
           </Link>
 
           <Link to="/resources#training" className={clsx(styles.frontresitem, styles['frontresitem--rose'])}>
@@ -540,7 +540,7 @@ function ReadyToStart() {
             <strong>Ready To Start?</strong>
           </p>
           <p className={clsx(styles.h5, 'pt-2')}>
-            Discover our quick start guides and build your first <br />application in 5-10 minutes
+            Discover our quick start guides and build your first application in 5-10 minutes
           </p>
         </div>
         <div className={styles.toolingend__action}>
