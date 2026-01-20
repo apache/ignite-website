@@ -77,36 +77,6 @@ export default function HadoopAcceleration(): JSX.Element {
         </div>
       </section>
 
-      <section className="compute2">
-        <div className="container">
-          <div className="doop2__block">
-            <h2 className="compute2__h2">Benefits Of Using Apache Ignite</h2>
-            <div className="compute2__grid flexi hub2__grid doop2__grid">
-              <div className="compute2item hub2item doop2__item">
-                <div className="compute2-points__item fz20"></div>
-                <div className="compute2item__block">
-                  <h3 className="fz20 compute2item__title">Real-time analytics</h3>
-                  <p className="compute2__text base2__text">
-                    Apache Ignite enables real-time analytics across Apache Hadoop operational and historical data silos.
-                  </p>
-                </div>
-              </div>
-
-              <div className="compute2item hub2item doop2__item">
-                <div className="compute2-points__item fz20"></div>
-                <div className="compute2item__block">
-                  <h3 className="fz20 compute2item__title">Low-latency and high-throughput operations</h3>
-                  <p className="compute2__text base2__text">
-                    Ignite enables low-latency and high-throughput access while Hadoop continues to be used for long-running
-                    OLAP workloads.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="doop3">
         <div className="container">
           <div className="doop3__block flexi">
