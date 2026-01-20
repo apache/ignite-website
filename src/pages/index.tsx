@@ -83,7 +83,7 @@ function TopCards() {
 }
 
 function CoreCapabilities() {
-  const [selectedLanguage, setSelectedLanguage] = useState<'java' | 'dotnet' | 'cpp' | 'python'>('java');
+  const [selectedLanguage, setSelectedLanguage] = useState<'java' | 'dotnet' | 'cpp' | 'python' | 'sql'>('java');
   const [copied, setCopied] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -214,6 +214,27 @@ for row in cursor.fetchall():
 # Close the connection
 cursor.close()
 conn.close()`
+    },
+    sql: {
+      language: "sql",
+      code: `-- Connect to the cluster
+-- $ docker run -it apacheignite/ignite:3.1.0 cli
+-- > connect http://localhost:10300
+-- > sql
+
+-- Create a table
+CREATE TABLE IF NOT EXISTS Person (
+    id INT PRIMARY KEY,
+    name VARCHAR,
+    age INT
+);
+
+-- Insert data
+INSERT INTO Person (id, name, age) VALUES (1, 'John Doe', 30);
+INSERT INTO Person (id, name, age) VALUES (2, 'Jane Smith', 28);
+
+-- Query data
+SELECT * FROM Person WHERE age > 25;`
     }
   };
 
@@ -303,6 +324,13 @@ conn.close()`
                 onClick={(e) => { e.preventDefault(); setSelectedLanguage('python'); }}
               >
                 Python
+              </a>
+              <a
+                href="#"
+                className={clsx(styles.nativecode__link, selectedLanguage === 'sql' && 'active')}
+                onClick={(e) => { e.preventDefault(); setSelectedLanguage('sql'); }}
+              >
+                SQL/CLI
               </a>
             </div>
             <div className={styles.nativecode__tabs} style={{position: 'relative'}}>
