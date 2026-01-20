@@ -55,17 +55,17 @@ export default function OperationalAnalytics(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">Stale Dashboards, Blocked Transactions</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional relational databases force an impossible choice: run analytical queries on transactional data
-              (blocking writes with table locks), or replicate data to separate OLAP systems (data staleness and ETL
-              complexity). Relational database MVCC helps but analytical queries still cause lock contention on write-heavy tables.
+              Business decisions wait for data. Run analytics on the production database and transactions queue behind
+              table locks. Replicate to a warehouse and dashboards show yesterday's numbers. The operations team watches
+              real-time metrics lag behind actual system state.
             </p>
             <p className="pt-3">
-              Aggregation queries on transactional data create read locks that block writes. Replicating to data
-              warehouses introduces latency and synchronization complexity. Separate OLAP systems require ETL pipelines
-              and duplicate storage infrastructure.
+              ETL pipelines add hours of latency between events and insights. Analytical queries on transactional
+              systems create contention that degrades application performance. Maintaining separate OLTP and OLAP
+              infrastructure doubles operational overhead while data freshness suffers.
             </p>
           </div>
         </header>

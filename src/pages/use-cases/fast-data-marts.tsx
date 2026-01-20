@@ -55,18 +55,17 @@ export default function FastDataMarts(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">When Dashboards Need Speed</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional analytical data mart architectures force an impossible choice: data warehouses with complete
-              data but high query latency (seconds to minutes), or specialized OLAP systems with fast analytics but
-              expensive infrastructure and operational complexity. Department dashboards require sub-second response times
-              on curated datasets.
+              Executives refresh dashboards during board meetings. Customer portals display real-time analytics. API
+              endpoints serve aggregated metrics to partner integrations. The warehouse query takes 30 seconds. Users
+              see spinners instead of insights.
             </p>
             <p className="pt-3">
-              Relational database data marts struggle with high-concurrency analytical workloads. In-memory caching layers
-              add cache invalidation complexity and lack SQL query capabilities. Data warehouse queries unsuitable for
-              customer-facing analytics APIs or operational dashboards requiring sub-second response times.
+              Pre-aggregating data shifts latency from query time to refresh time. Caching layers add invalidation
+              complexity and lose SQL flexibility. Specialized OLAP systems deliver speed but multiply infrastructure
+              costs. Operational dashboards need warehouse-quality data at cache-like speeds.
             </p>
           </div>
         </header>

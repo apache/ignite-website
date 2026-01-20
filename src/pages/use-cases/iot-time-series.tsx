@@ -55,17 +55,17 @@ export default function IoTTimeSeries(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">Volume Meets Validation</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional IoT architectures force an impossible choice: NoSQL databases for high-volume writes but no
-              schema validation (data quality issues), or relational databases with validation but write scalability
-              limits. Schema-less ingestion allows bad data into analytics pipelines.
+              Sensors stream millions of readings per minute. A temperature sensor sends negative Kelvin values. A
+              pressure gauge reports data in the wrong units. Schema-less ingestion accepts everything. Analytics
+              pipelines fail hours later when bad data surfaces in aggregations.
             </p>
             <p className="pt-3">
-              NoSQL systems handle write volume but lack schema enforcement at ingestion. Relational databases validate
-              data but struggle with high-frequency sensor writes. Separate validation layers add complexity and latency.
-              Bad data discovered during analytics creates downstream processing failures.
+              Relational databases validate on write but buckle under sensor volume. NoSQL systems scale writes but
+              defer validation problems downstream. Separate validation layers add latency and operational complexity.
+              Data quality needs enforcement at ingestion speed, not discovery during analysis.
             </p>
           </div>
         </header>

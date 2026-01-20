@@ -55,17 +55,17 @@ export default function AIMLFeatureStores(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">When Models Meet Reality</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional ML feature stores force an impossible choice: batch-computed features for training (accurate
-              but stale), or cached features for serving (fast but risk training/serving skew). Models trained on
-              batch features fail when serving features diverge.
+              Your model performed well in training. In production, accuracy drops. The culprit: training/serving skew.
+              Features computed in batch pipelines looked different than features retrieved during inference. The model
+              learned patterns that no longer exist by the time predictions matter.
             </p>
             <p className="pt-3">
-              Training/serving skew degrades model accuracy in production. Batch feature pipelines introduce latency
-              that makes real-time predictions impossible. Cached features create eventual consistency risks where
-              models see different feature values during training versus serving.
+              Batch feature computation introduces hours of staleness. Caching speeds up serving but creates drift from
+              training data. Separate online and offline feature stores multiply infrastructure complexity while the
+              skew problem persists. Models need consistent feature values across the entire lifecycle.
             </p>
           </div>
         </header>

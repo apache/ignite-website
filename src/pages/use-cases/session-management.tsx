@@ -57,17 +57,17 @@ export default function SessionManagement(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">Scale Without Losing Users</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional session management architectures force an impossible choice: in-memory caches for low-latency access but
-              memory-only storage (data loss on failure), or disk-backed databases for durability but slower access and
-              sticky session constraints.
+              Traffic spikes hit your application. You scale out, but sessions are pinned to specific servers. A node
+              fails and users lose their shopping carts, form progress, authentication state. Sticky sessions worked
+              at small scale but become a liability as you grow.
             </p>
             <p className="pt-3">
-              Sticky sessions create operational complexity and limit failover capabilities. In-memory caches without persistence
-              risk session data loss during node failures. Database-backed sessions add latency and read-write
-              blocking issues.
+              Database-backed sessions add latency that users notice on every click. In-memory caches deliver speed
+              but lose data during failures. Load balancer affinity constrains your ability to distribute traffic
+              and creates single points of failure that impact user experience.
             </p>
           </div>
         </header>

@@ -57,16 +57,17 @@ export default function EventStreamProcessing(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">The Enrichment Bottleneck</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional event stream architectures force an impossible choice: in-memory caches for speed but stale data, or
-              relational databases for consistency but high network round-trip latency. Stream processors need both low-latency
-              lookups AND strong consistency for reference data enrichment.
+              Your streaming pipeline processes thousands of events per second. Each event needs enrichment with customer
+              data, product catalogs, or pricing rules. The enrichment lookup becomes the bottleneck. Cache the reference
+              data and risk stale enrichments. Query the database and watch latency spike under load.
             </p>
             <p className="pt-3">
-              Cache invalidation complexity creates operational burden. Eventual consistency risks processing events
-              with outdated reference data. Database queries add latency that breaks real-time processing requirements.
+              Cache invalidation adds operational complexity without solving the freshness problem. Database round-trips
+              accumulate into seconds of delay across your event stream. Neither approach delivers both the speed and
+              accuracy that production workloads require.
             </p>
           </div>
         </header>

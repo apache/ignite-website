@@ -57,17 +57,17 @@ export default function MicroservicesState(): JSX.Element {
 
       <section className="inmememor1 container">
         <header className="blockheader blockheader--spl flexi">
-          <h2 className="capstext pb-3">The Trade-off Problem</h2>
+          <h2 className="capstext pb-3">Coordination Complexity at Scale</h2>
           <div className="inmememor1__text">
             <p>
-              Traditional microservices architectures force an impossible choice: monolithic databases with ACID
-              transactions (simple but doesn't scale), or per-service databases with distributed sagas (scalable but
-              complex compensation logic).
+              Your order service updates inventory, charges payment, and sends confirmation. One step fails. Now you
+              need compensation logic for every possible failure point. Sagas multiply code complexity. Two-phase commit
+              creates tight coupling. Each new service adds another coordination challenge.
             </p>
             <p className="pt-3">
-              Sagas require extensive compensation logic for failure scenarios. Two-phase commit across services creates
-              tight coupling and availability risks. Manual coordination between service databases increases operational
-              complexity and infrastructure costs.
+              Per-service databases promise autonomy but deliver coordination headaches. Eventual consistency means
+              customers see inconsistent state across your application. The shared database anti-pattern couples services
+              but at least transactions work. Neither approach scales without pain.
             </p>
           </div>
         </header>
