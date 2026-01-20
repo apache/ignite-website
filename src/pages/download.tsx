@@ -5,7 +5,6 @@ import Head from '@docusaurus/Head';
 import CodeBlock from '@theme/CodeBlock';
 import QuickDownload from '@site/src/components/Download/QuickDownload';
 import DownloadSelector from '@site/src/components/Download/DownloadSelector';
-import CollapsibleSection from '@site/src/components/Download/CollapsibleSection';
 import {
   extensionSourceReleases,
   extensionBinaryReleases,
@@ -60,40 +59,114 @@ export default function DownloadPage(): JSX.Element {
       {/* Quick Download - Featured Ignite 3 */}
       <QuickDownload />
 
-      {/* Download Options - Ignite 3 */}
+      {/* Apache Ignite 3 */}
       <section className={`${styles.downloadSection} container`} id="ignite3">
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Choose Your Installation Method</h2>
+          <h2 className={styles.sectionTitle}>Apache Ignite 3</h2>
           <p className={styles.sectionDescription}>
-            Select how you want to install Apache Ignite 3. Binary packages are recommended for most
-            users. Source releases are available for building from source.
+            The latest version of Apache Ignite. Binary packages are recommended for most users.
+            Source releases are available for building from source.
           </p>
         </div>
 
         <DownloadSelector variant="ignite3" preferredMirror={preferredMirror} />
+      </section>
 
-        <div className={styles.archiveNote}>
-          <p>
-            Looking for an older version?{' '}
-            <a href="https://archive.apache.org/dist/ignite" target="_blank" rel="noopener noreferrer">
-              Browse the archive
-            </a>
-          </p>
+      {/* Apache Ignite 2 (LTS) */}
+      <section className={styles.ltsSection} id="ignite2">
+        <div className="container">
+          <div className={styles.sectionHeader}>
+            <div className={styles.ltsTitleRow}>
+              <h2 className={styles.sectionTitle}>Apache Ignite 2</h2>
+              <span className={styles.ltsBadge}>LTS</span>
+            </div>
+            <p className={styles.sectionDescription}>
+              Long-term support release. Continues to receive maintenance updates and is
+              recommended for existing deployments.
+            </p>
+          </div>
+
+          <DownloadSelector variant="ignite2" preferredMirror={preferredMirror} />
+
+          {/* Extensions */}
+          <div className={styles.extensionsBlock} id="extensions">
+            <h3 className={styles.extensionsTitle}>Extensions</h3>
+            <p className={styles.extensionIntro}>
+              Extensions provide additional functionality including cloud discovery, Spring
+              integration, and performance monitoring.
+            </p>
+
+            <div className={styles.extensionGrid}>
+              {extensionSourceReleases.map((ext) => {
+                const binaryRelease = extensionBinaryReleases.find((b) => b.name === ext.name);
+                return (
+                  <div key={ext.name} className={styles.extensionCard}>
+                    <div className={styles.extensionCardHeader}>
+                      <h4 className={styles.extensionName}>{ext.displayName}</h4>
+                      <span className={styles.extensionVersion}>v{ext.version}</span>
+                    </div>
+                    <div className={styles.extensionCardLinks}>
+                      <a
+                        href={ext.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.extensionLink}>
+                        Source
+                      </a>
+                      {binaryRelease && (
+                        <a
+                          href={binaryRelease.binaryUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.extensionLink}>
+                          Binary
+                        </a>
+                      )}
+                      {ext.guide && (
+                        <a
+                          href={ext.guide}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.extensionLinkGuide}>
+                          Guide
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.springBootSection}>
+              <h4 className={styles.springBootTitle}>Spring Boot Auto-Configuration</h4>
+              <p className={styles.springBootDescription}>
+                Add Spring Boot auto-configuration support for Ignite 2.x applications.
+              </p>
+              <div className={styles.codeBlockWrapper}>
+                <CodeBlock language="xml">{springBootDependencies}</CodeBlock>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Verification Guide - Collapsed */}
-      <CollapsibleSection id="verify" title="VERIFY YOUR DOWNLOAD" defaultOpen={false}>
-        <div className={styles.verifyContent}>
-          <p>
-            It is essential to verify the integrity of downloaded files. Verification ensures the
-            file was not corrupted during download and that it was released by the Apache Ignite
-            project.
-          </p>
+      {/* Verification */}
+      <section className={styles.verifySection} id="verify">
+        <div className="container">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Verify Your Download</h2>
+            <p className={styles.sectionDescription}>
+              Verify the integrity of downloaded files to ensure they were not corrupted and were
+              released by the Apache Ignite project.
+            </p>
+          </div>
 
-          <h4>Using PGP Signature</h4>
-          <CodeBlock language="bash">
-            {`# Download the KEYS file
+          <div className={styles.verifyGrid}>
+            <div className={styles.verifyCard}>
+              <h4>Using PGP Signature</h4>
+              <div className={styles.codeBlockWrapper}>
+                <CodeBlock language="bash">
+                  {`# Download the KEYS file
 wget https://downloads.apache.org/ignite/KEYS
 
 # Import the keys
@@ -101,16 +174,23 @@ gpg --import KEYS
 
 # Verify the signature
 gpg --verify apache-ignite-*.zip.asc apache-ignite-*.zip`}
-          </CodeBlock>
+                </CodeBlock>
+              </div>
+            </div>
 
-          <h4>Using SHA512 Checksum</h4>
-          <CodeBlock language="bash">
-            {`# Download the SHA512 file
+            <div className={styles.verifyCard}>
+              <h4>Using SHA512 Checksum</h4>
+              <div className={styles.codeBlockWrapper}>
+                <CodeBlock language="bash">
+                  {`# Download the SHA512 file
 wget https://downloads.apache.org/ignite/3.1.0/apache-ignite-3.1.0-src.zip.sha512
 
 # Verify the checksum
 sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
-          </CodeBlock>
+                </CodeBlock>
+              </div>
+            </div>
+          </div>
 
           <p className={styles.verifyLinks}>
             <a
@@ -128,74 +208,7 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
             </a>
           </p>
         </div>
-      </CollapsibleSection>
-
-      {/* Ignite 2 LTS */}
-      <CollapsibleSection
-        id="ignite2"
-        title="APACHE IGNITE 2 (LTS)"
-        subtitle="Long-term support release"
-        defaultOpen={false}>
-        <div className={styles.ltsNotice}>
-          <p>
-            Apache Ignite 2.x is the long-term support (LTS) version. It continues to receive
-            maintenance updates and is recommended for existing deployments. For new projects,
-            consider Apache Ignite 3.
-          </p>
-        </div>
-
-        <DownloadSelector variant="ignite2" preferredMirror={preferredMirror} />
-
-        <div className={styles.ltsExtras}>
-          <h4>Slim Binary Releases</h4>
-          <p>
-            Slim packages contain a minimal set of modules for reduced deployment size. Available
-            for Ignite 2.x only.
-          </p>
-        </div>
-      </CollapsibleSection>
-
-      {/* Extensions - Ignite 2 Only */}
-      <CollapsibleSection
-        id="extensions"
-        title="EXTENSIONS"
-        subtitle="Apache Ignite 2 Only"
-        defaultOpen={false}>
-        <p className={styles.extensionIntro}>
-          Extensions provide additional functionality for Apache Ignite 2.x, including cloud
-          discovery, Spring integration, and performance monitoring.
-        </p>
-
-        <div className={styles.extensionList}>
-          {extensionSourceReleases.map((ext) => (
-            <div key={ext.name} className={styles.extensionItem}>
-              <div className={styles.extensionName}>{ext.displayName}</div>
-              <div className={styles.extensionVersion}>v{ext.version}</div>
-              <div className={styles.extensionLinks}>
-                <a href={ext.sourceUrl} target="_blank" rel="noopener noreferrer">
-                  Source
-                </a>
-                {extensionBinaryReleases.find((b) => b.name === ext.name) && (
-                  <a
-                    href={extensionBinaryReleases.find((b) => b.name === ext.name)?.binaryUrl}
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    Binary
-                  </a>
-                )}
-                {ext.guide && (
-                  <a href={ext.guide} target="_blank" rel="noopener noreferrer">
-                    Guide
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <h4 className={styles.springBootTitle}>Spring Boot Auto-Configuration</h4>
-        <CodeBlock language="xml">{springBootDependencies}</CodeBlock>
-      </CollapsibleSection>
+      </section>
 
       {/* Additional Resources */}
       <section className={styles.resourcesSection}>
@@ -205,7 +218,12 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
           <div className={styles.resourcesGrid}>
             {/* Git Repositories */}
             <div className={styles.resourceCard}>
-              <h3>Git Repositories</h3>
+              <div className={styles.resourceCardHeader}>
+                <svg className={styles.resourceIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <h3>Git Repositories</h3>
+              </div>
               <div className={styles.gitCommands}>
                 <div className={styles.gitCommand}>
                   <span className={styles.gitLabel}>Ignite 3</span>
@@ -220,7 +238,12 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
 
             {/* Archive */}
             <div className={styles.resourceCard}>
-              <h3>Release Archive</h3>
+              <div className={styles.resourceCardHeader}>
+                <svg className={styles.resourceIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                </svg>
+                <h3>Release Archive</h3>
+              </div>
               <p>Access all previous versions of Apache Ignite.</p>
               <a
                 href="https://archive.apache.org/dist/ignite"
@@ -233,7 +256,12 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
 
             {/* 3rd Party */}
             <div className={styles.resourceCard}>
-              <h3>3rd Party Distributions</h3>
+              <div className={styles.resourceCardHeader}>
+                <svg className={styles.resourceIcon} viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                <h3>3rd Party Distributions</h3>
+              </div>
               <p>
                 <a
                   href="https://www.gridgain.com/resources/download#communityEdition"
