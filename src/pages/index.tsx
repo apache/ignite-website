@@ -17,68 +17,49 @@ function HomepageHero() {
 
       <section className={clsx(styles.innerhero, styles.fronthero)}>
         <div className="container">
-          <div className={styles.innerhero__main}>
-            <h1 className={styles.innerhero__h1}>
-              Fast OR Consistent? <br />Choose Both.
-            </h1>
-            <div className={styles.innerhero__h2}>
-              Memory-First Distributed SQL Database That Eliminates The Latency-Consistency Trade-off
+          <div className={styles.heroColumns}>
+            <div className={styles.heroColumns__left}>
+              <h1 className={styles.innerhero__h1}>
+                Fast OR Consistent?<br />Choose Both.
+              </h1>
+              <p className={styles.innerhero__h2}>
+                Apache Ignite is a <em>distributed database</em> for mission-critical high-velocity applications that require in-memory performance. 
+              </p>
+              <p className={styles.innerhero__h2}>
+                Scale across memory and disk without compromise.
+              </p>
             </div>
-            <div className={styles.innerhero__action}>
-              <a className={clsx('button', styles.fronthero__button)} href="/docs/">
-                Get Started
-              </a>
+
+            <div className={styles.heroColumns__right}>
+              <div className={styles.heroTradeoffs}>
+                <h2 className={styles.heroTradeoffs__lead}>Distributed systems make you choose.</h2>
+                <ul className={styles.heroTradeoffs__list}>
+                  <li><span>Event streams:</span> <em>Fast OR Consistent?</em></li>
+                  <li><span>Distributed state:</span> <em>Fast OR Durable?</em></li>
+                  <li><span>Data integrity:</span> <em>Eventual OR ACID?</em></li>
+                  <li><span>Microservices:</span> <em>Simple OR Scalable?</em></li>
+                </ul>
+                <p className={styles.heroTradeoffs__answer}>
+                  <strong>Apache Ignite eliminates the trade-off.</strong>
+                </p>
+                <p className={styles.heroTradeoffs__pillars}>
+                  <em>Speed. Scale. Consistency. Durability. Queryability.</em>
+                </p>
+              </div>
             </div>
+          </div>
+
+          <div className={styles.heroActions}>
+            <a className={clsx('button', styles.fronthero__button)} href="/docs/">
+              Get Started
+            </a>
+            <Link className={clsx('button', 'button--outline', styles.fronthero__button)} to="/use-cases">
+              Explore Use Cases
+            </Link>
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function TopCards() {
-  return (
-    <aside className={clsx(styles.fronttopcards, 'container')}>
-      <a href="https://blogs.apache.org/ignite/entry/apache-ignite-momentum-highlights-from" target="_blank" className={styles.frontcard} rel="noreferrer">
-        <div className={styles.frontcard__title}>
-          A top-5 project of the Apache Software Foundation
-        </div>
-        <div className={styles.frontcard__prises}>
-          <div className={styles.frontcard__price}>
-            <div className={styles.frontcard__iconwrap}>
-              <img src="/img/frontpage/b1-prize1.svg" alt="" />
-            </div>
-            <span>Big Data <br />Users Lists</span>
-          </div>
-          <div className={styles.frontcard__price}>
-            <div className={clsx(styles.frontcard__iconwrap, styles['frontcard__iconwrap--blue'])}>
-              <img src="/img/frontpage/b1-prize1.svg" alt="" />
-            </div>
-            <span>Users Lists</span>
-          </div>
-          <div className={styles.frontcard__price}>
-            <div className={clsx(styles.frontcard__iconwrap, styles['frontcard__iconwrap--grey'])}>
-              <img src="/img/frontpage/b1-prize1.svg" alt="" />
-            </div>
-            <span>Dev Lists</span>
-          </div>
-        </div>
-      </a>
-
-      <Link to="/use-cases" className={styles.frontcard}>
-        <div className={clsx(styles.frontcard__title, styles.frontcard__title_secondary)} style={{ marginBottom: 0 }}>
-          <strong style={{ fontSize: '1.15em' }}>Distributed systems make you choose.</strong><br />
-          <br />
-          <span style={{ fontSize: '1.1em' }}>Event streams:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Fast OR Consistent?</span><br />
-          <span style={{ fontSize: '1.1em' }}>Distributed state:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Fast OR Durable?</span><br />
-          <span style={{ fontSize: '1.1em' }}>Data integrity:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Eventual OR ACID?</span><br />
-          <span style={{ fontSize: '1.1em' }}>Microservices:</span>  <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Simple OR Scalable?</span><br />
-          <br />
-          <strong style={{ fontSize: '1.15em' }}>Apache Ignite eliminates the trade-off.</strong><br />
-          <span style={{ fontSize: '0.95em', opacity: 0.8 }}>Speed. Scale. Consistency. Durability. Queryability.</span>
-        </div>
-      </Link>
-    </aside>
   );
 }
 
@@ -608,7 +589,6 @@ export default function Home(): ReactNode {
       <HomepageHero />
 
       <section className={styles.frontblue}>
-        <TopCards />
         <CoreCapabilities />
       </section>
 
