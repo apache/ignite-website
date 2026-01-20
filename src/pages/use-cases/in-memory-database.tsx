@@ -31,7 +31,7 @@ export default function InMemoryDatabase(): JSX.Element {
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main innerhero__main--long">
+          <div className="innerhero__main">
             <h1 className="h1 innerhero__h1">
               Database with Memory-First Storage
             </h1>
@@ -39,11 +39,16 @@ export default function InMemoryDatabase(): JSX.Element {
               Database-first platform with multi-tier storage and full SQL support
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="/docs/ignite2/2.17.0/quick-start/java.html" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
           </div>
+          <img
+            className="innerhero__pic innerhero__pic--usecase"
+            src="/img/usecases/head-bg.svg"
+            alt="Apache Ignite Use Cases"
+          />
         </div>
       </section>
 

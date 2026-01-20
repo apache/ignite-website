@@ -36,15 +36,13 @@ export default function HadoopAcceleration(): JSX.Element {
           <div className="innerhero__main">
             <h1 className="h1 innerhero__h1">
               Accelerate Existing Hadoop Deployments
-              <br />
-              <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
               Accelerate the performance of Hadoop-based applications with Ignite <br />
               as a high-performance data access layer
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
+              <a className="button innerhero__button" href="/docs/ignite2/2.17.0/quick-start/java.html" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>

@@ -37,15 +37,13 @@ export default function InMemoryDataGrid(): JSX.Element {
           <div className="innerhero__main">
             <h1 className="h1 innerhero__h1">
               In-Memory Data Grid
-              <br />
-              <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
               Use an advanced read-through / write-through cache
               <br /> that is deployed on top of one or several databases
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="https://ignite.apache.org/docs/ignite2/latest/index">
+              <a className="button innerhero__button" href="/docs/ignite2/2.17.0/quick-start/java.html" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>

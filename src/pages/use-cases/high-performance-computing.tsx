@@ -31,21 +31,24 @@ export default function HighPerformanceComputing(): JSX.Element {
 
       <section className="innerhero">
         <div className="container innerhero__cont">
-          <div className="innerhero__main innerhero__main--long">
+          <div className="innerhero__main">
             <h1 className="h1 innerhero__h1">
               High-Performance Computing
-              <br />
-              <span className="with-apache">With Apache Ignite</span>
             </h1>
             <div className="innerhero__descr pt-2 h5">
               Schema-driven colocation and compute-to-data patterns
             </div>
             <div className="innerhero__action">
-              <a className="button innerhero__button" href="/docs/" target="_blank" rel="noreferrer" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
+              <a className="button innerhero__button" href="/docs/ignite3/3.1.0/getting-started/quick-start" style={{ background: '#fff', color: 'var(--ai-blue)' }}>
                 Start Coding
               </a>
             </div>
           </div>
+          <img
+            className="innerhero__pic innerhero__pic--usecase"
+            src="/img/usecases/head-bg.svg"
+            alt="Apache Ignite Use Cases"
+          />
         </div>
       </section>
 
