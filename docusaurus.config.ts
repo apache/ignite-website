@@ -155,7 +155,19 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/og-pic.png',
+    metadata: [
+      {
+        name: 'description',
+        content: 'Apache Ignite is a leading distributed database management system for high-performance computing with in-memory speed. Learn how to use the Ignite decentralized database system and get started.',
+      },
+      {
+        property: 'og:description',
+        content: 'Apache Ignite is a leading distributed database management system for high-performance computing with in-memory speed. Learn how to use the Ignite decentralized database system and get started.',
+      },
+      {name: 'twitter:card', content: 'summary_large_image'},
+      {name: 'twitter:site', content: '@ApacheIgnite'},
+    ],
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true, // Current site doesn't have dark mode
