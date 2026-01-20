@@ -2,10 +2,12 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
+import CodeBlock from '@theme/CodeBlock';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 
 import '../../css/native-persistence.css';
 import '../../css/digital-hub.css';
+import '../../css/key-value-store.css';
 
 export default function KeyValueStore(): JSX.Element {
   const canonicalUrl = useCanonicalUrl();
@@ -107,8 +109,8 @@ export default function KeyValueStore(): JSX.Element {
         <div className="inmememor2__work flexi pt-2">
           <div className="inmememor2__left">
             <h3 className="fz20">Ignite 2: Cache API</h3>
-            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
-              <code>{`// Get cache instance
+            <CodeBlock language="java">
+{`// Get cache instance
 IgniteCache<Integer, Person> cache =
     ignite.cache("person");
 
@@ -119,13 +121,13 @@ cache.put(1, new Person("John", 30));
 Person person = cache.get(1);
 
 // Remove operation
-cache.remove(1);`}</code>
-            </pre>
+cache.remove(1);`}
+            </CodeBlock>
           </div>
           <div className="inmememor2__right">
             <h3 className="fz20">Ignite 3: Table API</h3>
-            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
-              <code>{`// Get KeyValueView from table
+            <CodeBlock language="java">
+{`// Get KeyValueView from table
 KeyValueView<Integer, Person> kvView =
     table.keyValueView(Integer.class, Person.class);
 
@@ -136,8 +138,8 @@ kvView.put(null, 1, new Person("John", 30));
 Person person = kvView.get(null, 1);
 
 // Remove operation
-kvView.remove(null, 1);`}</code>
-            </pre>
+kvView.remove(null, 1);`}
+            </CodeBlock>
           </div>
         </div>
 
@@ -147,8 +149,8 @@ kvView.remove(null, 1);`}</code>
         <div className="inmememor2__work flexi pt-3">
           <div className="inmememor2__left">
             <h3 className="fz20">Ignite 2: Cache API</h3>
-            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
-              <code>{`// Batch put
+            <CodeBlock language="java">
+{`// Batch put
 Map<Integer, Person> batch = new HashMap<>();
 batch.put(1, new Person("John", 30));
 batch.put(2, new Person("Jane", 25));
@@ -156,13 +158,13 @@ cache.putAll(batch);
 
 // Batch get
 Set<Integer> keys = Set.of(1, 2);
-Map<Integer, Person> results = cache.getAll(keys);`}</code>
-            </pre>
+Map<Integer, Person> results = cache.getAll(keys);`}
+            </CodeBlock>
           </div>
           <div className="inmememor2__right">
             <h3 className="fz20">Ignite 3: Table API</h3>
-            <pre style={{ background: '#f5f5f5', padding: '1rem', borderRadius: '4px', overflow: 'auto' }}>
-              <code>{`// Batch put
+            <CodeBlock language="java">
+{`// Batch put
 Map<Integer, Person> batch = Map.of(
     1, new Person("John", 30),
     2, new Person("Jane", 25)
@@ -171,8 +173,8 @@ kvView.putAll(null, batch);
 
 // Batch get
 Collection<Integer> keys = List.of(1, 2);
-Map<Integer, Person> results = kvView.getAll(null, keys);`}</code>
-            </pre>
+Map<Integer, Person> results = kvView.getAll(null, keys);`}
+            </CodeBlock>
           </div>
         </div>
       </section>
