@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening</title>
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['setDoNotTrack', true]);
+      _paq.push(['disableCookies']);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://analytics.apache.org/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '77']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.async = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <!-- MOBILE MENU START-->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button class="hystmodal__close" data-hystclose="">Close</button>
+          <div class="mobmenu__wrap">
+            <a class="mobmenu__logo" href="/"><img src="/img/logo.svg" alt="Logo" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li><a href="/docs/latest/">Quick Start</a></li>
+                <li><a href="/resources.html#learning">Learning resources</a></li>
+                <li><a href="/resources.html#training">Training and Courses</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+                    <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+                    <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+                    <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+                    <li><a href="/use-cases/high-performance-computing.html">High Performance Computing</a></li>
+                    <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+                    <li><a href="/use-cases/spark-acceleration.html">Spark Acceleration</a></li>
+                    <li><a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a></li>
+                    <li><a href="/use-cases.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/features/">Features</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+                    <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+                    <li><a href="/features/sql.html">Distributed SQL</a></li>
+                    <li><a href="/features/key-value-apis.html">Key-Value APIs</a></li>
+                    <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+                    <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+                    <li><a href="/features/service-apis.html">Services</a></li>
+                    <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+                    <li><a href="/features/streaming.html">Real-Time Streaming APIs</a></li>
+                    <li><a href="/docs/latest/messaging">Messaging</a></li>
+                    <li><a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+                    <li><a href="/features/index.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li><a href="/use-cases/provenusecases.html">Powered by</a></li>
+                <li><a href="/resources.html">Resources</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/docs/latest/">Docs</a></li>
+              </ul>
+              <a class="button mobmenu__button" href="/download.cgi">Download Ignite</a>
+            </div>
+            <!-- //mobmenu__menu-->
+          </div>
+          <!-- //mobmenu__wrap-->
+        </div>
+        <!-- //mobmenu-->
+      </div>
+    </div>
+    <!-- MOBILE MENU END-->
+    <header class="hdr hdr__white jsHdrBase">
+      <div class="jsHdrLine">
+        <div id="promotion-bar">
+          <a
+            href="https://ignite-summit.org/2025/?utm_medium=website-direct&amp;utm_source=apache_ignite&amp;utm_term=ignite-summit&amp;utm_content=event-hosted&amp;utm_campaign=2023-06-06-ignite-summit-nam"
+            target="_blank"
+            title="Ignite Summit 2025"
+            rel="noopener noreferrer"
+            >Ignite Summit 2025 — Watch on demand &nbsp;<span class="more d-none d-lg-block"><img src="/images/promos/arrow-white.svg" /></span
+          ></a>
+        </div>
+        <div class="hdr__wrap flexi">
+          <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+          ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+          ><a class="button hdr__button" href="/download.cgi">Download Ignite</a>
+          <nav class="hdrmenu">
+            <ul class="flexi">
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+              <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/resources.html" data-panel="resources">Resources</a></li>
+              <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+            </ul>
+          </nav>
+          <div class="dropmenu">
+            <div class="dropmenu__panel" data-menupanel="getStarted">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+              <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="features">
+              <div class="container dropmenu2__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext">MULTI-TIER STORAGE</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">ESSENTIAL Developer APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">High-Performance <br />Computing APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">Real-Streaming APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu2__grid-->
+              <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-2-->
+            <div class="dropmenu__panel" data-menupanel="community">
+              <div class="container dropmenu3__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu3__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="resources">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton blog" href="/blog/"><img src="/img/menu/icon-blog.svg" alt="" /><span>Blog</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#technical"><span>Technical resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box blog">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#book"><span>Apache Ignite Book</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#mail"><span>Mailing Lists, Forums And Discussion Archives</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+          </div>
+          <!-- /.dropmeu-->
+        </div>
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <div class="container blog">
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening</h1>
+        <p>
+          November 3, 2025 by <strong>Evgeniy Stanilovskiy. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite 3.1: Performance, Multi-Language Client Support, and Production Hardening%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
+      <div class="blog__content">
+        <main class="blog_main">
+          <section class="blog__posts">
+            <article class="post">
+              <div>
+                <p>
+                  Apache Ignite 3.1 improves the three areas that matter most when running distributed systems: performance at scale, language flexibility, and operational visibility. The release also fixes hundreds of bugs related to data
+                  corruption, race conditions, and edge cases discovered since 3.0.
+                </p>
+                <!-- end -->
+                <p>
+                  <strong>Before you upgrade</strong>: This release introduces zone-based replication, which changes how RAFT groups are allocated. Persistent storage in upgraded 3.0 clusters will continue to use table-based replication.
+                  Read the&nbsp;<a href="#zone-based-replication-migration">Zone-Based Replication Migration</a> section to understand your options.
+                </p>
+                <h3>What This Release Delivers</h3>
+                <ul>
+                  <li><strong>Improved replication performance and reliability</strong>: Zone-based replication improves data colocation, reduces required thread count and memory overhead while naturally improving SQL performance.</li>
+                  <li><strong>Extended clients support</strong>: Python DB API driver, .NET distributed computing with ADO.NET integration, and enhanced C++ client support expand your options for working with data.</li>
+                  <li><strong>Better cluster observability</strong>: 50+ new metrics covering checkpoints, SQL, transactions, and storage. New system views for cluster introspection.</li>
+                  <li><strong>Improved APIs</strong>: Multiple schema support, improved query planning controls, and streamlined Java APIs.</li>
+                </ul>
+                <h3>Performance: Built for Scale</h3>
+                <h4>Zone-Based Replication Reduces Overhead</h4>
+                <p>Apache Ignite 3.1 replaces the table-based replication model from 3.0 with zone-based replication.</p>
+                <p><strong>Updated defaults</strong>: Zone-based replication is enabled by default for new 3.1 clusters.</p>
+                <p>
+                  <strong>Existing clusters</strong>: Clusters with persistent storage upgraded from 3.0 will continue to use table-based replication. To adopt zone-based replication and gain the performance benefits, you must migrate to a
+                  new 3.1 cluster. Table-based replication support will be discontinued in Ignite 3.2 release.
+                </p>
+                <h4>DDL Operations Now Batch Automatically</h4>
+                <p>Creating multiple tables no longer requires multiple round-trips. DDL operations batch automatically when possible, reducing setup time during schema initialization and testing.</p>
+                <h4>Partition Pruning and Partition Awareness</h4>
+                <p>Apache Ignite 3.1 introduces two other major SQL optimizations that dramatically improve query performance:</p>
+                <p>
+                  <strong>Partition Pruning</strong>: The query optimizer automatically eliminates unnecessary partition scans based on predicates. Queries with key-based filters only scan relevant partitions instead of the entire dataset.
+                </p>
+                <p><strong>Partition Awareness</strong>: Client queries route directly to nodes owning the data, eliminating coordinator hops. The client determines the exact target node for single-partition queries.</p>
+                <p>Use the new <code>EXPLAIN MAPPING</code> statement to verify query routing:</p>
+                <pre><code class="language-sql">EXPLAIN MAPPING FOR SELECT * FROM orders WHERE order_id = 12345;
+</code></pre>
+                <p>Combined impact: Queries with partition key predicates can see 10x+ performance improvements.</p>
+                <h3>Multi-Language Support</h3>
+                <h4>Python: PEP 249-Compliant Database Driver</h4>
+                <p>Connect to Apache Ignite from Python with a standard DB API 2.0 compliant driver. SSL support and macOS compatibility are built in.</p>
+                <p>You can install the driver from pip:</p>
+                <pre><code class="language-shell">pip install pyignite-dbapi
+</code></pre>
+                <p>Then, you can import it into your application and initialize the connection:</p>
+                <pre><code class="language-py"># Import and use the driver
+import pyignite_dbapi
+
+conn = pyignite_dbapi.connect(address='localhost:10800', use_ssl=True)
+cursor = conn.cursor()
+cursor.execute('SELECT * FROM orders WHERE customer_id = ?', (customer_id,))
+</code></pre>
+                <h4>.NET: Distributed Computing and ADO.NET</h4>
+                <p>Write compute jobs in C#, F#, or any .NET language and distribute them across your cluster:</p>
+                <pre><code class="language-csharp">public class HelloJob : IComputeJob&lt;string, string&gt;
+{
+    public ValueTask&lt;string&gt; ExecuteAsync(IJobExecutionContext context, string arg, CancellationToken cancellationToken) =&gt;
+        ValueTask.FromResult("Hello " + arg);
+}
+
+var jobDesc = new JobDescriptor&lt;string, string&gt;(
+    JobClassName: typeof(HelloJob).AssemblyQualifiedName!,
+    DeploymentUnits: [new DeploymentUnit("unit1")]);
+var jobTarget = JobTarget.AnyNode(await client.GetClusterNodesAsync());
+var jobExec = await client.Compute.SubmitAsync(jobTarget, jobDesc, "world");</code></pre>
+                <p>ADO.NET integration brings familiar patterns to .NET developers:</p>
+                <pre><code class="language-csharp">var connStr = "Endpoints=localhost:10800";
+await using var conn = new IgniteDbConnection(connStr);
+await conn.OpenAsync();
+DbCommand cmd = conn.CreateCommand();
+cmd.CommandText = "DROP TABLE IF EXISTS Person";
+await cmd.ExecuteNonQueryAsync();</code></pre>
+                <p>Additional .NET features in 3.1:</p>
+                <ul>
+                  <li><strong>Platform Streamer Receiver</strong>: Custom data processing during streaming operations</li>
+                  <li><strong>Batch SQL Execution</strong>: <code>ISql.ExecuteBatchAsync</code> for efficient multi-statement execution</li>
+                  <li><strong>CancellationToken Support</strong>: Integrated cancellation for SQL and Compute APIs</li>
+                </ul>
+                <p>See the <a href="https://ptupitsyn.github.io/NET-Compute-In-Apache-Ignite-3-1/">extended blog post about .NET compute in Ignite 3.1</a> for a more in-depth explanation.</p>
+                <h4>C++ Client</h4>
+                <p>Use the improved C++ client to improve you application with several new production-ready features:</p>
+                <ul>
+                  <li><strong>Heartbeat Support</strong>: Connection health monitoring prevents timeout disconnects</li>
+                  <li><strong>Transaction Timeouts</strong>: Configurable timeout settings for transaction operations</li>
+                  <li><strong>Query Cancellation</strong>: An option to cancel long-running queries</li>
+                </ul>
+                <h4>ODBC Driver SSL Support</h4>
+                <p>Use the newly added support for <strong>SSL/TLS</strong> to enable secure connections to the cluster from your ODBC applications.</p>
+                <h3>SQL Capabilities</h3>
+                <h4>Multiple Schemas</h4>
+                <p>Organize tables across multiple schemas instead of using only PUBLIC:</p>
+                <pre><code class="language-sql">CREATE SCHEMA analytics;
+CREATE TABLE analytics.events (id int primary key, timestamp timestamp, data varchar);
+</code></pre>
+                <h4>Query Plan Recalculation</h4>
+                <p>Configure when query plans are recalculated based on data changes:</p>
+                <pre><code class="language-sql">CREATE TABLE Person (
+  id INT PRIMARY KEY,
+  name VARCHAR,
+  age INT
+) WITH (MIN STALE ROWS 1000, STALE ROWS FRACTION 0.15);
+</code></pre>
+                <p>Ignite will recalculate plans automatically when the application exceeds the thresholds.</p>
+                <p>Alternatively, manually invalidate plans to ensure they reflect current data:</p>
+                <pre><code class="language-shell">sql planner invalidate-cache --tables=PUBLIC.Person
+</code></pre>
+                <h4>EXPLAIN Output Improvements</h4>
+                <p>
+                  Use the improved EXPLAIN command to track which nodes execute queries and what data they access, making query execution plans clearer. The command now also supports the <code>EXPLAIN MAPPING FOR</code> option for tracking
+                  data distribution.
+                </p>
+                <h4>New Functions</h4>
+                <ul>
+                  <li><code>GROUPING</code>: Aggregate function for advanced grouping operations</li>
+                  <li><code>CURRENT_USER</code>: Access current user for auditing and access control</li>
+                </ul>
+                <h3>Code Deployment</h3>
+                <p>Access deployment unit information directly from your compute jobs to better diagnose issues and validate your code:</p>
+                <pre><code class="language-java">public class DiagnosticJob implements ComputeJob&lt;Void, String&gt; {
+    @Override
+    public CompletableFuture&lt;String&gt; executeAsync(JobExecutionContext context, Void input) {
+        String deploymentInfo = context.deploymentUnits().stream()
+            .map(unit -&gt; String.format("%s:%s at %s", unit.name(), unit.version(), unit.path()))
+            .collect(Collectors.joining(", "));
+        return CompletableFuture.completedFuture(deploymentInfo);
+    }
+}</code></pre>
+                <p>Deployment improvements in 3.1:</p>
+                <ul>
+                  <li>ZIP archive support preserves folder structure for complex applications</li>
+                  <li>Files over 10 MB now supported</li>
+                  <li>Automatic unit loading at node startup</li>
+                </ul>
+                <h3>Production Operations</h3>
+                <h4>Metrics and Observability</h4>
+                <p>Apache Ignite 3.1 adds comprehensive metrics across all major subsystems:</p>
+                <ul>
+                  <li><strong>Storage Metrics</strong>: Checkpoint operations, data regions, and storage I/O for aipersist storage engine</li>
+                  <li><strong>Table Metrics</strong>: Per-table operation statistics including read/write throughput</li>
+                  <li><strong>Rebalance Metrics</strong>: Track rebalancing progress and performance</li>
+                  <li><strong>SQL Query Metrics</strong>: Execution time, row counts, and query cache hit rates</li>
+                  <li><strong>Transaction Metrics</strong>: Transaction lifecycle and duration tracking</li>
+                  <li><strong>Topology Metrics</strong>: Node join/leave events and cluster state changes</li>
+                  <li><strong>Throttling Metrics</strong>: Backpressure and flow control statistics</li>
+                  <li><strong>Clock Drift Metrics</strong>: Monitor time synchronization across cluster nodes</li>
+                </ul>
+                <p><strong>Metric Log Exporter</strong>: Exports metrics to files. The exporter is used by default for all new clusters, providing guaranteed access to basic cluster metrics.</p>
+                <h4>System Views for Cluster Introspection</h4>
+                <p>New views expose internal cluster state:</p>
+                <ul>
+                  <li><code>SYSTEM.SQL_CACHED_QUERY_PLANS</code>: View cached query plans</li>
+                  <li><code>SYSTEM.INDEX_COLUMNS</code>: Access index column information</li>
+                  <li><code>SYSTEM.SCHEMAS</code>: List all schemas in the cluster</li>
+                </ul>
+                <p>All system views now use standardized column naming. Old column naming is still supported for compatibility purposes.</p>
+                <h4>Compute Job Lifecycle Events</h4>
+                <p>New lifecycle events help you track compute jobs through submission, execution, completion, and failure. MapReduce task events provide visibility into distributed computations.</p>
+                <h3>Cluster Management</h3>
+                <h4>Automatic Metastorage Node Selection</h4>
+                <p>Ignite now automatically selects metastorage and cluster management group nodes based on cluster size on cluster initialization:</p>
+                <ul>
+                  <li>≤3 nodes: all nodes participate</li>
+                  <li>4 nodes: 3 nodes (maintains odd number for consensus)</li>
+                  <li>≥5 nodes: 5 nodes (balances fault tolerance with overhead)</li>
+                </ul>
+                <h4>Multicast Discovery for Dynamic Environments</h4>
+                <p>Nodes discover each other automatically using multicast, removing the need for static node lists in containerized deployments:</p>
+                <pre><code class="language-shell">node config update ignite.network.nodeFinder.multicast.group=239.5.0.0
+node config update ignite.network.nodeFinder.type=MULTICAST
+</code></pre>
+                <h4>Docker Enhancements</h4>
+                <The>default docker environment comes with multiple improvements:</The>
+                <ul>
+                  <li><code>BOOTSTRAP_NODE_CONFIG</code> environment variable for configuration management</li>
+                  <li>ARM64 images for ARM-based systems</li>
+                  <li>Non-root default user improves security</li>
+                  <li>Java 17 and 21 images available</li>
+                </ul>
+                <h4>Distribution Zone Quorum Control</h4>
+                <p>You can explicitly set quorum requirements in distribution zones:</p>
+                <pre><code class="language-sql">CREATE ZONE exampleZone (REPLICAS 3, QUORUM SIZE 3) STORAGE PROFILES['default'];
+</code></pre>
+                <h3>Transaction Improvements</h3>
+                <p>New transaction timeout options can set different timeouts for read-only and read-write transactions:</p>
+                <ul>
+                  <li><code>readOnlyTimeoutMillis</code>: Shorter timeout for read-only transactions</li>
+                  <li><code>readWriteTimeoutMillis</code>: Longer timeout for complex write operations</li>
+                </ul>
+                <p>This prevents read-only queries from timing out unnecessarily while protecting against long-running writes.</p>
+                <h3>Java API Updates</h3>
+                <Multiple>new Java methods simplify the work with your cluster and provide more direct access to data:</Multiple>
+                <ul>
+                  <li><code>deleteAll()</code>: Bulk delete operations</li>
+                  <li><code>ignite.cluster().nodes()</code>: Returns nodes in logical topology</li>
+                  <li><code>ignite.cluster().localNode()</code>: Quick access to local node in embedded mode</li>
+                  <li><code>CancelHandle</code> API: Stop queries, transactions, and compute jobs</li>
+                  <li>Batched execution cancellation support</li>
+                </ul>
+                <h3>Disaster Recovery and Operational Tools</h3>
+                <p>
+                  New CLI and REST APIs enable partition-level data cleanup and restart, letting you recover from corrupted partitions without restarting the whole cluster. The system properly destroys tables during node recovery and cleans
+                  abandoned transaction write intents during index builds.
+                </p>
+                <h3>Migration from Apache Ignite 2</h3>
+                <p>
+                  Apache Ignite 3.1 includes a complete migration toolkit with DDL generator for automatic schema conversion, persistent data migration with progress tracking, and automatic type conversion for legacy Java time APIs. The
+                  toolkit supports authenticated operations and complex field mappings for key and value replication.
+                </p>
+                <h3>Breaking Changes and Deprecations</h3>
+                <p>All breaking changes include backward compatibility support. Recreate your cluster, update your code and configuration before 3.2, when deprecated approaches will be removed.</p>
+                <h4 id="zone-based-replication-migration">Zone-Based Replication Migration</h4>
+                <p>
+                  Zone-based replication changes how RAFT groups are allocated across tables. Clusters upgraded from 3.0 continue using table-based replication to preserve stability. To adopt zone-based replication and gain the performance
+                  benefits, create a new 3.1 cluster and migrate data using SQL <code>COPY INTO</code>/<code>COPY FROM</code> commands. See the
+                  <a href="https://ignite.apache.org/docs/ignite3/latest/installation/migration-from-ai3-1">3.0 to 3.1 Migration Guide</a> for detailed workflow.
+                </p>
+                <h4>Configuration and API Changes</h4>
+                <p>
+                  <strong>Configuration</strong>: Property names now include units (i.e. <code>timeoutMillis</code> instead of <code>timeout</code>). System properties were consolidated under <code>ignite.system</code>. Old formats work
+                  temporarily.
+                </p>
+                <p><strong>SQL Syntax</strong>: <code>CREATE ZONE</code> syntax modernized to align with SQL standards. Old <code>WITH</code> clause syntax is deprecated but functional.</p>
+                <p><strong>Java API</strong>: <code>ignite.clusterNodes()</code> deprecated in favor of <code>ignite.cluster().nodes()</code>. System view columns standardized with old names temporarily available.</p>
+                <p>
+                  <strong>Data Types</strong>: <code>BINARY</code> and <code>CHAR</code> removed. Use <code>VARBINARY</code> and <code>VARCHAR</code> instead. Maximum precision for <code>VARCHAR</code>/<code>VARBINARY</code> increased to
+                  2GB.
+                </p>
+                <h3>Get Started</h3>
+                <p><strong>Download</strong>: <a href="https://ignite.apache.org/download.html">Apache Ignite 3.1</a></p>
+                <p><strong>Migration Guide</strong>: <a href="https://ignite.apache.org/docs/ignite3/latest/installation/migration-from-ai3-1">Upgrading from 3.0</a></p>
+                <p><strong>Community</strong>: Join the <a href="https://ignite.apache.org/community/resources.html">Apache Ignite mailing list</a> or <a href="https://ignite.apache.org/community/resources.html">Slack channel</a></p>
+                <p>Questions about upgrading? Ask on the <a href="mailto:dev@ignite.apache.org">dev list</a> or <a href="mailto:user@ignite.apache.org">user list</a>.</p>
+              </div>
+            </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+                <li><a href="/blog/release">release</a></li>
+              </ul>
+            </section>
+          </section>
+        </main>
+        <aside class="blog__sidebar">
+          <ul>
+            <li><a href="/blog/apache">apache</a></li>
+            <li><a href="/blog/ignite">ignite</a></li>
+            <li><a href="/blog/release">release</a></li>
+            <li><a href="/blog/database">database</a></li>
+            <li><a href="/blog/in">in</a></li>
+            <li><a href="/blog/memory">memory</a></li>
+            <li><a href="/blog/open">open</a></li>
+            <li><a href="/blog/source">source</a></li>
+            <li><a href="/blog/.NET">.NET</a></li>
+            <li><a href="/blog/security">security</a></li>
+            <li><a href="/blog/Intel">Intel</a></li>
+            <li><a href="/blog/CET">CET</a></li>
+            <li><a href="/blog/linq">linq</a></li>
+            <li><a href="/blog/SQL">SQL</a></li>
+            <li><a href="/blog/performance">performance</a></li>
+            <li><a href="/blog/csharp">csharp</a></li>
+            <li><a href="/blog/in-memory">in-memory</a></li>
+            <li><a href="/blog/open-source">open-source</a></li>
+            <li><a href="/blog/log4j2">log4j2</a></li>
+            <li><a href="/blog/bigdata">bigdata</a></li>
+            <li><a href="/blog/computing">computing</a></li>
+            <li><a href="/blog/two">two</a></li>
+            <li><a href="/blog/learning">learning</a></li>
+            <li><a href="/blog/machine">machine</a></li>
+            <li><a href="/blog/spark">spark</a></li>
+            <li><a href="/blog/sql">sql</a></li>
+            <li><a href="/blog/data">data</a></li>
+            <li><a href="/blog/fast">fast</a></li>
+            <li><a href="/blog/nodal">nodal</a></li>
+            <li><a href="/blog/meltdown">meltdown</a></li>
+            <li><a href="/blog/spectre">spectre</a></li>
+            <li><a href="/blog/key-value">key-value</a></li>
+            <li><a href="/blog/store">store</a></li>
+            <li><a href="/blog/meetup">meetup</a></li>
+            <li><a href="/blog/biodata">biodata</a></li>
+            <li><a href="/blog/rdbms">rdbms</a></li>
+            <li><a href="/blog/grid">grid</a></li>
+            <li><a href="/blog/imdb">imdb</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/our-community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2024 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
+</html>

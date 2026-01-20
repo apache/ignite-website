@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Apache Ignite Streaming, Real-Time Data Processing</title>
+    <meta name="description" content="Apache Ignite data loading, streaming, and real-time processing capabilities allow to inject large amounts of data into an Ignite cluster in a scalable and fault-tolerant way. Learn more here." />
+    <link rel="canonical" href="https://ignite.apache.org/features/streaming.html" />
+    <meta property="og:title" content="Apache Ignite Streaming, Real-Time Data Processing" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ignite.apache.org/features/streaming.html" />
+    <meta property="og:image" content="/img/og-pic.png" />
+    <meta
+      property="og:description"
+      content="Apache Ignite data loading, streaming, and real-time processing capabilities allow to inject large amounts of data into an Ignite cluster in a scalable and fault-tolerant way. Learn more here."
+    />
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/native-persistence.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/compute-apis.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/streaming.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['setDoNotTrack', true]);
+      _paq.push(['disableCookies']);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://analytics.apache.org/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '77']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.async = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <!-- MOBILE MENU START-->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button class="hystmodal__close" data-hystclose="">Close</button>
+          <div class="mobmenu__wrap">
+            <a class="mobmenu__logo" href="/"><img src="/img/logo.svg" alt="Logo" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li><a href="/docs/latest/">Quick Start</a></li>
+                <li><a href="/resources.html#learning">Learning resources</a></li>
+                <li><a href="/resources.html#training">Training and Courses</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+                    <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+                    <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+                    <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+                    <li><a href="/use-cases/high-performance-computing.html">High Performance Computing</a></li>
+                    <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+                    <li><a href="/use-cases/spark-acceleration.html">Spark Acceleration</a></li>
+                    <li><a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a></li>
+                    <li><a href="/use-cases.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/features/">Features</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+                    <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+                    <li><a href="/features/sql.html">Distributed SQL</a></li>
+                    <li><a href="/features/key-value-apis.html">Key-Value APIs</a></li>
+                    <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+                    <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+                    <li><a href="/features/service-apis.html">Services</a></li>
+                    <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+                    <li><a href="/features/streaming.html">Real-Time Streaming APIs</a></li>
+                    <li><a href="/docs/latest/messaging">Messaging</a></li>
+                    <li><a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+                    <li><a href="/features/index.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li><a href="/use-cases/provenusecases.html">Powered by</a></li>
+                <li><a href="/resources.html">Resources</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/docs/latest/">Docs</a></li>
+              </ul>
+              <a class="button mobmenu__button" href="/download.cgi">Download Ignite</a>
+            </div>
+            <!-- //mobmenu__menu-->
+          </div>
+          <!-- //mobmenu__wrap-->
+        </div>
+        <!-- //mobmenu-->
+      </div>
+    </div>
+    <!-- MOBILE MENU END-->
+    <header class="hdr hdr__blue jsHdrBase">
+      <div class="jsHdrLine">
+        <div id="promotion-bar">
+          <a
+            href="https://ignite-summit.org/2025/?utm_medium=website-direct&amp;utm_source=apache_ignite&amp;utm_term=ignite-summit&amp;utm_content=event-hosted&amp;utm_campaign=2023-06-06-ignite-summit-nam"
+            target="_blank"
+            title="Ignite Summit 2025"
+            rel="noopener noreferrer"
+            >Ignite Summit 2025 — Watch on demand &nbsp;<span class="more d-none d-lg-block"><img src="/images/promos/arrow-white.svg" /></span
+          ></a>
+        </div>
+        <div class="hdr__wrap flexi">
+          <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+          ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+          ><a class="button hdr__button" href="/download.cgi">Download Ignite</a>
+          <nav class="hdrmenu">
+            <ul class="flexi">
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu__current hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+              <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/resources.html" data-panel="resources">Resources</a></li>
+              <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+            </ul>
+          </nav>
+          <div class="dropmenu">
+            <div class="dropmenu__panel" data-menupanel="getStarted">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+              <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="features">
+              <div class="container dropmenu2__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext">MULTI-TIER STORAGE</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">ESSENTIAL Developer APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">High-Performance <br />Computing APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">Real-Streaming APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu2__grid-->
+              <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-2-->
+            <div class="dropmenu__panel" data-menupanel="community">
+              <div class="container dropmenu3__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu3__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="resources">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton blog" href="/blog/"><img src="/img/menu/icon-blog.svg" alt="" /><span>Blog</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#technical"><span>Technical resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box blog">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#book"><span>Apache Ignite Book</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#mail"><span>Mailing Lists, Forums And Discussion Archives</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+          </div>
+          <!-- /.dropmeu-->
+        </div>
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <section class="innerhero">
+      <div class="container innerhero__cont">
+        <div class="innerhero__main">
+          <div class="innerhero__pre pb-3">Apache Ignite</div>
+          <h1 class="h1 innerhero__h1">
+            Real-Time Streaming<br />
+            APIs
+          </h1>
+          <div class="innerhero__descr pt-2 h5">Ingest streams of data and build event-driven architectures</div>
+          <div class="innerhero__action"><a class="button innerhero__button" href="https://ignite.apache.org/docs/latest/index">Start Coding</a></div>
+        </div>
+        <img class="innerhero__pic innerhero__pic--stream" src="/img/features/streaming/hero-image.svg" alt="stream-hero" />
+      </div>
+    </section>
+    <!-- /.innerhero-->
+    <section class="stream1">
+      <div class="container">
+        <div class="stream1__block flexi">
+          <p class="stream1__p h4">With Apache Ignite you can<strong> load and stream</strong> large finite — or never-ending — volumes of data<strong> in a scalable and fault-tolerant way</strong> into the cluster.</p>
+          <div class="stream1__part">
+            <img class="stream1__img" src="/img/features/streaming/speed.png" alt="speed" />
+            <p class="stream1__text">The rate at which data can be injected into Ignite <strong>exceeds millions of events per second </strong>on a moderately sized cluster.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.stream1-->
+    <section class="stream2">
+      <div class="container">
+        <div class="stream2__block flexi">
+          <div class="stream2__content">
+            <h2 class="stream2__h2 h4">Ignite Core Streaming APIs</h2>
+            <h3 class="stream2__h3">What are those APIs?</h3>
+            <p class="stream2__text">
+              With Ignite core streaming APIs such as IgniteDataStreamer you get basic streaming capabilities out of the box. You can stream and transform your data originating from multiple custom sources.<br /><br />Ignite data streamers
+              automatically buffer the data and group it into batches for better performance, and send it in parallel to multiple nodes.
+            </p>
+          </div>
+          <img class="stream2__img" src="/img/features/streaming/sql.svg" alt="sql" />
+        </div>
+      </div>
+    </section>
+    <!-- /.stream2-->
+    <section class="stream3">
+      <div class="container">
+        <h2 class="stream3__h2 h4">IgniteDataStreamer is used for:</h2>
+        <div class="stream3__blocks flexi">
+          <div class="stream3__block">
+            <div class="stream3__part flexi">
+              <div class="compute2-points__item fz20"></div>
+              <p class="stream3__text">Data loading</p>
+            </div>
+            <div class="stream3__part stream3__end flexi ml-04">
+              <div class="compute2-points__item fz20"></div>
+              <p class="stream3__text">Real-time data streaming</p>
+            </div>
+          </div>
+          <div class="stream3__block">
+            <div class="stream3__part stream3__first flexi">
+              <div class="compute2-points__item fz20"></div>
+              <p class="stream3__text">Achieving advanced streaming capabilities by integrating with streaming frameworks:</p>
+            </div>
+            <div class="stream3__item stream3__itemstart flexi">
+              <img class="stream3__img" src="/img/features/streaming/one.png" alt="one" /><img class="stream3__img" src="/img/features/streaming/two.svg" alt="two" /><img
+                class="stream3__img"
+                src="/img/features/streaming/three.png"
+                alt="three"
+              />
+            </div>
+            <div class="stream3__item flexi">
+              <img class="stream3__img" src="/img/features/streaming/four.svg" alt="four" /><img class="stream3__img" src="/img/features/streaming/five.svg" alt="five" /><img
+                class="stream3__img"
+                src="/img/features/streaming/six.svg"
+                alt="six"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.stream3-->
+    <section class="stream4">
+      <div class="container">
+        <h2 class="stream4__h2 h4">Event-Driven Architecture Basic Principles</h2>
+        <p class="stream4__p">In many cases, streams of data we receive comprise events that we have to react to.<br /><span class="stream4__greys">With Apache Ignite, you can:</span></p>
+        <div class="stream4__block flexi">
+          <div class="stream4__part">
+            <div class="stream4__number">01</div>
+            <div class="stream4__text">Enrich and transform your data <br />on the fly.</div>
+          </div>
+          <div class="stream4__part stream4__parttwo">
+            <div class="stream4__number">02</div>
+            <div class="stream4__text">
+              Execute any calculations in response<br />
+              to an event on the cluster-node side.
+            </div>
+          </div>
+          <div class="stream4__part">
+            <div class="stream4__number">03</div>
+            <div class="stream4__text">React to your streams of data on the application side with continuous queries.</div>
+            <div class="stream4__grey">If streamed data represents an event, your application-side logic can react to it after receiving a notification from continuous queries.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.stream4              -->
+    <section class="native-bottom container">
+      <div class="native-bottom__grid">
+        <article class="nativebotblock">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-rocket.svg" alt="" /><span>Ready to Start?</span></div>
+          <p class="nativebotblock__text">Start coding with Ignite Streaming APIs</p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/data-streaming" target="_blank">Ignite Streaming APIs</a>
+        </article>
+        <article class="nativebotblock nativebotblock--learn">
+          <div class="h4 nativebotblock__title"><img class="nativebotblock__icon" src="/img/features/native-docs.svg" alt="" /><span>Want to Learn More?</span></div>
+          <p class="nativebotblock__text">Explore our out-of-the-box integrations with Kafka, Flink, MQTT and other advanced streaming technologies</p>
+          <a class="nativebotblock__link arrowlink" href="https://ignite.apache.org/docs/latest/extensions-and-integrations/streaming/kafka-streamer" target="_blank">Extensions And Integrations Guide</a>
+        </article>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/our-community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2024 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
+</html>

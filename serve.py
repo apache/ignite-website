@@ -3,17 +3,12 @@
 HTTP server with .html extension fallback for clean URLs.
 Mimics Apache's .htaccess behavior, especially for Ignite 2 Jekyll docs
 which have sidebar links without .html extensions.
-
-Supports base path stripping for staging builds (e.g., /suggested-site/).
 """
 
 import http.server
 import os
 import sys
 from urllib.parse import urlparse, unquote
-
-# Global base path for URL stripping (set by main())
-BASE_PATH = ''
 
 class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
     """HTTP handler that adds .html extension fallback for clean URLs."""
@@ -22,11 +17,6 @@ class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
         """Resolve the request path, adding .html extension if needed."""
         parsed = urlparse(self.path)
         url_path = unquote(parsed.path)
-
-        # Strip base path prefix if configured (for staging builds)
-        if BASE_PATH and url_path.startswith(BASE_PATH):
-            url_path = url_path[len(BASE_PATH):] or '/'
-
         fs_path = self.translate_path(url_path)
 
         # If path exists as-is, use it
@@ -34,9 +24,9 @@ class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
             if os.path.isdir(fs_path):
                 index_path = os.path.join(fs_path, 'index.html')
                 if os.path.exists(index_path):
-                    return url_path  # Return stripped path
+                    return None  # Let default handler serve directory
             else:
-                return url_path  # Path exists, serve as-is
+                return None  # Path exists, serve as-is
 
         # Try adding .html extension (for Ignite 2 sidebar links)
         if not url_path.endswith('.html') and not url_path.endswith('/'):
@@ -51,11 +41,9 @@ class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
         if not url_path.endswith('/'):
             index_path = os.path.join(fs_path, 'index.html')
             if os.path.isdir(fs_path) and os.path.exists(index_path):
-                # Redirect to path with trailing slash (preserve base path in redirect)
-                original_path = unquote(parsed.path)
-                return 'redirect:' + original_path + '/'
+                return 'redirect:' + url_path + '/'
 
-        return url_path  # Return stripped path, let default handler return 404
+        return None  # Not found, let default handler return 404
 
     def do_HEAD(self):
         """Handle HEAD requests with .html fallback."""
@@ -81,13 +69,6 @@ class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
             self.path = resolved
         return super().do_GET()
 
-    def translate_path(self, path):
-        """Translate URL path to filesystem path, stripping base path if needed."""
-        # Strip base path prefix if configured
-        if BASE_PATH and path.startswith(BASE_PATH):
-            path = path[len(BASE_PATH):] or '/'
-        return super().translate_path(path)
-
     def log_message(self, format, *args):
         """Custom log format with status code highlighting."""
         status = args[1] if len(args) > 1 else ''
@@ -101,17 +82,8 @@ class CleanURLHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def main():
-    global BASE_PATH
-
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 3000
     directory = sys.argv[2] if len(sys.argv) > 2 else '.'
-    BASE_PATH = sys.argv[3] if len(sys.argv) > 3 else ''
-
-    # Ensure base path has correct format (starts with /, no trailing /)
-    if BASE_PATH and not BASE_PATH.startswith('/'):
-        BASE_PATH = '/' + BASE_PATH
-    if BASE_PATH.endswith('/'):
-        BASE_PATH = BASE_PATH[:-1]
 
     os.chdir(directory)
 
@@ -120,16 +92,11 @@ def main():
 
     print(f"Serving at http://localhost:{port}")
     print(f"Directory: {os.getcwd()}")
-    if BASE_PATH:
-        print(f"Base path: {BASE_PATH}")
-        print(f"Access site at: http://localhost:{port}{BASE_PATH}/")
     print("")
     print("Features:")
     print("  - Clean URLs: /page serves /page.html")
     print("  - Directory index: /dir/ serves /dir/index.html")
     print("  - Ignite 2 sidebar links work without .html")
-    if BASE_PATH:
-        print(f"  - Base path stripping: {BASE_PATH}/* -> /*")
     print("")
     print("Press Ctrl+C to stop")
     print("")

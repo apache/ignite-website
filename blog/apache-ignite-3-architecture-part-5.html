@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</title>
+    <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/site.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
+    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['setDoNotTrack', true]);
+      _paq.push(['disableCookies']);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function () {
+        var u = 'https://analytics.apache.org/';
+        _paq.push(['setTrackerUrl', u + 'matomo.php']);
+        _paq.push(['setSiteId', '77']);
+        var d = document,
+          g = d.createElement('script'),
+          s = d.getElementsByTagName('script')[0];
+        g.async = true;
+        g.src = u + 'matomo.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  </head>
+  <body>
+    <!-- MOBILE MENU START-->
+    <div class="hystmodal" id="jsMenuModal" aria-hidden="true">
+      <div class="hystmodal__wrap">
+        <div class="hystmodal__window mobmenu" role="dialog" aria-modal="true">
+          <button class="hystmodal__close" data-hystclose="">Close</button>
+          <div class="mobmenu__wrap">
+            <a class="mobmenu__logo" href="/"><img src="/img/logo.svg" alt="Logo" /></a>
+            <div class="mobmenu__menu">
+              <ul>
+                <li><a href="/docs/latest/">Quick Start</a></li>
+                <li><a href="/resources.html#learning">Learning resources</a></li>
+                <li><a href="/resources.html#training">Training and Courses</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/use-cases.html">Use Cases</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+                    <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+                    <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+                    <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+                    <li><a href="/use-cases/high-performance-computing.html">High Performance Computing</a></li>
+                    <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+                    <li><a href="/use-cases/spark-acceleration.html">Spark Acceleration</a></li>
+                    <li><a href="/use-cases/hadoop-acceleration.html">Hadoop Acceleration</a></li>
+                    <li><a href="/use-cases.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <span class="mobmenu__parent"><a href="/features/">Features</a><button class="mobmenu__opener"></button></span>
+                  <ul>
+                    <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+                    <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+                    <li><a href="/features/sql.html">Distributed SQL</a></li>
+                    <li><a href="/features/key-value-apis.html">Key-Value APIs</a></li>
+                    <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+                    <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+                    <li><a href="/features/service-apis.html">Services</a></li>
+                    <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+                    <li><a href="/features/streaming.html">Real-Time Streaming APIs</a></li>
+                    <li><a href="/docs/latest/messaging">Messaging</a></li>
+                    <li><a href="/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+                    <li><a href="/features/index.html">View All</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="/community.html">Community</a>
+                  <ul class="isdefault">
+                    <li><a href="/community.html">Project Info</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                  </ul>
+                </li>
+                <li><a href="/use-cases/provenusecases.html">Powered by</a></li>
+                <li><a href="/resources.html">Resources</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/docs/latest/">Docs</a></li>
+              </ul>
+              <a class="button mobmenu__button" href="/download.cgi">Download Ignite</a>
+            </div>
+            <!-- //mobmenu__menu-->
+          </div>
+          <!-- //mobmenu__wrap-->
+        </div>
+        <!-- //mobmenu-->
+      </div>
+    </div>
+    <!-- MOBILE MENU END-->
+    <header class="hdr hdr__white jsHdrBase">
+      <div class="jsHdrLine">
+        <div id="promotion-bar">
+          <a
+            href="https://ignite-summit.org/2025/?utm_medium=website-direct&amp;utm_source=apache_ignite&amp;utm_term=ignite-summit&amp;utm_content=event-hosted&amp;utm_campaign=2023-06-06-ignite-summit-nam"
+            target="_blank"
+            title="Ignite Summit 2025"
+            rel="noopener noreferrer"
+            >Ignite Summit 2025 — Watch on demand &nbsp;<span class="more d-none d-lg-block"><img src="/images/promos/arrow-white.svg" /></span
+          ></a>
+        </div>
+        <div class="hdr__wrap flexi">
+          <button class="hdr__burger" data-menumodal="#jsMenuModal"><img src="/img/menu.svg" alt="" /></button
+          ><a class="hdr__logo" href="/"><img class="hdr__logoimg hdr__logo--white" src="/img/logo-white.svg" alt="" /><img class="hdr__logoimg hdr__logo--black" src="/img/logo.svg" alt="" /></a
+          ><a class="button hdr__button" href="/download.cgi">Download Ignite</a>
+          <nav class="hdrmenu">
+            <ul class="flexi">
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/" data-panel="getStarted">Get Started</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/features" data-panel="features">Features</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/community.html" data-panel="community">Community</a></li>
+              <li><a href="/use-cases/provenusecases.html" data-panel="">Powered By</a></li>
+              <li class="js-hasdrop"><a class="hdrmenu--expanded" href="/resources.html" data-panel="resources">Resources</a></li>
+              <li><a href="///ignite.apache.org/docs/latest/" data-panel="">Docs</a></li>
+            </ul>
+          </nav>
+          <div class="dropmenu">
+            <div class="dropmenu__panel" data-menupanel="getStarted">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton" href="https://ignite.apache.org/docs/latest/"> <img src="/img/menu/icon-red-rocket.svg" alt="" /><span>Quick Start Guide</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <p class="capstext"><a class="dropmenu__capslink" href="/use-cases.html">USE CASES</a></p>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-cache.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Cache</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-data-grid.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Data Grid</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/in-memory-database.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>In-Memory Database</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/key-value-store.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Key-Value Store</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/high-performance-computing.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>High-Performance Computing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/digital-integration-hub.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Digital Integration Hub</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/spark-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Spark Acceleration</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/use-cases/hadoop-acceleration.html"><img src="/img/menu/icon-folder.svg" alt="" /><span>Hadoop Acceleration</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+              <div class="panelmorelinkwrap panelmorelinkwrap--end container"><a class="panellink" href="/use-cases.html">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="features">
+              <div class="container dropmenu2__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext">MULTI-TIER STORAGE</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/multi-tier-storage.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Multi-Tier Storage</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/arch/native-persistence.html"><img src="/img/menu/icon-db.svg" alt="" /><span>Native Persistence</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">ESSENTIAL Developer APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/sql.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Distributed SQL</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/key-value-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Key-Value APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/acid-transactions.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>ACID Transactions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">High-Performance <br />Computing APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/compute-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Compute APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/service-apis.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Services</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/machinelearning.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Machine Learning</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext">Real-Streaming APIs</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/features/streaming.html"><img src="/img/menu/icon-cube.svg" alt="" /><span>Real-Time Streaming APIs</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/messaging"><img src="/img/menu/icon-cube.svg" alt="" /><span>Messaging</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries"><img src="/img/menu/icon-cube.svg" alt="" /><span>Continuous Queries</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu2__grid-->
+              <div class="panelmorelinkwrap"><a class="panellink" href="/features/">View all</a></div>
+            </div>
+            <!-- /.dropmenu__panel-2-->
+            <div class="dropmenu__panel" data-menupanel="community">
+              <div class="container dropmenu3__grid">
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/community.html">Project Info</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#story"><img src="/img/menu/icon-clip.svg" alt="" /><span>Apache Ignite Story</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#community"><img src="/img/menu/icon-comment.svg" alt="" /><span>Meet The Community</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#contributing"><img src="/img/menu/icon-puzzle.svg" alt="" /><span>Start Contributing</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/community.html#faq"><img src="/img/menu/icon-question.svg" alt="" /><span>Ask Questions</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box">
+                  <div class="capstext"><a class="dropmenu__capslink" href="/events.html">Events</a></div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#summit"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Apache Ignite Summit</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#meetups"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Meetups</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box no-border">
+                  <div class="capstext">&nbsp;</div>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#upcoming"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Upcoming Events</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/events.html#past"><img src="/img/menu/icon-calendar.svg" alt="" /><span>Past Events</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu3__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+            <div class="dropmenu__panel" data-menupanel="resources">
+              <div class="container dropmenu1__grid">
+                <div class="dropmenu1__buttonwrap">&nbsp;</div>
+                <div class="dropmenu__box dropmenu__box--buttonin">
+                  <a class="dropmenu__redbutton blog" href="/blog/"><img src="/img/menu/icon-blog.svg" alt="" /><span>Blog</span></a>
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#technical"><span>Technical resources</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#learning"><span>Learning resources</span></a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="dropmenu__box blog">
+                  <ul class="dropmenu__menu">
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#training"><span>Training and Courses</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#book"><span>Apache Ignite Book</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/resources.html#mail"><span>Mailing Lists, Forums And Discussion Archives</span></a>
+                    </li>
+                    <li>
+                      <a class="dropmenu__iconitem" href="/faq.html"><span>FAQ</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- /.dropmenu1__grid-->
+            </div>
+            <!-- /.dropmenu__panel-->
+          </div>
+          <!-- /.dropmeu-->
+        </div>
+      </div>
+    </header>
+    <div class="dropmenu__back"></div>
+    <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
+    <div class="container blog">
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</h1>
+        <p>
+          December 23, 2025 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
+      <div class="blog__content">
+        <main class="blog_main">
+          <section class="blog__posts">
+            <article class="post">
+              <div>
+                <p>
+                  Your high-velocity application processes events fast enough until it doesn't. The bottleneck isn't CPU or memory. It's data movement. Every time event processing requires data from another node, network latency adds
+                  milliseconds that compound into seconds of delay under load.
+                </p>
+                <!-- end -->
+                <p>
+                  Consider a financial trading system processing peak loads of 10,000 trades per second. Each trade requires risk calculations against a customer's portfolio. If portfolio data lives on different nodes than the processing
+                  logic, network round-trips create an impossible performance equation: 10,000 trades × 2ms network latency = 20 seconds of network delay per second of wall clock time.
+                </p>
+                <p>Apache Ignite eliminates this constraint through data collocation. Related data and processing live on the same nodes, transforming distributed operations into local memory operations.</p>
+                <p><strong>The result: distributed system performance without distributed system overhead.</strong></p>
+                <br />
+                <h2>The Data Movement Tax on High-Velocity Applications</h2>
+                <h3>Network Latency Arithmetic</h3>
+                <p>At scale, network latency creates mathematical impossibilities:</p>
+                <p><strong>Here's what distributed processing costs in practice:</strong></p>
+                <pre><code>// Traditional distributed processing (data on different nodes)
+long startTime = System.nanoTime();
+// 1. Fetch event data (potentially remote: 0.5-2 ms)
+EventData event = eventService.getEvent(eventId);                       // Network: 0.5-2 ms
+// 2. Fetch related customer data (potentially remote: 0.5-2 ms)
+CustomerData customer = customerService.getCustomer(event.customerId);  // Network: 0.5-2 ms
+// 3. Fetch processing rules (potentially remote: 0.5-2 ms)
+ProcessingRules rules = rulesService.getRules(customer.segment);        // Network: 0.5-2 ms
+// 4. Execute processing logic (local: 0.1 ms)
+ProcessingResult result = processEvent(event, customer, rules);         // CPU: 0.1 ms
+// 5. Store results (potentially remote: 0.5-2 ms)
+resultService.storeResult(eventId, result);                             // Network: 0.5-2 ms
+long totalTime = System.nanoTime() - startTime;
+// Total: 2.6-10.1 ms per event (90%+ network overhead)
+</code></pre>
+                <p><strong>At Scale:</strong></p>
+                <ul>
+                  <li>1,000 events/sec × 5 ms average = 5 seconds processing time per second (impossible)</li>
+                  <li>10,000 events/sec × 5 ms average = 50 seconds processing time per second (catastrophic)</li>
+                </ul>
+                <h3>The Compound Effect of Distribution</h3>
+                <p>Real applications don't just move data once per event. They move data multiple times:</p>
+                <p><strong>Here's how the cascade effect compounds:</strong></p>
+                <pre><code>// Multi-hop data movement for single order
+OrderEvent order = getOrder(orderId);                                    // Network hop 1: 1 ms
+CustomerData customer = getCustomer(order.customerId);                   // Network hop 2: 1 ms
+InventoryData inventory = getInventory(order.productId);                 // Network hop 3: 1 ms
+PricingData pricing = getPricing(order.productId, customer.segment);     // Network hop 4: 1 ms
+PaymentData payment = processPayment(order.amount, customer.paymentId);  // Network hop 5: 2 ms
+ShippingData shipping = calculateShipping(order, customer.address);      // Network hop 6: 1 ms
+PromotionData promotions = applyPromotions(order, customer);             // Network hop 7: 1 ms
+// Total network overhead: 8ms per order (before any business logic)
+</code></pre>
+                <p><strong>The cascade effect</strong>: Each data dependency creates another network round-trip. Complex event processing can require 10+ network operations per event.</p>
+                <br />
+                <h2>Strategic Data Placement Through collocation</h2>
+                <h3>Apache Ignite collocation Architecture</h3>
+                <p>
+                  Apache Ignite uses deterministic hash distribution to ensure related data lands on the same nodes. The platform automatically generates consistent hash values for collocation keys, ensuring all data with the same
+                  collocation key always lands on the same node. This deterministic placement means that once data is collocated, subsequent access patterns benefit from data locality without manual coordination.
+                </p>
+                <h3>Table Design for Event Processing collocation</h3>
+                <pre><code>-- Create distribution zone for customer-based collocation
+CREATE ZONE customer_zone WITH
+    partitions=64,
+    replicas=3;
+-- Orders table using customer-based distribution zone
+CREATE TABLE orders (
+    order_id BIGINT PRIMARY KEY,
+    customer_id BIGINT,
+    product_id BIGINT,
+    amount DECIMAL(10,2),
+    order_date TIMESTAMP
+) WITH ZONE='customer_zone';
+-- Customer data using same distribution zone for collocation
+CREATE TABLE customers (
+    customer_id BIGINT PRIMARY KEY,
+    name VARCHAR(100),
+    segment VARCHAR(20),
+    payment_method VARCHAR(50)
+) WITH ZONE='customer_zone';
+-- Customer pricing using same zone for collocation
+CREATE TABLE customer_pricing (
+    customer_id BIGINT,
+    product_id BIGINT,
+    price DECIMAL(10,2),
+    discount_rate DECIMAL(5,2),
+    PRIMARY KEY (customer_id, product_id)
+) WITH ZONE='customer_zone';
+</code></pre>
+                <p>
+                  <strong>Result</strong>: All tables using the same distribution zone share the same partitioning strategy. Data for customer 12345 distributes to the same partition across all tables, enabling local processing without
+                  network communication.
+                </p>
+                <h3>Compute collocation for Event Processing</h3>
+                <p><strong>Processing Moves to Where Data Lives:</strong></p>
+                <p>
+                  Instead of moving data to processing logic, compute jobs execute on the nodes where related data already exists. For customer order processing, the compute job runs on the node containing the customer's data, orders, and
+                  pricing information. All data access becomes local memory operations rather than network calls.
+                </p>
+                <p><strong>Simple collocation Example:</strong></p>
+                <pre><code>// Execute processing where customer data lives
+Tuple customerKey = Tuple.create().set("customer_id", customerId);
+CompletableFuture&lt;OrderResult&gt future = client.compute().executeAsync(
+    JobTarget.colocated("customers", customerKey),  // Run on node with customer data
+    OrderProcessingJob.class,
+    customerId
+);
+</code></pre>
+                <p><strong>Performance Impact</strong>: 8ms distributed processing becomes sub-millisecond collocated processing through data locality.</p>
+                <br />
+                <h2>Real-World collocation Performance Impact</h2>
+                <h3>Financial Risk Calculation Example</h3>
+                <p><strong>Problem</strong>: Trading system needs real-time portfolio risk calculation for each trade.</p>
+                <p><strong>Here's what the distributed approach costs:</strong></p>
+                <p>
+                  Traditional risk calculations require multiple network calls: fetch trade details (1ms), retrieve portfolio data (2ms), get current market prices (1ms), and load risk rules (1ms). The actual risk calculation takes 0.2ms,
+                  but network overhead dominates at 5.2ms total. At 10,000 trades per second, this creates 52 seconds of processing time per second. This is mathematically impossible.
+                </p>
+                <p><strong>collocated Risk Processing:</strong></p>
+                <p>
+                  When account portfolios, trade histories, and risk rules collocate by account ID, risk calculations become local operations. All required data lives on the same node where the processing executes. Network overhead
+                  disappears, transforming 5.2ms distributed operations into sub-millisecond local calculations.
+                </p>
+                <p><strong>Business Impact:</strong></p>
+                <ul>
+                  <li><strong>Trading velocity</strong>: Process 10,000+ trades per second with real-time risk assessment</li>
+                  <li><strong>Risk accuracy</strong>: Use complete portfolio context without stale data</li>
+                  <li><strong>Regulatory compliance</strong>: Meet sub-second risk calculation requirements</li>
+                </ul>
+                <h3>IoT Event Processing Example</h3>
+                <p><strong>Problem</strong>: Manufacturing system processes sensor events requiring contextual data for anomaly detection.</p>
+                <p><strong>collocated Design</strong>:</p>
+                <pre><code>-- Create distribution zone for equipment-based collocation
+CREATE ZONE equipment_zone WITH
+    partitions=32,
+    replicas=2;
+-- Sensor data using equipment-based distribution zone
+CREATE TABLE sensor_readings (
+    sensor_id BIGINT,
+    equipment_id BIGINT,
+    timestamp TIMESTAMP,
+    temperature DECIMAL(5,2),
+    pressure DECIMAL(8,2),
+    vibration DECIMAL(6,3),
+    PRIMARY KEY (sensor_id, timestamp)
+) WITH ZONE='equipment_zone';
+-- Equipment specifications using same zone for collocation
+CREATE TABLE equipment_specs (
+    equipment_id BIGINT PRIMARY KEY,
+    max_temperature DECIMAL(5,2),
+    max_pressure DECIMAL(8,2),
+    max_vibration DECIMAL(6,3),
+    maintenance_schedule VARCHAR(50)
+) WITH ZONE='equipment_zone';
+</code></pre>
+                <p><strong>Processing Performance:</strong></p>
+                <p>
+                  Anomaly detection jobs execute on the nodes containing the equipment data they analyze. Current sensor readings, historical patterns, and equipment specifications all reside locally. The processing accesses recent sensor
+                  data, compares against equipment tolerances, and detects anomalies without any network calls.
+                </p>
+                <p>
+                  <strong>Performance Outcome</strong>: Sub-millisecond anomaly detection vs multi-millisecond distributed processing. Single cluster processes tens of thousands of sensor readings per second with real-time anomaly
+                  detection.
+                </p>
+                <br />
+                <h2>collocation Strategy Selection</h2>
+                <h3>Event-Driven collocation Patterns</h3>
+                <p><strong>Customer-Centric Applications</strong>:</p>
+                <pre><code>-- Customer-focused distribution zone
+CREATE ZONE customer_zone WITH partitions=64;
+CREATE TABLE orders (...) WITH ZONE='customer_zone';
+</code></pre>
+                <ul>
+                  <li>Orders, payments, preferences, history distributed by customer key</li>
+                  <li>Customer service queries access data from same partition</li>
+                  <li>Personalization engines process complete customer context locally</li>
+                </ul>
+                <p><strong>Time-Series Event Processing</strong>:</p>
+                <pre><code>-- Time-based distribution zone
+CREATE ZONE hourly_zone WITH partitions=24;
+CREATE TABLE events (...) WITH ZONE='hourly_zone';
+</code></pre>
+                <ul>
+                  <li>Recent events distribute based on time windows</li>
+                  <li>Historical analysis accesses time-coherent partitions</li>
+                  <li>Event correlation happens without cross-node communication</li>
+                </ul>
+                <p><strong>Geographic Distribution</strong>:</p>
+                <pre><code>-- Region-based distribution zone
+CREATE ZONE regional_zone WITH partitions=16;
+CREATE TABLE locations (...) WITH ZONE='regional_zone';
+</code></pre>
+                <ul>
+                  <li>Regional data partitions to regional node groups</li>
+                  <li>Location-aware services access local partition data</li>
+                  <li>Geographic analytics minimize cross-region data movement</li>
+                </ul>
+                <h3>Automatic Query Optimization Through collocation</h3>
+                <p><strong>When related data lives together, query performance transforms:</strong></p>
+                <pre><code>-- Before collocation: expensive cross-node JOINs
+SELECT c.name, o.order_total, p.amount
+FROM customers c
+  JOIN orders o ON c.customer_id = o.customer_id
+  JOIN payments p ON o.order_id = p.order_id
+WHERE c.customer_id = 12345;
+-- Network overhead: 3 tables × potential cross-node fetches = high latency
+-- After collocation: local memory JOINs
+-- Same query, but all customer 12345 data lives on same node
+-- Result: JOIN operations become local memory operations
+</code></pre>
+                <p><strong>Complex Analytics Become Local Operations:</strong></p>
+                <pre><code>// Complex analytical query becomes local operation
+ResultSet&lt;SqlRow&gt; customerAnalysis = client.sql().execute(tx, """
+    SELECT
+        c.segment,
+        COUNT(o.order_id) as order_count,
+        SUM(o.amount) as total_spent,
+        AVG(p.processing_time) as avg_payment_time
+    FROM customers c
+      JOIN orders o ON c.customer_id = o.customer_id
+      JOIN payments p ON o.order_id = p.order_id
+    WHERE c.registration_date >= ?
+    GROUP BY c.segment
+    HAVING total_spent > 10000
+""", lastMonth);
+// When all three tables share the same distribution zone:
+// - Multi-table JOINs execute locally per partition
+// - No network overhead for related data access
+// - Query performance scales with CPU, not network bandwidth
+</code></pre>
+                <p><strong>Query Performance Transformation:</strong></p>
+                <ul>
+                  <li><strong>JOIN operations</strong>: Cross-node network calls → local memory operations</li>
+                  <li><strong>Complex analytics</strong>: Network-bound → CPU-bound (much faster)</li>
+                  <li><strong>Query planning</strong>: Distributed execution → local partition execution</li>
+                  <li><strong>Performance scaling</strong>: Limited by network → limited by CPU/memory</li>
+                </ul>
+                <p>
+                  <strong>The performance transformation</strong>: Query optimization through data placement. When related data lives together, complex queries become simple local operations, fundamentally changing performance
+                  characteristics.
+                </p>
+                <h3>Performance Validation</h3>
+                <p><strong>collocation Effectiveness Monitoring:</strong></p>
+                <p>
+                  Apache Ignite provides built-in metrics to monitor collocation effectiveness: query response times, network traffic patterns, and CPU utilization versus network wait time. Effective collocation strategies achieve specific
+                  performance indicators that demonstrate data locality success.
+                </p>
+                <p><strong>Success Indicators:</strong></p>
+                <ul>
+                  <li><strong>Local execution</strong>: >95% of queries execute locally without network hops</li>
+                  <li><strong>Memory-speed access</strong>: Average query latency <1 ms for collocated data</li>
+                  <li><strong>CPU utilization</strong>: >80% processing time versus network waiting</li>
+                  <li><strong>Predictable performance</strong>: Consistent response times independent of cluster size</li>
+                </ul>
+                <br />
+                <h2>The Business Impact of Eliminating Data Movement</h2>
+                <h3>Cost Reduction</h3>
+                <ul>
+                  <li><strong>Network Infrastructure</strong>: 10x reduction in inter-node bandwidth requirements</li>
+                  <li><strong>Hardware Efficiency</strong>: Higher CPU/memory utilization vs network-bound systems</li>
+                  <li><strong>Operational Complexity</strong>: Fewer moving parts in event processing pipelines</li>
+                </ul>
+                <h3>Performance Gains</h3>
+                <ul>
+                  <li><strong>Response Time</strong>: 10-50x improvement in event processing latency</li>
+                  <li><strong>Throughput</strong>: 5-10x higher event processing capacity with same hardware</li>
+                  <li><strong>Predictability</strong>: Consistent performance independent of network conditions</li>
+                </ul>
+                <h3>Application Capabilities</h3>
+                <ul>
+                  <li><strong>Real-Time Analytics</strong>: Sub-millisecond analytics on live transactional event streams</li>
+                  <li><strong>Complex Event Processing</strong>: Multi-step event processing without coordination overhead</li>
+                  <li><strong>Interactive Applications</strong>: User-facing features with database-backed logic at cache speeds</li>
+                </ul>
+                <br />
+                <h2>The Architectural Evolution</h2>
+                <p>Traditional distributed systems accept network overhead as inevitable. Apache Ignite eliminates it through intelligent data placement.</p>
+                <p>
+                  Your high-velocity application doesn't need to choose between distributed scale and local performance. collocation provides both: the data capacity and fault tolerance of distributed systems with the performance
+                  characteristics of single-node processing.
+                </p>
+                <p><strong>The principle</strong>: collocate related data, localize dependent processing.</p>
+                <p>
+                  Every network hop you eliminate returns performance to your application's processing budget. At high event volumes, those performance gains determine whether your architecture scales with your business success or becomes
+                  the constraint that limits it.
+                </p>
+                <br />
+                <p>
+                  <em
+                    >Return next Tuesday for Part 6 to discover how distributed consensus maintains data consistency during high-frequency operations. We'll explore how to preserve the performance gains from collocation while ensuring your
+                    high-velocity applications remain both fast and reliable.</em
+                  >
+                </p>
+              </div>
+            </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/apache">apache</a></li>
+                <li><a href="/blog/ignite">ignite</a></li>
+              </ul>
+            </section>
+          </section>
+        </main>
+        <aside class="blog__sidebar">
+          <ul>
+            <li><a href="/blog/apache">apache</a></li>
+            <li><a href="/blog/ignite">ignite</a></li>
+            <li><a href="/blog/release">release</a></li>
+            <li><a href="/blog/database">database</a></li>
+            <li><a href="/blog/in">in</a></li>
+            <li><a href="/blog/memory">memory</a></li>
+            <li><a href="/blog/open">open</a></li>
+            <li><a href="/blog/source">source</a></li>
+            <li><a href="/blog/.NET">.NET</a></li>
+            <li><a href="/blog/security">security</a></li>
+            <li><a href="/blog/Intel">Intel</a></li>
+            <li><a href="/blog/CET">CET</a></li>
+            <li><a href="/blog/linq">linq</a></li>
+            <li><a href="/blog/SQL">SQL</a></li>
+            <li><a href="/blog/performance">performance</a></li>
+            <li><a href="/blog/csharp">csharp</a></li>
+            <li><a href="/blog/in-memory">in-memory</a></li>
+            <li><a href="/blog/open-source">open-source</a></li>
+            <li><a href="/blog/log4j2">log4j2</a></li>
+            <li><a href="/blog/bigdata">bigdata</a></li>
+            <li><a href="/blog/computing">computing</a></li>
+            <li><a href="/blog/two">two</a></li>
+            <li><a href="/blog/learning">learning</a></li>
+            <li><a href="/blog/machine">machine</a></li>
+            <li><a href="/blog/spark">spark</a></li>
+            <li><a href="/blog/sql">sql</a></li>
+            <li><a href="/blog/data">data</a></li>
+            <li><a href="/blog/fast">fast</a></li>
+            <li><a href="/blog/nodal">nodal</a></li>
+            <li><a href="/blog/meltdown">meltdown</a></li>
+            <li><a href="/blog/spectre">spectre</a></li>
+            <li><a href="/blog/key-value">key-value</a></li>
+            <li><a href="/blog/store">store</a></li>
+            <li><a href="/blog/meetup">meetup</a></li>
+            <li><a href="/blog/biodata">biodata</a></li>
+            <li><a href="/blog/rdbms">rdbms</a></li>
+            <li><a href="/blog/grid">grid</a></li>
+            <li><a href="/blog/imdb">imdb</a></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container footer__top">
+        <section class="footer1">
+          <a class="footer__title" href="/features/">Features</a>
+          <ul class="footer__menu">
+            <li><a href="/arch/multi-tier-storage.html">Multi-Tier Storage</a></li>
+            <li><a href="/arch/native-persistence.html">Native Persistence</a></li>
+            <li><a href="/features/sql.html">Distributed SQL</a></li>
+            <li><a href="/features/acid-transactions.html">ACID Transactions</a></li>
+            <li><a href="/features/key-value-apis.html">Key Value APIs</a></li>
+            <li><a href="/features/compute-apis.html">Compute APIs</a></li>
+            <li><a href="/features/machinelearning.html">Machine Learning</a></li>
+            <li><a href="/features/service-apis.html">Services</a></li>
+            <li><a href="/features/streaming.html">Real-Streaming APIs</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/key-value-api/continuous-queries">Continuous Queries</a></li>
+            <li><a href="https://ignite.apache.org/docs/latest/messaging">Messaging</a></li>
+          </ul>
+        </section>
+        <section class="footer2">
+          <a class="footer__title" href="/use-cases/">Use Cases</a>
+          <ul class="footer__menu">
+            <li><a href="/use-cases/in-memory-cache.html">In-Memory Cache</a></li>
+            <li><a href="/use-cases/in-memory-data-grid.html">In-Memory Data Grid</a></li>
+            <li><a href="/use-cases/in-memory-database.html">In-Memory Database</a></li>
+            <li><a href="/use-cases/high-performance-computing.html">High-Performance Computing</a></li>
+            <li><a href="/use-cases/digital-integration-hub.html">Digital Integration Hub</a></li>
+            <li><a href="/use-cases/key-value-store.html">Key-Value Store</a></li>
+            <li><a href="/use-cases/spark-acceleration.html">Apache Spark Acceleration</a></li>
+            <li><a href="/use-cases/hadoop-acceleration.html">Apache Hadoop Acceleration</a></li>
+          </ul>
+        </section>
+        <section class="footer3"><a class="footer__title" href="/our-community.html">Community</a><a class="footer__title" href="/resources.html">Resources</a><a class="footer__title" href="/events.html">Events</a></section>
+        <section class="footer4">
+          <div class="footer4__item">Join Our <a href="mailto:dev@ignite.apache.org">Dev Mailing List</a></div>
+          <div class="footer4__item pt-2">Or write your question</div>
+          <div class="footer4__item pt-1">user@ignite.apache.org</div>
+          <div class="footer4__item pt-5">Follow Us:</div>
+          <div class="footer4__socwrap flexi pt-2">
+            <a class="footer4__soc" href="https://github.com/apache/ignite" target="_blank"><img src="/img/icon-github.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.linkedin.com/showcase/apache-ignite/" target="_blank"><img src="/img/icon-linkedin.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://twitter.com/apacheignite" target="_blank"><img src="/img/icon-twitter.svg" alt="" /></a
+            ><a class="footer4__soc" href="https://www.meetup.com/Apache-Ignite-Virtual-Meetup/" target="_blank"><img src="/img/icon-meetup-black.png" alt="" /></a>
+          </div>
+          <a class="footer4__button button" href="https://ignite.apache.org/docs/latest/index">Start Using Apache Ignite </a>
+        </section>
+      </div>
+      <div class="container footer__bot">
+        <p>© 2015 - 2024 <a href="http://www.apache.org/">The Apache Software Foundation.</a></p>
+        <p class="pt-1x">Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation</p>
+        <p class="pt-1x"><a href="http://apache.org/foundation/policies/privacy.html">Privacy Policy</a></p>
+      </div>
+    </footer>
+    <a class="scrollTop" href="#"
+      ><svg class="feather feather-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline></svg
+    ></a>
+    <script src="/js/vendor/hystmodal/hystmodal.min.js"></script>
+    <script src="/js/vendor/smoothscroll.js"></script>
+    <script src="/js/vendor/mermaid/mermaid.min.js"></script>
+    <script src="/js/main.js?ver=0.9"></script>
+  </body>
+</html>

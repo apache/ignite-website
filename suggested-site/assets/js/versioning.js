@@ -3,7 +3,11 @@ function initVersioning() {
     if (!dropdown) return;
 
     const currentPath = document.location.pathname;
+<<<<<<< HEAD
     const isIgnite3 = currentPath.indexOf("/docs/ignite3/") !== -1;
+=======
+    const isIgnite3 = currentPath.indexOf("/suggested-site/docs/ignite3/") !== -1;
+>>>>>>> origin/master
     const versionsFile = isIgnite3
       ? '/docs/ignite3/available-versions.txt'
       : '/docs/ignite2/available-versions.txt';
