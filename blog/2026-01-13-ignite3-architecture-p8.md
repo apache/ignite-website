@@ -2,7 +2,7 @@
 title: "The Business Case for Architectural Evolution: Platform Consolidation Benefits"
 authors: [maglietti]
 date: 2026-01-13
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 8 — The Business Case for Architectural Evolution: Platform Consolidation Benefits

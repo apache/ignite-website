@@ -2,7 +2,7 @@
 title: "Eliminating Data Movement: The Hidden Cost of Distributed Event Processing"
 authors: [maglietti]
 date: 2025-12-23
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 5 — Eliminating Data Movement: The Hidden Cost of Distributed Event Processing

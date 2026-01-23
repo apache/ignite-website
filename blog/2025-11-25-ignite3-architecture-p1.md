@@ -2,7 +2,7 @@
 title: "When Multi-System Complexity Compounds at Scale"
 authors: [maglietti]
 date: 2025-11-26
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 1 — When Multi-System Complexity Compounds at Scale

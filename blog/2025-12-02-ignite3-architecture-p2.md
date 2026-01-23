@@ -2,7 +2,7 @@
 title: "Memory-First Architecture: The Foundation for High-Velocity Event Processing"
 authors: [maglietti]
 date: 2025-12-03
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 2 — Memory-First Architecture: The Foundation for High-Velocity Event Processing

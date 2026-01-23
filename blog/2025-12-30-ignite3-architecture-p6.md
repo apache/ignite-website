@@ -2,7 +2,7 @@
 title: "Distributed Consistency Under Load: When High-Velocity Meets High-Availability"
 authors: [maglietti]
 date: 2025-12-30
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 6 — Distributed Consistency Under Load: When High-Velocity Meets High-Availability

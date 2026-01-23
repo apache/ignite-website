@@ -2,7 +2,7 @@
 title: "Integrated Platform Performance: Maintaining Speed Under Pressure"
 authors: [maglietti]
 date: 2025-12-16
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 4 — Integrated Platform Performance: Maintaining Speed Under Pressure

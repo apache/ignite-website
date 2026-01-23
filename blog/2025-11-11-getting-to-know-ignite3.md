@@ -2,7 +2,7 @@
 title: "Getting to Know Apache Ignite 3"
 authors: [maglietti]
 date: 2025-11-12
-tags: [technical, ignite, ignite3, featured]
+tags: [technical, ignite3, featured]
 ---
 
 # Getting to Know Apache Ignite 3: A Schema-Driven Distributed Computing Platform

@@ -2,7 +2,7 @@
 title: "MVCC Transactions for High-Frequency Processing: ACID at Scale"
 authors: [maglietti]
 date: 2026-01-06
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 7 — MVCC Transactions for High-Frequency Processing: ACID at Scale

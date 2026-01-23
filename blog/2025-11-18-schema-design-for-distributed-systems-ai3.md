@@ -2,7 +2,7 @@
 title: "Schema Design for Distributed Systems: Why Data Placement Matters"
 authors: [maglietti]
 date: 2025-11-19
-tags: [technical, ignite, ignite3]
+tags: [technical, ignite3]
 ---
 
 # Schema Design for Distributed Systems: Why Data Placement Matters

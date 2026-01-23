@@ -2,7 +2,7 @@
 title: "Schema Evolution Under Operational Pressure: When Downtime Isn't an Option"
 authors: [maglietti]
 date: 2025-12-10
-tags: [architecture, technical, ignite, ignite3]
+tags: [architecture, technical, ignite3]
 ---
 
 # Apache Ignite 3 Architecture Series: Part 3 — Schema Evolution Under Operational Pressure: When Downtime Isn't an Option
