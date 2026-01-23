@@ -88,6 +88,8 @@ The `@Column` annotation comes from `org.apache.ignite.catalog.annotations`. The
 
 When you call `automap()` on a `MapperBuilder`, it scans your class for fields. For each field, it checks for a `@Column` annotation and uses that value as the column name. If there's no annotation, it falls back to the field name, normalized to uppercase. Fields you've already mapped explicitly with `map()` are skipped.
 
+The scanning finds only fields declared directly in your class. If your POJO extends a parent class, inherited fields won't be discovered, even if they have `@Column` annotations. The same applies to `createTable(Class)`. For shared fields across multiple tables, define them in each class or use composition.
+
 This means you can mix approaches when you need to. Use annotations for most fields and explicit mapping for edge cases that require type conversion:
 
 ```java
@@ -100,29 +102,61 @@ Mapper<Event> mapper = Mapper.builder(Event.class)
 
 The explicit `map()` handles the field that needs special treatment. The `automap()` handles everything else based on your annotations.
 
+The relationship between these components looks like this:
+
+```mermaid
+graph TB
+    ANN["@Column Annotations"]
+
+    subgraph CAT["Catalog API - Schema"]
+        OPT1["@Table/@Zone/@Index on POJO"]
+        OPT2[SQL DDL]
+        OPT3[Java Catalog DSL]
+    end
+
+    subgraph MAP["Mapper API - Data Mapping"]
+        OPT4["automap() reads @Column"]
+        OPT5["Explicit map() no annotations"]
+    end
+
+    ANN -.Shared by.-> OPT1
+    ANN -.Shared by.-> OPT4
+
+    OPT1 --> SCHEMA[Table Schema]
+    OPT2 --> SCHEMA
+    OPT3 --> SCHEMA
+
+    OPT4 --> MAPPING[Runtime Mapping]
+    OPT5 --> MAPPING
+
+    SCHEMA -.Work Together.-> MAPPING
+```
+
+The `@Column` annotation bridges both APIs, and each API has alternatives. You can define schema with SQL DDL and still use `automap()` for mapping. You can create tables from annotations and still use explicit `map()` calls. The APIs work together but remain independent.
+
 ## The Full Annotation Set
 
 Now that you understand how `automap()` reads `@Column`, here's the full toolkit. The `catalog.annotations` package includes more than just `@Column`. If you want to define your entire schema from Java classes, you have the tools:
 
-| Annotation | Purpose |
-|------------|---------|
-| `@Table` | Table name, zone, indexes, colocation |
-| `@Column` | Column name and properties |
-| `@Id` | Primary key field |
-| `@Index` | Secondary index |
-| `@ColumnRef` | Column reference for indexes |
-| `@Zone` | Distribution zone configuration |
+| Annotation   | Purpose                               |
+| ------------ | ------------------------------------- |
+| `@Table`     | Table name, zone, indexes, colocation |
+| `@Column`    | Column name and properties            |
+| `@Id`        | Primary key field                     |
+| `@Index`     | Secondary index                       |
+| `@ColumnRef` | Column reference for indexes          |
+| `@Zone`      | Distribution zone configuration       |
 
 You can use these annotations to generate your schema instead of writing SQL. Or you can use just `@Column` to help your mappers while managing schema separately. The packages support both workflows.
 
 The `table.mapper` package provides the runtime side:
 
-| Component | Purpose |
-|-----------|---------|
-| `Mapper.of()` | Factory for standard mappings |
-| `MapperBuilder` | Fluent API for custom mappings |
-| `TypeConverter` | Type transformation |
-| `automap()` | Automatic mapping using annotations |
+| Component       | Purpose                             |
+| --------------- | ----------------------------------- |
+| `Mapper.of()`   | Factory for standard mappings       |
+| `MapperBuilder` | Fluent API for custom mappings      |
+| `TypeConverter` | Type transformation                 |
+| `automap()`     | Automatic mapping using annotations |
 
 ## Complete Example
 
@@ -184,15 +218,38 @@ Order retrieved = orders.get(null, order);  // Key fields identify the record
 
 The annotations you wrote for schema creation also drive the runtime mappings. One class, one definition, used everywhere.
 
+## Beyond Annotations
+
+The examples use annotations for both schema definition (`@Table`, `@Zone`, `@Index`) and data mapping (`@Column`). This is the simplest approach when you control both schema and code, but both APIs can also work independently.
+
+**Alternative schema definition:**
+
+- Use SQL DDL instead of `catalog.createTable(Class)` if your schema already exists or your team prefers SQL
+- Use the Java Catalog DSL for programmatic schema creation without annotations
+- These approaches support schema evolution with `ALTER TABLE` operations
+
+**Alternative data mapping:**
+
+- Use `Mapper.builder().map("field", "COLUMN")` for explicit control without annotations
+- Mix explicit mapping with `automap()` for type conversions or special cases
+- Create custom `Mapper` implementations for advanced scenarios
+- The mapper works regardless of how you created the table
+
+**Schema evolution consideration:**
+
+Annotations provide convenience for the create-once pattern. The `createTable(Class)` method generates schema from your POJO, but it doesn't support altering existing tables. If your application needs to evolve the schema over time, define your tables with SQL DDL. You can still use `@Column` annotations on your POJOs for mapping, even if the table was created with DDL.
+
+The key is that annotations bridge the two APIs when you want them to, but you're not locked into using them for both. Pick the approach that fits your workflow.
+
 ## Summary
 
-| Want to... | Use this |
-|------------|----------|
-| Define column name for a field | `@Column("COLUMN_NAME")` |
-| Map fields automatically | `Mapper.builder(Class).automap().build()` |
-| Map a specific field manually | `.map("fieldName", "COLUMN_NAME")` |
-| Convert types during mapping | `.map("field", "COLUMN", new TypeConverter())` |
-| Create table from annotations | `client.catalog().createTable(Order.class)` |
+| Want to...                     | Use this                                       |
+| ------------------------------ | ---------------------------------------------- |
+| Define column name for a field | `@Column("COLUMN_NAME")`                       |
+| Map fields automatically       | `Mapper.builder(Class).automap().build()`      |
+| Map a specific field manually  | `.map("fieldName", "COLUMN_NAME")`             |
+| Convert types during mapping   | `.map("field", "COLUMN", new TypeConverter())` |
+| Create table from annotations  | `client.catalog().createTable(Order.class)`    |
 
 Database conventions and Java conventions don't naturally align, and Ignite's identifier normalization adds another consideration. The `catalog.annotations` package lets you declare the mapping at the source, right on your fields. The `table.mapper` package reads those declarations through `automap()`, turning what could be scattered configuration into a single point of truth.
 
