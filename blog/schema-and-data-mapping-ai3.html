@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Entries tagged [apache]</title>
-    <meta property="og:title" content="Entries tagged [apache]" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>Schema and Data Mapping in Apache Ignite 3</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Matomo -->
@@ -337,176 +332,332 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Entries tagged [apache]</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Schema and Data Mapping in Apache Ignite 3</h1>
+        <p>
+          January 27, 2026 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Schema and Data Mapping in Apache Ignite 3%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-8.html">Part 8 of 8: Apache Ignite 3 Architecture Series - The Business Case for Architectural Evolution: Platform Consolidation Benefits</a></h2>
-                <div>
-                  January 13, 2026 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-8.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Part 8 of 8: Apache Ignite 3 Architecture Series - The Business Case for Architectural Evolution: Platform Consolidation Benefits%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-8.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
+              <div>
                 <p>
-                  Your high-velocity application's architectural decisions directly impact business metrics. Response times affect customer satisfaction. System complexity drives operational overhead. Development velocity determines
-                  competitive advantage. When architecture limits business outcomes, evolution isn't a technical choice. It's a business necessity.
+                  Your schema came from somewhere. Maybe SQL scripts, maybe another developer, maybe your own DDL. Your application uses <code>Mapper.of()</code> for data access, and the workflow is functional. But if your POJO field names
+                  don't exactly match your column names, you're writing <code>map()</code> calls to bridge them, and that can start to feel heavy.
+                </p>
+                <!-- end -->
+                <h2>Schema and Data Mapping in Apache Ignite 3</h2>
+                <br />
+                <p>When you use <code>automap()</code> from the <code>table.mapper</code> package, it reads those annotations and builds the mappings for you.</p>
+                <p>Learn how these packages work together, and your future self will thank you.</p>
+                <br />
+                <h2>Connecting Schema to Code</h2>
+                <br />
+                <p>
+                  Database columns typically use names like <code>order_date</code>. Java fields typically use names like <code>orderDate</code>. When Ignite normalizes these to uppercase, the SQL column becomes
+                  <code>ORDER_DATE</code> while the Java field becomes <code>ORDERDATE</code>. Different strings that don't map.
+                </p>
+                <p>The <code>catalog.annotations</code> package gives you a way to declare mappings in your POJO:</p>
+                <pre><code class="java">// @Column declares the column mapping at the source
+public class Order {
+    @Id
+    @Column("ORDER_ID")
+    Integer orderId;
+    @Column("CUSTOMER_ID")
+    String customerId;
+    @Column("ORDER_DATE")
+    LocalDate orderDate;
+    @Column("TOTAL_AMOUNT")
+    BigDecimal totalAmount;
+    @Column("STATUS")
+    String status;
+}
+</code></pre>
+                <p>Each <code>@Column</code> annotation tells Ignite exactly which column the field maps to. The annotation value goes through the same normalization as SQL identifiers, so everything lines up.</p>
+                <p>Now your mapper call becomes straightforward:</p>
+                <pre><code class="java">// automap() reads @Column annotations and builds mappings automatically
+Mapper&lt;Order&gt mapper = Mapper.builder(Order.class)
+    .automap()
+    .build();
+</code></pre>
+                <p>
+                  The <code>automap()</code> method scans your class, finds the annotations, and builds the mappings. You annotate the POJO once. Every developer who writes a service or batch job using that class gets the mapping without
+                  thinking about it. The SRE debugging at 2am can read the class and understand the schema.
+                </p>
+                <p>
+                  If you built your schema with SQL, this approach still works. Add <code>@Column</code> annotations to your POJO fields, and <code>automap()</code> handles the mapping. Your schema stays in SQL. Your mappings stay visible
+                  in your code.
+                </p>
+                <p>
+                  If you want to go further, the <code>catalog.annotations</code> package lets you define your entire schema in Java. Annotations like <code>@Table</code>, <code>@Zone</code>, and <code>@Index</code> replace your DDL scripts
+                  with compile-time-checked code. The POJO becomes the single source of truth for both schema and mapping. That's a topic for another post, but worth exploring if you prefer keeping schema close to your application code.
+                </p>
+                <br />
+                <h2>Why This Matters</h2>
+                <br />
+                <p>When the mapping lives on the field, you get benefits that compound over time.</p>
+                <p>
+                  Your IDE becomes more helpful. The <code>@Column</code> annotation uses <code>@Retention(RUNTIME)</code>, so IntelliJ sees it and can provide context. Hover over a field to see the column name. Use Find Usages to trace
+                  references. Refactor with confidence because the annotation moves with the field.
+                </p>
+                <p>
+                  Future you can quickly jump back into the code. When you return to this class in six months, the column name is right there on the field. No hunting through mapper files. No tracing string literals across your codebase.
+                  The mapping is visible where you're already looking.
+                </p>
+                <p>The alternative is explicit <code>map()</code> calls scattered through your mapper code:</p>
+                <pre><code class="java">// Explicit mapping: column names scattered in mapper code, far from fields
+Mapper&lt;Order&gt mapper = Mapper.builder(Order.class)
+    .map("orderId", "ORDER_ID")
+    .map("customerId", "CUSTOMER_ID")
+    .map("orderDate", "ORDER_DATE")
+    .map("totalAmount", "TOTAL_AMOUNT")
+    .map("status", "STATUS")
+    .build();
+</code></pre>
+                <p>This works, and sometimes it's the right choice. But the column names live far from the fields they describe, which makes the code harder to maintain and gives your IDE less to work with.</p>
+                <br />
+                <h2>The Packages Work Together</h2>
+                <br />
+                <p>
+                  The <code>@Column</code> annotation comes from <code>org.apache.ignite.catalog.annotations</code>. The <code>automap()</code> method comes from <code>org.apache.ignite.table.mapper</code>. These are separate packages with
+                  separate purposes, but they were designed to complement each other.
+                </p>
+                <p>
+                  When you call <code>automap()</code> on a <code>MapperBuilder</code>, it scans your class for fields. For each field, it checks for a <code>@Column</code> annotation and uses that value as the column name. If there's no
+                  annotation, it falls back to the field name, normalized to uppercase. Fields you've already mapped explicitly with <code>map()</code> are skipped.
+                </p>
+                <p>
+                  The scanning finds only fields declared directly in your class. If your POJO extends a parent class, inherited fields won't be discovered, even if they have <code>@Column</code> annotations. The same applies to
+                  <code>createTable(Class)</code>. For shared fields across multiple tables, define them in each class or use composition.
+                </p>
+                <p>This means you can mix approaches when you need to. Use annotations for most fields and explicit mapping for edge cases that require type conversion:</p>
+                <pre><code class="java">// Mix explicit mapping for type conversion with automap() for everything else
+Mapper&lt;Event&gt mapper = Mapper.builder(Event.class)
+    .map("eventDate", "EVENT_DATE", new LocalDateConverter())
+    .automap()
+    .build();
+</code></pre>
+                <p>The explicit <code>map()</code> handles the field that needs special treatment. The <code>automap()</code> handles everything else based on your annotations.</p>
+                <p>The relationship between these components looks like this:</p>
+                <pre class="mermaid">
+graph TB
+    ANN["@Column Annotations"]
+    subgraph CAT["Catalog API - Schema"]
+        OPT1["@Table/@Zone/@Index on POJO"]
+        OPT2[SQL DDL]
+        OPT3[Java Catalog DSL]
+    end
+    subgraph MAP["Mapper API - Data Mapping"]
+        OPT4["automap() reads @Column"]
+        OPT5["Explicit map() no annotations"]
+    end
+    ANN -.Shared by.-> OPT1
+    ANN -.Shared by.-> OPT4
+    OPT1 --> SCHEMA[Table Schema]
+    OPT2 --> SCHEMA
+    OPT3 --> SCHEMA
+    OPT4 --> MAPPING[Runtime Mapping]
+    OPT5 --> MAPPING
+    SCHEMA -.Work Together.-> MAPPING
+</pre
+                >
+                <p>
+                  The <code>@Column</code> annotation bridges both APIs, and each API has alternatives. You can define schema with SQL DDL and still use <code>automap()</code> for mapping. You can create tables from annotations and still
+                  use explicit <code>map()</code> calls. The APIs work together but remain independent.
+                </p>
+                <br />
+                <h2>The Full Annotation Set</h2>
+                <br />
+                <p>
+                  Now that you understand how <code>automap()</code> reads <code>@Column</code>, here's the full toolkit. The <code>catalog.annotations</code> package includes more than just <code>@Column</code>. If you want to define your
+                  entire schema from Java classes, you have the tools:
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Annotation</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>@Table</code></td>
+                      <td>Table name, zone, indexes, colocation</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Column</code></td>
+                      <td>Column name and properties</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Id</code></td>
+                      <td>Primary key field</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Index</code></td>
+                      <td>Secondary index</td>
+                    </tr>
+                    <tr>
+                      <td><code>@ColumnRef</code></td>
+                      <td>Column reference for indexes</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Zone</code></td>
+                      <td>Distribution zone configuration</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>You can use these annotations to generate your schema instead of writing SQL. Or you can use just <code>@Column</code> to help your mappers while managing schema separately. The packages support both workflows.</p>
+                <p>The <code>table.mapper</code> package provides the runtime side:</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>Mapper.of()</code></td>
+                      <td>Factory for standard mappings</td>
+                    </tr>
+                    <tr>
+                      <td><code>MapperBuilder</code></td>
+                      <td>Fluent API for custom mappings</td>
+                    </tr>
+                    <tr>
+                      <td><code>TypeConverter</code></td>
+                      <td>Type transformation</td>
+                    </tr>
+                    <tr>
+                      <td><code>automap()</code></td>
+                      <td>Automatic mapping using annotations</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+                <h2>Complete Example</h2>
+                <br />
+                <p>Here's a complete example using both packages. The POJO becomes your single source of truth for schema, distribution strategy, and field mappings:</p>
+                <pre><code class="java">// Single POJO defines everything: schema, zone, indexes, and column mappings
+// This class is the source of truth for both DDL generation and runtime mapping
+@Table(
+    value = "orders",
+    zone = @Zone(value = "orders_zone", storageProfiles = "default"),
+    colocateBy = @ColumnRef("CUSTOMER_ID"),
+    indexes = @Index(value = "idx_order_date", columns = {
+        @ColumnRef(value = "ORDER_DATE", sort = SortOrder.DESC)
+    })
+)
+public class Order {
+    @Id
+    @Column(value = "ORDER_ID", nullable = false)
+    Integer orderId;
+    @Id
+    @Column(value = "CUSTOMER_ID", nullable = false)
+    String customerId;
+    @Column(value = "ORDER_DATE", nullable = false)
+    LocalDate orderDate;
+    @Column(value = "TOTAL_AMOUNT", precision = 10, scale = 2)
+    BigDecimal totalAmount;
+    @Column(value = "STATUS", length = 20)
+    String status;
+    // Constructors, getters, setters...
+}
+</code></pre>
+                <p>Create the table from your annotated class:</p>
+                <pre><code class="java">// Schema generated from annotations, table created in one call
+Table ordersTable = client.catalog().createTable(Order.class);
+</code></pre>
+                <p>Use the data with a mapper that reads those same annotations:</p>
+                <pre><code class="java">// RecordView uses your POJO directly
+// Mapper reads @Column annotations through automap()
+RecordView&lt;Order&gt orders = ordersTable.recordView(Mapper.of(Order.class));
+Order order = new Order(1001, "cust-001", LocalDate.now(),
+    new BigDecimal("299.99"), "PENDING");
+orders.upsert(null, order);
+Order retrieved = orders.get(null, order);
+</code></pre>
+                <br />
+                <h2>Beyond Annotations</h2>
+                <br />
+                <p>
+                  The examples use annotations for both schema definition ( <code>@Table</code>, <code>@Zone</code>, <code>@Index</code>) and data mapping ( <code>@Column</code>). This is the simplest approach when you control both schema
+                  and code, but both APIs can also work independently.
+                </p>
+                <p><strong>Alternative schema definition:</strong></p>
+                <ul>
+                  <li>Use SQL DDL instead of <code>catalog.createTable(Class)</code> if your schema already exists or your team prefers SQL</li>
+                  <li>Use the Java Catalog DSL for programmatic schema creation without annotations</li>
+                  <li>These approaches support schema evolution with <code>ALTER TABLE</code> operations</li>
+                </ul>
+                <p><strong>Alternative data mapping:</strong></p>
+                <ul>
+                  <li>Use <code>Mapper.builder().map("field", "COLUMN")</code> for explicit control without annotations</li>
+                  <li>Mix explicit mapping with <code>automap()</code> for type conversions or special cases</li>
+                  <li>Create custom <code>Mapper</code> implementations for advanced scenarios</li>
+                  <li>The mapper works regardless of how you created the table</li>
+                </ul>
+                <p><strong>Schema evolution consideration:</strong></p>
+                <p>
+                  Annotations provide convenience for the create-once pattern. The <code>createTable(Class)</code> method generates schema from your POJO, but it doesn't support altering existing tables. If your application needs to evolve
+                  the schema over time, define your tables with SQL DDL. You can still use <code>@Column</code> annotations on your POJOs for mapping, even if the table was created with DDL.
+                </p>
+                <p>The key is that annotations bridge the two APIs when you want them to, but you're not locked into using them for both. Pick the approach that fits your workflow.</p>
+                <br />
+                <h2>Summary</h2>
+                <br />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Want to...</th>
+                      <th>Use this</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Define column name for a field</td>
+                      <td><code>@Column("COLUMN_NAME")</code></td>
+                    </tr>
+                    <tr>
+                      <td>Map fields automatically</td>
+                      <td><code>Mapper.builder(Class).automap().build()</code></td>
+                    </tr>
+                    <tr>
+                      <td>Map a specific field manually</td>
+                      <td><code>.map("fieldName", "COLUMN_NAME")</code></td>
+                    </tr>
+                    <tr>
+                      <td>Convert types during mapping</td>
+                      <td><code>.map("field", "COLUMN", new TypeConverter())</code></td>
+                    </tr>
+                    <tr>
+                      <td>Create table from annotations</td>
+                      <td><code>client.catalog().createTable(Order.class)</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Database conventions and Java conventions don't naturally align, and Ignite's identifier normalization adds another consideration. The <code>catalog.annotations</code> package lets you declare the mapping at the source,
+                  right on your fields. The <code>table.mapper</code> package reads those declarations through <code>automap()</code>, turning what could be scattered configuration into a single point of truth.
+                </p>
+                <p>The result is code that your IDE can help you navigate and that future you can understand without archaeology.</p>
+                <p>
+                  For more details, see the <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/java-to-tables">Creating Tables from Java Classes</a> and
+                  <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/table-api">Table API</a> documentation.
                 </p>
               </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-8.html">↓ Read all</a></div>
             </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-7.html">Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale</a></h2>
-                <div>
-                  January 6, 2026 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-7.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 7 - MVCC Transactions for High-Frequency Processing: ACID at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-7.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content"><p>Traditional databases force a choice between fast transactions and concurrent analytics, but Apache Ignite's universal transaction model delivers both simultaneously.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-7.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-6.html">Apache Ignite Architecture Series: Part 6 - Distributed Consistency Under Load: When High-Velocity Meets High-Availability</a></h2>
-                <div>
-                  December 30, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-6.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 6 - Distributed Consistency Under Load: When High-Velocity Meets High-Availability%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-6.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Distributed systems traditionally force a choice between consistency and speed. Apache Ignite's RAFT implementation delivers both: strong guarantees that protect your business without the coordination penalties that limit
-                  throughput.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-6.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-5.html">Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing</a></h2>
-                <div>
-                  December 23, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 5 - Eliminating Data Movement: The Hidden Cost of Distributed Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-5.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Your high-velocity application processes events fast enough until it doesn't. The bottleneck isn't CPU or memory. It's data movement. Every time event processing requires data from another node, network latency adds
-                  milliseconds that compound into seconds of delay under load.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-5.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-4.html">Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure</a></h2>
-                <div>
-                  December 16, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 4 - Integrated Platform Performance: Maintaining Speed Under Pressure%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-4.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional systems force a choice: real-time analytics or fast transactions. Apache Ignite eliminates this trade-off with integrated platform performance that delivers both simultaneously.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-4.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-client-connections-handling.html">How many client connections can Apache Ignite 3 handle?</a></h2>
-                <div>
-                  December 10, 2025 by Pavel Tupitsyn. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=How many client connections can Apache Ignite 3 handle?%20https://ignite.apache.org/blog/apache-ignite-3-client-connections-handling.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Apache Ignite 3 manages client connections so efficiently that the scaling limits common in database-style systems simply aren’t a factor.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-client-connections-handling.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-3.html">Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option</a></h2>
-                <div>
-                  December 9, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 3 - Schema Evolution Under Operational Pressure: When Downtime Isn't an Option%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-3.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Schema changes in traditional databases mean downtime, lost revenue, and deployment chaos across multiple systems. This piece demonstrates how Apache Ignite's flexible schema approach helps lets data model evolve at the
-                  pace of your business requirements.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-3.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-2.html">Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing</a></h2>
-                <div>
-                  December 2, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html">Facebook</a><span>, </span
-                  ><a
-                    href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 2 - Memory-First Architecture: The Foundation for High-Velocity Event Processing%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-2.html"
-                    >Twitter</a
-                  >
-                </div>
-              </div>
-              <div class="post__content">
-                <p>Traditional databases force a choice: fast memory access or durable storage. High-velocity applications processing 10,000+ events per second hit a wall when disk I/O adds 5-15ms to every transaction.</p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-2.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-3-architecture-part-1.html">Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale</a></h2>
-                <div>
-                  November 25, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Architecture Series: Part 1 - When Multi-System Complexity Compounds at Scale%20https://ignite.apache.org/blog/apache-ignite-3-architecture-part-1.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  Apache Ignite shows what really happens once your <em>good enough</em> multi-system setup starts cracking under high-volume load. This piece breaks down why the old stack stalls at scale and how a unified, memory-first
-                  architecture removes the latency tax entirely.
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-3-architecture-part-1.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/schema-design-for-distributed-systems-ai3.html">Schema Design for Distributed Systems: Why Data Placement Matters</a></h2>
-                <div>
-                  November 18, 2025 by Michael Aglietti. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Schema Design for Distributed Systems: Why Data Placement Matters%20https://ignite.apache.org/blog/schema-design-for-distributed-systems-ai3.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content"><p>Discover how Apache Ignite keeps related data together with schema-driven colocation, cutting cross-node traffic and making distributed queries fast, local and predictable.</p></div>
-              <div class="post__footer"><a class="more" href="/blog/schema-design-for-distributed-systems-ai3.html">↓ Read all</a></div>
-            </article>
-          </section>
-          <section class="blog__footer">
-            <ul class="pagination">
-              <li><a class="current" href="/blog/apache">1</a></li>
-              <li><a class="item" href="/blog/apache/1/">2</a></li>
-              <li><a class="item" href="/blog/apache/2/">3</a></li>
-            </ul>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/technical">technical</a></li>
+                <li><a href="/blog/ignite3">ignite3</a></li>
+                <li><a href="/blog/java">java</a></li>
+              </ul>
+            </section>
           </section>
         </main>
         <aside class="blog__sidebar">
