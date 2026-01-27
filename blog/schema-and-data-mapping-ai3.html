@@ -3,16 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Entries tagged [source]</title>
-    <meta property="og:title" content="Entries tagged [source]" />
-    <link rel="canonical" href="https://ignite.apache.org/blog" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://ignite.apache.org/blog" />
-    <meta property="og:image" content="/img/og-pic.png" />
+    <title>Schema and Data Mapping in Apache Ignite 3</title>
     <link rel="stylesheet" href="/js/vendor/hystmodal/hystmodal.min.css?ver=0.9" />
     <link rel="stylesheet" href="/css/utils.css?ver=0.9" />
     <link rel="stylesheet" href="/css/site.css?ver=0.9" />
-    <link rel="stylesheet" href="/css/blog.css?ver=0.9" />
+    <link rel="stylesheet" href="../css/blog.css?ver=0.9" />
     <link rel="stylesheet" href="/css/media.css?ver=0.9" media="only screen and (max-width:1199px)" />
     <link rel="icon" type="image/png" href="/img/favicon.png" />
     <!-- Matomo -->
@@ -337,117 +332,333 @@
     <div class="dropmenu__back"></div>
     <header class="hdrfloat hdr__white jsHdrFloatBase"></header>
     <div class="container blog">
-      <section class="blog__header"><h1>Entries tagged [source]</h1></section>
+      <section class="blog__header post_page__header">
+        <a href="/blog/">← Apache Ignite Blog</a>
+        <h1>Schema and Data Mapping in Apache Ignite 3</h1>
+        <p>
+          January 27, 2026 by <strong>Michael Aglietti. Share in </strong><a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/undefined">Facebook</a><span>, </span
+          ><a href="http://twitter.com/home?status=Schema and Data Mapping in Apache Ignite 3%20https://ignite.apache.org/blog/undefined">Twitter</a>
+        </p>
+      </section>
       <div class="blog__content">
         <main class="blog_main">
           <section class="blog__posts">
             <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-17-0.html">Apache Ignite 2.17 Release: What’s New</a></h2>
-                <div>
-                  February 13, 2025 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.17 Release: What’s New%20https://ignite.apache.org/blog/apache-ignite-2-17-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
+              <div>
                 <p>
-                  We are happy to announce the release of <a href="https://ignite.apache.org/">Apache Ignite </a>2.17.0! In this latest version, the Ignite community has introduced a range of new features and improvements to deliver a more
-                  efficient, flexible, and future-proof platform. Below, we’ll cover the key highlights that you can look forward to when upgrading to the new release.
+                  Your schema came from somewhere. Maybe SQL scripts, maybe another developer, maybe your own DDL. Your application uses <code>Mapper.of()</code> for data access, and the workflow is functional. But if your POJO field names
+                  don't exactly match your column names, you're writing <code>map()</code> calls to bridge them, and that can start to feel heavy.
                 </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-17-0.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-16-0.html">Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes</a></h2>
-                <div>
-                  December 25, 2023 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-16-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.16.0: Cache dumps, Calcite engine stabilization, JDK 14+ bug fixes%20https://ignite.apache.org/blog/apache-ignite-2-16-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
+                <!-- end -->
+                <h2>Schema and Data Mapping in Apache Ignite 3</h2>
+                <br />
+                <p>When you use <code>automap()</code> from the <code>table.mapper</code> package, it reads those annotations and builds the mappings for you.</p>
+                <p>Learn how these packages work together, and your future self will thank you.</p>
+                <br />
+                <h2>Connecting Schema to Code</h2>
+                <br />
                 <p>
-                  As of December 25, 2023, <a href="https://ignite.apache.org/">Apache Ignite </a>2.16 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/j3brc">Important JIRA tasks </a>but
-                  let&apos;s briefly overview some valuable improvements.
+                  Database columns typically use names like <code>order_date</code>. Java fields typically use names like <code>orderDate</code>. When Ignite normalizes these to uppercase, the SQL column becomes
+                  <code>ORDER_DATE</code> while the Java field becomes <code>ORDERDATE</code>. Different strings that don't map.
                 </p>
-                <h3 id="cache-dumps">Cache dumps</h3>
+                <p>The <code>catalog.annotations</code> package gives you a way to declare mappings in your POJO:</p>
+                <pre><code class="java">// @Column declares the column mapping at the source
+public class Order {
+    @Id
+    @Column("ORDER_ID")
+    Integer orderId;
+    @Column("CUSTOMER_ID")
+    String customerId;
+    @Column("ORDER_DATE")
+    LocalDate orderDate;
+    @Column("TOTAL_AMOUNT")
+    BigDecimal totalAmount;
+    @Column("STATUS")
+    String status;
+}
+</code></pre>
+                <p>Each <code>@Column</code> annotation tells Ignite exactly which column the field maps to. The annotation value goes through the same normalization as SQL identifiers, so everything lines up.</p>
+                <p>Now your mapper call becomes straightforward:</p>
+                <pre><code class="java">// automap() reads @Column annotations and builds mappings automatically
+Mapper&lt;Order&gt mapper = Mapper.builder(Order.class)
+    .automap()
+    .build();
+</code></pre>
                 <p>
-                  Ignite has persistent cache <a href="https://ignite.apache.org/docs/latest/snapshots/snapshots">snapshots </a>and this feature is highly appreciated by Ignite users. This release introduces another way to make a copy of
-                  user data - a cache dump.
+                  The <code>automap()</code> method scans your class, finds the annotations, and builds the mappings. You annotate the POJO once. Every developer who writes a service or batch job using that class gets the mapping without
+                  thinking about it. The SRE debugging at 2am can read the class and understand the schema.
                 </p>
                 <p>
-                  The cache dump is essentially a file that contains all entries of a cache group at the time of dump creation. Dump is consistent like a snapshot, which means all entries that existed in the cluster at the moment of dump
-                  creation will be included in the dump file. Meta information of dumped caches and binary meta are also included in the dump.
+                  If you built your schema with SQL, this approach still works. Add <code>@Column</code> annotations to your POJO fields, and <code>automap()</code> handles the mapping. Your schema stays in SQL. Your mappings stay visible
+                  in your code.
                 </p>
-                <p>Main differences from cache snapshots:</p>
+                <p>
+                  If you want to go further, the <code>catalog.annotations</code> package lets you define your entire schema in Java. Annotations like <code>@Table</code>, <code>@Zone</code>, and <code>@Index</code> replace your DDL scripts
+                  with compile-time-checked code. The POJO becomes the single source of truth for both schema and mapping. That's a topic for another post, but worth exploring if you prefer keeping schema close to your application code.
+                </p>
+                <br />
+                <h2>Why This Matters</h2>
+                <br />
+                <p>When the mapping lives on the field, you get benefits that compound over time.</p>
+                <p>
+                  Your IDE becomes more helpful. The <code>@Column</code> annotation uses <code>@Retention(RUNTIME)</code>, so IntelliJ sees it and can provide context. Hover over a field to see the column name. Use Find Usages to trace
+                  references. Refactor with confidence because the annotation moves with the field.
+                </p>
+                <p>
+                  Future you can quickly jump back into the code. When you return to this class in six months, the column name is right there on the field. No hunting through mapper files. No tracing string literals across your codebase.
+                  The mapping is visible where you're already looking.
+                </p>
+                <p>The alternative is explicit <code>map()</code> calls scattered through your mapper code:</p>
+                <pre><code class="java">// Explicit mapping: column names scattered in mapper code, far from fields
+Mapper&lt;Order&gt mapper = Mapper.builder(Order.class)
+    .map("orderId", "ORDER_ID")
+    .map("customerId", "CUSTOMER_ID")
+    .map("orderDate", "ORDER_DATE")
+    .map("totalAmount", "TOTAL_AMOUNT")
+    .map("status", "STATUS")
+    .build();
+</code></pre>
+                <p>This works, and sometimes it's the right choice. But the column names live far from the fields they describe, which makes the code harder to maintain and gives your IDE less to work with.</p>
+                <br />
+                <h2>The Packages Work Together</h2>
+                <br />
+                <p>
+                  The <code>@Column</code> annotation comes from <code>org.apache.ignite.catalog.annotations</code>. The <code>automap()</code> method comes from <code>org.apache.ignite.table.mapper</code>. These are separate packages with
+                  separate purposes, but they were designed to complement each other.
+                </p>
+                <p>
+                  When you call <code>automap()</code> on a <code>MapperBuilder</code>, it scans your class for fields. For each field, it checks for a <code>@Column</code> annotation and uses that value as the column name. If there's no
+                  annotation, it falls back to the field name, normalized to uppercase. Fields you've already mapped explicitly with <code>map()</code> are skipped.
+                </p>
+                <p>
+                  The scanning finds only fields declared directly in your class. If your POJO extends a parent class, inherited fields won't be discovered, even if they have <code>@Column</code> annotations. The same applies to
+                  <code>createTable(Class)</code>. For shared fields across multiple tables, define them in each class or use composition.
+                </p>
+                <p>This means you can mix approaches when you need to. Use annotations for most fields and explicit mapping for edge cases that require type conversion:</p>
+                <pre><code class="java">// Mix explicit mapping for type conversion with automap() for everything else
+Mapper&lt;Event&gt mapper = Mapper.builder(Event.class)
+    .map("eventDate", "EVENT_DATE", new LocalDateConverter())
+    .automap()
+    .build();
+</code></pre>
+                <p>The explicit <code>map()</code> handles the field that needs special treatment. The <code>automap()</code> handles everything else based on your annotations.</p>
+                <p>The relationship between these components looks like this:</p>
+                <pre class="mermaid">
+graph TB
+    ANN["@Column Annotations"]
+    subgraph CAT["Catalog API - Schema"]
+        OPT1["@Table/@Zone/@Index on POJO"]
+        OPT2[SQL DDL]
+        OPT3[Java Catalog DSL]
+    end
+    subgraph MAP["Mapper API - Data Mapping"]
+        OPT4["automap() reads @Column"]
+        OPT5["Explicit map() no annotations"]
+    end
+    ANN -.Shared by.-> OPT1
+    ANN -.Shared by.-> OPT4
+    OPT1 --> SCHEMA[Table Schema]
+    OPT2 --> SCHEMA
+    OPT3 --> SCHEMA
+    OPT4 --> MAPPING[Runtime Mapping]
+    OPT5 --> MAPPING
+    SCHEMA -.Work Together.-> MAPPING
+</pre
+                >
+                <p>
+                  The <code>@Column</code> annotation bridges both APIs, and each API has alternatives. You can define schema with SQL DDL and still use <code>automap()</code> for mapping. You can create tables from annotations and still
+                  use explicit <code>map()</code> calls. The APIs work together but remain independent.
+                </p>
+                <br />
+                <h2>The Full Annotation Set</h2>
+                <br />
+                <p>
+                  Now that you understand how <code>automap()</code> reads <code>@Column</code>, here's the full toolkit. The <code>catalog.annotations</code> package includes more than just <code>@Column</code>. If you want to define your
+                  entire schema from Java classes, you have the tools:
+                </p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Annotation</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>@Table</code></td>
+                      <td>Table name, zone, indexes, colocation</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Column</code></td>
+                      <td>Column name and properties</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Id</code></td>
+                      <td>Primary key field</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Index</code></td>
+                      <td>Secondary index</td>
+                    </tr>
+                    <tr>
+                      <td><code>@ColumnRef</code></td>
+                      <td>Column reference for indexes</td>
+                    </tr>
+                    <tr>
+                      <td><code>@Zone</code></td>
+                      <td>Distribution zone configuration</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>You can use these annotations to generate your schema instead of writing SQL. Or you can use just<code>@Column</code> to help your mappers while managing schema separately. The packages support both workflows.</p>
+                <p>The <code>table.mapper</code> package provides the runtime side:</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Component</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>Mapper.of() -></code></td>
+                      <td>Factory for standard mappings</td>
+                    </tr>
+                    <tr>
+                      <td><code>MapperBuilder -></code></td>
+                      <td>Fluent API for custom mappings</td>
+                    </tr>
+                    <tr>
+                      <td><code>TypeConverter -></code></td>
+                      <td>Type transformation</td>
+                    </tr>
+                    <tr>
+                      <td><code>automap() -></code></td>
+                      <td>Automatic mapping using annotations</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+                <h2>Complete Example</h2>
+                <br />
+                <p>Here's a complete example using both packages. The POJO becomes your single source of truth for schema, distribution strategy, and field mappings:</p>
+                <pre><code class="java">// Single POJO defines everything: schema, zone, indexes, and column mappings
+// This class is the source of truth for both DDL generation and runtime mapping
+@Table(
+    value = "orders",
+    zone = @Zone(value = "orders_zone", storageProfiles = "default"),
+    colocateBy = @ColumnRef("CUSTOMER_ID"),
+    indexes = @Index(value = "idx_order_date", columns = {
+        @ColumnRef(value = "ORDER_DATE", sort = SortOrder.DESC)
+    })
+)
+public class Order {
+    @Id
+    @Column(value = "ORDER_ID", nullable = false)
+    Integer orderId;
+    @Id
+    @Column(value = "CUSTOMER_ID", nullable = false)
+    String customerId;
+    @Column(value = "ORDER_DATE", nullable = false)
+    LocalDate orderDate;
+    @Column(value = "TOTAL_AMOUNT", precision = 10, scale = 2)
+    BigDecimal totalAmount;
+    @Column(value = "STATUS", length = 20)
+    String status;
+    // Constructors, getters, setters...
+}
+</code></pre>
+                <p>Create the table from your annotated class:</p>
+                <pre><code class="java">// Schema generated from annotations, table created in one call
+Table ordersTable = client.catalog().createTable(Order.class);
+</code></pre>
+                <p>Use the data with a mapper that reads those same annotations:</p>
+                <pre><code class="java">// RecordView uses your POJO directly
+// Mapper reads @Column annotations through automap()
+RecordView&lt;Order&gt orders = ordersTable.recordView(Mapper.of(Order.class));
+Order order = new Order(1001, "cust-001", LocalDate.now(),
+    new BigDecimal("299.99"), "PENDING");
+orders.upsert(null, order);
+Order retrieved = orders.get(null, order);
+</code></pre>
+                <br />
+                <h2>Beyond Annotations</h2>
+                <br />
+                <p>
+                  The examples use annotations for both schema definition ( <code>@Table</code>, <code>@Zone</code>, <code>@Index</code>) and data mapping ( <code>@Column</code>). This is the simplest approach when you control both schema
+                  and code, but both APIs can also work independently.
+                </p>
+                <p><strong>Alternative schema definition:</strong></p>
                 <ul>
-                  <li>Supports in-memory caches that a snapshot feature does not support.</li>
-                  <li>Takes up less disk space. The dump contains only the cache entries as-is.</li>
-                  <li>Can be used for offline data processing.</li>
+                  <li>Use SQL DDL instead of <code>catalog.createTable(Class)</code> if your schema already exists or your team prefers SQL</li>
+                  <li>Use the Java Catalog DSL for programmatic schema creation without annotations</li>
+                  <li>These approaches support schema evolution with <code>ALTER TABLE</code> operations</li>
                 </ul>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-16-0.html">↓ Read all</a></div>
-            </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-2-13-0.html">Apache Ignite 2.13.0: new Apache Calcite-based SQL engine</a></h2>
-                <div>
-                  April 28, 2022 by Nikita Amelchev. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-2-13-0.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite 2.13.0: new Apache Calcite-based SQL engine%20https://ignite.apache.org/blog/apache-ignite-2-13-0.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  As of April 26, 2022, <a href="https://ignite.apache.org/">Apache Ignite</a> 2.13 has been released. You can directly check the full list of resolved <a href="https://s.apache.org/x8u49">Important JIRA tasks</a> but here
-                  let&apos;s briefly overview some valuable improvements.
-                </p>
-                <h4>This is a breaking change release: The legacy service grid implementation was removed.</h4>
-                <h3 id="new-apache-calcite-based-sql-engine">New Apache Calcite-based SQL engine</h3>
-                <p>We&apos;ve implemented a new experimental SQL engine based on Apache Calcite. Now it&apos;s possible to:</p>
+                <p><strong>Alternative data mapping:</strong></p>
                 <ul>
-                  <li>Get rid of some <a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Motivation">H2 limitations</a>;</li>
-                  <li><a href="https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Implementationdetails">Optimize</a> some query execution.</li>
+                  <li>Use<code>Mapper.builder().map("field", "COLUMN")</code> for explicit control without annotations</li>
+                  <li>Mix explicit mapping with<code>automap()</code> for type conversions or special cases</li>
+                  <li>Create custom<code>Mapper</code> implementations for advanced scenarios</li>
+                  <li>The mapper works regardless of how you created the table</li>
                 </ul>
-                <p>The current H2-based engine has fundamental limitations. For example:</p>
-                <ul>
-                  <li>some queries should be splitted into 2 phases (map subquery and reduce subquery), but some of them cannot be effectively executed in 2 phases.</li>
-                  <li>H2 is a third-party database product with not-ASF license.</li>
-                  <li>The optimizer and other internal things are not supposed to work in a distributed environment.</li>
-                  <li>It&apos;s hard to make Ignite-specific changes to the H2 code, patches are often declined.</li>
-                </ul>
+                <p><strong>Schema evolution consideration:</strong></p>
+                <p>
+                  Annotations provide convenience for the create-once pattern. The <code>createTable(Class)</code> method generates schema from your POJO, but it doesn't support altering existing tables. If your application needs to evolve
+                  the schema over time, define your tables with SQL DDL. You can still use <code>@Column</code> annotations on your POJOs for mapping, even if the table was created with DDL.
+                </p>
+                <p>The key is that annotations bridge the two APIs when you want them to, but you're not locked into using them for both. Pick the approach that fits your workflow.</p>
+                <br />
+                <h2>Summary</h2>
+                <br />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Want to...</th>
+                      <th>Use this</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Define column name for a field -></td>
+                      <td><code>@Column("COLUMN_NAME")</code></td>
+                    </tr>
+                    <tr>
+                      <td>Map fields automatically -></td>
+                      <td><code>Mapper.builder(Class).automap().build()</code></td>
+                    </tr>
+                    <tr>
+                      <td>Map a specific field manually -></td>
+                      <td><code>.map("fieldName", "COLUMN_NAME")</code></td>
+                    </tr>
+                    <tr>
+                      <td>Convert types during mapping -></td>
+                      <td><code>.map("field", "COLUMN", new TypeConverter())</code></td>
+                    </tr>
+                    <tr>
+                      <td>Create table from annotations -></td>
+                      <td><code>client.catalog().createTable(Order.class)</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Database conventions and Java conventions don't naturally align, and Ignite's identifier normalization adds another consideration. The <code>catalog.annotations</code> package lets you declare the mapping at the source,
+                  right on your fields. The <code>table.mapper</code> package reads those declarations through <code>automap()</code>, turning what could be scattered configuration into a single point of truth.
+                </p>
+                <p>The result is code that your IDE can help you navigate and that future you can understand without archaeology.</p>
+                <p>
+                  For more details, see the <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/java-to-tables">Creating Tables from Java Classes</a> and
+                  <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/table-api">Table API</a> documentation.
+                </p>
               </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-2-13-0.html">↓ Read all</a></div>
             </article>
-            <article class="post">
-              <div class="post__header">
-                <h2><a href="/blog/apache-ignite-momentum-highlights-from.html">Apache Ignite Momentum: Highlights from 2020-2021</a></h2>
-                <div>
-                  September 14, 2021 by Denis Magda. Share in <a href="http://www.facebook.com/sharer.php?u=https://ignite.apache.org/blog/apache-ignite-momentum-highlights-from.html">Facebook</a><span>, </span
-                  ><a href="http://twitter.com/home?status=Apache Ignite Momentum: Highlights from 2020-2021%20https://ignite.apache.org/blog/apache-ignite-momentum-highlights-from.html">Twitter</a>
-                </div>
-              </div>
-              <div class="post__content">
-                <p>
-                  When Apache Ignite entered the Apache Software Foundation (ASF) Incubator in 2014, it took less than a year for the project and its community to graduate from the Incubator and become a top-level project for the ASF. Since
-                  then, Ignite has experienced a significant and steady growth in popularity, and it has been used by thousands of application developers and architects to create high-performance and scalable applications used by millions
-                  of people daily. In this article, we&rsquo;ll recap the achievements of Ignite in 2020-2021.
-                </p>
-                <p></p>
-                <h3><br />Ignite is Ranked as a Top 5 Project<br /></h3>
-                <p></p>
-                <p>
-                  The ASF has ranked Apache ignite as a Top 5 project in various categories since 2017. <a href="https://blogs.apache.org/foundation/entry/apache-in-2017-by-the" target="_blank">That year</a>, Ignite was in the Top 5 of
-                  Apache Project Repositories by Commits and most active Apache mailing lists. <a href="https://www.apache.org/foundation/docs/FY2021AnnualReport.pdf" target="_blank">Today</a>, the momentum continues, and Ignite continues
-                  to be ranked as a Top 5 project in multiple categories: second on the Top 5 big data user lists, third on the Top 5 big data dev lists, second on the Top 5 of all user lists, third on the Top 5 repos by size.
-                </p>
-                <p>
-                  <a href="/img/blog/463ae37d-866d-4c15-8ebf-6b88499daa81.jpeg"><img src="/img/blog/463ae37d-866d-4c15-8ebf-6b88499daa81.jpeg" width="30%" /></a>
-                </p>
-              </div>
-              <div class="post__footer"><a class="more" href="/blog/apache-ignite-momentum-highlights-from.html">↓ Read all</a></div>
-            </article>
+            <section class="blog__footer">
+              <ul class="pagination post_page">
+                <li><a href="/blog/technical">technical</a></li>
+                <li><a href="/blog/ignite3">ignite3</a></li>
+                <li><a href="/blog/java">java</a></li>
+              </ul>
+            </section>
           </section>
-          <section class="blog__footer"><ul class="pagination"></ul></section>
         </main>
         <aside class="blog__sidebar">
           <ul>
