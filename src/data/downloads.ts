@@ -588,7 +588,7 @@ export const extensionSourceReleases: Extension[] = [
     date: '2022-05-17',
     guide: '/docs/ignite2/latest/extensions-and-integrations/zookeeper-ip-finder-ext.html',
     releaseNotes: '/releases/ext/zookeeper-ip-finder-ext-1.0.0/release_notes.html',
-    sourceUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/zookeeper-ip-finder-ext-src.zip',
+    sourceUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/ignite-zookeeper-ip-finder-ext-src.zip',
   },
 ];
 
@@ -643,8 +643,8 @@ export const extensionBinaryReleases: Extension[] = [
     date: '2022-05-17',
     guide: '/docs/ignite2/latest/extensions-and-integrations/zookeeper-ip-finder-ext.html',
     releaseNotes: '/releases/ext/zookeeper-ip-finder-ext-1.0.0/release_notes.html',
-    sourceUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/zookeeper-ip-finder-ext-bin.zip',
-    binaryUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/zookeeper-ip-finder-ext-bin.zip',
+    sourceUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/ignite-zookeeper-ip-finder-ext-bin.zip',
+    binaryUrl: 'https://archive.apache.org/dist/ignite/ignite-extensions/ignite-zookeeper-ip-finder-ext/1.0.0/ignite-zookeeper-ip-finder-ext-bin.zip',
   },
 ];
 
