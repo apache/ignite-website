@@ -157,6 +157,16 @@ RewriteBase /
 # Prevent directory listings (recommended)
 Options -Indexes
 
+# ---------------------------------------------------------------------------
+# Keep normal DirectorySlash behavior for the whole site (e.g. /community -> /community/)
+# but disable it ONLY under /docs/ignite3/ to avoid conflicts when dir/ and file.html coexist.
+# ---------------------------------------------------------------------------
+<IfModule mod_dir.c>
+  <If "%{REQUEST_URI} =~ m#^/docs/ignite3/#">
+    DirectorySlash Off
+  </If>
+</IfModule>
+
 RewriteCond %{HTTP_HOST} ^(www\.)?ignite.incubator.apache.org$
 RewriteRule ^/?(.*)$ https://ignite.apache.org/$1 [L,R=301]
 
@@ -196,58 +206,20 @@ RewriteRule ^docs/ignite2/latest$ docs/ignite2/latest/ [R=301,L]
 RewriteRule ^docs/ignite2/latest/(.*)$ docs/ignite2/2.17.0/$1 [L]
 RewriteRule ^docs/ignite3/latest/(.*)$ docs/ignite3/3.1.0/$1 [L]
 
-# redirect to latest for Ignite 3 docs (explicit section hits)
-RewriteRule ^docs/ignite3/?$ docs/ignite3/latest/ [R=301,L]
-RewriteRule ^docs/ignite3/latest$ docs/ignite3/latest/ [R=301,L]
-
 # =============================================================================
-# Ignite 3: prefer .html pages over same-name directories (NO trailing slash)
-# Works with DirectorySlash ON (default).
+# Ignite 3: every path is an .html file (NO trailing slash)
 # =============================================================================
 
-# Canonical: if browser requested .../page/ and page.html exists -> 301 to .../page
-RewriteCond %{THE_REQUEST} \s/+docs/ignite3/(.+)/[\s?]
-RewriteCond %{DOCUMENT_ROOT}/docs/ignite3/%1.html -f
+# If request is .../page/ and page.html exists -> 301 to .../page
+RewriteCond %{REQUEST_URI} ^/docs/ignite3/(.+)/$
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
 RewriteRule ^docs/ignite3/(.+)/$ /docs/ignite3/$1 [R=301,L]
 
-# Serve page.html when request is .../page/ and page.html exists (prevents directory handling)
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_URI} !\.html$
-RewriteCond %{REQUEST_URI} ^(.+)/$
-RewriteCond %{DOCUMENT_ROOT}%1.html -f
-RewriteRule ^docs/ignite3/(.+)/$ docs/ignite3/$1.html [L]
-
-# Serve page.html when request is .../page (no ext) and page.html exists
+# If request is .../page (no ext) and page.html exists -> serve page.html
 RewriteCond %{REQUEST_URI} ^/docs/ignite3/
 RewriteCond %{REQUEST_URI} !\.html$
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
 RewriteRule ^docs/ignite3/(.+)$ docs/ignite3/$1.html [L]
-
-# If it's a real directory with index.html (Docusaurus) AND no same-name .html -> enforce trailing slash
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_URI} !/$
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html !-f
-RewriteRule ^(.+)$ /$1/ [R=301,L]
-
-# =============================================================================
-# Docusaurus clean URL handling for Ignite 3 (/docs/ignite3/)
-# Docusaurus generates static HTML in directories with index.html files
-# =============================================================================
-
-# Serve index.html for directory requests under /docs/ignite3/
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_FILENAME}/index.html -f
-RewriteRule ^(.*)$ $1/index.html [L]
-
-# For non-directory paths under /docs/ignite3/, try adding /index.html
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}/index.html -f
-RewriteRule ^(.*)$ $1/index.html [L]
 
 # =============================================================================
 # Jekyll handling for Ignite 2 (/docs/ignite2/)
