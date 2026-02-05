@@ -1,0 +1,103 @@
+---
+title: "Apache Ignite 2.12.0: CDC, Index Query API, Vulnerabilities Fixes"
+authors: [nikita]
+date: 2022-01-14
+tags: [database, ignite2, in-memory, open-source, release, archived]
+---
+
+As of January 14, 2022, [Apache Ignite](https://ignite.apache.org/) 2.12 has been released. You can directly check the full list of resolved [Important JIRA tasks](https://s.apache.org/0zyi2) but here let's briefly overview some valuable improvements.
+
+### Vulnerability Updates
+
+The Apache Ignite versions lower than 2.11.1 are vulnerable to [CVE-2021-44832](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44832) which is related to the `ignite-log4j2` module usage.
+
+The release also fixes 10+ CVE's of various modules. See [release notes](https://ignite.apache.org/releases/ignite2/2.12.0/release_notes.html) for more details.
+
+### Change Data Capture
+
+Change Data Capture ([CDC](https://en.wikipedia.org/wiki/Change_data_capture)) is a data processing pattern used to asynchronously receive entries that have been changed on the local node so that action can be taken using the changed entry.
+
+<!--truncate-->
+
+Below are some of the CDC use cases:
+
+- Streaming changes in Warehouse;
+- Updating search index;
+- Calculating statistics (streaming queries);
+- Auditing logs;
+- Async interaction with external systems: Moderation, business process invocation, etc.
+
+Ignite implements CDC with the `ignite-cdc.sh` application and [Java API](https://github.com/apache/ignite/blob/master/modules/core/src/main/java/org/apache/ignite/cdc/CdcConsumer.java#L56).
+
+Below are the CDC application and the Ignite node integrated via [WAL archive segments](https://ignite.apache.org/docs/2.12.0/persistence/native-persistence#write-ahead-log):
+
+![Apache Ignite CDC design](/img/blog/c5574c7d-2a24-4def-b1c4-b2343ed98397.svg)
+
+When CDC is enabled, the Ignite server node creates a hard link to each WAL archive segment in the special `db/cdc/{consistency_id}` directory. The `ignite-cdc.sh` application can be runruns on a different JVM and processes newly archived WAL segments. When the segment is fully processed by `ignite-cdc.sh`, it is removed. The actual disk space is free when both links (archive and CDC) are removed.
+
+State of consumption is a pointer to the last processed event. A consumer can tell `ignite-cdc.sh` to save the consumption state. On startup event processing will be continued from the last saved state.
+
+See implementation details [here](https://ignite.apache.org/docs/2.12.0/persistence/change-data-capture).
+
+### Index Query API
+
+The Apache Ignite now provides Index Query API for existing indexes. Index queries work over distributed indexes and retrieve cache entries that match the specified query.
+
+It will help in some cases, where:
+
+- SQL is not applicable by the design of user application;
+- `IndexScan` is preferable to `ScanQuery` for performance reasons.
+
+Example of query:
+
+```java
+// Find the persons who work in Organization 1 and have salary more than 1,000.
+QueryCursor<Cache.Entry<Integer, Person>> cursor = cache.query(
+  new IndexQuery<Integer, Person>(Person.class, "ORG_SALARY_IDX")
+  .setCriteria(eq("orgId", 1), gt("salary", 1000))
+);
+```
+
+See more details [here](https://ignite.apache.org/docs/latest/key-value-api/using-cache-queries#executing-index-queries).
+
+### Snapshots
+
+Previous versions can perform snapshot restore in the same cluster topology only. The new version provides the ability to restore snapshots on different cluster topologies. Moreover, added support of encrypted caches.
+
+### Distributed Environment Tests
+
+The [new testing framework](https://cwiki.apache.org/confluence/display/IGNITE/IEP-56%3A+Distributed+environment+tests) was implemented. The main goal is to have a large enough set of integration tests that cover most of the typical cluster usage scenarios.
+
+Features:
+
+- Ignite nodes can be started/stopped on a Docker or a real cluster with any custom configuration;
+- Any Apache Ignite version is supported (released or compiled from sources);
+- Apache Ignite forks are also supported out of the box;
+- Any other application execution is also possible, e.g. we implemented starters for Spark and Zookeeper;
+- The cluster can be managed using the `control.sh`, we made this a part of the test API;
+- Custom Java applications can be executed remotely with/without a built-in Ignite node or a Thin client;
+- Any ssh command can be executed remotely, and the result will be available locally (at the python test);
+- A network can be broken by editing `iptables` to check communication issues;
+- Tests can be executed in parallel when the cluster size is bigger than tests requirements.
+
+Framework based on [Ducktape](https://ducktape-docs.readthedocs.io/en/latest/index.html) library from Kafka team, that's why we called it Ducktests.
+
+### Migration modules to the Apache Ignite Extensions
+
+There is activity on the migration of frameworks to extensions:
+
+- GCE, AWS, Azure modules were migrated to `gce`, `aws`, `azure` extensions.
+- CacheSpringStoreSessionListener was migrated to the `spring-tx` extension.
+- TcpDiscoveryZookeeperIpFinder was migrated to the `zookeeper-ip-finder` extension.
+
+The binaries archive now weighs 10 percent less.
+
+### Anything else?
+
+See the [release notes](https://ignite.apache.org/releases/ignite2/2.12.0/release_notes.html) to learn about all of the new features and bug fixes.
+
+Reach out to us on the community user list for more questions, details, and feedback.
+
+Sincerely yours,
+
+Ignite contributors and committers
