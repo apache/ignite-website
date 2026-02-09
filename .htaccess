@@ -157,11 +157,6 @@ RewriteBase /
 # Prevent directory listings (recommended)
 Options -Indexes
 
-# IMPORTANT: avoid DirectorySlash redirect loops with "page/" + "page.html"
-<IfModule mod_dir.c>
-  DirectorySlash Off
-</IfModule>
-
 RewriteCond %{HTTP_HOST} ^(www\.)?ignite.incubator.apache.org$
 RewriteRule ^/?(.*)$ https://ignite.apache.org/$1 [L,R=301]
 
@@ -184,11 +179,8 @@ RewriteRule ^releases/(1[^/]*)(/.*)?$ releases/ignite/$1$2 [R=301,L]
 # Redirect all release URLs starting with 2.*, 3.*, 4.* ... into "igniteN" namespace.
 RewriteRule ^releases/([2-9][^/]*)(/.*)?$ releases/ignite$1/$1$2 [R=301,L]
 
-# ---------------------------------------------------------------------------
-# /docs entry point: canonicalize /docs -> /docs/ and serve /docs/index.html
-# ---------------------------------------------------------------------------
-RewriteRule ^docs$ /docs/ [R=301,L]
-RewriteRule ^docs/$ docs/index.html [L]
+# docs entry point
+RewriteRule ^docs/?$ docs/index.html [L]
 
 # special handling for /docs/latest
 RewriteRule ^docs/latest/?$ docs/ignite2/latest/ [R=301,L]
@@ -216,16 +208,8 @@ RewriteRule ^docs/ignite3/(.+)/$ /docs/ignite3/$1 [R=301,L]
 
 # If user hits .../page (no ext) and page.html exists -> serve page.html
 RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html -f
+RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^docs/ignite3/(.+)$ docs/ignite3/$1.html [L]
-
-# If it's a real directory with index.html (Docusaurus) AND no same-name .html -> enforce trailing slash
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_URI} !/$
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}/index.html -f
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI}.html !-f
-RewriteRule ^(.+)$ /$1/ [R=301,L]
 
 # =============================================================================
 # Docusaurus clean URL handling for Ignite 3 (/docs/ignite3/)
