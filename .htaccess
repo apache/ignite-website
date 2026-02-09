@@ -1,78 +1,85 @@
 <IfModule mod_deflate.c>
-  # Insert filters / compress text, html, javascript, css, xml:
-  # mod_deflate can be used for Apache v2 and later and is the recommended GZip mechanism to use
-  AddOutputFilterByType DEFLATE text/plain
-  AddOutputFilterByType DEFLATE text/javascript
-  AddOutputFilterByType DEFLATE text/html
-  AddOutputFilterByType DEFLATE text/xml
-  AddOutputFilterByType DEFLATE text/css
-  AddOutputFilterByType DEFLATE application/js
-  AddOutputFilterByType DEFLATE application/javascript
-  AddOutputFilterByType DEFLATE application/x-font-ttf
-  AddOutputFilterByType DEFLATE font/opentype
-  AddOutputFilterByType DEFLATE image/svg+xml
-  AddOutputFilterByType DEFLATE image/x-icon
+# Insert filters / compress text, html, javascript, css, xml:
+# mod_deflate can be used for Apache v2 and later and is the recommended GZip mechanism to use
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/js
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-font-ttf 
+AddOutputFilterByType DEFLATE font/opentype 
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilterByType DEFLATE image/x-icon 
 
-  # Exception: Images
-  SetEnvIfNoCase REQUEST_URI \.(?:gif|jpg|jpeg|png)$ no-gzip dont-vary
+# Exception: Images
+SetEnvIfNoCase REQUEST_URI \.(?:gif|jpg|jpeg|png)$ no-gzip dont-vary
 
-  # Drop problematic browsers
-  BrowserMatch ^Mozilla/4 gzip-only-text/html
-  BrowserMatch ^Mozilla/4\.0[678] no-gzip
-  BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+# Drop problematic browsers
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
 
-  # Make sure proxies don't deliver the wrong content
-  <IfModule mod_headers.c>
-    Header append Vary User-Agent env=!dont-vary
-  </IfModule>
+# Make sure proxies don't deliver the wrong content
+<IfModule mod_headers.c>
+Header append Vary User-Agent env=!dont-vary
+</IfModule>
+
 </IfModule>
 
 <IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresDefault "access plus 1 week"
+ExpiresActive On
+ExpiresDefault "access plus 1 week"
 
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType text/javascript "access plus 1 month"
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
 
-  ExpiresByType text/xml "access plus 2 days"
+ExpiresByType text/xml "access plus 2 days" 
 
-  ExpiresByType image/x-icon "access plus 6 months"
-  ExpiresByType image/jpg "access plus 6 months"
-  ExpiresByType image/jpeg "access plus 6 months"
-  ExpiresByType image/gif "access plus 6 months"
-  ExpiresByType image/png "access plus 6 months"
-  ExpiresByType image/svg+xml "access plus 6 months"
+ExpiresByType image/x-icon "access plus 6 months"
+ExpiresByType image/jpg "access plus 6 months"
+ExpiresByType image/jpeg "access plus 6 months"
+ExpiresByType image/gif "access plus 6 months"
+ExpiresByType image/png "access plus 6 months"
+ExpiresByType image/svg+xml "access plus 6 months" 
 
-  ExpiresByType application/pdf "access plus 6 months"
+ExpiresByType application/pdf "access plus 6 months"
 
-  ExpiresByType font/eot "access plus 6 months"
-  ExpiresByType font/opentype "access plus 6 months"
-  ExpiresByType font/woff2 "access plus 6 months"
+ExpiresByType font/eot "access plus 6 months"
+ExpiresByType font/opentype "access plus 6 months" 
+ExpiresByType font/woff2 "access plus 6 months"
+
 </IfModule>
+
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|svg)$">
-    Header set Cache-Control "max-age=31536000, public"
-  </FilesMatch>
 
-  <FilesMatch "\.(xml)$">
-    Header set Cache-Control "max-age=172800, public, must-revalidate"
-  </FilesMatch>
 
-  <FilesMatch "\.(html|htm|txt)$">
-    Header set Cache-Control "no-cache, no-store, must-revalidate"
-    Header set Pragma "no-cache"
-    Header set Expires 0
-  </FilesMatch>
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|svg)$">
+Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
 
-  <FilesMatch "\.(yaml|yml)$">
-    Header set Content-Disposition "attachment"
-  </FilesMatch>
+<FilesMatch "\.(xml)$">
+Header set Cache-Control "max-age=172800, public, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(html|htm|txt)$">
+Header set Cache-Control "no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
+Header set Expires 0
+</FilesMatch>
+
+<FilesMatch "\.(yaml|yml)$">
+  Header set Content-Disposition "attachment"
+</FilesMatch>
+
 </IfModule>
+
 
 <IfModule mod_headers.c>
   <FilesMatch "\.(js|css|xml|gz|html|ttf)$">
-    Header append Vary "Accept-Encoding"
+    Header append Vary: Accept-Encoding
   </FilesMatch>
 </IfModule>
 
@@ -151,11 +158,12 @@ Redirect 301 /community/contribute.html /community
 Redirect 301 /community.html /community
 Redirect 301 /our-community.html /community
 
+
+##
+
 RewriteEngine On
 RewriteBase /
 
-# Prevent directory listings (recommended)
-Options -Indexes
 
 RewriteCond %{HTTP_HOST} ^(www\.)?ignite.incubator.apache.org$
 RewriteRule ^/?(.*)$ https://ignite.apache.org/$1 [L,R=301]
@@ -179,8 +187,8 @@ RewriteRule ^releases/(1[^/]*)(/.*)?$ releases/ignite/$1$2 [R=301,L]
 # Redirect all release URLs starting with 2.*, 3.*, 4.* ... into "igniteN" namespace.
 RewriteRule ^releases/([2-9][^/]*)(/.*)?$ releases/ignite$1/$1$2 [R=301,L]
 
-# docs entry point
-RewriteRule ^docs/?$ docs/index.html [L]
+# docs entry points → Ignite 3 latest
+RewriteRule ^docs/?$ docs/ignite3/latest/ [R=301,L]
 
 # special handling for /docs/latest
 RewriteRule ^docs/latest/?$ docs/ignite2/latest/ [R=301,L]
@@ -196,20 +204,6 @@ RewriteRule ^docs/ignite3/latest/(.*)$ docs/ignite3/3.1.0/$1 [L]
 # redirect to latest for Ignite 3 docs (explicit section hits)
 RewriteRule ^docs/ignite3/?$ docs/ignite3/latest/ [R=301,L]
 RewriteRule ^docs/ignite3/latest$ docs/ignite3/latest/ [R=301,L]
-
-# =============================================================================
-# Ignite 3: prefer .html pages over same-name directories (NO trailing slash)
-# =============================================================================
-
-# If user hits .../page/ and page.html exists -> redirect to .../page (no slash)
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/(.+)/$
-RewriteCond %{DOCUMENT_ROOT}/docs/ignite3/%1.html -f
-RewriteRule ^docs/ignite3/(.+)/$ /docs/ignite3/$1 [R=301,L]
-
-# If user hits .../page (no ext) and page.html exists -> serve page.html
-RewriteCond %{REQUEST_URI} ^/docs/ignite3/
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^docs/ignite3/(.+)$ docs/ignite3/$1.html [L]
 
 # =============================================================================
 # Docusaurus clean URL handling for Ignite 3 (/docs/ignite3/)
@@ -246,5 +240,7 @@ RewriteCond %{REQUEST_URI} ^/docs/ignite2/
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^docs/ignite2/(.*)$ docs/ignite2/$1.html [L,NC]
+
+
 
 ErrorDocument 404 /404.html
