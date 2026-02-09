@@ -1,0 +1,116 @@
+---
+title: "Apache Ignite 2.13.0: new Apache Calcite-based SQL engine"
+author: "Nikita Amelchev"
+date: 2022-04-28
+tags:
+    - database
+    - ignite
+    - in
+    - memory
+    - open
+    - source
+    - release
+---
+p
+  | As of April 26, 2022, 
+  a(href='https://ignite.apache.org/') Apache Ignite
+  |  2.13 has been released. You can directly check the full list of resolved 
+  a(href='https://s.apache.org/x8u49') Important JIRA tasks
+  |  but here let&apos;s briefly overview some valuable improvements.
+h4
+  | This is a breaking change release: The legacy service grid implementation was removed.
+
+h3#new-apache-calcite-based-sql-engine New Apache Calcite-based SQL engine
+p
+  | We&apos;ve implemented a new experimental SQL engine based on Apache Calcite. Now it&apos;s possible to:
+ul
+  li
+    | Get rid of some 
+    a(href='https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Motivation') H2 limitations
+    | ;
+  li
+    a(href='https://cwiki.apache.org/confluence/display/IGNITE/IEP-37%3A+New+query+execution+engine#IEP37:Newqueryexecutionengine-Implementationdetails') Optimize
+    |  some query execution.
+p The current H2-based engine has fundamental limitations. For example:
+ul
+  li
+    | some queries should be splitted into 2 phases (map subquery and reduce subquery), but some of them cannot be effectively executed in 2 phases.
+  li H2 is a third-party database product with not-ASF license.
+  li
+    | The optimizer and other internal things are not supposed to work in a distributed environment.
+  li
+    | It&apos;s hard to make Ignite-specific changes to the H2 code, patches are often declined.
+<!-- end -->
+p
+  | The Apache Calcite is a SQL engine with customizable modules. Requests can be splitted into more than 2 phases.
+p A query engine can be set before query execution. Here is an example for SQL:
+
+code.lang-java SELECT /*+ QUERY_ENGINE('h2') */ fld FROM table;
+
+p or 
+
+code.lang-java SELECT /*+ QUERY_ENGINE('calcite') */ fld FROM table;
+
+p
+  | See JDBC and ODBC examples 
+  a(href='https://github.com/apache/ignite/blob/master/modules/calcite/README.txt') here
+  | .
+p
+  | The new engine requires the ignite-indexing module (which depends on H2) to be included to the classpath to support queries infrastructure.
+p
+  | See more technical details about the new engine in the 
+  a(href='https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=130028084') IEP-37
+  | .
+
+h3#read-repair-strategies Read Repair strategies
+p
+  a(href='https://ignite.apache.org/docs/latest/read-repair') &quot;Read Repair&quot;
+  |  refers to a technique of repairing inconsistencies between primary and backup copies of data during normal read operations. When a specific key (or keys) is read by a user operation, Ignite checks the values for the given key in all backup copies.
+p We&apos;ve implemented the new Read Repair strategies as follows:
+ul
+  li LWW (Last Write Wins) - Last write (the newest entry) wins.
+  li PRIMARY - Value from the primary node wins.
+  li
+    | RELATIVE_MAJORITY - The relative majority: a value found more often than any other wins.
+  li REMOVE - Inconsistent entries will be removed.
+  li CHECK_ONLY - Only check will be performed.
+h3#array-type-in-binary-object Array type in Binary Object
+p
+  | In previous versions Ignite did not save information about array type. Now it can be stored in a binary object:
+code
+  pre cache.put(1, new Person[] {new Person(1), new Person(2)});
+  br
+  pre Person[] obj = cache.get(1);
+  br
+  pre assertEquals(Person[].class, obj.getClass());
+  
+p
+  | The feature is disabled by default due to compatibility issues. Set the IGNITE_USE_BINARY_ARRAYS system property to true to enable it.
+h3#cdc-for-in-memory-caches CDC for in-memory caches
+p
+  | The 
+  a(href='https://ignite.apache.org/docs/latest/persistence/change-data-capture') Change Data Capture
+  |  now can be configured for in-memory caches. From now on, only CDC needed records for such caches will be logged to WAL.
+h3#other-improvements-and-changes Other improvements and changes
+ul
+  li
+    | The C++ thin client implemented continuous queries and asynchronous network events handling. See the updated thin clients features list 
+    a(href='https://cwiki.apache.org/confluence/display/IGNITE/Thin+clients+features') here
+    | ;
+  li
+    | Implemented NUMA-aware 
+    a(href='https://github.com/apache/ignite/tree/master/modules/numa-allocator') allocator
+    |  for data regions;
+  li Ignite maven BOM;
+  li Removed the legacy service grid implementation;
+  li 100+ small improvements and bug fixes.
+h3#anything-else- Anything else?
+p
+  | See the 
+  a(href='https://ignite.apache.org/releases/ignite2/2.13.0/release_notes.html') release notes
+  |  to learn about all of the new features and improvements.
+p
+  | Reach out to us on the community user list for more questions, details, and feedback.
+p
+  | Sincerely yours,
+  | Ignite contributors and committers
