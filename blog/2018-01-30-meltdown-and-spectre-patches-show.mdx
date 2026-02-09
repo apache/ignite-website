@@ -1,0 +1,39 @@
+---
+title: "Meltdown and Spectre patches show negligible impact to Apache Ignite performance"
+authors: [denis]
+date: 2018-01-30
+tags: [apache, ignite2, meltdown, performance, security, spectre, archived]
+---
+
+As promised in my [initial blog post](https://blogs.apache.org/ignite/entry/protecting-apache-ignite-from-meltdown) on this matter, Apache Ignite community applied security patches against the notorious Meltdown Spectre vulnerabilities and completed performance testing of general operations and workloads that are typical for Ignite deployments.
+
+The security patches were applied only for [CVE-2017-5754](https://nvd.nist.gov/vuln/detail/CVE-2017-5754) (Meltdown) and [CVE-2017-5753](https://nvd.nist.gov/vuln/detail/CVE-2017-5753) (Spectre Variant 1) vulnerabilities. The patches for [CVE-2017-5715](https://nvd.nist.gov/vuln/detail/CVE-2017-5715) (Spectre Variant 2) for the hardware the community used for testing are not stable yet an can [cause system reboot issues or another unpredictable behavior](https://newsroom.intel.com/news/root-cause-of-reboot-issue-identified-updated-guidance-for-customers-and-partners/).
+
+The applied patches have shown that the performance implications are negligible - the performance drop is just in the 0 - 7% range as the figure shows:
+
+<!--truncate-->
+
+![Spectre and Meltdown Benchmarks](https://www.gridgain.com/sites/default/files/inline-images/meltdown-benchmarks.png)
+
+Thus, Apache Ignite community highly recommends its customers and partners to consider security patches for CVE-2017-5754 (Meltdown) and CVE-2017-5753 (Spectre Variant 1) in their deployment environments and contact us on the user list if you run into a larger performance drop in your use case.
+
+At the same time, we're keeping an eye on Intel announcements and will validate the performance implications of Spectre Variant 2 once a solution is released by the hardware vendor.
+
+Just for your reference, the benchmarks were executed in the following environment and configuration.
+
+### Benchmarking Environment
+
+Cluster Configuration:
+
+- 4 servers and 8 client nodes
+- Apache Ignite version: 2.4.0
+
+Hardware:
+
+- Huawei RH2288 V3, CPU - 2x Xeon E5-2609 v4, 1.7GHz, RAM - 96Gb, SSD - 3x800Gb RAID0 2.4Tb, Network - 10Gb/s
+- DEll R610, CPU - 2x Xeon X5570, RAM - 96Gb, SSD - 512Gb, HDD - 2048GB, Network - 10Gb/s
+
+Operating System:
+
+- OS CentOS Linux release 7.4.1708 (Core)
+- Kernel - Linux 3.10.0-693.11.6.el7.x86_64 #1 SMP Thu Jan 4 01:06:37 UTC 2018 x86_64

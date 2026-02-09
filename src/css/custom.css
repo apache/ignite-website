@@ -1,0 +1,254 @@
+/**
+ * Apache Ignite Website Custom Styles
+ *
+ * Main stylesheet that imports all custom styling layers.
+ * This layered approach provides maintainable, organized CSS
+ * that closely matches the legacy site while being Docusaurus-native.
+ *
+ * Import order is important:
+ * 1. Brand foundation (variables, colors)
+ * 2. Typography system
+ * 3. Layout utilities
+ * 4. Component patterns
+ * 5. Responsive overrides
+ */
+
+/* === Brand Foundation === */
+@import './brand-variables.css';
+@import './typography.css';
+@import './layout.css';
+
+/* === Component Patterns === */
+@import './components.css';
+@import './blog.css';
+@import './events.css';
+
+/* === Responsive Styles === */
+@import './responsive.css';
+
+/* === Global Resets === */
+
+/* More targeted reset - keep margin/padding reset but remove overly broad list-style and font-style */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset list styles only for navigation and UI elements */
+nav ul,
+.menu,
+.nav-list,
+.breadcrumb,
+.navbar ul,
+.footer ul,
+header ul {
+  list-style: none;
+}
+
+/* Let content lists keep their bullets - REMOVED universal list-style: none */
+article ul,
+.content ul,
+.markdown ul,
+.docusaurus ul {
+  list-style: disc;
+  padding-left: 2rem;
+}
+
+/* Remove outline: none - accessibility issue */
+/* Replaced with visible focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* === Link Styles === */
+
+a {
+  text-decoration: none;
+  color: var(--ai-link);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--ai-link-hover);
+}
+
+/* === Form Elements === */
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Remove default search input styling */
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display: none;
+}
+
+/* Remove spinner from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* === Body Styles === */
+
+body {
+  background: var(--ai-bg-primary);
+  position: relative;
+}
+
+/* === Scroll Behavior === */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Docusaurus Overrides === */
+
+/* Navbar styling */
+.navbar {
+  background-color: var(--ai-bg-primary);
+  border-bottom: 1px solid var(--ai-border-light);
+  height: 96px;
+}
+
+/* Homepage navbar positioning - absolute over hero */
+body.homepage .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: none;
+  border-bottom: none;
+}
+
+.navbar__logo {
+  height: auto;
+}
+
+/* Footer styling */
+.footer {
+  background: var(--ai-bg-tertiary);
+  padding: 0;
+}
+
+/* Main content wrapper */
+.main-wrapper {
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height)); /* Modern dynamic viewport height for mobile */
+}
+
+/* === Utility Classes === */
+/* Note: .flexi and .container are defined in layout.css */
+
+.button {
+  font-family: inherit;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  color: var(--ai-text-inverse);
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  text-decoration: none;
+  height: 5rem;
+  font-size: 1.6rem;
+  background-color: var(--ai-blue);
+  border-radius: 1rem;
+  transition: background 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+.button:hover {
+  background: var(--ai-blue-dark);
+  color: var(--ai-text-inverse);
+  text-decoration: none;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.pt-1 {
+  padding-top: 1rem;
+}
+
+.pt-2 {
+  padding-top: 2rem;
+}
+
+.pt-5 {
+  padding-top: 5rem;
+}
+
+/* === Scroll to Top Button === */
+/* Note: .scrollTop is defined in layout.css */
+
+/* === Modal Styles === */
+/* HystModal library z-index overrides */
+
+.hystmodal__shadow {
+  z-index: var(--ai-z-modal-shadow);
+}
+
+.hystmodal {
+  z-index: var(--ai-z-modal);
+}
+
+/* === Code Block Styling === */
+/* Match home page code block appearance */
+
+[class*='codeBlockContainer'] {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+[class*='codeBlockContent'],
+[class*='codeBlockLines'],
+.prism-code {
+  background: #2d3748 !important;
+}
+
+
+/* Code block title bar */
+[class*='codeBlockTitle'] {
+  background: #1a202c !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Line numbers */
+[class*='codeLineNumber'] {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Highlighted lines */
+[class*='docusaurus-highlight-code-line'] {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
