@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkdocusaurus=globalThis.webpackChunkdocusaurus||[]).push([[8146],{29328:a=>{a.exports=JSON.parse('{"metadata":{"permalink":"/blog","page":1,"postsPerPage":10,"totalPages":4,"totalCount":39,"nextPage":"/blog/page/2","blogDescription":"News, updates, and technical articles about Apache Ignite","blogTitle":"Apache Ignite Blog"}}')}}]);

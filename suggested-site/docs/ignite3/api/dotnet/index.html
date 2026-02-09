@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Apache Ignite 3 .NET Client | Apache Ignite.NET API Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Apache Ignite 3 .NET Client | Apache Ignite.NET API Documentation ">
+      
+      
+      <link rel="icon" href="images/favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="articles/toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/apache/ignite-3/blob/main/modules/platforms/dotnet/docs/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="images/logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="apache-ignite-3-net-client">Apache Ignite 3 .NET Client</h1>
+
+<p>.NET client for <a href="https://ignite.apache.org/">Apache Ignite</a> - a distributed database for high‑performance applications with in‑memory speed.</p>
+<h1 id="key-features">Key Features</h1>
+<ul>
+<li>Full support of all Ignite APIs: SQL, Transactions, Key/Value, Compute.</li>
+<li>Connects to any number of Ignite nodes at the same time.</li>
+<li>Partition awareness: sends key-based requests to the right node.</li>
+<li>Load-balancing, failover, automatic reconnection and request retries.</li>
+<li>Built-in LINQ provider for strongly-typed SQL queries.</li>
+<li>Integrates with <a href="https://nodatime.org/">NodaTime</a> to provide precise mapping to Ignite date/time types.</li>
+<li>Logging and metrics.</li>
+<li>High performance and fully asynchronous.</li>
+</ul>
+<h1 id="getting-started">Getting Started</h1>
+<p>Below are a few examples of basic usage to get you started:</p>
+<pre><code class="lang-cs">// Connect to the cluster.
+var cfg = new IgniteClientConfiguration(&quot;127.0.0.1:10800&quot;);
+IIgniteClient client = await IgniteClient.StartAsync(cfg);
+
+// Start a read-only transaction.
+await using var tx = await client.Transactions.BeginAsync(
+    new TransactionOptions { ReadOnly = true });
+
+// Get table by name.
+ITable? table = await client.Tables.GetTableAsync(&quot;Person&quot;);
+
+// Get a strongly-typed view of table data using Person record.
+IRecordView&lt;Person&gt; view = table!.GetRecordView&lt;Person&gt;();
+
+// Upsert a record with KV (NoSQL) API.
+await view.UpsertAsync(tx, new Person(1, &quot;John&quot;));
+
+// Query data with SQL.
+await using var resultSet = await client.Sql.ExecuteAsync&lt;Person&gt;(
+    tx, &quot;SELECT * FROM Person&quot;);
+    
+List&lt;Person&gt; sqlResults = await resultSet.ToListAsync();
+
+// Query data with LINQ.
+List&lt;string&gt; names  = view.AsQueryable(tx)
+    .OrderBy(person =&gt; person.Name)
+    .Select(person =&gt; person.Name)
+    .ToList();
+
+// Execute a distributed computation.
+IList&lt;IClusterNode&gt; nodes = await client.GetClusterNodesAsync();
+IJobTarget&lt;IEnumerable&lt;IClusterNode&gt;&gt; jobTarget = JobTarget.AnyNode(nodes);
+var jobDesc = new JobDescriptor&lt;string, int&gt;(
+    &quot;org.foo.bar.WordCountJob&quot;);
+IJobExecution&lt;int&gt; jobExecution = await client.Compute.SubmitAsync(
+    jobTarget, jobDesc, &quot;Hello, world!&quot;);
+
+int wordCount = await jobExecution.GetResultAsync();
+</code></pre>
+<h1 id="api-walkthrough">API Walkthrough</h1>
+<h2 id="configuration">Configuration</h2>
+<p><code>IgniteClientConfiguration</code> is used to configure connections properties (endpoints, SSL), retry policy, logging, and timeouts.</p>
+<pre><code class="lang-cs">var cfg = new IgniteClientConfiguration
+{
+    // Connect to multiple servers.
+    Endpoints = { &quot;server1:10800&quot;, &quot;server2:10801&quot; },
+
+    // Enable TLS.
+    SslStreamFactory = new SslStreamFactory
+    {
+        SslClientAuthenticationOptions = new SslClientAuthenticationOptions
+        {
+            // Allow self-signed certificates.
+            RemoteCertificateValidationCallback = 
+                (sender, certificate, chain, errors) =&gt; true
+        }
+    },    
+        
+    // Retry all read operations in case of network issues.
+    RetryPolicy = new RetryReadPolicy { RetryLimit = 32 }
+};
+</code></pre>
+<h2 id="sql">SQL</h2>
+<p>SQL is the primary API for data access. It is used to create, drop, and query tables, as well as to insert, update, and delete data.</p>
+<pre><code class="lang-cs">using var client = await IgniteClient.StartAsync(new(&quot;localhost&quot;));
+
+await client.Sql.ExecuteAsync(
+    null, &quot;CREATE TABLE Person (Id INT PRIMARY KEY, Name VARCHAR)&quot;);
+
+await client.Sql.ExecuteAsync(
+    null, &quot;INSERT INTO Person (Id, Name) VALUES (1, 'John Doe')&quot;);
+
+await using var resultSet = await client.Sql.ExecuteAsync(
+    null, &quot;SELECT Name FROM Person&quot;);
+
+await foreach (IIgniteTuple row in resultSet)
+    Console.WriteLine(row[0]);
+</code></pre>
+<h3 id="mapping-sql-results-to-user-types">Mapping SQL Results to User Types</h3>
+<p>SQL results can be mapped to user types using <code>ExecuteAsync&lt;T&gt;</code> method. This is cleaner and more efficient than <code>IIgniteTuple</code> approach above.</p>
+<pre><code class="lang-cs">await using var resultSet = await client.Sql.ExecuteAsync&lt;Person&gt;(
+    null, &quot;SELECT Name FROM Person&quot;);
+    
+await foreach (Person p in resultSet)
+    Console.WriteLine(p.Name);
+    
+public record Person(int Id, string Name);
+</code></pre>
+<p>Column names are matched to record properties by name. To map columns to properties with different names, use <code>ColumnAttribute</code>.</p>
+<h2 id="dbdatareader-adonet-api">DbDataReader (ADO.NET API)</h2>
+<p>Another way to work with query results is <code>System.Data.Common.DbDataReader</code>, which can be obtained with <code>ExecuteReaderAsync</code> method.</p>
+<p>For example, you can bind query results to a <code>DataGridView</code> control:</p>
+<pre><code class="lang-cs">await using var reader = await client.Sql.ExecuteReaderAsync(
+    null, &quot;select * from Person&quot;);
+
+var dt = new DataTable();
+dt.Load(reader);
+
+dataGridView1.DataSource = dt;
+</code></pre>
+<h2 id="nosql">NoSQL</h2>
+<p>NoSQL API is used to store and retrieve data in a key/value fashion. It can be more efficient than SQL in certain scenarios.
+Existing tables can be accessed, but new tables can only be created with SQL.</p>
+<p>First, get a table by name:</p>
+<pre><code class="lang-cs">ITable? table = await client.Tables.GetTableAsync(&quot;Person&quot;);
+</code></pre>
+<p>Then, there are two ways to look at the data.</p>
+<h3 id="record-view">Record View</h3>
+<p>Record view represents the entire row as a single object. It can be an <code>IIgniteTuple</code> or a user-defined type.</p>
+<pre><code class="lang-cs">IRecordView&lt;IIgniteTuple&gt; binaryView = table.RecordBinaryView;
+IRecordView&lt;Person&gt; view = table.GetRecordView&lt;Person&gt;();
+
+await view.UpsertAsync(null, new Person(1, &quot;John&quot;));
+</code></pre>
+<h3 id="keyvalue-view">KeyValue View</h3>
+<p>Key/Value view splits the row into key and value parts.</p>
+<pre><code class="lang-cs">IKeyValueView&lt;IIgniteTuple, IIgniteTuple&gt; kvBinaryView = table.KeyValueBinaryView;
+IKeyValueView&lt;PersonKey, Person&gt; kvView = table.GetKeyValueView&lt;PersonKey, Person&gt;();
+
+await kvView.PutAsync(null, new PersonKey(1), new Person(&quot;John&quot;));
+</code></pre>
+<h2 id="linq">LINQ</h2>
+<p>Data can be queried and modified with LINQ using <code>AsQueryable</code> method.
+LINQ expressions are translated to SQL queries and executed on the server.</p>
+<pre><code class="lang-cs">ITable? table = await client.Tables.GetTableAsync(&quot;Person&quot;);
+IRecordView&lt;Person&gt; view = table!.GetRecordView&lt;Person&gt;();
+
+IQueryable&lt;string&gt; query = view.AsQueryable()
+    .Where(p =&gt; p.Id &gt; 100)
+    .Select(p =&gt; p.Name);
+
+List&lt;string&gt; names = await query.ToListAsync();
+</code></pre>
+<p>Generated SQL can be retrieved with <code>ToQueryString</code> extension method, or by enabling debug logging.</p>
+<p>Bulk update and delete with optional conditions are supported via <code>ExecuteUpdateAsync</code> and <code>ExecuteDeleteAsync</code> extensions methods on <code>IQueryable&lt;T&gt;</code></p>
+<h2 id="transactions">Transactions</h2>
+<p>All operations on data in Ignite are transactional. If a transaction is not specified, an explicit transaction is started and committed automatically.</p>
+<p>To start a transaction, use <code>ITransactions.BeginAsync</code> method. Then, pass the transaction object to all operations that should be part of the same transaction.</p>
+<pre><code class="lang-cs">await using ITransaction tx = await client.Transactions.BeginAsync();
+
+await view.UpsertAsync(tx, new Person(1, &quot;John&quot;));
+
+await client.Sql.ExecuteAsync(
+    tx, &quot;INSERT INTO Person (Id, Name) VALUES (2, 'Jane')&quot;);
+
+await view.AsQueryable(tx)
+    .Where(p =&gt; p.Id &gt; 0)
+    .ExecuteUpdateAsync(updater =&gt; 
+        updater.SetProperty(person =&gt; person.Name, person =&gt; person.Name + &quot; Doe&quot;));
+
+await tx.CommitAsync();
+</code></pre>
+<h2 id="compute">Compute</h2>
+<p>Compute API is used to execute distributed computations on the cluster.</p>
+<p>Compute jobs can be implemented in Java or .NET.
+Resulting binaries (jar or dll files) should be <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/code-deployment/code-deployment">deployed</a> to the server nodes and called by the full class name.</p>
+<h3 id="call-a-java-compute-job">Call a Java Compute Job</h3>
+<p>You can call <a href="https://ignite.apache.org/docs/ignite3/latest/developers-guide/compute/compute">Java computing jobs</a> from your .NET code, for example:</p>
+<pre><code class="lang-csharp">IList&lt;IClusterNode&gt; nodes = await client.GetClusterNodesAsync();
+IJobTarget&lt;IEnumerable&lt;IClusterNode&gt;&gt; jobTarget = JobTarget.AnyNode(nodes);
+
+var jobDesc = new JobDescriptor&lt;string, string&gt;(
+    JobClassName: &quot;org.foo.bar.MyJob&quot;,
+    DeploymentUnits: [new DeploymentUnit(&quot;Unit1&quot;)]);
+
+IJobExecution&lt;string&gt; jobExecution = await client.Compute.SubmitAsync(
+    jobTarget, jobDesc, &quot;Job Arg&quot;);
+
+string jobResult = await jobExecution.GetResultAsync();
+</code></pre>
+<h3 id="implement-a-net-compute-job">Implement a .NET Compute Job</h3>
+<ol>
+<li>Prepare a &quot;class library&quot; project for the job implementation (<code>dotnet new classlib</code>). In most cases, it is better to use a separate project for compute jobs to reduce deployment size.</li>
+<li>Add a reference to <code>Apache.Ignite</code> package to the class library project (<code>dotnet add package Apache.Ignite</code>).</li>
+<li>Create a class that implements <code>IComputeJob&lt;TArg, TRes&gt;</code> interface, for example:
+<pre><code class="lang-csharp">public class HelloJob : IComputeJob&lt;string, string&gt;
+{
+    public ValueTask&lt;string&gt; ExecuteAsync(IJobExecutionContext context, string arg, CancellationToken cancellationToken) =&gt;
+        ValueTask.FromResult(&quot;Hello &quot; + arg);
+}
+</code></pre>
+</li>
+<li>Publish the project (<code>dotnet publish -c Release</code>).</li>
+<li>Copy the resulting dll file (and any extra dependencies, EXCLUDING Ignite dlls) to a separate directory.
+<ul>
+<li>Note: The directory with the dll must not contain any subdirectories.</li>
+</ul>
+</li>
+<li>Use <a href="https://ignite.apache.org/docs/ignite3/latest/ignite-cli-tool#cluster-commands">Ignite CLI</a> <code>cluster unit deploy</code> command to deploy the directory to the cluster as a deployment unit.</li>
+</ol>
+<h3 id="run-a-net-compute-job">Run a .NET Compute Job</h3>
+<p>.NET compute jobs can be executed from any client (.NET, Java, C++, etc),
+by specifying the assembly-qualified class name and using the <code>JobExecutorType.DotNetSidecar</code> option.</p>
+<pre><code class="lang-csharp">var jobTarget = JobTarget.AnyNode(await client.GetClusterNodesAsync());
+var jobDesc = new JobDescriptor&lt;string, string&gt;(
+    JobClassName: typeof(HelloJob).AssemblyQualifiedName!,
+    DeploymentUnits: [new DeploymentUnit(&quot;unit1&quot;)],
+    Options: new JobExecutionOptions(ExecutorType: JobExecutorType.DotNetSidecar));
+
+IJobExecution&lt;string&gt; jobExec = await client.Compute.SubmitAsync(jobTarget, jobDesc, &quot;world&quot;);
+</code></pre>
+<p>Alternatively, use the <code>JobDescriptor.Of</code> shortcut method to create a job descriptor from a job instance:</p>
+<pre><code class="lang-csharp">JobDescriptor&lt;string, string&gt; jobDesc = JobDescriptor.Of(new HelloJob())
+    with { DeploymentUnits = [new DeploymentUnit(&quot;unit1&quot;)] };
+</code></pre>
+<h4 id="notes">Notes</h4>
+<ul>
+<li>.NET 8 (or later) runtime (not SDK) is required on the server nodes.</li>
+<li>.NET compute jobs are executed in a separate process (sidecar) on the server node.</li>
+<li>The process is started on the first .NET job call and then reused for subsequent jobs.</li>
+<li>Every deployment unit combination is loaded into a separate <a href="https://learn.microsoft.com/en-us/dotnet/core/dependency-loading/understanding-assemblyloadcontext">AssemblyLoadContext</a>.</li>
+</ul>
+<h2 id="failover-retry-reconnect-load-balancing">Failover, Retry, Reconnect, Load Balancing</h2>
+<p>Ignite client implements a number of features to improve reliability and performance:</p>
+<ul>
+<li>When multiple endpoints are configured, the client will maintain connections to all of them, and load balance requests between them.</li>
+<li>If a connection is lost, the client will try to reconnect, assuming it may be a temporary network issue or a node restart.</li>
+<li>Periodic heartbeat messages are used to detect connection issues early.</li>
+<li>If a user request fails due to a connection issue, the client will retry it automatically according to the configured <code>IgniteClientConfiguration.RetryPolicy</code>.</li>
+</ul>
+<h2 id="logging">Logging</h2>
+<p>To enable logging, set <code>IgniteClientConfiguration.LoggerFactory</code> property. It uses the standard <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/logging">Microsoft.Extensions.Logging</a> API.</p>
+<p>For example, to log to console (requires <code>Microsoft.Extensions.Logging.Console</code> package):</p>
+<pre><code class="lang-cs">var cfg = new IgniteClientConfiguration
+{
+    LoggerFactory = LoggerFactory.Create(builder =&gt; builder.AddConsole().SetMinimumLevel(LogLevel.Debug))
+};
+</code></pre>
+<p>Or with Serilog (requires <code>Serilog.Extensions.Logging</code> and <code>Serilog.Sinks.Console</code> packages):</p>
+<pre><code class="lang-cs">var cfg = new IgniteClientConfiguration
+{
+    LoggerFactory = LoggerFactory.Create(builder =&gt;
+        builder.AddSerilog(new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .CreateLogger()))
+};
+</code></pre>
+<h2 id="metrics">Metrics</h2>
+<p>Ignite client exposes a number of metrics with <code>Apache.Ignite</code> meter name through the <a href="https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation">System.Diagnostics.Metrics API</a>
+that can be used to monitor system health and performance.</p>
+<p>For example, <a href="https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters">dotnet-counters</a> tool can be used like this:</p>
+<pre><code class="lang-sh">dotnet-counters monitor --counters Apache.Ignite,System.Runtime --process-id PID
+</code></pre>
+<h1 id="documentation">Documentation</h1>
+<p>Full documentation is available at <a href="https://ignite.apache.org/docs">https://ignite.apache.org/docs</a>.</p>
+<h1 id="feedback">Feedback</h1>
+<p>Use any of the following channels to provide feedback:</p>
+<ul>
+<li><a href="mailto:user@ignite.apache.org">user@ignite.apache.org</a></li>
+<li><a href="https://stackoverflow.com/questions/tagged/ignite">https://stackoverflow.com/questions/tagged/ignite</a></li>
+<li><a href="https://github.com/apache/ignite-3/issues">https://github.com/apache/ignite-3/issues</a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/apache/ignite-3/blob/main/modules/platforms/dotnet/docs/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Copyright 2023 The Apache Software Foundation
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
