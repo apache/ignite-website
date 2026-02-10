@@ -1,44 +1,1023 @@
-<!doctype html>
-<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-3.0.0 docs-doc-page docs-doc-id-developers-guide/events/events-list" data-has-hydrated="false">
+<!DOCTYPE html>
+
+      
+      
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="generator" content="Docusaurus v3.9.2">
-<title data-rh="true">Available Events | Apache Ignite 3 Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://ignite.apache.org/docs/ignite3/img/logo.svg"><meta data-rh="true" name="twitter:image" content="https://ignite.apache.org/docs/ignite3/img/logo.svg"><meta data-rh="true" property="og:url" content="https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/events-list"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="3.0.0"><meta data-rh="true" name="docusaurus_tag" content="docs-default-3.0.0"><meta data-rh="true" name="docsearch:version" content="3.0.0"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-3.0.0"><meta data-rh="true" property="og:title" content="Available Events | Apache Ignite 3 Documentation"><meta data-rh="true" name="description" content="{/*"><meta data-rh="true" property="og:description" content="{/*"><link data-rh="true" rel="icon" href="/docs/ignite3/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/events-list"><link data-rh="true" rel="alternate" href="https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/events-list" hreflang="en"><link data-rh="true" rel="alternate" href="https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/events-list" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Developers Guide","item":"https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/table-api"},{"@type":"ListItem","position":2,"name":"Events","item":"https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/"},{"@type":"ListItem","position":3,"name":"Available Events","item":"https://ignite.apache.org/docs/ignite3/3.0.0/developers-guide/events/events-list"}]}</script><link rel="stylesheet" href="/docs/ignite3/assets/css/styles.aea0cba5.css">
-<script src="/docs/ignite3/assets/js/runtime~main.4360c1c4.js" defer="defer"></script>
-<script src="/docs/ignite3/assets/js/main.189970e9.js" defer="defer"></script>
+    <meta charset="UTF-8">
+    <!-- Bugyard widget embed -->
+    <script type="text/javascript">
+        !function(){
+            if("function" != typeof window.bugyard){
+                var a = function(){ a.c(arguments) };
+                a.q = [], a.c = function(b){ a.q.push(b) };
+                window.bugyard = a;
+
+                var b = document.createElement("script");
+                b.setAttribute("data-bugyard", "610961912c35ff001493163a");
+                b.setAttribute("async", "async");
+                b.setAttribute("defer", "defer");
+                b.setAttribute("src", "/assets/js/bugyard.min.js");
+                document.getElementsByTagName("head")[0].appendChild(b);
+            }
+        }();
+        window.bugyard("hideButton");
+    </script>
+    <!-- Bugyard widget embed -->
+
+    <link rel="preload" href='/assets/js/code-tabs.js?1' as="script" crossorigin>
+    <link rel="preload" href='/assets/js/page-nav.js' as="script" crossorigin>
+    <link rel="preload" href='/assets/js/docs-menu.js?20201005' as="script" crossorigin>
+
+    <style>:root{--gg-red:#ec1c24;--gg-orange:#ec1c24;--gg-orange-dark:#bc440b;--gg-orange-filter:invert(47%) sepia(61%) saturate(1950%) hue-rotate(345deg) brightness(100%) contrast(95%);--gg-dark-gray:#333333;--orange-line-thickness:3px;--block-code-background:rgba(241, 241, 241, 20%);--inline-code-background:rgba(241, 241, 241, 90%);--padding-top:25px;--link-color:#ec1c24;--body-background:#fcfcfc}header{min-height:var(--header-height);background:#fff;box-shadow:0 4px 10px 0 #eee,0 0 4px 0 #d5d5d5;z-index:1}header>.container{display:grid;grid-template-columns:auto auto 1fr auto auto auto;grid-template-areas:'left-toggle home nav ver api search lang';grid-template-rows:40px;flex-direction:row;align-items:center;justify-content:flex-start;padding:12px 20px;max-width:1400px;margin:0 auto}header nav>ul{padding:0;margin:0;list-style:none;display:inherit}header .dropdown{display:none;position:fixed;top:calc(var(--header-height) - 12px);width:auto;background:#fff;box-shadow:0 4px 4px 0 rgba(0,0,0,.24),0 0 4px 0 rgba(0,0,0,.12);border-radius:4px;padding-top:10px;padding-bottom:12px;z-index:2}header .dropdown li{display:flex}header .dropdown a{color:grey!important;font-size:16px;padding-top:5px;padding-bottom:4px}header .menu{border:none;background:0 0;width:40px;height:40px;margin-right:12px;grid-area:left-toggle}header .menu img{width:18px;height:12px}header .search-close,header .top-nav-toggle{background:0 0;border:none;padding:0;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--gg-dark-gray);font-size:26px}header .search-toggle{grid-area:search}header .top-nav-toggle{grid-area:top-toggle}header .home{grid-area:home;margin-right:auto}header .home img{height:36px}header #api-docs{grid-area:api;margin:0;display:flex}header #api-docs .dropdown{padding:.5em 0}header #api-docs a{padding:9px 14px;color:var(--gg-dark-gray)!important;text-decoration:none;white-space:nowrap}header #api-docs .dropdown-item a{font-weight:400;display:block;width:100%;min-width:150px}header #lang-selector li{list-style:none;display:flex;padding:9px 14px}header #lang-selector li a{display:flex;color:#000;align-items:center}header #lang-selector li a span{font-size:10px;margin-left:5px}header #lang-selector li a img{width:25px}header #lang-selector li .dropdown{margin-left:-70px}header #lang-selector li .dropdown .dropdown-item{padding:0 1em;margin-bottom:8px}header #lang-selector li .dropdown .dropdown-item a span{font-size:14px}header .search{margin-left:auto;margin-right:20px;grid-area:search}header .search input[type=search]{color:var(--gg-dark-gray);background:rgba(255,255,255,.8);border:1px solid #ccc;padding:10px 15px;font-family:inherit;max-width:148px;height:37px;font-size:14px;-webkit-appearance:unset;appearance:unset}header #version-selector{list-style:none;grid-area:ver;line-height:28px;border-radius:0;margin-right:10px;border:none;color:var(--gg-dark-gray);padding:5px 16px 5px 10px;white-space:nowrap;font-size:14px;width:auto;text-align:right;box-sizing:border-box;text-align-last:right;-moz-appearance:none;-webkit-appearance:none;appearance:none;direction:rtl}header #version-selector option{direction:ltr}header>nav{grid-area:nav;font-size:18px;display:flex;flex-direction:row;margin:0 20px}header #lang-selector{grid-area:lang}header .search-close{margin-right:10px}@media (max-width:600px){header .search{margin-right:5px}header .search input[type=search]{max-width:110px}}header:not(.narrow-header) .search-close,header:not(.narrow-header) .top-nav-toggle{display:none}@media (max-width:670px){header>.container{grid-template-columns:auto 1fr auto;grid-template-areas:'left-toggle home search' 'ver api lang'}header #lang-selector li{justify-content:flex-end}}pre,pre.rouge{padding:8px 15px;background:var(--block-code-background)!important;border-radius:5px;border:1px solid #e5e5e5;overflow-x:auto;min-height:36px;line-height:18px;color:#545454}code{color:#545454}pre.rouge code{background:0 0!important}:not(pre)>code{background:var(--inline-code-background);padding:.1em .5em;background-clip:padding-box;border-radius:3px;color:#545454;font-size:90%}.listingblock .content{position:relative}.highlight{color:#586e75}.highlight .c1{color:#657b83}.highlight .nt{color:#b58900}.highlight .o{color:#93a1a1}.highlight .k{color:#6c71c4}.highlight .kt{color:#cb4b16}.highlight .s,.highlight .s1{color:#859900}.highlight .nc{color:#b58900}.highlight .na{color:#268bd2}body{font-family:'Open Sans',sans-serif}h1,h2{color:#000;font-weight:400;font-family:'Open Sans'}h1{font-size:36px;line-height:40px}a{text-decoration:none;color:var(--link-color)}section{color:#545454}.admonitionblock .icon .title{display:none}body{--header-height:64px;--promotion-bar-height:35px;--footer-height:104px;--footer-gap:60px;padding:0;margin:0;display:flex;flex-direction:column;min-height:100vh;background-color:var(--body-background);font-family:'Open Sans',sans-serif}body>section{flex:1}header{position:-webkit-sticky;position:sticky;top:0;z-index:2}*{box-sizing:border-box}@media (max-width:670px){body{--header-height:97px}}.left-nav{padding:10px 20px;width:289px;overflow-y:auto;top:calc(var(--header-height) + var(--promotion-bar-height));height:calc(100vh - var(--header-height) - var(--promotion-bar-height));font-family:'Open Sans';padding-top:var(--padding-top);background-color:var(--body-background)}.left-nav li{list-style:none}.left-nav a,.left-nav button{text-decoration:none;color:#757575;font-size:16px;display:inline-flex;width:100%;margin:2px 0;padding:.25em .375em;background:0 0;border:none;font:inherit;text-align:left}.left-nav a.active{color:var(--link-color)}.left-nav .nav-group{margin-left:6px;font-size:14px}.left-nav nav{border-left:2px solid #ddd;margin-bottom:5px}.left-nav nav.collapsed{display:none}.left-nav nav>li>a,.left-nav nav>li>button{padding-left:20px;text-align:left}.left-nav nav>li>a.active{border-left:var(--orange-line-thickness) solid var(--active-color);padding-left:calc(20px - var(--orange-line-thickness))}.left-nav nav.sub_pages{border:none}.left-nav nav.sub_pages a{padding-left:32px}.left-nav .state-indicator{margin-left:auto;margin-top:5px;width:6.2px;height:10px;flex:0 0 auto;filter:invert(49%) sepia(4%) saturate(5%) hue-rotate(23deg) brightness(92%) contrast(90%)}.left-nav button.expanded .state-indicator{transform:rotate(90deg)}.right-nav{width:289px;padding:12px 26px;overflow-y:auto;height:calc(100vh - var(--header-height));top:0;position:-webkit-sticky;position:sticky;display:flex;flex-direction:column;font-family:'Open sans';padding-top:var(--padding-top);background-color:#fff}.right-nav ul{list-style:none;padding:0;margin:0}.right-nav li{padding:0}.right-nav a{--border-width:0px;font-size:14px;color:#757575;padding-left:calc(15px * var(--nesting-level) + 8px - var(--border-width));margin:.3em 0;display:inline-block}.right-nav .sectlevel1{border-left:2px solid #ddd}.right-nav .sectlevel1{--nesting-level:0}.right-nav .sectlevel2{--nesting-level:1}.right-nav .sectlevel3{--nesting-level:2}@media (max-width:1200px){.right-nav{width:230px}}.right-nav footer{font-size:12px;padding:calc(var(--footer-gap) * .3) 0 5px;text-align:left;margin:auto 0 0}section.page-docs{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:100%;grid-template-areas:'left-nav content right-nav';line-height:20px;max-width:1440px;margin:auto;width:100%}section.page-docs>article{border-left:1px solid #eee;background-color:#fff;padding:0 50px 30px;grid-area:content;overflow:hidden;font-family:sans-serif;font-size:16px;color:#545454;line-height:1.6em}section.page-docs>article h1,section.page-docs>article h2{font-family:'Open Sans'}@media (max-width:800px){section.page-docs>article{padding-left:15px;padding-right:15px}}section.page-docs .edit-link{position:relative;top:10px;right:10px;float:right;padding-top:calc(var(--header-height) + var(--padding-top));margin-top:calc((-1 * var(--header-height)))}section.page-docs h1,section.page-docs h2{margin-bottom:0}section.page-docs h2[id]{margin-top:var(--margin-top);margin-bottom:calc(var(--margin-top) * .5);z-index:-1}section.page-docs .title{font-style:italic}section.page-docs h2[id]{--margin-top:1.2em}.left-nav{bottom:0;position:-webkit-sticky;position:sticky}.left-nav{grid-area:left-nav}.right-nav{grid-area:right-nav}.left-nav__overlay{display:none;background:rgba(0,0,0,.5);z-index:1;position:fixed;top:var(--header-height);bottom:0;left:0;right:0}@media (max-width:990px){body:not(.hide-left-nav) .left-nav__overlay{display:block}nav.left-nav{background:#fafafa;grid-area:left-nav;box-shadow:0 4px 4px 0 rgba(0,0,0,.24),0 0 4px 0 rgba(0,0,0,.12);min-height:calc(100vh - var(--header-height));max-height:calc(100vh - var(--header-height));position:fixed;bottom:0;top:var(--header-height);z-index:2}section.page-docs>article{grid-column-start:left-nav;grid-column-end:content;grid-row:content}}@media (max-width:800px){nav.right-nav{display:none}}:target:before{content:"";display:block;margin-top:calc(var(--header-height) * -1);height:var(--header-height);width:1px}@media (min-width:600px) and (max-width:900px){:target:before{content:"";display:block;width:1px;margin-top:-150px;height:150px}}
+#header #promotion-bar { background-color: #333333; padding: 8px; }
+#header #promotion-bar p { font-size: 14px; line-height: 1.4em; font-weight: 600; padding: 0; margin: 0; color: #f0f0f0; text-align: center;}
+#header #promotion-bar p a { color: #FCB903; } </style>
+
+    
+
+    
+    <meta name="ignite-version" content="3.0.0" />
+    <title>Available Events | Ignite Documentation</title>
+    
+    <link rel="canonical" href="/docs/latest/developers-guide/events/events-list" />
+    
+	
+	  <link rel="shortcut icon" href="/favicon.ico">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>
+
+    <link rel="preload" as="style" href="/assets/css/fonts.css" />
+    <link rel="stylesheet" href="/assets/css/fonts.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="/assets/css/fonts.css">
+    </noscript>
+    <link href="/docs/pagefind/pagefind-ui.css" rel="stylesheet">
+    <script src="/docs/pagefind/pagefind-ui.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            new PagefindUI({
+                element: "#search",
+                showSubResults: true,
+                showImages: false,
+            });
+        });
+    </script>
+    <script src="/assets/js/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const blocks = document.querySelectorAll('.mermaid');
+            if (blocks.length) {
+                mermaid.initialize({ startOnLoad: false });
+                mermaid.run();
+            }
+        });
+    </script>
+
+	<script>
+    // AnchorJS - v4.2.0 - 2019-01-01
+    // https://github.com/bryanbraun/anchorjs
+    // Copyright (c) 2019 Bryan Braun; Licensed MIT
+    !function(A,e){"use strict";"function"==typeof define&&define.amd?define([],e):"object"==typeof module&&module.exports?module.exports=e():(A.AnchorJS=e(),A.anchors=new A.AnchorJS)}(this,function(){"use strict";return function(A){function f(A){A.icon=A.hasOwnProperty("icon")?A.icon:"",A.visible=A.hasOwnProperty("visible")?A.visible:"hover",A.placement=A.hasOwnProperty("placement")?A.placement:"right",A.ariaLabel=A.hasOwnProperty("ariaLabel")?A.ariaLabel:"Anchor",A.class=A.hasOwnProperty("class")?A.class:"",A.base=A.hasOwnProperty("base")?A.base:"",A.truncate=A.hasOwnProperty("truncate")?Math.floor(A.truncate):64,A.titleText=A.hasOwnProperty("titleText")?A.titleText:""}function p(A){var e;if("string"==typeof A||A instanceof String)e=[].slice.call(document.querySelectorAll(A));else{if(!(Array.isArray(A)||A instanceof NodeList))throw new Error("The selector provided to AnchorJS was invalid.");e=[].slice.call(A)}return e}this.options=A||{},this.elements=[],f(this.options),this.isTouchDevice=function(){return!!("ontouchstart"in window||window.DocumentTouch&&document instanceof DocumentTouch)},this.add=function(A){var e,t,i,n,o,s,a,r,c,h,l,u,d=[];if(f(this.options),"touch"===(l=this.options.visible)&&(l=this.isTouchDevice()?"always":"hover"),A||(A="h2, h3, h4, h5, h6"),0===(e=p(A)).length)return this;for(function(){if(null===document.head.querySelector("style.anchorjs")){var A,e=document.createElement("style");e.className="anchorjs",e.appendChild(document.createTextNode("")),void 0===(A=document.head.querySelector('[rel="stylesheet"], style'))?document.head.appendChild(e):document.head.insertBefore(e,A),e.sheet.insertRule(" .anchorjs-link {   opacity: 0;   text-decoration: none;   -webkit-font-smoothing: antialiased;   -moz-osx-font-smoothing: grayscale; }",e.sheet.cssRules.length),e.sheet.insertRule(" *:hover > .anchorjs-link, .anchorjs-link:focus  {   opacity: 1; }",e.sheet.cssRules.length),e.sheet.insertRule(" [data-anchorjs-icon]::after {   content: attr(data-anchorjs-icon); }",e.sheet.cssRules.length),e.sheet.insertRule(' @font-face {   font-family: "anchorjs-icons";   src: url(data:n/a;base64,AAEAAAALAIAAAwAwT1MvMg8yG2cAAAE4AAAAYGNtYXDp3gC3AAABpAAAAExnYXNwAAAAEAAAA9wAAAAIZ2x5ZlQCcfwAAAH4AAABCGhlYWQHFvHyAAAAvAAAADZoaGVhBnACFwAAAPQAAAAkaG10eASAADEAAAGYAAAADGxvY2EACACEAAAB8AAAAAhtYXhwAAYAVwAAARgAAAAgbmFtZQGOH9cAAAMAAAAAunBvc3QAAwAAAAADvAAAACAAAQAAAAEAAHzE2p9fDzz1AAkEAAAAAADRecUWAAAAANQA6R8AAAAAAoACwAAAAAgAAgAAAAAAAAABAAADwP/AAAACgAAA/9MCrQABAAAAAAAAAAAAAAAAAAAAAwABAAAAAwBVAAIAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAMCQAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAg//0DwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAAIAAAACgAAxAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADAAAAAIAAgAAgAAACDpy//9//8AAAAg6cv//f///+EWNwADAAEAAAAAAAAAAAAAAAAACACEAAEAAAAAAAAAAAAAAAAxAAACAAQARAKAAsAAKwBUAAABIiYnJjQ3NzY2MzIWFxYUBwcGIicmNDc3NjQnJiYjIgYHBwYUFxYUBwYGIwciJicmNDc3NjIXFhQHBwYUFxYWMzI2Nzc2NCcmNDc2MhcWFAcHBgYjARQGDAUtLXoWOR8fORYtLTgKGwoKCjgaGg0gEhIgDXoaGgkJBQwHdR85Fi0tOAobCgoKOBoaDSASEiANehoaCQkKGwotLXoWOR8BMwUFLYEuehYXFxYugC44CQkKGwo4GkoaDQ0NDXoaShoKGwoFBe8XFi6ALjgJCQobCjgaShoNDQ0NehpKGgobCgoKLYEuehYXAAAADACWAAEAAAAAAAEACAAAAAEAAAAAAAIAAwAIAAEAAAAAAAMACAAAAAEAAAAAAAQACAAAAAEAAAAAAAUAAQALAAEAAAAAAAYACAAAAAMAAQQJAAEAEAAMAAMAAQQJAAIABgAcAAMAAQQJAAMAEAAMAAMAAQQJAAQAEAAMAAMAAQQJAAUAAgAiAAMAAQQJAAYAEAAMYW5jaG9yanM0MDBAAGEAbgBjAGgAbwByAGoAcwA0ADAAMABAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAH//wAP) format("truetype"); }',e.sheet.cssRules.length)}}(),t=document.querySelectorAll("[id]"),i=[].map.call(t,function(A){return A.id}),o=0;o<e.length;o++)if(this.hasAnchorJSLink(e[o]))d.push(o);else{if(e[o].hasAttribute("id"))n=e[o].getAttribute("id");else if(e[o].hasAttribute("data-anchor-id"))n=e[o].getAttribute("data-anchor-id");else{for(c=r=this.urlify(e[o].textContent),a=0;void 0!==s&&(c=r+"-"+a),a+=1,-1!==(s=i.indexOf(c)););s=void 0,i.push(c),e[o].setAttribute("id",c),n=c}n.replace(/-/g," "),(h=document.createElement("a")).className="anchorjs-link "+this.options.class,h.setAttribute("aria-label",this.options.ariaLabel),h.setAttribute("data-anchorjs-icon",this.options.icon),this.options.titleText&&(h.title=this.options.titleText),u=document.querySelector("base")?window.location.pathname+window.location.search:"",u=this.options.base||u,h.href=u+"#"+n,"always"===l&&(h.style.opacity="1"),""===this.options.icon&&(h.style.font="1em/1 anchorjs-icons","left"===this.options.placement&&(h.style.lineHeight="inherit")),"left"===this.options.placement?(h.style.position="absolute",h.style.marginLeft="-1em",h.style.paddingRight="0.5em",e[o].insertBefore(h,e[o].firstChild)):(h.style.paddingLeft="0.375em",e[o].appendChild(h))}for(o=0;o<d.length;o++)e.splice(d[o]-o,1);return this.elements=this.elements.concat(e),this},this.remove=function(A){for(var e,t,i=p(A),n=0;n<i.length;n++)(t=i[n].querySelector(".anchorjs-link"))&&(-1!==(e=this.elements.indexOf(i[n]))&&this.elements.splice(e,1),i[n].removeChild(t));return this},this.removeAll=function(){this.remove(this.elements)},this.urlify=function(A){return this.options.truncate||f(this.options),A.trim().replace(/\'/gi,"").replace(/[& +$,:;=?@"#{}|^~[`%!'<>\]\.\/\(\)\*\\\n\t\b\v]/g,"-").replace(/-{2,}/g,"-").substring(0,this.options.truncate).replace(/^-+|-+$/gm,"").toLowerCase()},this.hasAnchorJSLink=function(A){var e=A.firstChild&&-1<(" "+A.firstChild.className+" ").indexOf(" anchorjs-link "),t=A.lastChild&&-1<(" "+A.lastChild.className+" ").indexOf(" anchorjs-link ");return e||t||!1}}});
+    </script>
+  
 </head>
-<body class="navigation-with-keyboard">
-<svg style="display: none;"><defs>
-<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
-</defs></svg>
-<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/docs/ignite3/img/logo.svg"><link rel="preload" as="image" href="/docs/ignite3/img/logo-dark.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top navbar--primary"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" target="_self" href="/docs/ignite3/"><div class="navbar__logo"><img src="/docs/ignite3/img/logo.svg" alt="Apache Ignite Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/docs/ignite3/img/logo-dark.svg" alt="Apache Ignite Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div></a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a aria-current="page" class="navbar__link active" aria-haspopup="true" aria-expanded="false" role="button" href="/docs/ignite3/3.0.0/developers-guide/events/events-list">3.0.0</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/docs/ignite3/3.1.0">3.1.0 (Latest)</a></li><li><a aria-current="page" class="dropdown__link dropdown__link--active" href="/docs/ignite3/3.0.0/developers-guide/events/events-list">3.0.0</a></li></ul></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><input placeholder="Search" aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div><a href="https://github.com/apache/ignite-3" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/ignite3/3.0.0"><span title="About Apache Ignite 3" class="linkLabel_WmDU">About Apache Ignite 3</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/ignite3/3.0.0/installation/installing-using-zip"><span title="Installation" class="categoryLinkLabel_W154">Installation</span></a><button aria-label="Expand sidebar category &#x27;Installation&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/ignite3/3.0.0/quick-start/getting-started-guide"><span title="Getting Started" class="categoryLinkLabel_W154">Getting Started</span></a><button aria-label="Expand sidebar category &#x27;Getting Started&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/ignite3/3.0.0/quick-start/embedded-mode"><span title="Embedded Mode" class="linkLabel_WmDU">Embedded Mode</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/ignite3/3.0.0/ignite-cli-tool"><span title="Ignite CLI Tool" class="linkLabel_WmDU">Ignite CLI Tool</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href="/docs/ignite3/3.0.0/developers-guide/table-api"><span title="Developers Guide" class="categoryLinkLabel_W154">Developers Guide</span></a><button aria-label="Collapse sidebar category &#x27;Developers Guide&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/table-api"><span title="Table API" class="linkLabel_WmDU">Table API</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/clients"><span title="Clients" class="categoryLinkLabel_W154">Clients</span></a><button aria-label="Expand sidebar category &#x27;Clients&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/sql/calcite-based-sql-engine"><span title="Working with SQL" class="categoryLinkLabel_W154">Working with SQL</span></a><button aria-label="Expand sidebar category &#x27;Working with SQL&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/java-to-tables"><span title="Creating Tables from Java Classes" class="linkLabel_WmDU">Creating Tables from Java Classes</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/compute"><span title="Distributed Computing" class="categoryLinkLabel_W154">Distributed Computing</span></a><button aria-label="Expand sidebar category &#x27;Distributed Computing&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/transactions"><span title="Performing Transactions" class="linkLabel_WmDU">Performing Transactions</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/data-streamer"><span title="Streaming Data" class="linkLabel_WmDU">Streaming Data</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/code-deployment"><span title="Code Deployment" class="linkLabel_WmDU">Code Deployment</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/events"><span title="Events" class="categoryLinkLabel_W154">Events</span></a><button aria-label="Collapse sidebar category &#x27;Events&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/events"><span title="Working with Events" class="linkLabel_WmDU">Working with Events</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/events/events-list"><span title="Available Events" class="linkLabel_WmDU">Available Events</span></a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/ignite3/3.0.0/developers-guide/rest/rest-api"><span title="REST API" class="linkLabel_WmDU">REST API</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/ignite3/3.0.0/administrators-guide/config"><span title="Administrator&#x27;s Guide" class="categoryLinkLabel_W154">Administrator&#x27;s Guide</span></a><button aria-label="Expand sidebar category &#x27;Administrator&#x27;s Guide&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/ignite3/3.0.0/sql-reference/ddl"><span title="SQL Reference" class="categoryLinkLabel_W154">SQL Reference</span></a><button aria-label="Expand sidebar category &#x27;SQL Reference&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/ignite3/3.0.0/sql-tuning"><span title="SQL Performance Tuning" class="categoryLinkLabel_W154">SQL Performance Tuning</span></a><button aria-label="Expand sidebar category &#x27;SQL Performance Tuning&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/ignite3/3.0.0/general-tips"><span title="General Configuration Tips" class="linkLabel_WmDU">General Configuration Tips</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/ignite3/3.0.0/glossary"><span title="Glossary" class="linkLabel_WmDU">Glossary</span></a></li></ul></nav><button type="button" title="Collapse sidebar" aria-label="Collapse sidebar" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role="alert"><div>This is documentation for <!-- -->Apache Ignite 3 Documentation<!-- --> <b>3.0.0</b>, which is no longer actively maintained.</div><div class="margin-top--md">For up-to-date documentation, see the <b><a href="/docs/ignite3/3.1.0">latest version</a></b> (<!-- -->3.1.0 (Latest)<!-- -->).</div></div><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/docs/ignite3/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/ignite3/3.0.0/developers-guide/table-api"><span>Developers Guide</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/ignite3/3.0.0/developers-guide/events"><span>Events</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Available Events</span></li></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 3.0.0</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Available Events</h1></header>
-<p>This section lists events that are available in Apache Ignite 3.</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="connection-events">Connection Events<a href="#connection-events" class="hash-link" aria-label="Direct link to Connection Events" title="Direct link to Connection Events" translate="no">​</a></h2>
+<body>
+    <header>
+    <!--#include virtual="/includes/promotion_banner.html" -->
+    <div class="container">
+        <button type='button' class='menu' title='Docs menu'>
+        <img src="/assets/images/menu-icon.svg" width="18" height="12" alt="menu icon" />
+        </button>
+        <div class='home'>
+            <a href="/" class='home' title='Apache Ignite home'>
+                <img src="/assets/images/apache_ignite_logo.svg" alt="Apache Ignite logo" width="103" height="36" >
+            </a>
+        </div>
+
+        
+        
+        <select id="product-selector">
+            <option value="/docs/ignite2/latest" >Ignite 2</option>
+            <option value="/docs/ignite3/latest"selected>Ignite 3</option>
+        </select>
+
+        <select id="version-selector">
+            <option value="3.0.0">3.0.0</option>
+        </select>
+
+
+        <nav id="api-docs"><ul>
+            <li><a href="#">APIs</a>
+                <nav class='dropdown'>
+                    <ul>
+                    
+                    <li class="dropdown-item"><a href="/releases/ignite3/3.0.0/javadoc/">Java</a></li>
+                    <li class="dropdown-item"><a href="/releases/ignite3/3.0.0/dotnetdoc/">C#/.NET</a></li>
+                    <li class="dropdown-item"><a href="/releases/ignite3/3.0.0/cppdoc/">C++</a></li>
+                    <li class="dropdown-item"><a href="https://iggusev.github.io/openapi-ignite3.github.io/">OpenAPI</a></li>
+                    
+                    </ul>
+                </nav>
+            </li>
+
+            <li><a href="#">Examples</a>
+                <nav class="dropdown">
+                    <ul>
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/examples" target="_blank" rel="noopener" title="Apache Ignite Java examples">Java</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/dotnet/examples" target="_blank" rel="noopener" title="Apache Ignite C#/.NET examples">C#/.NET</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/cpp/examples" target="_blank" rel="noopener" title="Apache Ignite C++ examples">C++</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/python/examples" target="_blank" rel="noopener" title="Apache Ignite Python examples">Python</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/nodejs/examples" target="_blank" rel="noopener" title="Apache Ignite NodeJS examples">NodeJS</a></li>
+
+                    <li class="dropdown-item"><a href="https://github.com/apache/ignite/tree/master/modules/platforms/php/examples" target="_blank" rel="noopener" title="Apache Ignite PHP examples">PHP</a></li>
+                </ul>
+                </nav>
+                </li></ul>
+        </nav>
+
+
+
+        <div id="search-button"></div>
+
+        <nav id="lang-selector"><ul>
+            <li><a href="#"><img src="/assets/images/icon_lang_en_75x75.jpg" alt="English language icon"  width="25" height="25" /><span>▼</span></a>
+                <nav class="dropdown">
+                    <li class="dropdown-item"><a href="/docs/latest/" ><img src="/assets/images/icon_lang_en_75x75.jpg" alt="English language icon" width="25" height="25" /><span>English</span></a></li>
+                    <li class="dropdown-item"><a href="https://www.ignite-service.cn/doc/java/" target="_blank" rel="noopener"><img src="/assets/images/icon_lang_cn_75x75.jpg"  width="25" height="25" alt="Chinese language icon" /><span>Chinese</span></a></li>
+                </nav>
+            </li></ul>
+        </nav>
+
+        <button type='button' class='top-nav-toggle'>⋮</button>
+        
+    </div>
+    <div id="search-wrapper">
+        <div id="search"></div>
+    </div>
+</header>
+
+    	 <link rel="stylesheet" href="/assets/css/docs.css">
+<section class='page-docs'>
+    
+
+
+
+
+
+<nav class='left-nav' data-swiftype-index='false'>
+    
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/index" class='' >About Apache Ignite 3</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Installation<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/installation/installing-using-zip"
+                                class=''
+                            >Installing Using ZIP Archive</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/installation/deb-rpm"
+                                class=''
+                            >Installing DEB or RPM package</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/installation/installing-using-docker"
+                                class=''
+                            >Installing Docker</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Getting Started<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/getting-started-guide"
+                                class=''
+                            >Quick Start</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/start-cluster"
+                                class=''
+                            >Start Ignite 3 Cluster</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/explore-sql"
+                                class=''
+                            >Explore SQL Capabilities</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/persist-data"
+                                class=''
+                            >Persist Your Data</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/quick-start/java-api"
+                                class=''
+                            >Use Java API</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/quick-start/embedded-mode" class='' >Embedded Mode</a>
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/ignite-cli-tool" class='' >Ignite CLI Tool</a>
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle expanded '>Developers Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group expanded'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/table-api"
+                                class=''
+                            >Table API</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Clients<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/clients/overview" class=''>Overview</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/clients/java" class=''>Java Clients</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/clients/dotnet" class=''>.NET Clients</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/clients/cpp" class=''>C++ Clients</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/clients/linq" class=''>.NET LINQ Queries</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Working with SQL<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/calcite-based-sql-engine" class=''>Introduction</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/" class=''>SQL API</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/jdbc-driver" class=''>JDBC Driver</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/sql/odbc/odbc-driver" class=''>ODBC Driver</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/java-to-tables"
+                                class=''
+                            >Tables from Java Classes</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='expanded parent '>Events<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages expanded parent">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/events/overview" class=''>Working with Events</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/events/events-list" class='active'>Available Events</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/compute/compute"
+                                class=''
+                            >Distributed Computing</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/transactions"
+                                class=''
+                            >Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/data-streamer"
+                                class=''
+                            >Data Streaming</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/developers-guide/code-deployment/code-deployment"
+                                class=''
+                            >Code Deployment</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>REST API<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/developers-guide/rest/rest-api" class=''>Overview</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>Administrator’s Guide<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Ignite Configuration<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/config/node-config" class=''>Node Configuration Parameters</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/config/cluster-config" class=''>Cluster Configuration Parameters</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/config/storage/persistent" class=''>Storage Configuration</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/lifecycle"
+                                class=''
+                            >Cluster Lifecycle</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/storage"
+                                class=''
+                            >Storage Profiles and Engines</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/data-partitions"
+                                class=''
+                            >Data Partitioning</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/colocation"
+                                class=''
+                            >Data Colocation</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/cluster-security"
+                                class=''
+                            >Cluster Security</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Security and Authentication<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/security/ssl-tls" class=''>SSL/TLS</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/security/authentication" class=''>Authentication</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            
+                            
+                            <button
+                                type='button'
+                                class='collapsed '>Metrics and Monitoring<img class="state-indicator" src="/assets/images/left-nav-arrow.svg" width="6" height="10"></button>
+                            <nav class="sub_pages collapsed">
+
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/configuring-metrics" class=''>Configuring Metrics</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/metrics-list" class=''>Metrics List</a></li>
+                            
+                                
+                                  
+
+								  <li><a href="/docs/ignite3/latest/administrators-guide/metrics/system-views" class=''>System Views</a></li>
+                            
+                            </nav>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/administrators-guide/handling-exceptions"
+                                class=''
+                            >Handling Exceptions</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+
+            
+
+            
+
+			<button type='button' class='group-toggle collapsed '>SQL Reference<img class="state-indicator" src="/assets/images/left-nav-arrow.svg"  width="6" height="10"></button>
+             <nav class='nav-group collapsed'>
+            
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/ddl"
+                                class=''
+                            >Data Definition Language (DDL)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/dml"
+                                class=''
+                            >Data Manipulation Language (DML)</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/transactions"
+                                class=''
+                            >Transactions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/distribution-zones"
+                                class=''
+                            >Distribution Zones</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/operators-and-functions"
+                                class=''
+                            >Supported Operators and Functions</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/grammar-reference"
+                                class=''
+                            >Grammar Reference</a>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    <li> 
+                        
+                            <a href="/docs/ignite3/latest/sql-reference/data-types"
+                                class=''
+                            >Data Types</a>
+                        
+                    </li>
+                
+              
+                     
+             </nav>   
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/sql-tuning" class='' >SQL Performance Tuning</a>
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/general-tips" class='' >General Configuration Tips</a>
+            
+        </li>
+    
+        <li>
+            
+                
+                <a href="/docs/ignite3/latest/glossary/glossary" class='' >Glossary</a>
+            
+        </li>
+    
+</nav>
+<div class="left-nav__overlay"></div>
+
+
+    <article data-swiftype-index='true'>
+      <a class='edit-link' href="https://github.com/apache/ignite-3/tree/main/docs/_docs/developers-guide/events/events-list.adoc" target="_blank">Edit</a>
+        
+            <h1>Available Events</h1>
+        
+        <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section lists events that are available in Ignite 3.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="connection-events">Connection Events</h2>
+<div class="sectionbody">
+<div class="paragraph">
 <p>These events are fired every time a client connects to the cluster, or disconnects from it.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>CLIENT_CONNECTION_ESTABLISHED</td><td>Connection with the client established. Connection info contains information about the client.</td></tr><tr><td>CLIENT_CONNECTION_CLOSED</td><td>Connection with the client closed. Connection info contains information about the client.</td></tr></tbody></table>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="authentication-events">Authentication Events<a href="#authentication-events" class="hash-link" aria-label="Direct link to Authentication Events" title="Direct link to Authentication Events" translate="no">​</a></h2>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 70%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Event Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLIENT_CONNECTION_ESTABLISHED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection with the client established. Connection info contains information about the client.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLIENT_CONNECTION_CLOSED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection with the client closed. Connection info contains information about the client.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="authentication-events">Authentication Events</h2>
+<div class="sectionbody">
+<div class="paragraph">
 <p>These events are fired when the user performs an action that requires authentication.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>USER_AUTHENTICATION_SUCCESS</td><td>User was authenticated on the cluster.</td></tr><tr><td>USER_AUTHENTICATION_FAILURE</td><td>User failed to authenticate on the cluster. Get the username from the event&#x27;s <code>identity</code> field.</td></tr></tbody></table>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="authorization-events">Authorization Events<a href="#authorization-events" class="hash-link" aria-label="Direct link to Authorization Events" title="Direct link to Authorization Events" translate="no">​</a></h2>
-<p>These events are fired when the user performs an action that requires authentication. Each event body has a list of <code>privileges</code>, where every <code>privelege</code> is an object with the <code>action</code> and <code>selector</code>. For more details see <a class="" href="/docs/ignite3/3.0.0/administrators-guide/security/authentication">User Permissions and Roles</a> section.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>USER_AUTHORIZATION_SUCCESS</td><td>An action was authorized for the user on a specific object.</td></tr><tr><td>USER_AUTHORIZATION_FAILURE</td><td>An action was denied to the user on a specific object.</td></tr></tbody></table>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="query-events">Query Events<a href="#query-events" class="hash-link" aria-label="Direct link to Query Events" title="Direct link to Query Events" translate="no">​</a></h2>
-<p>These events are fired when the user performs a query.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>QUERY_STARTED</td><td>A new query was started.</td></tr><tr><td>QUERY_FINISHED</td><td>Query execution is finished.</td></tr></tbody></table>
-<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="query-event-structure">Query Event Structure<a href="#query-event-structure" class="hash-link" aria-label="Direct link to Query Event Structure" title="Direct link to Query Event Structure" translate="no">​</a></h3>
-<p>Each query event has the following fields:</p>
-<table><thead><tr><th>Field Name</th><th>Description</th></tr></thead><tbody><tr><td>initiator</td><td>Name of a node that initiated the query.</td></tr><tr><td>id</td><td>Query ID.</td></tr><tr><td>schema</td><td>Name of the schema that was used to resolve non-qualified object names.</td></tr><tr><td>sql</td><td>An original query string.</td></tr><tr><td>parentId</td><td>ID of the parent query, if any.</td></tr><tr><td>statementNumber</td><td>A 0-based index of query within the script, if applicable. Returns -1 otherwise.</td></tr><tr><td>txId</td><td>ID of the transaction, if known.</td></tr><tr><td>startTime</td><td>Time at which query appears on server. Applicable only to <code>QUERY_FINISHED</code> events.</td></tr><tr><td>type</td><td><strong>Optional</strong> Type of the query, if known.</td></tr><tr><td>error</td><td><strong>Optional</strong> An error, if one occurred during execution and caused the query to terminate.</td></tr></tbody></table>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="compute-job-events">Compute Job Events<a href="#compute-job-events" class="hash-link" aria-label="Direct link to Compute Job Events" title="Direct link to Compute Job Events" translate="no">​</a></h2>
-<p>These events describe the possible states of a compute job.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>COMPUTE_JOB_QUEUED</td><td>Triggered when a compute job is added to the execution queue.</td></tr><tr><td>COMPUTE_JOB_EXECUTING</td><td>Triggered when a compute job starts execution.</td></tr><tr><td>COMPUTE_JOB_FAILED</td><td>Triggered when a compute job fails and throws an exception during execution.</td></tr><tr><td>COMPUTE_JOB_COMPLETED</td><td>Triggered when a compute job is finished successfully.</td></tr><tr><td>COMPUTE_JOB_CANCELING</td><td>Triggered when a compute job cancellation is requested.</td></tr><tr><td>COMPUTE_JOB_CANCELED</td><td>Triggered when a compute job has been canceled.</td></tr></tbody></table>
-<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="compute-job-event-structure">Compute Job Event Structure<a href="#compute-job-event-structure" class="hash-link" aria-label="Direct link to Compute Job Event Structure" title="Direct link to Compute Job Event Structure" translate="no">​</a></h3>
-<p>Each compute job event has the following fields:</p>
-<table><thead><tr><th>Field Name</th><th>Description</th></tr></thead><tbody><tr><td>type</td><td>Type of the compute job. Could be <code>SINGLE</code>, <code>BROADCAST</code>, <code>MAP_REDUCE</code> or <code>DATA_RECEIVER</code>.<br><br>Single job is the most common type, assigned to jobs that are executed on a single node. Broadcast jobs are executed on many nodes simultaneously. Map reduce jobs are the jobs that are submitted from the map reduce task. Data receiver is an internal compute job that is used when data streamer API is used.</td></tr><tr><td>className</td><td>Class name of a job.</td></tr><tr><td>jobId</td><td>Compute job ID.</td></tr><tr><td>targetNode</td><td>Name of the node where a job is executed.</td></tr><tr><td>initiatorNode</td><td>Name of the node where a submit request is processed.</td></tr><tr><td>taskId</td><td><strong>Optional</strong> Сommon ID for all broadcast compute jobs submitted from a single invocation.</td></tr><tr><td>tableName</td><td><strong>Optional</strong> Table name for colocated jobs or partitioned broadcast jobs.</td></tr><tr><td>clientAddress</td><td><strong>Optional</strong> A socket address of a thin client that submitted a job.</td></tr></tbody></table>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="map-reduce-task-events">Map Reduce Task Events<a href="#map-reduce-task-events" class="hash-link" aria-label="Direct link to Map Reduce Task Events" title="Direct link to Map Reduce Task Events" translate="no">​</a></h2>
-<p>These events describe the possible states of a map reduce task.</p>
-<table><thead><tr><th>Event Type</th><th>Description</th></tr></thead><tbody><tr><td>MAP_REDUCE_TASK_QUEUED</td><td>Triggered when a map reduce task is added to the execution queue.</td></tr><tr><td>MAP_REDUCE_TASK_EXECUTING</td><td>Triggered when a map reduce task starts execution.</td></tr><tr><td>MAP_REDUCE_TASK_FAILED</td><td>Triggered when a map reduce task fails and throws an exception during execution.</td></tr><tr><td>MAP_REDUCE_TASK_COMPLETED</td><td>Triggered when a map reduce task is finished successfully.</td></tr><tr><td>MAP_REDUCE_TASK_CANCELED</td><td>Triggered when a map reduce task has been canceled.</td></tr></tbody></table>
-<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="map-reduce-event-structure">Map Reduce Event Structure<a href="#map-reduce-event-structure" class="hash-link" aria-label="Direct link to Map Reduce Event Structure" title="Direct link to Map Reduce Event Structure" translate="no">​</a></h3>
-<p>Each task event has the following fields:</p>
-<table><thead><tr><th>Field Name</th><th>Description</th></tr></thead><tbody><tr><td>type</td><td>Type of the task. Always is a <code>MAP_REDUCE</code> event type.</td></tr><tr><td>className</td><td>Class name of a task.</td></tr><tr><td>taskId</td><td>ID of a map reduce task.</td></tr><tr><td>targetNode</td><td>Name of the node where a task is executed.</td></tr><tr><td>clientAddress</td><td><strong>Optional</strong> A socket address of a thin client that submitted a task.</td></tr></tbody></table></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/ignite3/3.0.0/developers-guide/events"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Working with Events</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/ignite3/3.0.0/developers-guide/rest/rest-api"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">REST API</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#connection-events" class="table-of-contents__link toc-highlight">Connection Events</a></li><li><a href="#authentication-events" class="table-of-contents__link toc-highlight">Authentication Events</a></li><li><a href="#authorization-events" class="table-of-contents__link toc-highlight">Authorization Events</a></li><li><a href="#query-events" class="table-of-contents__link toc-highlight">Query Events</a><ul><li><a href="#query-event-structure" class="table-of-contents__link toc-highlight">Query Event Structure</a></li></ul></li><li><a href="#compute-job-events" class="table-of-contents__link toc-highlight">Compute Job Events</a><ul><li><a href="#compute-job-event-structure" class="table-of-contents__link toc-highlight">Compute Job Event Structure</a></li></ul></li><li><a href="#map-reduce-task-events" class="table-of-contents__link toc-highlight">Map Reduce Task Events</a><ul><li><a href="#map-reduce-event-structure" class="table-of-contents__link toc-highlight">Map Reduce Event Structure</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Documentation</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/ignite3/3.1.0">Apache Ignite 3</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://ignite.apache.org" target="_blank" rel="noopener noreferrer" class="footer__link-item">Apache Ignite<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://ignite.apache.org/community.html" target="_blank" rel="noopener noreferrer" class="footer__link-item">User Mailing List<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Apache Software Foundation</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Apache Software Foundation<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer" class="footer__link-item">License<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://github.com/apache/ignite-3" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 The Apache Software Foundation. Licensed under the Apache License, Version 2.0.</div></div></div></footer></div>
+</div>
+<table class="tableblock frame-all grid-all stripes-none stretch">
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 70%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Event Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_AUTHENTICATION_SUCCESS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User was authenticated on the cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_AUTHENTICATION_FAILURE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User failed to authenticate on the cluster.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+        <div class="copyright">
+ © 2025 The Apache Software Foundation.<br/>
+Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either registered trademarks or trademarks of The Apache Software Foundation. 
+
+</div>
+
+    </article>
+    <nav class="right-nav" data-swiftype-index='false'>
+    <div class="toc-wrapper">
+    <ul class="sectlevel1">
+<li><a href="#connection-events">Connection Events</a></li>
+<li><a href="#authentication-events">Authentication Events</a></li>
+</ul>
+    </div>
+          
+      
+      <nav class="promo-nav">
+            <!--#include virtual="/includes/docs_rightnav_promotion.html" -->
+            <!--a href="#" data-trigger-bugyard-feedback="true" id="doc-feedback-btn">Docs Feedback</a-->
+        </nav>
+        
+</nav>
+    
+</section>
+<script type='module' src='/assets/js/code-copy-to-clipboard.js' async crossorigin></script>
+
+    <script>
+    // inits deep anchors -- needs to be done here because of https://www.bryanbraun.com/anchorjs/#dont-run-it-too-late 
+    anchors.add('.page-docs h1, .page-docs h2, .page-docs h3:not(.discrete), .page-docs h4, .page-docs h5');
+    anchors.options = {
+        placement: 'right',
+        visible: 'always'
+    };
+    </script>
+
+<script type='module' src='/assets/js/index.js?1756458378' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1756458378' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1756458378' async></script>
+<script type='module' src='/assets/js/search.js?1756458378' defer crossorigin></script>
+
+<link rel="stylesheet" href="/assets/css/styles.css?1756458378" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1756458378"></noscript>
+
+<link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
+
+  
 </body>
+
 </html>
