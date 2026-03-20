@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchButton = document.getElementById("search-button");
   const searchWrapper = document.getElementById("search-wrapper");
-  const searchInput = document.querySelector(".pagefind-ui__search-input");
+
+  if (!searchButton || !searchWrapper) return;
+  if (searchButton.dataset.searchInit === "true") return;
+
+  searchButton.dataset.searchInit = "true";
 
   searchButton.addEventListener("click", () => {
     searchButton.classList.toggle("open");
