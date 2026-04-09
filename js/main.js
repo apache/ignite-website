@@ -1,4 +1,13 @@
 /**
+ * A server-side redirect is not currently feasible within the scope of
+ * available access (e.g., web server), so this approach provides a practical
+ * interim solution at the application level.
+ */
+if (location.pathname === '/download.cgi') {
+    location.replace('/download');
+}
+
+/**
  * Модальные окна
  * см. https://addmorescripts.github.io/hystModal/index_ru.html
  */
