@@ -301,7 +301,6 @@ export default function NavbarContent(): ReactNode {
         opened: activeDropdown !== null
       })}>
         <div className="jsHdrLine">
-          <TopBanner />
           <div className={clsx(styles.hdrWrap, 'flexi')}>
             <button
               className={styles.hdrBurger}
