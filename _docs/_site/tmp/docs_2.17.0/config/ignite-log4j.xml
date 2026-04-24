@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<Configuration monitorInterval="60">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <!-- Add the `disableAnsi="true"` property to the pattern layout if you want to disable colors in the console output. -->
+            <PatternLayout
+                pattern="[%d{ISO8601}]%highlight{[%-5p]}{INFO=green, DEBUG=green bold, TRACE=blue}%style{[%t]}{magenta}%style{[%c{1}]}{cyan}%notEmpty{[%markerSimpleName]} %m%n"/>
+            <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT"/>
+        </Console>
+
+        <Console name="CONSOLE_WARN" target="SYSTEM_OUT">
+            <!-- Add the `disableAnsi="true"` property to the pattern layout if you want to disable colors in the console output. -->
+            <PatternLayout pattern="%highlight{[%d{ISO8601}][%-5p][%t][%c{1}] %m%n}{WARN=yellow bold}"/>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <Console name="CONSOLE_ERR" target="SYSTEM_ERR">
+            <!-- Add the `disableAnsi="true"` property to the pattern layout if you want to disable colors in the console output. -->
+            <PatternLayout pattern="%highlight{[%d{ISO8601}][%-5p][%t][%c{1}] %m%n}{ERROR=bright red}"/>
+        </Console>
+
+        <File name="CONSISTENCY" fileName="${sys:IGNITE_HOME}/work/log/consistency.log">
+            <PatternLayout>
+                <Pattern>"[%d{ISO8601}][%-5p][%t][%c{1}] %m%n"</Pattern>
+            </PatternLayout>
+        </File>
+
+        <Routing name="FILE">
+            <Routes pattern="$${sys:appId}$${sys:nodeId}">
+                <Route>
+                    <RollingFile name="Rolling-${sys:appId}${sys:nodeId}" fileName="${sys:IGNITE_HOME}/work/log/${sys:appId}${sys:nodeId}.log"
+                                 filePattern="${sys:IGNITE_HOME}/work/log/${sys:appId}${sys:nodeId}-%i-%d{yyyy-MM-dd}.log.gz">
+                        <PatternLayout pattern="[%d{ISO8601}][%-5p][%t][%c{1}]%notEmpty{[%markerSimpleName]} %m%n"/>
+                        <Policies>
+                            <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                            <SizeBasedTriggeringPolicy size="10 MB" />
+                        </Policies>
+                    </RollingFile>
+                </Route>
+            </Routes>
+        </Routing>
+    </Appenders>
+
+    <Loggers>
+        <!--
+        <Logger name="org.apache.ignite" level=DEBUG/>
+        -->
+
+        <!--
+            Uncomment to disable courtesy notices, such as SPI configuration
+            consistency warnings.
+        -->
+        <!--
+        <Logger name="org.apache.ignite.CourtesyConfigNotice" level=OFF/>
+        -->
+
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="org.eclipse.jetty" level="WARN"/>
+
+        <Logger name="org.apache.ignite.internal.management.consistency" additivity="false" level="INFO">
+            <AppenderRef ref="CONSISTENCY"/>
+        </Logger>
+
+        <!--
+        Avoid warnings about failed bind attempt when multiple nodes running on the same host.
+        -->
+        <Logger name="org.eclipse.jetty.util.log" level="ERROR"/>
+        <Logger name="org.eclipse.jetty.util.component" level="ERROR"/>
+
+        <Logger name="com.amazonaws" level="WARN"/>
+
+        <Root level="INFO">
+            <!-- Uncomment to enable logging to console. -->
+            <!--
+            <AppenderRef ref="CONSOLE" level="DEBUG"/>
+            <AppenderRef ref="CONSOLE_WARN" level="WARN"/>
+            -->
+
+            <AppenderRef ref="CONSOLE_ERR" level="ERROR"/>
+            <AppenderRef ref="FILE" level="DEBUG"/>
+        </Root>
+    </Loggers>
+</Configuration>
