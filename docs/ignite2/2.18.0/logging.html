@@ -3376,7 +3376,7 @@
 
 
     <article data-swiftype-index='true'>
-      <a class='edit-link' href="https://github.com/apache/ignite/tree/IGNITE-7595/docs/_docs/logging.adoc" target="_blank">Edit</a>
+      <a class='edit-link' href="https://github.com/apache/ignite/tree/master/docs/_docs/logging.adoc" target="_blank">Edit</a>
         
             <h1>Configuring Logging</h1>
         
@@ -3496,7 +3496,16 @@ Before using Log4j2, enable the <a href="/docs/ignite2/latest/setup#enabling-mod
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Unresolved</span> <span class="n">directive</span> <span class="n">in</span> <span class="n">logging</span><span class="o">.</span><span class="na">adoc</span> <span class="o">-</span> <span class="nl">include:</span><span class="o">:{</span><span class="n">javaFile</span><span class="o">}[</span><span class="n">tag</span><span class="o">=</span><span class="n">log4j2</span><span class="o">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="o">]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="nc">IgniteLogger</span> <span class="n">log</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Log4J2Logger</span><span class="o">(</span><span class="s">"log4j2-config.xml"</span><span class="o">);</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="n">log</span><span class="o">);</span>
+
+<span class="c1">// Start a node.</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
 <div class="content">
@@ -3580,7 +3589,14 @@ Note that JCL simply forwards logging messages to an underlying logging system, 
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Unresolved</span> <span class="n">directive</span> <span class="n">in</span> <span class="n">logging</span><span class="o">.</span><span class="na">adoc</span> <span class="o">-</span> <span class="nl">include:</span><span class="o">:{</span><span class="n">javaFile</span><span class="o">}[</span><span class="n">tag</span><span class="o">=</span><span class="n">jcl</span><span class="o">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="o">]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="k">new</span> <span class="nc">JclLogger</span><span class="o">());</span>
+
+<span class="c1">// Start a node.</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
 <div class="content">
@@ -3625,7 +3641,14 @@ Before using SLF4J, enable the <a href="/docs/ignite2/latest/setup#enabling-modu
 </div>
 </div></code-tab><code-tab data-tab='Java'><div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Unresolved</span> <span class="n">directive</span> <span class="n">in</span> <span class="n">logging</span><span class="o">.</span><span class="na">adoc</span> <span class="o">-</span> <span class="nl">include:</span><span class="o">:{</span><span class="n">javaFile</span><span class="o">}[</span><span class="n">tag</span><span class="o">=</span><span class="n">slf4j</span><span class="o">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="o">]</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">();</span>
+
+<span class="n">cfg</span><span class="o">.</span><span class="na">setGridLogger</span><span class="o">(</span><span class="k">new</span> <span class="nc">Slf4jLogger</span><span class="o">());</span>
+
+<span class="c1">// Start a node.</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">Ignite</span> <span class="n">ignite</span> <span class="o">=</span> <span class="nc">Ignition</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="n">cfg</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">ignite</span><span class="o">.</span><span class="na">log</span><span class="o">().</span><span class="na">info</span><span class="o">(</span><span class="s">"Info Message Logged!"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
 </div>
 </div></code-tab><code-tab data-tab='.NET' data-unavailable='true'><div class="listingblock">
 <div class="content">
@@ -3733,13 +3756,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1777282213' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1777282213' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1777282213' async></script>
-<script type='module' src='/assets/js/search.js?1777282213' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1777306904' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1777306904' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1777306904' async></script>
+<script type='module' src='/assets/js/search.js?1777306904' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1777282213" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1777282213"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1777306904" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1777306904"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
