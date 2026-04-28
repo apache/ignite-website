@@ -1,0 +1,186 @@
+<head>
+<link rel="canonical" href="https://ignite.apache.org/releases/ignite2/2.18.0/release_notes.html"/>
+<META NAME="ROBOTS" CONTENT="NOINDEX">
+
+<script type='text/javascript'>
+    window.__lo_site_id = 284467;
+      (function() {
+        var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+        wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+        })();
+</script>
+<style>h1 {    color: #113847;    font-size: 33px;    font-weight: bold;    margin: 30px 0 15px 0;    padding-bottom: 7px;    width: 700px;}h2 {  border-bottom: 2px solid #ccc;     color: #113847;     font-size: 29px;     font-weight: normal;     margin: 30px 0 15px 0;     padding-bottom: 7px;  width: 700px; }a {      color: #cc0000;      text-decoration: none;  }span {    color: #cc0000;}a:hover {    text-decoration: underline;}ul,ol {    list-style: disc;    margin-left: 30px;}ul li,ol li {    margin: 5px 0;}p.description {    width: 700px;}</style>
+
+</head>
+
+<body>
+	<h1>Apache Ignite 2.18.0</h1>
+    <div></div>
+
+    <h2>WARNINGS</h2>
+    <ul>
+        <li>Removed deprecated GridClient.</li>
+        <li>Removed deprecated SpiQuery.</li>
+        <li>Removed setSharedMemoryPort from TcpCommunicationSpi.</li>
+        <li>SqlFieldsQuery#setLazy/isLazy marked as deprecated.</li>
+        <li>DeploymentSPI marked as deprecated.</li>
+        <li>No longer experimental parts and components:
+            <ul>
+                <li>Calcite-based query engine.</li>
+                <li>Performance statistics.</li>
+                <li>System views.</li>
+                <li>Tracing instrumentation.</li>
+                <li>.Net platform cache.</li>
+                <li>СDC.</li>
+                <li>Service Middleware.</li>
+                <li>JDBC driver partition awareness.</li>
+                <li>IndexQuery API.</li>
+                <li>DumpReader consumer and DumpReaderConfiguration.</li>
+                <li>Metric registry filter based on regular expression.</li>
+
+                <li>System properties:
+                    <ul style="list-style-type:circle">
+                        <li>IGNITE_WAIT_FOR_BACKUPS_ON_SHUTDOWN</li>
+                        <li>IGNITE_ENABLE_SUBQUERY_REWRITE_OPTIMIZATION</li>
+                        <li>IGNITE_SNAPSHOT_SEQUENTIAL_WRITE</li>
+                        <li>IGNITE_CONFIGURATION_VIEW_PACKAGES</li>
+                    </ul>
+                </li>
+
+                <li>Control utility commands:
+                    <ul style="list-style-type:circle">
+                        <li>Print metadata</li>
+                        <li>Print list of binary metadata types</li>
+                        <li>Print detailed info about specified binary type</li>
+                        <li>Removed the metadata of the specified type</li>
+                        <li>Update cluster metadata from specified file</li>
+                        <li>Print tracing configuration</li>
+                        <li>Reset all specific tracing configuration</li>
+                        <li>Set new tracing configuration</li>
+                    </ul>
+                </li>
+
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Ignite</h2>
+    <ul>
+        <li>Added SessionContext API.</li>
+        <li>Added store crash recovery data to checkpoint recovery files.</li>
+        <li>Added support for multiple storage paths per cache.</li>
+        <li>Added TCP connection pool metrics.</li>
+        <li>Added support for partition loss detection after cluster inactivity.</li>
+        <li>Added system views recording to perfStat report.</li>
+        <li>Added cache storage support for --persistence commands.</li>
+        <li>Added cache names filter to dump reader.</li>
+        <li>Added metrics to improve node network unavailability detection.</li>
+        <li>Added authorization for Compute Job cancellation.</li>
+        <li>Added metrics for bytes inserted/removed from/to cache groups.</li>
+        <li>Added capturing of cluster node certificates during join process.</li>
+        <li>Added tx deadlocks count metric.</li>
+        <li>Added ability to create tables for already existing cache with defined schema.</li>
+        <li>Added performance statistics for putAllConflict, removeAllConflict operations.</li>
+        <li>Added a warning if the index inline size is too large.</li>
+        <li>Added LastArchivedSegment metric.</li>
+        <li>Added CODEOWNERS for platforms.</li>
+        <li>Added a client router node metric.</li>
+        <li>Added data center ID to the ClusterNodeView.</li>
+        <li>Added an affinity backup filter that assigns partition copies evenly between data centers.</li>
+        <li>Added filtering capabilities to "metastorage" and "distributedMetastorage" system views.</li>
+        <li>Fixed in-memory cluster hangs when an error is thrown on activation.</li>
+        <li>Fixed hangs in put operations with RANDOM_LRU and RANDOM_2_LRU eviction policies.</li>
+        <li>Fixed read-through skipping in DML operations.</li>
+        <li>Fixed an issue where IndexQuery couldn't use an index until data population completed.</li>
+        <li>Fixed a memory leak in HeavyQueriesTracker.</li>
+        <li>Fixed freelist corruption in JDK 17 with Shenandoah GC and assertions turned off.</li>
+        <li>Fixed query entity configuration merge on node join.</li>
+        <li>Fixed NullPointerException when getting the cluster name on an inactive cluster.</li>
+        <li>Fixed CdcCommandLineStartup interruption.</li>
+        <li>Fixed snapshot restore failures due to non-serializable cache group names collections.</li>
+        <li>Fixed a binary compatibility issue with the dcId property.</li>
+        <li>Fixed transaction closing on explicit rollback or commit.</li>
+        <li>Fixed snapshot restoration when indexPath was equal to storagePath.</li>
+        <li>Fixed reading of empty unsupported system views in perfStat.</li>
+        <li>Fixed inconsistent behavior on concurrent commit and timeout with 1PC.</li>
+        <li>Fixed suboptimal expire shift calculation.</li>
+        <li>Fixed the corrupted tree exception on expiration.</li>
+        <li>Fixed H2 UNION query diagnostic plans (normalization added).</li>
+        <li>Fixed primitive column descriptor problem with alias on key or val field.</li>
+        <li>Fixed CdcMain to clear corrupted cdc state files.</li>
+        <li>Optimized cache warmup by using multiple threads.</li>
+        <li>Optimized discovery for multi-DC scenarios.</li>
+        <li>Optimized rebalancing in multi-DC mode.</li>
+        <li>Optimized the Cache API for multi-DC.</li>
+        <li>Optimized SQL Calcite-related operations for multi-DC.</li>
+        <li>Optimized the Java thin client for multi-DC scenarios.</li>
+        <li>Updated jetty-server dependency version to 11.0.25.</li>
+        <li>Updated commons-lang3 dependency version to 3.18.0.</li>
+    </ul>
+
+    <h2>SQL</h2>
+    <ul>
+        <li>Added a system view for SQL query plan history.</li>
+        <li>Added initiatorId to the SQL_QUERY_HISTORY system view.</li>
+        <li>Added information about query initiator id to log.</li>
+        <li>Fixed node crash after SQL query with WITH clause.</li>
+        <li>Fixed indexed field validation.</li>
+    </ul>
+
+    <h2>SQL Calcite</h2>
+    <ul>
+        <li>Added support of user-defined table functions.</li>
+        <li>Added UNNEST operator support.</li>
+        <li>Added HASH join type support.</li>
+        <li>Added a query blocking tasks executor (enables SQL execution inside UDFs).</li>
+        <li>Added non-equi condition support for LEFT/RIGHT/FULL/ANTI HASH JOIN.</li>
+        <li>Added heuristics to optimize join order, limit joins number to commute in planning.</li>
+        <li>Added dynamic configuration to disable a rule globally.</li>
+        <li>Added thread pool starvation warning, add UDF query warning.</li>
+        <li>Added number of passed query parameters validation.</li>
+        <li>Fixed MergeJoin/NestedLoopJoin buffers overflow.</li>
+        <li>Fixed merge filter to scan after trimmed fields.</li>
+        <li>Fixed incorrect processing of IS NOT DISTINCT condition in MergeJoin.</li>
+        <li>Fixed cast of dynamic parameters.</li>
+        <li>Fixed wider type for fixed chars coercion.</li>
+        <li>Fixed NVL/COALESCE failure with correlated subquery as parameter.</li>
+        <li>Fixed excessive log output on planning error.</li>
+        <li>Fixed assertion on planning for filter with double correlate.</li>
+        <li>Fixed function with schema serialization.</li>
+        <li>Fixed "field names not distinct" assertion error.</li>
+        <li>Optimized memory consumption for hash-table based operators.</li>
+        <li>Optimized IN statement with literals.</li>
+        <li>Optimized Row reusing for non-storing accumulators.</li>
+        <li>Optimized scans with filter.</li>
+        <li>Updated Calcite version to 1.40.</li>
+    </ul>
+
+    <h2>Control utility</h2>
+    <ul>
+        <li>Added support for interactive input of sensitive command arguments.</li>
+        <li>Added rolling upgrade commands.</li>
+        <li>Added WAL state/enable/disable commands.</li>
+        <li>Added checkpoint command to control utility.</li>
+        <li>Added offline command support to the control utility.</li>
+        <li>Fixed authorization for the --kill compute command and authorization error propagation.</li>
+        <li>Fixed cache list command if mapped to a client node.</li>
+        <li>Removed redundant permission check to cancel services.</li>
+    </ul>
+
+    <h2>Java thin client</h2>
+    <ul>
+        <li>Added thin client API to create SQL caches.</li>
+        <li>Added SqlFieldsQuery initiator ID support.</li>
+        <li>Added handshake timeout configuration for java thin client.</li>
+        <li>Fixed multi-key operations unordered map/set warnings in server logs.</li>
+        <li>Fixed duplicate channel handling in the thin client.</li>
+        <li>Fixed management client connection if the 'newThinConnectionsEnabled' property is set.</li>
+        <li>Fixed binary meta sending on reconnect.</li>
+    </ul>
+
+    <h2>JDBC</h2>
+    <ul>
+        <li>Added JDBC local query flag.</li>
+    </ul>
+</body>
