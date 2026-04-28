@@ -7,7 +7,7 @@ import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './docs.module.css';
 
 const IGNITE3_VERSION = '3.1.0';
-const IGNITE2_VERSION = '2.17.0';
+const IGNITE2_VERSION = '2.18.0';
 
 interface DocVersion {
   title: string;
