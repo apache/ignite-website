@@ -10,7 +10,7 @@ BASE_URL="https://ignite.apache.org"
 OUTPUT_FILE="sitemap.xml"
 
 IGNITE3_LATEST_VERSION="3.1.0"
-IGNITE2_LATEST_VERSION="2.17.0"
+IGNITE2_LATEST_VERSION="2.18.0"
 
 DOCUSAURUS_GENERATOR_META='<meta name="generator" content="Docusaurus v3.9.2">'
 
