@@ -1,0 +1,106 @@
+---
+title: "Apache Ignite 2.18 Release: What's New"
+authors: [evgeniy]
+date: 2026-05-06
+tags: [database, ignite2, release]
+---
+
+We are happy to announce the release of [Apache Ignite](https://ignite.apache.org/) 2.18.0!
+In this version, the Ignite community has removed the `@IgniteExperimental` annotation from a huge number of components,
+introduced a range of new features and system views. Made improvements to deliver a more efficient, flexible, and future-proof platform.
+Below, we'll cover the key highlights that you can look forward to when upgrading to the new release.
+
+<!--truncate-->
+
+### Support ability to configure persistence folder for DataRegion {#configure-persistence-folder-for-DataRegion}
+
+Initially, Apache Ignite allowed to configure single root folder for persistence data via:
+```java
+DataStorageConfiguration#setStoragePath
+```
+
+In case when specific server has several storage devices there was no way to use them all without complex operations with symlinks and file moving.
+Now it`s possible to provide ability to configure multiple storagePaths per DataRegion.
+
+```java
+new DataStorageConfiguration()
+    .setExtraStoragePaths("/path1", "/path2");
+```
+
+### Count of inserted and removed bytes per cache {#inserted-removed-count}
+
+Apache Ignite provides multiple [metrics](https://ignite.apache.org/docs/ignite2/latest/monitoring-metrics/new-metrics) for:
+
+- Transactions.
+- Thread Pools.
+- Cache Group IO.
+- ... And so on
+
+An additional metric that counts the total size (in bytes) of entries inserted into and removed from a cache group since the last cluster restart has been introduced.
+These metrics help to estimate approximate memory usage for in-memory caches, where direct byte-size calculation is problematic:<br />
+`insertedBytes` - Shows the count of inserted to store bytes.<br />
+`removedBytes` - Shows the count of removed from store bytes.<br />
+
+### SessionContext API {#session-ctx-api}
+
+This new API implements [IEP-129](https://cwiki.apache.org/confluence/display/IGNITE/IEP-129%3A+Application+attributes+and+SessionContext+API) by introducing a mechanism that provides session context and application attributes within Apache Ignite.
+
+The proposal addresses the following scenarios:
+
+- An application acquires an Ignite connection from a pool and needs to specify attributes that business logic depends on (e.g., for audit trails or multi-language support).
+- Different applications reuse the same connection but require their own attribute values.
+
+Accessing attributes via `SessionContext`
+
+- The new SessionContext interface provides a single entry point for attributes across all levels and session data.
+- Developers inject the `SessionContextProviderResource` into their functions (e.g., `QuerySqlFunction`, `CacheInterceptor`) to access the current context.
+- The provider extracts the `SessionContext` from the Ignite thread without requiring new instances per call.
+
+Set through jdbc:
+```java
+// JDBC connection to Ignite server.
+try (Connection conn = DriverManager.getConnection(URL)) {
+    conn.setClientInfo("SESSION_ID", "111-333");
+
+    ...
+}
+```
+
+Obtain through user defined function:
+```java
+@SessionContextProviderResource
+public SessionContextProvider sesCtxProv;
+
+@QuerySqlFunction
+public @Nullable String sessionId() {
+    return sesCtxProv.getSessionContext().getAttribute("SESSION_ID");
+}
+```
+
+### User defined table functions are available in calcite sql engine {#udf-table-func}
+
+Let`s define function like:
+```java
+@QuerySqlTableFunction(columnTypes = {int.class, int.class, int.class}, columnNames = {"COL_1", "COL_2", "COL_3"})
+public static Iterable<Collection<?>> collectionRow(int x) {
+    return Arrays.asList(
+        Arrays.asList(x + 1, x + 2, x + 3),
+        Arrays.asList(x + 4, x + 5, x + 6),
+        Arrays.asList(x + 7, x + 8, x + 9)
+    );
+}
+```
+
+And now it available to use:
+```java
+sql("SELECT * from collectionRow(10)")
+```
+
+
+### Anything else? {#anything-else}
+
+See the [release notes](https://ignite.apache.org/releases/ignite2/2.18.0/release_notes.html) to learn about all of the new features and improvements.
+
+Reach out to us on the community user list for more questions, details, and feedback.
+
+Sincerely yours, Ignite contributors and committers
