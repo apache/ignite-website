@@ -96,6 +96,22 @@ And now it available to use:
 sql("SELECT * from collectionRow(10)")
 ```
 
+### Ignite cluster over multiple data centers optimizations {#multi-dc-optimizations}
+Modern requirements dictate the ability to stretch a cluster across multiple data centers. <br />
+At the same time, the following requirements must be met:
+- Minimal additional configuration.
+- Connectivity should work seamlessly, exactly as with a standard cluster.
+- The cluster must survive a complete DC failure.
+- Minimize inter-DC communication.
+
+Numerous optimizations have been performed:
+- Clients connect to servers within their own DC. Supported in the thin client.
+- KV operations read from the local DC. Supported in the thin client.
+- The discovery mechanism minimizes cross-DC connections between nodes.
+- Data rebalancing should prioritize pulling partitions from within the same DC (localizing rebalance traffic within each DC).
+- Minimize cross-DC communication during snapshot recovery.
+- SQL (Calcite) should fetch data from the local DC.
+
 
 ### Anything else? {#anything-else}
 
