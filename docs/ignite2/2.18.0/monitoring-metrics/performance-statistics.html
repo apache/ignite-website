@@ -3393,26 +3393,152 @@
 </div>
 </div>
 <div class="sect1">
+<h2 id="what-is-collected">What Is Collected</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Performance statistics includes the following records:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Category</th>
+<th class="tableblock halign-left valign-top">Records</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache operations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache API and cache store operations: <code>get</code>, <code>put</code>, <code>remove</code>, <code>invoke</code>, <code>lock</code>, bulk operations,
+conflict operations, and cache store load, write, and delete operations</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache metadata</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cache start records with cache IDs and cache names</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transactions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction commit and rollback records with affected cache IDs, start time, and duration</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Queries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SQL, SCAN, and INDEX query records with query text or cache/index details, query ID, start time, duration,
+and success flag</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query details</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Query logical and physical reads, processed rows, and custom query properties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tasks and jobs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compute task and job records with task names, session IDs, execution time, queue time,
+affinity partition, and timeout flag</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persistence</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checkpoint timing records and page write throttling records</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System views</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System view schemas and rows captured when statistics collection starts (some views are skipped, see
+the list below)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The following system views are skipped because they are large or duplicate data that is already collected as
+performance records:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>baseline.node.attributes</code></p>
+</li>
+<li>
+<p><code>node.attributes</code></p>
+</li>
+<li>
+<p><code>metrics</code></p>
+</li>
+<li>
+<p><code>caches</code></p>
+</li>
+<li>
+<p><code>sql.queries</code></p>
+</li>
+<li>
+<p><code>nodes</code></p>
+</li>
+<li>
+<p><code>cacheGroupPageLists</code></p>
+</li>
+<li>
+<p><code>dataRegionPageLists</code></p>
+</li>
+<li>
+<p><code>partitionStates</code></p>
+</li>
+<li>
+<p><code>statisticsPartitionData</code></p>
+</li>
+<li>
+<p><code>metastorage</code></p>
+</li>
+<li>
+<p><code>distributed.metastorage</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="collecting-statistics">Collecting Statistics</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#jmx">JMX interface</a> and <a href="#control-script">Control Script</a> are used to start and stop statistics collecting.</p>
+<p><a href="#jmx">JMX interface</a> and <a href="#control-script">Control Script</a> are used to manage statistics collecting.</p>
 </div>
 <div class="paragraph">
-<p>Each node collects performance statistics in a binary file. This file is placed under
-the <code>Ignite_work_directory/perf_stat/</code> directory. The name mask is <code>node-{nodeId}-{index}.prf</code>.</p>
+<p>Each node collects performance statistics in binary files. These files are placed under
+the <code>Ignite_work_directory/perf_stat/</code> directory. Regular performance events are written to
+<code>node-{nodeId}.prf</code>. If a file with the same name already exists, Ignite adds an index to the file name:
+<code>node-{nodeId}-{index}.prf</code>.</p>
+</div>
+<div class="paragraph">
+<p>When statistics collection starts, each node also writes a snapshot of system views
+(<a href="/docs/ignite2/latest/monitoring-metrics/system-views">System Views</a>) to <code>node-{nodeId}-system-views.prf</code>.
+If a file with the same name already exists, Ignite adds an index:
+<code>node-{nodeId}-system-views-{index}.prf</code>. The <code>rotate</code> operation rotates only regular performance event files.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+<h3 id="sensitive-information" class="discrete">Sensitive Information</h3>
+<div class="paragraph">
+<p>Performance statistics files can contain sensitive information, including query text, cache names, task names,
+node attributes, and values exposed by system views. Store and share these files according to your security policies.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Performance statistics files are used to build the report offline.</p>
 </div>
 <div class="paragraph">
-<p>Nodes use off-heap cyclic buffer to temporarily store serialized statistics. The writer thread flushes buffer to the
-file when the flush size is reached. Some statistics are skipped if the buffer overflows due to a slow disk. See
-the <a href="#system-properties">properties</a> section for customization.</p>
+<p>For regular performance events, nodes use off-heap cyclic buffer to temporarily store serialized statistics. The writer
+thread flushes buffer to the file when the flush size is reached. Some statistics are skipped if the buffer overflows
+due to a slow disk. See the <a href="#system-properties">properties</a> section for customization.</p>
 </div>
 <div class="paragraph">
-<p>Each statistics collection process creates a new file on nodes. Each next file has the same name with the
-corresponding index. See the examples below:</p>
+<p>Each statistics collection process creates new files on nodes. Each next file has the same name with the corresponding
+index. See the examples below:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -3424,6 +3550,12 @@ corresponding index. See the examples below:</p>
 </li>
 <li>
 <p><code>node-faedc6c9-3542-4610-ae10-4ff7e0600000-2.prf</code></p>
+</li>
+<li>
+<p><code>node-faedc6c9-3542-4610-ae10-4ff7e0600000-system-views.prf</code></p>
+</li>
+<li>
+<p><code>node-faedc6c9-3542-4610-ae10-4ff7e0600000-system-views-1.prf</code></p>
 </li>
 </ul>
 </div>
@@ -3448,8 +3580,11 @@ extension.</p>
 <div class="content">
 <pre>/path_to_files/
     ├── node-162c7147-fef8-4ea2-bd25-8653c41fc7fa.prf
+    ├── node-162c7147-fef8-4ea2-bd25-8653c41fc7fa-system-views.prf
     ├── node-7b8a7c5c-f3b7-46c3-90da-e66103c00001.prf
-    └── node-faedc6c9-3542-4610-ae10-4ff7e0600000.prf</pre>
+    ├── node-7b8a7c5c-f3b7-46c3-90da-e66103c00001-system-views.prf
+    ├── node-faedc6c9-3542-4610-ae10-4ff7e0600000.prf
+    └── node-faedc6c9-3542-4610-ae10-4ff7e0600000-system-views.prf</pre>
 </div>
 </div>
 </li>
@@ -3467,6 +3602,24 @@ extension.</p>
 <p>The performance report is created in the new directory under the performance statistics files
 path: <code>path_to_files/report_yyyy-MM-dd_HH-mm-ss/</code>. Open <code>report_yyyy-MM-dd_HH-mm-ss/index.html</code> in the browser to see
 the report.</p>
+</div>
+<div class="paragraph">
+<p>You can also print raw performance statistics records to the console or to a file by using <code>print-statistics.sh</code> from
+the <code>performance-statistics-ext</code> release package. For example, to print checkpoint timing and page write throttling
+records:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--ops</span> CHECKPOINT,PAGES_WRITE_THROTTLE</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To write the output to a file, use the <code>--out</code> parameter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--ops</span> CHECKPOINT,PAGES_WRITE_THROTTLE <span class="nt">--out</span> checkpoints.json</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -3600,7 +3753,7 @@ statistics collection is stopped when the file size is exceeded.</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">IGNITE_PERF_STAT_CACHED_STRINGS_THRESHOLD</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1024</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10240</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum performance statistics cached strings threshold.
 String caching is stopped when the threshold is exceeded.</p></td>
 </tr>
@@ -3620,6 +3773,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     <div class="toc-wrapper">
     <ul class="sectlevel1">
 <li><a href="#overview">Overview</a></li>
+<li><a href="#what-is-collected">What Is Collected</a></li>
 <li><a href="#collecting-statistics">Collecting Statistics</a></li>
 <li><a href="#building-the-report">Building the Report</a></li>
 <li><a href="#management">Management</a>
@@ -3652,13 +3806,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1778234637' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1778234637' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1778234637' async></script>
-<script type='module' src='/assets/js/search.js?1778234637' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1778253358' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1778253358' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1778253358' async></script>
+<script type='module' src='/assets/js/search.js?1778253358' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1778234637" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778234637"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1778253358" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778253358"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>

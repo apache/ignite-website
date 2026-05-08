@@ -3396,7 +3396,7 @@
 <h2 id="building-the-report">Building the Report</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite provides a tool to generate the report from the performance statistics files.</p>
+<p>The extension provides a tool to generate an offline HTML report from performance statistics files.</p>
 </div>
 <div class="paragraph">
 <p>Follow these steps to build the performance report:</p>
@@ -3409,9 +3409,13 @@
 <div class="content">
 <pre>/path_to_files/
     ├── node-162c7147-fef8-4ea2-bd25-8653c41fc7fa.prf
+    ├── node-162c7147-fef8-4ea2-bd25-8653c41fc7fa-system-views.prf
     ├── node-7b8a7c5c-f3b7-46c3-90da-e66103c00001.prf
-    └── node-faedc6c9-3542-4610-ae10-4ff7e0600000.prf</pre>
+    └── node-7b8a7c5c-f3b7-46c3-90da-e66103c00001-system-views.prf</pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>node-*-system-views*.prf</code> files are stored next to regular performance statistics files. If the system view files are too large, you can omit them. The report will still be generated, but without <code>System views</code> data.</p>
 </div>
 </li>
 <li>
@@ -3430,6 +3434,11 @@
 Open <code>report_yyyy-MM-dd_HH-mm-ss/index.html</code> in the browser to see the report.</p>
 </div>
 <div class="paragraph">
+<p>The report includes <code>Cluster info</code>, <code>Cache operations</code>, <code>Transactions</code>, <code>SQL queries</code>, <code>Scan queries</code>,
+<code>Index queries</code>, <code>Tasks and jobs</code>, and <code>System views</code>. When <code>node-*-system-views*.prf</code> files are available in the
+input directory, the <code>System views</code> tab is populated with their data.</p>
+</div>
+<div class="paragraph">
 <p>For more details run the help command:</p>
 </div>
 <div class="listingblock">
@@ -3438,18 +3447,154 @@ Open <code>report_yyyy-MM-dd_HH-mm-ss/index.html</code> in the browser to see th
 </div>
 </div>
 <div class="sect2">
-<h3 id="performance-statistics-report-example">Performance Statistics Report Example</h3>
-<code-tabs><code-tab data-tab='Cache operations'><div class="paragraph">
-<p><span class="image"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_2.jpg" alt="Cache operations report"></span></p>
-</div></code-tab><code-tab data-tab='Transactions'><div class="paragraph">
-<p><span class="image"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_3.jpg" alt="Transactions report"></span></p>
-</div></code-tab><code-tab data-tab='Queries'><div class="paragraph">
-<p><span class="image"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_4.jpg" alt="Queries report"></span></p>
-</div></code-tab><code-tab data-tab='Compute'><div class="paragraph">
-<p><span class="image"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_5.jpg" alt="Compute report"></span></p>
-</div></code-tab><code-tab data-tab='Cluster info'><div class="paragraph">
-<p><span class="image"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_1.jpg" alt="Cluster info report"></span></p>
-</div></code-tab></code-tabs>
+<h3 id="html-report-tabs">HTML Report Tabs</h3>
+<div class="sect3">
+<h4 id="cluster-info">Cluster info</h4>
+<div class="paragraph">
+<p>Cluster topology and caches found in the input files: <code>Cluster nodes</code> and <code>Started caches</code> tables.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_cluster_info.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_cluster_info.png" alt="Cluster info report"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cache-operations">Cache operations</h4>
+<div class="paragraph">
+<p>Cache and cache store activity for the selected cache and node. Cache and node selectors filter all charts on the page.</p>
+</div>
+<div class="paragraph">
+<p>A bar chart summarizes the distribution of cache operation counts by type:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_cache_operations.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_cache_operations.png" alt="Distribution of cache operations"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>For each operation type, a line chart shows the operation count over time:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_cache_operations_1.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_cache_operations_1.png" alt="Cache operation count over time"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Cache store operations</code> section provides the same breakdowns for cache store calls. A distribution chart
+summarizes cache store operation counts by type:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_cache_operations_2.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_cache_operations_2.png" alt="Distribution of cache store operations"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Line charts show cache store operation counts over time:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_cache_operations_3.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_cache_operations_3.png" alt="Cache store operation count over time"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="transactions">Transactions</h4>
+<div class="paragraph">
+<p>Transaction activity for the selected cache and node. A histogram shows the distribution of transaction durations:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_transactions.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_transactions.png" alt="Transactions histogram"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Below it, line charts plot <code>commit</code> and <code>rollback</code> counts over time:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_transactions_1.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_transactions_1.png" alt="Transactions commit chart"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sql-queries">SQL queries</h4>
+<div class="paragraph">
+<p>Aggregated SQL query statistics. The <code>Overall statistics</code> table shows total executions, duration, and reads for each
+query. Each row expands into a <code>Properties</code> subtable with map and reduce phase plans, and a <code>Rows</code> subtable with
+rows fetched on mapper and reducer nodes:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_sql_queries.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_sql_queries.png" alt="SQL queries overall statistics"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Top of slowest queries</code> table lists slow query executions with the same expandable details:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_sql_queries_1.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_sql_queries_1.png" alt="Top of slowest SQL queries"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="scan-queries">Scan queries</h4>
+<div class="paragraph">
+<p>Aggregated scan query statistics by cache and the slowest scan queries: <code>Overall statistics</code> and <code>Top of slowest
+queries</code> tables.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_scan_queries.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_scan_queries.png" alt="Scan queries report"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="index-queries">Index queries</h4>
+<div class="paragraph">
+<p>Aggregated index query statistics and the slowest index queries: <code>Overall statistics</code> and <code>Top of slowest queries</code>
+tables.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_index_queries.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_index_queries.png" alt="Index queries report"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tasks-and-jobs">Tasks and jobs</h4>
+<div class="paragraph">
+<p>Aggregated task execution statistics. The <code>Overall statistics</code> table shows executions, total duration, and job
+counts per task:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_tasks_and_jobs.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_tasks_and_jobs.png" alt="Tasks and jobs overall statistics"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Top of slowest tasks</code> table lists slow task executions. Each row expands into a <code>Jobs</code> subtable with per-node
+job durations:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_tasks_and_jobs_1.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_tasks_and_jobs_1.png" alt="Top of slowest tasks with jobs subtable"></a>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="system-views">System views</h4>
+<div class="paragraph">
+<p>Rows from collected system views. The tab provides a node selector, a system view selector, and a searchable
+paginated table for the selected view.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="/docs/images/integrations/performance-statistics/perf_stat_system_views.png"><img src="/docs/ignite2/2.18.0/images/integrations/performance-statistics/perf_stat_system_views.png" alt="System views report"></a>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3457,7 +3602,8 @@ Open <code>report_yyyy-MM-dd_HH-mm-ss/index.html</code> in the browser to see th
 <h2 id="print-statistics">Print Statistics</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ignite provides a tool to print statistics to a console or to a file in JSON format.</p>
+<p>The extension provides a tool to print raw performance statistics records to the console or to a file in JSON format.
+Use this tool when you need access to individual records.</p>
 </div>
 <div class="paragraph">
 <p>Run the script from the release package of the tool to print statistics:</p>
@@ -3468,15 +3614,64 @@ Open <code>report_yyyy-MM-dd_HH-mm-ss/index.html</code> in the browser to see th
 </div>
 </div>
 <div class="paragraph">
-<p>Note that <code>path_to_files</code> is a path to the performance statistics file or files directory.</p>
+<p>Note that <code>path_to_files</code> can point either to a single performance statistics file or to a directory with multiple
+files.</p>
 </div>
 <div class="paragraph">
-<p>The script provides the ability to filter operations by operation&#8217;s type, time, or cache. For more details run the
-help command:</p>
+<p>The tool supports the following options:</p>
+</div>
+<table class="tableblock frame-all grid-all stripes-even stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--out out_file</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Appends JSON output to the specified file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--ops op_types</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prints only the specified comma-separated operation types.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--from start_time_from</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prints only records whose start time is greater than or equal to the specified value (Unix epoch milliseconds).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--to start_time_to</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prints only records whose start time is less than or equal to the specified value (Unix epoch milliseconds).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--caches cache_names</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prints only records related to the specified comma-separated cache names.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For more details run the help command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">performance-statistics-tool/print-statistics.sh <span class="nt">--help</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--ops</span> QUERY,QUERY_ROWS,QUERY_PROPERTY
+performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--ops</span> SYSTEM_VIEW_ROW
+performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--ops</span> CHECKPOINT,PAGES_WRITE_THROTTLE
+performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--from</span> 1713700000000 <span class="nt">--to</span> 1713703600000
+performance-statistics-tool/print-statistics.sh path_to_files <span class="nt">--caches</span> cache1,cache2 <span class="nt">--out</span> perfstat.json</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3506,7 +3701,18 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#overview">Overview</a></li>
 <li><a href="#building-the-report">Building the Report</a>
 <ul class="sectlevel2">
-<li><a href="#performance-statistics-report-example">Performance Statistics Report Example</a></li>
+<li><a href="#html-report-tabs">HTML Report Tabs</a>
+<ul class="sectlevel3">
+<li><a href="#cluster-info">Cluster info</a></li>
+<li><a href="#cache-operations">Cache operations</a></li>
+<li><a href="#transactions">Transactions</a></li>
+<li><a href="#sql-queries">SQL queries</a></li>
+<li><a href="#scan-queries">Scan queries</a></li>
+<li><a href="#index-queries">Index queries</a></li>
+<li><a href="#tasks-and-jobs">Tasks and jobs</a></li>
+<li><a href="#system-views">System views</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#print-statistics">Print Statistics</a></li>
@@ -3533,13 +3739,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1778234636' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1778234636' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1778234636' async></script>
-<script type='module' src='/assets/js/search.js?1778234636' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1778253357' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1778253357' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1778253357' async></script>
+<script type='module' src='/assets/js/search.js?1778253357' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1778234636" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778234636"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1778253357" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778253357"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
