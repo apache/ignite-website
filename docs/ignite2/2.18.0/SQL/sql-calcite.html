@@ -3499,6 +3499,71 @@ QUERY_ENGINE=CALCITE</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="memory-quotas">Memory Quotas</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Calcite-based SQL engine can track and limit heap memory accounted by Calcite query execution operators.
+This is useful for protecting a server node from a single large query or from many concurrent memory-heavy queries.</p>
+</div>
+<div class="paragraph">
+<p>Two types of quotas can be configured in <code>CalciteQueryEngineConfiguration</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>globalMemoryQuota</code> - a per-node heap memory quota for all Calcite SQL queries running on the node.</p>
+</li>
+<li>
+<p><code>queryMemoryQuota</code> - a per-node heap memory quota for each Calcite SQL query running on the node.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Both quotas are disabled by default (<code>0</code>).
+The quota values are specified in bytes.
+If a quota is exceeded, the query fails with an exception.
+The global quota error message contains <code>Global memory quota for SQL queries exceeded</code>, and the per-query quota error message contains <code>Query quota exceeded</code>.</p>
+</div>
+<div class="paragraph">
+<p>The quota is applied to query execution structures that keep rows in heap memory, for example sorting, hash joins, hash aggregates, set operations, collection operations, spools, and result materialization.
+It is not a process memory limit and it does not account for Ignite data regions, direct memory, JVM native memory, or the operating system page cache.
+The quotas are per-node.
+For a distributed query, total memory consumption across the cluster can be higher because the limit is applied independently on every participating node.
+Size these quotas together with <code>-Xmx</code> and the expected SQL concurrency.</p>
+</div>
+<code-tabs><code-tab data-tab='XML'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.IgniteConfiguration"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"sqlConfiguration"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.configuration.SqlConfiguration"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"queryEnginesConfiguration"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;list&gt;</span>
+                    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.apache.ignite.calcite.CalciteQueryEngineConfiguration"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"default"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"globalMemoryQuota"</span> <span class="na">value=</span><span class="s">"#{4L * 1024 * 1024 * 1024}"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"queryMemoryQuota"</span> <span class="na">value=</span><span class="s">"#{512L * 1024 * 1024}"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;/bean&gt;</span>
+                <span class="nt">&lt;/list&gt;</span>
+            <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/bean&gt;</span></code></pre>
+</div>
+</div></code-tab><code-tab data-tab='Java'><div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">IgniteConfiguration</span> <span class="n">cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">IgniteConfiguration</span><span class="o">().</span><span class="na">setSqlConfiguration</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nf">SqlConfiguration</span><span class="o">().</span><span class="na">setQueryEnginesConfiguration</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nf">CalciteQueryEngineConfiguration</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setDefault</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">setGlobalMemoryQuota</span><span class="o">(</span><span class="mi">4L</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">setQueryMemoryQuota</span><span class="o">(</span><span class="mi">512L</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="o">)</span>
+    <span class="o">)</span>
+<span class="o">);</span></code></pre>
+</div>
+</div></code-tab></code-tabs>
+</div>
+</div>
+<div class="sect1">
 <h2 id="sql-reference">SQL Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -4006,6 +4071,7 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
 <li><a href="#odbc">ODBC</a></li>
 </ul>
 </li>
+<li><a href="#memory-quotas">Memory Quotas</a></li>
 <li><a href="#sql-reference">SQL Reference</a>
 <ul class="sectlevel2">
 <li><a href="#ddl">DDL</a></li>
@@ -4088,13 +4154,13 @@ Apache, Apache Ignite, the Apache feather and the Apache Ignite logo are either 
     };
     </script>
 
-<script type='module' src='/assets/js/index.js?1778226013' async crossorigin></script>
-<script type='module' src='/assets/js/versioning.js?1778226013' async crossorigin></script>
-<script type='module' src='/assets/js/railroad-diagram.js?1778226013' async></script>
-<script type='module' src='/assets/js/search.js?1778226013' defer crossorigin></script>
+<script type='module' src='/assets/js/index.js?1778234634' async crossorigin></script>
+<script type='module' src='/assets/js/versioning.js?1778234634' async crossorigin></script>
+<script type='module' src='/assets/js/railroad-diagram.js?1778234634' async></script>
+<script type='module' src='/assets/js/search.js?1778234634' defer crossorigin></script>
 
-<link rel="stylesheet" href="/assets/css/styles.css?1778226013" media="print" onload="this.media='all'">
-<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778226013"></noscript>
+<link rel="stylesheet" href="/assets/css/styles.css?1778234634" media="print" onload="this.media='all'">
+<noscript><link media="all" rel="stylesheet" href="/assets/css/styles.css?1778234634"></noscript>
 
 <link rel="stylesheet" href="/assets/css/docsearch.min.css" media="print" onload="this.media='all'">
 <noscript><link media="all" rel="stylesheet" href="/assets/css/docsearch.min.css"></noscript>
