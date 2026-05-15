@@ -1,8 +1,8 @@
 publish:
   whoami: master
 notifications:
-  commits:      notifications@ignite.apache.org
-  issues:       notifications@ignite.apache.org
+  commits: notifications@ignite.apache.org
+  issues: notifications@ignite.apache.org
   pullrequests: notifications@ignite.apache.org
 github:
   description: "Apache Ignite Website"
@@ -27,10 +27,10 @@ github:
     projects: false
     discussions: false
   enabled_merge_buttons:
-    squash:  true
+    squash: true
     squash_commit_message: PR_TITLE
-    merge:   false
-    rebase:  false
+    merge: false
+    rebase: false
   protected_branches:
     main:
       required_linear_history: true
@@ -38,3 +38,16 @@ github:
       required_conversation_resolution: true
   autolink_jira:
     - IGNITE
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
