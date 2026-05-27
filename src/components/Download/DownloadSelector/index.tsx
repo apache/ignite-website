@@ -132,7 +132,7 @@ docker exec -it ignite-node /opt/ignite/bin/ignite3`
             : `# Start a single-node cluster
 docker run -d --name ignite-node \\
   -p 10800:10800 -p 47100:47100 -p 47500:47500 \\
-  -e "CONFIG_URI=/opt/ignite/config/default-config.xml" \\
+  -e "CONFIG_URI=/opt/ignite/apache-ignite/config/default-config.xml" \\
   apacheignite/ignite:${dockerTag}`;
 
     const composeExample =
