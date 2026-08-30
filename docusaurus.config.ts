@@ -239,9 +239,41 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        // Footer links will be configured in WP2
+        {
+          title: 'ASF',
+          items: [
+            {
+              label: 'Foundation',
+              href: 'https://www.apache.org/',
+            },
+            {
+              label: 'Events',
+              href: 'https://www.apache.org/events/current-event.html',
+            },
+            {
+              label: 'License',
+              href: 'https://www.apache.org/licenses/',
+            },
+            {
+              label: 'Security',
+              href: 'https://www.apache.org/security/',
+            },
+            {
+              label: 'Sponsorship',
+              href: 'https://www.apache.org/foundation/sponsorship.html',
+            },
+            {
+              label: 'Thanks',
+              href: 'https://www.apache.org/foundation/thanks.html',
+            },
+            {
+              label: 'Privacy',
+              href: 'https://privacy.apache.org/policies/privacy-policy-public.html',
+            },
+          ],
+        },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation, Licensed under the Apache License, Version 2.0.`,
+      copyright: `Copyright © ${new Date().getFullYear()} The Apache Software Foundation, Licensed under the Apache License, Version 2.0. Apache Ignite, Ignite, Apache, the Apache logo, and the Apache Ignite project logo are either registered trademarks or trademarks of The Apache Software Foundation.`,
     },
     prism: {
       theme: prismThemes.vsDark,
