@@ -4,6 +4,8 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
+import Ignite3StatusNote from '@site/src/components/Ignite3StatusNote';
+import { DOCS_QUICK_START, IGNITE2_DOCS_PATHS, IGNITE3_DOCS_PATHS } from '@site/src/config/docs-urls';
 import { FAQCategoryTabs, type FAQCategory } from '@site/src/components/FAQAccordion';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './faq.module.css';
@@ -40,10 +42,10 @@ function OverviewSection() {
           </p>
           <ul className={styles.overviewList}>
             <li>Memory-first storage with optional persistence</li>
-            <li>Schema-driven data placement for local query execution</li>
-            <li>ACID transactions across partitions using Raft consensus</li>
-            <li>Non-blocking reads through MVCC snapshot isolation</li>
-            <li>Full SQL support via Apache Calcite</li>
+            <li>Data colocation for local query execution</li>
+            <li>Distributed ACID transactions across partitions</li>
+            <li>Distributed SQL with indexes and joins</li>
+            <li>Compute and data streaming APIs</li>
           </ul>
         </div>
         <aside className={styles.overviewMetrics}>
@@ -70,12 +72,12 @@ function ValuePropsSection() {
     },
     {
       title: 'Scale Without Penalties',
-      description: 'Schema-driven colocation keeps related data together, eliminating cross-node join penalties.',
+      description: 'Data colocation keeps related data together, eliminating cross-node join penalties.',
       icon: '/img/faq/icon-faq2.svg',
     },
     {
       title: 'Consistency Without Tradeoffs',
-      description: 'ACID transactions across partitions with Raft consensus. No eventual consistency compromises.',
+      description: 'ACID transactions across partitions. No eventual consistency compromises.',
       icon: '/img/faq/icon-faq3.svg',
     },
   ];
@@ -111,11 +113,11 @@ function FAQSection() {
                 Apache Ignite is a memory-first distributed SQL database built for high-velocity data workloads where milliseconds matter. It combines:
               </p>
               <ul>
-                <li>Memory-first storage with optional persistence (AIPERSIST, AIMEM)</li>
-                <li>Schema-driven data placement (colocation) for local query execution</li>
-                <li>ACID transactions across partitions using Raft consensus</li>
-                <li>Non-blocking reads through MVCC snapshot isolation</li>
-                <li>Full SQL support via Apache Calcite</li>
+                <li>Memory-first storage with optional persistence</li>
+                <li>Data colocation for local query execution</li>
+                <li>Distributed ACID transactions across partitions</li>
+                <li>Distributed SQL with indexes and joins</li>
+                <li>Compute and data streaming APIs</li>
               </ul>
             </>
           ),
@@ -177,12 +179,26 @@ function FAQSection() {
           ),
         },
         {
+          question: 'Which version should I use?',
+          answer: (
+            <>
+              <p>
+                Use <strong>Apache Ignite 2</strong> for new projects and production deployments.
+                It is actively developed and maintained.
+              </p>
+              <Ignite3StatusNote />
+            </>
+          ),
+          learnMoreLink: '/docs/',
+          learnMoreText: 'Read the Documentation',
+        },
+        {
           question: 'What languages and clients are supported?',
           answer: (
             <>
               <p>Ignite provides native thin clients for:</p>
               <ul>
-                <li><strong>Java</strong>: Full feature set with CompletableFuture async support</li>
+                <li><strong>Java</strong>: Full feature set with async API support</li>
                 <li><strong>.NET (C#)</strong>: Native thin-client protocol with async/await</li>
                 <li><strong>C++</strong>: Native thin-client implementation</li>
                 <li><strong>Python</strong>: Native thin-client bindings</li>
@@ -190,14 +206,14 @@ function FAQSection() {
               <p>All clients provide partition-aware routing for direct access to data nodes.</p>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/develop/ignite-clients/',
+          learnMoreLink: IGNITE2_DOCS_PATHS.thinClients,
           learnMoreText: 'Client Documentation',
         },
       ],
     },
     {
       id: 'architecture',
-      title: 'Architecture',
+      title: 'Architecture (Ignite 3)',
       questions: [
         {
           question: 'How does schema-driven colocation work?',
@@ -211,7 +227,7 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/sql/reference/language-definition/ddl',
+          learnMoreLink: IGNITE3_DOCS_PATHS.sql.ddl,
           learnMoreText: 'Schema Design Guide',
         },
         {
@@ -264,7 +280,7 @@ function FAQSection() {
               </table>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/configure-and-operate/configuration/config-storage-overview',
+          learnMoreLink: IGNITE3_DOCS_PATHS.configureAndOperate.storageOverview,
           learnMoreText: 'Storage Configuration',
         },
         {
@@ -287,7 +303,7 @@ function FAQSection() {
     },
     {
       id: 'transactions',
-      title: 'Transactions',
+      title: 'Transactions (Ignite 3)',
       questions: [
         {
           question: 'Does Ignite support ACID transactions?',
@@ -302,7 +318,7 @@ function FAQSection() {
               </ul>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/develop/work-with-data/transactions',
+          learnMoreLink: IGNITE3_DOCS_PATHS.develop.transactions,
           learnMoreText: 'Transaction Guide',
         },
         {
@@ -350,7 +366,7 @@ function FAQSection() {
     },
     {
       id: 'sql',
-      title: 'SQL & Data Access',
+      title: 'SQL & Data Access (Ignite 3)',
       questions: [
         {
           question: 'What SQL capabilities does Ignite support?',
@@ -367,7 +383,7 @@ function FAQSection() {
               <p>The cost-based optimizer handles partition pruning, index selection, and join reordering automatically.</p>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/sql/',
+          learnMoreLink: IGNITE3_DOCS_PATHS.sql.index,
           learnMoreText: 'SQL Reference',
         },
         {
@@ -433,7 +449,7 @@ function FAQSection() {
     },
     {
       id: 'operations',
-      title: 'Operations',
+      title: 'Operations (Ignite 3)',
       questions: [
         {
           question: 'How do I deploy Ignite in Kubernetes?',
@@ -444,8 +460,8 @@ function FAQSection() {
               </p>
             </>
           ),
-          learnMoreLink: '/docs/ignite3/3.1.0/getting-started/quick-start',
-          learnMoreText: 'Getting Started Guide',
+          learnMoreLink: IGNITE3_DOCS_PATHS.configureAndOperate.installKubernetes,
+          learnMoreText: 'Kubernetes Installation Guide',
         },
         {
           question: 'How does replication and failover work?',
@@ -495,7 +511,7 @@ function FAQSection() {
     },
     {
       id: 'comparison',
-      title: 'Comparison',
+      title: 'Comparison (Ignite 3)',
       questions: [
         {
           question: 'How does Ignite compare to other distributed databases?',
@@ -608,7 +624,7 @@ function CTASection() {
           </p>
         </div>
         <div className={styles.ctaAction}>
-          <a className="button" href="/docs/ignite3/3.1.0/getting-started/quick-start">
+          <a className="button" href={DOCS_QUICK_START}>
             Quick Start Guide
           </a>
         </div>

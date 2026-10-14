@@ -6,7 +6,7 @@
  * custom Navbar and Footer components.
  */
 
-import { DOCS_PATHS, DOCS_INDEX } from './docs-urls';
+import { DOCS_QUICK_START, DOCS_INDEX } from './docs-urls';
 
 export interface NavItem {
   label: string;
@@ -39,7 +39,7 @@ export const getStartedMenu: DropdownMenu = {
   featured: {
     icon: '/img/menu/icon-red-rocket.svg',
     label: 'Quick Start Guide',
-    href: DOCS_PATHS.gettingStarted.quickStart,
+    href: DOCS_QUICK_START,
     className: 'dropmenu__redbutton'
   },
   sections: [
@@ -371,7 +371,7 @@ export const mainNavItems = [
  * Flattened navigation for mobile display
  */
 export const mobileMenuItems = [
-  { label: 'Quick Start', href: DOCS_PATHS.gettingStarted.quickStart },
+  { label: 'Quick Start', href: DOCS_QUICK_START },
   { label: 'Developer Resources', href: '/resources' },
   { label: 'Training and Courses', href: '/resources#training' },
   { label: 'FAQ', href: '/faq' },
@@ -483,7 +483,7 @@ export const footerSections = {
     ],
     ctaButton: {
       label: 'Start Using Apache Ignite',
-      href: DOCS_PATHS.gettingStarted.quickStart,
+      href: DOCS_QUICK_START,
     },
   },
 } as const;

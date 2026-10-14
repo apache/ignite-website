@@ -3,65 +3,64 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Section from '@site/src/components/Section';
-import { DOCS_BASE_PATH } from '@site/src/config/docs-urls';
+import { IGNITE3_STATUS_SHORT } from '@site/src/components/Ignite3StatusNote';
+import { IGNITE2_DOCS_PATHS, IGNITE3_DOCS_PATHS } from '@site/src/config/docs-urls';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './resources.module.css';
 
 // Data definitions
 // Documentation links are relative paths, resolved with baseUrl at build time
-const DOCS_BASE_URL = DOCS_BASE_PATH;
-
 const gettingStartedLinks = [
   {
     title: 'Quick Start Guide',
     description: 'Get started with Apache Ignite in 5 minutes. Download, install, and execute your first queries.',
-    url: `${DOCS_BASE_URL}/getting-started/quick-start`,
+    url: IGNITE2_DOCS_PATHS.quickStart,
     featured: true,
   },
   {
     title: 'Start Your First Cluster',
     description: 'Launch a local cluster and verify topology',
-    url: `${DOCS_BASE_URL}/getting-started/start-cluster`,
+    url: IGNITE2_DOCS_PATHS.clustering,
   },
   {
     title: 'Work with SQL',
     description: 'Execute queries, create tables, manipulate data',
-    url: `${DOCS_BASE_URL}/getting-started/work-with-sql`,
+    url: IGNITE2_DOCS_PATHS.sql,
   },
   {
-    title: 'Table API',
-    description: 'Use the Table API for record-view or key-value operations',
-    url: `${DOCS_BASE_URL}/getting-started/key-value-api`,
+    title: 'Key-Value API',
+    description: 'Use the cache API for key-value operations',
+    url: IGNITE2_DOCS_PATHS.keyValueApi,
   },
 ];
 
 const documentationLinks = {
   core: [
-    { title: 'Apache Ignite 3 Documentation', url: `${DOCS_BASE_URL}/`, primary: true },
-    { title: 'SQL Reference', url: `${DOCS_BASE_URL}/sql/` },
-    { title: 'Java API Reference', url: `${DOCS_BASE_URL}/api-reference/native-clients/java/` },
-    { title: '.NET API Reference', url: `${DOCS_BASE_URL}/api-reference/native-clients/dotnet/` },
-    { title: 'Apache Ignite 2 Documentation (LTS)', url: 'https://ignite.apache.org/docs/ignite2/latest/', secondary: true },
+    { title: 'Apache Ignite 2 Documentation', url: IGNITE2_DOCS_PATHS.index, primary: true },
+    { title: 'SQL Reference', url: IGNITE2_DOCS_PATHS.sql },
+    { title: 'Java API Reference', url: IGNITE2_DOCS_PATHS.javadoc },
+    { title: '.NET API Reference', url: IGNITE2_DOCS_PATHS.dotnetdoc },
+    { title: 'Apache Ignite 3 Documentation', url: IGNITE3_DOCS_PATHS.index, secondary: true },
   ],
   architecture: [
-    { title: 'Core Concepts', url: `${DOCS_BASE_URL}/understand/` },
-    { title: 'Installation Guides', url: `${DOCS_BASE_URL}/configure-and-operate/installation/` },
-    { title: 'Configuration & Monitoring', url: `${DOCS_BASE_URL}/configure-and-operate/` },
+    { title: 'Core Concepts', url: IGNITE2_DOCS_PATHS.dataModeling },
+    { title: 'Installation Guides', url: IGNITE2_DOCS_PATHS.installation },
+    { title: 'Configuration & Monitoring', url: IGNITE2_DOCS_PATHS.monitoring },
     { title: 'Ignite Wiki', url: 'https://cwiki.apache.org/confluence/display/IGNITE/', external: true },
   ],
 };
 
 const repositoryLinks = [
   {
-    title: 'Apache Ignite 3',
-    description: 'Current generation development',
-    url: 'https://github.com/apache/ignite-3',
+    title: 'Apache Ignite 2',
+    description: 'Actively developed, recommended version',
+    url: 'https://github.com/apache/ignite',
     primary: true,
   },
   {
-    title: 'Apache Ignite 2',
-    description: 'Long-term support (LTS)',
-    url: 'https://github.com/apache/ignite',
+    title: 'Apache Ignite 3',
+    description: IGNITE3_STATUS_SHORT,
+    url: 'https://github.com/apache/ignite-3',
   },
   {
     title: 'Ignite Extensions',
@@ -325,7 +324,7 @@ function ReadyToStart() {
           </p>
         </div>
         <div className={styles.toolingend__action}>
-          <a className="button" href={`${DOCS_BASE_URL}/getting-started/quick-start`} target="_blank" rel="noreferrer">
+          <a className="button" href={IGNITE2_DOCS_PATHS.quickStart} target="_blank" rel="noreferrer">
             Discover Quick Start Guide
           </a>
         </div>

@@ -5,20 +5,19 @@ import Head from '@docusaurus/Head';
 import CodeBlock from '@theme/CodeBlock';
 import QuickDownload from '@site/src/components/Download/QuickDownload';
 import DownloadSelector from '@site/src/components/Download/DownloadSelector';
+import Ignite3StatusNote from '@site/src/components/Ignite3StatusNote';
 import {
   extensionSourceReleases,
   extensionBinaryReleases,
   springBootDependencies,
 } from '@site/src/data/downloads';
-import {DOCS_BASE_PATH} from '@site/src/config/docs-urls';
+import {IGNITE2_DOCS_PATHS} from '@site/src/config/docs-urls';
 import {useCanonicalUrl} from '@site/src/hooks/useCanonicalUrl';
 import {
   resolveMirrorUrl,
   toCloserUrl,
 } from '@site/src/components/Download/downloadUtils';
 import styles from './download.module.css';
-
-const DOCS_BASE_URL = DOCS_BASE_PATH;
 
 export default function DownloadPage(): JSX.Element {
   const [preferredMirror, setPreferredMirror] = useState('https://dlcdn.apache.org');
@@ -60,33 +59,21 @@ export default function DownloadPage(): JSX.Element {
           </div>
         </section>
 
-        {/* Quick Download - Featured Ignite 3 */}
+        {/* Quick Download - Featured Ignite 2 */}
         <QuickDownload />
 
-        {/* Apache Ignite 3 */}
-        <section className={`${styles.downloadSection} container`} id="ignite3">
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Apache Ignite 3</h2>
-            <p className={styles.sectionDescription}>
-              The latest version of Apache Ignite. Binary packages are recommended for most users.
-              Source releases are available for building from source.
-            </p>
-          </div>
-
-          <DownloadSelector variant="ignite3" preferredMirror={preferredMirror} />
-        </section>
-
-        {/* Apache Ignite 2 (LTS) */}
+        {/* Apache Ignite 2 */}
         <section className={styles.ltsSection} id="ignite2">
           <div className="container">
             <div className={styles.sectionHeader}>
               <div className={styles.ltsTitleRow}>
                 <h2 className={styles.sectionTitle}>Apache Ignite 2</h2>
-                <span className={styles.ltsBadge}>LTS</span>
+                <span className={styles.ltsBadge}>Recommended</span>
               </div>
               <p className={styles.sectionDescription}>
-                Long-term support release. Continues to receive maintenance updates and is
-                recommended for existing deployments.
+                Actively developed and maintained release line, recommended for new projects and
+                production deployments. Binary packages are recommended for most users.
+                Source releases are available for building from source.
               </p>
             </div>
 
@@ -166,6 +153,16 @@ export default function DownloadPage(): JSX.Element {
           </div>
         </section>
 
+        {/* Apache Ignite 3 */}
+        <section className={`${styles.downloadSection} container`} id="ignite3">
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Apache Ignite 3</h2>
+            <Ignite3StatusNote />
+          </div>
+
+          <DownloadSelector variant="ignite3" preferredMirror={preferredMirror} />
+        </section>
+
         {/* Verification */}
         <section className={styles.verifySection} id="verify">
           <div className="container">
@@ -199,10 +196,10 @@ gpg --verify apache-ignite-*.zip.asc apache-ignite-*.zip`}
                 <div className={styles.codeBlockWrapper}>
                   <CodeBlock language="bash">
                     {`# Download the SHA512 file
-wget https://downloads.apache.org/ignite/3.1.0/apache-ignite-3.1.0-src.zip.sha512
+wget https://downloads.apache.org/ignite/2.18.0/apache-ignite-2.18.0-src.zip.sha512
 
 # Verify the checksum
-sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
+sha512sum -c apache-ignite-2.18.0-src.zip.sha512`}
                   </CodeBlock>
                 </div>
               </div>
@@ -242,12 +239,12 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
                 </div>
                 <div className={styles.gitCommands}>
                   <div className={styles.gitCommand}>
-                    <span className={styles.gitLabel}>Ignite 3</span>
-                    <code>git clone https://github.com/apache/ignite-3.git</code>
-                  </div>
-                  <div className={styles.gitCommand}>
                     <span className={styles.gitLabel}>Ignite 2</span>
                     <code>git clone https://github.com/apache/ignite.git</code>
+                  </div>
+                  <div className={styles.gitCommand}>
+                    <span className={styles.gitLabel}>Ignite 3</span>
+                    <code>git clone https://github.com/apache/ignite-3.git</code>
                   </div>
                 </div>
               </div>
@@ -308,7 +305,7 @@ sha512sum -c apache-ignite-3.1.0-src.zip.sha512`}
             <div className={styles.readyToStartAction}>
               <a
                   className="button"
-                  href={`${DOCS_BASE_URL}/getting-started/quick-start`}
+                  href={IGNITE2_DOCS_PATHS.quickStart}
                   target="_blank"
                   rel="noreferrer">
                 Quick Start Guide

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {ignite3BinaryReleases} from '@site/src/data/downloads';
+import {ignite2BinaryReleases} from '@site/src/data/downloads';
 import {
   resolveMirrorUrl,
   toCloserUrl,
@@ -8,11 +8,11 @@ import {
   getFileName,
   trackDownload,
 } from '@site/src/components/Download/downloadUtils';
-import {DOCS_BASE_PATH} from '@site/src/config/docs-urls';
+import {IGNITE2_DOCS_PATHS} from '@site/src/config/docs-urls';
 import styles from './styles.module.css';
 
 export default function QuickDownload(): JSX.Element {
-  const latestRelease = ignite3BinaryReleases.find((r) => r.latest) || ignite3BinaryReleases[0];
+  const latestRelease = ignite2BinaryReleases.find((r) => r.latest) || ignite2BinaryReleases[0];
 
   // Raw URL from data
   const rawUrl = latestRelease.binaryUrl || '';
@@ -23,10 +23,10 @@ export default function QuickDownload(): JSX.Element {
   // 2) convert to closer.lua download URL
   const downloadHref = toCloserUrl(resolvedUrl);
 
-  const fileName = getFileName(downloadHref) || 'ignite3.zip';
+  const fileName = getFileName(downloadHref) || 'apache-ignite.zip';
 
   const handleDownloadClick = () => {
-    trackDownload('binary_download', `ignite3_${latestRelease.version}_quick_download`);
+    trackDownload('binary_download', `ignite2_${latestRelease.version}_quick_download`);
   };
 
   return (
@@ -54,7 +54,7 @@ export default function QuickDownload(): JSX.Element {
             </a>
 
             <a
-                href={`${DOCS_BASE_PATH}/configure-and-operate/installation/`}
+                href={IGNITE2_DOCS_PATHS.installation}
                 className="button button--shadow"
                 target="_blank"
                 rel="noopener noreferrer">

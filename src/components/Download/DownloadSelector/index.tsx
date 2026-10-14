@@ -17,6 +17,7 @@ import {
   getFileName,
   trackDownload,
 } from '@site/src/components/Download/downloadUtils';
+import {IGNITE3_DOCS_PATHS} from '@site/src/config/docs-urls';
 import styles from './styles.module.css';
 
 type InstallMethod = 'binary' | 'source' | 'docker' | 'maven';
@@ -107,9 +108,8 @@ export default function DownloadSelector({
   };
 
   // Documentation URLs for Ignite 3
-  const IGNITE3_DOCS_BASE = 'https://ignite.apache.org/docs/ignite3/3.1.0';
-  const IGNITE3_INSTALL_ZIP = `${IGNITE3_DOCS_BASE}/configure-and-operate/installation/installing-using-zip`;
-  const IGNITE3_INSTALL_DOCKER = `${IGNITE3_DOCS_BASE}/configure-and-operate/installation/installing-using-docker`;
+  const IGNITE3_INSTALL_ZIP = IGNITE3_DOCS_PATHS.configureAndOperate.installZip;
+  const IGNITE3_INSTALL_DOCKER = IGNITE3_DOCS_PATHS.configureAndOperate.installDocker;
 
   // Docker content
   const renderDockerContent = () => {

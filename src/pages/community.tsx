@@ -4,6 +4,8 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import Section from '@site/src/components/Section';
+import { IGNITE3_STATUS_SHORT } from '@site/src/components/Ignite3StatusNote';
+import { DOCS_QUICK_START } from '@site/src/config/docs-urls';
 import { pmcMembers, type Committer } from '@site/src/data/committers';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './community.module.css';
@@ -319,13 +321,13 @@ function ContributingSection() {
             <h4 className="h5">Good First Issues</h4>
             <p>Issues suitable for new contributors</p>
           </a>
-          <a href="https://github.com/apache/ignite-3" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
-            <h4 className="h5">Apache Ignite 3</h4>
-            <p>Current generation development</p>
-          </a>
           <a href="https://github.com/apache/ignite" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
             <h4 className="h5">Apache Ignite 2</h4>
-            <p>Long-term support (LTS)</p>
+            <p>Actively developed, recommended version</p>
+          </a>
+          <a href="https://github.com/apache/ignite-3" target="_blank" rel="noreferrer" className={clsx(styles.contributeCard, 'cardsimple')}>
+            <h4 className="h5">Apache Ignite 3</h4>
+            <p>{IGNITE3_STATUS_SHORT}</p>
           </a>
         </div>
       </div>
@@ -460,7 +462,7 @@ function CTASection() {
           </p>
         </div>
         <div className={styles.ctaAction}>
-          <a className="button" href="/docs/ignite3/3.1.0/getting-started/quick-start">
+          <a className="button" href={DOCS_QUICK_START}>
             Quick Start Guide
           </a>
         </div>
