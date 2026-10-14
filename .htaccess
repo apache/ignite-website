@@ -174,16 +174,23 @@ RewriteRule ^/?(.*)$ https://ignite.apache.org/$1 [L,R=301]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://%{SERVER_NAME}/$1 [R=301,L]
 
-# bare /releases/latest → redirect to current Ignite 3 version
-RewriteRule ^releases/latest/?$ releases/ignite3/3.1.0/ [R=301,L]
+# bare /releases/latest → redirect to the latest Ignite 2 version (the default version on the website)
+# Keep the version in sync with IGNITE2_VERSION in src/config/docs-urls.ts.
+RewriteRule ^releases/latest/?$ releases/ignite2/2.18.0/ [R=301,L]
 
-RewriteRule ^releases/latest/(.*)$ releases/ignite3/3.1.0/$1 [L]
+RewriteRule ^releases/latest/(.*)$ releases/ignite2/2.18.0/$1 [L]
 RewriteRule ^releases/mobile/(.*)$ releases/latest/javadoc/$1 [R=301,L]
 
 # redirects all 404 pages under API doc paths to the corresponding index under "latest"
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^releases/(.*)/(javadoc|scaladoc|cppdoc|dotnetdoc)/(.*)$ releases/latest/%2/ [R=301,L]
+RewriteRule ^releases/(.*)/(javadoc|cppdoc|dotnetdoc)/(.*)$ releases/latest/$2/ [R=301,L]
+
+# Scala API docs exist only for old versions, so there is no "latest" scaladoc index
+# (redirecting there would loop); send missing scaladoc pages to the latest Javadoc instead.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^releases/(.*)/scaladoc/(.*)$ releases/latest/javadoc/ [R=301,L]
 
 # Redirect all 1.* release URLs to the "ignite" namespace (without the number).
 RewriteRule ^releases/(1[^/]*)(/.*)?$ releases/ignite/$1$2 [R=301,L]
@@ -196,14 +203,14 @@ RewriteRule ^releases/([2-9][^/]*)(/.*)?$ releases/ignite$1/$1$2 [R=301,L]
 RewriteRule ^docs$ /docs/ [R=301,L]
 RewriteRule ^docs/$ docs/index.html [L]
 
-# special handling for /docs/latest
-RewriteRule ^docs/latest/?$ docs/ignite3/3.1.0 [R=301,L]
+# special handling for /docs/latest: Ignite 2 is the default version on the website
+RewriteRule ^docs/latest/?$ docs/ignite2/latest/ [R=301,L]
 RewriteRule ^docs/latest/(.*)$ docs/ignite2/latest/$1 [R=301,L]
 
 # add trailing slash for bare ignite2/latest
 RewriteRule ^docs/ignite2/latest$ docs/ignite2/latest/ [R=301,L]
 
-# latest → pinned versions
+# latest → pinned versions (keep in sync with IGNITE2_VERSION / IGNITE3_VERSION in src/config/docs-urls.ts)
 RewriteRule ^docs/ignite2/latest/(.*)$ docs/ignite2/2.18.0/$1 [L]
 RewriteRule ^docs/ignite3/latest/(.*)$ docs/ignite3/3.1.0/$1 [L]
 

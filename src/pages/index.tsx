@@ -7,6 +7,7 @@ import Link from '@docusaurus/Link';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Section from '@site/src/components/Section';
+import { DOCS_QUICK_START, IGNITE2_DOCS_PATHS } from '@site/src/config/docs-urls';
 import { useCanonicalUrl } from '@site/src/hooks/useCanonicalUrl';
 import styles from './index.module.css';
 
@@ -83,96 +84,116 @@ function CoreCapabilities() {
     java: {
       language: "java",
       code: `// Connect to the cluster
-IgniteClient client = IgniteClient.builder()
-    .addresses("127.0.0.1:10800")
-    .build();
+ClientConfiguration cfg = new ClientConfiguration().setAddresses("127.0.0.1:10800");
 
-// Create a table
-String createTableSql = "CREATE TABLE IF NOT EXISTS Person ("
-    + "id INT PRIMARY KEY,"
-    + "name VARCHAR,"
-    + "age INT"
-    + ")";
-client.sql().execute(null, createTableSql);
+try (IgniteClient client = Ignition.startClient(cfg)) {
+    // Create a table
+    client.query(new SqlFieldsQuery("CREATE TABLE IF NOT EXISTS Person ("
+        + "id INT PRIMARY KEY,"
+        + "name VARCHAR,"
+        + "age INT"
+        + ")")).getAll();
 
-// Insert data
-String insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
-client.sql().execute(null, insertSql, 1, "John Doe", 30);
-client.sql().execute(null, insertSql, 2, "Jane Smith", 28);
+    // Insert data
+    String insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
+    client.query(new SqlFieldsQuery(insertSql).setArgs(1, "John Doe", 30)).getAll();
+    client.query(new SqlFieldsQuery(insertSql).setArgs(2, "Jane Smith", 28)).getAll();
 
-// Query data
-client.sql().execute(null, "SELECT * FROM Person WHERE age > ?", 25)
-    .forEachRemaining(row -> {
-        System.out.println("ID: " + row.intValue("id") +
-                          ", Name: " + row.stringValue("name") +
-                          ", Age: " + row.intValue("age"));
-    });
+    // Query data
+    List<List<?>> rows = client.query(
+        new SqlFieldsQuery("SELECT id, name, age FROM Person WHERE age > ?").setArgs(25)).getAll();
 
-// Close the client
-client.close();`
+    for (List<?> row : rows)
+        System.out.println("ID: " + row.get(0) + ", Name: " + row.get(1) + ", Age: " + row.get(2));
+}`
     },
     dotnet: {
       language: "csharp",
       code: `// Connect to the cluster
-var config = new IgniteClientConfiguration("127.0.0.1:10800");
-using var client = await IgniteClient.StartAsync(config);
+var cfg = new IgniteClientConfiguration
+{
+    Endpoints = new[] { "127.0.0.1:10800" }
+};
+using var client = Ignition.StartClient(cfg);
+
+// The .NET thin client runs SQL through a cache
+var cache = client.GetOrCreateCache<object, object>(
+    new CacheClientConfiguration("sql_cache") { SqlSchema = "PUBLIC" });
 
 // Create a table
-var createTableSql = "CREATE TABLE IF NOT EXISTS Person (" +
+cache.Query(new SqlFieldsQuery("CREATE TABLE IF NOT EXISTS Person (" +
     "id INT PRIMARY KEY," +
     "name VARCHAR," +
     "age INT" +
-    ")";
-await client.Sql.ExecuteAsync(null, createTableSql);
+    ")")).GetAll();
 
 // Insert data
 var insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
-await client.Sql.ExecuteAsync(null, insertSql, 1, "John Doe", 30);
-await client.Sql.ExecuteAsync(null, insertSql, 2, "Jane Smith", 28);
+cache.Query(new SqlFieldsQuery(insertSql, 1, "John Doe", 30)).GetAll();
+cache.Query(new SqlFieldsQuery(insertSql, 2, "Jane Smith", 28)).GetAll();
 
 // Query data
-await using var resultSet = await client.Sql.ExecuteAsync(null,
-    "SELECT * FROM Person WHERE age > ?", 25);
-await foreach (var row in resultSet)
+var rows = cache.Query(new SqlFieldsQuery("SELECT id, name, age FROM Person WHERE age > ?", 25));
+foreach (var row in rows)
 {
-    Console.WriteLine($"ID: {row["id"]}, Name: {row["name"]}, Age: {row["age"]}");
+    Console.WriteLine($"ID: {row[0]}, Name: {row[1]}, Age: {row[2]}");
 }`
     },
     cpp: {
       language: "cpp",
       code: `// Connect to the cluster
-ignite_client_configuration cfg{"127.0.0.1:10800"};
-auto client = ignite_client::start(cfg, std::chrono::seconds{30});
+IgniteClientConfiguration cfg;
+cfg.SetEndPoints("127.0.0.1:10800");
+IgniteClient client = IgniteClient::Start(cfg);
+
+// The C++ thin client runs SQL through a cache
+cache::CacheClient<int32_t, int32_t> cache =
+    client.GetOrCreateCache<int32_t, int32_t>("sql_cache");
 
 // Create a table
-std::string createTableSql = "CREATE TABLE IF NOT EXISTS Person ("
+cache::query::SqlFieldsQuery createTable("CREATE TABLE IF NOT EXISTS Person ("
     "id INT PRIMARY KEY,"
     "name VARCHAR,"
     "age INT"
-    ")";
-client.get_sql().execute(nullptr, nullptr, {createTableSql}, {});
+    ")");
+createTable.SetSchema("PUBLIC");
+cache.Query(createTable);
 
 // Insert data
-std::string insertSql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)";
-client.get_sql().execute(nullptr, nullptr, {insertSql}, {1, "John Doe", 30});
-client.get_sql().execute(nullptr, nullptr, {insertSql}, {2, "Jane Smith", 28});
+cache::query::SqlFieldsQuery insert("INSERT INTO Person (id, name, age) VALUES (?, ?, ?)");
+insert.SetSchema("PUBLIC");
+insert.AddArgument<int32_t>(1);
+insert.AddArgument<std::string>("John Doe");
+insert.AddArgument<int32_t>(30);
+cache.Query(insert);
+
+insert.ClearArguments();
+insert.AddArgument<int32_t>(2);
+insert.AddArgument<std::string>("Jane Smith");
+insert.AddArgument<int32_t>(28);
+cache.Query(insert);
 
 // Query data
-auto result = client.get_sql().execute(nullptr, nullptr,
-    {"SELECT * FROM Person WHERE age > ?"}, {25});
-while (result->has_row_set() && result->next()) {
-    std::cout << "ID: " << result->get_value<int32_t>("id")
-              << ", Name: " << result->get_value<std::string>("name")
-              << ", Age: " << result->get_value<int32_t>("age") << std::endl;
+cache::query::SqlFieldsQuery select("SELECT id, name, age FROM Person WHERE age > ?");
+select.SetSchema("PUBLIC");
+select.AddArgument<int32_t>(25);
+
+cache::query::QueryFieldsCursor cursor = cache.Query(select);
+while (cursor.HasNext()) {
+    cache::query::QueryFieldsRow row = cursor.GetNext();
+    int32_t id = row.GetNext<int32_t>();
+    std::string name = row.GetNext<std::string>();
+    int32_t age = row.GetNext<int32_t>();
+    std::cout << "ID: " << id << ", Name: " << name << ", Age: " << age << std::endl;
 }`
     },
     python: {
       language: "python",
       code: `# Connect to the cluster
-import pyignite_dbapi
+from pyignite import Client
 
-conn = pyignite_dbapi.connect(address="127.0.0.1:10800")
-cursor = conn.cursor()
+client = Client()
+client.connect("127.0.0.1", 10800)
 
 # Create a table
 create_table_sql = """CREATE TABLE IF NOT EXISTS Person (
@@ -180,28 +201,24 @@ create_table_sql = """CREATE TABLE IF NOT EXISTS Person (
     name VARCHAR,
     age INT
 )"""
-cursor.execute(create_table_sql)
+client.sql(create_table_sql)
 
 # Insert data
 insert_sql = "INSERT INTO Person (id, name, age) VALUES (?, ?, ?)"
-cursor.execute(insert_sql, (1, "John Doe", 30))
-cursor.execute(insert_sql, (2, "Jane Smith", 28))
+client.sql(insert_sql, query_args=[1, "John Doe", 30])
+client.sql(insert_sql, query_args=[2, "Jane Smith", 28])
 
 # Query data
-cursor.execute("SELECT * FROM Person WHERE age > ?", (25,))
-for row in cursor.fetchall():
+for row in client.sql("SELECT id, name, age FROM Person WHERE age > ?", query_args=[25]):
     print(f"ID: {row[0]}, Name: {row[1]}, Age: {row[2]}")
 
 # Close the connection
-cursor.close()
-conn.close()`
+client.close()`
     },
     sql: {
       language: "sql",
       code: `-- Connect to the cluster
--- $ docker run -it apacheignite/ignite:3.1.0 cli
--- > connect http://localhost:10300
--- > sql
+-- $ ./bin/sqlline.sh -u jdbc:ignite:thin://127.0.0.1/
 
 -- Create a table
 CREATE TABLE IF NOT EXISTS Person (
@@ -232,7 +249,7 @@ SELECT * FROM Person WHERE age > 25;`
           </p>
 
           <div style={{marginTop: '2rem'}}>
-            <a href="/docs/ignite3/3.1.0/getting-started/start-cluster" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href={IGNITE2_DOCS_PATHS.clustering} className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -241,7 +258,7 @@ SELECT * FROM Person WHERE age > 25;`
               <span>Configure a cluster in under 5 minutes</span>
             </a>
 
-            <a href="/docs/ignite3/3.1.0/getting-started/work-with-sql" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href={IGNITE2_DOCS_PATHS.sql} className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -250,7 +267,7 @@ SELECT * FROM Person WHERE age > 25;`
               <span>Run SQL queries on your distributed data</span>
             </a>
 
-            <a href="/docs/ignite3/3.1.0/getting-started/key-value-api" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href={IGNITE2_DOCS_PATHS.keyValueApi} className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -259,7 +276,7 @@ SELECT * FROM Person WHERE age > 25;`
               <span>Store and retrieve data with the Java API</span>
             </a>
 
-            <a href="/docs/ignite3/3.1.0/configure-and-operate/configuration/config-storage-persistent" className={styles.checklistItem} target="_blank" rel="noreferrer">
+            <a href={IGNITE2_DOCS_PATHS.persistence} className={styles.checklistItem} target="_blank" rel="noreferrer">
               <span className={styles.checklistIcon}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -488,7 +505,7 @@ function ReadyToStart() {
           </p>
         </div>
         <div className={styles.toolingend__action}>
-          <a className="button" href="/docs/ignite3/3.1.0/getting-started/quick-start" target="_blank" rel="noreferrer">Quick Start Guide</a>
+          <a className="button" href={DOCS_QUICK_START} target="_blank" rel="noreferrer">Quick Start Guide</a>
         </div>
       </div>
     </section>

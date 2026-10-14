@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import {DOCS_QUICK_START} from './src/config/docs-urls';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -186,7 +187,7 @@ const config: Config = {
           label: 'Get Started',
           position: 'left',
           items: [
-            {label: 'Quick Start', to: '/docs/ignite3/3.1.0/getting-started/quick-start'},
+            {label: 'Quick Start', to: DOCS_QUICK_START},
             {label: 'Developer Resources', to: '/resources'},
             {label: 'Training and Courses', to: '/resources#training'},
             {label: 'FAQ', to: '/faq'},

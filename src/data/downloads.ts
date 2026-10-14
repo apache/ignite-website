@@ -19,7 +19,8 @@
  *      - Ignite 2: ignite2SourceReleases, ignite2BinaryReleases, ignite2SlimReleases
  *   3. Mark the new version with `latest: true` and remove from previous latest
  *   4. Update dockerImages array dates if new Docker images were published
- *   5. Update the DOCS_BASE_URL in download.tsx if docs version changed
+ *   5. Update IGNITE2_VERSION / IGNITE3_VERSION in src/config/docs-urls.ts if the docs
+ *      version changed (see the comment there for the other places to update)
  *
  * URL Patterns:
  *   - Latest releases: Use '[preferred][distdir]' prefix for mirror selection
@@ -77,7 +78,7 @@ export const ignite3SourceReleases: DownloadRelease[] = [
     version: '3.1.0',
     latest: true,
     date: '2025-10-21',
-    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/installing-using-zip',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/install-zip',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.1.0/javadoc/',
     releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.1.0/RELEASE_NOTES.txt',
     sourceUrl: 'https://archive.apache.org/dist/ignite/3.1.0/apache-ignite-3.1.0-src.zip',
@@ -85,7 +86,7 @@ export const ignite3SourceReleases: DownloadRelease[] = [
   {
     version: '3.0.0',
     date: '2025-02-05',
-    guide: 'https://ignite.apache.org/docs/ignite3/3.0.0/configure-and-operate/installation/installing-using-zip',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.0.0/installation/installing-using-zip',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.0.0/javadoc/',
     releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.0.0/RELEASE_NOTES.txt',
     sourceUrl: 'https://archive.apache.org/dist/ignite/3.0.0/apache-ignite-3.0.0-src.zip',
@@ -230,7 +231,7 @@ export const ignite3BinaryReleases: DownloadRelease[] = [
     version: '3.1.0',
     latest: true,
     date: '2025-10-21',
-    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/installing-using-zip',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/install-zip',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.1.0/javadoc/',
     releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.1.0/RELEASE_NOTES.txt',
     binaryUrl: 'https://dlcdn.apache.org/ignite/3.1.0/ignite3-3.1.0.zip',
@@ -238,7 +239,7 @@ export const ignite3BinaryReleases: DownloadRelease[] = [
   {
     version: '3.0.0',
     date: '2025-02-05',
-    guide: 'https://ignite.apache.org/docs/ignite3/3.0.0/configure-and-operate/installation/installing-using-zip',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.0.0/installation/installing-using-zip',
     javadoc: 'https://ignite.apache.org/releases/ignite3/3.0.0/javadoc/',
     releaseNotes: 'https://ignite.apache.org/releases/ignite3/3.0.0/RELEASE_NOTES.txt',
     binaryUrl: 'https://dlcdn.apache.org/ignite/3.0.0/ignite3-3.0.0.zip',
@@ -486,7 +487,7 @@ export const dockerImages: DockerImage[] = [
   {
     name: 'Docker Image (Ignite 3)',
     date: '2025-10-30',
-    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/installing-using-docker',
+    guide: 'https://ignite.apache.org/docs/ignite3/3.1.0/configure-and-operate/installation/install-docker',
     links: [
       {
         url: 'https://hub.docker.com/r/apacheignite/ignite/tags?name=3.',

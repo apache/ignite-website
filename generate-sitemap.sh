@@ -9,6 +9,7 @@ set -euo pipefail
 BASE_URL="https://ignite.apache.org"
 OUTPUT_FILE="sitemap.xml"
 
+# Keep in sync with IGNITE3_VERSION / IGNITE2_VERSION in src/config/docs-urls.ts.
 IGNITE3_LATEST_VERSION="3.1.0"
 IGNITE2_LATEST_VERSION="2.18.0"
 
@@ -39,7 +40,7 @@ PRIORITY_0_9=(
 
 # Prefix-based priorities
 PRIORITY_PREFIX_1_0=(
-  "/docs/ignite3/${IGNITE3_LATEST_VERSION}/"
+  "/docs/ignite2/latest/"
 )
 
 PRIORITY_PREFIX_0_6=(
