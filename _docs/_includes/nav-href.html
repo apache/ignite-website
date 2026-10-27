@@ -1,0 +1,13 @@
+{%- comment -%}
+Renders the href of a TOC entry: base_url + "/" + url, with duplicate slashes
+collapsed (toc.yaml urls may start with "/") and a trailing "index" dropped, so
+nav links point at the directory URL the index pages canonicalize to.
+Usage: {% include nav-href.html url=subpage.url %}
+{%- endcomment -%}
+{%- assign nav_href = include.url | prepend: "/" | prepend: site.attrs.base_url | replace: "//", "/" -%}
+{%- assign nav_last = nav_href | split: "/" | last -%}
+{%- if nav_last == "index" -%}
+    {%- assign nav_cut = nav_href.size | minus: 5 -%}
+    {%- assign nav_href = nav_href | slice: 0, nav_cut -%}
+{%- endif -%}
+{{- nav_href -}}

@@ -37,7 +37,6 @@
 
     
     <meta name="ignite-version" content="{{site.attrs.version}}" />
-    <title>{{page.title}} | Ignite Documentation</title>
     {% assign major_version = site.attrs.version | split: "." | first %}
     {% if major_version == '3' %}
         {% assign url_version = "ignite3" %}
@@ -46,12 +45,60 @@
     {% endif %}
     {% if site.attrs.base_url contains "/latest" %}
     {% assign url_version = url_version | append: "/latest" %}
-    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
     {% else %}
     {% assign url_version = url_version | append: "/" | append: site.attrs.version %}
-    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
     <meta name="robots" content="noindex" />
     {% endif %}
+    {%- comment -%}
+    Index pages canonicalize to their directory URL (".../section/"), which is what
+    the server serves and what sitemap.xml lists.
+    {%- endcomment -%}
+    {%- assign canonical_path = page.id | replace_first: site.attrs.version, url_version -%}
+    {%- assign last_segment = canonical_path | split: "/" | last -%}
+    {%- if last_segment == "index" -%}
+        {%- assign cut_length = canonical_path.size | minus: 5 -%}
+        {%- assign canonical_path = canonical_path | slice: 0, cut_length -%}
+    {%- endif -%}
+    {%- comment -%}
+    The <title> is version-neutral; the version line goes into the description, which
+    is the first paragraph of the article (the AsciiDoc sources carry no description
+    attribute). Admonition blocks (<div class="admonitionblock ..."><table>...</table></div>)
+    are dropped first, so a page that opens with a note does not get the note as its snippet.
+    {%- endcomment -%}
+    {%- if site.attrs.section == "extensions" -%}
+        {%- assign version_label = "Apache Ignite Extensions" -%}
+    {%- else -%}
+        {%- assign version_label = "Apache Ignite " | append: major_version | append: ".x" -%}
+    {%- endif -%}
+    {%- assign article_html = content | split: "<article" | last | split: "</article>" | first -%}
+    {%- assign admonition_chunks = article_html | split: '<div class="admonitionblock' -%}
+    {%- assign article_text = admonition_chunks[0] -%}
+    {%- for chunk in admonition_chunks offset: 1 -%}
+        {%- assign after_table = chunk | split: "</table>" -%}
+        {%- if after_table.size > 1 -%}
+            {%- assign tail = after_table | slice: 1, after_table.size | join: "</table>" -%}
+            {%- assign article_text = article_text | append: tail -%}
+        {%- endif -%}
+    {%- endfor -%}
+    {%- assign first_paragraph = "" -%}
+    {%- if article_text contains '<div class="paragraph">' -%}
+        {%- assign first_paragraph = article_text | split: '<div class="paragraph">' | slice: 1 | first | split: "</p>" | first | split: "<p>" | last -%}
+    {%- elsif article_text contains "<p>" -%}
+        {%- assign first_paragraph = article_text | split: "<p>" | slice: 1 | first | split: "</p>" | first -%}
+    {%- endif -%}
+    {%- assign first_paragraph = first_paragraph | strip_html | normalize_whitespace | strip -%}
+    {%- if first_paragraph != "" -%}
+        {%- assign meta_description = version_label | append: " documentation. " | append: first_paragraph | truncatewords: 22 -%}
+    {%- else -%}
+        {%- assign meta_description = page.title | append: ". " | append: version_label | append: " documentation." -%}
+    {%- endif -%}
+    {%- if page.title == "Apache Ignite Documentation" %}
+    <title>{{ page.title }}</title>
+    {%- else %}
+    <title>{{ page.title | escape_once }} | Apache Ignite Documentation</title>
+    {%- endif %}
+    <meta name="description" content="{{ meta_description | escape_once }}" />
+    <link rel="canonical" href="{{ site.url }}{{ canonical_path }}" />
 	{% capture timestamp %}{{"now"| date: '%s'}}{% endcapture %}
 	  <link rel="shortcut icon" href="{{'/favicon.ico'|relative_url}}">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>

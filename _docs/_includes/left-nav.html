@@ -41,11 +41,11 @@
                                      {% assign chapter_class = 'expanded' %}
                                   {% endif %}
 
-								  <li><a href="{{base_url}}/{{subpage.url}}" class='{% if normalized_path == normalized_subpage_url %}active{% endif %}'>{{subpage.title}}</a></li>
+								  <li><a href="{% include nav-href.html url=subpage.url %}" class='{% if normalized_path == normalized_subpage_url %}active{% endif %}'>{{subpage.title}}</a></li>
                             {% endfor %}
                             </nav>
                         {% else %}
-                            <a href="{{base_url}}{{chapter.url|relative_url}}"
+                            <a href="{% include nav-href.html url=chapter.url %}"
                                 class='{% if normalized_path == normalized_chapter_url %}active{% endif %}'
                             >{{chapter.title}}</a>
                         {% endif %}
@@ -60,7 +60,7 @@
              </nav>   
             {% else %}
                 {% assign normalized_guide_url = guide.url | prepend: "/" %}
-                <a href="{{base_url}}{{guide.url|relative_url}}" class='{% if normalized_guide_url == normalized_path %}active{% endif %}' >{{guide.title}}</a>
+                <a href="{% include nav-href.html url=guide.url %}" class='{% if normalized_guide_url == normalized_path %}active{% endif %}' >{{guide.title}}</a>
             {% endif %}
         </li>
     {% endfor %}
