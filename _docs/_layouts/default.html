@@ -37,7 +37,6 @@
 
     
     <meta name="ignite-version" content="{{site.attrs.version}}" />
-    <title>{{page.title}} | Ignite Documentation</title>
     {% assign major_version = site.attrs.version | split: "." | first %}
     {% if major_version == '3' %}
         {% assign url_version = "ignite3" %}
@@ -46,12 +45,45 @@
     {% endif %}
     {% if site.attrs.base_url contains "/latest" %}
     {% assign url_version = url_version | append: "/latest" %}
-    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
     {% else %}
     {% assign url_version = url_version | append: "/" | append: site.attrs.version %}
-    <link rel="canonical" href="{{ page.id | replace_first: site.attrs.version, url_version }}" />
     <meta name="robots" content="noindex" />
     {% endif %}
+    {%- comment -%}
+    Index pages canonicalize to their directory URL (".../section/"), as sitemap.xml lists them.
+    {%- endcomment -%}
+    {%- assign canonical_path = page.id | replace_first: site.attrs.version, url_version -%}
+    {%- assign last_segment = canonical_path | split: "/" | last -%}
+    {%- if last_segment == "index" -%}
+        {%- assign cut_length = canonical_path.size | minus: 5 -%}
+        {%- assign canonical_path = canonical_path | slice: 0, cut_length -%}
+    {%- endif -%}
+    {%- comment -%}
+    The <title> is version-neutral; the version line goes into the description, built from
+    the first paragraph of the page (the AsciiDoc sources have no description attribute).
+    {%- endcomment -%}
+    {%- if site.attrs.section == "extensions" -%}
+        {%- assign version_label = "Apache Ignite Extensions" -%}
+    {%- else -%}
+        {%- assign version_label = "Apache Ignite " | append: major_version | append: ".x" -%}
+    {%- endif -%}
+    {%- assign first_paragraph = page.content | split: '<div class="paragraph">' | slice: 1 | first | split: "</p>" | first | split: "<p>" | last | strip_html | normalize_whitespace -%}
+    {%- if first_paragraph != "" -%}
+        {%- assign meta_description = version_label | append: " documentation. " | append: first_paragraph -%}
+        {%- assign description_words = meta_description | split: " " | size -%}
+        {%- if description_words > 22 -%}
+            {%- assign meta_description = meta_description | truncatewords: 22 -%}
+        {%- endif -%}
+    {%- else -%}
+        {%- assign meta_description = page.title | append: ". " | append: version_label | append: " documentation." -%}
+    {%- endif -%}
+    {%- if page.title == "Apache Ignite Documentation" %}
+    <title>{{ page.title }}</title>
+    {%- else %}
+    <title>{{ page.title | escape_once }} | Apache Ignite Documentation</title>
+    {%- endif %}
+    <meta name="description" content="{{ meta_description | escape_once }}" />
+    <link rel="canonical" href="{{ site.url }}{{ canonical_path }}" />
 	{% capture timestamp %}{{"now"| date: '%s'}}{% endcapture %}
 	  <link rel="shortcut icon" href="{{'/favicon.ico'|relative_url}}">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0'>

@@ -137,9 +137,6 @@ Redirect 301 /use-cases/caching/database-caching /use-cases/in-memory-cache
 
 Redirect 301 /releases/latest/javadoc/org/apache/ignite/yarn/class-use/IgniteProvider.VersionComparator.html /releases/latest/javadoc/org/apache/ignite/yarn/IgniteProvider.html
 
-## Fix for IGNITE-14392
-Redirect 301 /docs/latest/SQL/sql-transactions /docs/latest/SQL/sql-introduction
-
 ## Added by new site in 2021 (updated for Docusaurus)
 Redirect 301 /in-memory-computing.html /faq
 Redirect 301 /whatisignite.html /faq
@@ -203,9 +200,24 @@ RewriteRule ^releases/([2-9][^/]*)(/.*)?$ releases/ignite$1/$1$2 [R=301,L]
 RewriteRule ^docs$ /docs/ [R=301,L]
 RewriteRule ^docs/$ docs/index.html [L]
 
+# Pages removed or renamed in later 2.x releases; drop an entry if its page comes back
+RewriteRule ^docs/(ignite2/)?latest/read-repair/?$ /docs/ignite2/latest/key-value-api/read-repair [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/key-value-api/using-scan-queries/?$ /docs/ignite2/latest/key-value-api/using-cache-queries [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/data-structures/atomic-sequence/?$ /docs/ignite2/latest/data-structures/atomic-types [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/monitoring-metrics/metrics/?$ /docs/ignite2/latest/monitoring-metrics/new-metrics-system [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/extensions-and-integrations/change-data-capture-extensions/?$ /docs/ignite2/latest/extensions-and-integrations/change-data-capture/overview [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/tools/visor-cmd/?$ /docs/ignite2/latest/tools/control-script [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/transactions/mvcc/?$ /docs/ignite2/latest/key-value-api/transactions [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/SQL/sql-transactions/?$ /docs/ignite2/latest/SQL/sql-introduction [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/persistence/snapshots/?$ /docs/ignite2/latest/snapshots/snapshots [R=301,L]
+RewriteRule ^docs/(ignite2/)?latest/installation/?$ /docs/ignite2/latest/installation/installing-using-zip [R=301,L]
+
 # special handling for /docs/latest: Ignite 2 is the default version on the website
 RewriteRule ^docs/latest/?$ docs/ignite2/latest/ [R=301,L]
 RewriteRule ^docs/latest/(.*)$ docs/ignite2/latest/$1 [R=301,L]
+
+# Pre-2025 docs URL scheme: /docs/2.x.y/... -> /docs/ignite2/2.x.y/...
+RewriteRule ^docs/(2\.[0-9]+\.[0-9]+)(/.*)?$ /docs/ignite2/$1$2 [R=301,L]
 
 # add trailing slash for bare ignite2/latest
 RewriteRule ^docs/ignite2/latest$ docs/ignite2/latest/ [R=301,L]

@@ -9,11 +9,12 @@ set -euo pipefail
 BASE_URL="https://ignite.apache.org"
 OUTPUT_FILE="sitemap.xml"
 
-# Keep in sync with IGNITE3_VERSION / IGNITE2_VERSION in src/config/docs-urls.ts.
-IGNITE3_LATEST_VERSION="3.1.0"
+# Keep in sync with IGNITE2_VERSION in src/config/docs-urls.ts.
 IGNITE2_LATEST_VERSION="2.18.0"
 
-DOCUSAURUS_GENERATOR_META='<meta name="generator" content="Docusaurus v3.9.2">'
+# Prefix of the generator meta of Docusaurus pages, so that they stay in the sitemap
+# after a Docusaurus upgrade
+DOCUSAURUS_GENERATOR_META='<meta name="generator" content="Docusaurus v'
 
 EXCLUDE_DIRS=(
   ".git"
@@ -27,6 +28,8 @@ EXCLUDE_DIRS=(
   "jcache"
   "suggested-site"
   "_docs"
+  # Ignite 3 pages declare canonical URLs under the robots-blocked /docs/ignite3/<version>/
+  "docs/ignite3"
 )
 
 # Exact paths by priority
@@ -58,11 +61,15 @@ BASE_URL="${BASE_URL%/}"
 
 TMP_URLS="$(mktemp)"
 TMP_SORTED="$(mktemp)"
+TMP_DIRTY="$(mktemp)"
 
 cleanup() {
-  rm -f "$TMP_URLS" "$TMP_SORTED"
+  rm -f "$TMP_URLS" "$TMP_SORTED" "$TMP_DIRTY"
 }
 trap cleanup EXIT
+
+# Files with uncommitted changes (modified, staged or untracked), one path per line
+git -C "$SITE_DIR" status --porcelain --untracked-files=all 2>/dev/null | cut -c4- > "$TMP_DIRTY" || true
 
 in_array() {
   local needle="$1"
@@ -88,35 +95,55 @@ starts_with_any() {
   return 1
 }
 
+# The ${arr[@]+"${arr[@]}"} form keeps empty arrays from tripping `set -u` on bash 3.2.
 get_priority() {
   local url_path="$1"
 
-  if in_array "$url_path" "${PRIORITY_1_0[@]}"; then
+  if in_array "$url_path" ${PRIORITY_1_0[@]+"${PRIORITY_1_0[@]}"}; then
     echo "1.0"
     return
   fi
 
-  if starts_with_any "$url_path" "${PRIORITY_PREFIX_1_0[@]}"; then
+  if starts_with_any "$url_path" ${PRIORITY_PREFIX_1_0[@]+"${PRIORITY_PREFIX_1_0[@]}"}; then
     echo "1.0"
     return
   fi
 
-  if in_array "$url_path" "${PRIORITY_0_9[@]}"; then
+  if in_array "$url_path" ${PRIORITY_0_9[@]+"${PRIORITY_0_9[@]}"}; then
     echo "0.9"
     return
   fi
 
-  if starts_with_any "$url_path" "${PRIORITY_PREFIX_0_6[@]}"; then
+  if starts_with_any "$url_path" ${PRIORITY_PREFIX_0_6[@]+"${PRIORITY_PREFIX_0_6[@]}"}; then
     echo "0.6"
     return
   fi
 
-  if starts_with_any "$url_path" "${PRIORITY_PREFIX_0_8[@]}"; then
+  if starts_with_any "$url_path" ${PRIORITY_PREFIX_0_8[@]+"${PRIORITY_PREFIX_0_8[@]}"}; then
     echo "0.8"
     return
   fi
 
   echo "$DEFAULT_PRIORITY"
+}
+
+# <lastmod> is the date of the last commit that touched the file, so it does not depend
+# on when the repository was cloned. Files with uncommitted changes or unknown to git
+# use the file mtime.
+get_lastmod() {
+  local file="$1"
+  local rel="${file#$SITE_DIR/}"
+  local git_date=""
+
+  if ! grep -Fxq -- "$rel" "$TMP_DIRTY"; then
+    git_date="$(TZ=UTC git -C "$SITE_DIR" log -1 --format=%cd --date=format-local:'%Y-%m-%dT%H:%M:%SZ' -- "$rel" 2>/dev/null || true)"
+  fi
+
+  if [[ -n "$git_date" ]]; then
+    echo "$git_date"
+  else
+    date -u -r "$file" +"%Y-%m-%dT%H:%M:%SZ"
+  fi
 }
 
 # Build prune expression for find
@@ -132,10 +159,8 @@ find "$SITE_DIR" \
 while IFS= read -r -d '' file; do
   rel="${file#$SITE_DIR/}"
 
-  # docs/ignite3: only one allowed version
-  if [[ "$rel" == docs/ignite3/* ]]; then
-    [[ "$rel" != docs/ignite3/$IGNITE3_LATEST_VERSION/* ]] && continue
-  fi
+  # The error page is a Docusaurus page too
+  [[ "$rel" == "404.html" ]] && continue
 
   # docs/ignite2: only one allowed version
   if [[ "$rel" == docs/ignite2/* ]]; then
@@ -147,6 +172,9 @@ while IFS= read -r -d '' file; do
   if [[ "$rel" != docs/ignite2/* ]]; then
     grep -Fq "$DOCUSAURUS_GENERATOR_META" "$file" || continue
   fi
+
+  # Pages that declare noindex, e.g. the empty section hubs of the Ignite 2 docs
+  grep -qiE '<meta[^>]*name="robots"[^>]*content="noindex"' "$file" && continue
 
   # Build URL path
   if [[ "$rel" == "index.html" ]]; then
@@ -161,8 +189,10 @@ while IFS= read -r -d '' file; do
     fi
   fi
 
-  # Replace ignite2 version with latest in public URL
-  url_path="${url_path/\/docs\/ignite2\/$IGNITE2_LATEST_VERSION\//\/docs\/ignite2\/latest\/}"
+  # Replace ignite2 version with latest in public URL.
+  # Quoted pattern, plain replacement: bash 3.2 keeps the backslashes of "\/" in the result.
+  versioned_prefix="/docs/ignite2/$IGNITE2_LATEST_VERSION/"
+  url_path="${url_path/"$versioned_prefix"//docs/ignite2/latest/}"
 
   # Collapse accidental duplicate slashes in path only
   while [[ "$url_path" == *"//"* ]]; do
@@ -170,13 +200,14 @@ while IFS= read -r -d '' file; do
   done
 
   url="${BASE_URL}${url_path}"
-  lastmod="$(date -u -r "$file" +"%Y-%m-%dT%H:%M:%SZ")"
+  lastmod="$(get_lastmod "$file")"
   priority="$(get_priority "$url_path")"
 
   printf '%s\t%s\t%s\n' "$url" "$lastmod" "$priority"
 done > "$TMP_URLS"
 
-sort -u "$TMP_URLS" > "$TMP_SORTED"
+# LC_ALL=C: byte order, so the file comes out the same on every machine
+LC_ALL=C sort -u "$TMP_URLS" > "$TMP_SORTED"
 
 {
   printf '%s\n' '<?xml version="1.0" encoding="UTF-8"?>'

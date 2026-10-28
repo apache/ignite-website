@@ -37,7 +37,10 @@ Past events are slightly more complex. Since your site had over 300 events, we p
 
 ### Sitemap
 
-User `gulp sitemap` command for regenerate `./sitemap.xml` file if needed. Now, it transform `/docs/2.11.0/` files into `/docs/latest/` and removes .html file extention. If will need to change last versions of `/docs/` files, change it in function `sitemap()` in `./gulpfile.js`. 
+Run `./generate-sitemap.sh` from the repository root to regenerate `./sitemap.xml`, for example
+after a docs update. It lists the Docusaurus pages and the latest Ignite 2 docs (as
+`/docs/ignite2/latest/...`), with `<lastmod>` from git history; the latest version is set at the top
+of the script.
 
 ### Other
 
