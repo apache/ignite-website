@@ -9,9 +9,7 @@
  * lead to it. The IGNITE3_* constants are for the pages that describe Ignite 3 specifically.
  *
  * When a new Ignite 2 version is released, also update the version in the
- * docs/ignite2/latest and releases/latest rules of .htaccess and in the "latest"
- * pointer file at the repository root (generate-sitemap.sh and the docs-publishing
- * workflow in apache/ignite read it).
+ * docs/ignite2/latest and releases/latest rules of .htaccess and in generate-sitemap.sh.
  */
 
 /**
