@@ -10,6 +10,11 @@ const config: Config = {
   tagline: 'Distributed Database For High-Performance Applications With In-Memory Speed',
   favicon: 'img/favicon.png',
 
+  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
+  future: {
+    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+  },
+
   // Enable Mermaid diagrams in Markdown
   markdown: {
     mermaid: true,
